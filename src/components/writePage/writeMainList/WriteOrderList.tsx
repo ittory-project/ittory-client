@@ -1,4 +1,3 @@
-// src/components/WriteOrderList.tsx
 import React from 'react';
 import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderActivateItem } from './WriteOrderActivateItem';
