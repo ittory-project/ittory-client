@@ -9,6 +9,7 @@ interface WriteOrderProps {
   time?: number;
 }
 
+// 현재 순서이거나(myTurn/othersTurn), 지나간 순서(completed) 상태 아이템
 export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ status, profileImageUrl, name, title, time }) => {
   return (
     <Wrapper status={status}>
@@ -44,7 +45,7 @@ const Wrapper = styled.div<{status: 'completed' | 'myTurn' | 'othersTurn'}>`
   padding: 10px;
   border: ${(props) => (
     props.status === 'myTurn' 
-    ? '1px solid #FCFFAF; border-radius: 5px; background: linear-gradient(160deg, #425166, #243348 95%); padding: 20px 10px;' : '')};
+    ? '1px solid #FCFFAF; border-radius: 5px; background: linear-gradient(160deg, #425166, #1C2231 95%); padding: 20px 10px;' : '')};
 `;
 
 const ProfileImage = styled.img`

@@ -14,6 +14,7 @@ interface ListComponentProps {
   }[];
 }
 
+// 편지 작성 페이지의 리스트
 export const WriteOrderList: React.FC<ListComponentProps> = ({ items }) => {
   return (
     <Wrapper>
