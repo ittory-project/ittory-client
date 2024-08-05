@@ -5,6 +5,7 @@ interface InactiveItemProps {
   idx: number;
 }
 
+// 아직 차례가 아닌 리스트 내용 아이템
 export const WriteOrderInactiveItem: React.FC<InactiveItemProps> = ({ idx }) => {
   return (
     <Wrapper>
