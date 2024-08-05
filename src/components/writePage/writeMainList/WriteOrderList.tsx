@@ -2,16 +2,10 @@ import React from 'react';
 import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderActivateItem } from './WriteOrderActivateItem';
 import styled from 'styled-components';
+import { WriteOrderItem } from '../Write';
 
 interface ListComponentProps {
-  items: {
-    id: number;
-    status: 'inactive' | 'completed' | 'myTurn' | 'othersTurn';
-    profileImageUrl: string;
-    name: string;
-    title?: string;
-    time?: number;
-  }[];
+  items: WriteOrderItem[];
 }
 
 // 편지 작성 페이지의 리스트

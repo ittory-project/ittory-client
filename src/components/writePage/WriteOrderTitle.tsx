@@ -9,6 +9,10 @@ interface TitleProps {
 export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
   const [isPopover, setIsPopover] = useState(false);
 
+  const closePopover = () => {
+    setIsPopover(false);
+  }
+
   const handleOrderBtn = () => {
     setIsPopover(!isPopover);
   }
@@ -27,7 +31,7 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
           </OrderBtn>
         </InnerContainer>
       </OuterContainer>
-      {isPopover && <WriteOrderPopover />}
+      {isPopover && <WriteOrderPopover onClose={closePopover} />}
     </div>
   );
 };
