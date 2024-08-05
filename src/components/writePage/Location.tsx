@@ -6,11 +6,12 @@ interface LocationProps {
   name: string;
 }
 
+// 위치 컴포넌트
 export const Location: React.FC<LocationProps> = ({ name }) => {
-  const [progress, setProgress] = useState(100); // Progress in percentage
+  const [progress, setProgress] = useState(100);
 
   useEffect(() => {
-    const totalDuration = 100000; // Total duration in milliseconds
+    const totalDuration = 100000;
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev <= 0) {
@@ -19,17 +20,16 @@ export const Location: React.FC<LocationProps> = ({ name }) => {
         }
         return prev - 0.1;
       });
-    }, totalDuration / 1000); // Update every second
+    }, totalDuration / 1000);
 
     return () => clearInterval(interval);
   }, []);
 
   const radius = 25;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - progress / 100); // Calculate the offset to simulate disappearance
+  const offset = circumference * (1 - progress / 100);
 
-  // Define color based on the remaining time
-  const isWarning = progress <= 10; // True if 10 seconds or less are left
+  const isWarning = progress <= 10;
 
   return (
     <Background>
@@ -44,16 +44,16 @@ export const Location: React.FC<LocationProps> = ({ name }) => {
             cx="28"
             cy="28"
             r={radius}
-            stroke={isWarning ? '#FFA256' : 'white'} // Change color based on time
+            stroke={isWarning ? '#FFA256' : 'white'}
             strokeWidth="3"
             fill="none"
             strokeDasharray={circumference}
-            strokeDashoffset={-offset} // Adjust for the effect to be shrinking
-            transform="rotate(-90 28 28)" // Rotate to start from the top
+            strokeDashoffset={-offset} 
+            transform="rotate(-90 28 28)" 
           />
         </Svg>
         <Name
-          color={isWarning ? '#FFA256' : 'white'} // Change color based on time
+          color={isWarning ? '#FFA256' : 'white'} 
         >
           {name}
         </Name>
@@ -78,7 +78,7 @@ const Contents = styled.div`
   margin: 3px 0 0 0;
   width: 56px;
   height: 56px;
-  padding: 8px; /* Adjust padding for better fit */
+  padding: 8px; 
   box-sizing: border-box;
   flex-shrink: 0;
   border-radius: 28px;
