@@ -1,24 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import X from "../../../assets/X.png";
-import basic from "../../../assets/Book1.png";
-import book2 from "../../../assets/Book2.png";
-import camera from "../../../assets/camera.png";
-import image1 from "../../../assets/layer1.png";
-import image2 from "../../../assets/layer2.png";
-import image3 from "../../../assets/layer3.png";
-import FontSelect from "../CoverDeco/FontSelect";
-import ImageCropper from "../CoverDeco/ImageCropper";
-import { Area } from "react-easy-crop";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import letter from "../../../assets/letter.png";
-
-const fonts = [
-  { name: "SUIT", family: "SUIT" },
-  { name: "노트산스", family: "Eulyoo1945" },
-  { name: "언즈체", family: "Ownglyph_UNZ-Rg" },
-];
+import letter from "../../../../public/assets/letter.png";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   title: string;
@@ -32,7 +17,7 @@ interface Props {
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function CoverModal({
+export default function UserFinishModal({
   title,
   receiverName,
   deliverDay,
@@ -45,17 +30,28 @@ export default function CoverModal({
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [font, setFont] = useState<string>(selectfont);
-  const images = [image1, image2, image3, image3, image3];
-  const books = [basic, book2, book2, book2, book2];
-  const imgRef = useRef<HTMLInputElement | null>(null);
-  const inputRef = useRef<HTMLDivElement | null>(null);
-  const [originalImage, setOriginalImage] = useState<string>("");
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [cropperKey, setCropperKey] = useState<number>(0);
   const [bookimage, setBookimage] = useState<string>(backgroundImage);
-  const [ImageIndex, setImageIndex] = useState<number>(selectedImageIndex);
-  const [cropOpen, setCropOpen] = useState(false);
+  const [guideOpen, setGuideOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const navigateToInvite = () => {
+    navigate("/Invite", {
+      state: {
+        guideOpen: guideOpen,
+        receiverName: receiverName,
+        title: title,
+        croppedImage: croppedImage,
+        backgroundImage: backgroundImage,
+        deliverDay: deliverDay,
+        selectfont: selectfont,
+        selectedImageIndex: selectedImageIndex,
+      },
+    });
+  };
+
+  const handleguide = () => {
+    setGuideOpen(true);
+  };
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
@@ -99,9 +95,26 @@ export default function CoverModal({
           )}
         </Book>
       </MainContainer>
-      <Button>
-        <ButtonTxt>맘에 들어요!</ButtonTxt>
-      </Button>
+      <ButtonContainer>
+        <Button
+          style={{
+            background: "#CED4DA",
+          }}
+        >
+          <ButtonTxt style={{ color: "#495057" }} onClick={handleguide}>
+            사용법 보기
+          </ButtonTxt>
+        </Button>
+        <Button
+          style={{
+            background: "#FFA256",
+          }}
+        >
+          <ButtonTxt style={{ color: "#fff" }} onClick={navigateToInvite}>
+            맘에 들어요!
+          </ButtonTxt>
+        </Button>
+      </ButtonContainer>
     </ModalContainer>
   );
 }
@@ -112,12 +125,12 @@ const ModalContainer = styled.div`
   width: 100%;
   height: 37rem;
   padding: 24px 24px 20px 24px;
-  bottom: 1px;
   border-radius: 24px 24px 0px 0px;
   background: #fff;
   z-index: 100;
   flex-direction: column;
   align-items: center;
+  bottom: 0;
   box-shadow: -4px 0px 14px 0px rgba(0, 0, 0, 0.05);
 `;
 const Header = styled.div`
@@ -218,30 +231,34 @@ const DeliverDay = styled.div`
   line-height: 16px;
   letter-spacing: -0.5px;
 `;
-
+const ButtonContainer = styled.div`
+  padding: 0px 16px 20px 16px;
+  box-sizing: border-box;
+  align-items: flex-start;
+  gap: 8px;
+  align-self: stretch;
+  display: flex;
+  position: relative;
+  //bottom: 20px;
+  margin-top: 3rem;
+  width: 100%; /* 컨테이너의 너비를 조정 */
+  justify-content: center; /* 버튼들을 중앙에 배치 */
+`;
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
-  width: calc(100% - 48px);
   height: 48px;
-  padding: var(--Typography-size-s, 14px) 20px;
+  padding: 14px 2rem;
   align-items: center;
   gap: 8px;
-  align-self: stretch;
   justify-content: center;
-  align-self: stretch;
   border-radius: 50px;
-  background: #ffa256;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  //position: relative;
 `;
 const ButtonTxt = styled.div`
-  color: #fff;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
@@ -249,3 +266,10 @@ const ButtonTxt = styled.div`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
+//사용법보기 클릭시 어떤 형태로 나오는지
+//1. 기존 컴포넌트에서 팝업만 생성
+//2. 버튼 클릭하고 맘에 들어요 클릭 시 팝업 생성
+
+//생성된편지 ui, 사용법안내 팝업 만들기
+//와프 이해하기
+//지라 업데이트

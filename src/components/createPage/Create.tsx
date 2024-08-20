@@ -4,7 +4,7 @@ import styled from "styled-components";
 import CoverDeco from "./CoverDeco/CoverStyle";
 import FinalInfo from "./FinalLetter/FinalInfo";
 
-export const CreateLetter = () => {
+export const Create = () => {
   const [viewStartpage, setViewStartpage] = useState<boolean>(true);
   const [viewCoverDeco, setViewCoverDeco] = useState<boolean>(false);
   const [viewFinalInfo, setViewFinalInfo] = useState<boolean>(false);

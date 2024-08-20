@@ -3,7 +3,7 @@ import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop";
 import styled from "styled-components";
 import getCroppedImg from "./getCrop";
-import Slider from "@mui/material/Slider";
+//import Slider from "@mui/material/Slider";
 
 interface Props {
   originalImage: string;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import NonPrev from "../../../assets/prev_non.png";
-import Prev from "../../../assets/pageprev.png";
-import Next from "../../../assets/next.png";
+import NonPrev from "../../../../public/assets/prev_non.png";
+import Prev from "../../../../public/assets/pageprev.png";
+import Next from "../../../../public/assets/next.png";
 import { format, subMonths, addMonths } from "date-fns";
 import Calender from "./Calender";
 

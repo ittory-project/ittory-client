@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import PrevImg from "../../../assets/pageprev.png";
-import basic from "../../../assets/Book1.png";
-import book2 from "../../../assets/Book2.png";
-import camera from "../../../assets/camera.png";
-import image1 from "../../../assets/layer1.png";
-import image2 from "../../../assets/layer2.png";
-import image3 from "../../../assets/layer3.png";
+import PrevImg from "../../../../public/assets/pageprev.png";
+import basic from "../../../../public/assets/Book1.png";
+import book2 from "../../../../public/assets/Book2.png";
+import camera from "../../../../public/assets/camera.png";
+import image1 from "../../../../public/assets/layer1.png";
+import image2 from "../../../../public/assets/layer2.png";
+import image3 from "../../../../public/assets/layer3.png";
 import FontSelect from "./FontSelect";
 import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
@@ -217,7 +217,11 @@ export default function CoverStyle({
         </Button>
       ) : (
         <Button
-          style={{ background: "#FFA256" }}
+          style={{
+            background: "#FFA256",
+            boxShadow:
+              "-1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
+          }}
           onClick={() => {
             setBackgroundImage(books[ImageIndex]);
             setSelectfont(font);
@@ -478,4 +482,3 @@ const Image = styled.img<{ clicked: boolean }>`
 `;
 
 //개수 초과 시 우측 슬라이드 기능 - 디자인 확정 시
-//노란 버튼 box-shadow
