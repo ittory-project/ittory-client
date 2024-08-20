@@ -7,13 +7,14 @@
   font-weight: 400;
   font-style: normal;
 }
+/*
 @font-face {
   font-family: "SUIT";
   font-weight: 500;
   src:
     local("SUIT Medium"),
     url("./font/suit/SUIT-Medium.woff2") format("woff2");
-}
+}*/
 
 html,
 body,

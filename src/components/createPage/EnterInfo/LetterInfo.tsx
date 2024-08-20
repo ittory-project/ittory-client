@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import X from "../../../assets/X.png";
-import calender from "../../../assets/calendar.png";
+import X from "../../../../public/assets/X.png";
+import calender from "../../../../public/assets/calendar.png";
 import BottomSheet from "./BotttomSheet";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -177,7 +177,11 @@ export default function LetterInfo({
           </Button>
         ) : (
           <Button
-            style={{ background: "#FFA256" }}
+            style={{
+              background: "#FFA256",
+              boxShadow:
+                "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
+            }}
             onClick={() => {
               setViewCoverDeco(true);
               setViewStartpage(false);

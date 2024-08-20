@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import EditImg from "../../../assets/edit.png";
+import EditImg from "../../../../public/assets/edit.png";
 import EditLetter from "../FinalLetter/EditLetter";
 import CoverModal from "./CoverModal";
 import CompleteModal from "./CompleteModal";
