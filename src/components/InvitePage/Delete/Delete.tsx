@@ -1,41 +1,50 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { DeleteConfirm } from "./DeleteConfirm";
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Delete = ({ setViewDelete }: Props) => {
+  const [viewConfirm, setViewConfirm] = useState<boolean>(false);
   const handleDelete = () => {
     setViewDelete(false);
+  };
+  const handleConfirm = () => {
+    setViewConfirm(true);
   };
 
   return (
     <BackGround>
-      <Modal>
-        <Title>정말 삭제시겠어요?</Title>
-        <Contents>지금 삭제하시면 작성한 모든 내용이 사라지며,</Contents>
-        <Contents>다른 참여자들도 편지를 작성할 수 없게 됩니다.</Contents>
-        <ButtonContainer>
-          <Button
-            style={{
-              background: "#CED4DA",
-            }}
-          >
-            <ButtonTxt style={{ color: "#495057" }} onClick={handleDelete}>
-              취소하기
-            </ButtonTxt>
-          </Button>
-          <Button
-            style={{
-              background: "#FFA256",
-            }}
-          >
-            <ButtonTxt style={{ color: "#fff" }}>삭제하기</ButtonTxt>
-            {/* 삭제안내페이지 랜더링 */}
-          </Button>
-        </ButtonContainer>
-      </Modal>
+      {!viewConfirm && (
+        <Modal>
+          <Title>정말 삭제시겠어요?</Title>
+          <Contents>지금 삭제하시면 작성한 모든 내용이 사라지며,</Contents>
+          <Contents>다른 참여자들도 편지를 작성할 수 없게 됩니다.</Contents>
+          <ButtonContainer>
+            <Button
+              style={{
+                background: "#CED4DA",
+              }}
+            >
+              <ButtonTxt style={{ color: "#495057" }} onClick={handleDelete}>
+                취소하기
+              </ButtonTxt>
+            </Button>
+            <Button
+              style={{
+                background: "#FFA256",
+              }}
+            >
+              <ButtonTxt style={{ color: "#fff" }} onClick={handleConfirm}>
+                삭제하기
+              </ButtonTxt>
+            </Button>
+          </ButtonContainer>
+        </Modal>
+      )}
+      {viewConfirm && <DeleteConfirm />}
     </BackGround>
   );
 };
