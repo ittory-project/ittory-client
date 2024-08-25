@@ -16,34 +16,34 @@ const Receive = () => {
 
   return (
     <>
-    {showDoorAnimation ? <DoorAnimation /> :
-      <Container onClick={handleClick}>
-        {expanded ? (
-          <>
-            <Text style={{ opacity: expanded ? 1 : 0 }}>Hello World!</Text>
-            <AnimatedDiv expanded={expanded}>
-              <Img src="/img/profile.png" expanded={expanded} />  
-            </AnimatedDiv>
-            <Button
-              style={{ opacity: expanded ? 1 : 0 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleButtonClick();
-              }}
-            >
-              Click Me
-            </Button>
-          </>
-        ) : (
-          <>
-            <SmallText>Small State Text</SmallText>
-            <AnimatedDiv expanded={expanded}>
-              <Img src="/img/profile.png" expanded={expanded} />  
-            </AnimatedDiv>
-            <SmallButton>Small State Button</SmallButton>
-          </>
-        )}
-      </Container>
+      {showDoorAnimation ? <DoorAnimation /> :
+        <Container onClick={handleClick}>
+          {expanded ? (
+            <>
+              <Text style={{ opacity: expanded ? 1 : 0 }}>Hello World!</Text>
+              <AnimatedDiv expanded={expanded}>
+                <Img src="/img/profile.png" expanded={expanded} />  
+              </AnimatedDiv>
+              <Button
+                style={{ opacity: expanded ? 1 : 0 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleButtonClick();
+                }}
+              >
+                Click Me
+              </Button>
+            </>
+          ) : (
+            <>
+              <SmallText>Small State Text</SmallText>
+              <AnimatedDiv expanded={expanded}>
+                <Img src="/img/profile.png" expanded={expanded} />  
+              </AnimatedDiv>
+              <SmallButton>Small State Button</SmallButton>
+            </>
+          )}
+        </Container>
       }
     </>
   );
@@ -66,7 +66,7 @@ const Img = styled.img<{ expanded: boolean }>`
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  filter: ${({ expanded }) => (expanded ? 'none' : 'blur(5px)')};  /* 블러 처리 */
+  filter: ${({ expanded }) => (expanded ? 'none' : 'blur(5px)')};
 `;
 
 const AnimatedDiv = styled.div<{ expanded: boolean }>`
