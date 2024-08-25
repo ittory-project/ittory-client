@@ -10,14 +10,16 @@ import crown from "../../../public/assets/crown.svg";
 import plus from "../../../public/assets/plus.svg";
 import tip from "../../../public/assets/tooltip.svg";
 import { UserGuide } from "./UserGuide";
-import { Delete } from "./Delete";
+import { Delete } from "./Delete/Delete";
+import { Count } from "./Count";
+import { Exit } from "./Exit";
 
 export interface GroupItem {
   id: number;
   profileImage: string;
   name: string;
 }
-
+//방장이랑 참여자 별개의 컴포넌트로 만들기
 export const Invite = () => {
   const items: GroupItem[] = [
     {
@@ -41,12 +43,12 @@ export const Invite = () => {
       profileImage: "../../../public/img/profileimage.svg",
       name: "아이유우",
     },
-
+    /*
     {
       id: 5,
       profileImage: "../../../public/img/profileimage.svg",
       name: "예지",
-    },
+    },*/
   ];
   const location = useLocation();
   const receiverName = location.state.receiverName;
@@ -59,12 +61,11 @@ export const Invite = () => {
   const guideOpen = location.state.guideOpen;
 
   const [sliceName, setSliceName] = useState<string>("");
-  const [sliceUserName, setSliceUserName] = useState<string>("");
-  //몇자 이상시 유저 네임 말줄임 되는지
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewDelete, setViewDelete] = useState<boolean>(false);
-  const [mainPage, setMainPage] = useState<boolean>(true);
+  const [viewCount, setViewCount] = useState<boolean>(false);
+  const [viewExit, setViewExit] = useState<boolean>(false);
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -76,7 +77,7 @@ export const Invite = () => {
 
   const handleUserName = (name: string) => {
     return name.slice(0, 3);
-  };
+  }; //몇자 이상시 유저 네임 말줄임 되는지
 
   const handleGuide = () => {
     setGuide(true);
@@ -84,6 +85,13 @@ export const Invite = () => {
 
   const handleDeleteview = () => {
     setViewDelete(true);
+  };
+  const handleExit = () => {
+    setViewExit(true);
+  };
+
+  const handleCountview = () => {
+    setViewCount(true);
   };
 
   const handle = async () => {
@@ -115,7 +123,8 @@ export const Invite = () => {
   return (
     <BackGround>
       {guide && <Overlay />}
-      {!viewDelete && (
+      {viewCount && <Overlay />}
+      {!viewDelete && !viewExit && (
         <>
           <Header>
             <ReceiverContainer>
@@ -131,7 +140,7 @@ export const Invite = () => {
                 alt="deletebtn"
                 onClick={handleDeleteview}
               />
-              <Icon src={out} alt="outbtn" />
+              <Icon src={out} alt="outbtn" onClick={handleExit} />
             </IconContainer>
             {/* 삭제 아이콘은 방장에게만 */}
           </Header>
@@ -147,7 +156,7 @@ export const Invite = () => {
                 <DeliverDay>
                   {`${format(deliverDay, "yyyy")}.`}
                   {`${format(deliverDay, "MM")}.`}
-                  {format(deliverDay, "dds")}
+                  {format(deliverDay, "dd")}
                   {` (${format(deliverDay, "E", { locale: ko })})`}
                 </DeliverDay>
               )}
@@ -162,7 +171,7 @@ export const Invite = () => {
                 <List>
                   {items.map((user) =>
                     user.id === 1 ? (
-                      <MainUser>
+                      <MainUser key={user.id}>
                         <Crown img={crown} />
                         <User>
                           <ProfileImg img={items[0].profileImage} />
@@ -170,7 +179,7 @@ export const Invite = () => {
                         </User>
                       </MainUser>
                     ) : (
-                      <InvitedUser>
+                      <InvitedUser key={user.id}>
                         <User>
                           <ProfileImg img={user.profileImage} />
                           {user.name.length > 3 ? (
@@ -208,20 +217,23 @@ export const Invite = () => {
               </Box>
             </BoxContainer>
           </MainContainer>
-          <Button>
+          <Button onClick={handleCountview}>
             <ButtonTxt>이어 쓸 횟수 정하기</ButtonTxt>
-            {/* 바텀 시트 */}
           </Button>
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
+          {viewCount && (
+            <Count setViewCount={setViewCount} member={items.length} />
+          )}
         </>
       )}
 
       {viewDelete && <Delete setViewDelete={setViewDelete} />}
+      {viewExit && <Exit setViewExit={setViewExit} />}
     </BackGround>
   );
 };
-//인덱스 0일때 크라운
+
 const BackGround = styled.div`
   display: flex;
   flex-direction: column;
@@ -312,7 +324,7 @@ const MainContainer = styled.div`
 `;
 const Book = styled.div<{ backgroundImage: string }>`
   width: 200px;
-  height: 260px;
+  height: 261px;
   margin-top: 2rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
   background-image: url(${(props) => props.backgroundImage});
@@ -338,7 +350,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
 `;
 const TitleContainer = styled.div<{ font: string }>`
   display: flex;
-  margin-top: 10px;
+  margin-top: 9px;
   width: 224px;
   color: #fff;
   padding: 16px 0px 12px 0px;
@@ -504,7 +516,7 @@ const UserName = styled.div<{ isLongName: boolean }>`
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
-  width: calc(100% - 48px);
+  width: 21rem;
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;
   align-items: center;
