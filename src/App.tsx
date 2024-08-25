@@ -1,25 +1,27 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { HomePage } from './pages/HomePage';
-import { LoginPage } from './pages/LoginPage';
 import { MainLayout } from './layout/MainLayout';
-import { WritePage } from './pages/WritePage';
-import { CompTest } from './components/common/\bCompTest';
-import { ReceivePage } from './pages/ReceivePage';
+import { ReceivePage } from './pages/receive/ReceivePage';
+import { HomePage } from './pages/home/HomePage';
+import { LoginPage } from './pages/home/LoginPage';
+import { WritePage } from './pages/write/WritePage';
+import { CompTest } from './components/common/CompTest';
+import { ReceiveLetterPage } from './pages/receive/ReceiveLetterPage';
 
 function App() {
   return (
-    <MainLayout>
-      <Router>
+    <Router>
+      <MainLayout>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/write' element={<WritePage />} />
           <Route path='/receive' element={<ReceivePage />} />
+          <Route path='/receive/letter' element={<ReceiveLetterPage />} />
           <Route path='/comp' element={<CompTest />} />
         </Routes>
-      </Router>
-    </MainLayout>
+      </MainLayout>
+    </Router>
   );
 }
 

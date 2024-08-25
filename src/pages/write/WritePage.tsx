@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { WriteMainModal } from "../components/writePage/writeMainModal/WriteMainModal";
 import styled from "styled-components";
-import Write from "../components/writePage/Write";
+import { WriteMainModal } from "../../components/writePage/writeMainModal/WriteMainModal";
+import Write from "../../components/writePage/Write";
+
 
 export const WritePage = () => {
   const [showPopup, setShowPopup] = useState(true);

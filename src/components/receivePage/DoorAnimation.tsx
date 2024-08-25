@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
 const rotateHandle = keyframes`
@@ -31,10 +33,18 @@ const reduceHandleSize = keyframes`
 `;
 
 export const DoorAnimation = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate('letter')
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
     return (
         <Container>
             <Door>
-                <Handle src="/assets/doorknob.png" />
+                <Handle src="/assets/doorknob.svg" />
             </Door>
         </Container>
     );

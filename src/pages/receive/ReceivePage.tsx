@@ -1,4 +1,4 @@
-import Receive from "../components/receivePage/Receive";
+import Receive from "../../components/receivePage/Receive";
 
 export const ReceivePage = () => {
     return (

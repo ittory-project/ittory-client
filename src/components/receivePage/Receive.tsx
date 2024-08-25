@@ -1,33 +1,51 @@
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
+import { DoorAnimation } from './DoorAnimation';
 
 const Receive = () => {
   const [expanded, setExpanded] = useState(false);
+  const [showDoorAnimation, setShowDoorAnimation] = useState(false); 
 
   const handleClick = () => {
     setExpanded(true);
   };
 
+  const handleButtonClick = () => {
+    setShowDoorAnimation(true); 
+  };
+
   return (
-    <Container onClick={handleClick}>
-      {expanded ? (
-        <>
-          <Text style={{ opacity: expanded ? 1 : 0 }}>Hello World!</Text>
-          <AnimatedDiv expanded={expanded}>
-            <Img src="/img/profile.png" expanded={expanded} />  
-          </AnimatedDiv>
-          <Button style={{ opacity: expanded ? 1 : 0 }}>Click Me</Button>
-        </>
-      ) : (
-        <>
-          <SmallText>Small State Text</SmallText>
-          <AnimatedDiv expanded={expanded}>
-            <Img src="/img/profile.png" expanded={expanded} />  
-          </AnimatedDiv>
-          <SmallButton>Small State Button</SmallButton>
-        </>
-      )}
-    </Container>
+    <>
+    {showDoorAnimation ? <DoorAnimation /> :
+      <Container onClick={handleClick}>
+        {expanded ? (
+          <>
+            <Text style={{ opacity: expanded ? 1 : 0 }}>Hello World!</Text>
+            <AnimatedDiv expanded={expanded}>
+              <Img src="/img/profile.png" expanded={expanded} />  
+            </AnimatedDiv>
+            <Button
+              style={{ opacity: expanded ? 1 : 0 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleButtonClick();
+              }}
+            >
+              Click Me
+            </Button>
+          </>
+        ) : (
+          <>
+            <SmallText>Small State Text</SmallText>
+            <AnimatedDiv expanded={expanded}>
+              <Img src="/img/profile.png" expanded={expanded} />  
+            </AnimatedDiv>
+            <SmallButton>Small State Button</SmallButton>
+          </>
+        )}
+      </Container>
+      }
+    </>
   );
 };
 
