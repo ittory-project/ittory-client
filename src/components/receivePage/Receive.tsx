@@ -1,127 +1,179 @@
 import { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { DoorAnimation } from './DoorAnimation';
 
 const Receive = () => {
   const [expanded, setExpanded] = useState(false);
-  const [showDoorAnimation, setShowDoorAnimation] = useState(false); 
+  const [showDoorAnimation, setShowDoorAnimation] = useState(false);
+  const [hideDoorImg, setHideDoorImg] = useState(false); 
 
   const handleClick = () => {
     setExpanded(true);
+    setTimeout(() => {
+      setHideDoorImg(true); 
+    }, 1500);
   };
 
   const handleButtonClick = () => {
-    setShowDoorAnimation(true); 
+    console.log("why");
+    setShowDoorAnimation(true);
   };
 
   return (
     <>
-      {showDoorAnimation ? <DoorAnimation /> :
+      {showDoorAnimation ? (
+        <DoorAnimation />
+      ) : (
         <Container onClick={handleClick}>
+          <DoorImg expanded={expanded} hide={hideDoorImg}>
+            <AnimatedDiv expanded={expanded}>
+              <Img src="/img/profile.png" expanded={expanded} />
+            </AnimatedDiv>
+          </DoorImg>
           {expanded ? (
-            <>
-              <Text style={{ opacity: expanded ? 1 : 0 }}>Hello World!</Text>
-              <AnimatedDiv expanded={expanded}>
-                <Img src="/img/profile.png" expanded={expanded} />  
-              </AnimatedDiv>
-              <Button
-                style={{ opacity: expanded ? 1 : 0 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleButtonClick();
-                }}
-              >
-                Click Me
-              </Button>
-            </>
-          ) : (
-            <>
-              <SmallText>Small State Text</SmallText>
-              <AnimatedDiv expanded={expanded}>
-                <Img src="/img/profile.png" expanded={expanded} />  
-              </AnimatedDiv>
-              <SmallButton>Small State Button</SmallButton>
-            </>
-          )}
+            <div  onClick={(e) => e.stopPropagation()}>
+              {hideDoorImg && <ExpandTitle>선재님 맞으시죠? 편지가 도착했어요!</ExpandTitle>}
+              <ExpandButton onClick={handleButtonClick} >
+                네 맞아요!
+              </ExpandButton>
+            </div> ) : (
+              <>
+                <SmallText expanded={expanded}>선재님에게 편지가 도착했어요</SmallText>
+                <SmallInfo>문을 터치해 보세요</SmallInfo>
+              </>
+            )
+          }
         </Container>
-      }
+      )}
     </>
   );
 };
 
 export default Receive;
 
+const expandAnimation = keyframes`
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(5);
+  }
+`;
+
 const Container = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  background: var(--color-black-white-black, #000);
   overflow: hidden;
 `;
 
+const DoorImg = styled.div<{ expanded: boolean, hide: boolean }>`
+  position: absolute;
+  bottom: 0px;
+  z-index: 1;
+  width: 400px;
+  height: 600px;
+  background-image: ${({ hide }) => (hide ? '' : 'url(/assets/door.svg)' )};
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 2s ease;
+  // cursor: pointer;
+
+  ${({ expanded }) =>
+    expanded &&
+    css`
+      animation: ${expandAnimation} 2s forwards;
+      transform-origin: center;
+    `}
+`;
+
 const Img = styled.img<{ expanded: boolean }>`
-  width: 100%;
-  height: 100%;
+  width: ${({ expanded }) => (expanded ? '50px' : '50px')};
+  height: ${({ expanded }) => (expanded ? '50px' : '50px')};
   object-fit: cover;
   border-radius: 50%;
   filter: ${({ expanded }) => (expanded ? 'none' : 'blur(5px)')};
+  transition: all 2s ease;
 `;
 
 const AnimatedDiv = styled.div<{ expanded: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
   width: 50px;
   height: 50px;
-  background-color: #3498db;
   border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.5s ease;
+  position: absolute;
+  top: 150px;
+  transition: all 2s ease;
 
   ${({ expanded }) =>
     expanded &&
     css`
-      width: 300px;
-      height: 300px;
+      width: 50px;
+      height: 50px;
+      top: 50%; 
+      transform: translateY(-90%);
     `}
 `;
+ 
+const SmallText = styled.div<{ expanded: boolean }>`
+  font-size: 16px;
+  color: var(--Color-grayscale-gray50, #F8F9FA);
+  text-align: center;
+  position: absolute;
+  top: 200px;
+  transition: all 2s ease;
+`;
 
-const Text = styled.div`
+const ExpandTitle = styled.div`
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 24px;
   color: white;
   margin-bottom: 20px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: 2s ease;
+  text-align: center; /* 추가적으로 가운데 정렬 */
 `;
 
-const SmallText = styled.div`
-  font-size: 16px;
-  color: black;
-  margin-bottom: 10px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  font-size: 18px;
+const ExpandButton = styled.button`
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  width: 288px;
+  height: var(--Typography-line_height-xl, 48px);
+  padding: 14px 20px;
+  align-items: center;
+  gap: var(--Border-Radius-radius_300, 8px);
+  text-align: center;
   border: none;
-  border-radius: 5px;
-  background-color: #2ecc71;
-  color: white;
+  z-index: 3;
+
+  border-radius: var(--Border-Radius-radius_circle, 50px);
+  background: var(--Color-primary-orange, #FFA256);
+  box-shadow: -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset;
+  color: var(--color-black-white-white, #FFF);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  margin-top: 20px;
 `;
 
-const SmallButton = styled.button`
+const SmallInfo = styled.div`
   padding: 5px 10px;
   font-size: 14px;
-  border: none;
   border-radius: 5px;
-  background-color: #e74c3c;
   color: white;
-  cursor: pointer;
   margin-top: 10px;
+  position: absolute;
+  bottom: 200px;
+  z-index: 2;
 `;
