@@ -5,6 +5,7 @@ import { LoginPage } from './pages/LoginPage';
 import { MainLayout } from './layout/MainLayout';
 import { WritePage } from './pages/WritePage';
 import { CompTest } from './components/common/\bCompTest';
+import { ReceivePage } from './pages/ReceivePage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/write' element={<WritePage />} />
+          <Route path='/receive' element={<ReceivePage />} />
           <Route path='/comp' element={<CompTest />} />
         </Routes>
       </Router>
