@@ -47,7 +47,7 @@ export default function Calender({
           <Selected
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ "margin-right": i === 6 ? "0" : "6%" }}
+            style={{ marginRight: i === 6 ? "0" : "6%" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,7 @@ export default function Calender({
           <Selected
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ "margin-right": i === 6 ? "0" : "6%" }}
+            style={{ marginRight: i === 6 ? "0" : "6%" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -77,26 +77,20 @@ export default function Calender({
             </svg>
             <Txt style={{ color: "#FFF" }}>{formattedDate}</Txt>
           </Selected>
+        ) : format(day, "yyyy-MM-dd") < format(current, "yyyy-MM-dd") ? (
+          <Disabled
+            key={format(day, "yyyy-MM-dd")}
+            style={{ marginRight: i === 6 ? "0" : "6%" }}
+          >
+            <Txt style={{ color: "#DEE2E6" }}>{formattedDate}</Txt>
+          </Disabled>
         ) : (
           <Valid
             key={format(day, "yyyy-MM-dd")}
-            onClick={
-              format(current, "dd") >= format(currentMonth, "dd")
-                ? () => setSelectedDate(cloneDay)
-                : undefined
-            }
-            style={{ "margin-right": i === 6 ? "0" : "6%" }}
+            onClick={() => setSelectedDate(cloneDay)}
+            style={{ marginRight: i === 6 ? "0" : "6%" }}
           >
-            <Txt
-              style={{
-                color:
-                  format(current, "dd") >= format(currentMonth, "dd")
-                    ? "#000000"
-                    : "#DEE2E6",
-              }}
-            >
-              {formattedDate}
-            </Txt>
+            <Txt style={{ color: "#000000" }}>{formattedDate}</Txt>
           </Valid>
         )
       );
