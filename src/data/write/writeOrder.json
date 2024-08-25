@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "imageUrl": "img/profile.png",
+        "name": "카리나"
+    },
+    {
+        "id": 2,
+        "imageUrl": "img/profile.png",
+        "name": "지젤"
+    },
+    {
+        "id": 3,
+        "imageUrl": "img/profile.png",
+        "name": "윈터"
+    },
+    {
+        "id": 4,
+        "imageUrl": "img/profile.png",
+        "name": "닝닝"
+    },
+    {
+        "id": 5,
+        "imageUrl": "img/profile.png",
+        "name": "다현"
+    }
+]
