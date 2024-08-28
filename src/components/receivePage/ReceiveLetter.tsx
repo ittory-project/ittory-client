@@ -1,32 +1,13 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Pagination } from '../common/Pagination';
 
 const coverImages = {
   img: '/img/cover/orange.svg'
 };
 
-const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: number, totalPages: number, onPageChange: (page: number) => void }) => {
-  return (
-    <PaginationContainer>
-      <PaginationButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
-        <img src='/assets/arrow_back_black.svg' />
-      </PaginationButton>
-      <PaginationText>{currentPage}/{totalPages}</PaginationText>
-      <PaginationButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-        <img src='/assets/arrow_next_black.svg' />
-      </PaginationButton>
-    </PaginationContainer>
-  );
-};
-
 export const ReceiveLetter = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 14;
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    // query
-  };
 
   return (
     <Background>
@@ -44,7 +25,7 @@ export const ReceiveLetter = () => {
           </DescriptionDiv>
         </CoverContent>
       </CoverContainer>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination totalPages={totalPages} />
     </Background>
   );
 };
