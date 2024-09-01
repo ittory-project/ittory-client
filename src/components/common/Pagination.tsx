@@ -55,13 +55,20 @@ const PaginationContainer = styled.div`
 const PaginationButton = styled.button`
   background-color: transparent;
   border: none;
-  font-size: 24px;
-  color: #333;
+  style: none;
   cursor: pointer;
   
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+  
+  &:active {
+    color: #000;
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 

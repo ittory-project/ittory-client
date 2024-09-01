@@ -79,13 +79,14 @@ const DateDiv = styled.div`
 const PhotoDiv = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 60px;
+  margin-top: 35px;
+  margin-bottom: 45px;
 `;
 
 const ProfileImage = styled.img`
   width: 164px;
   height: 164px;
-  border-radius: 30px;
+  border-radius: 20px;
   object-fit: cover;
 `;
 

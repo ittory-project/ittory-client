@@ -68,6 +68,7 @@ const CoverContainer = styled.div`
 const ToDiv = styled.div`
   font-size: 24px;
   margin-bottom: 40px;
+  padding: 0px 10px;
   color: var(--color-black-white-white, #FFF);
   text-align: center;
 

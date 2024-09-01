@@ -3,23 +3,24 @@ import styled from 'styled-components';
 export const ReceiveLetterContents = () => {
   return (
     <>
-      <ProductLeftImage src='/img/cover/left.svg' />
-      <ProductImage src='/img/cover/product.svg' />
-      <ContentTitle>편지 내용 제목</ContentTitle>
-      <ContentText>
-      </ContentText>
+      <ProductLeftSide src='/img/cover/left.svg' />
+      <ProductRightSide src='/img/cover/product.svg' />
+      <ContentImg src='/img/profile.png' />
+      <Content>편지 내용</Content>
+      <ContentWriter>카리나</ContentWriter>
     </>
   );
 };
 
-const ProductImage = styled.img`
+const ProductRightSide = styled.img`
   display: flex;
   margin: 3.5px 4px 3.5px auto;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
-const ProductLeftImage = styled.img`
+const ProductLeftSide = styled.img`
   width: 67px;
   height: 369px;
   object-fit: fill;
@@ -28,15 +29,57 @@ const ProductLeftImage = styled.img`
   top: -7px;
 `;
 
-const ContentTitle = styled.h1`
-  font-size: 24px;
-  color: #D2691E;
-  margin-bottom: 16px;
+const ContentImg = styled.img`
+  width: 182px;
+  height: 182px;
+  border-radius: var(--Border-Radius-radius_400, 12px);
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translate(-47%, -0%);
 `;
 
-const ContentText = styled.p`
+const Content = styled.div`
+  display: flex;
+  height: 41px;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  color: var(--Color-grayscale-gray900, #212529);
+  text-align: center;
+
+  /* body/small_medium */
+  font-family: var(--Typography-family-body, SUIT);
+  font-size: var(--Typography-size-s, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-47%, -0%);
+`;
+
+const ContentWriter = styled.div`
   font-size: 16px;
   color: #333;
   line-height: 1.6;
+
+  color: var(--Color-grayscale-gray600, #868E96);
+  text-align: right;
+
+  /* caption/2xsmall */
+  font-family: var(--Typography-family-caption, SUIT);
+  font-size: var(--Typography-size-2xs, 11px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Typography-line_height-2xs, 16px); /* 145.455% */
+  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  
+  position: absolute;
+  top: 85%;
+  right: 40px;
 `;
 
