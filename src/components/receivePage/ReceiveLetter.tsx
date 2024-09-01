@@ -1,43 +1,75 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Pagination } from '../common/Pagination';
+import { useLocation } from 'react-router-dom';
+
+function Query() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const coverImages = {
   img: '/img/cover/orange.svg'
 };
 
 export const ReceiveLetter = () => {
-  const totalPages = 14;
+  const query = Query();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const page = Number(query.get("page")) || 1;
+    setCurrentPage(page);
+  }, [query]);
+
+  const renderPageContent = () => {
+    if (currentPage === 1) {
+      return (
+        <CoverContainer>
+          <CoverImage src={coverImages.img} alt="Cover" />
+          <CoverContent>
+            <TitleDiv>일이삼사오육칠팔구십일이</TitleDiv>
+            <DateDiv>2024. 08. 21 (수)</DateDiv>
+            <PhotoDiv>
+              <ProfileImage src={'/img/profile.png'} alt="Profile" />
+            </PhotoDiv>
+            <DescriptionDiv>
+              일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오
+            </DescriptionDiv>
+          </CoverContent>
+        </CoverContainer>
+      );
+    } else {
+      return <LetterContent />;
+    }
+  };
 
   return (
     <Background>
       <ToDiv>To. {'선재'}</ToDiv>
-      <CoverContainer>
-        <CoverImage src={coverImages.img} alt="Cover" />
-        <CoverContent>
-          <TitleDiv>일이삼사오육칠팔구십일이</TitleDiv>
-          <DateDiv>2024. 08. 21 (수)</DateDiv>
-          <PhotoDiv>
-            <ProfileImage src={'/img/profile.png'} alt="Profile" />
-          </PhotoDiv>
-          <DescriptionDiv>
-            일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오
-          </DescriptionDiv>
-        </CoverContent>
-      </CoverContainer>
-      <Pagination totalPages={totalPages} />
+      {renderPageContent()}
+      <Pagination totalPages={14} />
     </Background>
   );
 };
 
+const LetterContent = () => {
+  return (
+    <CoverContainer>
+      <ProductImage src='/img/cover/product.svg' />
+      <ContentTitle>편지 내용 제목</ContentTitle>
+      <ContentText>
+      </ContentText>
+    </CoverContainer>
+  );
+};
+
 const Background = styled.div`
+  width: 100%;
   height: 100vh;
   background: linear-gradient(180deg, #F3C183 0%, #F0F5BF 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
 `;
 
 const CoverContainer = styled.div`
@@ -53,7 +85,6 @@ const CoverContainer = styled.div`
               0 16px 8px rgba(0,0,0,0.09),
               0 32px 16px rgba(0,0,0,0.09);
   background-color: white;
-  border-radius: 12px;
   overflow: hidden;
 `;
 
@@ -157,47 +188,21 @@ const DescriptionDiv = styled.div`
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
-const PaginationContainer = styled.div`
+const ProductImage = styled.img`
   display: flex;
+  margin: 3px 4px 3px auto;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
 `;
 
-const PaginationButton = styled.button`
-  background-color: transparent;
-  border: none;
+const ContentTitle = styled.h1`
   font-size: 24px;
-  color: #333;
-  cursor: pointer;
-  
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  color: #D2691E;
+  margin-bottom: 16px;
 `;
 
-const PaginationText = styled.span`
-  width: 46px;
-  margin: 0 10px;
-  font-size: 18px;
+const ContentText = styled.p`
+  font-size: 16px;
   color: #333;
-  display: flex;
-  padding: var(--Border-Radius-radius_200, 6px) var(--Border-Radius-radius_300, 8px);
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: rgba(248, 249, 250, 0.50);
-  backdrop-filter: blur(2px);
-  color: var(--Color-secondary-navy, #1C2231);
-  text-align: center;
-
-  /* caption/number_large */
-  font-family: var(--Typography-family-number, "Gmarket Sans");
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: -0.048px;
+  line-height: 1.6;
 `;

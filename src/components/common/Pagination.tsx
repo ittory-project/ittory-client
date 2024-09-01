@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 interface PaginationProps {
     totalPages: number;
-    pagesPerGroup: number;
 }
 
 function Query() {
@@ -12,27 +11,27 @@ function Query() {
 }
 
 export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const navigate = useNavigate();
-    const query = Query();
+  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+  const query = Query();
 
-    useEffect(() => {
-        const getPage = Number(query.get("page"))
-        if (getPage) {
-            setCurrentPage(getPage)
-        } else {
-            setCurrentPage(1)
-        }
-    }, [currentPage, query]);
+  useEffect(() => {
+    const getPage = Number(query.get("page"))
+    if (getPage) {
+      setCurrentPage(getPage)
+    } else {
+      setCurrentPage(1)
+    }
+  }, [currentPage, query]);
 
-    const onPageChange = (page: number) => {
-        if (page < 1 || page > totalPages) return;
-        setCurrentPage(page);
-        query.set('page', page.toString());
-        navigate({
-            search: query.toString(),
-        });
-    };
+  const onPageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    query.set('page', page.toString());
+    navigate({
+      search: query.toString(),
+    });
+  };
   return (
     <PaginationContainer>
       <PaginationButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
