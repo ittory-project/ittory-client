@@ -17,26 +17,21 @@ export default function FontSelect({ font, fonts, setFont }: Props) {
   return (
     <Container>
       <FontSelectorContainer>
-        {fonts.map((fontlist) =>
-          fontlist.family === font ? (
-            <Selected
-              key={fontlist.family}
+        {fonts.map((fontlist) => (
+          <FontItem
+            key={fontlist.family}
+            fontFamily={fontlist.family}
+            selected={fontlist.family === font}
+            onClick={() => handleFontChange(fontlist.family)}
+          >
+            <Fonttxt
               fontFamily={fontlist.family}
-              style={{ fontFamily: fontlist.family }}
+              selected={fontlist.family === font}
             >
               {fontlist.name}
-            </Selected>
-          ) : (
-            <Unselected
-              key={fontlist.family}
-              fontFamily={fontlist.family}
-              onClick={() => handleFontChange(fontlist.family)}
-              style={{ fontFamily: fontlist.family }}
-            >
-              {fontlist.name}
-            </Unselected>
-          )
-        )}
+            </Fonttxt>
+          </FontItem>
+        ))}
       </FontSelectorContainer>
     </Container>
   );
@@ -46,45 +41,55 @@ export default function FontSelect({ font, fonts, setFont }: Props) {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 20px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const FontSelectorContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 11px 16px;
+  white-space: nowrap;
+  /* 스크롤바 스타일 (브라우저에 따라 다를 수 있음) */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
 `;
-
-const Selected = styled.div<{ fontFamily: string }>`
-  display: flex;
+const FontItem = styled.div<{ fontFamily: string; selected: boolean }>`
+  display: inline-flex;
   width: 80px;
   height: 34px;
+  box-sizing: border-box;
   padding: 6px 16px;
   justify-content: center;
   align-items: center;
   gap: 4px;
+  text-align: center;
   border-radius: 50px;
-  border: 1px solid #ffa256;
-  background: #fff2e8;
-  color: #ffa256;
+  border: ${(props) =>
+    props.selected ? "1px solid #ffa256" : "1px solid #ced4da"};
+  background: ${(props) => (props.selected ? "#fff2e8" : "#f1f3f5")};
+  cursor: pointer;
+  transition: background-color 0.3s;
+`;
+const Fonttxt = styled.span<{ fontFamily: string; selected: boolean }>`
+  color: ${(props) => (props.selected ? "#ffa256" : "#858e96")};
+  font-family: ${(props) => props.fontFamily};
   font-size: ${(props) =>
-    props.fontFamily === "Ownglyph_UNZ-Rg" ? "18px" : "14px"};
+    props.fontFamily === "Ownglyph_UNZ-Rg" ? "20px" : "14px"};
   font-weight: 500;
-`;
-const Unselected = styled.div<{ fontFamily: string }>`
-  display: flex;
-  width: 80px;
-  height: 34px;
-  padding: 6px 16px;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  border-radius: 50px;
-  border: 1px solid #ced4da;
-  background: #f1f3f5;
-  color: #858e96;
-  font-size: ${(props) =>
-    props.fontFamily === "Ownglyph_UNZ-Rg" ? "18px" : "14px"};
-  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+  margin-top: ${(props) =>
+    props.fontFamily === "GmarketSans" ? "3px" : "1px"};
 `;

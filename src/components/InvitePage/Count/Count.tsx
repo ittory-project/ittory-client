@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import X from "../../../public/assets/X.png";
-import photo from "../../../public/assets/photo.svg";
-//import { Picker } from "./Picker";
+import X from "../../../../public/assets/X.png";
+import photo from "../../../../public/assets/photo.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,6 +14,7 @@ export const Count = ({ setViewCount, member }: Props) => {
   const list = Array.from({ length: 50 }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectNumber, setSelectNumber] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setSelectNumber(activeIndex + 1);
@@ -22,6 +23,11 @@ export const Count = ({ setViewCount, member }: Props) => {
   const handleCancel = () => {
     setViewCount(false);
   };
+
+  const navigateToConnection = () => {
+    navigate("/Connection");
+  };
+
   return (
     <ModalContainer>
       <Header>
@@ -71,9 +77,8 @@ export const Count = ({ setViewCount, member }: Props) => {
           <TotalTxt>{selectNumber * member}개</TotalTxt>
         </Notice>
         <Button>
-          <ButtonTxt>시작하기</ButtonTxt>
+          <ButtonTxt onClick={navigateToConnection}>시작하기</ButtonTxt>
         </Button>
-        {/* 편지 작성전 연결화면으로 이동 */}
       </Contents>
     </ModalContainer>
   );

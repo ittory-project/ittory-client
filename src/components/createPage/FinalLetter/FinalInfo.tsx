@@ -6,6 +6,8 @@ import EditImg from "../../../../public/assets/edit.png";
 import EditLetter from "../FinalLetter/EditLetter";
 import CoverModal from "./CoverModal";
 import CompleteModal from "./CompleteModal";
+import bright from "../../../../public/assets/border.svg";
+import shadow from "../../../../public/assets/shadow2.svg";
 
 interface Props {
   myName: string;
@@ -115,13 +117,15 @@ export default function FinalInfo({
                   style={{ width: "11px", height: "11px" }}
                 />
               </EditBtn>
-              {croppedImage === "" || selectedImageIndex !== 0 ? (
+              {croppedImage === "" || selectedImageIndex === 4 ? (
                 <Book backgroundImage={backgroundImage}>
                   <BookTitle font={selectfont}>{title}</BookTitle>
                 </Book>
               ) : (
                 <Book backgroundImage={backgroundImage}>
                   <BookTitle font={selectfont}>{title}</BookTitle>
+                  <Bright src={bright} />
+                  <Shadow src={shadow} />
                   <BtnImgContainer bgimg={croppedImage}></BtnImgContainer>
                 </Book>
               )}
@@ -335,10 +339,10 @@ const Cover = styled.div`
 `;
 const Book = styled.div<{ backgroundImage: string }>`
   width: 120px;
-  height: 156.429px;
+  height: 157px;
   position: relative;
   margin-top: 0.8rem;
-  border-radius: 3.833px 11.5px 11.5px 3.833px;
+  border-radius: 2.143px 6.429px 6.429px 2.143px;
   background-image: url(${(props) => props.backgroundImage});
   display: flex;
   align-items: center;
@@ -347,18 +351,36 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
 `;
+const Bright = styled.img`
+  width: 78px;
+  height: 78px;
+  margin-left: 3px;
+  margin-top: 45px;
+  position: absolute;
+  z-index: 0;
+  flex-shrink: 0;
+`;
+const Shadow = styled.img`
+  margin-left: 2.5px;
+  margin-top: 40px;
+  position: absolute;
+  z-index: 1;
+  flex-shrink: 0;
+`;
 const BtnImgContainer = styled.div<{ bgimg: string }>`
-  width: 80.357px;
-  height: 80.357px;
+  z-index: 0;
+  width: 73px;
+  height: 73px;
   gap: 4px;
   flex-shrink: 0;
-  border-radius: 100px;
+  border-radius: 10px;
   background-image: url(${(props) => props.bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 12px;
-  margin-left: 3px;
+  margin-top: 21px;
+  margin-left: 2.7px;
+  border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ font: string }>`
   display: flex;

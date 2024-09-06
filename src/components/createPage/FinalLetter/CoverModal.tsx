@@ -1,20 +1,28 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/X.png";
-import basic from "../../../../public/assets/Book1.png";
-import book2 from "../../../../public/assets/Book2.png";
-import camera from "../../../../public/assets/camera.png";
-import image1 from "../../../../public/assets/layer1.png";
-import image2 from "../../../../public/assets/layer2.png";
-import image3 from "../../../../public/assets/layer3.png";
+import basic from "../../../../public/assets/Book1.svg";
+import book2 from "../../../../public/assets/Book2.svg";
+import book3 from "../../../../public/assets/Book3.svg";
+import book4 from "../../../../public/assets/Book4.svg";
+import book5 from "../../../../public/assets/Book5.svg";
+import camera from "../../../../public/assets/camera.svg";
+import image1 from "../../../../public/assets/layer1.svg";
+import image2 from "../../../../public/assets/layer2.svg";
+import image3 from "../../../../public/assets/layer3.svg";
+import image4 from "../../../../public/assets/layer4.svg";
+import image5 from "../../../../public/assets/layer5.svg";
 import FontSelect from "../CoverDeco/FontSelect";
 import ImageCropper from "../CoverDeco/ImageCropper";
 import { Area } from "react-easy-crop";
+import shadow from "../../../../public/assets/shadow2.svg";
+import bright from "../../../../public/assets/border.svg";
 
 const fonts = [
-  { name: "SUIT", family: "SUIT" },
-  { name: "노트산스", family: "Eulyoo1945" },
-  { name: "언즈체", family: "Ownglyph_UNZ-Rg" },
+  { name: "서체1", family: "GmarketSans" },
+  { name: "서체2", family: "Ownglyph_UNZ-Rg" },
+  { name: "서체3", family: "CookieRun-Regular" },
+  { name: "서체4", family: "Cafe24ClassicType-Regular" },
 ];
 
 interface Props {
@@ -51,8 +59,8 @@ export default function CoverModal({
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
   const [font, setFont] = useState<string>(selectfont);
-  const images = [image1, image2, image3, image3, image3];
-  const books = [basic, book2, book2, book2, book2];
+  const images = [image1, image2, image3, image4, image5];
+  const books = [basic, book2, book3, book4, book5];
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLDivElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
@@ -147,6 +155,7 @@ export default function CoverModal({
 
   const onUploadImageButtonClick = useCallback(() => {
     if (imgRef.current) {
+      imgRef.current.value = "";
       imgRef.current.click();
     }
   }, []);
@@ -199,13 +208,22 @@ export default function CoverModal({
             spellCheck="false"
             font={font}
           />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="184"
+            height="2"
+            viewBox="0 0 184 2"
+            fill="none"
+          >
+            <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
+          </svg>
           {isKeyboardOpen && (
             <KeyboardBar keyboardHeight={keyboardHeight}>
               <FontSelect font={font} fonts={fonts} setFont={setFont} />
             </KeyboardBar>
           )}
         </TitleContainer>
-        {ImageIndex === 0 ? (
+        {ImageIndex !== 4 ? (
           croppedImage === "" ? (
             <ButtonContainer
               className="img__box"
@@ -226,22 +244,31 @@ export default function CoverModal({
               <BtnTxt>사진 추가</BtnTxt>
             </ButtonContainer>
           ) : (
-            <BtnImgContainer
-              bgimg={croppedImage}
-              onClick={onUploadImageButtonClick}
-            >
-              <input
-                style={{ display: "none" }}
-                type="file"
-                accept="image/*"
-                ref={imgRef}
-                onChange={onUploadImage}
-              />
-            </BtnImgContainer>
+            <>
+              <Bright src={bright} />
+              <Shadow src={shadow} />
+              <BtnImgContainer
+                bgimg={croppedImage}
+                onClick={onUploadImageButtonClick}
+              >
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  accept="image/*"
+                  ref={imgRef}
+                  onChange={onUploadImage}
+                />
+              </BtnImgContainer>
+            </>
           )
         ) : (
           <></>
         )}
+        <NameBar>
+          <NameContainer>
+            <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
+          </NameContainer>
+        </NameBar>
       </Book>
       <ImageContainer>
         {images.map((img, index) => (
@@ -252,6 +279,7 @@ export default function CoverModal({
             src={img}
             alt={`Image ${index + 1}`}
             className="image"
+            img={img}
           />
         ))}
       </ImageContainer>
@@ -280,7 +308,7 @@ const ModalContainer = styled.div<{
   display: flex;
   width: 100%;
   height: ${({ isKeyboardOpen, keyboardHeight }) =>
-    isKeyboardOpen ? `calc(100% + ${keyboardHeight}px)` : "38rem"};
+    isKeyboardOpen ? `calc(38rem - ${keyboardHeight}px)` : "38rem"};
   padding: 24px 24px 20px 24px;
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
@@ -304,7 +332,7 @@ cursor:pointer;
   gap: 4px
   flex-shrink: 0;
   border-radius: 100px;
-  background: "#e9ecef";
+  background: #e9ecef;
   &:focus {
   border: none;
     outline: none;
@@ -318,7 +346,7 @@ const BtnTxt = styled.div`
   font-weight: 400;
   line-height: 16px;
   letter-spacing: -0.5px;
-  padding-top: 4spx;
+  padding-top: 4px;
 `;
 const Header = styled.div`
   display: flex;
@@ -360,18 +388,43 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
 `;
+const Bright = styled.img`
+  width: 142px;
+  height: 142px;
+  margin-left: 3px;
+  margin-top: 85px;
+  position: absolute;
+  z-index: 3;
+  flex-shrink: 0;
+  object-fit: cover;
+  pointer-events: none;
+`;
+const Shadow = styled.img`
+  width: 153px;
+  height: 153px;
+  margin-left: 1px;
+  margin-top: 79px;
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  flex-shrink: 0;
+  object-fit: cover;
+`;
 const BtnImgContainer = styled.div<{ bgimg: string }>`
-  width: 150px;
-  height: 150px;
+  width: 134px;
+  z-index: 2;
+  cursor: pointer;
+  position: relative;
+  height: 134px;
   gap: 4px;
   flex-shrink: 0;
-  border-radius: 100px;
+  border-radius: 20px;
   background-image: url(${(props) => props.bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 3.8px;
-  margin-left: 4.5px;
+  margin-top: 19px;
+  margin-left: 4px;
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -379,6 +432,7 @@ const TitleContainer = styled.div`
   padding: 16px 0px 12px 0px;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 const Input = styled.input<{ font: string }>`
   box-sizing: border-box;
@@ -389,9 +443,8 @@ const Input = styled.input<{ font: string }>`
   align-items: center;
   height: 40px;
   text-align: center;
-  border-radius: 4px;
-  border: 1px dashed #fff;
-  background: rgba(255, 255, 255, 0.2);
+  border: 0;
+  background: rgba(255, 255, 255, 0);
 
   &::placeholder {
     line-height: 24px;
@@ -399,7 +452,8 @@ const Input = styled.input<{ font: string }>`
     text-align: center;
     text-overflow: ellipsis;
     font-family: ${(props) => props.font};
-    font-size: 16px;
+    font-size: ${(props) =>
+      props.selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -415,15 +469,52 @@ const Input = styled.input<{ font: string }>`
     text-overflow: ellipsis;
     font-family: ${(props) => props.font};
     font-size: ${(props) =>
-      props.font === "Ownglyph_UNZ-Rg" ? "21px" : "16px"};
+      props.font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
     line-height: 24px;
-  } //언즈체일때 글씨 크기
+  }
   &:focus {
     outline: none;
   }
+`;
+const NameBar = styled.div`
+  margin-top: 30px;
+  width: 224px;
+  height: 23px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-right: none;
+  border-left: none;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const NameContainer = styled.div`
+  width: 224px;
+  height: 21px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0.823px 0.823px 0.823px 0px rgba(255, 255, 255, 0.25) inset;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  text-align: center;
+`;
+const NameTxt = styled.div`
+  padding: 0 12px 0 12px;
+  width: 200px;
+  color: #715142;
+  text-align: center;
+  text-overflow: ellipsis;
+  font-family: SUIT;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 13px;
+  letter-spacing: -0.5px;
 `;
 const KeyboardBar = styled.div<{ keyboardHeight: number }>`
   position: fixed;
@@ -453,15 +544,22 @@ const ImageContainer = styled.div`
   gap: var(--Border-Radius-radius_300, 8px);
   align-self: stretch;
 `;
-const Image = styled.img<{ clicked: boolean }>`
+
+const Image = styled.div<{ clicked: boolean; img: string }>`
   cursor: pointer;
   transition: all 0.2s ease;
   width: ${(props) => (props.clicked ? "56px" : "48px")};
   height: ${(props) => (props.clicked ? "56px" : "48px")};
   opacity: ${(props) => (props.clicked ? "" : "0.4")};
-  border-radius: 8px;
-  border: ${(props) => (props.clicked ? "3px solid #ffa256" : "")};
+  border-radius: 10.2px;
+  flex-shrink: 0;
+  border: ${(props) => (props.clicked ? "3px solid #ffd0a9" : "")};
+  background-image: url(${(props) => props.img});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
+
 const Button = styled.button<{ isKeyboardOpen: boolean }>`
   box-sizing: border-box;
   display: ${(props) =>

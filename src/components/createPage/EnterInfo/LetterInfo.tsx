@@ -114,6 +114,7 @@ export default function LetterInfo({
               minlength="1"
               maxlength="12"
               onFocus={handleFocus}
+              spellcheck="false"
               //onBlur={handleBlur}
             />
           </InputBox>
@@ -135,6 +136,7 @@ export default function LetterInfo({
               minlength="1"
               maxlength="5"
               onFocus={handleFocus}
+              spellcheck="false"
               //onBlur={handleBlur}
             />
           </InputBox>
