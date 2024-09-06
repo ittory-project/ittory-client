@@ -3,9 +3,10 @@ import styled from "styled-components";
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
+  handleUserExit: (userId: number) => void;
 }
 //방장에게만 적용되는 팝업
-export const Exit = ({ setViewExit }: Props) => {
+export const Exit = ({ setViewExit, handleUserExit }: Props) => {
   const handleExit = () => {
     setViewExit(false);
   };
@@ -32,7 +33,10 @@ export const Exit = ({ setViewExit }: Props) => {
           >
             <ButtonTxt style={{ color: "#fff" }}>나가기</ButtonTxt>
           </Button>
-          {/* 랜딩페이지로 이동 */}
+          {/* 
+          - 랜딩페이지로 이동
+          - handleUserExit() 실행
+          */}
         </ButtonContainer>
       </Modal>
     </BackGround>

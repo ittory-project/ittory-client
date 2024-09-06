@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import letter from "../../../../public/assets/letter.png";
 import { useNavigate } from "react-router-dom";
+import bright from "../../../../public/assets/border.svg";
+import shadow from "../../../../public/assets/shadow2.svg";
 
 interface Props {
   title: string;
@@ -79,16 +81,22 @@ export default function CompleteModal({
         </Receiver>
         <Book backgroundImage={bookimage}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
-          {selectedImageIndex === 0 && <BtnImgContainer bgimg={croppedImage} />}
           {deliverDay === null ? (
             <></>
           ) : (
             <DeliverDay>
-              {`${format(deliverDay, "yyyy")}.`}
-              {`${format(deliverDay, "MM")}.`}
-              {format(deliverDay, "dds")}
+              {`${format(deliverDay, "yyyy")}. `}
+              {`${format(deliverDay, "MM")}. `}
+              {format(deliverDay, "dd")}
               {` (${format(deliverDay, "E", { locale: ko })})`}
             </DeliverDay>
+          )}
+          {selectedImageIndex !== 4 && (
+            <>
+              <Bright src={bright} />
+              <Shadow src={shadow} />
+              <BtnImgContainer bgimg={croppedImage} />
+            </>
           )}
         </Book>
       </MainContainer>
@@ -173,19 +181,6 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
-  width: 150px;
-  height: 150px;
-  gap: 4px;
-  flex-shrink: 0;
-  border-radius: 100px;
-  background-image: url(${(props) => props.bgimg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  margin-top: 18.5px;
-  margin-left: 4.5px;
-`;
 const TitleContainer = styled.div<{ font: string }>`
   display: flex;
   width: 224px;
@@ -199,17 +194,50 @@ const TitleContainer = styled.div<{ font: string }>`
   font-weight: 500;
   letter-spacing: -0.5px;
   line-height: 24px;
+  margin-top: 8px;
 `;
 const DeliverDay = styled.div`
-  color: #fff;
-  margin-top: 203px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: -14px;
   text-align: center;
   font-family: var(--Typography-family-caption, SUIT);
-  font-size: 11px;
+  font-size: 10px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 16px;
+  font-weight: 700;
+  line-height: 14px;
   letter-spacing: -0.5px;
+`;
+const Bright = styled.img`
+  width: 148px;
+  height: 148px;
+  margin-left: 3.9px;
+  margin-top: 80px;
+  position: absolute;
+  z-index: 2;
+  flex-shrink: 0;
+`;
+const Shadow = styled.img`
+  width: 161px;
+  height: 161px;
+  margin-left: 2.7px;
+  margin-top: 73px;
+  position: absolute;
+  z-index: 3;
+  flex-shrink: 0;
+`;
+const BtnImgContainer = styled.div<{ bgimg: string }>`
+  width: 136px;
+  height: 136px;
+  gap: 4px;
+  z-index: 2;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background-image: url(${(props) => props.bgimg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 25px;
+  margin-left: 4.6px;
 `;
 
 const Button = styled.button`

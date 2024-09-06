@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import letter from "../../../../public/assets/letter.png";
 import { useNavigate } from "react-router-dom";
+import bright from "../../../../public/assets/border.svg";
+import shadow from "../../../../public/assets/shadow2.svg";
 
 interface Props {
   title: string;
@@ -82,7 +84,13 @@ export default function UserFinishModal({
         </Receiver>
         <Book backgroundImage={bookimage}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
-          {selectedImageIndex === 0 && <BtnImgContainer bgimg={croppedImage} />}
+          {selectedImageIndex === 4 && (
+            <>
+              <Bright src={bright} />
+              <Shadow src={shadow} />
+              <BtnImgContainer bgimg={croppedImage} />
+            </>
+          )}
           {deliverDay === null ? (
             <></>
           ) : (
@@ -193,19 +201,6 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
-  width: 150px;
-  height: 150px;
-  gap: 4px;
-  flex-shrink: 0;
-  border-radius: 100px;
-  background-image: url(${(props) => props.bgimg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  margin-top: 18.5px;
-  margin-left: 4.5px;
-`;
 const TitleContainer = styled.div<{ font: string }>`
   display: flex;
   width: 224px;
@@ -219,18 +214,52 @@ const TitleContainer = styled.div<{ font: string }>`
   font-weight: 500;
   letter-spacing: -0.5px;
   line-height: 24px;
+  margin-top: 9px;
 `;
 const DeliverDay = styled.div`
-  color: #fff;
-  margin-top: 203px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: -14px;
   text-align: center;
   font-family: var(--Typography-family-caption, SUIT);
-  font-size: 11px;
+  font-size: 10px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 16px;
+  font-weight: 700;
+  line-height: 14px;
   letter-spacing: -0.5px;
 `;
+const Bright = styled.img`
+  width: 148px;
+  height: 148px;
+  margin-left: 3.9px;
+  margin-top: 80px;
+  position: absolute;
+  z-index: 2;
+  flex-shrink: 0;
+`;
+const Shadow = styled.img`
+  width: 161px;
+  height: 161px;
+  margin-left: 2.7px;
+  margin-top: 73px;
+  position: absolute;
+  z-index: 3;
+  flex-shrink: 0;
+`;
+const BtnImgContainer = styled.div<{ bgimg: string }>`
+  width: 150px;
+  height: 150px;
+  gap: 4px;
+  z-index: 3;
+  flex-shrink: 0;
+  border-radius: 100px;
+  background-image: url(${(props) => props.bgimg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 18.5px;
+  margin-left: 4.5px;
+`;
+
 const ButtonContainer = styled.div`
   padding: 0px 16px 20px 16px;
   box-sizing: border-box;
@@ -266,10 +295,3 @@ const ButtonTxt = styled.div`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
-//사용법보기 클릭시 어떤 형태로 나오는지
-//1. 기존 컴포넌트에서 팝업만 생성
-//2. 버튼 클릭하고 맘에 들어요 클릭 시 팝업 생성
-
-//생성된편지 ui, 사용법안내 팝업 만들기
-//와프 이해하기
-//지라 업데이트

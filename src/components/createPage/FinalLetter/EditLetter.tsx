@@ -6,6 +6,8 @@ import EditImg from "../../../../public/assets/edit.png";
 import calender from "../../../../public/assets/calendar.png";
 import BottomSheet from "../EnterInfo/BotttomSheet";
 import CoverModal from "../FinalLetter/CoverModal";
+import shadow from "../../../../public/assets/shadow2.svg";
+import bright from "../../../../public/assets/border.svg";
 
 interface Props {
   myName: string;
@@ -142,13 +144,15 @@ export default function EditLetter({
               style={{ width: "11px", height: "11px" }}
             />
           </EditBtn>
-          {croppedImage === "" || selectedImageIndex !== 0 ? (
+          {croppedImage === "" || selectedImageIndex === 4 ? (
             <Book backgroundImage={backgroundImage}>
               <BookTitle font={selectfont}>{title}</BookTitle>
             </Book>
           ) : (
             <Book backgroundImage={backgroundImage}>
               <BookTitle font={selectfont}>{title}</BookTitle>
+              <Bright src={bright} />
+              <Shadow src={shadow} />
               <BtnImgContainer bgimg={croppedImage}></BtnImgContainer>
             </Book>
           )}
@@ -305,18 +309,36 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
 `;
+const Bright = styled.img`
+  width: 78px;
+  height: 78px;
+  margin-left: 3px;
+  margin-top: 44px;
+  position: absolute;
+  z-index: 0;
+  flex-shrink: 0;
+`;
+const Shadow = styled.img`
+  margin-left: 2.6px;
+  margin-top: 39.8px;
+  position: absolute;
+  z-index: 1;
+  flex-shrink: 0;
+`;
 const BtnImgContainer = styled.div<{ bgimg: string }>`
-  width: 80.357px;
-  height: 80.357px;
+  z-index: 0;
+  width: 73px;
+  height: 73px;
   gap: 4px;
   flex-shrink: 0;
-  border-radius: 100px;
+  border-radius: 10px;
   background-image: url(${(props) => props.bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 15px;
-  margin-left: 2.5px;
+  margin-top: 24px;
+  margin-left: 3px;
+  border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ font: string }>`
   display: flex;

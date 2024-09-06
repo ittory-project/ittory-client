@@ -1,10 +1,38 @@
-@import url("https://webfontworld.github.io/eulyoo/Eulyoo1945.css");
-
+@font-face {
+  font-family: "CookieRun-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "GmarketSans";
+  font-weight: 700;
+  font-style: normal;
+  src: url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.eot");
+  src:
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.eot?#iefix")
+      format("embedded-opentype"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff2")
+      format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.woff")
+      format("woff"),
+    url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.ttf")
+      format("truetype");
+  font-display: swap;
+}
 @font-face {
   font-family: "Ownglyph_UNZ-Rg";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2406-1@1.0/Ownglyph_UNZ-Rg.woff2")
     format("woff2");
   font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Cafe24ClassicType-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Cafe24ClassicType-Regular.woff2")
+    format("woff2");
+  font-weight: normal;
   font-style: normal;
 }
 /*
@@ -23,7 +51,6 @@ body,
   padding: 0;
   height: 100%;
   width: 100%;
-  font-family: "Eulyoo1945";
 }
 
 .App {
@@ -32,6 +59,18 @@ body,
   align-items: center;
   min-height: 100vh;
   background-color: white;
+}
+
+.reactEasyCrop_CropArea.reactEasyCrop_CropAreaGrid {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  border: 0;
+}
+.reactEasyCrop_CropAreaGrid::before {
+  border: 0 !important;
+}
+.reactEasyCrop_CropAreaGrid::after {
+  border: 0 !important;
 }
 
 .MainLayout {
