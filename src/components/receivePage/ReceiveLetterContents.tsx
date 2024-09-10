@@ -32,7 +32,7 @@ const ProductLeftSide = styled.img`
 const ContentImg = styled.img`
   width: 182px;
   height: 182px;
-  border-radius: var(--Border-Radius-radius_400, 12px);
+  border-radius: 12px;
   position: absolute;
   top: 35px;
   left: 50%;
@@ -45,16 +45,15 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: center;
   align-self: stretch;
-  color: var(--Color-grayscale-gray900, #212529);
+  color: #212529;
   text-align: center;
 
-  /* body/small_medium */
   font-family: var(--Typography-family-body, SUIT);
-  font-size: var(--Typography-size-s, 14px);
+  font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
-  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  line-height: 20px;
+  letter-spacing: -0.5px;
   
   position: absolute;
   top: 65%;
@@ -67,16 +66,15 @@ const ContentWriter = styled.div`
   color: #333;
   line-height: 1.6;
 
-  color: var(--Color-grayscale-gray600, #868E96);
+  color: #868E96;
   text-align: right;
 
-  /* caption/2xsmall */
   font-family: var(--Typography-family-caption, SUIT);
-  font-size: var(--Typography-size-2xs, 11px);
+  font-size: 11px;
   font-style: normal;
   font-weight: 400;
-  line-height: var(--Typography-line_height-2xs, 16px); /* 145.455% */
-  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  line-height: 16px;
+  letter-spacing: -0.5px;
   
   position: absolute;
   top: 85%;

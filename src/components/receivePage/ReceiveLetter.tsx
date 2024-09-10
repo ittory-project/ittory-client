@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Pagination } from '../common/Pagination';
 import { useLocation } from 'react-router-dom';
 import { ReceiveLetterCover } from './ReceiveLetterCover';
+import { ReceiveLetterSave } from './ReceiveLetterSave';
 import { ReceiveLetterContents } from './ReceiveLetterContents';
 
 function Query() {
@@ -19,13 +20,12 @@ export const ReceiveLetter = () => {
   }, [query]);
 
   const renderPageContent = () => {
-    if (currentPage === 1) {
-      return (
-        <ReceiveLetterCover />
-      );
-    } else {
+    if (currentPage === 1) 
+      return  <ReceiveLetterCover /> ;
+    else if (currentPage === 14) 
+      return <ReceiveLetterSave /> ;
+    else 
       return <ReceiveLetterContents />;
-    }
   };
 
   return (

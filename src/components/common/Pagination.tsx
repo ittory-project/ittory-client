@@ -22,16 +22,16 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
     } else {
       setCurrentPage(1)
     }
-  }, [currentPage, query]);
+  }, [query]);
 
   const onPageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
     query.set('page', page.toString());
     navigate({
       search: query.toString(),
     });
   };
+  
   return (
     <PaginationContainer>
       <PaginationButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
