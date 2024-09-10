@@ -28,7 +28,7 @@ const Receive = () => {
           <DoorImg expanded={expanded}>
           </DoorImg>
           <AnimatedDiv expanded={expanded}>
-              <Img src="/img/profile.png" expanded={expanded} />
+            <Img src="/img/profile.png" />
           </AnimatedDiv>
           {expanded ? (
             // 2번째 화면
@@ -69,7 +69,7 @@ const expandAnimation = keyframes`
     transform: scale(1);
   }
   to {
-    transform: scale(6);
+    transform: scale(7);
   }
 `;
 
@@ -114,24 +114,25 @@ const AnimatedDiv = styled.div<{ expanded: boolean }>`
   height: 30px;
   border-radius: 50%;
   position: absolute;
-  top: 45%;
+  top: 47%;
   transition: all 2s ease;
-`;
-
-const Img = styled.img<{ expanded: boolean }>`
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 50%;
   filter: ${({ expanded }) => (expanded ? 'none' : 'blur(2px)')};
-  transition: all 2s ease;
 
-    ${({ expanded }) =>
+  ${({ expanded }) =>
     expanded &&
     css`
       animation: ${expandAnimation} 2s forwards;
       transform-origin: center;
-    `}
+  `}
+`;
+
+const Img = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 2px #1C2231;
 `;
 
 const MainTitle = styled.div`
@@ -249,5 +250,5 @@ const ExpandButton = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: 24px;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.5px);
 `;
