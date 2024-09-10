@@ -7,6 +7,7 @@ const Receive = () => {
   const [showDoorAnimation, setShowDoorAnimation] = useState(false);
   const [hideDoorImg, setHideDoorImg] = useState(false); 
 
+  // 애니메이션 실행 후 1.5초 이후에 2번째 애니메이션 화면 상태(setHideDoorImg)로 넘어감
   const handleClick = () => {
     setExpanded(true);
     setTimeout(() => {
@@ -15,7 +16,6 @@ const Receive = () => {
   };
 
   const handleButtonClick = () => {
-    console.log("why");
     setShowDoorAnimation(true);
   };
 
@@ -26,16 +26,18 @@ const Receive = () => {
       ) : (
         <Container onClick={handleClick}>
           <DoorImg expanded={expanded} hide={hideDoorImg}>
-            <AnimatedDiv expanded={expanded}>
-              <Img src="/img/profile.png" expanded={expanded} />
-            </AnimatedDiv>
           </DoorImg>
+          <AnimatedDiv expanded={expanded}>
+              <Img src="/img/profile.png" expanded={expanded} />
+          </AnimatedDiv>
           {expanded ? (
             <div  onClick={(e) => e.stopPropagation()}>
               {hideDoorImg && <ExpandTitle>선재님 맞으시죠? 편지가 도착했어요!</ExpandTitle>}
-              <ExpandButton onClick={handleButtonClick} >
-                네 맞아요!
-              </ExpandButton>
+              {hideDoorImg && 
+                <ExpandButton onClick={handleButtonClick} >
+                  네 맞아요!
+                </ExpandButton>
+              }
             </div> ) : (
               <>
                 <SmallText expanded={expanded}>선재님에게 편지가 도착했어요</SmallText>
@@ -51,6 +53,7 @@ const Receive = () => {
 
 export default Receive;
 
+// 문, 이미지 커지는 애니메이션
 const expandAnimation = keyframes`
   from {
     transform: scale(1);
@@ -75,17 +78,32 @@ const DoorImg = styled.div<{ expanded: boolean, hide: boolean }>`
   position: absolute;
   bottom: 0px;
   z-index: 1;
-  width: 400px;
-  height: 600px;
+  width: 90%;
+  height: 70%;
   background-image: ${({ hide }) => (hide ? '' : 'url(/assets/door.svg)' )};
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 2s ease;
-  // cursor: pointer;
 
   ${({ expanded }) =>
+    expanded &&
+    css`
+      animation: ${expandAnimation} 2s forwards;
+      transform-origin: center 21%;
+    `}
+`;
+
+const Img = styled.img<{ expanded: boolean }>`
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: ${({ expanded }) => (expanded ? 'none' : 'blur(2px)')};
+  transition: all 2s ease;
+
+    ${({ expanded }) =>
     expanded &&
     css`
       animation: ${expandAnimation} 2s forwards;
@@ -93,35 +111,17 @@ const DoorImg = styled.div<{ expanded: boolean, hide: boolean }>`
     `}
 `;
 
-const Img = styled.img<{ expanded: boolean }>`
-  width: ${({ expanded }) => (expanded ? '50px' : '50px')};
-  height: ${({ expanded }) => (expanded ? '50px' : '50px')};
-  object-fit: cover;
-  border-radius: 50%;
-  filter: ${({ expanded }) => (expanded ? 'none' : 'blur(5px)')};
-  transition: all 2s ease;
-`;
-
 const AnimatedDiv = styled.div<{ expanded: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2;
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   position: absolute;
-  top: 150px;
+  top: 45%;
   transition: all 2s ease;
-
-  ${({ expanded }) =>
-    expanded &&
-    css`
-      width: 50px;
-      height: 50px;
-      top: 50%; 
-      transform: translateY(-90%);
-    `}
 `;
  
 const SmallText = styled.div<{ expanded: boolean }>`
@@ -131,6 +131,17 @@ const SmallText = styled.div<{ expanded: boolean }>`
   position: absolute;
   top: 200px;
   transition: all 2s ease;
+
+  color: var(--Color-grayscale-gray50, #F8F9FA);
+  text-align: center;
+
+  /* heading/large */
+  font-family: var(--Typography-family-heading, SUIT);
+  font-size: var(--Typography-size-l, 20px);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--Typography-line_height-base, 28px); /* 140% */
+  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
 const ExpandTitle = styled.div`
@@ -142,7 +153,7 @@ const ExpandTitle = styled.div`
   color: white;
   margin-bottom: 20px;
   transition: 2s ease;
-  text-align: center; /* 추가적으로 가운데 정렬 */
+  text-align: center;
 `;
 
 const ExpandButton = styled.button`
@@ -172,8 +183,19 @@ const SmallInfo = styled.div`
   font-size: 14px;
   border-radius: 5px;
   color: white;
-  margin-top: 10px;
   position: absolute;
-  bottom: 200px;
+  bottom: 50px;
   z-index: 2;
+
+  color: var(--Color-primary-yellow, #FCFFAF);
+  text-align: center;
+  text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.25);
+
+  /* title/base_medium */
+  font-family: var(--Typography-family-title, SUIT);
+  font-size: var(--Typography-size-base, 16px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Typography-line_height-s, 24px); /* 150% */
+  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
