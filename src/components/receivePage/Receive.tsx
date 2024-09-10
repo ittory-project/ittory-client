@@ -25,23 +25,33 @@ const Receive = () => {
         <DoorAnimation />
       ) : (
         <Container onClick={handleClick}>
-          <DoorImg expanded={expanded} hide={hideDoorImg}>
+          <DoorImg expanded={expanded}>
           </DoorImg>
           <AnimatedDiv expanded={expanded}>
               <Img src="/img/profile.png" expanded={expanded} />
           </AnimatedDiv>
           {expanded ? (
-            <div  onClick={(e) => e.stopPropagation()}>
-              {hideDoorImg && <ExpandTitle>선재님 맞으시죠? 편지가 도착했어요!</ExpandTitle>}
+            // 2번째 화면
+            <div onClick={(e) => e.stopPropagation()}>
+              {hideDoorImg && 
+                <TextBalloon>
+                  <ExpandTitle>열두글자닉네임안녕하세요님 맞으시죠?<br/>편지가 도착했어요!</ExpandTitle>
+                  <BalloonUnder src='/assets/text_balloon_under.svg' />
+                </TextBalloon>
+              }
               {hideDoorImg && 
                 <ExpandButton onClick={handleButtonClick} >
                   네 맞아요!
                 </ExpandButton>
               }
             </div> ) : (
+              // 기존 화면
               <>
-                <SmallText expanded={expanded}>선재님에게 편지가 도착했어요</SmallText>
-                <SmallInfo>문을 터치해 보세요</SmallInfo>
+                <MainTitleContainer>
+                  <MainText>띵동~</MainText>
+                  <MainTitle>선재님에게 편지가 도착했어요</MainTitle>
+                </MainTitleContainer>
+                <MainInfo>문을 터치해 보세요</MainInfo>
               </>
             )
           }
@@ -59,7 +69,7 @@ const expandAnimation = keyframes`
     transform: scale(1);
   }
   to {
-    transform: scale(5);
+    transform: scale(6);
   }
 `;
 
@@ -70,17 +80,17 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: var(--color-black-white-black, #000);
+  background: #000;
   overflow: hidden;
 `;
 
-const DoorImg = styled.div<{ expanded: boolean, hide: boolean }>`
+const DoorImg = styled.div<{ expanded: boolean }>`
   position: absolute;
   bottom: 0px;
   z-index: 1;
   width: 90%;
   height: 70%;
-  background-image: ${({ hide }) => (hide ? '' : 'url(/assets/door.svg)' )};
+  background-image: url(/assets/door.svg);
   background-size: cover;
   display: flex;
   justify-content: center;
@@ -93,6 +103,19 @@ const DoorImg = styled.div<{ expanded: boolean, hide: boolean }>`
       animation: ${expandAnimation} 2s forwards;
       transform-origin: center 21%;
     `}
+`;
+
+const AnimatedDiv = styled.div<{ expanded: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  position: absolute;
+  top: 45%;
+  transition: all 2s ease;
 `;
 
 const Img = styled.img<{ expanded: boolean }>`
@@ -111,74 +134,44 @@ const Img = styled.img<{ expanded: boolean }>`
     `}
 `;
 
-const AnimatedDiv = styled.div<{ expanded: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  position: absolute;
-  top: 45%;
-  transition: all 2s ease;
-`;
- 
-const SmallText = styled.div<{ expanded: boolean }>`
+const MainTitle = styled.div`
   font-size: 16px;
-  color: var(--Color-grayscale-gray50, #F8F9FA);
+  color: #F8F9FA;
   text-align: center;
-  position: absolute;
-  top: 200px;
   transition: all 2s ease;
+  width: 147px;
+  margin-top: 10px;
 
-  color: var(--Color-grayscale-gray50, #F8F9FA);
+  color: #F8F9FA;
   text-align: center;
 
-  /* heading/large */
   font-family: var(--Typography-family-heading, SUIT);
-  font-size: var(--Typography-size-l, 20px);
+  font-size: 20px;
   font-style: normal;
   font-weight: 700;
-  line-height: var(--Typography-line_height-base, 28px); /* 140% */
-  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  line-height: 28px;
+  letter-spacing: -0.5px;
 `;
 
-const ExpandTitle = styled.div`
-  position: absolute;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  color: white;
-  margin-bottom: 20px;
-  transition: 2s ease;
+const MainText = styled.div`
+  color: #ADB5BD;
   text-align: center;
-`;
 
-const ExpandButton = styled.button`
+  /* body/small */
+  font-family: var(--Typography-family-body, SUIT);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+`
+
+const MainTitleContainer = styled.div`
   position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  width: 288px;
-  height: var(--Typography-line_height-xl, 48px);
-  padding: 14px 20px;
-  align-items: center;
-  gap: var(--Border-Radius-radius_300, 8px);
-  text-align: center;
-  border: none;
-  z-index: 3;
+  top: 10%;
+`
 
-  border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: var(--Color-primary-orange, #FFA256);
-  box-shadow: -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset;
-  color: var(--color-black-white-white, #FFF);
-  cursor: pointer;
-`;
-
-const SmallInfo = styled.div`
+const MainInfo = styled.div`
   padding: 5px 10px;
   font-size: 14px;
   border-radius: 5px;
@@ -187,15 +180,74 @@ const SmallInfo = styled.div`
   bottom: 50px;
   z-index: 2;
 
-  color: var(--Color-primary-yellow, #FCFFAF);
+  color: #FCFFAF;
   text-align: center;
   text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.25);
 
-  /* title/base_medium */
   font-family: var(--Typography-family-title, SUIT);
-  font-size: var(--Typography-size-base, 16px);
+  font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: var(--Typography-line_height-s, 24px); /* 150% */
-  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  line-height: 24px;
+  letter-spacing: -0.5px;
+`;
+
+const TextBalloon = styled.div`
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 3;
+`;
+
+const ExpandTitle = styled.div`
+  min-width: 20%;
+  max-width: 90%;
+  font-size: clamp(14px, 2vw, 20px);
+  color: white;
+  margin-bottom: 0px;
+  transition: 2s ease;
+  text-align: center;
+  padding: 12px 18px;
+
+  border-radius: 12px;
+  background: #243348;
+  backdrop-filter: blur(2px);
+  white-space: nowrap;
+`;
+
+const BalloonUnder = styled.img`
+  display: block; 
+  margin: 0 auto; 
+`;
+
+const ExpandButton = styled.div`
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  width: 288px;
+  height: 48px;
+  padding: 3px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  border: none;
+  z-index: 3;
+
+  border-radius: 50px;
+  background: #FFA256;
+  box-shadow: -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset;
+  color: #FFF;
+  cursor: pointer;
+
+  font-family: var(--Typography-family-title, SUIT);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.5px;
 `;
