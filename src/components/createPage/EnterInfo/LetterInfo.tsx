@@ -84,7 +84,7 @@ export default function LetterInfo({
   }, [keyboardRef]);
 
   return (
-    <BackGround isOpen={isModalOpen}>
+    <BackGround>
       {isModalOpen && <Overlay />}
       <Cancel>
         <img src={X} alt="X Icon" style={{ width: "14px", height: "14px" }} />

@@ -88,7 +88,7 @@ const ButtonContainer = styled.div`
   position: relative;
   justify-content: center;
   display: flex;
-  width: 224px;
+  width: 100%;
   align-items: center;
 `;
 const Button = styled.button`
