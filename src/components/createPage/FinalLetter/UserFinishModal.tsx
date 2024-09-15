@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import letter from "../../../../public/assets/letter.png";
+import letter from "../../../../public/assets/letter.svg";
 import { useNavigate } from "react-router-dom";
 import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";

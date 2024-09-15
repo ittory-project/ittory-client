@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import letter from "../../../public/assets/letter.png";
+import letter from "../../../public/assets/letter.svg";
 import runner from "../../../public/assets/runner.svg";
 
 export interface GroupItem {

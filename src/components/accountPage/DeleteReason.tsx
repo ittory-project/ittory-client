@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import prev from "../../../public/assets/prev.png";
+import prev from "../../../public/assets/prev.svg";
 import check from "../../../public/assets/checkbox_gray.svg";
 import checked from "../../../public/assets/checkbox_black.svg";
 

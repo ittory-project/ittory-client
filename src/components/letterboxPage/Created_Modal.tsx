@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import X from "../../../public/assets/X.png";
+import X from "../../../public/assets/x.svg";
 import delete2 from "../../../public/assets/delete2.svg";
 import share from "../../../public/assets/share.svg";
 

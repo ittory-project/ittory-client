@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import X from "../../../../public/assets/X.png";
+import X from "../../../../public/assets/x.svg";
 import photo from "../../../../public/assets/photo.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
@@ -68,11 +68,13 @@ export const Count = ({ setViewCount, member }: Props) => {
           </Picker>
         </List>
         <Notice>
-          <img
-            src={photo}
-            alt="photo Icon"
-            style={{ width: "14px", height: "14px", marginLeft: "6px" }}
-          />
+          <IconImg>
+            <img
+              src={photo}
+              alt="photo Icon"
+              style={{ width: "14px", height: "14px" }}
+            />
+          </IconImg>
           <TitleTxt>만들어질 그림 개수</TitleTxt>
           <TotalTxt>{selectNumber * member}개</TotalTxt>
         </Notice>
@@ -132,6 +134,7 @@ const Contents = styled.div`
   display: flex;
   position: relative;
   width: 100%;
+  padding: 0px 16px 20px 16px;
   box-sizing: border-box;
   flex-direction: column;
   align-items: center;
@@ -141,7 +144,7 @@ const Contents = styled.div`
 const List = styled.div`
   display: flex;
   box-sizing: border-box;
-  width: 21rem;
+  width: 288px;
   height: 15rem;
   padding: var(--Border-Radius-radius_300, 8px) 0px 16px 0px;
   flex-direction: column;
@@ -158,7 +161,7 @@ const Picker = styled.div`
 `;
 const Select = styled.div`
   display: flex;
-  width: 17.5rem;
+  width: 244px;
   height: 40px;
   box-sizing: border-box;
   padding: var(--Border-Radius-radius_300, 8px) 0px;
@@ -244,6 +247,10 @@ const Notice = styled.div`
   align-items: center;
   align-self: stretch;
   margin-bottom: 3px;
+  position: relative;
+`;
+const IconImg = styled.div`
+  display: flex;
 `;
 const TitleTxt = styled.div`
   display: flex;
@@ -258,8 +265,8 @@ const TitleTxt = styled.div`
   line-height: 20px;
   letter-spacing: -0.5px;
   position: absolute;
-  left: 33px;
-  margin-top: 1px;
+  margin-left: 20px;
+  margin-top: 2px;
 `;
 const TotalTxt = styled.div`
   display: flex;
@@ -280,9 +287,10 @@ const TotalTxt = styled.div`
 
 const Button = styled.button`
   box-sizing: border-box;
+  width: 288px;
   display: flex;
   height: 48px;
-  padding: var(--Typography-size-s, 14px) 0px;
+  padding: 14px 0px;
   align-items: center;
   gap: 8px;
   justify-content: center;
@@ -291,7 +299,6 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  width: 21rem;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);

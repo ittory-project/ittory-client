@@ -37,7 +37,6 @@ export default function FontSelect({ font, fonts, setFont }: Props) {
   );
 }
 
-// 스타일 정의
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,7 +48,7 @@ const Container = styled.div`
 const FontSelectorContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 0.4rem;
   overflow-x: auto;
   padding: 11px 16px;
   white-space: nowrap;

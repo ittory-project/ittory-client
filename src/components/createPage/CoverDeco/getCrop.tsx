@@ -30,10 +30,10 @@ export default async function getCroppedImg(
   const scaleY = image.height / size.height;
 
   // Calculate the cropping area in the image coordinates
-  const cropX = crop.x * scaleX + 600;
+  const cropX = crop.x * scaleX + 200;
   const cropY = crop.y * scaleY;
   const cropWidth = crop.width * scaleX;
-  const cropHeight = crop.height * scaleY + 300;
+  const cropHeight = crop.height * scaleY + 250;
 
   // Draw the image on the canvas
   ctx.drawImage(

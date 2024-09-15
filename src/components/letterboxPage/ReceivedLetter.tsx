@@ -5,7 +5,6 @@ import book1 from "../../../public/assets/book_mini_yellow.svg";
 import book2 from "../../../public/assets/book_mini_green.svg";
 import book3 from "../../../public/assets/book_mini_blue.svg";
 import book4 from "../../../public/assets/book_mini_pink.svg";
-import { Created_Modal } from "./Created_Modal";
 import { DeletePopup } from "./DeletePopup";
 import { Received_Modal } from "./Received_Modal";
 import { EmptyLetter } from "./EmptyLetter";

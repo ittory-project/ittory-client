@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CreatedLetter } from "./CreatedLetter";
 import { ReceivedLetter } from "./ReceivedLetter";
-import prev from "../../../public/assets/prev.png";
+import prev from "../../../public/assets/prev.svg";
 
 export const LetterBox = () => {
   const navigate = useNavigate();
