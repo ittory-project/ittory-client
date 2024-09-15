@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import letter from "../../../../public/assets/letter.png";
+import letter from "../../../../public/assets/letter.svg";
 import { useNavigate } from "react-router-dom";
 import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
@@ -111,7 +111,7 @@ const ModalContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   width: 100%;
-  height: 37rem;
+  //height: 34rem;
   padding: 24px 24px 20px 24px;
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
@@ -146,7 +146,7 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 2.5rem;
+  margin-top: 24px;
 `;
 const Receiver = styled.div`
   display: flex;
@@ -172,6 +172,7 @@ const LetterImg = styled.div<{ img: string }>`
 const Book = styled.div<{ backgroundImage: string }>`
   width: 224px;
   height: 292px;
+  margin-botom: 24px;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
   background-image: url(${(props) => props.backgroundImage});
   display: flex;
@@ -243,7 +244,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
-  width: calc(100% - 48px);
+  width: 288px;
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;
   align-items: center;
@@ -256,8 +257,8 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  position: absolute;
-  bottom: 20px;
+  position: relative;
+  margin-top: 24px;
   left: 50%;
   transform: translateX(-50%);
 `;

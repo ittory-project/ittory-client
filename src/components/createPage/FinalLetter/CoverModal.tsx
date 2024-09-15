@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
-import X from "../../../../public/assets/X.png";
+import X from "../../../../public/assets/x.svg";
 import basic from "../../../../public/assets/Book1.svg";
 import book2 from "../../../../public/assets/Book2.svg";
 import book3 from "../../../../public/assets/Book3.svg";
@@ -17,6 +17,7 @@ import ImageCropper from "../CoverDeco/ImageCropper";
 import { Area } from "react-easy-crop";
 import shadow from "../../../../public/assets/shadow2.svg";
 import bright from "../../../../public/assets/border.svg";
+import camera_mini from "../../../../public/assets/camera_mini.svg";
 
 const fonts = [
   { name: "서체1", family: "GmarketSans" },
@@ -251,6 +252,9 @@ export default function CoverModal({
                 bgimg={croppedImage}
                 onClick={onUploadImageButtonClick}
               >
+                <CameraIcon>
+                  <Camera src={camera_mini} alt="camera_icon" />
+                </CameraIcon>
                 <input
                   style={{ display: "none" }}
                   type="file"
@@ -299,6 +303,28 @@ export default function CoverModal({
     </ModalContainer>
   );
 }
+
+const CameraIcon = styled.div`
+  display: flex;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  padding: 3.429px;
+  justify-content: center;
+  align-items: center;
+  gap: 8.571px;
+  flex-shrink: 0;
+  border-radius: 13.714px;
+  background: rgba(0, 0, 0, 0.5);
+`;
+const Camera = styled.img`
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+`;
 const ModalContainer = styled.div<{
   keyboardHeight: number;
   isKeyboardOpen: boolean;
@@ -574,8 +600,8 @@ const Button = styled.button<{ isKeyboardOpen: boolean }>`
   align-self: stretch;
   justify-content: center;
   align-self: stretch;
-  border-radius: 8px;
-  background: #000;
+  border-radius: 50px;
+  background: #343a40;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;

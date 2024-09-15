@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import prev from "../../../public/assets/prev.png";
+import prev from "../../../public/assets/prev.svg";
 import { useNavigate } from "react-router-dom";
 import out from "../../../public/assets/out_X.svg";
 import logout from "../../../public/assets/logout.svg";

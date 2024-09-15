@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import X from "../../public/assets/X.png";
+import X from "../../public/assets/x.svg";
 import direction from "../../public/assets/navigate.svg";
 import letter_create from "../../public/assets/letter_create.svg";
 import letter_receive from "../../public/assets/letter_receive.svg";
@@ -83,7 +83,7 @@ export const Menu = ({ onClose }: Props) => {
       </Cancel>
       <Profile>
         <ImageContainer>
-          {/* 로그인 전, 프로필 사진 없을 시기본 캐릭터 */}
+          {/* 로그인 전, 프로필 사진 없을 시 기본 캐릭터 */}
           {User.profileImage !== "" && user === true ? (
             <ProfileImage src={User.profileImage} alt="Profile" />
           ) : (
@@ -96,7 +96,7 @@ export const Menu = ({ onClose }: Props) => {
               로그인하고 이용하기
               {<img src={direction} style={{ width: "5px", height: "10px" }} />}
             </NavigateLogin>
-          </> //클릭 시
+          </>
         ) : (
           <UserSet>
             <UserName>{User.name}</UserName>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import EditImg from "../../../../public/assets/edit.png";
+import EditImg from "../../../../public/assets/edit.svg";
 import EditLetter from "../FinalLetter/EditLetter";
 import CoverModal from "./CoverModal";
 import CompleteModal from "./CompleteModal";
@@ -240,15 +240,14 @@ const SubTitle = styled.span`
   letter-spacing: -0.5px;
 `;
 const Container = styled.div`
-  margin-top: 1.8rem;
+  margin-top: 1.5rem;
   display: flex;
   width: 272px;
-  height: 29.5rem;
+  box-sizing: border-box;
   padding: 16px 12px;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 8px;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
@@ -330,7 +329,6 @@ const Cover = styled.div`
   padding: 0px 12px 20px 12px;
   flex-direction: column;
   align-items: flex-start;
-  height: 16rem;
   width: 100%;
   align-self: stretch;
   border-radius: 8px;
@@ -341,7 +339,6 @@ const Book = styled.div<{ backgroundImage: string }>`
   width: 120px;
   height: 157px;
   position: relative;
-  margin-top: 0.8rem;
   border-radius: 2.143px 6.429px 6.429px 2.143px;
   background-image: url(${(props) => props.backgroundImage});
   display: flex;
@@ -408,7 +405,7 @@ const Button = styled.button`
   justify-content: center;
   gap: 8px;
   border-radius: 50px;
-  bottom: 1.2rem;
+  bottom: 16px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import prev from "../../../public/assets/prev.png";
+import prev from "../../../public/assets/prev.svg";
 import bell from "../../../public/assets/bell.svg";
 import check from "../../../public/assets/check.svg";
 import { DeleteReason } from "./DeleteReason";

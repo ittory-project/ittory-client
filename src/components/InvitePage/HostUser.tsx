@@ -214,10 +214,11 @@ export const HostUser = ({
                 </List>
               </Box>
             </BoxContainer>
+            <Button onClick={handleCountview}>
+              <ButtonTxt>이어 쓸 횟수 정하기</ButtonTxt>
+            </Button>
           </MainContainer>
-          <Button onClick={handleCountview}>
-            <ButtonTxt>이어 쓸 횟수 정하기</ButtonTxt>
-          </Button>
+
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
@@ -241,6 +242,7 @@ const BackGround = styled.div`
   align-items: center;
   //justify-content: center;
   height: 100vh;
+  overflow: hidden;
   width: 100vw;
   position: relative;
   left: 50%;
@@ -292,6 +294,7 @@ const Header = styled.div`
 const ReceiverContainer = styled.div`
   display: flex;
   align-items: center;
+  height: 48px;
 `;
 const Receiver = styled.span`
   height: 24px;
@@ -316,7 +319,6 @@ const Icon = styled.img`
   cursor: pointer;
   width: 24px;
   height: 24px;
-  margin-right: 0;
 `;
 const MainContainer = styled.div`
   display: flex;
@@ -448,7 +450,7 @@ const Bar = styled.div`
 const BoxContainer = styled.div`
   display: flex;
   height: 116px;
-  margin-top: 3.5rem;
+  margin-top: 21px;
   flex-direction: column;
   align-items: center; //수직
   justify-content: center; //수평
@@ -574,7 +576,7 @@ const UserName = styled.div<{ isLongName: boolean }>`
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
-  width: 21rem;
+  width: 100%;
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;
   align-items: center;
@@ -587,8 +589,9 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  position: absolute;
-  bottom: 20px;
+  position: relative;
+  margin-bottom: 20px;
+  margin-top: 20px;
   left: 50%;
   transform: translateX(-50%);
 `;

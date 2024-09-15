@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import PrevImg from "../../../../public/assets/pageprev.png";
+import PrevImg from "../../../../public/assets/pageprev.svg";
 import basic from "../../../../public/assets/Book1.svg";
 import book2 from "../../../../public/assets/Book2.svg";
 import book3 from "../../../../public/assets/Book3.svg";
@@ -15,6 +15,7 @@ import image4 from "../../../../public/assets/layer4.svg";
 import image5 from "../../../../public/assets/layer5.svg";
 import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
+import bookshadow from "../../../../public/assets/book_shadow.svg";
 import FontSelect from "./FontSelect";
 import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
@@ -25,7 +26,7 @@ const fonts = [
   { name: "서체3", family: "CookieRun-Regular" },
   { name: "서체4", family: "Cafe24ClassicType-Regular" },
 ];
-//폰트적용 수정
+
 interface Props {
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
   setViewStartpage: React.Dispatch<React.SetStateAction<boolean>>;
@@ -169,6 +170,7 @@ export default function CoverStyle({
             >
               <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
             </svg>
+
             {isKeyboardOpen && (
               <KeyboardBar keyboardHeight={keyboardHeight}>
                 <FontSelect font={font} fonts={fonts} setFont={setFont} />
@@ -229,6 +231,9 @@ export default function CoverStyle({
             </NameContainer>
           </NameBar>
         </Book>
+        <BookShadow>
+          <img src={bookshadow} alt="book_shadow" />
+        </BookShadow>
         <ImageContainer>
           {images.map((img, index) => (
             <Image
@@ -277,7 +282,11 @@ export default function CoverStyle({
     </BackGround>
   );
 }
-
+const BookShadow = styled.div`
+  flex-shrink: 0;
+  position: relative;
+  margin-top: 333.1px;
+`;
 const BackGround = styled.div`
   display: flex;
   flex-direction: column;
@@ -568,7 +577,7 @@ const NameTxt = styled.div`
   letter-spacing: -0.5px;
 `;
 const ImageContainer = styled.div`
-  position: relative;
+  position: fixed;
   margin-top: 24.2rem;
   height: 56px;
   display: flex;
@@ -576,6 +585,8 @@ const ImageContainer = styled.div`
   align-items: center;
   gap: var(--Border-Radius-radius_300, 8px);
   align-self: stretch;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 const Image = styled.div<{ clicked: boolean; img: string }>`
   cursor: pointer;

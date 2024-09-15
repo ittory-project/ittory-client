@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import X from "../../../../public/assets/X.png";
-import calender from "../../../../public/assets/calendar.png";
+import X from "../../../../public/assets/x.svg";
+import calender from "../../../../public/assets/calendar.svg";
 import BottomSheet from "./BotttomSheet";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
