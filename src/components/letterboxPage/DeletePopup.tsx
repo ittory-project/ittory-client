@@ -3,34 +3,63 @@ import styled from "styled-components";
 
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
+  onDelete: () => void;
+  context: string;
+  deleteItem: string;
 }
 
-export const Logout = ({ setPopup }: Props) => {
-  const handleDelete = () => {
+export const DeletePopup = ({
+  setPopup,
+  onDelete,
+  setIsModalOpen,
+  context,
+  deleteItem,
+  setOpenLetter,
+}: Props) => {
+  const [deleteName, setDeleteName] = useState<string>("");
+
+  useEffect(() => {
+    setDeleteName(deleteItem);
+  }, []);
+
+  const cancelDelete = () => {
     setPopup(false);
+  };
+  const handleDelete = () => {
+    onDelete();
+    setPopup(false);
+    setIsModalOpen(false);
+    setOpenLetter(false);
   };
 
   return (
     <BackGround>
       <Modal>
-        <Title>로그아웃 하시겠어요?</Title>
+        {context === "created" && <Title>'To.{deleteName}'</Title>}
+        {context === "received" && <Title>'{deleteName}'</Title>}
+        <Title>편지를 정말 삭제시겠어요?</Title>
+        <Contents>삭제한 편지는 복구할 수 없어요</Contents>
         <ButtonContainer>
           <Button
             style={{
               background: "#CED4DA",
             }}
-            onClick={handleDelete}
           >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+            <ButtonTxt style={{ color: "#495057" }} onClick={cancelDelete}>
+              취소하기
+            </ButtonTxt>
           </Button>
           <Button
             style={{
               background: "#FFA256",
             }}
           >
-            <ButtonTxt style={{ color: "#fff" }}>로그아웃</ButtonTxt>
+            <ButtonTxt style={{ color: "#fff" }} onClick={handleDelete}>
+              삭제하기
+            </ButtonTxt>
           </Button>
-          {/* 클릭 시 랜딩페이지로 이동 */}
         </ButtonContainer>
       </Modal>
     </BackGround>
@@ -41,13 +70,14 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
   height: 100vh;
   width: 100vw;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99;
 `;
 const Modal = styled.div`
   display: flex;
@@ -79,9 +109,25 @@ const Title = styled.div`
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.5px;
-  margin-bottom: 20px;
+`;
+const Contents = styled.div`
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--Border-Radius-radius_300, 8px);
+  align-self: stretch;
+  color: #868e96;
+  text-align: center;
+  font-family: var(--Typography-family-caption, SUIT);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -0.5px;
 `;
 const ButtonContainer = styled.div`
+  margin-top: 20px;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;

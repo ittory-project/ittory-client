@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import X from "../../public/assets/X.png";
 import direction from "../../public/assets/navigate.svg";
@@ -28,9 +28,40 @@ export const Menu = ({ onClose }: Props) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<boolean>(true);
   //user여부 (로그인 여부)
+  const [focusCreate, setFocusCreate] = useState<boolean>(false);
+  const [focusReceive, setFocusReceive] = useState<boolean>(false);
+  const [navigatePath, setNavigatePath] = useState<string | null>(null);
+  const [navigateState, setNavigateState] = useState<{
+    focusCreate: boolean;
+    focusReceive: boolean;
+  } | null>(null);
 
   const navigateToAccount = () => {
     navigate("/Account");
+    onClose();
+  };
+
+  useEffect(() => {
+    if (navigatePath) {
+      navigate(navigatePath, { state: navigateState });
+      setNavigatePath(null);
+      setNavigateState(null);
+    }
+  }, [navigatePath, navigateState]);
+
+  const handleCreate = () => {
+    setFocusCreate(true);
+    setFocusReceive(false);
+    setNavigateState({ focusCreate: true, focusReceive: false });
+    setNavigatePath("/LetterBox");
+    onClose();
+  };
+
+  const handleReceive = () => {
+    setFocusCreate(false);
+    setFocusReceive(true);
+    setNavigateState({ focusCreate: false, focusReceive: true });
+    setNavigatePath("/LetterBox");
     onClose();
   };
 
@@ -85,7 +116,7 @@ export const Menu = ({ onClose }: Props) => {
         )}
       </Profile>
       <LetterContainer>
-        <CreatedLetter>
+        <CreatedLetter onClick={handleCreate}>
           <img
             src={letter_create}
             style={{ width: "18px", height: "14px", marginBottom: "1.2px" }}
@@ -106,7 +137,7 @@ export const Menu = ({ onClose }: Props) => {
         >
           <path d="M0 1H204" stroke="#DEE2E6" stroke-dasharray="4 4" />
         </svg>
-        <ReceivedLetter>
+        <ReceivedLetter onClick={handleReceive}>
           <img
             src={letter_receive}
             style={{ width: "18px", height: "18px", marginBottom: "1.2px" }}
@@ -144,7 +175,6 @@ export const Menu = ({ onClose }: Props) => {
           </Navi>
         </AskContainer>
       </List>
-      {/* 정확히 어디 눌러야 이동하는지 */}
     </BackGround>
   );
 };

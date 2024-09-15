@@ -6,6 +6,7 @@ import { InvitePage } from "./pages/InvitePage";
 import { JoinPage } from "./pages/JoinPage";
 import { ConnectionPage } from "./pages/ConnectionPage";
 import { AccountPage } from "./pages/AccountPage";
+import { LetterBoxPage } from "./pages/LetterBoxPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/Join" element={<JoinPage />} />
           <Route path="/Connection" element={<ConnectionPage />} />
           <Route path="/Account" element={<AccountPage />} />
+          <Route path="/LetterBox" element={<LetterBoxPage />} />
         </Routes>
       </MainLayout>
     </Router>
