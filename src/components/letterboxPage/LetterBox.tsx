@@ -9,24 +9,28 @@ export const LetterBox = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const focusCreate = location.state.focusCreate;
-  const focusReceive = location.state.focusReceive;
-
   const [focusOn, setFocusOn] = useState<string | null>(null);
-  const [create, setCreate] = useState<boolean>(focusCreate);
-  const [receive, setReceive] = useState<boolean>(focusReceive);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
   const [openLetter, setOpenLetter] = useState<boolean>(false);
+  const [create, setCreate] = useState<boolean>(false);
+  const [receive, setReceive] = useState<boolean>(false);
 
   const navigateBack = () => {
     navigate(-1);
   };
 
   useEffect(() => {
-    setCreate(focusCreate);
-    setReceive(focusReceive);
-  }, [focusCreate, focusReceive]);
+    const focusCreate = location.state?.focusCreate;
+    const focusReceive = location.state?.focusReceive;
+
+    if (focusCreate !== undefined) {
+      setCreate(focusCreate);
+    }
+    if (focusReceive !== undefined) {
+      setReceive(focusReceive);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     if (focusOn === "create") {

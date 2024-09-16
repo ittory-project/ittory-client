@@ -71,35 +71,18 @@ export const CreatedLetter = ({
     setOpenLetter(true);
   };
 
-  //삭제 기능 main*/
   const handleDelete = () => {
     if (itemToDelete !== null) {
       setItems(items.filter((item) => item.id !== itemToDelete));
       setDeleteAlert("편지가 삭제되었어요");
       setItemToDelete(null);
     }
-    //삭제 후 서버로 post
-
     setTimeout(() => {
       setDeleteAlert(null);
     }, 5000);
     // 5초 후에 alert 메시지를 숨기기
-    //정확히 몇초인지..
   };
 
-  //서버가 해줄 경우
-  /*
-  const handleDelete = async () => {
-    if (itemToDelete !== null) {
-      // 서버와 통신하여 삭제
-      await fetch(`/api/items/${itemToDelete}`, {
-        method: "DELETE",
-      });
-      setItems(items.filter((item) => item.id !== itemToDelete));
-      setDeleteAlert("편지가 삭제되었어요");
-      setItemToDelete(null);
-    }
-  };*/
   return (
     <>
       {items.length === 0 ? (
