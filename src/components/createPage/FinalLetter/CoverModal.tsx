@@ -334,7 +334,7 @@ const ModalContainer = styled.div<{
   display: flex;
   width: 100%;
   height: ${({ isKeyboardOpen, keyboardHeight }) =>
-    isKeyboardOpen ? `calc(38rem - ${keyboardHeight}px)` : "38rem"};
+    isKeyboardOpen ? `calc(33rem - ${keyboardHeight}px)` : "33rem"};
   padding: 24px 24px 20px 24px;
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
@@ -562,7 +562,7 @@ const KeyboardBar = styled.div<{ keyboardHeight: number }>`
 `;
 const ImageContainer = styled.div`
   position: relative;
-  margin-top: 24.2rem;
+  margin-top: 21rem;
   height: 56px;
   display: flex;
   justify-content: center;
@@ -592,7 +592,7 @@ const Button = styled.button<{ isKeyboardOpen: boolean }>`
     props.isKeyboardOpen
       ? "none"
       : "flex"}; /* 키보드가 올라왔을 때 버튼 숨김 */
-  width: calc(100% - 48px);
+  width: 288px;
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;
   align-items: center;

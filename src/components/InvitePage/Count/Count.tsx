@@ -78,10 +78,10 @@ export const Count = ({ setViewCount, member }: Props) => {
           <TitleTxt>만들어질 그림 개수</TitleTxt>
           <TotalTxt>{selectNumber * member}개</TotalTxt>
         </Notice>
-        <Button>
-          <ButtonTxt onClick={navigateToConnection}>시작하기</ButtonTxt>
-        </Button>
       </Contents>
+      <Button>
+        <ButtonTxt onClick={navigateToConnection}>시작하기</ButtonTxt>
+      </Button>
     </ModalContainer>
   );
 };
@@ -105,7 +105,6 @@ const Header = styled.div`
   display: flex;
   width: 100%;
   padding: 16px 8px 16px 8px;
-  //flex-direction: column;
   align-items: center;
   align-self: stretch;
   gap: 24px;
@@ -133,13 +132,14 @@ const Cancel = styled.span`
 const Contents = styled.div`
   display: flex;
   position: relative;
-  width: 100%;
-  padding: 0px 16px 20px 16px;
+  width: 288px;
+
+  overflow:
+  padding: 0px 16px 0px 16px;
   box-sizing: border-box;
   flex-direction: column;
   align-items: center;
-  align-self: stretch;
-  gap: 16px;
+  justify-content: center;
 `;
 const List = styled.div`
   display: flex;
@@ -241,16 +241,18 @@ const SlideContent = styled.div`
 `;
 const Notice = styled.div`
   display: flex;
-  padding: 2px var(--Border-Radius-radius_100, 4px)
-    var(--Border-Radius-radius_300, 8px) var(--Border-Radius-radius_100, 4px);
-  justify-content: space-between;
+  width: 288px;
+  position: relative;
+  box-sizing: border-box;
+  padding: 2px 4px 8px 4px;
   align-items: center;
   align-self: stretch;
-  margin-bottom: 3px;
-  position: relative;
+  margin-top: 16px;
 `;
 const IconImg = styled.div`
   display: flex;
+  position: relative;
+  left: 0;
 `;
 const TitleTxt = styled.div`
   display: flex;
@@ -264,9 +266,8 @@ const TitleTxt = styled.div`
   font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.5px;
-  position: absolute;
-  margin-left: 20px;
   margin-top: 2px;
+  margin-left: 5px;
 `;
 const TotalTxt = styled.div`
   display: flex;
@@ -281,7 +282,7 @@ const TotalTxt = styled.div`
   line-height: 24px;
   letter-spacing: -0.5px;
   position: absolute;
-  right: 5px;
+  right: 0;
   margin-bottom: 2px;
 `;
 
@@ -293,6 +294,8 @@ const Button = styled.button`
   padding: 14px 0px;
   align-items: center;
   gap: 8px;
+  position: absolute;
+  bottom: 20px;
   justify-content: center;
   border-radius: 50px;
   background: #ffa256;

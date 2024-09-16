@@ -329,7 +329,7 @@ const MainContainer = styled.div`
 const Book = styled.div<{ backgroundImage: string }>`
   width: 200px;
   height: 261px;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
   background-image: url(${(props) => props.backgroundImage});
   display: flex;

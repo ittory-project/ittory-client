@@ -197,6 +197,7 @@ const BackGround = styled.div`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  overflow: hidden;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -212,7 +213,6 @@ const Container = styled.div`
   margin-top: 3rem;
   display: flex;
   width: 272px;
-  height: 35rem;
   padding: 16px 12px;
   flex-direction: column;
   align-items: flex-start;
@@ -287,9 +287,6 @@ const Cover = styled.div`
   box-sizing: border-box;
   padding: 0px 12px 20px 12px;
   flex-direction: column;
-  align-items: flex-start;
-  height: 16rem;
-  width: 100%;
   align-self: stretch;
   border-radius: 8px;
   background: #f8f9fa;
