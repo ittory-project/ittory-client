@@ -5,6 +5,7 @@ import x from "../../../public/assets/x_white.svg";
 import { Created_Modal } from "./Created_Modal";
 import { Received_Modal } from "./Received_Modal";
 import { DeletePopup } from "./DeletePopup";
+import { ReceiveLetter } from "../receivePage/ReceiveLetter";
 
 interface Props {
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -53,6 +54,7 @@ export const Letter = ({
               <More src={more} alt="more_icon" onClick={handleMore} />
             </MoreBox>
           </Header>
+          <ReceiveLetter />
           {isModalOpen &&
             (context === "created" ? (
               <Created_Modal
