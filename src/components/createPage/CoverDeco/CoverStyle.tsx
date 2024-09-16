@@ -335,7 +335,7 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 36rem;
+  bottom: 20px;
   align-self: stretch;
   border-radius: 50px;
   left: 50%;
@@ -578,7 +578,7 @@ const NameTxt = styled.div`
 `;
 const ImageContainer = styled.div`
   position: fixed;
-  margin-top: 24.2rem;
+  margin-top: 23.5rem;
   height: 56px;
   display: flex;
   justify-content: center;

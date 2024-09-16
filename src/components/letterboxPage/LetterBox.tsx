@@ -96,7 +96,6 @@ const BackGround = styled.div`
   width: 100vw;
   position: relative;
   background: #fff;
-  overflow: hidden;
 `;
 const Overlay = styled.div`
   position: fixed;

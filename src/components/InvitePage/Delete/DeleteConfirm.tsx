@@ -85,7 +85,7 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  width: 21rem;
+  width: 100%;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
