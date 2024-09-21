@@ -22,7 +22,7 @@ export const DeletePopup = ({
 
   useEffect(() => {
     setDeleteName(deleteItem);
-  }, []);
+  }, [deleteItem]);
 
   const cancelDelete = () => {
     setPopup(false);
@@ -70,7 +70,6 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  //justify-content: center;
   height: 100vh;
   width: 100vw;
   position: relative;

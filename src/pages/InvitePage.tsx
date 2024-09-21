@@ -1,4 +1,4 @@
-import { Invite } from "../components/invitePage/Invite";
+import { Invite } from "../components/InvitePage/Invite";
 
 export const InvitePage = () => {
   return (
