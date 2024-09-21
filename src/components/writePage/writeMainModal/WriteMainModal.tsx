@@ -10,10 +10,12 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
     <Overlay onClick={onClose}>
       <Popup onClick={(e) => e.stopPropagation()}>
         <PopupTitle>
-          3명의참가자어쩌고
+          {}명의 참여자가
+          <br/>
+          {}이어 쓸 거예요!
         </PopupTitle>
         <PopupTitleDetail>
-          3명의참가자어쩌고
+          총 {}개의 그림이 생성돼요
         </PopupTitleDetail>
         <PopupList>
           <PopupListTitle>
@@ -45,7 +47,7 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 5;
 `;
 
 const Popup = styled.div`
