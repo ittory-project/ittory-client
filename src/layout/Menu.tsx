@@ -69,7 +69,13 @@ export const Menu = ({ onClose }: Props) => {
     onClose();
   };
   const handleLogin = () => {
-    //로그인화면으로
+    navigate("/login");
+  };
+  const handleAsk = () => {
+    window.open(
+      "https://docs.google.com/forms/d/e/1FAIpQLSf2kfLU3FoKyvgWiA_mzdTrTiYTNn9otsoQkaIIfNYM5Nze2g/viewform",
+      "_blank"
+    );
   };
   return (
     <BackGround>
@@ -164,7 +170,7 @@ export const Menu = ({ onClose }: Props) => {
             <img src={graynavi} style={{ width: "5px", height: "10px" }} />
           </Navi>
         </VisitContainer>
-        <AskContainer>
+        <AskContainer onClick={handleAsk}>
           <img
             src={ask}
             style={{ width: "16px", height: "16px", marginBottom: "1.2px" }}
