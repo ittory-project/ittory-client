@@ -7,6 +7,7 @@ import { LoginPage } from './pages/home/LoginPage';
 import { WritePage } from './pages/write/WritePage';
 import { CompTest } from './components/common/CompTest';
 import { ReceiveLetterPage } from './pages/receive/ReceiveLetterPage';
+import { LoginRedirectPage } from './pages/home/LoginRedirectPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
+          <Route path='/login/redirect' element={<LoginRedirectPage />} />
           <Route path='/write' element={<WritePage />} />
           <Route path='/receive' element={<ReceivePage />} />
           <Route path='/receive/letter' element={<ReceiveLetterPage />} />

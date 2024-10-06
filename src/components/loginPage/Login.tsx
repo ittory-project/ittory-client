@@ -1,6 +1,11 @@
 import styled from 'styled-components';
+import { getKakaoCode } from '../../api/config/setToken';
 
 export const Login = () => {
+    const kakaoLogin = () => {
+        getKakaoCode()
+    }
+
     return (
         <Container>
             <CloseBtn 
@@ -9,7 +14,7 @@ export const Login = () => {
             <LoginContainer>
                 <Logo src="" alt="Logo" />
                 <Desc>{'서비스 설명입니다.'}</Desc>
-                <LoginBtn>
+                <LoginBtn onClick={kakaoLogin}>
                     <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
                     {'카카오로 시작하기'}
                 </LoginBtn>
@@ -19,11 +24,11 @@ export const Login = () => {
     );
 };
 
-export const Container = styled.div`
+const Container = styled.div`
     height: 100vh;
 `;
 
-export const LoginContainer = styled.div`
+const LoginContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,7 +41,7 @@ export const LoginContainer = styled.div`
     position: relative;
 `;
 
-export const CloseBtn = styled.img`
+const CloseBtn = styled.img`
     height: 24px;
     width: 24px;
     position: absolute;
@@ -44,25 +49,25 @@ export const CloseBtn = styled.img`
     right: 20px;
 `;
 
-export const Logo = styled.img`
+const Logo = styled.img`
     width: 236px;
     height: 90px;
     margin-bottom: 20px;
 `;
 
-export const Desc = styled.div`
+const Desc = styled.div`
     font-size: 18px;
     color: #868E96;
     margin-bottom: 250px;
 `;
 
-export const Icon = styled.img`
+const Icon = styled.img`
     width: 20px;
     height: 20px;
     margin-right: 8px;
 `;
 
-export const LoginBtn = styled.button`
+const LoginBtn = styled.button`
     width: 90%;
     max-width: 400px; 
     height: 48px;
@@ -79,7 +84,7 @@ export const LoginBtn = styled.button`
     justify-content: center;
 `;
 
-export const LoginDesc = styled.div`
+const LoginDesc = styled.div`
     font-size: 14px;
     color: #868E96;
     text-align: center;
