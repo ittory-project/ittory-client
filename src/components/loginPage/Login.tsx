@@ -2,26 +2,26 @@ import styled from 'styled-components';
 import { getKakaoCode } from '../../api/config/setToken';
 
 export const Login = () => {
-    const kakaoLogin = () => {
-        getKakaoCode()
-    }
+  const kakaoLogin = () => {
+    getKakaoCode()
+  }
 
-    return (
-        <Container>
-            <CloseBtn 
-                src='/assets/btn_close.png'
-            />
-            <LoginContainer>
-                <Logo src="" alt="Logo" />
-                <Desc>{'서비스 설명입니다.'}</Desc>
-                <LoginBtn onClick={kakaoLogin}>
-                    <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
-                    {'카카오로 시작하기'}
-                </LoginBtn>
-                <LoginDesc>{'로그인하시면 개인정보처리방침과 서비스이용약관에 동의하게 됩니다.'}</LoginDesc>
-            </LoginContainer>
-        </Container>
-    );
+  return (
+    <Container>
+      <CloseBtn 
+        src='/assets/btn_close.png'
+      />
+      <LoginContainer>
+        <Logo src="" alt="Logo" />
+        <Desc>{'서비스 설명입니다.'}</Desc>
+        <LoginBtn onClick={kakaoLogin}>
+          <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
+          {'카카오로 시작하기'}
+        </LoginBtn>
+        <LoginDesc>{'로그인하시면 개인정보처리방침과 서비스이용약관에 동의하게 됩니다.'}</LoginDesc>
+      </LoginContainer>
+    </Container>
+  );
 };
 
 const Container = styled.div`
