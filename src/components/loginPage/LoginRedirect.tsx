@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getJwt, getKakaoToken, setJwt } from "../../api/config/setToken";
+import { getJwt, getKakaoCode, getKakaoToken, setJwt } from "../../api/config/setToken";
 import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../api/service/LoginService";
 
@@ -9,11 +9,12 @@ export const LoginRedirect = () => {
   
   const setLocalStorageJwt = async (code: string) => {
     try {
-    getKakaoToken(code)
-    const response = await postLogin(code)
-    setJwt(response.accessToken)
-    console.log(getJwt())
-    navigate('/')
+      const kakaoToken = getKakaoToken(code)
+      const accessToken = kakaoToken?.accessToken
+      const response = await postLogin(accessToken)
+      setJwt(response.accessToken)
+      console.log(getJwt())
+      navigate('/')
     } catch(error) {
       console.error(error)
     }
