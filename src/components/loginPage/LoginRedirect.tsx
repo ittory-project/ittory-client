@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { getJwt, getKakaoCode, getKakaoToken, setJwt } from "../../api/config/setToken";
+import { getJwt, getKakaoToken, getUserId, setJwt, setUserId } from "../../api/config/setToken";
 import { useNavigate } from "react-router-dom";
-import { postLogin } from "../../api/service/LoginService";
+import { postLogin } from "../../api/service/AuthService";
 
 export const LoginRedirect = () => {
   const code = new URL(window.location.href).searchParams.get("code");
@@ -9,12 +9,17 @@ export const LoginRedirect = () => {
   
   const setLocalStorageJwt = async (code: string) => {
     try {
-      const kakaoToken = getKakaoToken(code)
-      const accessToken = kakaoToken?.accessToken
-      const response = await postLogin(accessToken)
-      setJwt(response.accessToken)
-      console.log(getJwt())
-      navigate('/')
+      const kakaoToken = await getKakaoToken(code)
+      if (kakaoToken) {
+        const response = await postLogin(kakaoToken.accessToken)
+        setJwt(response.accessToken)
+        const jwt = getJwt()
+        if (jwt) {
+          setUserId(jwt)
+          console.log(`유저 아이디: ${getUserId()}`)
+          navigate('/')
+        } 
+      }
     } catch(error) {
       console.error(error)
     }

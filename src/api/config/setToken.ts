@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { LoginJwtPostResponse } from '../model/LoginModel';
+import { AuthJwtPostResponse } from '../model/AuthModel';
+import { jwtDecode } from 'jwt-decode';
 
 // 카카오 인가 코드 받기
 export const getKakaoCode = async () => {
@@ -22,7 +23,7 @@ interface KakaoTokenResponse {
 }
 
 // 카카오 토큰 받기
-export const getKakaoToken = async (code: string): Promise<LoginJwtPostResponse | null> => {
+export const getKakaoToken = async (code: string): Promise<AuthJwtPostResponse | null> => {
   try {
     const response = await axios.post<KakaoTokenResponse>(
       'https://kauth.kakao.com/oauth/token',
@@ -40,25 +41,48 @@ export const getKakaoToken = async (code: string): Promise<LoginJwtPostResponse 
       }
     );
 
-    const token: LoginJwtPostResponse = {
+    const token: AuthJwtPostResponse = {
       accessToken: response.data.access_token,
       refreshToken: response.data.refresh_token
     }
-    console.log('Access Token:', token.accessToken);
     return token;
   } catch (error) {
-    console.error('카카오 로그인 연결에 실패하였습니다.:', error);
-    return null;
+    console.error('카카오 로그인 연결 실패:', error);
+    return null
   }
 };
 
 // 세션에서 JWT(서버) 받아오기
 export const getJwt = () => {
   const jwt = window.localStorage.getItem('jwt')
-  return jwt
+  if (jwt) {
+    return jwt
+  } else {
+    console.error("회원 정보가 존재하지 않습니다.")
+    return null
+  }
 }
 
 // 세션에 JWT(서버) 저장하기
 export const setJwt = (code: string) => {
   window.localStorage.setItem('jwt', code)
+}
+
+export const getUserId = () => {
+  const userId = window.localStorage.getItem('userId')
+  return userId
+}
+
+interface jwtType {
+  exp: number
+  iat: number
+  role: string
+  sub: string
+  type: string
+}
+
+export const setUserId = (jwt: string) => {
+  const userId: jwtType = jwtDecode(jwt)
+  console.log(userId)
+  window.localStorage.setItem('userId', userId.sub)
 }
