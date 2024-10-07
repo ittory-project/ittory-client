@@ -47,8 +47,8 @@ const setAxiosJwtHeader = (config: { headers: any }) => {
 };
 
 const responseHandler = (response: AxiosResponse): Promise<AxiosResponse> => {
-  if (!response.data.isSuccess) {
-    console.error(response)
+  if (!response.data.success) {
+    console.error(response.data)
     window.alert(`오류: ${response.data.message}`)
     return Promise.reject(new AxiosError)
   }
