@@ -3,6 +3,8 @@ import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop";
 import styled from "styled-components";
 import getCroppedImg from "./getCrop";
+import axios from "axios";
+//301, cors에러 memberID 어떻게 조회..
 
 interface Props {
   originalImage: string;
@@ -41,6 +43,7 @@ export default function ImageCropper({
   );
 
   // 크롭된 이미지를 저장하는 함수
+  /*
   const handleSaveClick = async () => {
     if (croppedAreaPixels) {
       const croppedImgUrl = await getCroppedImg(
@@ -56,6 +59,46 @@ export default function ImageCropper({
       setCroppedImage(croppedImgUrl);
       closeModal();
       // 여기서 croppedImg를 서버에 업로드하거나 다운로드 링크를 생성
+    }
+  };*/
+  const handleSaveClick = async () => {
+    if (croppedAreaPixels) {
+      const croppedImgUrl = await getCroppedImg(
+        originalImage,
+        croppedAreaPixels,
+        {
+          width,
+          height,
+          borderRadius,
+        }
+      );
+      console.log("Cropped Image URL: ", croppedImgUrl);
+      setCroppedImage(croppedImgUrl);
+
+      // Blob으로 변환하여 FormData에 추가
+      const responseBlob = await fetch(croppedImgUrl).then((res) => res.blob());
+
+      const formData = new FormData();
+      formData.append("image", responseBlob, "cropped-image.jpg"); // Blob 추가
+      formData.append("imgExtension", "JPG"); // 요청 본문에 imgExtension 추가
+
+      // POST 요청 (301에러)
+      try {
+        const uploadResponse = await axios.post(
+          "http://dev-server.ittory.co.kr/image/letter-cover",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Upload Response: ", uploadResponse.data);
+      } catch (error) {
+        console.error("Error uploading image: ", error);
+      }
+
+      closeModal();
     }
   };
 

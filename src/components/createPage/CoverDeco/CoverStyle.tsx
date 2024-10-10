@@ -19,6 +19,7 @@ import bookshadow from "../../../../public/assets/book_shadow.svg";
 import FontSelect from "./FontSelect";
 import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
+import axios from "axios";
 
 const fonts = [
   { name: "서체1", family: "GmarketSans" },
@@ -66,6 +67,20 @@ export default function CoverStyle({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cropperKey, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const response = await axios.get(
+          "https://dev-server.ittory.co.kr/api/cover-type/all"
+        );
+        console.log(response);
+      } catch (error) {
+        console.error("Failed to fetch cover types:", error);
+      }
+    };
+    fetchCoverTypes();
+  }, []);
 
   const handleImageClick = (index: number) => {
     setImageIndex(index);
@@ -241,7 +256,7 @@ export default function CoverStyle({
               clicked={ImageIndex === index}
               key={index}
               img={img}
-              alt={`Image ${index + 1}`}
+              //alt={`Image ${index + 1}`}
               className="image"
             />
           ))}
