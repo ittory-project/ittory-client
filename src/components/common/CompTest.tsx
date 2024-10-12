@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { getLetterStartParti } from "../../api/service/LetterService";
 import { LetterStartPartiGetResponse } from "../../api/model/LetterModel";
 import { getJwt, getUserId } from "../../api/config/setToken";
+import { enterComponent } from "../../api/service/WsService";
 
 export const CompTest = () => {
 
@@ -24,16 +25,20 @@ export const CompTest = () => {
     console.log(`유저 아이디: ${getUserId()}`)
   });
 
-    return (
-        <Contents>
-            <Location name="카리나" />
-            <AlertContainer>
-                <WriteOrderAlert text="카리나" />
-                <WriteQuitAlert text="" />
-                <WriteOrderAlert text="카리나" />
-            </AlertContainer>
-        </Contents>
-    );
+  const socketTest = () => {
+    enterComponent(1)
+  }
+
+  return (
+    <Contents>
+      <Location name="카리나" />
+      <AlertContainer>
+        <WriteOrderAlert text="카리나" />
+        <WriteQuitAlert text="" />
+        <button onClick={socketTest}>소켓테스트</button>
+      </AlertContainer>
+    </Contents>
+  );
 }
 
 const Contents = styled.div`
