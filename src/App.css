@@ -39,15 +39,20 @@
 }
 
 .large-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
   background-color: white;
 }
 
 .small-screen {
-  height: 100%;
-  width: 375px;
-  margin: 0 auto;
-  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
 }
+
 @font-face {
   font-family: "Cafe24ClassicType-Regular";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Cafe24ClassicType-Regular.woff2")
@@ -56,9 +61,7 @@
   font-style: normal;
 }
 
-html,
-body,
-#root {
+html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
