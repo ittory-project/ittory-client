@@ -20,6 +20,7 @@ import FontSelect from "./FontSelect";
 import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
 import axios from "axios";
+import FontPopup from "./FontPopup";
 
 const fonts = [
   { name: "서체1", family: "GmarketSans" },
@@ -67,6 +68,7 @@ export default function CoverStyle({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cropperKey, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
+  const [fontPopup, setFontPopup] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
@@ -86,6 +88,10 @@ export default function CoverStyle({
     setImageIndex(index);
   };
 
+  const handlePopup = () => {
+    setFontPopup(true);
+  };
+
   useEffect(() => {
     console.log("Updated selectedImageIndex:", selectedImageIndex);
     setSelectedImageIndex(ImageIndex);
@@ -94,6 +100,7 @@ export default function CoverStyle({
   const openModal = () => {
     setIsModalOpen(true);
   };
+  /*
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
       const heightDiff =
@@ -104,6 +111,29 @@ export default function CoverStyle({
       } else {
         setIsKeyboardOpen(false);
         setKeyboardHeight(0);
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+    };
+  }, [inputRef]);*/
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      const heightDiff =
+        window.innerHeight - document.documentElement.clientHeight;
+
+      // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
+      if (inputRef.current && inputRef.current.contains(e.target as Node)) {
+        if (heightDiff > 0) {
+          setIsKeyboardOpen(true);
+          setKeyboardHeight(heightDiff);
+        } else {
+          setIsKeyboardOpen(false);
+          setKeyboardHeight(0);
+          handlePopup();
+        }
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -186,10 +216,12 @@ export default function CoverStyle({
               <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
             </svg>
 
-            {isKeyboardOpen && (
+            {isKeyboardOpen == true ? (
               <KeyboardBar keyboardHeight={keyboardHeight}>
                 <FontSelect font={font} fonts={fonts} setFont={setFont} />
               </KeyboardBar>
+            ) : (
+              <></>
             )}
           </TitleContainer>
           {ImageIndex !== 4 ? (
@@ -262,9 +294,9 @@ export default function CoverStyle({
           ))}
         </ImageContainer>
       </Container>
-      {title === "" || (ImageIndex === 0 && croppedImage === "") ? (
+      {title === "" || croppedImage === "" ? (
         <Button disabled={true} style={{ background: "#ced4da" }}>
-          <ButtonTxt>완료</ButtonTxt>
+          <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       ) : (
         <Button
@@ -280,7 +312,7 @@ export default function CoverStyle({
             setViewFinalInfo(true);
           }}
         >
-          <ButtonTxt>완료</ButtonTxt>
+          <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       )}
       {isModalOpen && (
@@ -292,6 +324,14 @@ export default function CoverStyle({
           setCroppedImage={handleSaveCroppedImage} // 크롭된 이미지를 저장하는 함수
           setCroppedAreaPixels={setCroppedAreaPixels}
           borderRadius={20}
+        />
+      )}
+      {fontPopup && (
+        <FontPopup
+          font={font}
+          fonts={fonts}
+          setFont={setFont}
+          setFontPopup={setFontPopup}
         />
       )}
     </BackGround>
