@@ -15,5 +15,12 @@ export const stompClient = (): Client => {
     heartbeatOutgoing: 4000,
   });
 
+  client.onStompError = (frame) => {
+    console.error('STOMP error:', frame.headers.message);
+  };
+  client.onDisconnect = () => {
+    console.log('Disconnected from WebSocket');
+  };
+  
   return client;
 };
