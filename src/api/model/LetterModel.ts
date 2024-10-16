@@ -7,7 +7,7 @@ export interface LetterStartInfoGetResponse {
 
 // 현재 유저를 순서에 맞게 조회 
 export interface LetterPartiListGetResponse {
-  participant: LetterPartiItem
+  participants: LetterPartiItem[]
 }
 
 // 현재 유저 리스트 아이템
