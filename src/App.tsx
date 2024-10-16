@@ -26,7 +26,7 @@ function App() {
         <Route path='/comp' element={<CompTest />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/redirect" element={<LoginRedirectPage />} />
-        <Route path="/write" element={<WritePage />} />
+        <Route path="/write/:letterId" element={<WritePage />} />
         <Route path="/receive" element={<ReceivePage />} />
         <Route path="/receive/letter" element={<ReceiveLetterPage />} />
         <Route path="/Create" element={<CreatePage />} />
