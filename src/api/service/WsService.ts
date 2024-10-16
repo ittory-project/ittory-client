@@ -3,8 +3,8 @@ import { WsEnterResponse } from "../model/WsModel";
 
 // 편지 생성 API
 // param: 편지 ID, 설정할 유저 닉네임
-// subscribe: WsEnterResponse - 접속할 유저 정보
-export const enterComponent = (letterId: number, nickname: string) => {
+// response: WsEnterResponse - 접속할 유저 정보
+export const enterLetterWs = (letterId: number, nickname: string) => {
   const client = stompClient();
 
   client.onConnect = () => {

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { getLetterStartParti } from "../../api/service/LetterService";
 import { LetterStartPartiGetResponse } from "../../api/model/LetterModel";
 import { getJwt, getUserId } from "../../api/config/setToken";
-import { enterComponent } from "../../api/service/WsService";
+import { enterLetterWs } from "../../api/service/WsService";
 
 export const CompTest = () => {
 
@@ -27,7 +27,7 @@ export const CompTest = () => {
 
   // 채팅 입장 테스트(소켓)
   const socketTest = () => {
-    enterComponent(1, "닉네임2")
+    enterLetterWs(1, "닉네임2")
   }
 
   return (
