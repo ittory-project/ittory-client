@@ -33,7 +33,6 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
     } else {
       const response: LetterPartiListGetResponse = await getLetterPartiList(Number(letterId));
       setWriteOrderList(response.participants)
-      console.log(response.participants)
     }
   }
 

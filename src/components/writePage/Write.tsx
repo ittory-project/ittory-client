@@ -49,7 +49,7 @@ const Write = () => {
   return (
     <Container>
       <StickyHeader>
-        <WriteOrderTitle title="선재야 생일축하해" />
+        <WriteOrderTitle title="선재야 생일 축하해" />
       </StickyHeader>
       <ScrollableOrderList>
         <WriteOrderList items={items} nowItemId={nowItemId}/>
