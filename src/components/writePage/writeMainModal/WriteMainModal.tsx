@@ -56,7 +56,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
           <PopupListTitle>
             작성 순서
           </PopupListTitle>
-          {writeOrderList &&
+          {writeOrderList ?
             <List>
               <Line $itemnum={Number(partiCount)} />
               {writeOrderList.map(participant => (
@@ -67,6 +67,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
                 </ListItem>
               ))}
             </List>
+            : <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
           }
         </PopupList>
       </Popup>
