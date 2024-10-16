@@ -61,6 +61,8 @@ const Write = () => {
   );
 }
 
+export default Write;
+
 const Container = styled.div`
   height: 100%;
   width: 100%;
@@ -91,5 +93,3 @@ const StickyFooter = styled.div`
   z-index: 4;
   background-color: transparent;
 `;
-
-export default Write;
