@@ -25,8 +25,9 @@ export const CompTest = () => {
     console.log(`유저 아이디: ${getUserId()}`)
   });
 
+  // 채팅 입장 테스트(소켓)
   const socketTest = () => {
-    enterComponent(1)
+    enterComponent(1, "닉네임2")
   }
 
   return (
