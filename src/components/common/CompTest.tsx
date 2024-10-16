@@ -3,16 +3,16 @@ import { Location } from "../writePage/Location";
 import { WriteQuitAlert } from "../writePage/WriteQuitAlert";
 import { WriteOrderAlert } from "../writePage/WriteOrderAlert";
 import { useEffect } from "react";
-import { getLetterStartParti } from "../../api/service/LetterService";
-import { LetterStartPartiGetResponse } from "../../api/model/LetterModel";
 import { getJwt, getUserId } from "../../api/config/setToken";
 import { enterLetterWs } from "../../api/service/WsService";
+import { getLetterStartInfo } from "../../api/service/LetterService";
+import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
 
 export const CompTest = () => {
 
   // api 테스트 - 편지 시작 시 정보 조회
   const getPartiList = async () => {
-    const response: LetterStartPartiGetResponse = await getLetterStartParti(1);
+    const response: LetterStartInfoGetResponse = await getLetterStartInfo(1);
     console.log(response.participantCount)
     console.log(response.repeatCount)
     console.log(response.elementCount)
