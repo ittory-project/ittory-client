@@ -20,6 +20,5 @@ export async function getLetterPartiList(letterId: number, order?: number): Prom
         order
       }
     });
-  console.log(response)
   return response.data.data;
 }
