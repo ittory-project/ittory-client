@@ -38,7 +38,7 @@ export const WriteOrderPopover: React.FC<PopoverProps> = ({ onClose }) => {
             {writeOrderList.map(participant => (
               <ListItem key={participant.sequence}>
                 <ListNumber>{participant.sequence}</ListNumber>
-                <Avatar src={participant.imageUrl} alt={participant.nickname} />
+                <Avatar src={participant.imageUrl || '/assets/basic_user.svg'} alt={participant.nickname} />
                 <Name>{participant.nickname}</Name>
               </ListItem>
             ))}
