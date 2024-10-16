@@ -15,6 +15,7 @@ import { ConnectionPage } from "./pages/ConnectionPage";
 import { AccountPage } from "./pages/AccountPage";
 import { LetterBoxPage } from "./pages/LetterBoxPage";
 import StompTest from "./components/common/StompTest";
+import { WriteElementPage } from "./pages/write/WriteElementPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/redirect" element={<LoginRedirectPage />} />
         <Route path="/write/:letterId" element={<WritePage />} />
+        <Route path="/write/element/:letterId" element={<WriteElementPage />} />
         <Route path="/receive" element={<ReceivePage />} />
         <Route path="/receive/letter" element={<ReceiveLetterPage />} />
         <Route path="/Create" element={<CreatePage />} />

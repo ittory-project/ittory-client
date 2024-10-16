@@ -9,7 +9,7 @@ export const Login = () => {
   return (
     <Container>
       <CloseBtn 
-        src='/assets/btn_close.png'
+        src='/assets/btn_close.svg'
       />
       <LoginContainer>
         <Logo src="" alt="Logo" />
