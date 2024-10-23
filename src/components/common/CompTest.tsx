@@ -7,6 +7,8 @@ import { getJwt, getUserId } from "../../api/config/setToken";
 import { enterLetterWs, quitLetterWs, writeLetterWs } from "../../api/service/WsService";
 import { getLetterStartInfo } from "../../api/service/LetterService";
 import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
+import { useDispatch, useSelector } from 'react-redux';
+import { addData, clearData, LetterItem, selectData } from "../../api/config/state";
 
 export const CompTest = () => {
   const letterNum = 6
@@ -41,6 +43,26 @@ export const CompTest = () => {
     quitLetterWs(letterNum)
   }
 
+  // redux 세팅 - 실시간 편지 저장
+  const dispatch = useDispatch();
+  const data = useSelector(selectData);
+
+  const handleAddData = () => {
+    const newItem: LetterItem = {
+      elementId: '1',
+      imageUrl: 'https://example.com/image.jpg',
+      content: 'New Content',
+      nickname: 'JohnDoe',
+      elementSequence: 1,
+      writeSequence: 1,
+    };
+    dispatch(addData(newItem)); 
+  };
+
+  const handleClearData = () => {
+    dispatch(clearData());
+  };
+
   return (
     <Contents>
       <Location name="카리나" />
@@ -50,6 +72,16 @@ export const CompTest = () => {
         <button onClick={socketTest}>소켓테스트</button>
         <button onClick={socketListTest}>작성 목록 테스트</button>
         <button onClick={socketQuitTest}>퇴장 테스트</button>
+        <button onClick={handleAddData}>Add Data</button>
+        <button onClick={handleClearData}>Clear Data</button>
+        <div>
+          <h3>Stored Data:</h3>
+          <ul>
+            {data.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
       </AlertContainer>
     </Contents>
   );
