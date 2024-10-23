@@ -4,15 +4,16 @@ import { WriteQuitAlert } from "../writePage/WriteQuitAlert";
 import { WriteOrderAlert } from "../writePage/WriteOrderAlert";
 import { useEffect } from "react";
 import { getJwt, getUserId } from "../../api/config/setToken";
-import { enterLetterWs } from "../../api/service/WsService";
+import { enterLetterWs, quitLetterWs, writeLetterWs } from "../../api/service/WsService";
 import { getLetterStartInfo } from "../../api/service/LetterService";
 import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
 
 export const CompTest = () => {
+  const letterNum = 6
 
   // api 테스트 - 편지 시작 시 정보 조회
   const getPartiList = async () => {
-    const response: LetterStartInfoGetResponse = await getLetterStartInfo(1);
+    const response: LetterStartInfoGetResponse = await getLetterStartInfo(letterNum);
     console.log(response.participantCount)
     console.log(response.repeatCount)
     console.log(response.elementCount)
@@ -27,7 +28,17 @@ export const CompTest = () => {
 
   // 채팅 입장 테스트(소켓)
   const socketTest = () => {
-    enterLetterWs(1, "닉네임2")
+    enterLetterWs(letterNum, "샤")
+  }
+
+  // 채팅 입장 테스트(소켓)
+  const socketListTest = () => {
+    writeLetterWs(letterNum)
+  }
+
+  // 채팅 입장 테스트(소켓)
+  const socketQuitTest = () => {
+    quitLetterWs(letterNum)
   }
 
   return (
@@ -37,6 +48,8 @@ export const CompTest = () => {
         <WriteOrderAlert text="카리나" />
         <WriteQuitAlert text="" />
         <button onClick={socketTest}>소켓테스트</button>
+        <button onClick={socketListTest}>작성 목록 테스트</button>
+        <button onClick={socketQuitTest}>퇴장 테스트</button>
       </AlertContainer>
     </Contents>
   );
