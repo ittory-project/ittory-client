@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 export const WriteElement: React.FC = () => {
@@ -18,6 +18,14 @@ export const WriteElement: React.FC = () => {
     return () => clearInterval(interval);
   }, []);  
 
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  
+  useEffect(() => {
+    if (taRef.current) {
+      taRef.current.focus();
+    }
+  }, []);
+
   return (
     <Container>
       <Content>
@@ -33,6 +41,7 @@ export const WriteElement: React.FC = () => {
             <ProfileImage src={'/img/profile.png'} alt="Profile" />
           </PhotoDiv>
           <WriteTa 
+            ref={taRef}
             placeholder="그림을 보고 편지를 채워 주세요"             
             value={text} 
             onChange={e => setText(e.target.value)} ></WriteTa>
