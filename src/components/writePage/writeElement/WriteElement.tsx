@@ -37,13 +37,16 @@ export const WriteElement: React.FC = () => {
             value={text} 
             onChange={e => setText(e.target.value)} ></WriteTa>
           <ControlContainer>
-            {text.length > 0 && (
+            {text.length > 0 ? (
               <>
-              <CharacterCount>
-                <div style={{ color: text.length > 30 ? '#FF0004' : 'black' }}>{text.length}</div>/30자</CharacterCount>
+                <CharacterCount>
+                  <div style={{ color: text.length > 30 ? '#FF0004' : 'black' }}>{text.length}</div>/30자
+                </CharacterCount>
               </>
 
-            )}
+            ) : 
+            <><CharacterCount></CharacterCount></>
+            }
             <CompleteBtn isDisabled={text.length === 0 || text.length > 30}>완료</CompleteBtn>
           </ControlContainer>
         </WriteContent>
@@ -65,7 +68,7 @@ const Container = styled.div`
 
 const Content = styled.div`
   display: flex;
-  width: 100vw;
+  width: 95%;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
@@ -159,6 +162,7 @@ const WriteTa = styled.textarea`
   align-self: stretch;
   border: none;
   background: var(--Color-grayscale-gray50, #F8F9FA);
+  overflow: hidden;
   
   &:focus {
     outline: none;
