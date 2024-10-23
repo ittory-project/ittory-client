@@ -16,6 +16,7 @@ import { AccountPage } from "./pages/AccountPage";
 import { LetterBoxPage } from "./pages/LetterBoxPage";
 import StompTest from "./components/common/StompTest";
 import { WriteElementPage } from "./pages/write/WriteElementPage";
+import { ShareLetterPage } from "./pages/share/SharePage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/write/element/:letterId" element={<WriteElementPage />} />
         <Route path="/receive" element={<ReceivePage />} />
         <Route path="/receive/letter" element={<ReceiveLetterPage />} />
+        <Route path="/share" element={<ShareLetterPage />} />
         <Route path="/Create" element={<CreatePage />} />
         <Route path="/Invite" element={<InvitePage />} />
         <Route path="/Join" element={<JoinPage />} />
