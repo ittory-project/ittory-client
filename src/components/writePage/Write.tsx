@@ -1,24 +1,36 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+
 import { addData, clearData, LetterItem, selectParsedData } from '../../api/config/state';
+import { LetterPartiItem, LetterPartiListGetResponse } from '../../api/model/LetterModel';
+import { stompClient } from '../../api/config/stompInterceptor';
+import { decodeLetterId } from '../../api/config/base64';
 import Button from '../common/Button';
+
 import { WriteOrderList } from './writeMainList/WriteOrderList';
 import { WriteOrderTitle } from './WriteOrderTitle';
-import { stompClient } from '../../api/config/stompInterceptor';
-import { useNavigate, useParams } from 'react-router-dom';
-import { decodeLetterId } from '../../api/config/base64';
-import { LetterPartiItem, LetterPartiListGetResponse } from '../../api/model/LetterModel';
 import { getLetterPartiList } from '../../api/service/LetterService';
+import { WriteLocation } from './WriteLocation';
+import { getUserId } from '../../api/config/setToken';
 
+// 작성 현황을 볼 수 있는 페이지
+// /write/:letterId
+// letterId: base64로 인코딩한 편지 아이디
 export const Write = () => {
-  const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // 편지 아이디 식별
+  const { letterId } = useParams();
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  // redux 값 가져오기
   const data = useSelector(selectParsedData);
   const [letterItems, setLetterItems] = useState<LetterItem[]>(data);
+  // 진행 순서
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
+  // 현재 유저의 멤버 아이디
+  const [nowMemberId, setNowMemberId] = useState(-1);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -34,14 +46,20 @@ export const Write = () => {
       client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
         const response = JSON.parse(message.body);
 
+        // [TODO]: Exit response json 객체 만들기
         if (response.action === 'EXIT') {
           console.log("퇴장 모달 띄우기");
-          // [TODO]: 참여자 리스트 갱신하기
-          getPartiList()
-          // [TODO]: response의 멤버 데이터를 이용하여 유저 상태 확인
+          // getPartiList가 잘 불러와진 다음에 getUserWriteState를 통해 세팅
+          const fetchPartiList = async () => {
+            await getPartiList();
+            if (writeOrderList && writeOrderList.length > 0) {
+              getUserWriteState()
+            }
+          };
+          fetchPartiList();
         } else {
           dispatch(addData(response));
-          // [TODO]: response의 멤버 데이터를 이용하여 유저 상태 확인
+          getUserWriteState()
         }
       });
     };
@@ -64,12 +82,19 @@ export const Write = () => {
       setWriteOrderList(response.participants)
     }
   }
-  useEffect(() => {
-    getPartiList()
+  useEffect(() => { // 처음에만 이펙트 통해서 getPartiList 호출 + 첫번째 유저로 nowMemberId 초기화
+    const fetchPartiList = async () => {
+      await getPartiList();
+      if (writeOrderList && writeOrderList.length > 0) {
+        setNowMemberId(writeOrderList[0].memberId);
+        getUserWriteState()
+      }
+    };
+    fetchPartiList();
   }, []);
 
   // 현재 유저가 어떤 상태인지 확인
-  const getUserWriteState = (nowMemberId: number) => {
+  const getUserWriteState = () => {
     if (!writeOrderList) return null;
   
     // 현재 아이템 찾기: nowMemberId와 동일한 memberId를 가진 아이템의 인덱스
@@ -91,10 +116,11 @@ export const Write = () => {
   
     return null;
   };
-  
 
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
+  // [TODO]: useEffect 아니고 초기, 작성 완료, 퇴장 시에 업데이트 하는 것으로 바꿔야 함
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
+  // [TODO]: 다음 차례 사람 아이템을 여기에서 제일 위에 넣어주면 되는 거 아닌가? - 현재 유저와 같으면 내 차례예요 넣고 내 차례 아니면 편지를 작성하고 있어요 띄우면 됨
   useEffect(() => {
     const tempItems: LetterItem[] = Array.from({ length: 10 }, (_, index) => ({
       elementId: `${index + 1}`,
@@ -104,13 +130,24 @@ export const Write = () => {
       elementSequence: index + 1,
       writeSequence: index + 1,
     }));
-    
     setLetterItems((prevItems) => [...prevItems, ...tempItems]);
   }, []);
 
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {
     dispatch(clearData());
+  };
+
+  const [nowItemId, setNowItemId] = useState<number | undefined>(undefined);
+  const goWritePage = () => {
+    handleScrollTo(9)
+    setTimeout(() => {
+      setNowItemId(undefined);
+    }, 1000);
+  }
+
+  const handleScrollTo = (id: number) => {
+    setNowItemId(id);
   };
 
   // 작성 페이지 이동
@@ -127,11 +164,16 @@ export const Write = () => {
           <WriteOrderTitle writeOrderList={writeOrderList} title="생일 축하 메시지" />
         </StickyHeader>
         <ScrollableOrderList>
-          <WriteOrderList letterItems={letterItems} nowItemId={undefined} />
+          <WriteOrderList letterItems={letterItems} nowItemId={nowItemId} />
         </ScrollableOrderList>
-        <StickyFooter>
-          <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
-        </StickyFooter>
+        { nowMemberId === Number(getUserId()) ? 
+          <ButtonContainer>
+            <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
+          </ButtonContainer>
+          : <LocationContainer onClick={goWritePage}>
+              <WriteLocation name="카리나"/>
+            </LocationContainer>
+        }
       </Container>
     )
     : <>오류염</>
@@ -161,9 +203,17 @@ const ScrollableOrderList = styled.div`
   }
 `;
 
-const StickyFooter = styled.div`
+const ButtonContainer = styled.div`
   position: sticky;
   bottom: 10px;
+  z-index: 4;
+  background-color: transparent;
+`;
+
+const LocationContainer = styled.div`
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
   z-index: 4;
   background-color: transparent;
 `;

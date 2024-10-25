@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Location } from "../writePage/Location";
 import { WriteQuitAlert } from "../writePage/WriteQuitAlert";
 import { WriteOrderAlert } from "../writePage/WriteOrderAlert";
 import { useEffect } from "react";
@@ -66,7 +65,6 @@ export const CompTest = () => {
 
   return (
     <Contents>
-      <Location name="카리나" />
       <AlertContainer>
         <WriteOrderAlert text="카리나" />
         <WriteQuitAlert text="" />
