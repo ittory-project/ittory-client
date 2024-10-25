@@ -31,6 +31,8 @@ export const Write = () => {
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
   // 현재 유저의 멤버 아이디
   const [nowMemberId, setNowMemberId] = useState(-1);
+  // 현재까지 작성된 편지 수 (최근 작성 완료된 편지의 elementSequence 값)
+  const [nowLetterId, setNowLetterId] = useState(0);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -56,9 +58,10 @@ export const Write = () => {
               getUserWriteState()
             }
           };
-          fetchPartiList();
+          fetchPartiList()
         } else {
-          dispatch(addData(response));
+          dispatch(addData(response))
+          setNowLetterId(response.writeSequence)
           getUserWriteState()
         }
       });
@@ -80,6 +83,7 @@ export const Write = () => {
     } else {
       const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
       setWriteOrderList(response.participants)
+      setLockedWriteItems()
     }
   }
   useEffect(() => { // 처음에만 이펙트 통해서 getPartiList 호출 + 첫번째 유저로 nowMemberId 초기화
@@ -121,9 +125,9 @@ export const Write = () => {
   // [TODO]: useEffect 아니고 초기, 작성 완료, 퇴장 시에 업데이트 하는 것으로 바꿔야 함
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
   // [TODO]: 다음 차례 사람 아이템을 여기에서 제일 위에 넣어주면 되는 거 아닌가? - 현재 유저와 같으면 내 차례예요 넣고 내 차례 아니면 편지를 작성하고 있어요 띄우면 됨
-  useEffect(() => {
+  const setLockedWriteItems =() => {
     const nowItem: LetterItem = {
-      elementId: `1`,
+      elementId: `${nowLetterId + 1}`,
       imageUrl: `https://example.com/imagpg`,
       content: `Temporary Content`,
       nickname: `User`,
@@ -131,7 +135,7 @@ export const Write = () => {
       writeSequence: 1,
     };    
     const tempItems: LetterItem[] = Array.from({ length: 10 }, (_, index) => ({
-      elementId: `${index + 1}`,
+      elementId: `${nowLetterId + index + 2}`,
       imageUrl: `https://example.com/image${index + 1}.jpg`,
       nickname: `User${index + 1}`,
       elementSequence: index + 1,
@@ -139,7 +143,7 @@ export const Write = () => {
     }));
     setLetterItems((prevItems) => [...prevItems, nowItem]);
     setLetterItems((prevItems) => [...prevItems, ...tempItems]);
-  }, []);
+  };
 
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {
