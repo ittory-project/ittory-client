@@ -17,7 +17,10 @@ export const WriteOrderPopover: React.FC<PopoverProps> = ({ writeOrderList, onCl
         {writeOrderList ?
           <PopupList>
             <Line $itemnum={Number(writeOrderList.length)} />
-            {writeOrderList.map(participant => (
+            {writeOrderList
+              .slice()
+              .sort((a, b) => a.sequence - b.sequence)
+              .map(participant => (
               <ListItem key={participant.sequence}>
                 <ListNumber>{participant.sequence}</ListNumber>
                 <Avatar src={participant.imageUrl || '/assets/basic_user.svg'} alt={participant.nickname} />

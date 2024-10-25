@@ -4,11 +4,11 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 export interface LetterItem {
   elementId: string,
-  imageUrl: string,
+  imageUrl?: string,
   content?: string,
-  nickname: string,
-  elementSequence: number,
-  writeSequence: number,
+  nickname?: string,
+  elementSequence?: number,
+  writeSequence?: number,
 }
 
 const jsonSlice = createSlice({

@@ -128,18 +128,14 @@ export const Write = () => {
   const setLockedWriteItems =() => {
     const nowItem: LetterItem = {
       elementId: `${nowLetterId + 1}`,
-      imageUrl: `https://example.com/imagpg`,
+      imageUrl: `https://example.com/img`,
       content: `Temporary Content`,
       nickname: `User`,
       elementSequence: 1,
       writeSequence: 1,
     };    
     const tempItems: LetterItem[] = Array.from({ length: 10 }, (_, index) => ({
-      elementId: `${nowLetterId + index + 2}`,
-      imageUrl: `https://example.com/image${index + 1}.jpg`,
-      nickname: `User${index + 1}`,
-      elementSequence: index + 1,
-      writeSequence: index + 1,
+      elementId: `${nowLetterId + index + 2}`
     }));
     setLetterItems((prevItems) => [...prevItems, nowItem]);
     setLetterItems((prevItems) => [...prevItems, ...tempItems]);
@@ -150,14 +146,14 @@ export const Write = () => {
     dispatch(clearData());
   };
 
+  // 위치 버튼 누르면 그 부분으로 이동하는 액션
   const [nowItemId, setNowItemId] = useState<number | undefined>(undefined);
   const goWritePage = () => {
-    handleScrollTo(9)
+    handleScrollTo(nowLetterId + 1)
     setTimeout(() => {
       setNowItemId(undefined);
     }, 1000);
   }
-
   const handleScrollTo = (id: number) => {
     setNowItemId(id);
   };
