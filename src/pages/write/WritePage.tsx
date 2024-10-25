@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { WriteMainModal } from "../../components/writePage/writeMainModal/WriteMainModal";
-import Write from "../../components/writePage/Write";
+import { Write } from "../../components/writePage/Write";
 
 
 export const WritePage = () => {
