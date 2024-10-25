@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 interface WriteOrderProps {
-  status: 'completed' | 'myTurn' | 'othersTurn';
   profileImageUrl: string;
   name: string;
   title?: string;
@@ -10,24 +9,26 @@ interface WriteOrderProps {
 }
 
 // 현재 순서이거나(myTurn/othersTurn), 지나간 순서(completed) 상태 아이템
-export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ status, profileImageUrl, name, title, time }) => {
+export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImageUrl, name, title, time }) => {
+  const [letterStatus, setLetterStatus] = useState<'completed' | 'myTurn' | 'othersTurn'>('othersTurn')
+  
   return (
-    <Wrapper status={status}>
+    <Wrapper status={letterStatus}>
       <ProfileImage src={""+profileImageUrl} />
       <ContentWrapper>
-        {status === 'myTurn' && (
+        {letterStatus === 'myTurn' && (
           <MyTurn>
             <MainText>내 차례예요</MainText>
             <SubText>{time}초</SubText>
           </MyTurn>
         )}
-        {status === 'completed' && (
+        {letterStatus === 'completed' && (
           <>
             <MainText>{title}</MainText>
             <SubText>{name}</SubText>
           </>
         )}
-        {status === 'othersTurn' && (
+        {letterStatus === 'othersTurn' && (
           <>
             <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
             <SubText>{time}초</SubText>

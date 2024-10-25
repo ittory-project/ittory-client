@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { LetterPartiItem, LetterPartiListGetResponse, LetterStartInfoGetResponse } from "../../../api/model/LetterModel";
 import { getLetterPartiList, getLetterStartInfo } from "../../../api/service/LetterService";
 import { useParams } from "react-router-dom";
+import { decodeLetterId } from "../../../api/config/base64";
 
 interface WriteModalProps {
   onClose: () => void;
@@ -11,6 +12,7 @@ interface WriteModalProps {
 
 export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
   const { letterId } = useParams()
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [partiCount, setPartiCount] = useState<Number | null>()
   const [repeatCount, setRepeatCount] = useState<Number | null>()
   const [elementCount, setElementCount] = useState<Number | null>()
@@ -19,8 +21,10 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
   const getStartInfo = async () => {
     if (!letterId) {
       window.alert("잘못된 접근입니다.")
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.")
     } else {
-      const response: LetterStartInfoGetResponse = await getLetterStartInfo(Number(letterId));
+      const response: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
       setPartiCount(response.participantCount)
       setRepeatCount(response.repeatCount)
       setElementCount(response.elementCount)
@@ -30,8 +34,10 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
   const getPartiList = async () => {
     if (!letterId) {
       window.alert("잘못된 접근입니다.")
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.")
     } else {
-      const response: LetterPartiListGetResponse = await getLetterPartiList(Number(letterId));
+      const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
       setWriteOrderList(response.participants)
     }
   }
