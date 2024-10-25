@@ -1,12 +1,15 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { WriteOrderPopover } from "./WriteOrderPopover";
+import { WriteOrderList } from "./writeMainList/WriteOrderList";
+import { LetterPartiItem } from "../../api/model/LetterModel";
 
 interface TitleProps {
+  writeOrderList: LetterPartiItem[];
   title: string;
 }
 
-export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
+export const WriteOrderTitle: React.FC<TitleProps> = ({ writeOrderList, title }) => {
   const [isPopover, setIsPopover] = useState(false);
 
   const closePopover = () => {
@@ -28,7 +31,7 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
           <OrderBtn src={ isPopover ? "/assets/write/order_btn_click.svg" : "/assets/write/order_btn.svg"} onClick={handleOrderBtn} />
         </InnerContainer>
       </OuterContainer>
-      {isPopover && <WriteOrderPopover onClose={closePopover} />}
+      {isPopover && <WriteOrderPopover writeOrderList={writeOrderList} onClose={closePopover} />}
     </div>
   );
 };
