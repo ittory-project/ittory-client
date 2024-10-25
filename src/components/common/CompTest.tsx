@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addData, clearData, LetterItem, selectData } from "../../api/config/state";
 
 export const CompTest = () => {
-  const letterNum = 6
+  const letterNum = 7
 
   // api 테스트 - 편지 시작 시 정보 조회
   const getPartiList = async () => {
@@ -33,12 +33,12 @@ export const CompTest = () => {
     enterLetterWs(letterNum, "샤")
   }
 
-  // 채팅 입장 테스트(소켓)
+  // 채팅 내용 테스트(소켓)
   const socketListTest = () => {
     writeLetterWs(letterNum)
   }
 
-  // 채팅 입장 테스트(소켓)
+  // 채팅 퇴장 테스트(소켓)
   const socketQuitTest = () => {
     quitLetterWs(letterNum)
   }
@@ -48,6 +48,7 @@ export const CompTest = () => {
   const data = useSelector(selectData);
 
   const handleAddData = () => {
+    // 받은 response의 예시
     const newItem: LetterItem = {
       elementId: '1',
       imageUrl: 'https://example.com/image.jpg',

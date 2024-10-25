@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction, configureStore } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage'; // default localStorage
+import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 
 export interface LetterItem {
   elementId: string,
   imageUrl: string,
-  content: string,
+  content?: string,
   nickname: string,
   elementSequence: number,
   writeSequence: number,
@@ -43,3 +43,6 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 export const { addData, clearData } = jsonSlice.actions;
 export const selectData = (state: { jsonData: { data: string[] } }) => state.jsonData.data;
+
+export const selectParsedData = (state: { jsonData: { data: string[] } }) => 
+  state.jsonData.data.map(item => JSON.parse(item) as LetterItem);

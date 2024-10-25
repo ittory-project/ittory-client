@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { LetterPartiItem, LetterPartiListGetResponse } from "../../api/model/LetterModel";
 import { getLetterPartiList } from "../../api/service/LetterService";
+import { decodeLetterId } from "../../api/config/base64";
 
 interface PopoverProps {
   onClose: () => void;
@@ -10,13 +11,16 @@ interface PopoverProps {
 
 export const WriteOrderPopover: React.FC<PopoverProps> = ({ onClose }) => {
   const { letterId } = useParams()
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
 
   const getPartiList = async () => {
     if (!letterId) {
       window.alert("잘못된 접근입니다.")
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.")
     } else {
-      const response: LetterPartiListGetResponse = await getLetterPartiList(Number(letterId));
+      const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
       setWriteOrderList(response.participants)
     }
   }

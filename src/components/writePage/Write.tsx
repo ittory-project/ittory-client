@@ -1,65 +1,84 @@
-import styled from "styled-components";
-import { WriteOrderList } from "./writeMainList/WriteOrderList";
-import Button from "../common/Button";
-import { WriteOrderTitle } from "./WriteOrderTitle";
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import { addData, clearData, LetterItem, selectParsedData } from '../../api/config/state';
+import Button from '../common/Button';
+import { WriteOrderList } from './writeMainList/WriteOrderList';
+import { WriteOrderTitle } from './WriteOrderTitle';
+import { stompClient } from '../../api/config/stompInterceptor';
+import { useNavigate, useParams } from 'react-router-dom';
+import { decodeLetterId } from '../../api/config/base64';
 
-export type Status = "inactive" | "completed" | "myTurn" | "othersTurn";
-export interface WriteOrderItem {
-  id: number;
-  status: Status;
-  profileImageUrl: string;
-  name: string;
-  title?: string;
-  time?: number;
-}
+export const Write = () => {
+  const { letterId } = useParams();
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const data = useSelector(selectParsedData);
+  const [letterItems, setLetterItems] = useState<LetterItem[]>(data);
 
-const Write = () => {
-  const items: WriteOrderItem[] = [
-    { id: 1, status: 'completed', profileImageUrl: '/img/profile.png', name: '사용자 이름', title: '제목 텍스트' },
-    { id: 2, status: 'othersTurn', profileImageUrl: '/img/profile.png', name: '사용자 이름', time: 15 },
-    { id: 3, status: 'myTurn', profileImageUrl: '/img/profile.png', name: '사용자 이름', time: 30 },
-    { id: 4, status: 'inactive', profileImageUrl: '/img/profile.png', name: '사용자 이름' },
-    { id: 5, status: 'inactive', profileImageUrl: '/img/profile.png', name: '사용자 이름' },
-    { id: 6, status: 'completed', profileImageUrl: '/img/profile.png', name: '사용자 이름', title: '제목 텍스트' },
-    { id: 7, status: 'othersTurn', profileImageUrl: '/img/profile.png', name: '사용자 이름', time: 15 },
-    { id: 8, status: 'completed', profileImageUrl: '/img/profile.png', name: '사용자 이름', title: '제목 텍스트' },
-    { id: 9, status: 'othersTurn', profileImageUrl: '/img/profile.png', name: '사용자 이름', time: 15 },
-    { id: 10, status: 'inactive', profileImageUrl: '/img/profile.png', name: '사용자 이름' },
-    { id: 11, status: 'inactive', profileImageUrl: '/img/profile.png', name: '사용자 이름' },
-    { id: 12, status: 'completed', profileImageUrl: '/img/profile.png', name: '사용자 이름', title: '제목 텍스트' },
-    { id: 13, status: 'othersTurn', profileImageUrl: '/img/profile.png', name: '사용자 이름', time: 15 },
-    { id: 14, status: 'completed', profileImageUrl: '/img/profile.png', name: '사용자 이름', title: '제목 텍스트' },
-    { id: 15, status: 'othersTurn', profileImageUrl: '/img/profile.png', name: '사용자 이름', time: 15 },
-  ];
-
-  const [nowItemId, setNowItemId] = useState<number | undefined>(undefined);
-
-  const goWritePage = () => {
-    handleScrollTo(9)
-    setTimeout(() => {
-      setNowItemId(undefined);
-    }, 1000);
+  if (!letterNumId) {
+    return <div>Error: 잘못된 접근입니다.</div>;
   }
 
-  const handleScrollTo = (id: number) => {
-    setNowItemId(id);
+  useEffect(() => {
+    const client = stompClient();
+
+    client.onConnect = () => {
+      client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
+        const response = JSON.parse(message.body);
+
+        if (response.action === 'EXIT') {
+          console.log("퇴장액션");
+        } else {
+          dispatch(addData(response));
+        }
+      });
+    };
+
+    client.activate();
+
+    return () => {
+      client.deactivate();
+    };
+  }, [dispatch, letterNumId]);
+
+  useEffect(() => {
+    const tempItems: LetterItem[] = Array.from({ length: 10 }, (_, index) => ({
+      elementId: `${index + 1}`,
+      imageUrl: `https://example.com/image${index + 1}.jpg`,
+      content: `Temporary Content ${index + 1}`,
+      nickname: `User${index + 1}`,
+      elementSequence: index + 1,
+      writeSequence: index + 1,
+    }));
+    
+    setLetterItems((prevItems) => [...prevItems, ...tempItems]);
+  }, []);
+
+  const handleClearData = () => {
+    dispatch(clearData());
+  };
+
+  const handleWritePage = () => {
+    console.log(letterNumId);
+    navigate('/write/element/' + letterId);
   };
 
   return (
     <Container>
       <StickyHeader>
-        <WriteOrderTitle title="선재야 생일 축하해" />
+        <WriteOrderTitle title="생일 축하 메시지" />
       </StickyHeader>
       <ScrollableOrderList>
-        <WriteOrderList items={items} nowItemId={nowItemId}/>
+        <WriteOrderList letterItems={letterItems} nowItemId={undefined} />
       </ScrollableOrderList>
       <StickyFooter>
-        <Button text={'편지를 적어주세요'} color={'#FCFFAF'} onClick={goWritePage} />
+        <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
       </StickyFooter>
     </Container>
   );
-}
+};
 
 export default Write;
 
