@@ -7,7 +7,7 @@ interface LocationProps {
 }
 
 // 위치 컴포넌트
-export const Location: React.FC<LocationProps> = ({ name }) => {
+export const WriteLocation: React.FC<LocationProps> = ({ name }) => {
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
