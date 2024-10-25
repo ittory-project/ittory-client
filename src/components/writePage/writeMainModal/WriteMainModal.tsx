@@ -65,7 +65,10 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
           {writeOrderList ?
             <List>
               <Line $itemnum={Number(partiCount)} />
-              {writeOrderList.map(participant => (
+              {writeOrderList
+              .slice()
+              .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
+              .map(participant => (
                 <ListItem key={participant.sequence}>
                   <ListNumber>{participant.sequence}</ListNumber>
                   <Avatar src={participant.imageUrl || '/assets/basic_user.svg'} alt={participant.nickname} />
