@@ -12,7 +12,6 @@ export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name }) =
   const radius = 25;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - progressTime / 100);
-
   const isWarning = progressTime <= 10;
 
   return (

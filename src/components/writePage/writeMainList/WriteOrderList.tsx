@@ -23,7 +23,6 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowI
     if (nowItemId !== undefined) {
       const targetIndex = letterItems.findIndex(item => Number(item.elementId) === nowItemId);
       if (targetIndex !== -1 && itemRefs.current) {
-        console.log(itemRefs.current[targetIndex])
         itemRefs.current[targetIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
@@ -36,7 +35,7 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowI
         {letterItems.map((item, index) => {
           return (
             <div key={item.elementId} ref={(el) => (itemRefs.current[index] = el)}>
-              {item.content ? (
+              { item.content && item.imageUrl && item.nickname ? (
                 <WriteOrderActivateItem
                   key={item.elementId}
                   profileImageUrl={item.imageUrl}
