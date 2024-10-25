@@ -1,34 +1,12 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { LetterPartiItem, LetterPartiListGetResponse } from "../../api/model/LetterModel";
-import { getLetterPartiList } from "../../api/service/LetterService";
-import { decodeLetterId } from "../../api/config/base64";
+import { LetterPartiItem } from "../../api/model/LetterModel";
 
 interface PopoverProps {
+  writeOrderList: LetterPartiItem[]
   onClose: () => void;
 }
 
-export const WriteOrderPopover: React.FC<PopoverProps> = ({ onClose }) => {
-  const { letterId } = useParams()
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
-
-  const getPartiList = async () => {
-    if (!letterId) {
-      window.alert("잘못된 접근입니다.")
-    } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.")
-    } else {
-      const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
-      setWriteOrderList(response.participants)
-    }
-  }
-
-  useEffect(() => {
-    getPartiList()
-  }, []);
-
+export const WriteOrderPopover: React.FC<PopoverProps> = ({ writeOrderList, onClose }) => {
   return (
     // 상단에 순서 버튼 누르면 작게 순서 알려주는거
     <Overlay onClick={onClose}>
