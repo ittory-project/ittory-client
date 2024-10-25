@@ -122,14 +122,22 @@ export const Write = () => {
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
   // [TODO]: 다음 차례 사람 아이템을 여기에서 제일 위에 넣어주면 되는 거 아닌가? - 현재 유저와 같으면 내 차례예요 넣고 내 차례 아니면 편지를 작성하고 있어요 띄우면 됨
   useEffect(() => {
+    const nowItem: LetterItem = {
+      elementId: `1`,
+      imageUrl: `https://example.com/imagpg`,
+      content: `Temporary Content`,
+      nickname: `User`,
+      elementSequence: 1,
+      writeSequence: 1,
+    };    
     const tempItems: LetterItem[] = Array.from({ length: 10 }, (_, index) => ({
       elementId: `${index + 1}`,
       imageUrl: `https://example.com/image${index + 1}.jpg`,
-      content: `Temporary Content ${index + 1}`,
       nickname: `User${index + 1}`,
       elementSequence: index + 1,
       writeSequence: index + 1,
     }));
+    setLetterItems((prevItems) => [...prevItems, nowItem]);
     setLetterItems((prevItems) => [...prevItems, ...tempItems]);
   }, []);
 
@@ -153,9 +161,25 @@ export const Write = () => {
   // 작성 페이지 이동
   // [TODO]: 작성 페이지를 outlet으로 구현하면 소켓 disconnect가 되지 않을까,,,?
   const handleWritePage = () => {
-    console.log(letterNumId);
     navigate('/write/element/' + letterId);
   };
+
+  // 시간 계산
+  const [progressTime, setProgressTime] = useState(100);
+  useEffect(() => {
+    const totalDuration = 100000;
+    const interval = setInterval(() => {
+      setProgressTime(prev => {
+        if (prev <= 0) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 0.1;
+      });
+    }, totalDuration / 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return writeOrderList ? 
     (
@@ -164,14 +188,14 @@ export const Write = () => {
           <WriteOrderTitle writeOrderList={writeOrderList} title="생일 축하 메시지" />
         </StickyHeader>
         <ScrollableOrderList>
-          <WriteOrderList letterItems={letterItems} nowItemId={nowItemId} />
+          <WriteOrderList letterItems={letterItems} nowItemId={nowItemId} progressTime={progressTime}/>
         </ScrollableOrderList>
         { nowMemberId === Number(getUserId()) ? 
           <ButtonContainer>
             <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
           </ButtonContainer>
           : <LocationContainer onClick={goWritePage}>
-              <WriteLocation name="카리나"/>
+              <WriteLocation progressTime={progressTime} name="카리나"/>
             </LocationContainer>
         }
       </Container>

@@ -3,33 +3,17 @@ import styled from 'styled-components';
 import img from '../../../public/assets/location.svg';
 
 interface LocationProps {
+  progressTime: number;
   name: string;
 }
 
 // 위치 컴포넌트
-export const WriteLocation: React.FC<LocationProps> = ({ name }) => {
-  const [progress, setProgress] = useState(100);
-
-  useEffect(() => {
-    const totalDuration = 100000;
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev <= 0) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 0.1;
-      });
-    }, totalDuration / 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name }) => {
   const radius = 25;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - progress / 100);
+  const offset = circumference * (1 - progressTime / 100);
 
-  const isWarning = progress <= 10;
+  const isWarning = progressTime <= 10;
 
   return (
     <Background>

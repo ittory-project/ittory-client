@@ -19,7 +19,10 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImage
         {letterStatus === 'myTurn' && (
           <MyTurn>
             <MainText>내 차례예요</MainText>
-            <SubText>{time}초</SubText>
+            <ClockText>
+              <ClockIcon src="/assets/write/clock.svg" />
+              {Math.floor(Number(time))}초
+            </ClockText>
           </MyTurn>
         )}
         {letterStatus === 'completed' && (
@@ -31,7 +34,10 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImage
         {letterStatus === 'othersTurn' && (
           <>
             <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
-            <SubText>{time}초</SubText>
+            <ClockText>
+              <ClockIcon src="/assets/write/clock.svg" />
+                {Math.floor(Number(time))}초
+            </ClockText>
           </>
         )}
       </ContentWrapper>
@@ -78,4 +84,22 @@ const MainTextWriting = styled(MainText)`
 const SubText = styled.div`
   font-size: 14px;
   color: #868e96;
+`;
+
+const ClockIcon = styled.img`
+  display: flex;
+  width: 12px;
+  height: 13px;
+  margin: 1px 5px 0px 0px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ClockText = styled.div`
+  margin: 2px 0px 0px 0px;
+  display: flex;
+  color: var(--Color-primary-orange, #FFA256);
+  font-size: var(--Typography-size-s, 11px);
+  font-style: normal;
+  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
