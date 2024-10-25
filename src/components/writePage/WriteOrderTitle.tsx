@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { WriteOrderPopover } from "./WriteOrderPopover";
-import { WriteOrderList } from "./writeMainList/WriteOrderList";
 import { LetterPartiItem } from "../../api/model/LetterModel";
 
 interface TitleProps {

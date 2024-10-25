@@ -7,10 +7,11 @@ import { LetterItem } from '../../../api/config/state';
 interface ListComponentProps {
   letterItems: LetterItem[]
   nowItemId?: number
+  progressTime: number
 }
 
 // 편지 작성 페이지의 리스트
-export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowItemId }) => {
+export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowItemId, progressTime }) => {
 
   // 위치 버튼 누르면 해당 부분으로 이동되는 기능
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -36,15 +37,15 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowI
           return (
             <div key={item.elementId} ref={(el) => (itemRefs.current[index] = el)}>
               {item.content ? (
-                <WriteOrderInactiveItem key={item.elementId} idx={Number(item.elementId)} />
-              ) : (
                 <WriteOrderActivateItem
                   key={item.elementId}
                   profileImageUrl={item.imageUrl}
                   name={item.nickname}
                   title={item.content || ''}
-                  time={0}
+                  time={progressTime}
                 />
+              ) : (
+                <WriteOrderInactiveItem key={item.elementId} idx={Number(item.elementId)} />
               )}
             </div>
           );
