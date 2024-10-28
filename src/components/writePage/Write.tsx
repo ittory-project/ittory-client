@@ -141,7 +141,7 @@ export const Write = ({ setShowSubmitPage }: WriteElementProps) => {
     const tempItems: LetterItem[] = Array.from({ length: 10 }, (_, index) => ({
       elementId: `${nowLetterId + index + 2}`
     }));
-    setLetterItems((prevItems) => [...prevItems, nowItem]);
+    setLetterItems([...data, nowItem]);
     setLetterItems((prevItems) => [...prevItems, ...tempItems]);
   };
 
