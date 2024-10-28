@@ -34,7 +34,7 @@ export const CompTest = () => {
 
   // 채팅 내용 테스트(소켓)
   const socketListTest = () => {
-    writeLetterWs(letterNum)
+    writeLetterWs(letterNum, 1, "test")
   }
 
   // 채팅 퇴장 테스트(소켓)

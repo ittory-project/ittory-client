@@ -163,7 +163,6 @@ export const Write = ({ setShowSubmitPage }: WriteElementProps) => {
   };
 
   // 작성 페이지 이동
-  // [TODO]: 작성 페이지를 outlet으로 구현하면 소켓 disconnect가 되지 않을까,,,?
   const handleWritePage = () => {
     setShowSubmitPage(true)
     navigate(`/write/MQ==/sub`);
