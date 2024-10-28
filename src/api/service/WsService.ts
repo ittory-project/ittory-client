@@ -30,7 +30,7 @@ export const enterLetterWs = (letterId: number, nickname: string) => {
 // 편지 작성(조회) API
 // param: 편지 ID, 편지 내용
 // response: WsEnterResponse - 접속할 유저 정보
-export const writeLetterWs = (letterId: number) => {
+export const writeLetterWs = (letterId: number, sequence: number, content: string) => {
   const client = stompClient();
 
   client.onConnect = () => {
@@ -42,8 +42,8 @@ export const writeLetterWs = (letterId: number) => {
     client.publish({
       destination: `/ws/letter/${letterId}/elements`,
       body: JSON.stringify({
-        sequence : 1,
-        content : "test",
+        sequence : sequence,
+        content : content,
     }),
     });  
   };
