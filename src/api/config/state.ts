@@ -1,15 +1,7 @@
 import { createSlice, PayloadAction, configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
-
-export interface LetterItem {
-  elementId: string,
-  imageUrl?: string,
-  content?: string,
-  nickname?: string,
-  elementSequence?: number,
-  writeSequence?: number,
-}
+import { LetterItem } from '../model/WsModel';
 
 const jsonSlice = createSlice({
   name: 'jsonData',

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { addData, clearData, LetterItem, selectParsedData } from '../../api/config/state';
+import { addData, clearData, selectParsedData } from '../../api/config/state';
 import { LetterPartiItem, LetterPartiListGetResponse } from '../../api/model/LetterModel';
 import { stompClient } from '../../api/config/stompInterceptor';
 import { decodeLetterId } from '../../api/config/base64';
@@ -14,6 +14,7 @@ import { WriteOrderTitle } from './WriteOrderTitle';
 import { getLetterPartiList } from '../../api/service/LetterService';
 import { WriteLocation } from './WriteLocation';
 import { getUserId } from '../../api/config/setToken';
+import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
 
 interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,33 +45,34 @@ export const Write = ({ setShowSubmitPage }: WriteElementProps) => {
   }
 
   // 외부 값 받아오기 위해 구독만 + 퇴장 감지
-  // Service로 빼고 싶음... 하지만 방법을 찾지 못함
+  // [안중요 TODO]: Service로 빼고 싶음... 하지만 방법을 찾지 못함
   useEffect(() => {
     const client = stompClient();
-
+  
     client.onConnect = () => {
       client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
-        const response = JSON.parse(message.body);
-
-        // [TODO]: Exit response json 객체 만들기
-        if (response.action === 'EXIT') {
+        const response: LetterItem | WsExitResponse = JSON.parse(message.body);
+  
+        if ('action' in response && response.action === 'EXIT') {
           console.log("퇴장 모달 띄우기");
           // getPartiList가 잘 불러와진 다음에 getUserWriteState를 통해 세팅
           const fetchPartiList = async () => {
             await getPartiList();
             if (writeOrderList && writeOrderList.length > 0) {
-              getUserWriteState()
+              getUserWriteState();
             }
           };
-          fetchPartiList()
+          fetchPartiList();
         } else {
-          dispatch(addData(response))
-          setNowLetterId(response.writeSequence)
-          getUserWriteState()
+          // LetterItem 타입을 가진 객체인 경우
+          const letterResponse = response as LetterItem;
+          dispatch(addData(letterResponse));
+          // [안중요 TODO]: letterResponse의 writeSequence가 null일수도 있기 때문에 Number로 묶어줬는데, 더 적절한 조치가 필요 
+          setNowLetterId(Number(letterResponse.writeSequence));
+          getUserWriteState();
         }
       });
     };
-
     client.activate();
 
     return () => {
@@ -126,7 +128,6 @@ export const Write = ({ setShowSubmitPage }: WriteElementProps) => {
   };
 
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
-  // [TODO]: 리셋되는 것이 아닌, 계속 밑에 추가가 되는 문제 해결해야 함
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
   // [TODO]: 현재 아이템을 정확한 값으로 넣어야 함
   const setLockedWriteItems =() => {

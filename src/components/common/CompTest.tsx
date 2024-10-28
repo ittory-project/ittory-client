@@ -7,7 +7,8 @@ import { enterLetterWs, quitLetterWs, writeLetterWs } from "../../api/service/Ws
 import { getLetterStartInfo } from "../../api/service/LetterService";
 import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
 import { useDispatch, useSelector } from 'react-redux';
-import { addData, clearData, LetterItem, selectData } from "../../api/config/state";
+import { addData, clearData, selectData } from "../../api/config/state";
+import { LetterItem } from "../../api/model/WsModel";
 
 export const CompTest = () => {
   const letterNum = 7
