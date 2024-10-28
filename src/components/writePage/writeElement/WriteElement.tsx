@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { writeLetterWs } from "../../../api/service/WsService";
+import { decodeLetterId } from "../../../api/config/base64";
 
 export const WriteElement = () => {
   const setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>> = useOutletContext();
   const [time, setTime] = useState(100);
   const [text, setText] = useState("");
+  const { letterId } = useParams();
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
+  // [TODO]: WritePage에서 시간을 통째로 관리하는 것으로 바꿔야 한다
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(prev => {
@@ -21,12 +26,24 @@ export const WriteElement = () => {
   }, []);  
 
   const handleElementClose = () => {
-    
     setShowSubmitPage(false)
   }
 
+  // 작성 완료 버튼
+  const handleWriteComplete = () => {
+    try {
+      // [TODO]: Sequence를 어떻게 전달해야 하는걸까?
+      writeLetterWs(letterNumId, 1, text)
+    } catch (e) {
+      console.log(e)
+    } finally {
+      // [TODO]: 작성이 꼭 완료되어야 작성 페이지를 닫을 수 있게끔 했으면 한다...
+      handleElementClose()
+    }
+  }
+
+  // 접속 시 무조건 focusing 되도록 해야 키보드가 올라온다.
   const taRef = useRef<HTMLTextAreaElement>(null);
-  
   useEffect(() => {
     if (taRef.current) {
       taRef.current.focus();
@@ -62,7 +79,7 @@ export const WriteElement = () => {
             ) : 
             <><CharacterCount></CharacterCount></>
             }
-            <CompleteBtn isDisabled={text.length === 0 || text.length > 30}>완료</CompleteBtn>
+            <CompleteBtn onClick={handleWriteComplete} isDisabled={text.length === 0 || text.length > 30}>완료</CompleteBtn>
           </ControlContainer>
         </WriteContent>
       </Content>
