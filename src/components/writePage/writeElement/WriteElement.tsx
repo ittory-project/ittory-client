@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 
-export const WriteElement: React.FC = () => {
+export const WriteElement = () => {
+  const setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>> = useOutletContext();
   const [time, setTime] = useState(100);
   const [text, setText] = useState("");
 
@@ -17,6 +19,11 @@ export const WriteElement: React.FC = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);  
+
+  const handleElementClose = () => {
+    
+    setShowSubmitPage(false)
+  }
 
   const taRef = useRef<HTMLTextAreaElement>(null);
   
@@ -34,7 +41,7 @@ export const WriteElement: React.FC = () => {
           <ClockIcon src="/assets/write/clock.svg" />
           {time}초
         </ClockText>
-          <CloseBtn src='/assets/btn_close.svg' />
+          <CloseBtn onClick={handleElementClose} src='/assets/btn_close.svg' />
         </Header>
         <WriteContent>
           <PhotoDiv>
@@ -52,7 +59,6 @@ export const WriteElement: React.FC = () => {
                   <div style={{ color: text.length > 30 ? '#FF0004' : 'black' }}>{text.length}</div>/30자
                 </CharacterCount>
               </>
-
             ) : 
             <><CharacterCount></CharacterCount></>
             }
@@ -66,7 +72,7 @@ export const WriteElement: React.FC = () => {
 
 const Container = styled.div`
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   padding: 10px 0;
   background-color: #212529;
   display: flex;
@@ -164,6 +170,7 @@ const ProfileImage = styled.img`
 
 const WriteTa = styled.textarea`
   display: flex;
+  width: 230px;
   padding: 16px;
   flex-direction: column;
   align-items: flex-start;

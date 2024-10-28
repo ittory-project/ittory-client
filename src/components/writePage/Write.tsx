@@ -15,10 +15,14 @@ import { getLetterPartiList } from '../../api/service/LetterService';
 import { WriteLocation } from './WriteLocation';
 import { getUserId } from '../../api/config/setToken';
 
+interface WriteElementProps {
+  setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 // 작성 현황을 볼 수 있는 페이지
 // /write/:letterId
 // letterId: base64로 인코딩한 편지 아이디
-export const Write = () => {
+export const Write = ({ setShowSubmitPage }: WriteElementProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 편지 아이디 식별
@@ -113,8 +117,8 @@ export const Write = () => {
         nextItem: writeOrderList[nextIndex], // 다음 아이템
         nextItemMemberId: writeOrderList[nextIndex].memberId, // 다음 아이템의 memberId
         nextNextItemMemberId: writeOrderList[nextNextIndex].memberId // 다다음 아이템의 memberId
-        // [TODO]: 다음 아이템 - 리스트 컴포넌트에서 현재 아이디 처리하고, 그게 나인지도 처리함: 밑으로 보내줘야 함
-        // [TODO]: 다다음 아이템 - 이 페이지에서 알림 보내줌: 여기에서 처리
+        // [TODO]: 다음 아이템 - 현재 아이템 생성할 때 값 넣어주기
+        // [TODO]: 다다음 아이템 - 이 페이지에서 알림창 띄우는 것 만들기
       };
     }
   
@@ -122,9 +126,9 @@ export const Write = () => {
   };
 
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
-  // [TODO]: useEffect 아니고 초기, 작성 완료, 퇴장 시에 업데이트 하는 것으로 바꿔야 함
+  // [TODO]: 리셋되는 것이 아닌, 계속 밑에 추가가 되는 문제 해결해야 함
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
-  // [TODO]: 다음 차례 사람 아이템을 여기에서 제일 위에 넣어주면 되는 거 아닌가? - 현재 유저와 같으면 내 차례예요 넣고 내 차례 아니면 편지를 작성하고 있어요 띄우면 됨
+  // [TODO]: 현재 아이템을 정확한 값으로 넣어야 함
   const setLockedWriteItems =() => {
     const nowItem: LetterItem = {
       elementId: `${nowLetterId + 1}`,
@@ -161,7 +165,8 @@ export const Write = () => {
   // 작성 페이지 이동
   // [TODO]: 작성 페이지를 outlet으로 구현하면 소켓 disconnect가 되지 않을까,,,?
   const handleWritePage = () => {
-    navigate('/write/element/' + letterId);
+    setShowSubmitPage(true)
+    navigate(`/write/MQ==/sub`);
   };
 
   // 시간 계산
@@ -190,7 +195,7 @@ export const Write = () => {
         <ScrollableOrderList>
           <WriteOrderList letterItems={letterItems} nowItemId={nowItemId} progressTime={progressTime}/>
         </ScrollableOrderList>
-        { nowMemberId === Number(getUserId()) ? 
+        { nowMemberId !== Number(getUserId()) ? 
           <ButtonContainer>
             <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
           </ButtonContainer>
@@ -215,7 +220,7 @@ const Container = styled.div`
 const StickyHeader = styled.div`
   position: sticky;
   top: 10px;
-  z-index: 4;
+  z-index: 3;
 `;
 
 const ScrollableOrderList = styled.div`
@@ -230,7 +235,7 @@ const ScrollableOrderList = styled.div`
 const ButtonContainer = styled.div`
   position: sticky;
   bottom: 10px;
-  z-index: 4;
+  z-index: 3;
   background-color: transparent;
 `;
 
@@ -238,6 +243,6 @@ const LocationContainer = styled.div`
   position: fixed;
   bottom: 10px;
   right: 10px;
-  z-index: 4;
+  z-index: 3;
   background-color: transparent;
 `;

@@ -10,6 +10,7 @@ interface WriteOrderProps {
 
 // 현재 순서이거나(myTurn/othersTurn), 지나간 순서(completed) 상태 아이템
 export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImageUrl, name, title, time }) => {
+  // [TODO]: 이 아이템의 유저 아이디와 내 아이디가 일치하는지 확인할 수 있게 하기 - 이걸 그냥 상위에서 끝내버리면 더 편할 것 같다..?
   const [letterStatus, setLetterStatus] = useState<'completed' | 'myTurn' | 'othersTurn'>('othersTurn')
   
   return (
