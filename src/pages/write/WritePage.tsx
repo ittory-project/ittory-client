@@ -12,6 +12,7 @@ export const WritePage = () => {
     setShowPopup(false);
   };
 
+  // 모달 띄우는 시간 계산
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowPopup(false);
@@ -19,13 +20,30 @@ export const WritePage = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // 편지 작성 시간 계산
+  const [progressTime, setProgressTime] = useState(100);
+  useEffect(() => {
+    const totalDuration = 100000;
+    const interval = setInterval(() => {
+      setProgressTime(prev => {
+        if (prev <= 0) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 0.1;
+      });
+    }, totalDuration / 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Container>
       {showPopup && <WriteMainModal onClose={onClose} />}
-      <Write setShowSubmitPage={setShowSubmitPage} />
+      <Write setShowSubmitPage={setShowSubmitPage} progressTime={progressTime} setProgressTime={setProgressTime} />
       {showSubmitPage && (
         <ModalOverlay>
-          <Outlet context={setShowSubmitPage}/>
+          <Outlet context={{setShowSubmitPage, progressTime}}/>
         </ModalOverlay>
       )}
     </Container>

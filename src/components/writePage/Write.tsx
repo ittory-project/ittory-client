@@ -18,12 +18,14 @@ import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
 
 interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
+  progressTime: number;
+  setProgressTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
 // 작성 현황을 볼 수 있는 페이지
 // /write/:letterId
 // letterId: base64로 인코딩한 편지 아이디
-export const Write = ({ setShowSubmitPage }: WriteElementProps) => {
+export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: WriteElementProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 편지 아이디 식별
@@ -168,23 +170,6 @@ export const Write = ({ setShowSubmitPage }: WriteElementProps) => {
     setShowSubmitPage(true)
     navigate(`/write/MQ==/sub`);
   };
-
-  // 시간 계산
-  const [progressTime, setProgressTime] = useState(100);
-  useEffect(() => {
-    const totalDuration = 100000;
-    const interval = setInterval(() => {
-      setProgressTime(prev => {
-        if (prev <= 0) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 0.1;
-      });
-    }, totalDuration / 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return writeOrderList ? 
     (

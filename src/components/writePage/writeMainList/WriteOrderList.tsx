@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderActivateItem } from './WriteOrderActivateItem';
 import styled from 'styled-components';
-import { LetterItem } from '../../../api/config/state';
+import { LetterItem } from '../../../api/model/WsModel';
 
 interface ListComponentProps {
   letterItems: LetterItem[]

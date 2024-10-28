@@ -4,29 +4,19 @@ import styled from "styled-components";
 import { writeLetterWs } from "../../../api/service/WsService";
 import { decodeLetterId } from "../../../api/config/base64";
 
+export interface WriteElementProps {
+  setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
+  progressTime: number;
+}
+
 export const WriteElement = () => {
-  const setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>> = useOutletContext();
-  const [time, setTime] = useState(100);
+  const props: WriteElementProps = useOutletContext();
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
-  // [TODO]: WritePage에서 시간을 통째로 관리하는 것으로 바꿔야 한다
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(prev => {
-        if (prev <= 0) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);  
-
   const handleElementClose = () => {
-    setShowSubmitPage(false)
+    props.setShowSubmitPage(false)
   }
 
   // 작성 완료 버튼
@@ -56,7 +46,7 @@ export const WriteElement = () => {
         <Header>
         <ClockText>
           <ClockIcon src="/assets/write/clock.svg" />
-          {time}초
+          {Math.floor(props.progressTime)}초
         </ClockText>
           <CloseBtn onClick={handleElementClose} src='/assets/btn_close.svg' />
         </Header>
