@@ -40,7 +40,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
   // 진행 순서
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
   // 현재 유저의 멤버 아이디
-  const [nowMemberId, setNowMemberId] = useState(-1);
+  const [nowMemberId, setNowMemberId] = useState(0);
   // 현재까지 작성된 편지 수 (최근 작성 완료된 편지의 elementSequence 값)
   const [nowLetterId, setNowLetterId] = useState(0);
   // 현재 유저 순서(sequence)
@@ -68,17 +68,34 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
           const fetchPartiList = async () => {
             await getPartiList();
             if (writeOrderList && writeOrderList.length > 0) {
-              getUserWriteState();
+              setLockedWriteItems()
             }
           };
           fetchPartiList();
-        } else {
-          // LetterItem 타입을 가진 객체인 경우
+        } else { // 작성 완료 response 감지 시
           const letterResponse = response as LetterItem;
           dispatch(addData(letterResponse));
           // [안중요 TODO]: letterResponse의 writeSequence가 null일수도 있기 때문에 Number로 묶어줬는데, 더 적절한 조치가 필요 
           setNowLetterId(Number(letterResponse.writeSequence));
-          getUserWriteState();
+          
+          if (writeOrderList && writeOrderList.length > 0) {
+            // 현재 nowSequence와 일치하는 writeOrder의 인덱스 찾기
+            const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
+            // 다음 인덱스 계산
+            const nextIndex = currentIndex === -1 || currentIndex === writeOrderList.length - 1 ? 0 : currentIndex + 1;
+            // 마지막 인덱스에서 첫 번째로 돌아갈 경우 writeSequence 증가
+            if (nextIndex === 0 && currentIndex === writeOrderList.length - 1) {
+              setNowRepeat(nowRepeat + 1);
+            }
+            // nowSequence에 다음 sequence, 멤버아이디 값 할당
+            setNowSequence(writeOrderList[nextIndex].sequence);
+            setNowMemberId(writeOrderList[nextIndex].memberId);
+          }          
+
+          if (nowRepeat > repeatCount) {
+            console.log("끝")
+          }
+          setLockedWriteItems()
         }
       });
     };
@@ -98,6 +115,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
     } else {
       const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
       setWriteOrderList(response.participants)
+      // 아직 작성 안 한 아이템들 세팅
       setLockedWriteItems()
     }
   }
@@ -106,40 +124,10 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
       await getPartiList();
       if (writeOrderList && writeOrderList.length > 0) {
         setNowMemberId(writeOrderList[0].memberId);
-        getUserWriteState()
       }
     };
     fetchPartiList();
   }, []);
-
-  // 현재 유저가 어떤 상태인지 확인
-  const getUserWriteState = () => {
-  //   if (!writeOrderList) return null;
-  
-  //   // 현재 아이템 찾기: nowMemberId와 동일한 memberId를 가진 아이템의 인덱스
-  //   const index = writeOrderList.findIndex(item => item.memberId === nowMemberId);
-  
-  //   if (index !== -1) {
-  //     // 다음, 다다음 아이템의 인덱스. 마지막 아이템 순환
-  //     const nextIndex = (index + 1) % writeOrderList.length;
-  //     const nextNextIndex = (nextIndex + 1) % writeOrderList.length;
-  
-  //     return {
-  //       nextItem: writeOrderList[nextIndex], // 다음 아이템
-  //       nextItemMemberId: writeOrderList[nextIndex].memberId, // 다음 아이템의 memberId
-  //       nextNextItemMemberId: writeOrderList[nextNextIndex].memberId // 다다음 아이템의 memberId
-  //       // [TODO]: 다음 아이템 - 현재 아이템 생성할 때 값 넣어주기
-  //       // [TODO]: 다다음 아이템 - 이 페이지에서 알림창 띄우는 것 만들기
-  //     };
-
-
-      // 다시
-      if (!writeOrderList) return null
-
-
-  
-    return null;
-  };
 
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
@@ -180,7 +168,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
   // 작성 페이지 이동
   const handleWritePage = () => {
     setShowSubmitPage(true)
-    navigate(`/write/MQ==/sub`);
+    navigate(`/write/OA==/sub`);
   };
 
   return writeOrderList ? 
