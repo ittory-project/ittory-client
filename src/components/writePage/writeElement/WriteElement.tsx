@@ -27,7 +27,7 @@ export const WriteElement = () => {
     } catch (e) {
       console.log(e)
     } finally {
-      // [TODO]: 작성이 꼭 완료되어야 작성 페이지를 닫을 수 있게끔 했으면 한다...
+      // 안중요 [TODO]: 작성이 꼭 완료되어야 작성 페이지를 닫을 수 있게끔 했으면 한다...
       handleElementClose()
     }
   }
