@@ -2,15 +2,40 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { WriteMainModal } from "../../components/writePage/writeMainModal/WriteMainModal";
 import { Write } from "../../components/writePage/Write";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
+import { decodeLetterId } from "../../api/config/base64";
+import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
+import { getLetterStartInfo } from "../../api/service/LetterService";
 
 export const WritePage = () => {
+  const { letterId } = useParams()
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [partiCount, setPartiCount] = useState<Number | null>()
+  const [repeatCount, setRepeatCount] = useState<Number | null>()
+  const [elementCount, setElementCount] = useState<Number | null>()
+
   const [showPopup, setShowPopup] = useState(true);
   const [showSubmitPage, setShowSubmitPage] = useState(false);
 
   const onClose = () => {
     setShowPopup(false);
   };
+
+  const getStartInfo = async () => {
+    if (!letterId) {
+      window.alert("잘못된 접근입니다.")
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.")
+    } else {
+      const response: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
+      setPartiCount(response.participantCount)
+      setRepeatCount(response.repeatCount)
+      setElementCount(response.elementCount)
+    }
+  }
+  useEffect(() => {
+    getStartInfo()
+  }, []);
 
   // 모달 띄우는 시간 계산
   useEffect(() => {
@@ -39,8 +64,19 @@ export const WritePage = () => {
 
   return (
     <Container>
-      {showPopup && <WriteMainModal onClose={onClose} />}
-      <Write setShowSubmitPage={setShowSubmitPage} progressTime={progressTime} setProgressTime={setProgressTime} />
+      {showPopup && 
+        <WriteMainModal 
+          onClose={onClose} 
+          partiCount={Number(partiCount)} 
+          repeatCount={Number(repeatCount)} 
+          elementCount={Number(elementCount)}
+          />}
+      <Write 
+        setShowSubmitPage={setShowSubmitPage} 
+        progressTime={progressTime} 
+        setProgressTime={setProgressTime} 
+        partiCount={Number(partiCount)} 
+        repeatCount={Number(repeatCount)} />
       {showSubmitPage && (
         <ModalOverlay>
           <Outlet context={{setShowSubmitPage, progressTime}}/>

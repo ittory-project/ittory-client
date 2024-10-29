@@ -8,28 +8,15 @@ import { decodeLetterId } from "../../../api/config/base64";
 
 interface WriteModalProps {
   onClose: () => void;
+  partiCount: number;
+  repeatCount: number;
+  elementCount: number
 }
 
-export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
+export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose, partiCount, repeatCount, elementCount }) => {
   const { letterId } = useParams()
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  const [partiCount, setPartiCount] = useState<Number | null>()
-  const [repeatCount, setRepeatCount] = useState<Number | null>()
-  const [elementCount, setElementCount] = useState<Number | null>()
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
-
-  const getStartInfo = async () => {
-    if (!letterId) {
-      window.alert("잘못된 접근입니다.")
-    } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.")
-    } else {
-      const response: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
-      setPartiCount(response.participantCount)
-      setRepeatCount(response.repeatCount)
-      setElementCount(response.elementCount)
-    }
-  }
 
   const getPartiList = async () => {
     if (!letterId) {
@@ -41,9 +28,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
       setWriteOrderList(response.participants)
     }
   }
-
   useEffect(() => {
-    getStartInfo()
     getPartiList()
   }, []);
 
