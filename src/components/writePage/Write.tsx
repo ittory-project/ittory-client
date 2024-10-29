@@ -20,12 +20,15 @@ interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
   progressTime: number;
   setProgressTime: React.Dispatch<React.SetStateAction<number>>;
+  partiCount: number;
+  repeatCount: number;
 }
 
 // 작성 현황을 볼 수 있는 페이지
 // /write/:letterId
 // letterId: base64로 인코딩한 편지 아이디
-export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: WriteElementProps) => {
+// [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
+export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiCount, repeatCount }: WriteElementProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 편지 아이디 식별
@@ -40,6 +43,10 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
   const [nowMemberId, setNowMemberId] = useState(-1);
   // 현재까지 작성된 편지 수 (최근 작성 완료된 편지의 elementSequence 값)
   const [nowLetterId, setNowLetterId] = useState(0);
+  // 현재 유저 순서(sequence)
+  const [nowSequence, setNowSequence] = useState(1);
+  // 현재 반복 횟수
+  const [nowRepeat, setNowRepeat] = useState(1);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -107,24 +114,29 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
 
   // 현재 유저가 어떤 상태인지 확인
   const getUserWriteState = () => {
-    if (!writeOrderList) return null;
+  //   if (!writeOrderList) return null;
   
-    // 현재 아이템 찾기: nowMemberId와 동일한 memberId를 가진 아이템의 인덱스
-    const index = writeOrderList.findIndex(item => item.memberId === nowMemberId);
+  //   // 현재 아이템 찾기: nowMemberId와 동일한 memberId를 가진 아이템의 인덱스
+  //   const index = writeOrderList.findIndex(item => item.memberId === nowMemberId);
   
-    if (index !== -1) {
-      // 다음, 다다음 아이템의 인덱스. 마지막 아이템 순환
-      const nextIndex = (index + 1) % writeOrderList.length;
-      const nextNextIndex = (nextIndex + 1) % writeOrderList.length;
+  //   if (index !== -1) {
+  //     // 다음, 다다음 아이템의 인덱스. 마지막 아이템 순환
+  //     const nextIndex = (index + 1) % writeOrderList.length;
+  //     const nextNextIndex = (nextIndex + 1) % writeOrderList.length;
   
-      return {
-        nextItem: writeOrderList[nextIndex], // 다음 아이템
-        nextItemMemberId: writeOrderList[nextIndex].memberId, // 다음 아이템의 memberId
-        nextNextItemMemberId: writeOrderList[nextNextIndex].memberId // 다다음 아이템의 memberId
-        // [TODO]: 다음 아이템 - 현재 아이템 생성할 때 값 넣어주기
-        // [TODO]: 다다음 아이템 - 이 페이지에서 알림창 띄우는 것 만들기
-      };
-    }
+  //     return {
+  //       nextItem: writeOrderList[nextIndex], // 다음 아이템
+  //       nextItemMemberId: writeOrderList[nextIndex].memberId, // 다음 아이템의 memberId
+  //       nextNextItemMemberId: writeOrderList[nextNextIndex].memberId // 다다음 아이템의 memberId
+  //       // [TODO]: 다음 아이템 - 현재 아이템 생성할 때 값 넣어주기
+  //       // [TODO]: 다다음 아이템 - 이 페이지에서 알림창 띄우는 것 만들기
+  //     };
+
+
+      // 다시
+      if (!writeOrderList) return null
+
+
   
     return null;
   };
