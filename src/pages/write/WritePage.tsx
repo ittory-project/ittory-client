@@ -75,7 +75,6 @@ export const WritePage = () => {
         setShowSubmitPage={setShowSubmitPage} 
         progressTime={progressTime} 
         setProgressTime={setProgressTime} 
-        partiCount={Number(partiCount)} 
         repeatCount={Number(repeatCount)} />
       {showSubmitPage && (
         <ModalOverlay>

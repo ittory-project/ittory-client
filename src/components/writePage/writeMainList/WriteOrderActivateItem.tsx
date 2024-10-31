@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { getUserId } from '../../../api/config/setToken';
 
 interface WriteOrderProps {
   profileImageUrl: string;
@@ -12,12 +13,13 @@ interface WriteOrderProps {
 export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImageUrl, name, title, time }) => {
   // [TODO]: 이 아이템의 유저 아이디와 내 아이디가 일치하는지 확인할 수 있게 하기 - 이걸 그냥 상위에서 끝내버리면 더 편할 것 같다..?
   const [letterStatus, setLetterStatus] = useState<'completed' | 'myTurn' | 'othersTurn'>('othersTurn')
-  
-  return (
+  const userId = getUserId()
+
+  return userId && (
     <Wrapper status={letterStatus}>
       <ProfileImage src={""+profileImageUrl} />
       <ContentWrapper>
-        {letterStatus === 'myTurn' && (
+        { !title && Number(getUserId()) === 4 && (
           <MyTurn>
             <MainText>내 차례예요</MainText>
             <ClockText>
@@ -26,13 +28,13 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImage
             </ClockText>
           </MyTurn>
         )}
-        {letterStatus === 'completed' && (
+        { title && (
           <>
             <MainText>{title}</MainText>
             <SubText>{name}</SubText>
           </>
         )}
-        {letterStatus === 'othersTurn' && (
+        { !title && Number(getUserId()) !== 4 && (
           <>
             <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
             <ClockText>

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { writeLetterWs } from "../../../api/service/WsService";
-import { decodeLetterId } from "../../../api/config/base64";
+import { decodeLetterId, encodeLetterId } from "../../../api/config/base64";
 
 export interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,6 +10,7 @@ export interface WriteElementProps {
 }
 
 export const WriteElement = () => {
+  const navigate = useNavigate();
   const props: WriteElementProps = useOutletContext();
   const [text, setText] = useState("");
   const { letterId } = useParams();
@@ -17,20 +18,20 @@ export const WriteElement = () => {
 
   const handleElementClose = () => {
     props.setShowSubmitPage(false)
+    navigate(`/write/${encodeLetterId(letterNumId)}`)
   }
 
   // 작성 완료 버튼
-  const handleWriteComplete = () => {
+  const handleWriteComplete = async () => {
     try {
-      // [TODO]: Sequence를 어떻게 전달해야 하는걸까?
-      writeLetterWs(letterNumId, 1, text)
+      // writeLetterWs 완료 여부를 기다림
+      await writeLetterWs(letterNumId, 2, text);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     } finally {
-      // 안중요 [TODO]: 작성이 꼭 완료되어야 작성 페이지를 닫을 수 있게끔 했으면 한다...
-      handleElementClose()
+      handleElementClose(); // 작성 완료 후 페이지 닫기
     }
-  }
+  };
 
   // 접속 시 무조건 focusing 되도록 해야 키보드가 올라온다.
   const taRef = useRef<HTMLTextAreaElement>(null);

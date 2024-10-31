@@ -30,26 +30,36 @@ export const enterLetterWs = (letterId: number, nickname: string) => {
 // 편지 작성(조회) API
 // param: 편지 ID, 편지 내용
 // response: WsEnterResponse - 접속할 유저 정보
-export const writeLetterWs = (letterId: number, sequence: number, content: string) => {
-  const client = stompClient();
+export const writeLetterWs = (letterId: number, sequence: number, content: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const client = stompClient();
 
-  client.onConnect = () => {
-    client.subscribe(`/topic/letter/${letterId}`, (message) => {
-      console.log(message)
-      const response = JSON.parse(message.body);
-      console.log('Received message:', response);
-    });  
-    client.publish({
-      destination: `/ws/letter/${letterId}/elements`,
-      body: JSON.stringify({
-        sequence : sequence,
-        content : content,
-    }),
-    });  
-  };
+    client.onConnect = () => {
+      client.subscribe(`/topic/letter/${letterId}`, (message) => {
+        const response = JSON.parse(message.body);
+        console.log('Received message:', response);
+        if (response && response.elementId) { 
+          resolve();
+        } else {
+          reject(new Error("작성 실패"));
+        }
+      });
 
-  client.activate();
+      client.publish({
+        destination: `/ws/letter/${letterId}/elements`,
+        body: JSON.stringify({ sequence, content }),
+      });
+    };
+
+    client.onStompError = (frame) => {
+      console.error("Broker reported error: ", frame.headers["message"]);
+      reject(new Error("연결 오류"));
+    };
+
+    client.activate();
+  });
 };
+
 
 // 편지 퇴장 API
 // param: 편지 ID
