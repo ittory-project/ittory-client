@@ -11,7 +11,7 @@ import { addData, clearData, selectData } from "../../api/config/state";
 import { LetterItem } from "../../api/model/WsModel";
 
 export const CompTest = () => {
-  const letterNum = 8
+  const letterNum = 9
 
   // api 테스트 - 편지 시작 시 정보 조회
   const getPartiList = async () => {

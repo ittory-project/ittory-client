@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { addData, clearData, selectParsedData } from '../../api/config/state';
 import { LetterPartiItem, LetterPartiListGetResponse } from '../../api/model/LetterModel';
 import { stompClient } from '../../api/config/stompInterceptor';
-import { decodeLetterId } from '../../api/config/base64';
+import { decodeLetterId, encodeLetterId } from '../../api/config/base64';
 import Button from '../common/Button';
 
 import { WriteOrderList } from './writeMainList/WriteOrderList';
@@ -20,7 +20,6 @@ interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
   progressTime: number;
   setProgressTime: React.Dispatch<React.SetStateAction<number>>;
-  partiCount: number;
   repeatCount: number;
 }
 
@@ -28,7 +27,7 @@ interface WriteElementProps {
 // /write/:letterId
 // letterId: base64로 인코딩한 편지 아이디
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
-export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiCount, repeatCount }: WriteElementProps) => {
+export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeatCount }: WriteElementProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 편지 아이디 식별
@@ -47,6 +46,10 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
   const [nowSequence, setNowSequence] = useState(1);
   // 현재 반복 횟수
   const [nowRepeat, setNowRepeat] = useState(1);
+  // 총 참여자 수
+  const [partiNum, setPartiNum] = useState(-1)
+  // 총 반복 횟수
+  const [repeatNum, setRepeatNum] = useState(-1)
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -74,6 +77,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
           fetchPartiList();
         } else { // 작성 완료 response 감지 시
           const letterResponse = response as LetterItem;
+          console.log("작성 내용:", JSON.stringify(letterResponse));
           dispatch(addData(letterResponse));
           // [안중요 TODO]: letterResponse의 writeSequence가 null일수도 있기 때문에 Number로 묶어줬는데, 더 적절한 조치가 필요 
           setNowLetterId(Number(letterResponse.writeSequence));
@@ -82,10 +86,12 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
             // 현재 nowSequence와 일치하는 writeOrder의 인덱스 찾기
             const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
             // 다음 인덱스 계산
-            const nextIndex = currentIndex === -1 || currentIndex === writeOrderList.length - 1 ? 0 : currentIndex + 1;
+            let nextIndex = currentIndex + 1;
+            currentIndex === -1 || currentIndex > writeOrderList.length ? 0 : currentIndex + 1;
             // 마지막 인덱스에서 첫 번째로 돌아갈 경우 writeSequence 증가
-            if (nextIndex === 0 && currentIndex === writeOrderList.length - 1) {
+            if (currentIndex > writeOrderList.length) {
               setNowRepeat(nowRepeat + 1);
+              nextIndex = 0
             }
             // nowSequence에 다음 sequence, 멤버아이디 값 할당
             setNowSequence(writeOrderList[nextIndex].sequence);
@@ -114,11 +120,10 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
       window.alert("잘못된 접근입니다.")
     } else {
       const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
-      setWriteOrderList(response.participants)
-      // 아직 작성 안 한 아이템들 세팅
-      setLockedWriteItems()
+      setWriteOrderList(response.participants);
+      setPartiNum(response.participants.length); // partiNum 설정
     }
-  }
+  };
   useEffect(() => { // 처음에만 이펙트 통해서 getPartiList 호출 + 첫번째 유저로 nowMemberId 초기화
     const fetchPartiList = async () => {
       await getPartiList();
@@ -129,6 +134,12 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
     fetchPartiList();
   }, []);
 
+  // partiNum과 repeatCount가 설정된 후에 setLockedWriteItems 호출
+  useEffect(() => {
+    if (partiNum && repeatCount) {
+      setLockedWriteItems();
+    }
+  }, [partiNum, repeatCount]);
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
   // [TODO]: 현재 아이템을 정확한 값으로 넣어야 함
@@ -136,14 +147,16 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
     const nowItem: LetterItem = {
       elementId: `${nowLetterId + 1}`,
       imageUrl: `https://example.com/img`,
-      content: `Temporary Content`,
       nickname: `User`,
       elementSequence: 1,
       writeSequence: 1,
-    };    
-    const tempItems: LetterItem[] = Array.from({ length: 10 }, (_, index) => ({
+    };
+    console.log(repeatCount, nowRepeat, partiNum, nowSequence)
+    const tempItemNum = (repeatCount - nowRepeat) * partiNum + (partiNum - nowSequence) - 1
+    const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: `${nowLetterId + index + 2}`
     }));
+    console.log("저장된 내용: ", data);
     setLetterItems([...data, nowItem]);
     setLetterItems((prevItems) => [...prevItems, ...tempItems]);
   };
@@ -168,7 +181,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
   // 작성 페이지 이동
   const handleWritePage = () => {
     setShowSubmitPage(true)
-    navigate(`/write/OA==/sub`);
+    navigate(`/write/${encodeLetterId(letterNumId)}/sub/${nowRepeat}/${nowSequence}`);
   };
 
   return writeOrderList ? 
@@ -178,6 +191,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, partiC
           <WriteOrderTitle writeOrderList={writeOrderList} title="생일 축하 메시지" />
         </StickyHeader>
         <ScrollableOrderList>
+          <button onClick={handleClearData}>삭삭제</button>
           <WriteOrderList letterItems={letterItems} nowItemId={nowItemId} progressTime={progressTime}/>
         </ScrollableOrderList>
         { nowMemberId !== Number(getUserId()) ? 
