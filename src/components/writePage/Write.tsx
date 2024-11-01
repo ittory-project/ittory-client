@@ -15,6 +15,7 @@ import { getLetterPartiList } from '../../api/service/LetterService';
 import { WriteLocation } from './WriteLocation';
 import { getUserId } from '../../api/config/setToken';
 import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
+import { write } from 'fs';
 
 interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
@@ -80,7 +81,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
           console.log("작성 내용:", JSON.stringify(letterResponse));
           dispatch(addData(letterResponse));
           // [안중요 TODO]: letterResponse의 writeSequence가 null일수도 있기 때문에 Number로 묶어줬는데, 더 적절한 조치가 필요 
-          setNowLetterId(Number(letterResponse.writeSequence));
+          setLetterItems((prevItems) => [...prevItems, letterResponse]);
           
           if (writeOrderList && writeOrderList.length > 0) {
             // 현재 nowSequence와 일치하는 writeOrder의 인덱스 찾기
@@ -101,7 +102,10 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
           if (nowRepeat > repeatCount) {
             console.log("끝")
           }
-          setLockedWriteItems()
+          if (writeOrderList) {
+            setLockedWriteItems()
+            setPartiNum(writeOrderList.length);
+          }
         }
       });
     };
@@ -121,6 +125,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
     } else {
       const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
       setWriteOrderList(response.participants);
+      console.log("setPartiNum 언제 하는지" + response.participants)
       setPartiNum(response.participants.length); // partiNum 설정
     }
   };
@@ -136,10 +141,15 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
 
   // partiNum과 repeatCount가 설정된 후에 setLockedWriteItems 호출
   useEffect(() => {
-    if (partiNum && repeatCount) {
-      setLockedWriteItems();
-    }
-  }, [partiNum, repeatCount]);
+    const timer = setTimeout(() => {
+      if (partiNum > -1 && repeatCount > -1) {
+        setLockedWriteItems();
+      }
+    }, 0);
+  
+    return () => clearTimeout(timer);
+  }, [partiNum, repeatCount, nowSequence, nowRepeat]);
+  
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
   // [TODO]: 현재 아이템을 정확한 값으로 넣어야 함
