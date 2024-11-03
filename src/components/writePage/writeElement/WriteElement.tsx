@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { writeLetterWs } from "../../../api/service/WsService";
@@ -30,7 +30,7 @@ export const WriteElement = () => {
     } 
     try {
       // writeLetterWs 완료 여부를 기다림
-      await writeLetterWs(letterNumId, Number(sequence), text);
+      await writeLetterWs(letterNumId, Number(repeat), text);
     } catch (e) {
       console.log(e);
     } finally {
@@ -45,6 +45,11 @@ export const WriteElement = () => {
       taRef.current.focus();
     }
   }, []);
+
+  const handleKeyboardEnterEvent = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    handleWriteComplete();
+  }
 
   return (
     <Container>
@@ -64,7 +69,12 @@ export const WriteElement = () => {
             ref={taRef}
             placeholder="그림을 보고 편지를 채워 주세요"             
             value={text} 
-            onChange={e => setText(e.target.value)} ></WriteTa>
+            onChange={e => setText(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                handleKeyboardEnterEvent(e)
+              }
+            }} />
           <ControlContainer>
             {text.length > 0 ? (
               <>

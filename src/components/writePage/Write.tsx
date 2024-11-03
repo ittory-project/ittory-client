@@ -71,7 +71,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
           const letterResponse = response as LetterItem;
           dispatch(addData(letterResponse));
           setLetterItems((prevItems) => [...prevItems, letterResponse]);
-          updateOrderAndLockedItems(letterResponse);
+          updateOrderAndLockedItems();
         }
       });
     };
@@ -85,20 +85,30 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
   }, [dispatch, letterNumId]);
 
   // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
-  const updateOrderAndLockedItems = (newItem: LetterItem) => {
-    console.log("writeOrderList의 상태: " + writeOrderList)
+  const updateOrderAndLockedItems = () => {
+    console.log("writeOrderList의 상태: ", writeOrderList);
     if (writeOrderList) {
-      console.log("writeOrderList가 false는 아니네.")
+      console.log("writeOrderList가 false는 아니네.");
       const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
       let nextIndex = (currentIndex + 1) % writeOrderList.length;
-      console.log(currentIndex, nextIndex)
+
+      // 상태 업데이트
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
-      setNowLetterId(Number(newItem.elementId) + 1);
-      if (currentIndex >= writeOrderList.length) setNowRepeat(nowRepeat + 1)
-      console.log(nowSequence, nowMemberId, nowLetterId, nowRepeat)
+      setNowLetterId(nowLetterId + 1);
+
+      if (currentIndex >= writeOrderList.length - 1) {
+        setNowRepeat(nowRepeat + 1);
+      }
     }
   };
+
+  // nowLetterId와 nowRepeat가 변경될 때마다 로그 출력
+  useEffect(() => {
+    console.log("nowLetterId:", nowLetterId);
+    console.log("nowRepeat:", nowRepeat);
+  }, [nowLetterId, nowRepeat]);
+
 
   // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
   const fetchParticipantsAndUpdateLockedItems = async () => {
@@ -125,7 +135,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
       if (writeOrderList) {
         console.log('초기 writeOrderList:', writeOrderList);
         setNowMemberId(writeOrderList[0].memberId);
-        setNowSequence(writeOrderList[0].sequence); // 초기 순서 설정
+        setNowSequence(writeOrderList[0].sequence);
       }
     };
     initialize();
@@ -144,7 +154,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
       writeSequence: 1,
     };
   console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
-    const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence) - 1
+    const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence)
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: `${nowLetterId + index + 2}`
     }));
@@ -190,7 +200,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
           <WriteOrderTitle writeOrderList={writeOrderList} title="생일 축하 메시지" />
         </StickyHeader>
         <ScrollableOrderList>
-          <button onClick={handleClearData}>삭삭제</button>
+          <button onClick={handleClearData}>삭삭제wp</button>
           <WriteOrderList letterItems={[...letterItems, ...lockedItems]} nowItemId={nowItemId} progressTime={progressTime}/>
         </ScrollableOrderList>
         { nowMemberId === Number(getUserId()) ? 
