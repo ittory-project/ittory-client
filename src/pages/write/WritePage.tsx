@@ -10,6 +10,7 @@ import { getLetterStartInfo } from "../../api/service/LetterService";
 export const WritePage = () => {
   const { letterId } = useParams()
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [letterTitle, setLetterTitle] = useState("");
   const [partiCount, setPartiCount] = useState<Number | null>()
   const [repeatCount, setRepeatCount] = useState<Number | null>()
   const [elementCount, setElementCount] = useState<Number | null>()
@@ -28,6 +29,7 @@ export const WritePage = () => {
       window.alert("잘못된 접근입니다.")
     } else {
       const response: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
+      setLetterTitle(response.title)
       setPartiCount(response.participantCount)
       setRepeatCount(response.repeatCount)
       setElementCount(response.elementCount)
@@ -75,7 +77,7 @@ export const WritePage = () => {
         setShowSubmitPage={setShowSubmitPage} 
         progressTime={progressTime} 
         setProgressTime={setProgressTime} 
-        repeatCount={Number(repeatCount)} />
+        letterTitle={letterTitle} />
       {showSubmitPage && (
         <ModalOverlay>
           <Outlet context={{setShowSubmitPage, progressTime}}/>
