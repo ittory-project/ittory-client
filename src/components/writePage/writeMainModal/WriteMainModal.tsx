@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { LetterPartiItem, LetterPartiListGetResponse, LetterStartInfoGetResponse } from "../../../api/model/LetterModel";
-import { getLetterPartiList, getLetterStartInfo } from "../../../api/service/LetterService";
+import { LetterPartiItem, LetterPartiListGetResponse } from "../../../api/model/LetterModel";
+import { getLetterPartiList } from "../../../api/service/LetterService";
 import { useParams } from "react-router-dom";
 import { decodeLetterId } from "../../../api/config/base64";
 
