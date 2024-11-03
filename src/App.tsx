@@ -14,6 +14,7 @@ import { JoinPage } from "./pages/JoinPage";
 import { ConnectionPage } from "./pages/ConnectionPage";
 import { AccountPage } from "./pages/AccountPage";
 import { LetterBoxPage } from "./pages/LetterBoxPage";
+import StompTest from "./components/common/StompTest";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <MainLayout>
         <Routes>
         <Route path='/' element={<HomePage />} />
+        <Route path='/stomp' element={<StompTest />} />
         <Route path='/comp' element={<CompTest />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/redirect" element={<LoginRedirectPage />} />
