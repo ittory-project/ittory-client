@@ -4,8 +4,9 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import letter from "../../../../public/assets/letter.svg";
 import { useNavigate } from "react-router-dom";
-import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
+import { CoverType } from "../../../api/model/CoverType";
+import { getCoverTypes } from "../../../api/service/CoverService";
 
 interface Props {
   title: string;
@@ -13,7 +14,7 @@ interface Props {
   receiverName: string;
   deliverDay: Date | null;
   croppedImage: string;
-  backgroundImage: string;
+  backgroundImage: number;
   selectfont: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,9 +33,24 @@ export default function CompleteModal({
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [bookimage, setBookimage] = useState<string>(backgroundImage);
+  const [bookimage, setBookimage] = useState<number>(backgroundImage);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+        console.log(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypes();
+  }, []);
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
@@ -79,7 +95,9 @@ export default function CompleteModal({
         <Receiver>
           To.{receiverName} <LetterImg img={letter} />
         </Receiver>
-        <Book backgroundImage={bookimage}>
+        <Book
+          backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
+        >
           <TitleContainer font={selectfont}>{title}</TitleContainer>
           {deliverDay === null ? (
             <></>
@@ -93,7 +111,6 @@ export default function CompleteModal({
           )}
           {selectedImageIndex !== 4 && (
             <>
-              <Bright src={bright} />
               <Shadow src={shadow} />
               <BtnImgContainer bgimg={croppedImage} />
             </>
@@ -208,20 +225,11 @@ const DeliverDay = styled.div`
   line-height: 14px;
   letter-spacing: -0.5px;
 `;
-const Bright = styled.img`
-  width: 148px;
-  height: 148px;
-  margin-left: 3.9px;
-  margin-top: 80px;
-  position: absolute;
-  z-index: 2;
-  flex-shrink: 0;
-`;
 const Shadow = styled.img`
-  width: 161px;
+  width: 175px;
   height: 161px;
-  margin-left: 2.7px;
-  margin-top: 73px;
+  margin-left: 3px;
+  margin-top: 72px;
   position: absolute;
   z-index: 3;
   flex-shrink: 0;

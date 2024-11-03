@@ -4,8 +4,10 @@ import { Point, Area } from "react-easy-crop";
 import styled from "styled-components";
 import getCroppedImg from "./getCrop";
 import axios from "axios";
-//301, cors에러 memberID 어떻게 조회..
+import { ImageUrlRequest } from "../../../api/model/ImageModel";
+import { postCoverImage } from "../../../api/service/ImageService";
 
+//post 정상적으로 되면 완료 버튼 누를 시 post되게 하기
 interface Props {
   originalImage: string;
   setCroppedImage: (croppedImgUrl: string) => void;
@@ -15,6 +17,12 @@ interface Props {
   width?: number;
   height?: number;
   borderRadius?: number;
+}
+
+export enum ImageExtension {
+  JPG = "JPG",
+  JPEG = "JPEG",
+  PNG = "PNG",
 }
 
 export default function ImageCropper({
@@ -75,31 +83,44 @@ export default function ImageCropper({
       console.log("Cropped Image URL: ", croppedImgUrl);
       setCroppedImage(croppedImgUrl);
 
-      // Blob으로 변환하여 FormData에 추가
+      //Blob으로 변경
       const responseBlob = await fetch(croppedImgUrl).then((res) => res.blob());
+      console.log(responseBlob);
 
-      const formData = new FormData();
-      formData.append("image", responseBlob, "cropped-image.jpg"); // Blob 추가
-      formData.append("imgExtension", "JPG"); // 요청 본문에 imgExtension 추가
+      // Step 1: URL 발급 요청
+      const imageUrlRequest: ImageUrlRequest = {
+        imgExtension: ImageExtension.JPG, // 적절한 Enum 값 설정
+      };
 
-      // POST 요청 (301에러)
       try {
-        const uploadResponse = await axios.post(
-          "http://dev-server.ittory.co.kr/image/letter-cover",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        console.log("Upload Response: ", uploadResponse.data);
-      } catch (error) {
-        console.error("Error uploading image: ", error);
-      }
+        const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
+        console.log("PreSigned URL: ", preSignedUrl);
 
-      closeModal();
+        // Step 2: presigned URL로 이미지 업로드
+        await fetch(preSignedUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "image/jpeg", // MIME type 설정
+          },
+          body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
+        });
+
+        // Step 3: 업로드가 완료되면 S3 URL 생성
+        const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
+        console.log("Image uploaded successfully to S3!");
+        console.log("Image URL: ", s3ImageUrl);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            "Error uploading image: ",
+            error.response?.data || (error as Error).message // 타입 단언 추가
+          );
+        } else {
+          console.error("Unexpected error: ", error);
+        }
+      }
     }
+    closeModal();
   };
 
   return (
@@ -132,6 +153,7 @@ const Container = styled.div`
   bottom: 0;
   border-radius: 20px 20px 0px 0px;
   overflow: hidden;
+  z-index: 100;
 `;
 const Header = styled.div`
   position: absolute;
@@ -159,7 +181,7 @@ const CropContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: 37.5rem;
+  height: 36.5rem;
   overflow: hidden;
 `;
 const Button = styled.button`
