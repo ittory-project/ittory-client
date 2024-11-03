@@ -1,23 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
-import basic from "../../../../public/assets/Book1.svg";
-import book2 from "../../../../public/assets/Book2.svg";
-import book3 from "../../../../public/assets/Book3.svg";
-import book4 from "../../../../public/assets/Book4.svg";
-import book5 from "../../../../public/assets/Book5.svg";
 import camera from "../../../../public/assets/camera.svg";
-import image1 from "../../../../public/assets/layer1.svg";
-import image2 from "../../../../public/assets/layer2.svg";
-import image3 from "../../../../public/assets/layer3.svg";
-import image4 from "../../../../public/assets/layer4.svg";
-import image5 from "../../../../public/assets/layer5.svg";
 import FontSelect from "../CoverDeco/FontSelect";
 import ImageCropper from "../CoverDeco/ImageCropper";
 import { Area } from "react-easy-crop";
 import shadow from "../../../../public/assets/shadow2.svg";
-import bright from "../../../../public/assets/border.svg";
 import camera_mini from "../../../../public/assets/camera_mini.svg";
+import { CoverType } from "../../../api/model/CoverType";
+import { getCoverTypes } from "../../../api/service/CoverService";
 
 const fonts = [
   { name: "서체1", family: "GmarketSans" },
@@ -30,9 +21,9 @@ interface Props {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   croppedImage: string;
-  backgroundImage: string;
+  backgroundImage: number;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<string>>;
+  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
   selectfont: string;
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,16 +51,29 @@ export default function CoverModal({
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
   const [font, setFont] = useState<string>(selectfont);
-  const images = [image1, image2, image3, image4, image5];
-  const books = [basic, book2, book3, book4, book5];
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLDivElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [cropperKey, setCropperKey] = useState<number>(0);
-  const [bookimage, setBookimage] = useState<string>(backgroundImage);
+  const [bookimage, setBookimage] = useState<number>(backgroundImage - 1);
   const [ImageIndex, setImageIndex] = useState<number>(selectedImageIndex);
   const [cropOpen, setCropOpen] = useState(false);
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+        console.log(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypes();
+  }, []);
 
   useEffect(() => {
     console.log(selectedImageIndex);
@@ -168,7 +172,7 @@ export default function CoverModal({
 
   const handleImageClick = (index: number) => {
     setImageIndex(index);
-    setBookimage(books[index]);
+    setBookimage(index);
   };
 
   const openModal = () => {
@@ -192,7 +196,7 @@ export default function CoverModal({
         </Cancel>
       </Header>
 
-      <Book backgroundImage={bookimage}>
+      <Book backgroundImage={coverTypes[ImageIndex]?.editImageUrl}>
         <TitleContainer ref={inputRef}>
           <Input
             placeholder="제목 최대 12자"
@@ -204,8 +208,8 @@ export default function CoverModal({
               }
               setTitle(e.target.value);
             }}
-            minLength="1"
-            maxLength="12"
+            minLength={1}
+            maxLength={12}
             spellCheck="false"
             font={font}
           />
@@ -246,7 +250,6 @@ export default function CoverModal({
             </ButtonContainer>
           ) : (
             <>
-              <Bright src={bright} />
               <Shadow src={shadow} />
               <BtnImgContainer
                 bgimg={croppedImage}
@@ -275,15 +278,17 @@ export default function CoverModal({
         </NameBar>
       </Book>
       <ImageContainer>
-        {images.map((img, index) => (
+        {coverTypes.map((coverType, index) => (
           <Image
             onClick={() => handleImageClick(index)}
             clicked={ImageIndex === index}
             key={index}
-            src={img}
-            alt={`Image ${index + 1}`}
+            img={
+              ImageIndex === index
+                ? coverType.selectImageUrl
+                : coverType.listImageUrl
+            }
             className="image"
-            img={img}
           />
         ))}
       </ImageContainer>
@@ -414,22 +419,11 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
 `;
-const Bright = styled.img`
-  width: 142px;
-  height: 142px;
-  margin-left: 3px;
-  margin-top: 85px;
-  position: absolute;
-  z-index: 3;
-  flex-shrink: 0;
-  object-fit: cover;
-  pointer-events: none;
-`;
 const Shadow = styled.img`
-  width: 153px;
+  width: 158px;
   height: 153px;
-  margin-left: 1px;
-  margin-top: 79px;
+  margin-left: -2px;
+  margin-top: 77px;
   position: absolute;
   z-index: 3;
   pointer-events: none;
@@ -449,8 +443,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 19px;
-  margin-left: 4px;
+  margin-top: 17.7px;
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -479,7 +472,7 @@ const Input = styled.input<{ font: string }>`
     text-overflow: ellipsis;
     font-family: ${(props) => props.font};
     font-size: ${(props) =>
-      props.selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -506,13 +499,10 @@ const Input = styled.input<{ font: string }>`
   }
 `;
 const NameBar = styled.div`
-  margin-top: 30px;
+  margin-top: 32px;
   width: 224px;
   height: 23px;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-right: none;
-  border-left: none;
   position: relative;
   display: flex;
   justify-content: center;
@@ -522,8 +512,6 @@ const NameContainer = styled.div`
   width: 224px;
   height: 21px;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: 0.823px 0.823px 0.823px 0px rgba(255, 255, 255, 0.25) inset;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -579,7 +567,6 @@ const Image = styled.div<{ clicked: boolean; img: string }>`
   opacity: ${(props) => (props.clicked ? "" : "0.4")};
   border-radius: 10.2px;
   flex-shrink: 0;
-  border: ${(props) => (props.clicked ? "3px solid #ffd0a9" : "")};
   background-image: url(${(props) => props.img});
   background-size: cover;
   background-position: center;

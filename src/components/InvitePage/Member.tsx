@@ -560,7 +560,7 @@ const ProfileImg = styled.div<{ img: string }>`
   background-position: center;
   margin-bottom: 6px;
 `;
-const UserName = styled.div<{ isLongName: boolean }>`
+const UserName = styled.div`
   overflow: hidden;
   color: #000;
   text-align: center;
@@ -573,7 +573,6 @@ const UserName = styled.div<{ isLongName: boolean }>`
   letter-spacing: -0.5px;
   white-space: nowrap;
   overflow: hidden;
-  //text-overflow: ${(props) => (props.isLongName ? "ellipsis" : "clip")};
   &:first-of-type {
     margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
   }
