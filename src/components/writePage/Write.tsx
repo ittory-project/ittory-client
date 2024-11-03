@@ -20,13 +20,14 @@ interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
   progressTime: number;
   setProgressTime: React.Dispatch<React.SetStateAction<number>>;
+  letterTitle: string;
 }
 
 // 작성 현황을 볼 수 있는 페이지
 // /write/:letterId
 // letterId: base64로 인코딩한 편지 아이디
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
-export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: WriteElementProps) => {
+export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letterTitle }: WriteElementProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 편지 아이디 식별
@@ -197,7 +198,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: Writ
     (
       <Container>
         <StickyHeader>
-          <WriteOrderTitle writeOrderList={writeOrderList} title="생일 축하 메시지" />
+          <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
         </StickyHeader>
         <ScrollableOrderList>
           <button onClick={handleClearData}>삭삭제wp</button>
