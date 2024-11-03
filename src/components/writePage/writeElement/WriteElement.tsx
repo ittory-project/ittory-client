@@ -15,6 +15,8 @@ export const WriteElement = () => {
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const { repeat } = useParams();
+  const { sequence } = useParams();
 
   const handleElementClose = () => {
     props.setShowSubmitPage(false)
@@ -23,9 +25,12 @@ export const WriteElement = () => {
 
   // 작성 완료 버튼
   const handleWriteComplete = async () => {
+    if (!repeat || !sequence) {
+      return window.alert("오류")
+    } 
     try {
       // writeLetterWs 완료 여부를 기다림
-      await writeLetterWs(letterNumId, 2, text);
+      await writeLetterWs(letterNumId, Number(sequence), text);
     } catch (e) {
       console.log(e);
     } finally {

@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { addData, clearData, selectParsedData } from '../../api/config/state';
-import { LetterPartiItem, LetterPartiListGetResponse } from '../../api/model/LetterModel';
+import { LetterPartiItem, LetterPartiListGetResponse, LetterStartInfoGetResponse } from '../../api/model/LetterModel';
 import { stompClient } from '../../api/config/stompInterceptor';
 import { decodeLetterId, encodeLetterId } from '../../api/config/base64';
 import Button from '../common/Button';
 
 import { WriteOrderList } from './writeMainList/WriteOrderList';
 import { WriteOrderTitle } from './WriteOrderTitle';
-import { getLetterPartiList } from '../../api/service/LetterService';
+import { getLetterPartiList, getLetterStartInfo } from '../../api/service/LetterService';
 import { WriteLocation } from './WriteLocation';
 import { getUserId } from '../../api/config/setToken';
 import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
@@ -20,14 +20,13 @@ interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
   progressTime: number;
   setProgressTime: React.Dispatch<React.SetStateAction<number>>;
-  repeatCount: number;
 }
 
 // 작성 현황을 볼 수 있는 페이지
 // /write/:letterId
 // letterId: base64로 인코딩한 편지 아이디
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
-export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeatCount }: WriteElementProps) => {
+export const Write = ({ setShowSubmitPage, progressTime, setProgressTime }: WriteElementProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 편지 아이디 식별
@@ -77,6 +76,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
       });
     };
     client.activate();
+
     return () => {
       (async () => {
         client.deactivate();
@@ -84,34 +84,53 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
     };
   }, [dispatch, letterNumId]);
 
+  // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
   const updateOrderAndLockedItems = (newItem: LetterItem) => {
+    console.log("writeOrderList의 상태: " + writeOrderList)
     if (writeOrderList) {
-    const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
+      console.log("writeOrderList가 false는 아니네.")
+      const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
       let nextIndex = (currentIndex + 1) % writeOrderList.length;
+      console.log(currentIndex, nextIndex)
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
-      setNowLetterId(Number(newItem.elementId));
-    setLockedWriteItems();
+      setNowLetterId(Number(newItem.elementId) + 1);
+      if (currentIndex >= writeOrderList.length) setNowRepeat(nowRepeat + 1)
+      console.log(nowSequence, nowMemberId, nowLetterId, nowRepeat)
     }
   };
 
+  // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
   const fetchParticipantsAndUpdateLockedItems = async () => {
     const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
+    setPartiNum(response.participants.length);
     setWriteOrderList(response.participants);
+    
+    // writeOrderList가 업데이트 된 후에 locked items 세팅
     setLockedWriteItems();
   };
 
+  const fetchRepeatCount = async () => {
+    const info: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
+    setRepeatNum(info.repeatCount)
+  }
+
+  // 참여자 목록 불러오기
+  // 컴포넌트가 처음 렌더링될 때 참여자 목록을 불러옵니다.
   useEffect(() => {
     const initialize = async () => {
-      const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
-      setWriteOrderList(response.participants);
-      setPartiNum(response.participants.length);
-      if (response.participants.length > 0) {
-        setNowMemberId(response.participants[0].memberId);
+      await fetchParticipantsAndUpdateLockedItems(); 
+      await fetchRepeatCount();
+
+      if (writeOrderList) {
+        console.log('초기 writeOrderList:', writeOrderList);
+        setNowMemberId(writeOrderList[0].memberId);
+        setNowSequence(writeOrderList[0].sequence); // 초기 순서 설정
       }
     };
     initialize();
-  }, [letterNumId]);
+  }, []);
+  
   
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
@@ -124,14 +143,21 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
       elementSequence: 1,
       writeSequence: 1,
     };
-    const tempItemNum = (repeatCount - nowRepeat) * partiNum + (partiNum - nowSequence) - 1
+  console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
+    const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence) - 1
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: `${nowLetterId + index + 2}`
     }));
     setLockedItems([nowItem, ...tempItems]);
   };
   useEffect(() => {
-    setLockedWriteItems();
+    const setRepeatNum = async () => {
+      await fetchRepeatCount()
+    }
+    setRepeatNum()
+    console.log('repeatNum 설정: ', repeatNum)
+    console.log('writeOrderList가 업데이트 됨:', writeOrderList);
+    setLockedWriteItems(); 
   }, [nowRepeat, partiNum, nowSequence]);
 
   // 처음에 시작하기 전 페이지에 이거 넣기
