@@ -15,7 +15,6 @@ import { getLetterPartiList } from '../../api/service/LetterService';
 import { WriteLocation } from './WriteLocation';
 import { getUserId } from '../../api/config/setToken';
 import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
-import { write } from 'fs';
 
 interface WriteElementProps {
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +39,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
   // 진행 순서
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
   // 현재 유저의 멤버 아이디
-  const [nowMemberId, setNowMemberId] = useState(0);
+  const [nowMemberId, setNowMemberId] = useState(4);
   // 현재까지 작성된 편지 수 (최근 작성 완료된 편지의 elementSequence 값)
   const [nowLetterId, setNowLetterId] = useState(0);
   // 현재 유저 순서(sequence)
@@ -51,6 +50,8 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
   const [partiNum, setPartiNum] = useState(-1)
   // 총 반복 횟수
   const [repeatNum, setRepeatNum] = useState(-1)
+  // 잠금된 아이템
+  const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -61,94 +62,56 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
   // [안중요 TODO]: Service로 빼고 싶음... 하지만 방법을 찾지 못함
   useEffect(() => {
     const client = stompClient();
-  
     client.onConnect = () => {
       client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
         const response: LetterItem | WsExitResponse = JSON.parse(message.body);
-  
-        if ('action' in response && response.action === 'EXIT') {
-          console.log("퇴장 모달 띄우기");
-          // getPartiList가 잘 불러와진 다음에 getUserWriteState를 통해 세팅
-          const fetchPartiList = async () => {
-            await getPartiList();
-            if (writeOrderList && writeOrderList.length > 0) {
-              setLockedWriteItems()
-            }
-          };
-          fetchPartiList();
-        } else { // 작성 완료 response 감지 시
-          const letterResponse = response as LetterItem;
-          console.log("작성 내용:", JSON.stringify(letterResponse));
-          dispatch(addData(letterResponse));
-          // [안중요 TODO]: letterResponse의 writeSequence가 null일수도 있기 때문에 Number로 묶어줬는데, 더 적절한 조치가 필요 
-          setLetterItems((prevItems) => [...prevItems, letterResponse]);
-          
-          if (writeOrderList && writeOrderList.length > 0) {
-            // 현재 nowSequence와 일치하는 writeOrder의 인덱스 찾기
-            const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
-            // 다음 인덱스 계산
-            let nextIndex = currentIndex + 1;
-            currentIndex === -1 || currentIndex > writeOrderList.length ? 0 : currentIndex + 1;
-            // 마지막 인덱스에서 첫 번째로 돌아갈 경우 writeSequence 증가
-            if (currentIndex > writeOrderList.length) {
-              setNowRepeat(nowRepeat + 1);
-              nextIndex = 0
-            }
-            // nowSequence에 다음 sequence, 멤버아이디 값 할당
-            setNowSequence(writeOrderList[nextIndex].sequence);
-            setNowMemberId(writeOrderList[nextIndex].memberId);
-          }          
 
-          if (nowRepeat > repeatCount) {
-            console.log("끝")
-          }
-          if (writeOrderList) {
-            setLockedWriteItems()
-            setPartiNum(writeOrderList.length);
-          }
+        if ('action' in response && response.action === 'EXIT') {
+          fetchParticipantsAndUpdateLockedItems();
+        } else if ('elementId' in response) {
+          const letterResponse = response as LetterItem;
+          dispatch(addData(letterResponse));
+          setLetterItems((prevItems) => [...prevItems, letterResponse]);
+          updateOrderAndLockedItems(letterResponse);
         }
       });
     };
     client.activate();
-
     return () => {
-      client.deactivate();
+      (async () => {
+        client.deactivate();
+      })();
     };
   }, [dispatch, letterNumId]);
 
-  // 참여자 목록 불러오기
-  const getPartiList = async () => {
-    if (!letterId) {
-      window.alert("잘못된 접근입니다.")
-    } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.")
-    } else {
-      const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
-      setWriteOrderList(response.participants);
-      console.log("setPartiNum 언제 하는지" + response.participants)
-      setPartiNum(response.participants.length); // partiNum 설정
+  const updateOrderAndLockedItems = (newItem: LetterItem) => {
+    if (writeOrderList) {
+    const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
+      let nextIndex = (currentIndex + 1) % writeOrderList.length;
+      setNowSequence(writeOrderList[nextIndex].sequence);
+      setNowMemberId(writeOrderList[nextIndex].memberId);
+      setNowLetterId(Number(newItem.elementId));
+    setLockedWriteItems();
     }
   };
-  useEffect(() => { // 처음에만 이펙트 통해서 getPartiList 호출 + 첫번째 유저로 nowMemberId 초기화
-    const fetchPartiList = async () => {
-      await getPartiList();
-      if (writeOrderList && writeOrderList.length > 0) {
-        setNowMemberId(writeOrderList[0].memberId);
+
+  const fetchParticipantsAndUpdateLockedItems = async () => {
+    const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
+    setWriteOrderList(response.participants);
+    setLockedWriteItems();
+  };
+
+  useEffect(() => {
+    const initialize = async () => {
+      const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
+      setWriteOrderList(response.participants);
+      setPartiNum(response.participants.length);
+      if (response.participants.length > 0) {
+        setNowMemberId(response.participants[0].memberId);
       }
     };
-    fetchPartiList();
-  }, []);
-
-  // partiNum과 repeatCount가 설정된 후에 setLockedWriteItems 호출
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (partiNum > -1 && repeatCount > -1) {
-        setLockedWriteItems();
-      }
-    }, 0);
-  
-    return () => clearTimeout(timer);
-  }, [partiNum, repeatCount, nowSequence, nowRepeat]);
+    initialize();
+  }, [letterNumId]);
   
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
@@ -161,15 +124,15 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
       elementSequence: 1,
       writeSequence: 1,
     };
-    console.log(repeatCount, nowRepeat, partiNum, nowSequence)
     const tempItemNum = (repeatCount - nowRepeat) * partiNum + (partiNum - nowSequence) - 1
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: `${nowLetterId + index + 2}`
     }));
-    console.log("저장된 내용: ", data);
-    setLetterItems([...data, nowItem]);
-    setLetterItems((prevItems) => [...prevItems, ...tempItems]);
+    setLockedItems([nowItem, ...tempItems]);
   };
+  useEffect(() => {
+    setLockedWriteItems();
+  }, [nowRepeat, partiNum, nowSequence]);
 
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {
@@ -202,9 +165,9 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
         </StickyHeader>
         <ScrollableOrderList>
           <button onClick={handleClearData}>삭삭제</button>
-          <WriteOrderList letterItems={letterItems} nowItemId={nowItemId} progressTime={progressTime}/>
+          <WriteOrderList letterItems={[...letterItems, ...lockedItems]} nowItemId={nowItemId} progressTime={progressTime}/>
         </ScrollableOrderList>
-        { nowMemberId !== Number(getUserId()) ? 
+        { nowMemberId === Number(getUserId()) ? 
           <ButtonContainer>
             <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
           </ButtonContainer>
@@ -214,7 +177,7 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, repeat
         }
       </Container>
     )
-    : <>오류염</>
+    : <>접속 오류</>
 };
 
 const Container = styled.div`
