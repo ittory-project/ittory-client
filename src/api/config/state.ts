@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, configureStore } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, configureStore, createSelector } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import { LetterItem } from '../model/WsModel';
@@ -63,13 +63,17 @@ export const persistor = persistStore(store);
 
 export const { addData, clearData } = jsonSlice.actions;
 export const selectData = (state: { writeData: { data: string[] } }) => state.writeData.data;
-export const selectParsedData = (state: { writeData?: { data?: string[] } }) => 
-  state.writeData?.data?.map(item => JSON.parse(item) as LetterItem) || [];
+export const selectParsedData = createSelector(
+  [selectData],
+  (data) => data.map(item => JSON.parse(item) as LetterItem)
+);
 
 export const { setOrderData, clearOrderData } = orderSlice.actions;
 export const selectOrderData = (state: { orderData: { data: string[] } }) => state.orderData.data;
-export const selectParsedOrderData = (state: { orderData: { data: string[] } }) =>
-  state.orderData?.data?.map((item) => JSON.parse(item) as LetterPartiItem) || [];
+export const selectParsedOrderData = createSelector(
+  [selectOrderData],
+  (orderData) => orderData.map(item => JSON.parse(item) as LetterPartiItem)
+);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
