@@ -60,15 +60,16 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+
 export const { addData, clearData } = jsonSlice.actions;
-export const selectData = (state: { jsonData: { data: string[] } }) => state.jsonData.data;
-export const selectParsedData = (state: { jsonData?: { data?: string[] } }) => 
-  state.jsonData?.data?.map(item => JSON.parse(item) as LetterItem) || [];
+export const selectData = (state: { writeData: { data: string[] } }) => state.writeData.data;
+export const selectParsedData = (state: { writeData?: { data?: string[] } }) => 
+  state.writeData?.data?.map(item => JSON.parse(item) as LetterItem) || [];
 
 export const { setOrderData, clearOrderData } = orderSlice.actions;
 export const selectOrderData = (state: { orderData: { data: string[] } }) => state.orderData.data;
 export const selectParsedOrderData = (state: { orderData: { data: string[] } }) =>
-  state.orderData.data.map((item) => JSON.parse(item) as LetterPartiItem) || [];
+  state.orderData?.data?.map((item) => JSON.parse(item) as LetterPartiItem) || [];
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
