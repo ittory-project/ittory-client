@@ -5,13 +5,13 @@ import { decodeLetterId } from "../../../api/config/base64";
 import { Client } from "@stomp/stompjs";
 
 interface WriteElementProps {
-  nowSequence: number;
+  sequence: number;
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
   progressTime: number;
   clientRef: React.MutableRefObject<Client | null>;
 }
 
-export const WriteElement = ({ nowSequence, setShowSubmitPage, progressTime, clientRef }: WriteElementProps ) => {
+export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, clientRef }: WriteElementProps ) => {
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
@@ -22,7 +22,7 @@ export const WriteElement = ({ nowSequence, setShowSubmitPage, progressTime, cli
 
   // 작성 완료 버튼
   const handleWriteComplete = async () => {
-    if (!nowSequence) {
+    if (!sequence) {
       return window.alert("오류")
     } 
     try {
@@ -31,8 +31,9 @@ export const WriteElement = ({ nowSequence, setShowSubmitPage, progressTime, cli
       // clientRef를 통해 client 객체에 접근
       clientRef.current?.publish({
         destination: `/ws/letter/${letterNumId}/elements`,
-        body: JSON.stringify({ sequence: nowSequence, content: text }),
+        body: JSON.stringify({ sequence: sequence, content: text }),
       });
+      console.log(`sequence: ${sequence}, letterNum: ${letterNumId}`)
     } catch (e) {
       console.log(e);
     }
