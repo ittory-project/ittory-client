@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Client } from '@stomp/stompjs';
 import styled from 'styled-components';
 
 import { addData, AppDispatch, clearData, clearOrderData, selectParsedData, selectParsedOrderData, setOrderData } from '../../api/config/state';
-import { LetterPartiListGetResponse, LetterStartInfoGetResponse } from '../../api/model/LetterModel';
+import { LetterPartiItem, LetterPartiListGetResponse, LetterStartInfoGetResponse } from '../../api/model/LetterModel';
+import { getLetterPartiList, getLetterStartInfo } from '../../api/service/LetterService';
 import { stompClient } from '../../api/config/stompInterceptor';
+import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
 import { decodeLetterId } from '../../api/config/base64';
+import { getUserId } from '../../api/config/setToken';
 import Button from '../common/Button';
 
 import { WriteOrderList } from './writeMainList/WriteOrderList';
 import { WriteOrderTitle } from './WriteOrderTitle';
-import { getLetterPartiList, getLetterStartInfo } from '../../api/service/LetterService';
 import { WriteLocation } from './WriteLocation';
-import { getUserId } from '../../api/config/setToken';
-import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
-import { Client } from '@stomp/stompjs';
 import { WriteElement } from './writeElement/WriteElement';
 
 interface WriteElementProps {
@@ -39,11 +39,11 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const [letterItems, setLetterItems] = useState<LetterItem[]>(data);
   // 진행 순서
   const orderData = useSelector(selectParsedOrderData);
-  // const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>(orderData)
+  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>(orderData)
   // 현재 유저의 멤버 아이디
   const [nowMemberId, setNowMemberId] = useState(4);
   // 현재까지 작성된 편지 수 (최근 작성 완료된 편지의 elementSequence 값)
-  const [nowLetterId, setNowLetterId] = useState(0);
+  const [nowLetterId, setNowLetterId] = useState(1);
   // 현재 유저 순서(sequence)
   const [nowSequence, setNowSequence] = useState(1);
   // 현재 반복 횟수
@@ -56,12 +56,30 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
   // 작성 페이지 보여주기
   const [showSubmitPage, setShowSubmitPage] = useState(false);
+  // updateResponse flag
+  const [updateResponse, setUpdateResponse] = useState(false);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
     return <div>Error: 잘못된 접근입니다.</div>;
   } 
   
+  // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
+  useEffect (() => {
+    setLetterItems(data)
+  }, [data])
+  // 편지 작성 순서가 변경되거나, 새로 작성이 완료됐을 때마다 Redux에서 순서를 불러오고 세팅한다. 
+  useEffect (() => {
+    setWriteOrderList(orderData)
+    // orderData의 변경 외에, 응답이 왔을 때 응답에 대한 내용을 처라히기 위함
+    if (updateResponse) {
+      updateOrderAndLockedItems();
+      setShowSubmitPage(false)
+      setUpdateResponse(false)
+    }
+  }, [orderData, updateResponse])
+
+  // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
   // 외부 값 받아오기 위해 구독만 + 퇴장 감지
   useEffect(() => {
@@ -78,8 +96,11 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
           console.log('작성 내용: ', letterResponse)
           dispatch(addData(letterResponse));
           setLetterItems((prevItems) => [...prevItems, letterResponse]);
-          updateOrderAndLockedItems();
-          setShowSubmitPage(false)
+          // 아래의 두 동작을 useState로 분리함: redux로 불러오는 것에 약간의 딜레이가 발생, useState로 저장하는 데에도 약간의 딜레이가 발생함
+          // 해결방법: updateResponse라는 flag를 만들어 현재 업데이트를 해야 하는 상황인지 아닌지 판단 후 useEffect에서 실행
+          // updateOrderAndLockedItems();
+          // setShowSubmitPage(false)
+          setUpdateResponse(true)
         }
       });
     };
@@ -94,17 +115,17 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
   // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
   const updateOrderAndLockedItems = async () => {
-    console.log("리덕스에서 잘 불러왔나요?: ", orderData);
-    if (orderData) {
-      const currentIndex = orderData.findIndex(item => item.sequence === nowSequence);
-      let nextIndex = (currentIndex + 1) % orderData.length;
+    console.log("불러오는 것도 안됨: ", orderData)
+    console.log("유즈이펙트 오류: ", writeOrderList);
+    if (writeOrderList) {
+      const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
+      let nextIndex = (currentIndex + 1) % writeOrderList.length;
       // 상태 업데이트
-      setNowSequence(orderData[nextIndex].sequence);
-      setNowMemberId(orderData[nextIndex].memberId);
+      setNowSequence(writeOrderList[nextIndex].sequence);
+      setNowMemberId(writeOrderList[nextIndex].memberId);
       setNowLetterId(prevNowLetterId => prevNowLetterId + 1);
 
-      if (currentIndex >= orderData.length - 1) {
-        console.log("그러니까 이걸 올리기라도 하는지 의문임", nowRepeat + 1)
+      if (currentIndex >= writeOrderList.length - 1) {
         setNowRepeat(prevNowRepeat => prevNowRepeat + 1);
       }
       console.log("아무튼 상태 업데이트를 완료하긴 함")
@@ -137,21 +158,20 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       await fetchParticipantsAndUpdateLockedItems(); 
       await fetchRepeatCount();
 
-      if (orderData) {
-        setNowMemberId(orderData[0].memberId);
-        setNowSequence(orderData[0].sequence);
+      if (writeOrderList) {
+        setNowMemberId(writeOrderList[0].memberId);
+        setNowSequence(writeOrderList[0].sequence);
       }
     };
     initialize();
   }, []);
   
-  
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   const setLockedWriteItems = () => {
-    console.log("잠금 리스트 설정할 때 잘 들어가 있나요", orderData)
+    console.log("잠금 리스트 설정할 때 잘 들어가 있나요", writeOrderList)
     const nowItem: LetterItem = {
-      elementId: `${nowLetterId + 1}`,
-      imageUrl: `어너미친거야`, // writeOrderList[nowMemberId].imageUrl,
+      elementId: `${nowLetterId}`,
+      imageUrl: `어너미친거야`, //writeOrderList[nowMemberId].imageUrl,
       nickname: `User`, // writeOrderList[nowMemberId].imageUrl
       elementSequence: 1,
       writeSequence: 1,
@@ -159,7 +179,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
     const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence)
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
-      elementId: `${nowLetterId + index + 2}`
+      elementId: `${nowLetterId + index + 1}`
     }));
     setLockedItems([nowItem, ...tempItems]);
   };
@@ -168,8 +188,8 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       await fetchRepeatCount()
     }
     setRepeatNum()
-    console.log('repeatNum 설정: ', repeatNum)
-    console.log('writeOrderList가 업데이트 됨:', orderData);
+    console.log("Redux에서 불러온 값: ", orderData)
+    console.log('writeOrderList가 업데이트 됨:', writeOrderList);
     setLockedWriteItems(); 
   }, [nowRepeat, partiNum, nowSequence, nowLetterId]);
 
@@ -196,14 +216,14 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     setShowSubmitPage(true)
   };
 
-  return orderData ? 
+  return writeOrderList ? 
     (
       <Container>
         <StickyHeader>
-          <WriteOrderTitle writeOrderList={orderData} title={letterTitle} />
+          <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
         </StickyHeader>
         <ScrollableOrderList>
-          <button onClick={handleClearData}>삭삭제wp</button>
+          <button onClick={handleClearData}>삭삭제</button>
           <WriteOrderList letterItems={[...letterItems, ...lockedItems]} nowItemId={nowItemId} progressTime={progressTime}/>
         </ScrollableOrderList>
         { nowMemberId === Number(getUserId()) ? 
@@ -216,7 +236,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
         }
         {showSubmitPage && (
           <ModalOverlay>
-            <WriteElement nowSequence={nowSequence} setShowSubmitPage={setShowSubmitPage} progressTime={progressTime} clientRef={clientRef}/>
+            <WriteElement sequence={nowLetterId} setShowSubmitPage={setShowSubmitPage} progressTime={progressTime} clientRef={clientRef}/>
           </ModalOverlay>
         )}
       </Container>
