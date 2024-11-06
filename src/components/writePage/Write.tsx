@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { addData, clearData, selectParsedData } from '../../api/config/state';
-import { LetterPartiItem, LetterPartiListGetResponse, LetterStartInfoGetResponse } from '../../api/model/LetterModel';
+import { addData, AppDispatch, clearData, clearOrderData, selectParsedData, selectParsedOrderData, setOrderData } from '../../api/config/state';
+import { LetterPartiListGetResponse, LetterStartInfoGetResponse } from '../../api/model/LetterModel';
 import { stompClient } from '../../api/config/stompInterceptor';
-import { decodeLetterId, encodeLetterId } from '../../api/config/base64';
+import { decodeLetterId } from '../../api/config/base64';
 import Button from '../common/Button';
 
 import { WriteOrderList } from './writeMainList/WriteOrderList';
@@ -15,9 +15,10 @@ import { getLetterPartiList, getLetterStartInfo } from '../../api/service/Letter
 import { WriteLocation } from './WriteLocation';
 import { getUserId } from '../../api/config/setToken';
 import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
+import { Client } from '@stomp/stompjs';
+import { WriteElement } from './writeElement/WriteElement';
 
 interface WriteElementProps {
-  setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
   progressTime: number;
   setProgressTime: React.Dispatch<React.SetStateAction<number>>;
   letterTitle: string;
@@ -27,9 +28,9 @@ interface WriteElementProps {
 // /write/:letterId
 // letterId: base64로 인코딩한 편지 아이디
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
-export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letterTitle }: WriteElementProps) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteElementProps) => {
+  // redux 사용을 위한 dispatch
+  const dispatch = useDispatch<AppDispatch>();
   // 편지 아이디 식별
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
@@ -37,7 +38,8 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
   const data = useSelector(selectParsedData);
   const [letterItems, setLetterItems] = useState<LetterItem[]>(data);
   // 진행 순서
-  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
+  const orderData = useSelector(selectParsedOrderData);
+  // const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>(orderData)
   // 현재 유저의 멤버 아이디
   const [nowMemberId, setNowMemberId] = useState(4);
   // 현재까지 작성된 편지 수 (최근 작성 완료된 편지의 elementSequence 값)
@@ -52,16 +54,19 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
   const [repeatNum, setRepeatNum] = useState(-1)
   // 잠금된 아이템
   const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
+  // 작성 페이지 보여주기
+  const [showSubmitPage, setShowSubmitPage] = useState(false);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
     return <div>Error: 잘못된 접근입니다.</div>;
-  }
-
+  } 
+  
+  const clientRef = useRef<Client | null>(null);
   // 외부 값 받아오기 위해 구독만 + 퇴장 감지
-  // [안중요 TODO]: Service로 빼고 싶음... 하지만 방법을 찾지 못함
   useEffect(() => {
     const client = stompClient();
+    clientRef.current = client;
     client.onConnect = () => {
       client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
         const response: LetterItem | WsExitResponse = JSON.parse(message.body);
@@ -70,9 +75,11 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
           fetchParticipantsAndUpdateLockedItems();
         } else if ('elementId' in response) {
           const letterResponse = response as LetterItem;
+          console.log('작성 내용: ', letterResponse)
           dispatch(addData(letterResponse));
           setLetterItems((prevItems) => [...prevItems, letterResponse]);
           updateOrderAndLockedItems();
+          setShowSubmitPage(false)
         }
       });
     };
@@ -86,36 +93,33 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
   }, [dispatch, letterNumId]);
 
   // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
-  const updateOrderAndLockedItems = () => {
-    console.log("writeOrderList의 상태: ", writeOrderList);
-    if (writeOrderList) {
-      console.log("writeOrderList가 false는 아니네.");
-      const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
-      let nextIndex = (currentIndex + 1) % writeOrderList.length;
-
+  const updateOrderAndLockedItems = async () => {
+    console.log("리덕스에서 잘 불러왔나요?: ", orderData);
+    if (orderData) {
+      const currentIndex = orderData.findIndex(item => item.sequence === nowSequence);
+      let nextIndex = (currentIndex + 1) % orderData.length;
       // 상태 업데이트
-      setNowSequence(writeOrderList[nextIndex].sequence);
-      setNowMemberId(writeOrderList[nextIndex].memberId);
-      setNowLetterId(nowLetterId + 1);
+      setNowSequence(orderData[nextIndex].sequence);
+      setNowMemberId(orderData[nextIndex].memberId);
+      setNowLetterId(prevNowLetterId => prevNowLetterId + 1);
 
-      if (currentIndex >= writeOrderList.length - 1) {
-        setNowRepeat(nowRepeat + 1);
+      if (currentIndex >= orderData.length - 1) {
+        console.log("그러니까 이걸 올리기라도 하는지 의문임", nowRepeat + 1)
+        setNowRepeat(prevNowRepeat => prevNowRepeat + 1);
       }
+      console.log("아무튼 상태 업데이트를 완료하긴 함")
     }
   };
 
-  // nowLetterId와 nowRepeat가 변경될 때마다 로그 출력
   useEffect(() => {
-    console.log("nowLetterId:", nowLetterId);
-    console.log("nowRepeat:", nowRepeat);
-  }, [nowLetterId, nowRepeat]);
-
+    console.log(`현재 반복 상태: ${nowRepeat}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`)
+  }, [nowSequence, nowMemberId, nowLetterId, nowRepeat])
 
   // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
   const fetchParticipantsAndUpdateLockedItems = async () => {
     const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
     setPartiNum(response.participants.length);
-    setWriteOrderList(response.participants);
+    dispatch(setOrderData(response.participants))
     
     // writeOrderList가 업데이트 된 후에 locked items 세팅
     setLockedWriteItems();
@@ -133,10 +137,9 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
       await fetchParticipantsAndUpdateLockedItems(); 
       await fetchRepeatCount();
 
-      if (writeOrderList) {
-        console.log('초기 writeOrderList:', writeOrderList);
-        setNowMemberId(writeOrderList[0].memberId);
-        setNowSequence(writeOrderList[0].sequence);
+      if (orderData) {
+        setNowMemberId(orderData[0].memberId);
+        setNowSequence(orderData[0].sequence);
       }
     };
     initialize();
@@ -144,17 +147,16 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
   
   
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
-  // [TODO]: 앞으로 남은 갯수 제대로 계산해야 함
-  // [TODO]: 현재 아이템을 정확한 값으로 넣어야 함
-  const setLockedWriteItems =() => {
+  const setLockedWriteItems = () => {
+    console.log("잠금 리스트 설정할 때 잘 들어가 있나요", orderData)
     const nowItem: LetterItem = {
       elementId: `${nowLetterId + 1}`,
-      imageUrl: `https://example.com/img`,
-      nickname: `User`,
+      imageUrl: `어너미친거야`, // writeOrderList[nowMemberId].imageUrl,
+      nickname: `User`, // writeOrderList[nowMemberId].imageUrl
       elementSequence: 1,
       writeSequence: 1,
     };
-  console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
+    console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
     const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence)
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: `${nowLetterId + index + 2}`
@@ -167,12 +169,13 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
     }
     setRepeatNum()
     console.log('repeatNum 설정: ', repeatNum)
-    console.log('writeOrderList가 업데이트 됨:', writeOrderList);
+    console.log('writeOrderList가 업데이트 됨:', orderData);
     setLockedWriteItems(); 
-  }, [nowRepeat, partiNum, nowSequence]);
+  }, [nowRepeat, partiNum, nowSequence, nowLetterId]);
 
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {
+    dispatch(clearOrderData())
     dispatch(clearData());
   };
 
@@ -191,14 +194,13 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
   // 작성 페이지 이동
   const handleWritePage = () => {
     setShowSubmitPage(true)
-    navigate(`/write/${encodeLetterId(letterNumId)}/sub/${nowRepeat}/${nowSequence}`);
   };
 
-  return writeOrderList ? 
+  return orderData ? 
     (
       <Container>
         <StickyHeader>
-          <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
+          <WriteOrderTitle writeOrderList={orderData} title={letterTitle} />
         </StickyHeader>
         <ScrollableOrderList>
           <button onClick={handleClearData}>삭삭제wp</button>
@@ -212,6 +214,11 @@ export const Write = ({ setShowSubmitPage, progressTime, setProgressTime, letter
               <WriteLocation progressTime={progressTime} name="카리나"/>
             </LocationContainer>
         }
+        {showSubmitPage && (
+          <ModalOverlay>
+            <WriteElement nowSequence={nowSequence} setShowSubmitPage={setShowSubmitPage} progressTime={progressTime} clientRef={clientRef}/>
+          </ModalOverlay>
+        )}
       </Container>
     )
     : <>접속 오류</>
@@ -254,4 +261,16 @@ const LocationContainer = styled.div`
   right: 10px;
   z-index: 3;
   background-color: transparent;
+`;
+
+const ModalOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
 `;
