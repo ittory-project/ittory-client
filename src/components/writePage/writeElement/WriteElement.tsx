@@ -1,40 +1,40 @@
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { writeLetterWs } from "../../../api/service/WsService";
-import { decodeLetterId, encodeLetterId } from "../../../api/config/base64";
+import { decodeLetterId } from "../../../api/config/base64";
+import { Client } from "@stomp/stompjs";
 
-export interface WriteElementProps {
+interface WriteElementProps {
+  nowSequence: number;
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
   progressTime: number;
+  clientRef: React.MutableRefObject<Client | null>;
 }
 
-export const WriteElement = () => {
-  const navigate = useNavigate();
-  const props: WriteElementProps = useOutletContext();
+export const WriteElement = ({ nowSequence, setShowSubmitPage, progressTime, clientRef }: WriteElementProps ) => {
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  const { repeat } = useParams();
-  const { sequence } = useParams();
 
-  const handleElementClose = () => {
-    props.setShowSubmitPage(false)
-    navigate(`/write/${encodeLetterId(letterNumId)}`)
+  const handleExit= () => {
+    setShowSubmitPage(false)
   }
 
   // 작성 완료 버튼
   const handleWriteComplete = async () => {
-    if (!repeat || !sequence) {
+    if (!nowSequence) {
       return window.alert("오류")
     } 
     try {
       // writeLetterWs 완료 여부를 기다림
-      await writeLetterWs(letterNumId, Number(repeat), text);
+      // await writeLetterWs(letterNumId, Number(repeat), text);
+      // clientRef를 통해 client 객체에 접근
+      clientRef.current?.publish({
+        destination: `/ws/letter/${letterNumId}/elements`,
+        body: JSON.stringify({ sequence: nowSequence, content: text }),
+      });
     } catch (e) {
       console.log(e);
-    } finally {
-      handleElementClose(); // 작성 완료 후 페이지 닫기
     }
   };
 
@@ -57,9 +57,9 @@ export const WriteElement = () => {
         <Header>
         <ClockText>
           <ClockIcon src="/assets/write/clock.svg" />
-          {Math.floor(props.progressTime)}초
+          {Math.floor(progressTime)}초
         </ClockText>
-          <CloseBtn onClick={handleElementClose} src='/assets/btn_close.svg' />
+          <CloseBtn onClick={handleExit} src='/assets/btn_close.svg' />
         </Header>
         <WriteContent>
           <PhotoDiv>
@@ -85,7 +85,7 @@ export const WriteElement = () => {
             ) : 
             <><CharacterCount></CharacterCount></>
             }
-            <CompleteBtn onClick={handleWriteComplete} isDisabled={text.length === 0 || text.length > 30}>완료</CompleteBtn>
+            <CompleteBtn onClick={handleWriteComplete} $isdisabled={text.length === 0 || text.length > 30}>완료</CompleteBtn>
           </ControlContainer>
         </WriteContent>
       </Content>
@@ -167,16 +167,16 @@ const WriteContent = styled.div`
   background: var(--Color-grayscale-gray50, #F8F9FA);
 `;
 
-const CompleteBtn = styled.div<{ isDisabled: boolean }>`
+const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
   display: flex;
   padding: 4px 12px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
-  background: ${({ isDisabled }) => (isDisabled ? '#d3d3d3' : '#000')}; 
+  background: ${({ $isdisabled }) => ($isdisabled ? '#d3d3d3' : '#000')}; 
   color: #FFF;
-  cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')}; 
+  cursor: ${({ $isdisabled }) => ($isdisabled ? 'not-allowed' : 'pointer')}; 
 `;
 
 const PhotoDiv = styled.div`

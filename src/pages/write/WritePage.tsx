@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { WriteMainModal } from "../../components/writePage/writeMainModal/WriteMainModal";
 import { Write } from "../../components/writePage/Write";
-import { Outlet, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { decodeLetterId } from "../../api/config/base64";
 import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
 import { getLetterStartInfo } from "../../api/service/LetterService";
@@ -16,7 +16,6 @@ export const WritePage = () => {
   const [elementCount, setElementCount] = useState<Number | null>()
 
   const [showPopup, setShowPopup] = useState(true);
-  const [showSubmitPage, setShowSubmitPage] = useState(false);
 
   const onClose = () => {
     setShowPopup(false);
@@ -74,15 +73,9 @@ export const WritePage = () => {
           elementCount={Number(elementCount)}
           />}
       <Write 
-        setShowSubmitPage={setShowSubmitPage} 
         progressTime={progressTime} 
         setProgressTime={setProgressTime} 
         letterTitle={letterTitle} />
-      {showSubmitPage && (
-        <ModalOverlay>
-          <Outlet context={{setShowSubmitPage, progressTime}}/>
-        </ModalOverlay>
-      )}
     </Container>
   );
 };
@@ -94,16 +87,4 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const ModalOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3;
 `;
