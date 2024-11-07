@@ -42,12 +42,15 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>(orderData)
   // 현재 유저의 멤버 아이디
   const [nowMemberId, setNowMemberId] = useState(4);
-  // 현재까지 작성된 편지 수 (최근 작성 완료된 편지의 elementSequence 값)
-  const [nowLetterId, setNowLetterId] = useState(1);
+  // 현재 작성해야 하는 편지 아이디
+  const storedNowLetterId = window.localStorage.getItem('nowLetterId')
+  const [nowLetterId, setNowLetterId] = useState(Number(storedNowLetterId || 1));
   // 현재 유저 순서(sequence)
-  const [nowSequence, setNowSequence] = useState(1);
+  const storedNowSequence = window.localStorage.getItem('nowSequence')
+  const [nowSequence, setNowSequence] = useState(Number(storedNowSequence || 1));
   // 현재 반복 횟수
-  const [nowRepeat, setNowRepeat] = useState(1);
+  const storedNowRepeat = window.localStorage.getItem('nowRepeat')
+  const [nowRepeat, setNowRepeat] = useState(Number(storedNowRepeat || 1));
   // 총 참여자 수
   const [partiNum, setPartiNum] = useState(-1)
   // 총 반복 횟수
@@ -63,6 +66,16 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   if (!letterNumId) {
     return <div>Error: 잘못된 접근입니다.</div>;
   } 
+
+  useEffect(() => {
+    window.localStorage.setItem('nowLetterId', String(nowLetterId))
+  }, [nowLetterId])
+  useEffect(() => {
+    window.localStorage.setItem('nowSequence', String(nowSequence))
+  }, [nowSequence])
+  useEffect(() => {
+    window.localStorage.setItem('nowRepeat', String(nowRepeat))
+  }, [nowRepeat])
   
   // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
   useEffect (() => {
