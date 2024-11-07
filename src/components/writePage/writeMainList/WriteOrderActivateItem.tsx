@@ -15,9 +15,13 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImage
   const [letterStatus, setLetterStatus] = useState<'completed' | 'myTurn' | 'othersTurn'>('othersTurn')
   const userId = getUserId()
 
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = "/img/profile.png";
+  };
+
   return userId && (
     <Wrapper status={letterStatus}>
-      <ProfileImage src={""+profileImageUrl} />
+      <ProfileImage src={""+profileImageUrl} onError={handleImageError} />
       <ContentWrapper>
         { !title && Number(getUserId()) === 4 && (
           <MyTurn>

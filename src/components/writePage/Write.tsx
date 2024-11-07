@@ -67,6 +67,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     return <div>Error: 잘못된 접근입니다.</div>;
   } 
 
+  // 각각의 아이템들을 세션에서 가져올 수 있도록 하기
   useEffect(() => {
     window.localStorage.setItem('nowLetterId', String(nowLetterId))
   }, [nowLetterId])
