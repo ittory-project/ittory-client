@@ -16,5 +16,5 @@ export interface LetterPartiItem {
   sequence: number,
   memberId: number,
   nickname: string,
-  imageUrl: string
+  imageUrl?: string
 }
