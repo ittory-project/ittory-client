@@ -183,10 +183,11 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   const setLockedWriteItems = () => {
     console.log("잠금 리스트 설정할 때 잘 들어가 있나요", writeOrderList)
+    console.log("지금 리스트가 뭔데: ", nowSequence)
     const nowItem: LetterItem = {
       elementId: `${nowLetterId}`,
-      imageUrl: `어너미친거야`, //writeOrderList[nowMemberId].imageUrl,
-      nickname: `User`, // writeOrderList[nowMemberId].imageUrl
+      imageUrl: writeOrderList[nowSequence].imageUrl || "",
+      nickname: writeOrderList[nowSequence].nickname || `유저 ${writeOrderList[nowMemberId].sequence}`,
       elementSequence: 1,
       writeSequence: 1,
     };
