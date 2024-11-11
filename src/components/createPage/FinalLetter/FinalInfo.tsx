@@ -6,9 +6,11 @@ import EditImg from "../../../../public/assets/edit.svg";
 import EditLetter from "../FinalLetter/EditLetter";
 import CoverModal from "./CoverModal";
 import CompleteModal from "./CompleteModal";
+import UserFinishModal from "./UserFinishModal";
 import shadow from "../../../../public/assets/shadow2.svg";
 import { CoverType } from "../../../api/model/CoverType";
 import { getCoverTypes } from "../../../api/service/CoverService";
+import { getVisitUser } from "../../../api/service/MemberService";
 
 interface Props {
   myName: string;
@@ -56,19 +58,22 @@ export default function FinalInfo({
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [complete, setComplete] = useState(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [visit, setVisit] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchCoverTypes = async () => {
+    const fetchData = async () => {
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-        console.log(types);
+
+        const user = await getVisitUser();
+        setVisit(user.isVisited);
       } catch (err) {
         console.error(err);
       }
     };
 
-    fetchCoverTypes();
+    fetchData();
   }, []);
 
   const handleEditview = () => {
@@ -77,6 +82,7 @@ export default function FinalInfo({
   const openCoveredit = () => {
     setCoveropen(true);
   };
+
   const handleComplete = () => {
     setComplete(true);
   };
@@ -175,8 +181,8 @@ export default function FinalInfo({
               )}
             </Cover>
           </Container>
-          <Button>
-            <ButtonTxt onClick={handleComplete}>확인했어요</ButtonTxt>
+          <Button onClick={handleComplete}>
+            <ButtonTxt>확인했어요</ButtonTxt>
           </Button>
         </>
       ) : (
@@ -216,20 +222,34 @@ export default function FinalInfo({
           setSelectedImageIndex={setSelectedImageIndex}
         />
       )}
-      {complete && (
-        <CompleteModal
-          setKeyboardVisible={setKeyboardVisible}
-          myName={myName}
-          receiverName={receiverName}
-          deliverDay={deliverDay}
-          title={title}
-          croppedImage={croppedImage}
-          backgroundImage={backgroundImage}
-          selectfont={selectfont}
-          setIsModalOpen={setComplete}
-          selectedImageIndex={selectedImageIndex}
-        />
-      )}
+      {complete &&
+        (!visit ? (
+          <UserFinishModal
+            setKeyboardVisible={setKeyboardVisible}
+            myName={myName}
+            receiverName={receiverName}
+            deliverDay={deliverDay}
+            title={title}
+            croppedImage={croppedImage}
+            backgroundImage={backgroundImage}
+            selectfont={selectfont}
+            setIsModalOpen={setComplete}
+            selectedImageIndex={selectedImageIndex}
+          />
+        ) : (
+          <CompleteModal
+            setKeyboardVisible={setKeyboardVisible}
+            myName={myName}
+            receiverName={receiverName}
+            deliverDay={deliverDay}
+            title={title}
+            croppedImage={croppedImage}
+            backgroundImage={backgroundImage}
+            selectfont={selectfont}
+            setIsModalOpen={setComplete}
+            selectedImageIndex={selectedImageIndex}
+          />
+        ))}
     </BackGround>
   );
 }
