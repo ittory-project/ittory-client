@@ -8,6 +8,7 @@ import ask from "../../public/assets/ask.svg";
 import visit from "../../public/assets/visit.svg";
 import graynavi from "../../public/assets/graynavi.svg";
 import { useNavigate } from "react-router-dom";
+import { getLetterCounts, getMyPage } from "../api/service/MemberService";
 
 interface Props {
   onClose: () => void;
@@ -20,11 +21,6 @@ export interface GroupItem {
 }
 
 export const Menu = ({ onClose }: Props) => {
-  const User: GroupItem = {
-    id: 1,
-    profileImage: "../../../public/img/profileimage.svg",
-    name: "카리나",
-  };
   const navigate = useNavigate();
   const [user, setUser] = useState<boolean>(true);
   //user여부 (로그인 여부)
@@ -35,6 +31,37 @@ export const Menu = ({ onClose }: Props) => {
     focusCreate: boolean;
     focusReceive: boolean;
   } | null>(null);
+  const [partiLetter, setPartiLetter] = useState<Number>(0);
+  const [receiveLetter, setReceiveLetter] = useState<Number>(0);
+  const [profileImage, setProfileImage] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+
+  useEffect(() => {
+    const fetchLetterCounts = async () => {
+      try {
+        const counts = await getLetterCounts();
+        setPartiLetter(counts.participationLetterCount);
+        setReceiveLetter(counts.receiveLetterCount);
+        console.log("Letter Counts:", counts);
+      } catch (err) {
+        console.error("Error fetching letter counts:", err);
+      }
+    };
+
+    const fetchMyPageData = async () => {
+      try {
+        const myPageData = await getMyPage();
+        setProfileImage(myPageData.profileImage);
+        setUserName(myPageData.name);
+        console.log("My Page Data:", myPageData);
+      } catch (err) {
+        console.error("Error fetching my page data:", err);
+      }
+    };
+
+    fetchLetterCounts();
+    fetchMyPageData();
+  }, []);
 
   const navigateToAccount = () => {
     navigate("/Account");
@@ -90,8 +117,8 @@ export const Menu = ({ onClose }: Props) => {
       <Profile>
         <ImageContainer>
           {/* 로그인 전, 프로필 사진 없을 시 기본 캐릭터 */}
-          {User.profileImage !== "" && user === true ? (
-            <ProfileImage src={User.profileImage} alt="Profile" />
+          {profileImage !== "" ? (
+            <ProfileImage src={profileImage} alt="Profile" />
           ) : (
             <DefaultImage />
           )}
@@ -105,7 +132,7 @@ export const Menu = ({ onClose }: Props) => {
           </>
         ) : (
           <UserSet>
-            <UserName>{User.name}</UserName>
+            <UserName>{userName}</UserName>
             <UserSetting onClick={navigateToAccount}>
               계정 관리
               <img
@@ -131,7 +158,9 @@ export const Menu = ({ onClose }: Props) => {
           {user === false ? (
             <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
           ) : (
-            <LetterNum>2개</LetterNum>
+            <LetterNum>
+              <>{partiLetter}개</>
+            </LetterNum>
           )}
         </CreatedLetter>
         <svg
@@ -152,7 +181,9 @@ export const Menu = ({ onClose }: Props) => {
           {user === false ? (
             <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
           ) : (
-            <LetterNum>2개</LetterNum>
+            <LetterNum>
+              <>{receiveLetter}개</>
+            </LetterNum>
           )}
         </ReceivedLetter>
       </LetterContainer>
