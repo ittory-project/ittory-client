@@ -7,8 +7,11 @@ import { useNavigate } from "react-router-dom";
 import shadow from "../../../../public/assets/shadow2.svg";
 import { CoverType } from "../../../api/model/CoverType";
 import { getCoverTypes } from "../../../api/service/CoverService";
+import { LetterRequestBody } from "../../../api/model/LetterModel";
+import { postLetter } from "../../../api/service/LetterService";
 
 interface Props {
+  myName: string;
   title: string;
   selectedImageIndex: number;
   receiverName: string;
@@ -22,6 +25,7 @@ interface Props {
 
 export default function CompleteModal({
   title,
+  myName,
   receiverName,
   deliverDay,
   croppedImage,
@@ -33,7 +37,6 @@ export default function CompleteModal({
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [bookimage, setBookimage] = useState<number>(backgroundImage);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
@@ -69,26 +72,51 @@ export default function CompleteModal({
     };
   }, [modalBackground]);
 
-  const navigateToInvite = () => {
+  const fontFamilyToId: { [key: string]: number } = {
+    GmarketSans: 1,
+    "Ownglyph_UNZ-Rg": 2,
+    "CookieRun-Regular": 3,
+    "Cafe24ClassicType-Regular": 4,
+  };
+
+  const navigateToInvite = async () => {
     setGuideOpen(true);
-    navigate("/Invite", {
-      state: {
-        guideOpen: guideOpen,
-        receiverName: receiverName,
-        title: title,
-        croppedImage: croppedImage,
-        backgroundImage: backgroundImage,
-        deliverDay: deliverDay,
-        selectfont: selectfont,
-        selectedImageIndex: selectedImageIndex,
-      },
-    });
+
+    const requestBody: LetterRequestBody = {
+      coverTypeId: selectedImageIndex + 1,
+      fontId: fontFamilyToId[selectfont],
+      receiverName: receiverName,
+      deliveryDate: deliverDay?.toISOString() || "",
+      title: title,
+      coverPhotoUrl: croppedImage,
+    };
+    console.log(requestBody);
+
+    try {
+      const response = await postLetter(requestBody);
+      console.log("Response:", response);
+
+      navigate("/Invite", {
+        state: {
+          guideOpen: guideOpen,
+          receiverName: receiverName,
+          title: title,
+          croppedImage: croppedImage,
+          backgroundImage: backgroundImage,
+          deliverDay: deliverDay,
+          selectfont: selectfont,
+          selectedImageIndex: selectedImageIndex,
+        },
+      });
+    } catch (error) {
+      console.error("Error posting letter:", error);
+    }
   };
 
   return (
     <ModalContainer ref={modalBackground}>
       <Header>
-        <Title>카리나님,</Title>
+        <Title>{myName}님,</Title>
         <Title>편지가 만들어졌어요!</Title>
       </Header>
       <MainContainer>

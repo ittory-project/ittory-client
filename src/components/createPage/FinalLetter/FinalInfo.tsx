@@ -219,6 +219,7 @@ export default function FinalInfo({
       {complete && (
         <CompleteModal
           setKeyboardVisible={setKeyboardVisible}
+          myName={myName}
           receiverName={receiverName}
           deliverDay={deliverDay}
           title={title}

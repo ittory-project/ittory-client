@@ -4,6 +4,7 @@ import prev from "../../../public/assets/prev.svg";
 import bell from "../../../public/assets/bell.svg";
 import check from "../../../public/assets/check.svg";
 import { DeleteReason } from "./DeleteReason";
+import { getMyPage } from "../../api/service/MemberService";
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,6 +12,19 @@ interface Props {
 
 export const AccountDelete = ({ setViewDelete }: Props) => {
   const [viewReason, setViewReason] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const myPageData = await getMyPage();
+        setName(myPageData.name);
+      } catch (err) {
+        console.error("Error fetching my page data:", err);
+      }
+    };
+    fetchMyPageData();
+  }, []);
 
   const handleDelete = () => {
     setViewDelete(false);
@@ -30,7 +44,7 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
           </Header>
           <Container>
             <Bell src={bell} />
-            <Title>카리나님,</Title>
+            <Title>{name}님,</Title>
             <Title>탈퇴하기시 전에 확인해 주세요</Title>
             <Contents>
               <TxtList>
