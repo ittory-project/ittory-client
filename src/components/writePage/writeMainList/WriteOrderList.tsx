@@ -3,6 +3,7 @@ import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderActivateItem } from './WriteOrderActivateItem';
 import styled from 'styled-components';
 import { LetterItem } from '../../../api/model/WsModel';
+import { WriteOrderFinalItem } from './WriteOrderFinalItem';
 
 interface ListComponentProps {
   letterItems: LetterItem[]
@@ -49,6 +50,7 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowI
             </div>
           );
         })}
+        <WriteOrderFinalItem />
       </ListItem>
     </Wrapper>
   );
