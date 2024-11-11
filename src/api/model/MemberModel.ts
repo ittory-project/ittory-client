@@ -41,7 +41,7 @@ export interface ParticipationGetResponse {
 }
 
 export interface Letter {
-  // 아직 내부 모르는 상태(임의 설정)
+  // 임의 설정
   id: number;
   title: string;
 }
