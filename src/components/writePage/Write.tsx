@@ -184,10 +184,11 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const setLockedWriteItems = () => {
     console.log("잠금 리스트 설정할 때 잘 들어가 있나요", writeOrderList)
     console.log("지금 리스트가 뭔데: ", nowSequence)
+    const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
     const nowItem: LetterItem = {
       elementId: `${nowLetterId}`,
-      imageUrl: writeOrderList[nowSequence].imageUrl || "",
-      nickname: writeOrderList[nowSequence].nickname || `유저 ${writeOrderList[nowMemberId].sequence}`,
+      imageUrl: writeOrderList[currentIndex].imageUrl || "",
+      nickname: writeOrderList[currentIndex].nickname || `유저 ${writeOrderList[currentIndex].sequence}`,
       elementSequence: 1,
       writeSequence: 1,
     };
