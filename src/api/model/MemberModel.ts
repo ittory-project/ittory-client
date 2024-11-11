@@ -45,3 +45,8 @@ export interface Letter {
   id: number;
   title: string;
 }
+
+//재방문 유저 확인
+export interface VisitGetResponse {
+  isVisited: boolean;
+}

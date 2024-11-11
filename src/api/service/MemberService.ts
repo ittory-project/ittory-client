@@ -6,6 +6,7 @@ import {
   WithdrawPostRequest,
   ReceivedGetResponse,
   ParticipationGetResponse,
+  VisitGetResponse,
 } from "../model/MemberModel";
 
 export async function getLetterCounts(): Promise<LetterCountsGetResponse> {
@@ -58,4 +59,12 @@ export async function getParticipatedLetter(
     }
   );
   return response.data;
+}
+
+//재방문 유저 확인
+export async function getVisitUser(): Promise<VisitGetResponse> {
+  const response: ApiResponse<VisitGetResponse> = await api.get(
+    "https://dev-server.ittory.co.kr/api/member/visit"
+  );
+  return response.data.data;
 }
