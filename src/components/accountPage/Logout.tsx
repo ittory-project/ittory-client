@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { postLogout } from "../../api/service/AuthService";
 
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
@@ -8,6 +9,15 @@ interface Props {
 export const Logout = ({ setPopup }: Props) => {
   const handleDelete = () => {
     setPopup(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const logoutResponse = await postLogout();
+      console.log("Logout successful:", logoutResponse);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -27,6 +37,7 @@ export const Logout = ({ setPopup }: Props) => {
             style={{
               background: "#FFA256",
             }}
+            onClick={handleLogout}
           >
             <ButtonTxt style={{ color: "#fff" }}>로그아웃</ButtonTxt>
           </Button>

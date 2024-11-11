@@ -6,6 +6,7 @@ import BottomSheet from "./BotttomSheet";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
+import { getMyPage } from "../../../api/service/MemberService";
 
 interface Props {
   myName: string;
@@ -30,9 +31,20 @@ export default function LetterInfo({
 }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const keyboardRef = useRef<HTMLElement | null>(null);
+  const keyboardRef = useRef<HTMLInputElement | null>(null);
+  const [name, setName] = useState<string>("");
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const myPageData = await getMyPage();
+        setName(myPageData.name);
+      } catch (err) {
+        console.error("Error fetching my page data:", err);
+      }
+    };
+    fetchMyPageData();
+  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -92,7 +104,7 @@ export default function LetterInfo({
       <Container>
         {!keyboardVisible && (
           <Title>
-            <Text>카리나님,</Text>
+            <Text>{name}님,</Text>
             <Text>같이 편지를 만들어봐요!</Text>
           </Title>
         )}
@@ -111,10 +123,10 @@ export default function LetterInfo({
                 }
                 setReceiverName(e.target.value);
               }}
-              minlength="1"
-              maxlength="12"
+              min-Length="1"
+              max-Length="12"
               onFocus={handleFocus}
-              spellcheck="false"
+              spellCheck="false"
               //onBlur={handleBlur}
             />
           </InputBox>
@@ -133,10 +145,10 @@ export default function LetterInfo({
                 }
                 setMyName(e.target.value);
               }}
-              minlength="1"
-              maxlength="5"
+              min-Length="1"
+              max-Length="5"
               onFocus={handleFocus}
-              spellcheck="false"
+              spellCheck="false"
               //onBlur={handleBlur}
             />
           </InputBox>
