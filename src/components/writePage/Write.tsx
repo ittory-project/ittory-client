@@ -213,7 +213,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       elementId: `${nowLetterId + index + 1}`
     }));
     
-    if (tempItemNum <= 0) {
+    if (tempItemNum < 0) {
       setLockedItems([]);
     } else {
       setLockedItems([nowItem, ...tempItems]);
