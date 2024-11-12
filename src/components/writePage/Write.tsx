@@ -17,6 +17,7 @@ import { WriteOrderList } from './writeMainList/WriteOrderList';
 import { WriteOrderTitle } from './WriteOrderTitle';
 import { WriteLocation } from './WriteLocation';
 import { WriteElement } from './writeElement/WriteElement';
+import { WriteOrderAlert } from './WriteOrderAlert';
 
 interface WriteElementProps {
   progressTime: number;
@@ -41,7 +42,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const orderData = useSelector(selectParsedOrderData);
   const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>(orderData)
   // 현재 유저의 멤버 아이디
-  const [nowMemberId, setNowMemberId] = useState(4);
+  const [nowMemberId, setNowMemberId] = useState(0);
+  // 다음 유저의 멤버 아이디 (상단바 설정용)
+  const [nextMemberId, setNextMemberId] = useState(0)
   // 현재 작성해야 하는 편지 아이디
   const storedNowLetterId = window.localStorage.getItem('nowLetterId')
   const [nowLetterId, setNowLetterId] = useState(Number(storedNowLetterId || 1));
@@ -149,6 +152,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       // 상태 업데이트
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
+      setNextMemberId(writeOrderList[(nextIndex+1) % partiNum].memberId);
       setNowLetterId(prevNowLetterId => prevNowLetterId + 1);
 
       if (currentIndex >= writeOrderList.length - 1) {
@@ -160,6 +164,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
   useEffect(() => {
     console.log(`현재 반복 상태: ${nowRepeat}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`)
+    console.log(`다음 멤버 아이디: ${nextMemberId}, 나: ${nowMemberId}`)
   }, [nowSequence, nowMemberId, nowLetterId, nowRepeat])
 
   // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
@@ -188,6 +193,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
       if (writeOrderList) {
         setNowMemberId(writeOrderList[0].memberId);
+        setNextMemberId(writeOrderList[1 % partiNum].memberId)
         setNowSequence(writeOrderList[0].sequence);
       }
     };
@@ -208,7 +214,6 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       writeSequence: 1,
     };
     console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
-    // const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence)
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: `${nowLetterId + index + 1}`
     }));
@@ -252,14 +257,19 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     setShowSubmitPage(true)
   };
 
+  // 데이터 삭제버튼
+  // <button onClick={handleClearData}>삭삭제</button>
   return writeOrderList ? 
     (
       <Container>
         <StickyHeader>
           <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
         </StickyHeader>
+        <AlertContainer>
+          { nowMemberId === nextMemberId && <WriteOrderAlert text="다음 순서" /> }
+          { true && <WriteOrderAlert text="님이 퇴장했습니다." /> }
+        </AlertContainer>
         <ScrollableOrderList>
-          <button onClick={handleClearData}>삭삭제</button>
           <WriteOrderList letterItems={[...letterItems, ...lockedItems]} nowItemId={nowItemId} progressTime={progressTime}/>
         </ScrollableOrderList>
         { nowMemberId === Number(getUserId()) ? 
@@ -293,6 +303,17 @@ const StickyHeader = styled.div`
   position: sticky;
   top: 10px;
   z-index: 3;
+`;
+
+const AlertContainer = styled.div`
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 3;
+  padding: 0px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const ScrollableOrderList = styled.div`
