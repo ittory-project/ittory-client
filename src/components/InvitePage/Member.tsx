@@ -16,6 +16,8 @@ import { Exit } from "./Exit";
 import notice from "../../../public/assets/notice.svg";
 import bright from "../../../public/assets/border.svg";
 import shadow from "../../../public/assets/shadow2.svg";
+import { getMyPage } from "../../api/service/MemberService";
+import { enterLetterWs } from "../../api/service/WsService";
 
 export interface GroupItem {
   id: number;
@@ -57,6 +59,8 @@ export const Member = ({
   const [currentitems, setCurrentItems] = useState<GroupItem[]>(items);
   const [previousItems, setPreviousItems] = useState<GroupItem[]>(items);
   const namesString = items.map((item) => item.name).join(", ");
+  const [memberId, setMemberId] = useState<number>(0);
+  const [name, setName] = useState<string>("");
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -64,7 +68,22 @@ export const Member = ({
     } else {
       setSliceName(receiverName);
     }
-  }, [receiverName]);
+  }, []);
+
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const myData = await getMyPage();
+        setMemberId(myData.memberId);
+        setName(myData.name);
+      } catch (err) {
+        console.error("Error fetching my data:", err);
+      }
+    };
+    fetchMyPageData();
+
+    enterLetterWs(memberId, name);
+  }, []);
 
   const handleUserName = (name: string) => {
     return name.slice(0, 3);
