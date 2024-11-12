@@ -31,7 +31,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
       // clientRef를 통해 client 객체에 접근
       clientRef.current?.publish({
         destination: `/ws/letter/${letterNumId}/elements`,
-        body: JSON.stringify({ sequence: sequence - 1, content: text }),
+        body: JSON.stringify({ sequence: sequence, content: text }),
       });
       console.log(`sequence: ${sequence}, letterNum: ${letterNumId}`)
     } catch (e) {

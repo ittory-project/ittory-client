@@ -36,7 +36,7 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowI
         {letterItems.map((item, index) => {
           return (
             <div key={item.elementId} ref={(el) => (itemRefs.current[index] = el)}>
-              { item.imageUrl && item.nickname ? (
+              { item.nickname ? (
                 <WriteOrderActivateItem
                   key={item.elementId}
                   profileImageUrl={item.imageUrl}
