@@ -16,6 +16,8 @@ import { Count } from "./Count/Count";
 import { Exit } from "./Exit";
 import bright from "../../../public/assets/border.svg";
 import shadow from "../../../public/assets/shadow2.svg";
+import { getMyPage } from "../../api/service/MemberService";
+import { enterLetterWs } from "../../api/service/WsService";
 
 export interface GroupItem {
   id: number;
@@ -56,6 +58,8 @@ export const HostUser = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.name).join(", ");
+  const [memberId, setMemberId] = useState<number>(0);
+  const [name, setName] = useState<string>("");
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -63,6 +67,21 @@ export const HostUser = ({
     } else {
       setSliceName(receiverName);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const myData = await getMyPage();
+        setMemberId(myData.memberId);
+        setName(myData.name);
+      } catch (err) {
+        console.error("Error fetching my data:", err);
+      }
+    };
+    fetchMyPageData();
+
+    enterLetterWs(memberId, name);
   }, []);
 
   const handleUserName = (name: string) => {
@@ -555,6 +574,7 @@ const ProfileImg = styled.div<{ img: string }>`
   background-position: center;
   margin-bottom: 6px;
 `;
+/*
 const UserName = styled.div<{ isLongName: boolean }>`
   overflow: hidden;
   color: #000;
@@ -570,9 +590,27 @@ const UserName = styled.div<{ isLongName: boolean }>`
   overflow: hidden;
   //text-overflow: ${(props) => (props.isLongName ? "ellipsis" : "clip")};
   &:first-of-type {
+    margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 
+  }
+`;*/
+const UserName = styled.div`
+  overflow: hidden;
+  color: #000;
+  text-align: center;
+  text-overflow: ellipsis;
+  font-family: SUIT;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  &:first-of-type {
     margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
   }
 `;
+
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
