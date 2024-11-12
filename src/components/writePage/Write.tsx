@@ -51,6 +51,12 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   // 현재 반복 횟수
   const storedNowRepeat = window.localStorage.getItem('nowRepeat')
   const [nowRepeat, setNowRepeat] = useState(Number(storedNowRepeat || 1));
+  // 전체 편지 아이템 횟수
+  const storedTotalItem = window.localStorage.getItem('totalItem')
+  const [totalItem, setTotalItem] = useState(Number(storedTotalItem || 1));
+  // 현재 예정 편지 아이템 횟수
+  const storedNowTotalItem = window.localStorage.getItem('nowTotalItem')
+  const [nowTotalItem, setNowTotalItem] = useState(Number(storedNowTotalItem || 1));
   // 총 참여자 수
   const [partiNum, setPartiNum] = useState(-1)
   // 총 반복 횟수
@@ -77,6 +83,12 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   useEffect(() => {
     window.localStorage.setItem('nowRepeat', String(nowRepeat))
   }, [nowRepeat])
+  useEffect(() => {
+    window.localStorage.setItem('totalItem', "6")
+  }, [totalItem])
+  useEffect(() => {
+    window.localStorage.setItem('nowTotalItem', String(nowTotalItem))
+  }, [nowTotalItem])
   
   // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
   useEffect (() => {
@@ -155,7 +167,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
     setPartiNum(response.participants.length);
     dispatch(setOrderData(response.participants))
-    
+    // 계산 로직: 수정해야
+    console.log(`현재 작성 숫자: ${nowLetterId}, 현재 총 아이템 수: ${nowLetterId + (partiNum - nowSequence) + totalItem - nowLetterId - (totalItem - nowLetterId) % partiNum}`)
+    setNowTotalItem(nowLetterId + (partiNum - nowSequence) + totalItem - nowLetterId - (totalItem - nowLetterId) % partiNum)
     // writeOrderList가 업데이트 된 후에 locked items 세팅
     setLockedWriteItems();
   };
@@ -183,7 +197,8 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   const setLockedWriteItems = () => {
     console.log("잠금 리스트 설정할 때 잘 들어가 있나요", writeOrderList)
-    console.log("지금 리스트가 뭔데: ", nowSequence)
+    const tempItemNum = nowTotalItem - nowLetterId
+    
     const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
     const nowItem: LetterItem = {
       elementId: `${nowLetterId}`,
@@ -193,11 +208,16 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       writeSequence: 1,
     };
     console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
-    const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence)
+    // const tempItemNum = (repeatNum - nowRepeat) * partiNum + (partiNum - nowSequence)
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: `${nowLetterId + index + 1}`
     }));
-    setLockedItems([nowItem, ...tempItems]);
+    
+    if (tempItemNum <= 0) {
+      setLockedItems([]);
+    } else {
+      setLockedItems([nowItem, ...tempItems]);
+    }
   };
   useEffect(() => {
     const setRepeatNum = async () => {
