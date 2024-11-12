@@ -17,9 +17,9 @@ export const WriteOrderAlert: React.FC<WriteOrderAlertProps> = ({ text }) => {
 const Container = styled.div`
   display: inline-flex; /* Changed from flex to inline-flex */
   align-items: center;
-  height: 36px;
+  height: 33px;
   padding: 8px 20px;
-  margin: 10px auto;
+  margin: 8px auto 0px;
   gap: 8px; /* Increased gap for better spacing */
   border-radius: var(--Border-Radius-radius_100, 4px);
   background: var(--Color-secondary-blue, #4DB4FF);
