@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { getUserId } from '../../../api/config/setToken';
 
 interface WriteOrderProps {
-  profileImageUrl: string;
+  profileImageUrl: string | undefined;
   name: string;
   title?: string;
   time?: number;
