@@ -42,6 +42,7 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowI
                   profileImageUrl={item.imageUrl}
                   name={item.nickname}
                   title={item.content || ''}
+                  itemId={index+1}
                   time={progressTime}
                 />
               ) : (

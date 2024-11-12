@@ -6,11 +6,12 @@ interface WriteOrderProps {
   profileImageUrl: string | undefined;
   name: string;
   title?: string;
+  itemId: number;
   time?: number;
 }
 
 // 현재 순서이거나(myTurn/othersTurn), 지나간 순서(completed) 상태 아이템
-export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImageUrl, name, title, time }) => {
+export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImageUrl, name, title, itemId, time }) => {
   // [TODO]: 이 아이템의 유저 아이디와 내 아이디가 일치하는지 확인할 수 있게 하기 - 이걸 그냥 상위에서 끝내버리면 더 편할 것 같다..?
   const [letterStatus, setLetterStatus] = useState<'completed' | 'myTurn' | 'othersTurn'>('othersTurn')
   const userId = getUserId()
@@ -35,7 +36,10 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ profileImage
         { title && (
           <>
             <MainText>{title}</MainText>
-            <SubText>{name}</SubText>
+            <SubText>
+              <LetterNum>{itemId}</LetterNum>
+              {name}
+            </SubText>
           </>
         )}
         { !title && Number(getUserId()) !== 4 && (
@@ -89,8 +93,22 @@ const MainTextWriting = styled(MainText)`
 `;
 
 const SubText = styled.div`
+  display: flex;
   font-size: 14px;
   color: #868e96;
+`;
+
+const LetterNum = styled.div`
+  display: flex;
+  width: 16px;
+  height: 16px;
+  padding: 1.6px 1.6px;
+  margin: 0px 3px 0px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: var(--Border-Radius-radius_300, 8px);
+  border-radius: 40px;
+  background: var(--Color-grayscale-gray800, #343A40);
 `;
 
 const ClockIcon = styled.img`
