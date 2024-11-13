@@ -25,3 +25,13 @@ export interface LetterPostResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+//유저 조회
+export interface Participants {
+  sequence: number;
+  memberId: number;
+  nickname: string;
+  imageUrl: string;
+}
+
+export type ParticipantsGetResponse = Participants[];

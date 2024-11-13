@@ -9,6 +9,10 @@ import { DeletePopup } from "./DeletePopup";
 import { Received_Modal } from "./Received_Modal";
 import { EmptyLetter } from "./EmptyLetter";
 import { Letter } from "./Letter";
+import {
+  getReceivedLetter,
+  getLetterCounts,
+} from "../../api/service/MemberService";
 
 export interface GroupItem {
   id: number;
@@ -45,6 +49,22 @@ export const ReceivedLetter = ({
   const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const [deleteTitle, setDeleteTitle] = useState<string>("");
+  const [letterCounts, setLetterCounts] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchLetter = async () => {
+      try {
+        const letters = await getReceivedLetter();
+        const counts = await getLetterCounts();
+        setLetterCounts(counts.receiveLetterCount);
+        console.log(letters);
+      } catch (err) {
+        console.error("Error fetching letter counts:", err);
+      }
+    };
+
+    fetchLetter();
+  }, []);
 
   const getBackgroundColor = (bookcover: string) => {
     switch (bookcover) {
@@ -112,7 +132,7 @@ export const ReceivedLetter = ({
                   총
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: "700" }}>
-                  {items.length}
+                  {letterCounts}
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: "400" }}>개</NumberTxt>
               </NumberHeader>

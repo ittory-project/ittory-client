@@ -9,6 +9,10 @@ import { Created_Modal } from "./Created_Modal";
 import { DeletePopup } from "./DeletePopup";
 import { EmptyLetter } from "./EmptyLetter";
 import { Letter } from "./Letter";
+import {
+  getParticipatedLetter,
+  getLetterCounts,
+} from "../../api/service/MemberService";
 
 export interface GroupItem {
   id: number;
@@ -24,8 +28,7 @@ interface Props {
   popup: boolean;
   openLetter: boolean;
 }
-//서버에서 편지 이미지 주는 방식
-//날짜 어떤 방식으로 오는지 몰라서 일단 비워둠
+
 export const CreatedLetter = ({
   setIsModalOpen,
   isModalOpen,
@@ -35,9 +38,9 @@ export const CreatedLetter = ({
   openLetter,
 }: Props) => {
   const [items, setItems] = useState<GroupItem[]>([
-    { id: 1, name: "일이삼사오육칠팔구", bookcover: book1 },
-    { id: 2, name: "일이삼사오육칠팔구", bookcover: book2 },
-    { id: 3, name: "일이삼사오육칠팔구", bookcover: book3 },
+    { id: 16, name: "일이삼사오육칠팔구", bookcover: book1 },
+    { id: 17, name: "일이삼사오육칠팔구", bookcover: book2 },
+    { id: 18, name: "일이삼사오육칠팔구", bookcover: book3 },
     { id: 4, name: "일이삼사오육칠팔구", bookcover: book4 },
     { id: 5, name: "일이삼사오육칠팔구", bookcover: book2 },
   ]);
@@ -45,6 +48,22 @@ export const CreatedLetter = ({
   const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const [deleteName, setDeleteName] = useState<string>("");
+  const [letterCounts, setLetterCounts] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchLetter = async () => {
+      try {
+        const letters = await getParticipatedLetter();
+        const counts = await getLetterCounts();
+        setLetterCounts(counts.participationLetterCount);
+        console.log(letters);
+      } catch (err) {
+        console.error("Error fetching letter counts:", err);
+      }
+    };
+
+    fetchLetter();
+  }, []);
 
   const getBackgroundColor = (bookcover: string) => {
     switch (bookcover) {
@@ -97,7 +116,7 @@ export const CreatedLetter = ({
                   총
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: "700" }}>
-                  {items.length}
+                  {letterCounts}
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: "400" }}>개</NumberTxt>
               </NumberHeader>
