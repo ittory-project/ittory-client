@@ -266,8 +266,8 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
           <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
         </StickyHeader>
         <AlertContainer>
-          { nowMemberId === nextMemberId && <WriteOrderAlert text="다음 순서" /> }
-          { true && <WriteOrderAlert text="님이 퇴장했습니다." /> }
+          { nowMemberId === nextMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} isOrderAlert={true} /> }
+          { true && <WriteOrderAlert name="퇴장닉네임" isOrderAlert={false}/> }
         </AlertContainer>
         <ScrollableOrderList>
           <WriteOrderList letterItems={[...letterItems, ...lockedItems]} nowItemId={nowItemId} progressTime={progressTime}/>
