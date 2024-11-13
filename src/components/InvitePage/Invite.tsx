@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { HostUser } from "./HostUser";
 import { Member } from "./Member";
+import { getParticipants } from "../../api/service/LetterService";
 
 export interface GroupItem {
   id: number;
@@ -62,6 +63,21 @@ export const Invite = () => {
     profileImage: "../../../public/img/profileimage.svg",
     name: "카리나",
   };
+
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const data = await getParticipants(0);
+        console.log(data);
+        //setMemberId(myData.memberId);
+        //setName(myData.name);
+      } catch (err) {
+        console.error("Error fetching my data:", err);
+      }
+    };
+
+    fetchParticipants();
+  }, []);
 
   useEffect(() => {
     // Calculate memberIndex when currentItems changes

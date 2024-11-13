@@ -3,6 +3,7 @@ import {
   LetterStartPartiGetResponse,
   LetterPostResponse,
   LetterRequestBody,
+  ParticipantsGetResponse,
 } from "../model/LetterModel";
 
 // 편지 시작 시 정보 조회 API
@@ -26,4 +27,25 @@ export async function postLetter(
     data
   );
   return response.data;
+}
+
+//유저 조회 api
+export async function getParticipants(
+  letterId: number,
+  order?: string
+): Promise<ParticipantsGetResponse> {
+  const params: Record<string, any> = { letterId };
+
+  if (order) {
+    params.order = order; // `order`가 있으면 추가
+  }
+
+  const response = await api.get<ApiResponse<ParticipantsGetResponse>>(
+    `/api/letter/participant`,
+    {
+      params,
+    }
+  );
+
+  return response.data.data.data;
 }
