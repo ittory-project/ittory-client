@@ -170,7 +170,7 @@ export const Menu = ({ onClose }: Props) => {
           viewBox="0 0 204 2"
           fill="none"
         >
-          <path d="M0 1H204" stroke="#DEE2E6" stroke-dasharray="4 4" />
+          <path d="M0 1H204" stroke="#DEE2E6" strokeDasharray="4 4" />
         </svg>
         <ReceivedLetter onClick={handleReceive}>
           <img

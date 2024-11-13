@@ -33,30 +33,16 @@ export async function postWithdraw(
   return response.data;
 }
 
-export async function getReceivedLetter(
-  memberId: number
-): Promise<ReceivedGetResponse> {
+export async function getReceivedLetter(): Promise<ReceivedGetResponse> {
   const response = await api.get<ReceivedGetResponse>(
-    "https://dev-server.ittory.co.kr/api/member/received",
-    {
-      params: {
-        memberId: memberId,
-      },
-    }
+    "https://dev-server.ittory.co.kr/api/member/received"
   );
   return response.data;
 }
 
-export async function getParticipatedLetter(
-  memberId: number
-): Promise<ParticipationGetResponse> {
+export async function getParticipatedLetter(): Promise<ParticipationGetResponse> {
   const response = await api.get<ReceivedGetResponse>(
-    "https://dev-server.ittory.co.kr/api/member/participations",
-    {
-      params: {
-        memberId: memberId,
-      },
-    }
+    "https://dev-server.ittory.co.kr/api/member/participations"
   );
   return response.data;
 }
