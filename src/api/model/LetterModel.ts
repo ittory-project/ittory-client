@@ -11,6 +11,15 @@ export interface LetterPartiListGetResponse {
   participants: LetterPartiItem[]
 }
 
+// redux에 저장된 편지 아이템
+export interface LetterItem {
+  elementId: number,
+  content?: string,
+  userNickname?: string,
+  userId?: number,
+  letterImg?: string,
+}
+
 // 현재 유저 리스트 아이템
 export interface LetterPartiItem {
   sequence: number,

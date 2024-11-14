@@ -5,10 +5,10 @@ import { Client } from '@stomp/stompjs';
 import styled from 'styled-components';
 
 import { addData, AppDispatch, clearData, clearOrderData, selectParsedData, selectParsedOrderData, setOrderData } from '../../api/config/state';
-import { LetterPartiItem, LetterPartiListGetResponse, LetterStartInfoGetResponse } from '../../api/model/LetterModel';
+import { LetterItem, LetterPartiItem, LetterPartiListGetResponse, LetterStartInfoGetResponse } from '../../api/model/LetterModel';
 import { getLetterPartiList, getLetterStartInfo } from '../../api/service/LetterService';
 import { stompClient } from '../../api/config/stompInterceptor';
-import { LetterItem, WsExitResponse } from '../../api/model/WsModel';
+import { LetterItemResponse, WsExitResponse } from '../../api/model/WsModel';
 import { decodeLetterId } from '../../api/config/base64';
 import { getUserId } from '../../api/config/setToken';
 import Button from '../common/Button';
@@ -105,6 +105,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       updateOrderAndLockedItems();
       setShowSubmitPage(false)
       setUpdateResponse(false)
+      setProgressTime(100)
     }
   }, [orderData, updateResponse])
 
@@ -116,15 +117,23 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     clientRef.current = client;
     client.onConnect = () => {
       client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
-        const response: LetterItem | WsExitResponse = JSON.parse(message.body);
+        const response: LetterItemResponse | WsExitResponse = JSON.parse(message.body);
 
         if ('action' in response && response.action === 'EXIT') {
           fetchParticipantsAndUpdateLockedItems();
         } else if ('elementId' in response) {
-          const letterResponse = response as LetterItem;
+          const letterResponse = response as LetterItemResponse;
           console.log('작성 내용: ', letterResponse)
+          console.log(`왜안되는거? ${writeOrderList[writeOrderList.findIndex(item => item.memberId === nowMemberId)].imageUrl}`)
+          const responseToLetterItem: LetterItem = {
+            elementId: Number(response.elementId),
+            content: response.content,
+            userNickname: response.content,
+            userId: nowMemberId,
+            letterImg: letterResponse.imageUrl,
+          }          
           dispatch(addData(letterResponse));
-          setLetterItems((prevItems) => [...prevItems, letterResponse]);
+          setLetterItems((prevItems) => [...prevItems, responseToLetterItem]);
           // 아래의 두 동작을 useState로 분리함: redux로 불러오는 것에 약간의 딜레이가 발생, useState로 저장하는 데에도 약간의 딜레이가 발생함
           // 해결방법: updateResponse라는 flag를 만들어 현재 업데이트를 해야 하는 상황인지 아닌지 판단 후 useEffect에서 실행
           // updateOrderAndLockedItems();
@@ -207,15 +216,12 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     
     const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
     const nowItem: LetterItem = {
-      elementId: `${nowLetterId}`,
-      imageUrl: writeOrderList[currentIndex].imageUrl || "",
-      nickname: writeOrderList[currentIndex].nickname || `유저 ${writeOrderList[currentIndex].sequence}`,
-      elementSequence: 1,
-      writeSequence: 1,
+      elementId: nowLetterId,
+      userNickname: writeOrderList[currentIndex].nickname || `유저 ${writeOrderList[currentIndex].sequence}`,
     };
     console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
-      elementId: `${nowLetterId + index + 1}`
+      elementId: nowLetterId + index + 1
     }));
     
     if (tempItemNum < 0) {
@@ -238,6 +244,10 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const handleClearData = () => {
     dispatch(clearOrderData())
     dispatch(clearData());
+    window.localStorage.setItem('nowLetterId', "1")
+    window.localStorage.setItem('nowSequence', "1")
+    window.localStorage.setItem('nowRepeat', "1")
+    window.localStorage.setItem('totalItem', "1")
   };
 
   // 위치 버튼 누르면 그 부분으로 이동하는 액션
@@ -266,8 +276,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
           <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
         </StickyHeader>
         <AlertContainer>
-          { nowMemberId === nextMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} isOrderAlert={true} /> }
+          { Number(getUserId()) === nextMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} isOrderAlert={true} /> }
           { true && <WriteOrderAlert name="퇴장닉네임" isOrderAlert={false}/> }
+          <button onClick={handleClearData}>삭삭제</button>
         </AlertContainer>
         <ScrollableOrderList>
           <WriteOrderList letterItems={[...letterItems, ...lockedItems]} nowItemId={nowItemId} progressTime={progressTime}/>

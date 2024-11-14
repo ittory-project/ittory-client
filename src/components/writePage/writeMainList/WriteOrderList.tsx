@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderActivateItem } from './WriteOrderActivateItem';
 import styled from 'styled-components';
-import { LetterItem } from '../../../api/model/WsModel';
 import { WriteOrderFinalItem } from './WriteOrderFinalItem';
+import { LetterItem } from '../../../api/model/LetterModel';
+import { WriteOrderNowItem } from './WriteOrderNowItem';
 
 interface ListComponentProps {
   letterItems: LetterItem[]
@@ -36,18 +37,27 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowI
         {letterItems.map((item, index) => {
           return (
             <div key={item.elementId} ref={(el) => (itemRefs.current[index] = el)}>
-              { item.nickname ? (
+              { (item.userId && item.userNickname && item.letterImg) && 
                 <WriteOrderActivateItem
                   key={item.elementId}
-                  profileImageUrl={item.imageUrl}
-                  name={item.nickname}
-                  title={item.content || ''}
+                  letterImageUrl={item.letterImg}
+                  name={item.userNickname}
+                  content={item.content || ''}
                   itemId={index+1}
+                />
+              }
+              {
+                (item.userId && !item.letterImg) &&
+                <WriteOrderNowItem
+                  key={item.elementId}
+                  profileImageUrl={item.letterImg}
+                  nowUserId={item.userId}
                   time={progressTime}
                 />
-              ) : (
+              }
+              { (!item.userNickname) &&
                 <WriteOrderInactiveItem key={item.elementId} idx={Number(item.elementId)} />
-              )}
+              }
             </div>
           );
         })}
