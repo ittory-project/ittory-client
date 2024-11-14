@@ -5,7 +5,6 @@ export interface WsEnterResponse {
   action: string
 }
 
-// redux에도 그대로 사용함
 export interface LetterItemResponse {
   elementId: string,
   imageUrl: string,

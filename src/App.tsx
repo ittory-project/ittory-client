@@ -14,7 +14,6 @@ import { JoinPage } from "./pages/JoinPage";
 import { ConnectionPage } from "./pages/ConnectionPage";
 import { AccountPage } from "./pages/AccountPage";
 import { LetterBoxPage } from "./pages/LetterBoxPage";
-import { WriteElementPage } from "./pages/write/WriteElementPage";
 import { ShareLetterPage } from "./pages/share/SharePage";
 
 function App() {
@@ -26,9 +25,7 @@ function App() {
         <Route path='/comp' element={<CompTest />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/redirect" element={<LoginRedirectPage />} />
-        <Route path="/write/:letterId" element={<WritePage />} >
-          <Route path="sub/:repeat/:sequence" element={<WriteElementPage />} />
-        </Route>
+        <Route path="/write/:letterId" element={<WritePage />} />
         <Route path="/receive" element={<ReceivePage />} />
         <Route path="/receive/letter" element={<ReceiveLetterPage />} />
         <Route path="/share" element={<ShareLetterPage />} />

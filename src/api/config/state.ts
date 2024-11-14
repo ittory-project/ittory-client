@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, configureStore, createSelector } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
-import { LetterItem } from '../model/WsModel';
-import { LetterPartiItem } from '../model/LetterModel';
+import { LetterItem, LetterPartiItem } from '../model/LetterModel';
 
 // 편지 작성한 내용들
 const jsonSlice = createSlice({
