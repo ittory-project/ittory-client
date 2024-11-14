@@ -6,13 +6,13 @@ export interface WsEnterResponse {
 }
 
 // redux에도 그대로 사용함
-export interface LetterItem {
+export interface LetterItemResponse {
   elementId: string,
-  imageUrl?: string,
-  content?: string,
-  nickname?: string,
-  elementSequence?: number,
-  writeSequence?: number,
+  imageUrl: string,
+  content: string,
+  nickname: string,
+  elementSequence: number,
+  writeSequence: number,
 }
 
 export interface WsExitResponse {
