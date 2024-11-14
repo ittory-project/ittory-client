@@ -66,6 +66,10 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const [repeatNum, setRepeatNum] = useState(-1)
   // 잠금된 아이템
   const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
+  // 퇴장 정보
+  const [exitUser, setExitUser] = useState("");
+  // 퇴장 팝업 띄우기
+  const [hasExitUser, setHasExitUser] = useState(false);
   // 작성 페이지 보여주기
   const [showSubmitPage, setShowSubmitPage] = useState(false);
   // updateResponse flag
@@ -121,6 +125,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
         if ('action' in response && response.action === 'EXIT') {
           fetchParticipantsAndUpdateLockedItems();
+          const exitResponse = response as WsExitResponse;
+          console.log('퇴장 정보: ', exitResponse)
+          setExitUser(exitResponse.nickname);
         } else if ('elementId' in response) {
           const letterResponse = response as LetterItemResponse;
           console.log('작성 내용: ', letterResponse)
@@ -236,6 +243,18 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     setLockedWriteItems(); 
   }, [nowRepeat, partiNum, nowSequence, nowLetterId, nowMemberId]);
 
+  // 퇴장 감지 후 팝업창 띄우기
+  useEffect(() => {
+    if (exitUser.length !== 0) {
+      setHasExitUser(true)
+      const timer = setTimeout(() => {
+        setHasExitUser(false);
+        setExitUser("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [exitUser])
+
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {
     dispatch(clearOrderData())
@@ -273,7 +292,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
         </StickyHeader>
         <AlertContainer>
           { Number(getUserId()) === nextMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} isOrderAlert={true} /> }
-          { true && <WriteOrderAlert name="퇴장닉네임" isOrderAlert={false}/> }
+          { hasExitUser && <WriteOrderAlert name={exitUser} isOrderAlert={false}/> }
           <button onClick={handleClearData}>삭삭제</button>
         </AlertContainer>
         <ScrollableOrderList>
