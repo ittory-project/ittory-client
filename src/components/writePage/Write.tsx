@@ -124,7 +124,6 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
         } else if ('elementId' in response) {
           const letterResponse = response as LetterItemResponse;
           console.log('작성 내용: ', letterResponse)
-          console.log(`왜안되는거? ${writeOrderList[writeOrderList.findIndex(item => item.memberId === nowMemberId)].imageUrl}`)
           const responseToLetterItem: LetterItem = {
             elementId: Number(response.elementId),
             content: response.content,
@@ -153,8 +152,6 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
   // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
   const updateOrderAndLockedItems = async () => {
-    console.log("불러오는 것도 안됨: ", orderData)
-    console.log("유즈이펙트 오류: ", writeOrderList);
     if (writeOrderList) {
       const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
       let nextIndex = (currentIndex + 1) % writeOrderList.length;
@@ -167,7 +164,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       if (currentIndex >= writeOrderList.length - 1) {
         setNowRepeat(prevNowRepeat => prevNowRepeat + 1);
       }
-      console.log("아무튼 상태 업데이트를 완료하긴 함")
+      console.log("여기에 이제 넘어가는 화면 넣어야 함.")
     }
   };
 
@@ -219,7 +216,6 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       elementId: nowLetterId,
       userNickname: writeOrderList[currentIndex].nickname || `유저 ${writeOrderList[currentIndex].sequence}`,
     };
-    console.log(`총 반복해야 하는 횟수: ${repeatNum}, 현재 반복 상태: ${nowRepeat}, 참여자 수: ${partiNum}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}`)
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
       elementId: nowLetterId + index + 1
     }));
@@ -236,7 +232,6 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     }
     setRepeatNum()
     console.log("Redux에서 불러온 값: ", orderData)
-    console.log('writeOrderList가 업데이트 됨:', writeOrderList);
     setLockedWriteItems(); 
   }, [nowRepeat, partiNum, nowSequence, nowLetterId]);
 
