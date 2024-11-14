@@ -127,11 +127,10 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
           const responseToLetterItem: LetterItem = {
             elementId: Number(response.elementId),
             content: response.content,
-            userNickname: response.content,
-            userId: nowMemberId,
-            letterImg: letterResponse.imageUrl,
+            userNickname: response.nickname,
+            letterImg: response.imageUrl,
           }          
-          dispatch(addData(letterResponse));
+          dispatch(addData(responseToLetterItem));
           setLetterItems((prevItems) => [...prevItems, responseToLetterItem]);
           // 아래의 두 동작을 useState로 분리함: redux로 불러오는 것에 약간의 딜레이가 발생, useState로 저장하는 데에도 약간의 딜레이가 발생함
           // 해결방법: updateResponse라는 flag를 만들어 현재 업데이트를 해야 하는 상황인지 아닌지 판단 후 useEffect에서 실행
@@ -212,8 +211,10 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     const tempItemNum = nowTotalItem - nowLetterId
     
     const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
+    console.log("왜 아이템 아이디가 들어가지 않는걸까", nowLetterId)
     const nowItem: LetterItem = {
       elementId: nowLetterId,
+      userId: nowMemberId,
       userNickname: writeOrderList[currentIndex].nickname || `유저 ${writeOrderList[currentIndex].sequence}`,
     };
     const tempItems: LetterItem[] = Array.from({ length: tempItemNum }, (_, index) => ({
@@ -233,7 +234,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     setRepeatNum()
     console.log("Redux에서 불러온 값: ", orderData)
     setLockedWriteItems(); 
-  }, [nowRepeat, partiNum, nowSequence, nowLetterId]);
+  }, [nowRepeat, partiNum, nowSequence, nowLetterId, nowMemberId]);
 
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {

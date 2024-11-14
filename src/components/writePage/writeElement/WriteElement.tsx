@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { decodeLetterId } from "../../../api/config/base64";
 import { Client } from "@stomp/stompjs";
+import { getElementImg } from "../../../api/service/ElementService";
+import { ElementImgGetResponse } from "../../../api/model/ElementModel";
 
 interface WriteElementProps {
   sequence: number;
@@ -15,6 +17,23 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  
+  const [elementImg, setElementImg] = useState("");
+  
+  const getPartiList = async () => {
+    console.log('과연 key 값은 무엇으로 들어갈 것인가?', sequence)
+    if (!letterId) {
+      window.alert("잘못된 접근입니다.")
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.")
+    } else {
+      const response: ElementImgGetResponse = await getElementImg(letterNumId, sequence);
+      setElementImg(response.elementImageUrl)
+    }
+  }
+  useEffect(() => {
+    getPartiList()
+  }, []);
 
   const handleExit= () => {
     setShowSubmitPage(false)
@@ -33,7 +52,6 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
         destination: `/ws/letter/${letterNumId}/elements`,
         body: JSON.stringify({ sequence: sequence, content: text }),
       });
-      console.log(`sequence: ${sequence}, letterNum: ${letterNumId}`)
     } catch (e) {
       console.log(e);
     }
@@ -52,6 +70,10 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
     handleWriteComplete();
   }
 
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = "/img/profile.png";
+  };
+
   return (
     <Container>
       <Content>
@@ -64,7 +86,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
         </Header>
         <WriteContent>
           <PhotoDiv>
-            <ProfileImage src={'/img/profile.png'} alt="Profile" />
+            <LetterImage src={""+elementImg} onError={handleImageError} />
           </PhotoDiv>
           <WriteTa 
             ref={taRef}
@@ -185,10 +207,10 @@ const PhotoDiv = styled.div`
   justify-content: center;
 `;
 
-const ProfileImage = styled.img`
+const LetterImage = styled.img`
   width: 164px;
   height: 164px;
-  border-radius: 20px;
+  border-radius: 10px;
   object-fit: cover;
 `;
 

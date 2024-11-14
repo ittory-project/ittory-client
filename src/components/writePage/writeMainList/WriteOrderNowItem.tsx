@@ -1,21 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getUserId } from '../../../api/config/setToken';
+import { useParams } from 'react-router-dom';
+import { decodeLetterId } from '../../../api/config/base64';
+import { ElementImgGetResponse } from '../../../api/model/ElementModel';
+import { getElementImg } from '../../../api/service/ElementService';
 
 interface WriteOrderProps {
-  profileImageUrl: string | undefined;
+  elementId: number
   nowUserId: number
-  time: number;
+  time: number
 }
 
 // 현재 순서(myTurn/othersTurn) 아이템
-export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({ profileImageUrl, nowUserId, time }) => {
+export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({ elementId, nowUserId, time }) => {
+  const { letterId } = useParams()
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  
   const [letterStatus, setLetterStatus] = useState<'myTurn' | 'othersTurn'>('othersTurn')
   const userId = getUserId() || 0
+  const [elementImg, setElementImg] = useState("");
+  
+  const getPartiList = async () => {
+    if (!letterId) {
+      window.alert("잘못된 접근입니다.")
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.")
+    } else {
+      const response: ElementImgGetResponse = await getElementImg(letterNumId, elementId);
+      setElementImg(response.elementImageUrl)
+    }
+  }
+  useEffect(() => {
+    getPartiList()
+  }, []);
 
   useEffect(() => {
-    console.log(`설정을 하긴 하는거냐? ${userId}, ${nowUserId}`)
-    if (userId === nowUserId) {
+    if (Number(userId) == nowUserId) {
       setLetterStatus('myTurn')
     } else {
       setLetterStatus('othersTurn')
@@ -28,7 +49,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({ profileImageUrl, 
 
   return userId && (
     <Wrapper status={letterStatus}>
-      <ProfileImage src={""+profileImageUrl} onError={handleImageError} />
+      <LetterImage src={""+elementImg} onError={handleImageError} />
       <ContentWrapper>
         { letterStatus === 'myTurn' && (
           <MyTurn>
@@ -63,7 +84,7 @@ const Wrapper = styled.div<{status: 'myTurn' | 'othersTurn'}>`
     ? '1px solid #FCFFAF; border-radius: 5px; background: linear-gradient(160deg, #425166, #1C2231 95%); padding: 20px 10px;' : '')};
 `;
 
-const ProfileImage = styled.img`
+const LetterImage = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 5px;
