@@ -2,16 +2,15 @@ import styled from "styled-components";
 
 interface WriteOrderAlertProps {
   name: string;
-  isOrderAlert: boolean;
+  isNextAlert: boolean;
 }
 
-export const WriteOrderAlert: React.FC<WriteOrderAlertProps> = ({ name, isOrderAlert }) => {
+export const WriteOrderAlert: React.FC<WriteOrderAlertProps> = ({ name, isNextAlert }) => {
   return (
     // 다음 차례는 '카리나' 님이에요
     <Container>
-      { isOrderAlert && `다음 차례는 '${name}' 님이에요`}
-      { !isOrderAlert && `${name}님이 퇴장했습니다.`}
-      { isOrderAlert && <img src="/assets/baton.svg" /> }
+      { isNextAlert ? `다음 차례는 '${name}' 님이에요` : `${name}님 편지를 적어주세요`}
+      <img src="/assets/baton.svg" />
     </Container>
   );
 };

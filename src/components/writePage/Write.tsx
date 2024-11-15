@@ -18,6 +18,7 @@ import { WriteOrderTitle } from './WriteOrderTitle';
 import { WriteLocation } from './WriteLocation';
 import { WriteElement } from './writeElement/WriteElement';
 import { WriteOrderAlert } from './WriteOrderAlert';
+import { WriteQuitAlert } from './WriteQuitAlert';
 
 interface WriteElementProps {
   progressTime: number;
@@ -164,6 +165,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       // 상태 업데이트
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
+      console.log("다음 사람 인덱스: ", (nextIndex+1) % partiNum, "다음 사람 멤버아이디 너 누기야: " , writeOrderList[(nextIndex+1) % partiNum].memberId)
       setNextMemberId(writeOrderList[(nextIndex+1) % partiNum].memberId);
       setNowLetterId(prevNowLetterId => prevNowLetterId + 1);
 
@@ -205,20 +207,19 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
       if (writeOrderList) {
         setNowMemberId(writeOrderList[0].memberId);
+        console.log("다음 사람 인덱스: ", 1 % partiNum, "partinum: ", partiNum, "다음 사람 멤버아이디 너 누기야: " , writeOrderList[1 % partiNum].memberId)
         setNextMemberId(writeOrderList[1 % partiNum].memberId)
         setNowSequence(writeOrderList[0].sequence);
       }
     };
     initialize();
-  }, []);
+    // initialize를 partiNum 세팅 이후에 작동되게 하고 싶은데, 만약 이렇게 하면 partiNum이 바뀌고 나서(특정 유저 퇴장 이후) 작동될 수 있어서 조치 필요
+  }, [partiNum]);
   
   // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
   const setLockedWriteItems = () => {
-    console.log("잠금 리스트 설정할 때 잘 들어가 있나요", writeOrderList)
     const tempItemNum = nowTotalItem - nowLetterId
-    
     const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
-    console.log("왜 아이템 아이디가 들어가지 않는걸까", nowLetterId)
     const nowItem: LetterItem = {
       elementId: nowLetterId,
       userId: nowMemberId,
@@ -239,7 +240,6 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       await fetchRepeatCount()
     }
     setRepeatNum()
-    console.log("Redux에서 불러온 값: ", orderData)
     setLockedWriteItems(); 
   }, [nowRepeat, partiNum, nowSequence, nowLetterId, nowMemberId]);
 
@@ -291,8 +291,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
           <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
         </StickyHeader>
         <AlertContainer>
-          { Number(getUserId()) === nextMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} isOrderAlert={true} /> }
-          { hasExitUser && <WriteOrderAlert name={exitUser} isOrderAlert={false}/> }
+          { Number(getUserId()) === nextMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.memberId === nextMemberId)].nickname} isNextAlert={true} /> }
+          { Number(getUserId()) === nowMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} isNextAlert={false} /> }
+          { hasExitUser && <WriteQuitAlert name={exitUser} /> }
           <button onClick={handleClearData}>삭삭제</button>
         </AlertContainer>
         <ScrollableOrderList>
