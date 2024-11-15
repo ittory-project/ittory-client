@@ -125,9 +125,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
         const response: LetterItemResponse | WsExitResponse = JSON.parse(message.body);
 
         if ('action' in response && response.action === 'EXIT') {
-          fetchParticipantsAndUpdateLockedItems();
           const exitResponse = response as WsExitResponse;
           console.log('퇴장 정보: ', exitResponse)
+          fetchParticipantsAndUpdateLockedItems();
           setExitUser(exitResponse.nickname);
         } else if ('elementId' in response) {
           const letterResponse = response as LetterItemResponse;
@@ -158,6 +158,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   }, [dispatch, letterNumId]);
 
   // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
+  // 편지 아이템이 작성됐을 때
   const updateOrderAndLockedItems = async () => {
     if (writeOrderList) {
       const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
@@ -182,9 +183,11 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   }, [nowSequence, nowMemberId, nowLetterId, nowRepeat])
 
   // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
+  // 유저 퇴장 또는 시작 시
   const fetchParticipantsAndUpdateLockedItems = async () => {
     const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
     setPartiNum(response.participants.length);
+    setNowSequence(prevNowLetterId => prevNowLetterId % response.participants.length)
     dispatch(setOrderData(response.participants))
     // 계산 로직: 수정해야
     console.log(`현재 작성 숫자: ${nowLetterId}, 현재 총 아이템 수: ${nowLetterId + (partiNum - nowSequence) + totalItem - nowLetterId - (totalItem - nowLetterId) % partiNum}`)
@@ -220,6 +223,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const setLockedWriteItems = () => {
     const tempItemNum = nowTotalItem - nowLetterId
     const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
+    // 퇴장할 때 writeOrderList의 currentIndex가 잡히지 않는 문제. 아마도 currentIndex가 제대로 반영되지 않은 채로 잠금 화면들이 만들어지려고 했던듯
     const nowItem: LetterItem = {
       elementId: nowLetterId,
       userId: nowMemberId,
