@@ -4,7 +4,7 @@ import more from "../../../public/assets/more_white.svg";
 import x from "../../../public/assets/x_white.svg";
 import { Created_Modal } from "./Created_Modal";
 import { Received_Modal } from "./Received_Modal";
-import { DeletePopup } from "./DeletePopup";
+import { DeletePopup } from "./Delete_letterbox";
 import { ReceiveLetter } from "../receivePage/ReceiveLetter";
 
 interface Props {

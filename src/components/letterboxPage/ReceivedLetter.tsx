@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import more from "../../../public/assets/more.svg";
-import { DeletePopup } from "./DeletePopup";
+import { Delete_letter } from "./Delete_letter";
 import { Received_Modal } from "./Received_Modal";
 import { EmptyLetter } from "./EmptyLetter";
 import { Letter } from "./Letter";
@@ -42,7 +42,7 @@ export const ReceivedLetter = ({
 }: Props) => {
   const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
   const [deleteTitle, setDeleteTitle] = useState<string>("");
-  const [deleteId, setDeleteId] = useState<number>(-1);
+  const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<Letter[]>([]);
 
@@ -78,11 +78,11 @@ export const ReceivedLetter = ({
   };
 
   const openModal = (itemId: number) => {
-    setDeleteId(itemId);
+    setSelectId(itemId);
     setIsModalOpen(true);
   };
   const handleLetter = (itemId: number) => {
-    setDeleteId(itemId);
+    setSelectId(itemId);
     setOpenLetter(true);
   };
 
@@ -157,14 +157,14 @@ export const ReceivedLetter = ({
             </Container>
           )}
           {popup && (
-            <DeletePopup
+            <Delete_letter
               setOpenLetter={setOpenLetter}
               setPopup={setPopup}
               onDelete={handleDelete}
               setIsModalOpen={setIsModalOpen}
               context="received"
               deleteItem={deleteTitle}
-              letterId={deleteId}
+              letterId={selectId}
             />
           )}
           {openLetter && (
@@ -177,6 +177,7 @@ export const ReceivedLetter = ({
               onDelete={handleDelete}
               deleteItem={deleteTitle}
               setIsModalOpen={setIsModalOpen}
+              letterId={selectId}
             />
           )}
         </>

@@ -4,6 +4,7 @@ import {
   LetterPostResponse,
   LetterRequestBody,
   ParticipantsGetResponse,
+  LetterDeleteResponse,
 } from "../model/LetterModel";
 
 // 편지 시작 시 정보 조회 API
@@ -49,4 +50,15 @@ export async function getParticipants(
   });
 
   return response.data.data.participants;
+}
+
+//편지삭제 api
+export async function deleteLetterLetter(
+  letterId: number
+): Promise<LetterDeleteResponse> {
+  const response = await api.delete(
+    `https://dev-server.ittory.co.kr/api/letter/${letterId}`
+  );
+
+  return response.data;
 }
