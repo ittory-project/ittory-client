@@ -34,18 +34,19 @@ export async function getParticipants(
   letterId: number,
   order?: string
 ): Promise<ParticipantsGetResponse> {
-  const params: Record<string, any> = { letterId };
+  const params: Record<string, any> = {};
 
   if (order) {
     params.order = order; // `order`가 있으면 추가
   }
 
-  const response = await api.get<ApiResponse<ParticipantsGetResponse>>(
-    `/api/letter/participant`,
-    {
-      params,
-    }
-  );
+  const response = await api.get<{
+    data: {
+      participants: ParticipantsGetResponse;
+    };
+  }>(`https://dev-server.ittory.co.kr/api/letter/participant/${letterId}`, {
+    params,
+  });
 
-  return response.data.data.data;
+  return response.data.data.participants;
 }

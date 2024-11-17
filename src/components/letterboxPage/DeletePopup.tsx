@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { deleteLetterboxLetter } from "../../api/service/MemberService";
 
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
@@ -8,6 +9,7 @@ interface Props {
   onDelete: () => void;
   context: string;
   deleteItem: string;
+  letterId: number;
 }
 
 export const DeletePopup = ({
@@ -17,6 +19,7 @@ export const DeletePopup = ({
   context,
   deleteItem,
   setOpenLetter,
+  letterId,
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
 
@@ -27,11 +30,17 @@ export const DeletePopup = ({
   const cancelDelete = () => {
     setPopup(false);
   };
-  const handleDelete = () => {
-    onDelete();
-    setPopup(false);
-    setIsModalOpen(false);
-    setOpenLetter(false);
+  const handleDelete = async () => {
+    try {
+      const deleteData = await deleteLetterboxLetter(letterId);
+      onDelete();
+      setPopup(false);
+      setIsModalOpen(false);
+      setOpenLetter(false);
+      console.log(deleteData);
+    } catch (error) {
+      console.error("Failed to delete letter:", error);
+    }
   };
 
   return (

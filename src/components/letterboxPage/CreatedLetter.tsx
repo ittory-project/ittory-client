@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import more from "../../../public/assets/more.svg";
-import book1 from "../../../public/assets/book_mini_yellow.svg";
-import book2 from "../../../public/assets/book_mini_green.svg";
-import book3 from "../../../public/assets/book_mini_blue.svg";
-import book4 from "../../../public/assets/book_mini_pink.svg";
 import { Created_Modal } from "./Created_Modal";
 import { DeletePopup } from "./DeletePopup";
 import { EmptyLetter } from "./EmptyLetter";
@@ -14,10 +10,15 @@ import {
   getLetterCounts,
 } from "../../api/service/MemberService";
 
-export interface GroupItem {
-  id: number;
-  name: string;
-  bookcover: string;
+export interface Letter {
+  letterId: number;
+  receiverName: string;
+  coverTypeImage: string;
+  deliveryDate: string;
+}
+
+interface DeliverDayProps {
+  deliverDate: string;
 }
 
 interface Props {
@@ -37,25 +38,19 @@ export const CreatedLetter = ({
   setOpenLetter,
   openLetter,
 }: Props) => {
-  const [items, setItems] = useState<GroupItem[]>([
-    { id: 16, name: "일이삼사오육칠팔구", bookcover: book1 },
-    { id: 17, name: "일이삼사오육칠팔구", bookcover: book2 },
-    { id: 18, name: "일이삼사오육칠팔구", bookcover: book3 },
-    { id: 4, name: "일이삼사오육칠팔구", bookcover: book4 },
-    { id: 5, name: "일이삼사오육칠팔구", bookcover: book2 },
-  ]);
-
   const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
-  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
   const [deleteName, setDeleteName] = useState<string>("");
+  const [deleteId, setDeleteId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
+  const [letters, setLetters] = useState<Letter[]>([]);
 
   useEffect(() => {
     const fetchLetter = async () => {
       try {
-        const letters = await getParticipatedLetter();
+        const letterdata = await getParticipatedLetter();
         const counts = await getLetterCounts();
         setLetterCounts(counts.participationLetterCount);
+        setLetters(letterdata.data.letters);
         console.log(letters);
       } catch (err) {
         console.error("Error fetching letter counts:", err);
@@ -67,13 +62,13 @@ export const CreatedLetter = ({
 
   const getBackgroundColor = (bookcover: string) => {
     switch (bookcover) {
-      case book1:
+      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_BIRTHDAY.png":
         return "#FFF6E4"; // Yellow
-      case book2:
+      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_LUCKY.png":
         return "#ECFFE1"; // Green
-      case book3:
+      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_LOVE.png":
         return "#E3F8FF"; // Blue
-      case book4:
+      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_THANKYOU.png":
         return "#FFEFF1"; // Pink
       default:
         return "#FFFFFF"; // Default color
@@ -81,30 +76,39 @@ export const CreatedLetter = ({
   };
 
   const openModal = (itemId: number) => {
-    setItemToDelete(itemId);
+    //setItemToDelete(itemId);
+    setDeleteId(itemId);
     setIsModalOpen(true);
   };
 
   const handleLetter = (itemId: number) => {
-    setItemToDelete(itemId);
+    //setItemToDelete(itemId);
+    setDeleteId(itemId);
     setOpenLetter(true);
   };
 
   const handleDelete = () => {
-    if (itemToDelete !== null) {
-      setItems(items.filter((item) => item.id !== itemToDelete));
-      setDeleteAlert("편지가 삭제되었어요");
-      setItemToDelete(null);
-    }
+    setDeleteAlert("편지가 삭제되었어요");
     setTimeout(() => {
       setDeleteAlert(null);
-    }, 5000);
-    // 5초 후에 alert 메시지를 숨기기
+    }, 5000); // 5초 후에 alert 를 숨기기
+  };
+
+  const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
+    const date = new Date(deliverDate);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return (
+      <StyledDeliverDay>{`${year}. ${month}. ${day} 전달`}</StyledDeliverDay>
+    );
   };
 
   return (
     <>
-      {items.length === 0 ? (
+      {letters.length === 0 ? (
         <EmptyLetter context="created" />
       ) : (
         <>
@@ -120,27 +124,28 @@ export const CreatedLetter = ({
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: "400" }}>개</NumberTxt>
               </NumberHeader>
-              {items.map((item) => (
+              {letters.map((item) => (
                 <LetterContainer
-                  key={item.id}
-                  bgColor={getBackgroundColor(item.bookcover)}
+                  key={item.letterId}
+                  //현재는 letterId에 중복값있어서 경고 발생
+                  bgColor={getBackgroundColor(item.coverTypeImage)}
                 >
-                  <BookCover src={item.bookcover} alt={item.name} />
+                  <BookCover src={item.coverTypeImage} />
                   <Content
                     onClick={() => {
-                      setDeleteName(item.name);
-                      handleLetter(item.id);
+                      setDeleteName(item.receiverName);
+                      handleLetter(item.letterId);
                     }}
                   >
-                    <BookName>To. {item.name}</BookName>
-                    <DeliverDay>2024. 08. 21 전달</DeliverDay>
+                    <BookName>To. {item.receiverName}</BookName>
+                    <DeliverDay deliverDate={item.deliveryDate}></DeliverDay>
                   </Content>
                   <MoreButton
                     src={more}
                     alt="more_btn"
                     onClick={() => {
-                      setDeleteName(item.name);
-                      openModal(item.id);
+                      setDeleteName(item.receiverName);
+                      openModal(item.letterId);
                     }}
                   />
                 </LetterContainer>
@@ -161,6 +166,7 @@ export const CreatedLetter = ({
               setIsModalOpen={setIsModalOpen}
               context="created"
               deleteItem={deleteName}
+              letterId={deleteId}
             />
           )}
           {openLetter && (
@@ -210,6 +216,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   align-self: stretch;
+  overflow-y: auto;
 `;
 const NumberHeader = styled.div`
   display: flex;
@@ -258,7 +265,7 @@ const BookName = styled.div`
   letter-spacing: -0.5px;
   margin-bottom: 4px;
 `;
-const DeliverDay = styled.div`
+const StyledDeliverDay = styled.div`
   color: #868e96;
   font-family: SUIT;
   font-size: 11px;

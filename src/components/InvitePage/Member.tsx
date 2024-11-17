@@ -82,7 +82,7 @@ export const Member = ({
     };
     fetchMyPageData();
 
-    enterLetterWs(memberId, name);
+    //enterLetterWs(memberId, name);
   }, []);
 
   const handleUserName = (name: string) => {
