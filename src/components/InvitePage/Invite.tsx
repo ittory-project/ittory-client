@@ -4,11 +4,19 @@ import { useLocation } from "react-router-dom";
 import { HostUser } from "./HostUser";
 import { Member } from "./Member";
 import { getParticipants } from "../../api/service/LetterService";
+import { getMyPage } from "../../api/service/MemberService";
 
 export interface GroupItem {
   id: number;
   profileImage: string;
   name: string;
+}
+
+export interface Participants {
+  sequence: number;
+  memberId: number;
+  nickname: string;
+  imageUrl: string;
 }
 //재방문유저 여부
 export const Invite = () => {
@@ -34,12 +42,6 @@ export const Invite = () => {
       profileImage: "../../../public/img/profileimage.svg",
       name: "아이유우",
     },
-    /*
-    {
-      id: 5,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "예지",
-    },*/
   ];
 
   const location = useLocation();
@@ -57,6 +59,8 @@ export const Invite = () => {
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
+  const [participants, setParticipants] = useState<Participants[]>([]);
+  const [userId, setUserId] = useState<number>(0);
 
   const nowUser: GroupItem = {
     id: 1,
@@ -67,17 +71,32 @@ export const Invite = () => {
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
-        const data = await getParticipants(0);
+        const data = await getParticipants(1);
+        setParticipants(data);
         console.log(data);
-        //setMemberId(myData.memberId);
-        //setName(myData.name);
       } catch (err) {
-        console.error("Error fetching my data:", err);
+        console.error("Error fetching participants:", err);
+      }
+    };
+    const fetchMydata = async () => {
+      try {
+        const mydata = await getMyPage();
+        setUserId(mydata.memberId);
+      } catch (err) {
+        console.error("Error fetching mydata:", err);
       }
     };
 
     fetchParticipants();
+    fetchMydata();
   }, []);
+
+  //방장 인덱스 지정
+  useEffect(() => {
+    if (participants.length > 0 && participants[0].memberId === userId) {
+      setMemberIndex(0);
+    }
+  }, [participants, userId]);
 
   useEffect(() => {
     // Calculate memberIndex when currentItems changes
@@ -151,7 +170,7 @@ export const Invite = () => {
           deliverDay={deliverDay}
           selectedImageIndex={selectedImageIndex}
           guideOpen={guideOpen}
-          items={currentItems}
+          items={participants}
           handleUserExit={handleUserExit}
         />
       ) : (

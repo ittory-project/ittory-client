@@ -7,6 +7,7 @@ import {
   ReceivedGetResponse,
   ParticipationGetResponse,
   VisitGetResponse,
+  LetterboxDeleteResponse,
 } from "../model/MemberModel";
 
 export async function getLetterCounts(): Promise<LetterCountsGetResponse> {
@@ -41,7 +42,7 @@ export async function getReceivedLetter(): Promise<ReceivedGetResponse> {
 }
 
 export async function getParticipatedLetter(): Promise<ParticipationGetResponse> {
-  const response = await api.get<ReceivedGetResponse>(
+  const response = await api.get<ParticipationGetResponse>(
     "https://dev-server.ittory.co.kr/api/member/participations"
   );
   return response.data;
@@ -53,4 +54,14 @@ export async function getVisitUser(): Promise<VisitGetResponse> {
     "https://dev-server.ittory.co.kr/api/member/visit"
   );
   return response.data.data;
+}
+
+export async function deleteLetterboxLetter(
+  letterId: number
+): Promise<LetterboxDeleteResponse> {
+  const response = await api.delete(
+    `https://dev-server.ittory.co.kr/api/member/${letterId}`
+  );
+
+  return response.data;
 }

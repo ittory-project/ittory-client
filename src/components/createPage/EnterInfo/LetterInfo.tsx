@@ -5,7 +5,6 @@ import calender from "../../../../public/assets/calendar.svg";
 import BottomSheet from "./BotttomSheet";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useNavigate } from "react-router-dom";
 import { getMyPage } from "../../../api/service/MemberService";
 
 interface Props {
@@ -29,8 +28,8 @@ export default function LetterInfo({
   setViewCoverDeco,
   setViewStartpage,
 }: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
   const keyboardRef = useRef<HTMLInputElement | null>(null);
   const [name, setName] = useState<string>("");
 
@@ -108,7 +107,7 @@ export default function LetterInfo({
             <Text>같이 편지를 만들어봐요!</Text>
           </Title>
         )}
-        <MainCotainer shiftUp={keyboardVisible} isOpen={isModalOpen}>
+        <MainCotainer shiftup={keyboardVisible} isopen={isModalOpen}>
           <InputBox>
             <InputLogo>받는 사람</InputLogo>
             <Input
@@ -123,8 +122,8 @@ export default function LetterInfo({
                 }
                 setReceiverName(e.target.value);
               }}
-              min-Length="1"
-              max-Length="12"
+              min-length="1"
+              max-length="12"
               onFocus={handleFocus}
               spellCheck="false"
               //onBlur={handleBlur}
@@ -145,8 +144,8 @@ export default function LetterInfo({
                 }
                 setMyName(e.target.value);
               }}
-              min-Length="1"
-              max-Length="5"
+              min-length="1"
+              max-length="5"
               onFocus={handleFocus}
               spellCheck="false"
               //onBlur={handleBlur}
@@ -276,7 +275,7 @@ const Text = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
-const MainCotainer = styled.div<{ shiftUp: boolean; isOpen: boolean }>`
+const MainCotainer = styled.div<{ shiftup?: boolean; isopen?: boolean }>`
   display: flex;
   width: 16.5rem;
   height: 14.7rem;
@@ -290,7 +289,7 @@ const MainCotainer = styled.div<{ shiftUp: boolean; isOpen: boolean }>`
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
   transition: transform 0.3s ease;
   transform: ${(props) =>
-    props.shiftUp ? "translateY(0.8rem)" : "translateY(0)"};
+    props.shiftup ? "translateY(0.8rem)" : "translateY(0)"};
 `;
 const InputBox = styled.div`
   display: flex;

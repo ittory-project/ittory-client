@@ -18,6 +18,7 @@ import bright from "../../../public/assets/border.svg";
 import shadow from "../../../public/assets/shadow2.svg";
 import { getMyPage } from "../../api/service/MemberService";
 import { enterLetterWs } from "../../api/service/WsService";
+import { Participants } from "./Invite";
 
 export interface GroupItem {
   id: number;
@@ -34,7 +35,7 @@ interface Props {
   deliverDay: Date;
   selectedImageIndex: number;
   guideOpen: boolean;
-  items: GroupItem[];
+  items: Participants[];
   handleUserExit: (userId: number) => void;
 }
 
@@ -57,7 +58,7 @@ export const HostUser = ({
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
-  const namesString = items.map((item) => item.name).join(", ");
+  const namesString = items.map((item) => item.nickname).join(", ");
   const [memberId, setMemberId] = useState<number>(0);
   const [name, setName] = useState<string>("");
 
@@ -81,7 +82,7 @@ export const HostUser = ({
     };
     fetchMyPageData();
 
-    enterLetterWs(memberId, name);
+    //enterLetterWs(memberId, name);
   }, []);
 
   const handleUserName = (name: string) => {
@@ -188,26 +189,28 @@ export const HostUser = ({
                 <List>
                   {items.map((user, index) =>
                     index === 0 ? (
-                      <MainUser key={user.id}>
+                      <MainUser key={index}>
                         <Crown img={crown} />
                         <User>
-                          <ProfileImg img={items[0].profileImage} />
-                          <UserName>{items[0].name}</UserName>
+                          <ProfileImg img={items[0].imageUrl} />
+                          <UserName>{items[0].nickname}</UserName>
                         </User>
                       </MainUser>
                     ) : (
-                      <InvitedUser key={user.id}>
+                      <InvitedUser key={index}>
                         <User>
-                          <ProfileImg img={user.profileImage} />
-                          {user.name.length > 3 ? (
+                          <ProfileImg img={user.imageUrl} />
+                          {user.nickname.length > 3 ? (
                             <UserNameContainer>
-                              <UserName>{handleUserName(user.name)}</UserName>
+                              <UserName>
+                                {handleUserName(user.nickname)}
+                              </UserName>
                               <UserName style={{ letterSpacing: "-0.2em" }}>
                                 ···
                               </UserName>
                             </UserNameContainer>
                           ) : (
-                            <UserName>{user.name}</UserName>
+                            <UserName>{user.nickname}</UserName>
                           )}
                         </User>
                       </InvitedUser>
