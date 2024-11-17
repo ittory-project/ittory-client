@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import more from "../../../public/assets/more.svg";
 import { Created_Modal } from "./Created_Modal";
-import { DeletePopup } from "./DeletePopup";
+import { DeletePopup } from "./Delete_letterbox";
 import { EmptyLetter } from "./EmptyLetter";
 import { Letter } from "./Letter";
 import {
