@@ -19,6 +19,8 @@ import shadow from "../../../public/assets/shadow2.svg";
 import { getMyPage } from "../../api/service/MemberService";
 import { enterLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
+import { getCoverTypes } from "../../api/service/CoverService";
+import { CoverType } from "../../api/model/CoverType";
 
 export interface GroupItem {
   id: number;
@@ -29,14 +31,15 @@ export interface GroupItem {
 interface Props {
   receiverName: string;
   title: string;
-  backgroundImage: string;
+  backgroundImage: number;
   croppedImage: string;
   selectfont: string;
   deliverDay: Date;
   selectedImageIndex: number;
   guideOpen: boolean;
   items: Participants[];
-  handleUserExit: (userId: number) => void;
+  letterId: number;
+  //handleUserExit: (userId: number) => void;
 }
 
 export const HostUser = ({
@@ -49,7 +52,8 @@ export const HostUser = ({
   selectedImageIndex,
   guideOpen,
   items = [],
-  handleUserExit,
+  letterId,
+  //handleUserExit,
 }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
@@ -61,6 +65,22 @@ export const HostUser = ({
   const namesString = items.map((item) => item.nickname).join(", ");
   const [memberId, setMemberId] = useState<number>(0);
   const [name, setName] = useState<string>("");
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [entered, setEntered] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+        console.log(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypes();
+  }, []);
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -82,8 +102,16 @@ export const HostUser = ({
     };
     fetchMyPageData();
 
-    //enterLetterWs(memberId, name);
+    //enterLetterWs(letterId, name);
   }, []);
+
+  useEffect(() => {
+    if (name && !entered) {
+      // name과 entered 상태가 true인 경우만 실행
+      //enterLetterWs(letterId, name);
+      setEntered(true); // 입장 처리 완료
+    }
+  }, [letterId, name, entered]);
 
   const handleUserName = (name: string) => {
     return name.slice(0, 3);
@@ -129,7 +157,7 @@ export const HostUser = ({
       }
     }
   }; //토스트메시지 노출시간 정하기
-
+  console.log(selectfont);
   return (
     <BackGround>
       {guide && <Overlay />}
@@ -154,7 +182,12 @@ export const HostUser = ({
             </IconContainer>
           </Header>
           <MainContainer>
-            <Book backgroundImage={backgroundImage}>
+            {
+              //<Book backgroundImage={backgroundImage}>
+            }
+            <Book
+              backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
+            >
               <TitleContainer font={selectfont}>{title}</TitleContainer>
               {deliverDay === null ? (
                 <></>
@@ -251,7 +284,11 @@ export const HostUser = ({
 
       {viewDelete && <Delete setViewDelete={setViewDelete} />}
       {viewExit && (
-        <Exit setViewExit={setViewExit} handleUserExit={handleUserExit} />
+        <Exit
+          setViewExit={setViewExit}
+          letterId={letterId}
+          setEnter={setEntered}
+        />
       )}
       {popup && <CountPopup setPopup={setPopup} setViewCount={setViewCount} />}
     </BackGround>

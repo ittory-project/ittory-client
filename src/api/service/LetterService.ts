@@ -5,6 +5,9 @@ import {
   LetterRequestBody,
   ParticipantsGetResponse,
   LetterDeleteResponse,
+  ApiLetterResponse,
+  CountRequestBody,
+  CountPostResponse,
 } from "../model/LetterModel";
 
 // 편지 시작 시 정보 조회 API
@@ -23,11 +26,11 @@ export async function getLetterStartParti(
 export async function postLetter(
   data: LetterRequestBody
 ): Promise<LetterPostResponse> {
-  const response = await api.post<LetterPostResponse>(
+  const response = await api.post<ApiLetterResponse<LetterPostResponse>>(
     "https://dev-server.ittory.co.kr/api/letter",
     data
   );
-  return response.data;
+  return response.data.data;
 }
 
 //유저 조회 api
@@ -52,13 +55,44 @@ export async function getParticipants(
   return response.data.data.participants;
 }
 
+/*
 //편지삭제 api
-export async function deleteLetterLetter(
+export async function deleteLetter(
   letterId: number
 ): Promise<LetterDeleteResponse> {
   const response = await api.delete(
     `https://dev-server.ittory.co.kr/api/letter/${letterId}`
   );
 
+  return response.data;
+}*/
+
+export const deleteLetter = async (
+  letterId: number
+): Promise<LetterDeleteResponse> => {
+  try {
+    const response = await api.delete(
+      `https://dev-server.ittory.co.kr/api/letter/${letterId}`
+    );
+
+    // 서버가 204 No Content를 반환하는 경우
+    if (response.status === 204) {
+      console.log("Letter deleted successfully.");
+      return response.data;
+    }
+    return response.data;
+  } catch (error) {
+    console.error("Failed to delete letter:", error);
+  }
+};
+
+//반복 횟수
+export async function postRepeatCount(
+  data: CountRequestBody
+): Promise<CountPostResponse> {
+  const response = await api.post<CountPostResponse>(
+    "https://dev-server.ittory.co.kr/api/letter/repeat-count",
+    data
+  );
   return response.data;
 }

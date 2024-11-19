@@ -4,8 +4,10 @@ import more from "../../../public/assets/more_white.svg";
 import x from "../../../public/assets/x_white.svg";
 import { Created_Modal } from "./Created_Modal";
 import { Received_Modal } from "./Received_Modal";
-import { DeletePopup } from "./Delete_letterbox";
 import { ReceiveLetter } from "../receivePage/ReceiveLetter";
+import { Delete_letterbox } from "./Delete_letterbox";
+
+//편지 불러올때 어떻게 해야하지..
 
 interface Props {
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,6 +18,8 @@ interface Props {
   onDelete: () => void;
   deleteItem: string;
   isModalOpen: boolean;
+  letterId: number;
+  openLetter: boolean;
 }
 
 export const Letter = ({
@@ -27,6 +31,8 @@ export const Letter = ({
   deleteItem,
   setIsModalOpen,
   isModalOpen,
+  letterId,
+  openLetter,
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
 
@@ -60,23 +66,26 @@ export const Letter = ({
               <Created_Modal
                 setIsModalOpen={setIsModalOpen}
                 setPopup={setPopup}
+                openLetter={openLetter}
               />
             ) : context === "received" ? (
               <Received_Modal
                 setIsModalOpen={setIsModalOpen}
                 setPopup={setPopup}
+                openLetter={openLetter}
               />
             ) : null)}
         </>
       )}
       {popup && (
-        <DeletePopup
+        <Delete_letterbox
           setOpenLetter={setOpenLetter}
           setPopup={setPopup}
           onDelete={onDelete}
           setIsModalOpen={setIsModalOpen}
           context="created"
           deleteItem={deleteName}
+          letterId={letterId}
         />
       )}
     </BackGround>

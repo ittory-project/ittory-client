@@ -2,20 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import more from "../../../public/assets/more.svg";
 import { Created_Modal } from "./Created_Modal";
-import { DeletePopup } from "./Delete_letterbox";
+import { Delete_letterbox } from "./Delete_letterbox";
 import { EmptyLetter } from "./EmptyLetter";
 import { Letter } from "./Letter";
 import {
   getParticipatedLetter,
   getLetterCounts,
 } from "../../api/service/MemberService";
-
-export interface Letter {
-  letterId: number;
-  receiverName: string;
-  coverTypeImage: string;
-  deliveryDate: string;
-}
+import { ParticipateLetterModel } from "../../api/model/MemberModel";
 
 interface DeliverDayProps {
   deliverDate: string;
@@ -40,9 +34,9 @@ export const CreatedLetter = ({
 }: Props) => {
   const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
   const [deleteName, setDeleteName] = useState<string>("");
-  const [deleteId, setDeleteId] = useState<number>(-1);
+  const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
-  const [letters, setLetters] = useState<Letter[]>([]);
+  const [letters, setLetters] = useState<ParticipateLetterModel[]>([]);
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -77,13 +71,13 @@ export const CreatedLetter = ({
 
   const openModal = (itemId: number) => {
     //setItemToDelete(itemId);
-    setDeleteId(itemId);
+    setSelectId(itemId);
     setIsModalOpen(true);
   };
 
   const handleLetter = (itemId: number) => {
     //setItemToDelete(itemId);
-    setDeleteId(itemId);
+    setSelectId(itemId);
     setOpenLetter(true);
   };
 
@@ -154,19 +148,20 @@ export const CreatedLetter = ({
                 <Created_Modal
                   setIsModalOpen={setIsModalOpen}
                   setPopup={setPopup}
+                  openLetter={openLetter}
                 />
               )}
             </Container>
           )}
           {popup && (
-            <DeletePopup
+            <Delete_letterbox
               setOpenLetter={setOpenLetter}
               setPopup={setPopup}
               onDelete={handleDelete}
               setIsModalOpen={setIsModalOpen}
               context="created"
               deleteItem={deleteName}
-              letterId={deleteId}
+              letterId={selectId}
             />
           )}
           {openLetter && (
@@ -178,7 +173,9 @@ export const CreatedLetter = ({
               popup={popup}
               onDelete={handleDelete}
               deleteItem={deleteName}
+              letterId={selectId}
               setIsModalOpen={setIsModalOpen}
+              openLetter={openLetter}
             />
           )}
         </>

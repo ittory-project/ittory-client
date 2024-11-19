@@ -35,7 +35,7 @@ interface Props {
   selectedImageIndex: number;
   guideOpen: boolean;
   items: GroupItem[];
-  handleUserExit: (userId: number) => void;
+  //handleUserExit: (userId: number) => void;
 }
 
 export const Member = ({
@@ -48,7 +48,7 @@ export const Member = ({
   selectedImageIndex,
   guideOpen,
   items = [],
-  handleUserExit,
+  //handleUserExit,
 }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);

@@ -95,9 +95,11 @@ export default function CompleteModal({
     try {
       const response = await postLetter(requestBody);
       console.log("Response:", response);
+      const letterId = response.letterId;
 
       navigate("/Invite", {
         state: {
+          letterId: letterId,
           guideOpen: guideOpen,
           receiverName: receiverName,
           title: title,
