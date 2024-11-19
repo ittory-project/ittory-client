@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import more from "../../../public/assets/more.svg";
-import { Delete_letter } from "./Delete_letter";
+import { Delete_letterbox } from "./Delete_letterbox";
 import { Received_Modal } from "./Received_Modal";
 import { EmptyLetter } from "./EmptyLetter";
 import { Letter } from "./Letter";
@@ -9,6 +9,7 @@ import {
   getReceivedLetter,
   getLetterCounts,
 } from "../../api/service/MemberService";
+import { ReceiveLetterModel } from "../../api/model/MemberModel";
 
 //받은 편지함 receiverName->title로 수정 필요
 //실제 데이터 넣어보기
@@ -20,12 +21,6 @@ interface Props {
   popup: boolean;
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
   openLetter: boolean;
-}
-export interface Letter {
-  letterId: number;
-  receiverName: string;
-  coverTypeImage: string;
-  deliveryDate: string;
 }
 
 interface DeliverDayProps {
@@ -44,7 +39,7 @@ export const ReceivedLetter = ({
   const [deleteTitle, setDeleteTitle] = useState<string>("");
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
-  const [letters, setLetters] = useState<Letter[]>([]);
+  const [letters, setLetters] = useState<ReceiveLetterModel[]>([]);
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -53,14 +48,15 @@ export const ReceivedLetter = ({
         const counts = await getLetterCounts();
         setLetterCounts(counts.receiveLetterCount);
         setLetters(letterdata.data.letters);
-        console.log(letters);
+        console.log(letterCounts);
+        console.log(letterdata);
       } catch (err) {
         console.error("Error fetching letter counts:", err);
       }
     };
 
     fetchLetter();
-  }, []);
+  }, [letterCounts]);
 
   const getBackgroundColor = (bookcover: string) => {
     switch (bookcover) {
@@ -131,18 +127,18 @@ export const ReceivedLetter = ({
                   <BookCover src={item.coverTypeImage} />
                   <Content
                     onClick={() => {
-                      setDeleteTitle(item.receiverName);
+                      setDeleteTitle(item.title);
                       handleLetter(item.letterId);
                     }}
                   >
-                    <BookName>{item.receiverName}</BookName>
+                    <BookName>{item.title}</BookName>
                     <DeliverDay deliverDate={item.deliveryDate}></DeliverDay>
                   </Content>
                   <MoreButton
                     src={more}
                     alt="more_btn"
                     onClick={() => {
-                      setDeleteTitle(item.receiverName);
+                      setDeleteTitle(item.title);
                       openModal(item.letterId);
                     }}
                   />
@@ -152,12 +148,13 @@ export const ReceivedLetter = ({
                 <Received_Modal
                   setIsModalOpen={setIsModalOpen}
                   setPopup={setPopup}
+                  openLetter={openLetter}
                 />
               )}
             </Container>
           )}
           {popup && (
-            <Delete_letter
+            <Delete_letterbox
               setOpenLetter={setOpenLetter}
               setPopup={setPopup}
               onDelete={handleDelete}
@@ -178,6 +175,7 @@ export const ReceivedLetter = ({
               deleteItem={deleteTitle}
               setIsModalOpen={setIsModalOpen}
               letterId={selectId}
+              openLetter={openLetter}
             />
           )}
         </>
@@ -215,6 +213,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   align-self: stretch;
+  overflow-y: auto;
 `;
 const NumberHeader = styled.div`
   display: flex;

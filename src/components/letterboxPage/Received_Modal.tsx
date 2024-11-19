@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import X from "../../../public/assets/x.svg";
 import delete2 from "../../../public/assets/delete2.svg";

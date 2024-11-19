@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { deleteLetterboxLetter } from "../../api/service/MemberService";
 
+//200은 뜨는데 실제로 삭제는 안된다..
+
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,7 +14,7 @@ interface Props {
   letterId: number;
 }
 
-export const DeletePopup = ({
+export const Delete_letterbox = ({
   setPopup,
   onDelete,
   setIsModalOpen,

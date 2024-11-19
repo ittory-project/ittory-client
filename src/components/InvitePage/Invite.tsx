@@ -53,6 +53,7 @@ export const Invite = () => {
   const deliverDay = location.state.deliverDay;
   const selectedImageIndex = location.state.selectedImageIndex;
   const guideOpen = location.state.guideOpen;
+  const getletterId = location.state.letterId;
 
   const [currentItems, setCurrentItems] = useState<GroupItem[]>(items);
   const [previousItems, setPreviousItems] = useState<GroupItem[]>(items);
@@ -61,13 +62,14 @@ export const Invite = () => {
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
   const [userId, setUserId] = useState<number>(0);
+  const [letterId, setLetterId] = useState<number>(getletterId);
 
+  /*
   const nowUser: GroupItem = {
     id: 1,
     profileImage: "../../../public/img/profileimage.svg",
     name: "카리나",
-  };
-
+  };*/
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
@@ -98,6 +100,7 @@ export const Invite = () => {
     }
   }, [participants, userId]);
 
+  /*
   useEffect(() => {
     // Calculate memberIndex when currentItems changes
     const index = currentItems.findIndex(
@@ -137,7 +140,7 @@ export const Invite = () => {
       }
     }
     setPreviousItems(currentItems);
-  }, [currentItems]);
+  }, [currentItems]);*/
 
   useEffect(() => {
     const exitTimer = setTimeout(() => {
@@ -160,7 +163,7 @@ export const Invite = () => {
     <BackGround>
       {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
       {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {memberIndex === 0 ? (
+      {memberIndex != 0 ? (
         <HostUser
           receiverName={receiverName}
           title={title}
@@ -171,7 +174,8 @@ export const Invite = () => {
           selectedImageIndex={selectedImageIndex}
           guideOpen={guideOpen}
           items={participants}
-          handleUserExit={handleUserExit}
+          letterId={letterId}
+          //handleUserExit={handleUserExit}
         />
       ) : (
         <Member
@@ -184,7 +188,7 @@ export const Invite = () => {
           selectedImageIndex={selectedImageIndex}
           guideOpen={guideOpen}
           items={currentItems}
-          handleUserExit={handleUserExit}
+          //handleUserExit={handleUserExit}
         />
       )}
     </BackGround>
