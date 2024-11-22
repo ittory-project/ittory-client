@@ -5,6 +5,7 @@ import { HostUser } from "./HostUser";
 import { Member } from "./Member";
 import { getParticipants } from "../../api/service/LetterService";
 import { getMyPage } from "../../api/service/MemberService";
+import { WebSocketProvider } from "./WebSocketProvider";
 
 export interface GroupItem {
   id: number;
@@ -18,8 +19,14 @@ export interface Participants {
   nickname: string;
   imageUrl: string;
 }
+
+interface Props {
+  exit: boolean;
+  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
 //재방문유저 여부
-export const Invite = () => {
+export const Invite = ({ exit, setExitMessage }: Props) => {
   const items: GroupItem[] = [
     {
       id: 1,
@@ -63,13 +70,8 @@ export const Invite = () => {
   const [participants, setParticipants] = useState<Participants[]>([]);
   const [userId, setUserId] = useState<number>(0);
   const [letterId, setLetterId] = useState<number>(getletterId);
+  const [exitState, SetExitState] = useState<boolean>(false);
 
-  /*
-  const nowUser: GroupItem = {
-    id: 1,
-    profileImage: "../../../public/img/profileimage.svg",
-    name: "카리나",
-  };*/
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
@@ -100,7 +102,64 @@ export const Invite = () => {
     }
   }, [participants, userId]);
 
-  /*
+  useEffect(() => {
+    const exitTimer = setTimeout(() => {
+      setExitAlert(null);
+    }, 5000);
+
+    // Cleanup timer if component unmounts or alert changes
+    return () => clearTimeout(exitTimer);
+  }, [exitAlert]);
+
+  useEffect(() => {
+    const hostTimer = setTimeout(() => {
+      setHostAlert(null);
+    }, 10000);
+
+    return () => clearTimeout(hostTimer);
+  }, [hostAlert]);
+
+  return (
+    <WebSocketProvider letterId={letterId}>
+      <BackGround>
+        {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
+        {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
+        {memberIndex !== 0 ? (
+          <HostUser
+            receiverName={receiverName}
+            title={title}
+            backgroundImage={backgroundImage}
+            croppedImage={croppedImage}
+            selectfont={selectfont}
+            deliverDay={deliverDay}
+            selectedImageIndex={selectedImageIndex}
+            guideOpen={guideOpen}
+            items={participants}
+            letterId={letterId}
+            setExitMessage={setExitMessage}
+            //handleUserExit={handleUserExit}
+          />
+        ) : (
+          <Member
+            letterId={letterId}
+            receiverName={receiverName}
+            title={title}
+            backgroundImage={backgroundImage}
+            croppedImage={croppedImage}
+            selectfont={selectfont}
+            deliverDay={deliverDay}
+            selectedImageIndex={selectedImageIndex}
+            guideOpen={guideOpen}
+            items={currentItems}
+            setExitMessage={setExitMessage}
+            //handleUserExit={handleUserExit}
+          />
+        )}
+      </BackGround>
+    </WebSocketProvider>
+  );
+};
+/*
   useEffect(() => {
     // Calculate memberIndex when currentItems changes
     const index = currentItems.findIndex(
@@ -141,59 +200,6 @@ export const Invite = () => {
     }
     setPreviousItems(currentItems);
   }, [currentItems]);*/
-
-  useEffect(() => {
-    const exitTimer = setTimeout(() => {
-      setExitAlert(null);
-    }, 5000);
-
-    // Cleanup timer if component unmounts or alert changes
-    return () => clearTimeout(exitTimer);
-  }, [exitAlert]);
-
-  useEffect(() => {
-    const hostTimer = setTimeout(() => {
-      setHostAlert(null);
-    }, 10000);
-
-    return () => clearTimeout(hostTimer);
-  }, [hostAlert]);
-
-  return (
-    <BackGround>
-      {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
-      {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {memberIndex != 0 ? (
-        <HostUser
-          receiverName={receiverName}
-          title={title}
-          backgroundImage={backgroundImage}
-          croppedImage={croppedImage}
-          selectfont={selectfont}
-          deliverDay={deliverDay}
-          selectedImageIndex={selectedImageIndex}
-          guideOpen={guideOpen}
-          items={participants}
-          letterId={letterId}
-          //handleUserExit={handleUserExit}
-        />
-      ) : (
-        <Member
-          receiverName={receiverName}
-          title={title}
-          backgroundImage={backgroundImage}
-          croppedImage={croppedImage}
-          selectfont={selectfont}
-          deliverDay={deliverDay}
-          selectedImageIndex={selectedImageIndex}
-          guideOpen={guideOpen}
-          items={currentItems}
-          //handleUserExit={handleUserExit}
-        />
-      )}
-    </BackGround>
-  );
-};
 
 const BackGround = styled.div`
   display: flex;

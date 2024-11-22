@@ -33,9 +33,9 @@ export const Join = () => {
                   }
                   setNickname(e.target.value);
                 }}
-                minlength="1"
-                maxlength="5"
-                spellcheck="false"
+                min-length="1"
+                max-length="5"
+                spell-check="false"
               />
             </InputBox>
           </Container>

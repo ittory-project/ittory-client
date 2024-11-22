@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DeleteConfirm } from "./DeleteConfirm";
+import { deleteLetter } from "../../../api/service/LetterService";
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  letterId: number;
 }
 
-export const Delete = ({ setViewDelete }: Props) => {
+export const Delete = ({ setViewDelete, letterId }: Props) => {
   const [viewConfirm, setViewConfirm] = useState<boolean>(false);
   const handleDelete = () => {
     setViewDelete(false);
   };
-  const handleConfirm = () => {
-    setViewConfirm(true);
+
+  const handleConfirm = async () => {
+    try {
+      console.log(letterId);
+      const response = await deleteLetter(letterId);
+      //계속 404에러... 포스트맨에서도 해당 letterId 편지 없다고나옴
+      console.log(response);
+      setViewConfirm(true);
+    } catch (err) {
+      console.error("error:", err);
+    }
   };
 
   return (

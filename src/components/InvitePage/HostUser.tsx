@@ -21,6 +21,7 @@ import { enterLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { getCoverTypes } from "../../api/service/CoverService";
 import { CoverType } from "../../api/model/CoverType";
+import { getLetterInfo } from "../../api/service/LetterService";
 
 export interface GroupItem {
   id: number;
@@ -39,6 +40,7 @@ interface Props {
   guideOpen: boolean;
   items: Participants[];
   letterId: number;
+  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
   //handleUserExit: (userId: number) => void;
 }
 
@@ -53,6 +55,7 @@ export const HostUser = ({
   guideOpen,
   items = [],
   letterId,
+  setExitMessage,
   //handleUserExit,
 }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
@@ -67,19 +70,28 @@ export const HostUser = ({
   const [name, setName] = useState<string>("");
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [entered, setEntered] = useState<boolean>(false);
+  const [cropImg, setCropImg] = useState<string>("");
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-        console.log(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    const fetchLetterInfo = async () => {
+      try {
+        const letterData = await getLetterInfo(letterId);
+        setCropImg(letterData.coverPhotoUrl);
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchCoverTypes();
+    fetchLetterInfo();
   }, []);
 
   useEffect(() => {
@@ -101,8 +113,6 @@ export const HostUser = ({
       }
     };
     fetchMyPageData();
-
-    //enterLetterWs(letterId, name);
   }, []);
 
   useEffect(() => {
@@ -157,7 +167,6 @@ export const HostUser = ({
       }
     }
   }; //토스트메시지 노출시간 정하기
-  console.log(selectfont);
   return (
     <BackGround>
       {guide && <Overlay />}
@@ -182,9 +191,6 @@ export const HostUser = ({
             </IconContainer>
           </Header>
           <MainContainer>
-            {
-              //<Book backgroundImage={backgroundImage}>
-            }
             <Book
               backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
             >
@@ -203,7 +209,7 @@ export const HostUser = ({
                 <>
                   <Bright src={bright} />
                   <Shadow src={shadow} />
-                  <BtnImgContainer bgimg={croppedImage} />
+                  <BtnImgContainer bgimg={cropImg} />
                 </>
               )}
               <NameBar>
@@ -277,20 +283,33 @@ export const HostUser = ({
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
-            <Count setViewCount={setViewCount} member={items.length} />
+            <Count
+              letterId={letterId}
+              setViewCount={setViewCount}
+              member={items.length}
+            />
           )}
         </>
       )}
 
-      {viewDelete && <Delete setViewDelete={setViewDelete} />}
+      {viewDelete && (
+        <Delete letterId={letterId} setViewDelete={setViewDelete} />
+      )}
       {viewExit && (
         <Exit
           setViewExit={setViewExit}
           letterId={letterId}
           setEnter={setEntered}
+          setExitMessage={setExitMessage}
         />
       )}
-      {popup && <CountPopup setPopup={setPopup} setViewCount={setViewCount} />}
+      {popup && (
+        <CountPopup
+          setPopup={setPopup}
+          setViewCount={setViewCount}
+          letterId={letterId}
+        />
+      )}
     </BackGround>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { getDuplicate } from "../../api/service/ParticipantService";
 
 interface Props {
   nickname: string;
@@ -14,6 +15,18 @@ export const JoinModal = ({ nickname, setViewModal }: Props) => {
   const handleCancel = () => {
     setViewModal(false);
   };
+
+  const handleAccess = async () => {
+    try {
+      const letterId = 74;
+      //letterId 어디서 가져오지..
+      const response = await getDuplicate(letterId, nickname);
+      console.log(response);
+    } catch (err) {
+      console.error("error:", err);
+    }
+  };
+
   /*
   const navigateToInvite = () => {
     setGuideOpen(true);
@@ -50,6 +63,7 @@ export const JoinModal = ({ nickname, setViewModal }: Props) => {
             style={{
               background: "#FFA256",
             }}
+            onClick={handleAccess}
           >
             <ButtonTxt style={{ color: "#fff" }}>네!</ButtonTxt>
           </Button>
