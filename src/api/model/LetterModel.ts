@@ -17,10 +17,8 @@ export interface LetterRequestBody {
 export interface ApiLetterResponse<T> {
   success: boolean;
   status: number;
-  data: T; // 실제 데이터는 data 속성 안에 있습니다.
+  data: T;
 }
-
-// 기존 LetterPostResponse 타입 정의는 그대로
 export interface LetterPostResponse {
   coverPhotoUrl: string;
   coverTypeId: number;
@@ -31,6 +29,17 @@ export interface LetterPostResponse {
   receiverName: string;
   title: string;
   updatedAt: string;
+}
+
+//편지 반복 횟수 등록
+export interface CountRequestBody {
+  letterId: number;
+  repeatCount: number;
+}
+
+export interface CountPostResponse {
+  success: boolean;
+  status: number;
 }
 
 //유저 조회
@@ -45,3 +54,19 @@ export type ParticipantsGetResponse = Participants[];
 
 // 편지 삭제
 export type LetterDeleteResponse = void;
+
+//편지 기본 정보 조회
+export interface LetterInfoGetResponse {
+  coverPhotoUrl: string;
+  coverTypeId: number;
+  deliveryDate: string;
+  fontId: number;
+  letterId: number;
+  receiverName: string;
+  title: string;
+}
+
+//편지 참여가능 여부 조회
+export interface LetterEnterResponse {
+  enterStatus: boolean;
+}

@@ -4,20 +4,18 @@ import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import out from "../../../public/assets/out.svg";
-import deletebtn from "../../../public/assets/delete.svg";
 import info from "../../../public/assets/info.svg";
 import crown from "../../../public/assets/crown.svg";
 import plus from "../../../public/assets/plus.svg";
 import tip from "../../../public/assets/tooltip.svg";
 import { UserGuide } from "./UserGuide";
-import { Delete } from "./Delete/Delete";
-import { Count } from "./Count/Count";
-import { Exit } from "./Exit";
 import notice from "../../../public/assets/notice.svg";
 import bright from "../../../public/assets/border.svg";
 import shadow from "../../../public/assets/shadow2.svg";
-import { getMyPage } from "../../api/service/MemberService";
-import { enterLetterWs } from "../../api/service/WsService";
+import { getCoverTypes } from "../../api/service/CoverService";
+import { getLetterInfo } from "../../api/service/LetterService";
+import { CoverType } from "../../api/model/CoverType";
+import { exitLetterWs } from "./WebSocketProvider";
 
 export interface GroupItem {
   id: number;
@@ -28,13 +26,15 @@ export interface GroupItem {
 interface Props {
   receiverName: string;
   title: string;
-  backgroundImage: string;
+  backgroundImage: number;
   croppedImage: string;
   selectfont: string;
   deliverDay: Date;
   selectedImageIndex: number;
   guideOpen: boolean;
   items: GroupItem[];
+  letterId: number;
+  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
   //handleUserExit: (userId: number) => void;
 }
 
@@ -48,6 +48,8 @@ export const Member = ({
   selectedImageIndex,
   guideOpen,
   items = [],
+  letterId,
+  setExitMessage,
   //handleUserExit,
 }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
@@ -61,6 +63,9 @@ export const Member = ({
   const namesString = items.map((item) => item.name).join(", ");
   const [memberId, setMemberId] = useState<number>(0);
   const [name, setName] = useState<string>("");
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [entered, setEntered] = useState<boolean>(false);
+  const [cropImg, setCropImg] = useState<string>("");
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -71,18 +76,26 @@ export const Member = ({
   }, []);
 
   useEffect(() => {
-    const fetchMyPageData = async () => {
+    const fetchCoverTypes = async () => {
       try {
-        const myData = await getMyPage();
-        setMemberId(myData.memberId);
-        setName(myData.name);
+        const types = await getCoverTypes();
+        setCoverTypes(types);
       } catch (err) {
-        console.error("Error fetching my data:", err);
+        console.error(err);
       }
     };
-    fetchMyPageData();
+    const fetchLetterInfo = async () => {
+      try {
+        const letterData = await getLetterInfo(letterId);
+        setCropImg(letterData.coverPhotoUrl);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    console.log(letterId);
 
-    //enterLetterWs(memberId, name);
+    fetchCoverTypes();
+    fetchLetterInfo();
   }, []);
 
   const handleUserName = (name: string) => {
@@ -94,9 +107,11 @@ export const Member = ({
   };
 
   const handleExit = () => {
-    //handleUserExit
+    exitLetterWs(letterId, name, setExitMessage);
+    console.log(letterId);
   };
 
+  //url 맞게 수정하기
   const handle = async () => {
     const url = "https://shinsangeun.github.io";
     if (navigator.share) {
@@ -143,7 +158,9 @@ export const Member = ({
             </IconContainer>
           </Header>
           <MainContainer>
-            <Book backgroundImage={backgroundImage}>
+            <Book
+              backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
+            >
               <TitleContainer font={selectfont}>{title}</TitleContainer>
               {deliverDay === null ? (
                 <></>
@@ -159,7 +176,7 @@ export const Member = ({
                 <>
                   <Bright src={bright} />
                   <Shadow src={shadow} />
-                  <BtnImgContainer bgimg={croppedImage} />
+                  <BtnImgContainer bgimg={cropImg} />
                 </>
               )}
               <NameBar>

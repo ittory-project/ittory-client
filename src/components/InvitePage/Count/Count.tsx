@@ -4,14 +4,25 @@ import X from "../../../../public/assets/x.svg";
 import photo from "../../../../public/assets/photo.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
+import { postRepeatCount } from "../../../api/service/LetterService";
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
   member: number;
+  letterId: number;
 }
 
-export const Count = ({ setViewCount, member }: Props) => {
-  const list = Array.from({ length: 50 }, (_, index) => index + 1);
+interface SlideContentProps {
+  isActive: boolean;
+  index: number;
+  activeIndex: number;
+  totalSlides: number;
+}
+
+export const Count = ({ setViewCount, member, letterId }: Props) => {
+  const fakemember = 1;
+  const length = Math.floor(50 / fakemember);
+  const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectNumber, setSelectNumber] = useState(1);
   const navigate = useNavigate();
@@ -24,9 +35,24 @@ export const Count = ({ setViewCount, member }: Props) => {
     setViewCount(false);
   };
 
-  const navigateToConnection = () => {
-    navigate("/Connection");
+  const handleSubmit = async () => {
+    try {
+      const count = Number(selectNumber);
+      const id = letterId;
+      console.log("Request body:", { letterId: id, repeatCount: count }); // 로그 출력
+
+      const requestBody = { letterId: id, repeatCount: count };
+      const response = await postRepeatCount(requestBody);
+      console.log(response);
+    } catch (err) {
+      console.error("API error:", err);
+    }
   };
+
+  const navigateToConnection = () => {
+    //navigate("/Connection");
+  };
+  //작성 순서 api 호출해33서 작성 순서 설정 /random
 
   return (
     <ModalContainer>
@@ -79,7 +105,7 @@ export const Count = ({ setViewCount, member }: Props) => {
           <TotalTxt>{selectNumber * member}개</TotalTxt>
         </Notice>
       </Contents>
-      <Button>
+      <Button onClick={handleSubmit}>
         <ButtonTxt onClick={navigateToConnection}>시작하기</ButtonTxt>
       </Button>
     </ModalContainer>
@@ -182,7 +208,7 @@ const Select = styled.div`
   bottom: 6.02rem;
   z-index: 1;
 `;
-const SlideContent = styled.div`
+const SlideContent = styled.div<SlideContentProps>`
   height: calc(14rem / 5);
   display: flex;
   text-align: center;

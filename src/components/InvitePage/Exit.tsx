@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { exitLetterWs } from "../../api/service/WsService";
+import { exitLetterWs } from "./WebSocketProvider";
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
   //handleUserExit: (userId: number) => void;
   letterId: number;
   setEnter: React.Dispatch<React.SetStateAction<boolean>>;
+  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 //방장에게만 적용되는 팝업
-export const Exit = ({ setViewExit, letterId, setEnter }: Props) => {
+export const Exit = ({
+  setViewExit,
+  letterId,
+  setEnter,
+  setExitMessage,
+}: Props) => {
   const navigate = useNavigate();
   const handleExitCancel = () => {
     setViewExit(false);
   };
 
   const handleExit = () => {
-    exitLetterWs(letterId);
-    setEnter(false);
-    navigate("/home");
+    exitLetterWs(letterId, "yuin", setExitMessage);
   };
 
   return (

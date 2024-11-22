@@ -12,6 +12,9 @@ export interface GroupItem {
 interface UserNumElement extends HTMLElement {
   getBoundingClientRect: () => DOMRect;
 }
+interface PopupProps {
+  isVisible: boolean;
+}
 
 export const WriteOrder = () => {
   //실시간으로 멤버 수 변화 반영
@@ -199,7 +202,7 @@ const Button = styled.div`
   line-height: 16px;
   letter-spacing: -0.5px;
 `;
-const Popup = styled.div`
+const Popup = styled.div<PopupProps>`
   z-index: 10;
   display: flex;
   width: 272px;
