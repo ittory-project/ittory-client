@@ -14,7 +14,7 @@ import { JoinPage } from "./pages/JoinPage";
 import { ConnectionPage } from "./pages/ConnectionPage";
 import { AccountPage } from "./pages/AccountPage";
 import { LetterBoxPage } from "./pages/LetterBoxPage";
-import StompTest from "./components/common/StompTest";
+import { ShareLetterPage } from "./pages/share/SharePage";
 
 function App() {
   return (
@@ -22,13 +22,13 @@ function App() {
       <MainLayout>
         <Routes>
         <Route path='/' element={<HomePage />} />
-        <Route path='/stomp' element={<StompTest />} />
         <Route path='/comp' element={<CompTest />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/redirect" element={<LoginRedirectPage />} />
-        <Route path="/write" element={<WritePage />} />
+        <Route path="/write/:letterId" element={<WritePage />} />
         <Route path="/receive" element={<ReceivePage />} />
         <Route path="/receive/letter" element={<ReceiveLetterPage />} />
+        <Route path="/share" element={<ShareLetterPage />} />
         <Route path="/Create" element={<CreatePage />} />
         <Route path="/Invite" element={<InvitePage />} />
         <Route path="/Join" element={<JoinPage />} />
