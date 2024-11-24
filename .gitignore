@@ -1,3 +1,4 @@
 # node_modules 숨김
 /node_modules
+.DS_Store
 .env
