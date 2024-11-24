@@ -1,36 +1,79 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import writeOrderData from "../../../data/write/writeOrder.json"
+
+import {
+  LetterPartiItem,
+  LetterPartiListGetResponse,
+} from "../../../api/model/LetterModel";
+import { getLetterPartiList } from "../../../api/service/LetterService";
+import { useParams } from "react-router-dom";
+import { decodeLetterId } from "../../../api/config/base64";
 
 interface WriteModalProps {
   onClose: () => void;
+  partiCount: number;
+  repeatCount: number;
+  elementCount: number;
 }
 
-export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
+export const WriteMainModal: React.FC<WriteModalProps> = ({
+  onClose,
+  partiCount,
+  repeatCount,
+  elementCount,
+}) => {
+  const { letterId } = useParams();
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>();
+
+  const getPartiList = async () => {
+    if (!letterId) {
+      window.alert("잘못된 접근입니다.");
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.");
+    } else {
+      const response: LetterPartiListGetResponse =
+        await getLetterPartiList(letterNumId);
+      setWriteOrderList(response.participants);
+    }
+  };
+  useEffect(() => {
+    getPartiList();
+  }, []);
+
   return (
     <Overlay onClick={onClose}>
       <Popup onClick={(e) => e.stopPropagation()}>
         <PopupTitle>
-          {}명의 참여자가
-          <br/>
-          {}이어 쓸 거예요!
+          {String(partiCount)}명의 참여자가
+          <br />
+          {String(repeatCount)}번씩 이어 쓸 거예요!
         </PopupTitle>
         <PopupTitleDetail>
-          총 {}개의 그림이 생성돼요
+          총 {String(elementCount)}개의 그림이 생성돼요
         </PopupTitleDetail>
         <PopupList>
-          <PopupListTitle>
-            작성 순서
-          </PopupListTitle>
-          <List>
-          <Line />
-          {writeOrderData.map(participant => (
-            <ListItem key={participant.id}>
-              <ListNumber>{participant.id}</ListNumber>
-              <Avatar src={participant.imageUrl} alt={participant.name} />
-              <Name>{participant.name}</Name>
-            </ListItem>
-          ))}
-        </List>
+          <PopupListTitle>작성 순서</PopupListTitle>
+          {writeOrderList ? (
+            <List>
+              <Line $itemnum={Number(partiCount)} />
+              {writeOrderList
+                .slice()
+                .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
+                .map((participant) => (
+                  <ListItem key={participant.sequence}>
+                    <ListNumber>{participant.sequence}</ListNumber>
+                    <Avatar
+                      src={participant.imageUrl || "/assets/basic_user.svg"}
+                      alt={participant.nickname}
+                    />
+                    <Name>{participant.nickname}</Name>
+                  </ListItem>
+                ))}
+            </List>
+          ) : (
+            <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
+          )}
         </PopupList>
       </Popup>
     </Overlay>
@@ -58,8 +101,10 @@ const Popup = styled.div`
   align-items: center;
   gap: 16px;
   border-radius: var(--Border-Radius-radius_500, 16px);
-  background: linear-gradient(144deg, #FFF -0.87%, #C3F1FF 109.18%);
-  box-shadow: 0px 4px 0px 0px rgba(195, 241, 255, 0.80) inset, 0px -4px 0px 0px rgba(0, 0, 0, 0.10) inset;
+  background: linear-gradient(144deg, #fff -0.87%, #c3f1ff 109.18%);
+  box-shadow:
+    0px 4px 0px 0px rgba(195, 241, 255, 0.8) inset,
+    0px -4px 0px 0px rgba(0, 0, 0, 0.1) inset;
 `;
 
 const PopupTitle = styled.div`
@@ -76,7 +121,7 @@ const PopupTitle = styled.div`
 `;
 
 const PopupTitleDetail = styled.div`
-  color: var(--Color-grayscale-gray600, #868E96);
+  color: var(--Color-grayscale-gray600, #868e96);
   text-align: center;
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
@@ -88,14 +133,16 @@ const PopupTitleDetail = styled.div`
 
 const PopupList = styled.div`
   display: flex;
+  max-height: 50vh;
   width: 224px;
-  padding: 0px var(--Typography-line_height-l, 40px) 16px var(--Typography-line_height-l, 40px);
+  padding: 0px var(--Typography-line_height-l, 40px) 16px
+    var(--Typography-line_height-l, 40px);
   flex-direction: column;
   align-items: center;
   gap: 16px;
   border-radius: var(--Border-Radius-radius_400, 12px);
-  border: 3px solid var(--Color-secondary-soft_blue, #D3EDFF);
-  background: var(--color-black-white-white, #FFF);
+  border: 3px solid var(--Color-secondary-soft_blue, #d3edff);
+  background: var(--color-black-white-white, #fff);
 `;
 
 const PopupListTitle = styled.div`
@@ -106,9 +153,9 @@ const PopupListTitle = styled.div`
   align-items: center;
   gap: 10px;
   border-radius: 0px 0px 12px 12px;
-  background: var(--Color-secondary-soft_blue, #D3EDFF);
+  background: var(--Color-secondary-soft_blue, #d3edff);
   box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.04) inset;
-  color: var(--Color-secondary-blue, #4DB4FF);
+  color: var(--Color-secondary-blue, #4db4ff);
   text-align: center;
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-xs, 12px);
@@ -122,9 +169,13 @@ const List = styled.ul`
   z-index: 2;
   position: relative;
   width: 100%;
-  list-style-type: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ListItem = styled.li`
@@ -141,7 +192,7 @@ const ListNumber = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  color: var(--color-black-white-white, #FFF);
+  color: var(--color-black-white-white, #fff);
   text-align: center;
   font-family: var(--Typography-family-number, "Gmarket Sans");
   font-size: 12px;
@@ -149,8 +200,8 @@ const ListNumber = styled.div`
   line-height: var(--Typography-line_height-2xs, 16px); /* 160% */
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
   border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: var(--Color-secondary-blue, #4DB4FF);
-  color: var(--color-black-white-white, #FFF);
+  background: var(--Color-secondary-blue, #4db4ff);
+  color: var(--color-black-white-white, #fff);
 `;
 
 const Avatar = styled.img`
@@ -165,10 +216,10 @@ const Name = styled.span`
   color: #333;
 `;
 
-const Line = styled.div`
-  border-left: 1.5px dashed rgba(111, 176, 255, 0.50);
-  height: 80%;
-  top: 35px;
+const Line = styled.div<{ $itemnum: number }>`
+  border-left: 1.5px dashed rgba(111, 176, 255, 0.5);
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 60px)`};
+  top: 0px;
   left: 12px;
   position: absolute;
   z-index: 1;
