@@ -92,7 +92,8 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     window.localStorage.setItem('nowRepeat', String(nowRepeat))
   }, [nowRepeat])
   useEffect(() => {
-    window.localStorage.setItem('totalItem', "6")
+    setTotalItem(12)
+    window.localStorage.setItem('totalItem', String(totalItem))
   }, [totalItem])
   useEffect(() => {
     window.localStorage.setItem('nowTotalItem', String(nowTotalItem))
@@ -166,7 +167,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       // 상태 업데이트
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
-      console.log("다음 사람 인덱스: ", (nextIndex+1) % partiNum, "다음 사람 멤버아이디 너 누기야: " , writeOrderList[(nextIndex+1) % partiNum].memberId)
+      console.log("다음 사람 인덱스: ", (nextIndex+1) % partiNum, "다음 사람 멤버아이디 누구: " , writeOrderList[(nextIndex+1) % partiNum].memberId)
       setNextMemberId(writeOrderList[(nextIndex+1) % partiNum].memberId);
       setNowLetterId(prevNowLetterId => prevNowLetterId + 1);
 
@@ -199,6 +200,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const fetchRepeatCount = async () => {
     const info: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
     setRepeatNum(info.repeatCount)
+    setTotalItem(info.elementCount)
   }
 
   // 참여자 목록 불러오기
@@ -210,7 +212,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
       if (writeOrderList) {
         setNowMemberId(writeOrderList[0].memberId);
-        console.log("다음 사람 인덱스: ", 1 % partiNum, "partinum: ", partiNum, "다음 사람 멤버아이디 너 누기야: " , writeOrderList[1 % partiNum].memberId)
+        console.log("다음 사람 인덱스: ", 1 % partiNum, "partinum: ", partiNum, "다음 사람 멤버아이디: " , writeOrderList[1 % partiNum].memberId)
         setNextMemberId(writeOrderList[1 % partiNum].memberId)
         setNowSequence(writeOrderList[0].sequence);
       }
@@ -223,6 +225,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const setLockedWriteItems = () => {
     const tempItemNum = nowTotalItem - nowLetterId
     const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
+    console.log(writeOrderList)
     // 퇴장할 때 writeOrderList의 currentIndex가 잡히지 않는 문제. 아마도 currentIndex가 제대로 반영되지 않은 채로 잠금 화면들이 만들어지려고 했던듯
     const nowItem: LetterItem = {
       elementId: nowLetterId,
@@ -298,7 +301,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
           { Number(getUserId()) === nextMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.memberId === nextMemberId)].nickname} isNextAlert={true} /> }
           { Number(getUserId()) === nowMemberId && <WriteOrderAlert name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} isNextAlert={false} /> }
           { hasExitUser && <WriteQuitAlert name={exitUser} /> }
-          <button onClick={handleClearData}>삭삭제</button>
+          <button onClick={handleClearData}>삭제</button>
         </AlertContainer>
         <ScrollableOrderList>
           <WriteOrderList letterItems={[...letterItems, ...lockedItems]} nowItemId={nowItemId} progressTime={progressTime}/>
@@ -308,7 +311,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
             <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
           </ButtonContainer>
           : <LocationContainer onClick={goWritePage}>
-              <WriteLocation progressTime={progressTime} name="카리나"/>
+              <WriteLocation progressTime={progressTime} name={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].nickname} profileImage={writeOrderList[writeOrderList.findIndex(item => item.sequence === nowSequence)].imageUrl}/>
             </LocationContainer>
         }
         {showSubmitPage && (

@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { WriteQuitAlert } from "../writePage/WriteQuitAlert";
-import { WriteOrderAlert } from "../writePage/WriteOrderAlert";
 import { enterLetterWs, quitLetterWs, writeLetterWs } from "../../api/service/WsService";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -8,7 +6,7 @@ import { LetterPartiItem } from "../../api/model/LetterModel";
 import { AppDispatch, clearOrderData, selectParsedOrderData, setOrderData } from "../../api/config/state";
 
 export const CompTest = () => {
-  const letterNum = 9
+  const letterNum = 10
 
   // 채팅 입장 테스트(소켓)
   const socketTest = () => {
@@ -40,8 +38,6 @@ export const CompTest = () => {
   return (
     <Contents>
       <AlertContainer>
-        <WriteOrderAlert text="카리나" />
-        <WriteQuitAlert text="" />
         <button onClick={socketTest}>소켓테스트</button>
         <button onClick={socketListTest}>작성 목록 테스트</button>
         <button onClick={socketQuitTest}>퇴장 테스트</button>

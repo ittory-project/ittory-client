@@ -21,7 +21,6 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
   const [elementImg, setElementImg] = useState("");
   
   const getPartiList = async () => {
-    console.log('과연 key 값은 무엇으로 들어갈 것인가?', sequence)
     if (!letterId) {
       window.alert("잘못된 접근입니다.")
     } else if (!letterNumId) {
