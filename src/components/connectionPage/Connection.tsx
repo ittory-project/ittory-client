@@ -4,10 +4,7 @@ import book from "../../../public/assets/trianglebook.svg";
 import shadow from "../../../public/assets/bookshadow.svg";
 import bg from "../../../public/assets/bg.svg";
 import { WriteOrder } from "./WriteOrder";
-
-//커버스타일 테두리 수정
-//초대수락->생성된 편지로 어떻게 넘어가는지 알아보기
-//구체적 애니메이션
+import { useLocation } from "react-router-dom";
 
 const scaleAnimation = keyframes`
   0% {
@@ -29,6 +26,9 @@ const hideDuringAnimation = keyframes`
 
 export const Connection = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const location = useLocation();
+  const count = location.state.count;
+  const letterId = location.state.letterId;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -50,7 +50,7 @@ export const Connection = () => {
           <Ground />
         </BackGround>
       ) : (
-        <WriteOrder />
+        <WriteOrder count={count} letterId={letterId} />
       )}
     </>
   );
@@ -87,7 +87,7 @@ const Shadow = styled.img`
   animation-delay: 1.6s;
 `;
 //커버 종류에 따라 background 색 달라짐
-const Top = styled.div`
+const Top = styled.img`
   z-index: 1;
   position: absolute;
   top: 0;
@@ -108,7 +108,7 @@ const Ground = styled.div`
   flex-shrink: 0;
   background: linear-gradient(0deg, #f1f4a7 9.55%, #fdffc7 100%);
 `;
-const TopImg = styled.div`
+const TopImg = styled.img`
   z-index: 1;
   position: absolute;
   top: 0;

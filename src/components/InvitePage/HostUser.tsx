@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
 import out from "../../../public/assets/out.svg";
 import deletebtn from "../../../public/assets/delete.svg";
@@ -23,41 +23,20 @@ import { getCoverTypes } from "../../api/service/CoverService";
 import { CoverType } from "../../api/model/CoverType";
 import { getLetterInfo } from "../../api/service/LetterService";
 
-export interface GroupItem {
-  id: number;
-  profileImage: string;
-  name: string;
-}
-
 interface Props {
-  receiverName: string;
-  title: string;
-  backgroundImage: number;
-  croppedImage: string;
-  selectfont: string;
-  deliverDay: Date;
-  selectedImageIndex: number;
   guideOpen: boolean;
   items: Participants[];
   letterId: number;
-  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
-  //handleUserExit: (userId: number) => void;
 }
 
-export const HostUser = ({
-  receiverName,
-  title,
-  backgroundImage,
-  croppedImage,
-  selectfont,
-  deliverDay,
-  selectedImageIndex,
-  guideOpen,
-  items = [],
-  letterId,
-  setExitMessage,
-  //handleUserExit,
-}: Props) => {
+const fonts = [
+  { name: "서체1", family: "GmarketSans" },
+  { name: "서체2", family: "Ownglyph_UNZ-Rg" },
+  { name: "서체3", family: "CookieRun-Regular" },
+  { name: "서체4", family: "Cafe24ClassicType-Regular" },
+];
+
+export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
@@ -72,6 +51,12 @@ export const HostUser = ({
   const [entered, setEntered] = useState<boolean>(false);
   const [cropImg, setCropImg] = useState<string>("");
 
+  const [deliverDay, setDeliverDay] = useState<Date | null>();
+  const [title, setTitle] = useState<string>("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [selectfont, setSelectfont] = useState<number>(-1);
+  const [receiverName, setReceiverName] = useState<string>("");
+
   useEffect(() => {
     const fetchCoverTypes = async () => {
       try {
@@ -84,7 +69,13 @@ export const HostUser = ({
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
+        console.log(letterData);
         setCropImg(letterData.coverPhotoUrl);
+        setTitle(letterData.title);
+        setDeliverDay(parseISO(letterData.deliveryDate));
+        setReceiverName(letterData.receiverName);
+        setSelectedImageIndex(letterData.coverTypeId);
+        setSelectfont(letterData.fontId);
       } catch (err) {
         console.error(err);
       }
@@ -100,7 +91,7 @@ export const HostUser = ({
     } else {
       setSliceName(receiverName);
     }
-  }, []);
+  }, [receiverName]);
 
   useEffect(() => {
     const fetchMyPageData = async () => {
@@ -192,18 +183,22 @@ export const HostUser = ({
           </Header>
           <MainContainer>
             <Book
-              backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
+              backgroundImage={
+                coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+              }
             >
-              <TitleContainer font={selectfont}>{title}</TitleContainer>
-              {deliverDay === null ? (
-                <></>
-              ) : (
+              <TitleContainer font={fonts[selectfont + 1].family}>
+                {title}
+              </TitleContainer>
+              {deliverDay ? (
                 <DeliverDay>
-                  {`${format(deliverDay, "yyyy")}. `}
-                  {`${format(deliverDay, "MM")}. `}
-                  {format(deliverDay, "dd")}
-                  {` (${format(deliverDay, "E", { locale: ko })})`}
+                  {`${format(deliverDay as Date, "yyyy")}. `}
+                  {`${format(deliverDay as Date, "MM")}. `}
+                  {format(deliverDay as Date, "dd")}
+                  {` (${format(deliverDay as Date, "E", { locale: ko })})`}
                 </DeliverDay>
+              ) : (
+                <></>
               )}
               {selectedImageIndex !== 4 && (
                 <>
@@ -295,14 +290,7 @@ export const HostUser = ({
       {viewDelete && (
         <Delete letterId={letterId} setViewDelete={setViewDelete} />
       )}
-      {viewExit && (
-        <Exit
-          setViewExit={setViewExit}
-          letterId={letterId}
-          setEnter={setEntered}
-          setExitMessage={setExitMessage}
-        />
-      )}
+      {viewExit && <Exit setViewExit={setViewExit} letterId={letterId} />}
       {popup && (
         <CountPopup
           setPopup={setPopup}

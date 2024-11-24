@@ -7,12 +7,6 @@ import { getParticipants } from "../../api/service/LetterService";
 import { getMyPage } from "../../api/service/MemberService";
 import { WebSocketProvider } from "./WebSocketProvider";
 
-export interface GroupItem {
-  id: number;
-  profileImage: string;
-  name: string;
-}
-
 export interface Participants {
   sequence: number;
   memberId: number;
@@ -21,61 +15,27 @@ export interface Participants {
 }
 
 interface Props {
-  exit: boolean;
-  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
+  exitName: string;
+  setexitName?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 //재방문유저 여부
-export const Invite = ({ exit, setExitMessage }: Props) => {
-  const items: GroupItem[] = [
-    {
-      id: 1,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "카리나",
-    },
-
-    {
-      id: 2,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "닝닝",
-    },
-    {
-      id: 3,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "윈터",
-    },
-    {
-      id: 4,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "아이유우",
-    },
-  ];
-
+export const Invite = ({ exitName, setexitName }: Props) => {
   const location = useLocation();
-  const receiverName = location.state.receiverName;
-  const title = location.state.title;
-  const backgroundImage = location.state.backgroundImage;
-  const croppedImage = location.state.croppedImage;
-  const selectfont = location.state.selectfont;
-  const deliverDay = location.state.deliverDay;
-  const selectedImageIndex = location.state.selectedImageIndex;
   const guideOpen = location.state.guideOpen;
   const getletterId = location.state.letterId;
 
-  const [currentItems, setCurrentItems] = useState<GroupItem[]>(items);
-  const [previousItems, setPreviousItems] = useState<GroupItem[]>(items);
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
   const [userId, setUserId] = useState<number>(0);
   const [letterId, setLetterId] = useState<number>(getletterId);
-  const [exitState, SetExitState] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
-        const data = await getParticipants(1);
+        const data = await getParticipants(12);
         setParticipants(data);
         console.log(data);
       } catch (err) {
@@ -102,104 +62,56 @@ export const Invite = ({ exit, setExitMessage }: Props) => {
     }
   }, [participants, userId]);
 
+  //퇴장 알림
   useEffect(() => {
+    /*
+    exitName이 방장이였던 경우 
+    setExitAlert(`방장 '${exitName}'님이 퇴장했어요`);
+    */
+    setExitAlert(`'${exitName}'님이 퇴장했어요`);
     const exitTimer = setTimeout(() => {
       setExitAlert(null);
+      if (setexitName) {
+        setexitName(null);
+      }
     }, 5000);
 
-    // Cleanup timer if component unmounts or alert changes
     return () => clearTimeout(exitTimer);
-  }, [exitAlert]);
+  }, [exitName]);
 
+  //방장 바뀜 알림
   useEffect(() => {
+    //const host = participants[0].nickname;
+    //setHostAlert(`참여한 순서대로 '${host}'님이 방장이 되었어요`);
     const hostTimer = setTimeout(() => {
       setHostAlert(null);
     }, 10000);
 
     return () => clearTimeout(hostTimer);
-  }, [hostAlert]);
+  }, [exitName]);
 
   return (
     <WebSocketProvider letterId={letterId}>
       <BackGround>
-        {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
+        {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
         {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
         {memberIndex !== 0 ? (
           <HostUser
-            receiverName={receiverName}
-            title={title}
-            backgroundImage={backgroundImage}
-            croppedImage={croppedImage}
-            selectfont={selectfont}
-            deliverDay={deliverDay}
-            selectedImageIndex={selectedImageIndex}
             guideOpen={guideOpen}
             items={participants}
             letterId={letterId}
-            setExitMessage={setExitMessage}
-            //handleUserExit={handleUserExit}
           />
         ) : (
           <Member
             letterId={letterId}
-            receiverName={receiverName}
-            title={title}
-            backgroundImage={backgroundImage}
-            croppedImage={croppedImage}
-            selectfont={selectfont}
-            deliverDay={deliverDay}
-            selectedImageIndex={selectedImageIndex}
             guideOpen={guideOpen}
-            items={currentItems}
-            setExitMessage={setExitMessage}
-            //handleUserExit={handleUserExit}
+            items={participants}
           />
         )}
       </BackGround>
     </WebSocketProvider>
   );
 };
-/*
-  useEffect(() => {
-    // Calculate memberIndex when currentItems changes
-    const index = currentItems.findIndex(
-      (item) =>
-        item.id === nowUser.id &&
-        item.profileImage === nowUser.profileImage &&
-        item.name === nowUser.name
-    );
-    setMemberIndex(index);
-  }, [currentItems]);
-
-  const handleUserExit = (userId: number) => {
-    // 배열에서 특정 유저 제거
-    const updatedItems = items.filter((item) => item.id !== userId);
-    setCurrentItems(updatedItems);
-  };
-
-  useEffect(() => {
-    const removedMembers = previousItems.filter(
-      (prevItem) =>
-        !currentItems.find((currentItem) => currentItem.id === prevItem.id)
-    );
-
-    if (removedMembers.length > 0) {
-      setExitAlert(
-        `${removedMembers.map((item) => item.name).join(", ")}님이 퇴장했어요`
-      );
-      const firstRemovedMember = removedMembers[0];
-      if (
-        firstRemovedMember &&
-        previousItems[0] &&
-        firstRemovedMember.id === previousItems[0].id
-      ) {
-        setHostAlert(
-          `참여한 순서대로 '${currentItems[0]?.name || "없음"}'님이 방장이 되었어요`
-        );
-      }
-    }
-    setPreviousItems(currentItems);
-  }, [currentItems]);*/
 
 const BackGround = styled.div`
   display: flex;

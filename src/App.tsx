@@ -29,12 +29,12 @@ function App() {
           <Route path="/receive" element={<ReceivePage />} />
           <Route path="/receive/letter" element={<ReceiveLetterPage />} />
           <Route path="/share" element={<ShareLetterPage />} />
-          <Route path="/Create" element={<CreatePage />} />
-          <Route path="/Invite" element={<InvitePage />} />
-          <Route path="/Join" element={<JoinPage />} />
-          <Route path="/Connection" element={<ConnectionPage />} />
-          <Route path="/Account" element={<AccountPage />} />
-          <Route path="/LetterBox" element={<LetterBoxPage />} />
+          <Route path="/create" element={<CreatePage />} />
+          <Route path="/invite" element={<InvitePage />} />
+          <Route path="/join" element={<JoinPage />} />
+          <Route path="/connection" element={<ConnectionPage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/letterBox" element={<LetterBoxPage />} />
         </Routes>
       </MainLayout>
     </Router>

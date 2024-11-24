@@ -2,11 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import letter from "../../../public/assets/letter.svg";
 import runner from "../../../public/assets/runner.svg";
+import { getParticipants } from "../../api/service/LetterService";
+import { getLetterInfo } from "../../api/service/LetterService";
 
-export interface GroupItem {
-  id: number;
-  profileImage: string;
-  name: string;
+export interface Participants {
+  sequence: number;
+  memberId: number;
+  nickname: string;
+  imageUrl: string;
+}
+interface Props {
+  count: number;
+  letterId: number;
 }
 
 interface UserNumElement extends HTMLElement {
@@ -16,41 +23,35 @@ interface PopupProps {
   isVisible: boolean;
 }
 
-export const WriteOrder = () => {
-  //실시간으로 멤버 수 변화 반영
-  const items: GroupItem[] = [
-    {
-      id: 1,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "카리나",
-    },
-
-    {
-      id: 2,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "닝닝",
-    },
-    {
-      id: 3,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "윈터",
-    } /*
-
-    {
-      id: 4,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "아이유우",
-    } 
-
-    {
-      id: 5,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "예지",
-    },*/,
-  ];
-
+export const WriteOrder = ({ count, letterId }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const userNumsRef = useRef<(UserNumElement | null)[]>([]);
+  const [items, setItems] = useState<Participants[]>([]);
+  const [title, setTitle] = useState<string>("");
+
+  console.log(count);
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const memdata = await getParticipants(letterId, "sequence");
+        setItems(memdata);
+        console.log(items);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchParticipants();
+    const fetchTitle = async () => {
+      try {
+        const data = await getLetterInfo(letterId);
+        setTitle(data.title);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchTitle();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -65,7 +66,7 @@ export const WriteOrder = () => {
       <Overlay />
       <TitleBar>
         <img src={letter} style={{ width: "18px", height: "14px" }} />
-        <LetterTitle>선재야 생일 축하해</LetterTitle>
+        <LetterTitle>{title}</LetterTitle>
         <Button>
           <img src={runner} style={{ width: "12.5px", height: "14px" }} />
           순서
@@ -76,10 +77,11 @@ export const WriteOrder = () => {
           <Txt>
             {items.length}명의 참여자가
             <br />
-            <span style={{ color: "#FFA256" }}>20번씩</span> 이어 쓸 거예요!
+            <span style={{ color: "#FFA256" }}>{count}번씩</span> 이어 쓸
+            거예요!
           </Txt>
         </Title>
-        <SubTitle>총 60개의 그림이 생성돼요</SubTitle>
+        <SubTitle>총 {count * items.length}개의 그림이 생성돼요</SubTitle>
         <Container>
           <TitleBox>작성 순서</TitleBox>
           {items.map((user, index) => (
@@ -101,8 +103,8 @@ export const WriteOrder = () => {
                   <></>
                 )}
               </NumLine>
-              <UserImage img={user.profileImage} />
-              <UserName>{user.name}</UserName>
+              <UserImage img={user.imageUrl} />
+              <UserName>{user.nickname}</UserName>
             </UserList>
           ))}
         </Container>

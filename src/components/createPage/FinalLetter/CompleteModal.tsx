@@ -101,13 +101,6 @@ export default function CompleteModal({
         state: {
           letterId: letterId,
           guideOpen: guideOpen,
-          receiverName: receiverName,
-          title: title,
-          croppedImage: croppedImage,
-          backgroundImage: backgroundImage,
-          deliverDay: deliverDay,
-          selectfont: selectfont,
-          selectedImageIndex: selectedImageIndex,
         },
       });
     } catch (error) {
