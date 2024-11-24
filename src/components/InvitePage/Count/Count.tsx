@@ -44,14 +44,13 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
       const requestBody = { letterId: id, repeatCount: count };
       const response = await postRepeatCount(requestBody);
       console.log(response);
+
+      navigate("/Connection");
     } catch (err) {
       console.error("API error:", err);
     }
   };
 
-  const navigateToConnection = () => {
-    //navigate("/Connection");
-  };
   //작성 순서 api 호출해33서 작성 순서 설정 /random
 
   return (
@@ -106,7 +105,7 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
         </Notice>
       </Contents>
       <Button onClick={handleSubmit}>
-        <ButtonTxt onClick={navigateToConnection}>시작하기</ButtonTxt>
+        <ButtonTxt>시작하기</ButtonTxt>
       </Button>
     </ModalContainer>
   );

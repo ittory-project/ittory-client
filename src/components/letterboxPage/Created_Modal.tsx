@@ -7,9 +7,10 @@ import share from "../../../public/assets/share.svg";
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  openLetter:boolean;
 }
 
-export const Created_Modal = ({ setIsModalOpen, setPopup }: Props) => {
+export const Created_Modal = ({ setIsModalOpen, setPopup,openLetter }: Props) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };

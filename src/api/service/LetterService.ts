@@ -69,24 +69,24 @@ export async function deleteLetter(
   return response.data;
 }*/
 
-//편지 작성 중 편지 삭제되는 API
-export const deleteLetter = async (
+//편지 삭제 API
+export async function deleteLetter(
   letterId: number
-): Promise<LetterDeleteResponse> => {
+): Promise<LetterDeleteResponse> {
   try {
     const response = await api.delete(
       `https://dev-server.ittory.co.kr/api/letter/${letterId}`
     );
-
-    // 204 No Content 응답 처리 (편지가 정상적으로 삭제되었을 때)
-    if (response.status === 204) {
-      return;
-    }
     return response.data;
-  } catch (err) {
-    throw err;
+  } catch (err: any) {
+    if (err.response && err.response.data) {
+      console.error("API Error Response:", err.response.data);
+      throw err.response.data; // 에러 데이터를 그대로 throw
+    } else {
+      throw err; // 예기치 않은 에러 처리
+    }
   }
-};
+}
 
 //반복 횟수 API
 export async function postRepeatCount(
