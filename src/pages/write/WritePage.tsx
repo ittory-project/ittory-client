@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { WriteMainModal } from "../../components/writePage/writeMainModal/WriteMainModal";
-<<<<<<< HEAD
-import Write from "../../components/writePage/Write";
-
-
-export const WritePage = () => {
-=======
 import { Write } from "../../components/writePage/Write";
 import { useParams } from "react-router-dom";
 import { decodeLetterId } from "../../api/config/base64";
@@ -14,55 +8,42 @@ import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
 import { getLetterStartInfo } from "../../api/service/LetterService";
 
 export const WritePage = () => {
-  const { letterId } = useParams()
+  const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterTitle, setLetterTitle] = useState("");
-  const [partiCount, setPartiCount] = useState<Number | null>()
-  const [repeatCount, setRepeatCount] = useState<Number | null>()
-  const [elementCount, setElementCount] = useState<Number | null>()
+  const [partiCount, setPartiCount] = useState<Number | null>();
+  const [repeatCount, setRepeatCount] = useState<Number | null>();
+  const [elementCount, setElementCount] = useState<Number | null>();
 
->>>>>>> 8ff0b8bc6a6de3d8e5f82258f216c727382c07f9
   const [showPopup, setShowPopup] = useState(true);
 
   const onClose = () => {
     setShowPopup(false);
   };
 
-<<<<<<< HEAD
-=======
   const getStartInfo = async () => {
     if (!letterId) {
-      window.alert("잘못된 접근입니다.")
+      window.alert("잘못된 접근입니다.");
     } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.")
+      window.alert("잘못된 접근입니다.");
     } else {
-      const response: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
-      setLetterTitle(response.title)
-      setPartiCount(response.participantCount)
-      setRepeatCount(response.repeatCount)
-      setElementCount(response.elementCount)
+      const response: LetterStartInfoGetResponse =
+        await getLetterStartInfo(letterNumId);
+      setLetterTitle(response.title);
+      setPartiCount(response.participantCount);
+      setRepeatCount(response.repeatCount);
+      setElementCount(response.elementCount);
     }
-  }
+  };
   useEffect(() => {
-    getStartInfo()
+    getStartInfo();
   }, []);
 
   // 모달 띄우는 시간 계산
->>>>>>> 8ff0b8bc6a6de3d8e5f82258f216c727382c07f9
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowPopup(false);
     }, 15000);
-<<<<<<< HEAD
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <Container>
-      {showPopup && <WriteMainModal onClose={onClose} />}
-      <Write />
-=======
     return () => clearTimeout(timer);
   }, []);
 
@@ -71,7 +52,7 @@ export const WritePage = () => {
   useEffect(() => {
     const totalDuration = 100000;
     const interval = setInterval(() => {
-      setProgressTime(prev => {
+      setProgressTime((prev) => {
         if (prev <= 0) {
           clearInterval(interval);
           return 0;
@@ -85,19 +66,19 @@ export const WritePage = () => {
 
   return (
     <Container>
-      {showPopup && 
-        <WriteMainModal 
-          onClose={onClose} 
-          partiCount={Number(partiCount)} 
-          repeatCount={Number(repeatCount)} 
+      {showPopup && (
+        <WriteMainModal
+          onClose={onClose}
+          partiCount={Number(partiCount)}
+          repeatCount={Number(repeatCount)}
           elementCount={Number(elementCount)}
-          />}
-      <Write 
-        progressTime={progressTime} 
-        setProgressTime={setProgressTime} 
-        letterTitle={letterTitle}
         />
->>>>>>> 8ff0b8bc6a6de3d8e5f82258f216c727382c07f9
+      )}
+      <Write
+        progressTime={progressTime}
+        setProgressTime={setProgressTime}
+        letterTitle={letterTitle}
+      />
     </Container>
   );
 };
@@ -105,11 +86,7 @@ export const WritePage = () => {
 const Container = styled.div`
   position: relative;
   width: 100%;
-<<<<<<< HEAD
-  height: 100vh;;
-=======
   height: 100vh;
->>>>>>> 8ff0b8bc6a6de3d8e5f82258f216c727382c07f9
   display: flex;
   justify-content: center;
   align-items: center;

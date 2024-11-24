@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { exitLetterWs } from "./WebSocketProvider";
+import { quitLetterWs } from "../../api/service/WsService";
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,7 +23,7 @@ export const Exit = ({
   };
 
   const handleExit = () => {
-    exitLetterWs(letterId, "yuin", setExitMessage);
+    quitLetterWs(letterId);
   };
 
   return (

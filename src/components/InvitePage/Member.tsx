@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
 import out from "../../../public/assets/out.svg";
 import info from "../../../public/assets/info.svg";
@@ -15,56 +15,38 @@ import shadow from "../../../public/assets/shadow2.svg";
 import { getCoverTypes } from "../../api/service/CoverService";
 import { getLetterInfo } from "../../api/service/LetterService";
 import { CoverType } from "../../api/model/CoverType";
-import { exitLetterWs } from "./WebSocketProvider";
-
-export interface GroupItem {
-  id: number;
-  profileImage: string;
-  name: string;
-}
+import { quitLetterWs } from "../../api/service/WsService";
+import { Participants } from "./Invite";
 
 interface Props {
-  receiverName: string;
-  title: string;
-  backgroundImage: number;
-  croppedImage: string;
-  selectfont: string;
-  deliverDay: Date;
-  selectedImageIndex: number;
   guideOpen: boolean;
-  items: GroupItem[];
+  items: Participants[];
   letterId: number;
-  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
-  //handleUserExit: (userId: number) => void;
 }
+const fonts = [
+  { name: "서체1", family: "GmarketSans" },
+  { name: "서체2", family: "Ownglyph_UNZ-Rg" },
+  { name: "서체3", family: "CookieRun-Regular" },
+  { name: "서체4", family: "Cafe24ClassicType-Regular" },
+];
 
-export const Member = ({
-  receiverName,
-  title,
-  backgroundImage,
-  selectfont,
-  deliverDay,
-  selectedImageIndex,
-  guideOpen,
-  items = [],
-  letterId,
-  setExitMessage,
-  //handleUserExit,
-}: Props) => {
+export const Member = ({ guideOpen, items, letterId }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
-  const [currentitems, setCurrentItems] = useState<GroupItem[]>(items);
-  const [previousItems, setPreviousItems] = useState<GroupItem[]>(items);
-  const namesString = items.map((item) => item.name).join(", ");
+  const namesString = items.map((item) => item.nickname).join(", ");
   const [memberId, setMemberId] = useState<number>(0);
-  const [name, setName] = useState<string>("");
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [entered, setEntered] = useState<boolean>(false);
+
   const [cropImg, setCropImg] = useState<string>("");
+  const [deliverDay, setDeliverDay] = useState<Date | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [selectfont, setSelectfont] = useState<number>(-1);
+  const [receiverName, setReceiverName] = useState<string>("");
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -87,6 +69,10 @@ export const Member = ({
       try {
         const letterData = await getLetterInfo(letterId);
         setCropImg(letterData.coverPhotoUrl);
+        setDeliverDay(parseISO(letterData.deliveryDate));
+        setReceiverName(letterData.receiverName);
+        setSelectedImageIndex(letterData.coverTypeId);
+        setSelectfont(letterData.fontId);
       } catch (err) {
         console.error(err);
       }
@@ -106,8 +92,8 @@ export const Member = ({
   };
 
   const handleExit = () => {
-    exitLetterWs(letterId, name, setExitMessage);
     console.log(letterId);
+    quitLetterWs(letterId);
   };
 
   //url 맞게 수정하기
@@ -158,18 +144,22 @@ export const Member = ({
           </Header>
           <MainContainer>
             <Book
-              backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
+              backgroundImage={
+                coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+              }
             >
-              <TitleContainer font={selectfont}>{title}</TitleContainer>
-              {deliverDay === null ? (
-                <></>
-              ) : (
+              <TitleContainer font={fonts[selectfont + 1].family}>
+                {title}
+              </TitleContainer>
+              {deliverDay ? (
                 <DeliverDay>
-                  {`${format(deliverDay, "yyyy")}.`}
-                  {`${format(deliverDay, "MM")}.`}
-                  {format(deliverDay, "dd")}
-                  {` (${format(deliverDay, "E", { locale: ko })})`}
+                  {`${format(deliverDay as Date, "yyyy")}. `}
+                  {`${format(deliverDay as Date, "MM")}. `}
+                  {format(deliverDay as Date, "dd")}
+                  {` (${format(deliverDay as Date, "E", { locale: ko })})`}
                 </DeliverDay>
+              ) : (
+                <></>
               )}
               {selectedImageIndex !== 4 && (
                 <>
@@ -202,26 +192,28 @@ export const Member = ({
                 <List>
                   {items.map((user, index) =>
                     index === 0 ? (
-                      <MainUser key={user.id}>
+                      <MainUser key={user.memberId}>
                         <Crown img={crown} />
                         <User>
-                          <ProfileImg img={items[0].profileImage} />
-                          <UserName>{items[0].name}</UserName>
+                          <ProfileImg img={items[0].imageUrl} />
+                          <UserName>{items[0].nickname}</UserName>
                         </User>
                       </MainUser>
                     ) : (
-                      <InvitedUser key={user.id}>
+                      <InvitedUser key={user.memberId}>
                         <User>
-                          <ProfileImg img={user.profileImage} />
-                          {user.name.length > 3 ? (
+                          <ProfileImg img={user.imageUrl} />
+                          {user.nickname.length > 3 ? (
                             <UserNameContainer>
-                              <UserName>{handleUserName(user.name)}</UserName>
+                              <UserName>
+                                {handleUserName(user.nickname)}
+                              </UserName>
                               <UserName style={{ letterSpacing: "-0.2em" }}>
                                 ···
                               </UserName>
                             </UserNameContainer>
                           ) : (
-                            <UserName>{user.name}</UserName>
+                            <UserName>{user.nickname}</UserName>
                           )}
                         </User>
                       </InvitedUser>

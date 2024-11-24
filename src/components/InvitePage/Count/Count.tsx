@@ -20,12 +20,13 @@ interface SlideContentProps {
 }
 
 export const Count = ({ setViewCount, member, letterId }: Props) => {
-  const fakemember = 1;
-  const length = Math.floor(50 / fakemember);
+  const length = Math.floor(50 / member);
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectNumber, setSelectNumber] = useState(1);
   const navigate = useNavigate();
+
+  console.log(length);
 
   useEffect(() => {
     setSelectNumber(activeIndex + 1);
@@ -45,7 +46,12 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
       const response = await postRepeatCount(requestBody);
       console.log(response);
 
-      navigate("/Connection");
+      navigate("/Connection", {
+        state: {
+          count: length,
+          letterId: 12, //임의 값
+        },
+      });
     } catch (err) {
       console.error("API error:", err);
     }

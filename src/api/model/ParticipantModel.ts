@@ -1,6 +1,6 @@
 //참여자 작성 순서 설정
 export interface RandomPostRequest {
-  letterId: string;
+  letterId: number;
 }
 export interface randomParticipants {
   sequence: number;

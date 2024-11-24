@@ -6,8 +6,7 @@ import { Created_Modal } from "./Created_Modal";
 import { Received_Modal } from "./Received_Modal";
 import { ReceiveLetter } from "../receivePage/ReceiveLetter";
 import { Delete_letterbox } from "./Delete_letterbox";
-
-//편지 불러올때 어떻게 해야하지..
+import { encodeLetterId, decodeLetterId } from "../../api/config/base64";
 
 interface Props {
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,6 +46,10 @@ export const Letter = ({
     setDeleteName(deleteItem);
   }, [deleteItem]);
 
+  console.log(letterId);
+  const id = encodeLetterId(letterId);
+  console.log(decodeLetterId(id));
+
   return (
     <BackGround>
       {isModalOpen && <Overlay />}
@@ -61,6 +64,7 @@ export const Letter = ({
             </MoreBox>
           </Header>
           <ReceiveLetter />
+
           {isModalOpen &&
             (context === "created" ? (
               <Created_Modal
