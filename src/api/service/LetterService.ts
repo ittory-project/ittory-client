@@ -13,11 +13,11 @@ export async function getLetterStartInfo(letterId: number): Promise<LetterStartI
 // 현재 유저를 순서에 맞게 조회 API
 // param: 편지 ID, 순서
 // response: LetterPartiListGetResponse
-export async function getLetterPartiList(letterId: number, order?: number): Promise<LetterPartiListGetResponse> {
+export async function getLetterPartiList(letterId: number): Promise<LetterPartiListGetResponse> {
   const response: ApiResponse<LetterPartiListGetResponse> = await api.get( 
     `/api/letter/participant/${letterId}`, {
       params: {
-        order
+        order: 'sequence'
       }
     });
   return response.data.data;
