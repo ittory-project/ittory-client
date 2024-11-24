@@ -1,43 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
-  letterId: number;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
+  onDelete: () => void;
+  context: string;
+  deleteItem: string;
 }
 
-export const CountPopup = ({ setPopup, setViewCount, letterId }: Props) => {
-  const handleCancel = () => {
+export const DeletePopup = ({
+  setPopup,
+  onDelete,
+  setIsModalOpen,
+  context,
+  deleteItem,
+  setOpenLetter,
+}: Props) => {
+  const [deleteName, setDeleteName] = useState<string>("");
+
+  useEffect(() => {
+    setDeleteName(deleteItem);
+  }, [deleteItem]);
+
+  const cancelDelete = () => {
     setPopup(false);
   };
-  const openCount = () => {
+  const handleDelete = () => {
+    onDelete();
     setPopup(false);
-    setViewCount(true);
+    setIsModalOpen(false);
+    setOpenLetter(false);
   };
 
   return (
     <BackGround>
       <Modal>
-        <Title>이어 쓸 횟수를 정하면</Title>
-        <Title>편지 작성이 바로 시작돼요</Title>
-        <Contents>참여자가 모두 들어왔는지 확인해 주세요</Contents>
+        {context === "created" && <Title>'To.{deleteName}'</Title>}
+        {context === "received" && <Title>'{deleteName}'</Title>}
+        <Title>편지를 정말 삭제시겠어요?</Title>
+        <Contents>삭제한 편지는 복구할 수 없어요</Contents>
         <ButtonContainer>
           <Button
             style={{
               background: "#CED4DA",
             }}
-            onClick={handleCancel}
           >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+            <ButtonTxt style={{ color: "#495057" }} onClick={cancelDelete}>
+              취소하기
+            </ButtonTxt>
           </Button>
           <Button
             style={{
               background: "#FFA256",
             }}
-            onClick={openCount}
           >
-            <ButtonTxt style={{ color: "#fff" }}>횟수 정하기</ButtonTxt>
+            <ButtonTxt style={{ color: "#fff" }} onClick={handleDelete}>
+              삭제하기
+            </ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>
@@ -49,18 +70,17 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  //justify-content: center;
   height: 100vh;
   width: 100vw;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99;
 `;
 const Modal = styled.div`
   display: flex;
   width: 272px;
-  height: 11.6rem;
   box-sizing: border-box;
   padding: 24px;
   flex-direction: column;
@@ -73,8 +93,6 @@ const Modal = styled.div`
   border: 3px solid #d3edff;
   background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
   z-index: 100;
-  align-items: center;
-  margin: 0;
 `;
 const Title = styled.div`
   display: flex;
@@ -92,6 +110,7 @@ const Title = styled.div`
   letter-spacing: -0.5px;
 `;
 const Contents = styled.div`
+  margin-top: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,15 +124,13 @@ const Contents = styled.div`
   font-weight: 400;
   line-height: 16px;
   letter-spacing: -0.5px;
-  margin-top: 8px;
 `;
 const ButtonContainer = styled.div`
-  display: flex;
+  margin-top: 20px;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
   position: relative;
-  margin-top: 1.35rem;
   justify-content: center;
   display: flex;
   width: 100%;
@@ -133,11 +150,11 @@ const Button = styled.button`
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 `;
-const ButtonTxt = styled.span`
+const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: 14px;
+  line-height: 20px;
   letter-spacing: -0.5px;
 `;

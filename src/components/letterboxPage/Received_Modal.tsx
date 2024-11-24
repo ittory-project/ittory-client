@@ -6,10 +6,14 @@ import delete2 from "../../../public/assets/delete2.svg";
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  openLetter:boolean;
+  openLetter: boolean;
 }
 
-export const Received_Modal = ({ setIsModalOpen, setPopup,openLetter }: Props) => {
+export const Received_Modal = ({
+  setIsModalOpen,
+  setPopup,
+  openLetter,
+}: Props) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };

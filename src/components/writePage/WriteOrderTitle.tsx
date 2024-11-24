@@ -1,21 +1,26 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { WriteOrderPopover } from "./WriteOrderPopover";
+import { LetterPartiItem } from "../../api/model/LetterModel";
 
 interface TitleProps {
+  writeOrderList: LetterPartiItem[];
   title: string;
 }
 
-export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
+export const WriteOrderTitle: React.FC<TitleProps> = ({
+  writeOrderList,
+  title,
+}) => {
   const [isPopover, setIsPopover] = useState(false);
 
   const closePopover = () => {
     setIsPopover(false);
-  }
+  };
 
   const handleOrderBtn = () => {
     setIsPopover(!isPopover);
-  }
+  };
 
   return (
     <div>
@@ -25,13 +30,22 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
             <Img src="/img/write_letter_order.png" />
             {title}
           </LeftContent>
-          <OrderBtn onClick={handleOrderBtn}>
-            <img src="/assets/order_btn.svg" />
-            순서
-          </OrderBtn>
+          <OrderBtn
+            src={
+              isPopover
+                ? "/assets/write/order_btn_click.svg"
+                : "/assets/write/order_btn.svg"
+            }
+            onClick={handleOrderBtn}
+          />
         </InnerContainer>
       </OuterContainer>
-      {isPopover && <WriteOrderPopover onClose={closePopover} />}
+      {isPopover && (
+        <WriteOrderPopover
+          writeOrderList={writeOrderList}
+          onClose={closePopover}
+        />
+      )}
     </div>
   );
 };
@@ -46,7 +60,7 @@ const OuterContainer = styled.div`
   gap: 12px;
   align-self: stretch;
   border-radius: 8px;
-  background: linear-gradient(to right, #FFF, #4DB4FF);
+  background: linear-gradient(to right, #fff, #4db4ff);
 `;
 
 const InnerContainer = styled.div`
@@ -56,8 +70,8 @@ const InnerContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   border-radius: 8px;
-  background: #D3EDFF;
-  color: var(--Color-secondary-dark_navy_blue, #060D24);
+  background: #d3edff;
+  color: var(--Color-secondary-dark_navy_blue, #060d24);
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-xs, 15px);
   font-style: normal;
@@ -78,14 +92,6 @@ const Img = styled.img`
   margin: 0px 10px 0px 20px;
 `;
 
-const OrderBtn = styled.div`
-  display: flex;
-  margin: 0px 20px 0px auto;
-  padding: 6px 10px 6px 8px;
-  align-items: center;
-  gap: 4px;
-  border-radius: 100px;
-  border: 1px solid var(--Color-secondary-dark_navy_blue, #060D24);
-  background: var(--Color-secondary-navy_blue, #243348);
-  color: #D3EDFF;
+const OrderBtn = styled.img`
+  margin: 0px 10px 0px auto;
 `;
