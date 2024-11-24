@@ -1,12 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { WriteOrderPopover } from "./WriteOrderPopover";
+import { LetterPartiItem } from "../../api/model/LetterModel";
 
 interface TitleProps {
+  writeOrderList: LetterPartiItem[];
   title: string;
 }
 
-export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
+export const WriteOrderTitle: React.FC<TitleProps> = ({ writeOrderList, title }) => {
   const [isPopover, setIsPopover] = useState(false);
 
   const closePopover = () => {
@@ -25,13 +27,10 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({ title }) => {
             <Img src="/img/write_letter_order.png" />
             {title}
           </LeftContent>
-          <OrderBtn onClick={handleOrderBtn}>
-            <img src="/assets/order_btn.svg" />
-            순서
-          </OrderBtn>
+          <OrderBtn src={ isPopover ? "/assets/write/order_btn_click.svg" : "/assets/write/order_btn.svg"} onClick={handleOrderBtn} />
         </InnerContainer>
       </OuterContainer>
-      {isPopover && <WriteOrderPopover onClose={closePopover} />}
+      {isPopover && <WriteOrderPopover writeOrderList={writeOrderList} onClose={closePopover} />}
     </div>
   );
 };
@@ -78,14 +77,6 @@ const Img = styled.img`
   margin: 0px 10px 0px 20px;
 `;
 
-const OrderBtn = styled.div`
-  display: flex;
-  margin: 0px 20px 0px auto;
-  padding: 6px 10px 6px 8px;
-  align-items: center;
-  gap: 4px;
-  border-radius: 100px;
-  border: 1px solid var(--Color-secondary-dark_navy_blue, #060D24);
-  background: var(--Color-secondary-navy_blue, #243348);
-  color: #D3EDFF;
+const OrderBtn = styled.img`
+  margin: 0px 10px 0px auto;
 `;

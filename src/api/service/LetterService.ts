@@ -1,11 +1,24 @@
 import { api, ApiResponse } from "../config/api";
-import { LetterStartPartiGetResponse } from "../model/LetterModel";
+import { LetterPartiListGetResponse, LetterStartInfoGetResponse } from "../model/LetterModel";
 
 // 편지 시작 시 정보 조회 API
 // param: 편지 ID
-// response: LoginJwtPostResponse - 서버의 토큰
-export async function getLetterStartParti(letterId: number): Promise<LetterStartPartiGetResponse> {
-  const response: ApiResponse<LetterStartPartiGetResponse> = await api.get( 
+// response: LetterStartInfoGetResponse
+export async function getLetterStartInfo(letterId: number): Promise<LetterStartInfoGetResponse> {
+  const response: ApiResponse<LetterStartInfoGetResponse> = await api.get( 
     `/api/letter/${letterId}/startInfo`);
+  return response.data.data;
+}
+
+// 현재 유저를 순서에 맞게 조회 API
+// param: 편지 ID, 순서
+// response: LetterPartiListGetResponse
+export async function getLetterPartiList(letterId: number): Promise<LetterPartiListGetResponse> {
+  const response: ApiResponse<LetterPartiListGetResponse> = await api.get( 
+    `/api/letter/participant/${letterId}`, {
+      params: {
+        order: 'sequence'
+      }
+    });
   return response.data.data;
 }

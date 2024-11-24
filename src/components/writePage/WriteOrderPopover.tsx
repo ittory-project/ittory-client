@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import memberData from "../../data/write/writeOrder.json"
+import { LetterPartiItem } from "../../api/model/LetterModel";
 
 interface PopoverProps {
+  writeOrderList: LetterPartiItem[]
   onClose: () => void;
 }
 
-export const WriteOrderPopover: React.FC<PopoverProps> = ({ onClose }) => {
+export const WriteOrderPopover: React.FC<PopoverProps> = ({ writeOrderList, onClose }) => {
   return (
     // 상단에 순서 버튼 누르면 작게 순서 알려주는거
     <Overlay onClick={onClose}>
@@ -13,16 +14,22 @@ export const WriteOrderPopover: React.FC<PopoverProps> = ({ onClose }) => {
         <ButtonContainer>
           <img src="/assets/popover_close.svg" onClick={onClose}/>
         </ButtonContainer>
-        <PopupList>
-          <Line />
-          {memberData.map(participant => (
-            <ListItem key={participant.id}>
-              <ListNumber>{participant.id}</ListNumber>
-              <Avatar src={participant.imageUrl} alt={participant.name} />
-              <Name>{participant.name}</Name>
-            </ListItem>
-          ))}
-        </PopupList>
+        {writeOrderList ?
+          <PopupList>
+            <Line $itemnum={Number(writeOrderList.length)} />
+            {writeOrderList
+              .slice()
+              .sort((a, b) => a.sequence - b.sequence)
+              .map(participant => (
+              <ListItem key={participant.sequence}>
+                <ListNumber>{participant.sequence}</ListNumber>
+                <Avatar src={participant.imageUrl || '/assets/basic_user.svg'} alt={participant.nickname} />
+                <Name>{participant.nickname}</Name>
+              </ListItem>
+            ))}
+          </PopupList>
+            : <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
+          }
       </Popup>
     </Overlay>
   );
@@ -41,6 +48,7 @@ const Overlay = styled.div`
 
 const Popup = styled.div`
   width: 180px;
+  max-height: 50vh;
   display: flex;
   padding: 8px 12px 16px 12px;
   flex-direction: column;
@@ -67,6 +75,11 @@ const PopupList = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ListItem = styled.li`
@@ -107,11 +120,22 @@ const Name = styled.span`
   color: #333;
 `;
 
-const Line = styled.div`
+const Line = styled.div<{ $itemnum: number }>`
   border-left: 1.5px dashed #D3EDFF;
-  height: 80%;
-  top: 35px;
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 55px)`};
+  top: 0px;
   left: 12px;
   position: absolute;
   z-index: 1;
+`;
+
+const PopupTitleDetail = styled.div`
+  color: var(--Color-grayscale-gray600, #868E96);
+  text-align: center;
+  font-family: var(--Typography-family-body, SUIT);
+  font-size: var(--Typography-size-s, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
