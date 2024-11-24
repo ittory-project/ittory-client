@@ -1,15 +1,28 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Pagination } from '../common/Pagination';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
+import { decodeLetterId } from '../../api/config/base64';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { getFontById } from '../../api/service/FontService';
+import { getCoverTypeById } from '../../api/service/CoverTypeService';
 
 function Query() {
   return new URLSearchParams(useLocation().search);
 }
 
 export const ShareLetter = () => {
+  const { letterId } = useParams();
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
+  const [font, setFont] = useState<FontGetResponse>();
+  const [coverType, setCoverType] = useState<CoverTypeGetResponse>()
+
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -18,12 +31,46 @@ export const ShareLetter = () => {
     setCurrentPage(page);
   }, [query]);
 
+
+  const getSharedLetter = async (letterNumId: number) => {
+    const response = await getLetterDetailInfo(letterNumId)
+    setLetterInfo(response)
+  }
+
+  const getSharedLetterStyle = async () => {
+    if (letterInfo) {
+      const fontResponse = await getFontById(letterInfo.fontId)
+      if (fontResponse) {
+        setFont(fontResponse)
+      }
+      const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId)
+      if (coverTypeResponse) {
+        setCoverType(coverTypeResponse)
+      }
+    }
+  }
+
+  useEffect (() => {
+    getSharedLetter(letterNumId)
+  }, [letterNumId])
+  useEffect(() => {
+    getSharedLetterStyle()
+  }, [letterInfo])
+
   const renderPageContent = () => {
-    if (currentPage === 1) 
-      return  <ReceiveLetterCover /> ;
-    else 
-      return <ReceiveLetterContents />;
+    if (!letterInfo || !coverType || !font) {
+      return <div>편지를 찾을 수 없습니다.</div>
+    } else {
+      if (currentPage === 1) 
+        return  <ReceiveLetterCover letterStyle={coverType} letterFontStyle={font} letterContent={letterInfo}/> ;
+      else 
+        return <ReceiveLetterContents letterFontStyle={font} letterContent={letterInfo.elements[currentPage - 2]}/>;
+    }
   };
+
+  const handleStorage = async () => {
+    
+  }
 
   const createShare = async () => {
     try {
@@ -39,24 +86,29 @@ export const ShareLetter = () => {
   }
 
   return (
-    <Background>
-      <ToDiv>To. {'선재'}</ToDiv>
-      <CoverContainer>
-        {renderPageContent()}
-      </CoverContainer>
-      <Pagination totalPages={14} />
-      <BtnContainer>
-        <StoreBtn>편지함에 보관하기</StoreBtn>
-        <ShareBtn onClick={createShare}>지금 공유하기</ShareBtn>
-      </BtnContainer>
-    </Background>
+    (letterInfo && coverType && font) ? (
+      <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
+        <ToDiv>To. {letterInfo.receiverName}</ToDiv>
+        <CoverContainer>
+          {renderPageContent()}
+        </CoverContainer>
+        <Pagination totalPages={letterInfo.elements.length + 1} />
+        <BtnContainer>
+          <StoreBtn onClick={handleStorage}>편지함에 보관하기</StoreBtn>
+          <ShareBtn onClick={createShare}>지금 공유하기</ShareBtn>
+        </BtnContainer>
+      </Background>
+    ) : (
+      <div>편지를 불러올 수 없습니다.</div>
+    )
   );
 };
 
-const Background = styled.div`
+const Background = styled.div<{ $backgroundimg: string }>`
   width: 100%;
   height: 100vh;
-  background: linear-gradient(180deg, #F3C183 0%, #F0F5BF 100%);
+  background-image: url(${(props) => props.$backgroundimg});
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,14 +121,11 @@ const CoverContainer = styled.div`
   height: 355px;
   flex-shrink: 0;
   border-radius: 5px 15px 15px 5px;
-  background: linear-gradient(180deg, #F4AC1E 0%, #FFC85E 2.63%, #FFBF44 4.31%, #FFBB35 35%, #FFC34E 100%);
   box-shadow: 0 2px 1px rgba(0,0,0,0.09), 
               0 4px 2px rgba(0,0,0,0.09), 
               0 8px 4px rgba(0,0,0,0.09), 
               0 16px 8px rgba(0,0,0,0.09),
               0 32px 16px rgba(0,0,0,0.09);
-  background-color: white;
-
 `;
 
 const ToDiv = styled.div`

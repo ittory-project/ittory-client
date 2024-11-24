@@ -1,12 +1,20 @@
 import styled from 'styled-components';
+import { LetterDetail } from '../../api/model/LetterModel';
+import { FontGetResponse } from '../../api/model/FontModel';
 
-export const ReceiveLetterContents = () => {
+interface LetterContentProps {
+  // letterStyle: CoverTypeGetResponse
+  letterFontStyle: FontGetResponse
+  letterContent: LetterDetail
+}
+
+export const ReceiveLetterContents = ({ letterFontStyle, letterContent }: LetterContentProps) => {
   return (
     <>
       <ProductLeftSide src='/img/cover/left.svg' />
       <ProductRightSide src='/img/cover/product.svg' />
-      <ContentImg src='/img/profile.png' />
-      <Content>편지 내용</Content>
+      <ContentImg src={letterContent.coverImageUrl} />
+      <Content>{letterContent.content}</Content>
       <ContentWriter>카리나</ContentWriter>
     </>
   );

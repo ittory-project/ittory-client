@@ -1,21 +1,32 @@
 import styled from 'styled-components';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { formatDate } from '../../api/config/formatData';
 
-const coverImages = {
-  img: '/img/cover/orange.svg'
-};
+interface LetterContentProps {
+  letterStyle: CoverTypeGetResponse
+  letterFontStyle: FontGetResponse
+  letterContent: LetterDetailGetResponse
+}
 
-export const ReceiveLetterCover = () => {
+export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent }: LetterContentProps) => {
+  
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = "/img/profile.png";
+  };
+
   return (
     <>
-    <CoverImage src={coverImages.img} alt="Cover" />
+    <CoverImage src={letterStyle.confirmImageUrl} alt="Cover" />
       <CoverContent>
-        <TitleDiv>일이삼사오육칠팔구십일이</TitleDiv>
-        <DateDiv>2024. 08. 21 (수)</DateDiv>
+        <TitleDiv>{letterContent.title}</TitleDiv>
+        <DateDiv>{formatDate(letterContent.deliveryDate)}</DateDiv>
         <PhotoDiv>
-          <ProfileImage src={'/img/profile.png'} alt="Profile" />
+          <ProfileImage src={"" + letterContent.coverPhotoUrl}  onError={handleImageError} />
         </PhotoDiv>
         <DescriptionDiv>
-          일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오
+          {`보내줘`}
         </DescriptionDiv>
         </CoverContent>
         </>
@@ -49,7 +60,6 @@ const TitleDiv = styled.div`
   color: var(--color-black-white-white, #FFF);
   text-align: center;
   text-overflow: ellipsis;
-  text-shadow: 0px 2px 14px #EB9F0C;
   font-family: var(--Typography-family-number, "Gmarket Sans");
   font-size: 20px;
   font-style: normal;

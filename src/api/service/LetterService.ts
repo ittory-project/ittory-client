@@ -1,5 +1,5 @@
 import { api, ApiResponse } from "../config/api";
-import { LetterPartiListGetResponse, LetterStartInfoGetResponse } from "../model/LetterModel";
+import { LetterDetailGetResponse, LetterPartiListGetResponse, LetterStartInfoGetResponse } from "../model/LetterModel";
 
 // 편지 시작 시 정보 조회 API
 // param: 편지 ID
@@ -20,5 +20,14 @@ export async function getLetterPartiList(letterId: number): Promise<LetterPartiL
         order: 'sequence'
       }
     });
+  return response.data.data;
+}
+
+// 편지 내용 상세 조회 API
+// param: 편지 ID
+// response: ShareDetailGetResponse
+export async function getLetterDetailInfo(letterId: number): Promise<LetterDetailGetResponse> {
+  const response: ApiResponse<LetterDetailGetResponse> = await api.get( 
+    `/api/letter/detail/${letterId}`);
   return response.data.data;
 }
