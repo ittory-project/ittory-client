@@ -75,7 +75,8 @@ export const WritePage = () => {
       <Write 
         progressTime={progressTime} 
         setProgressTime={setProgressTime} 
-        letterTitle={letterTitle} />
+        letterTitle={letterTitle}
+        />
     </Container>
   );
 };

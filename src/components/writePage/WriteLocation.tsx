@@ -5,10 +5,11 @@ import img from '../../../public/assets/location.svg';
 interface LocationProps {
   progressTime: number;
   name: string;
+  profileImage: string | undefined;
 }
 
 // 위치 컴포넌트
-export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name }) => {
+export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, profileImage }) => {
   const radius = 25;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference * (1 - progressTime / 100);
@@ -16,31 +17,33 @@ export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name }) =
 
   return (
     <Background>
-      <Contents>
-        <Svg
-          width="56"
-          height="56"
-          viewBox="0 0 56 56"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <Circle
-            cx="28"
-            cy="28"
-            r={radius}
-            stroke={isWarning ? '#FFA256' : 'white'}
-            strokeWidth="3"
-            fill="none"
-            strokeDasharray={circumference}
-            strokeDashoffset={-offset} 
-            transform="rotate(-90 28 28)" 
-          />
-        </Svg>
-        <Name
-          color={isWarning ? '#FFA256' : 'white'} 
-        >
-          {name}
-        </Name>
-      </Contents>
+      <Profile profileImage={profileImage}>
+        <Contents>
+          <Svg
+            width="56"
+            height="56"
+            viewBox="0 0 56 56"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <Circle
+              cx="28"
+              cy="28"
+              r={radius}
+              stroke={isWarning ? '#FFA256' : 'white'}
+              strokeWidth="3"
+              fill="none"
+              strokeDasharray={circumference}
+              strokeDashoffset={-offset} 
+              transform="rotate(-90 28 28)" 
+            />
+          </Svg>
+          <Name
+            color={isWarning ? '#FFA256' : 'white'} 
+          >
+            {name}
+          </Name>
+        </Contents>
+      </Profile>
     </Background>
   );
 };
@@ -54,18 +57,30 @@ const Background = styled.div`
   background-size: cover;
 `;
 
+const Profile = styled.div<{ profileImage: string | undefined }>`
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin: 4px 0 0 0;
+  background-image: url(${({ profileImage }) => profileImage});
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Contents = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 3px 0 0 0;
   width: 56px;
   height: 56px;
   padding: 8px; 
   box-sizing: border-box;
   flex-shrink: 0;
   border-radius: 28px;
-  background: var(--Color-secondary-dark_navy_blue, #060D24);
+  background: rgba(6, 13, 36, 0.8);
   position: relative;
 `;
 
