@@ -1,51 +1,38 @@
-import React from 'react';
 import styled from 'styled-components';
 
 interface WriteOrderProps {
-  status: 'completed' | 'myTurn' | 'othersTurn';
-  profileImageUrl: string;
+  letterImageUrl: string | undefined;
   name: string;
-  title?: string;
-  time?: number;
+  content: string;
+  itemId: number;
 }
 
-// 현재 순서이거나(myTurn/othersTurn), 지나간 순서(completed) 상태 아이템
-export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ status, profileImageUrl, name, title, time }) => {
+// 지나간 순서(completed) 상태 아이템
+export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ letterImageUrl, name, content, itemId }) => {
+
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = "/img/profile.png";
+  };
+
   return (
-    <Wrapper status={status}>
-      <ProfileImage src={""+profileImageUrl} />
+    <Wrapper>
+      <ProfileImage src={""+letterImageUrl} onError={handleImageError} />
       <ContentWrapper>
-        {status === 'myTurn' && (
-          <MyTurn>
-            <MainText>내 차례예요</MainText>
-            <SubText>{time}초</SubText>
-          </MyTurn>
-        )}
-        {status === 'completed' && (
-          <>
-            <MainText>{title}</MainText>
-            <SubText>{name}</SubText>
-          </>
-        )}
-        {status === 'othersTurn' && (
-          <>
-            <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
-            <SubText>{time}초</SubText>
-          </>
-        )}
+        <MainText>{content}</MainText>
+        <SubText>
+          <LetterNum>{itemId}</LetterNum>
+          {name}
+        </SubText>
       </ContentWrapper>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div<{status: 'completed' | 'myTurn' | 'othersTurn'}>`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 20px 0;
   padding: 10px;
-  border: ${(props) => (
-    props.status === 'myTurn' 
-    ? '1px solid #FCFFAF; border-radius: 5px; background: linear-gradient(160deg, #425166, #1C2231 95%); padding: 20px 10px;' : '')};
 `;
 
 const ProfileImage = styled.img`
@@ -61,20 +48,26 @@ const ContentWrapper = styled.div`
   flex-direction: column;
 `;
 
-const MyTurn = styled.div`
-  border-radius: 5px;
-`;
-
 const MainText = styled.div`
   font-size: 16px;
   color: #ffffff;
 `;
 
-const MainTextWriting = styled(MainText)`
+const SubText = styled.div`
+  display: flex;
+  font-size: 14px;
   color: #868e96;
 `;
 
-const SubText = styled.div`
-  font-size: 14px;
-  color: #868e96;
+const LetterNum = styled.div`
+  display: flex;
+  width: 16px;
+  height: 16px;
+  padding: 1.6px 1.6px;
+  margin: 0px 3px 0px 0px;
+  justify-content: center;
+  align-items: center;
+  gap: var(--Border-Radius-radius_300, 8px);
+  border-radius: 40px;
+  background: var(--Color-grayscale-gray800, #343A40);
 `;

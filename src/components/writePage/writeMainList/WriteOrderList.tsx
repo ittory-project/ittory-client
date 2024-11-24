@@ -2,15 +2,20 @@ import React, { useEffect, useRef } from 'react';
 import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderActivateItem } from './WriteOrderActivateItem';
 import styled from 'styled-components';
-import { WriteOrderItem } from '../Write';
+import { WriteOrderFinalItem } from './WriteOrderFinalItem';
+import { LetterItem } from '../../../api/model/LetterModel';
+import { WriteOrderNowItem } from './WriteOrderNowItem';
 
 interface ListComponentProps {
-  items: WriteOrderItem[];
+  letterItems: LetterItem[]
   nowItemId?: number
+  progressTime: number
 }
 
 // 편지 작성 페이지의 리스트
-export const WriteOrderList: React.FC<ListComponentProps> = ({ items, nowItemId }) => {
+export const WriteOrderList: React.FC<ListComponentProps> = ({ letterItems, nowItemId, progressTime }) => {
+
+  // 위치 버튼 누르면 해당 부분으로 이동되는 기능
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   useEffect(() => {
     movePosition();
@@ -18,9 +23,8 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ items, nowItemId 
 
   const movePosition = () => {
     if (nowItemId !== undefined) {
-      const targetIndex = items.findIndex(item => item.id === nowItemId);
+      const targetIndex = letterItems.findIndex(item => Number(item.elementId) === nowItemId);
       if (targetIndex !== -1 && itemRefs.current) {
-        console.log(itemRefs.current[targetIndex])
         itemRefs.current[targetIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
@@ -30,24 +34,34 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({ items, nowItemId 
     <Wrapper>
       <Line />
       <ListItem>
-        {items.map((item, index) => {
+        {letterItems.map((item, index) => {
           return (
-            <div key={item.id} ref={(el) => (itemRefs.current[index] = el)}>
-              {item.status === 'inactive' ? (
-                <WriteOrderInactiveItem key={item.id} idx={item.id} />
-              ) : (
+            <div key={item.elementId} ref={(el) => (itemRefs.current[index] = el)}>
+              { (item.userNickname && item.letterImg && !item.userId) && 
                 <WriteOrderActivateItem
-                  key={item.id}
-                  status={item.status}
-                  profileImageUrl={item.profileImageUrl}
-                  name={item.name}
-                  title={item.title || ''}
-                  time={item.time || 0}
+                  key={item.elementId}
+                  letterImageUrl={item.letterImg}
+                  name={item.userNickname}
+                  content={item.content || ''}
+                  itemId={index+1}
                 />
-              )}
+              }
+              {
+                (item.elementId && item.userId && item.userNickname && !item.letterImg) &&
+                <WriteOrderNowItem
+                  key={item.elementId}
+                  elementId={item.elementId}
+                  nowUserId={item.userId}
+                  time={progressTime}
+                />
+              }
+              { (!item.userNickname) &&
+                <WriteOrderInactiveItem key={item.elementId} idx={Number(item.elementId)} />
+              }
             </div>
           );
         })}
+        <WriteOrderFinalItem />
       </ListItem>
     </Wrapper>
   );

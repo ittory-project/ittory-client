@@ -1,36 +1,68 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import writeOrderData from "../../../data/write/writeOrder.json"
+
+import { LetterPartiItem, LetterPartiListGetResponse } from "../../../api/model/LetterModel";
+import { getLetterPartiList } from "../../../api/service/LetterService";
+import { useParams } from "react-router-dom";
+import { decodeLetterId } from "../../../api/config/base64";
 
 interface WriteModalProps {
   onClose: () => void;
+  partiCount: number;
+  repeatCount: number;
+  elementCount: number
 }
 
-export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose }) => {
+export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose, partiCount, repeatCount, elementCount }) => {
+  const { letterId } = useParams()
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>()
+
+  const getPartiList = async () => {
+    if (!letterId) {
+      window.alert("잘못된 접근입니다.")
+    } else if (!letterNumId) {
+      window.alert("잘못된 접근입니다.")
+    } else {
+      const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
+      setWriteOrderList(response.participants)
+    }
+  }
+  useEffect(() => {
+    getPartiList()
+  }, []);
+
   return (
     <Overlay onClick={onClose}>
       <Popup onClick={(e) => e.stopPropagation()}>
         <PopupTitle>
-          {}명의 참여자가
+          {String(partiCount)}명의 참여자가
           <br/>
-          {}이어 쓸 거예요!
+          {String(repeatCount)}번씩 이어 쓸 거예요!
         </PopupTitle>
         <PopupTitleDetail>
-          총 {}개의 그림이 생성돼요
+          총 {String(elementCount)}개의 그림이 생성돼요
         </PopupTitleDetail>
         <PopupList>
           <PopupListTitle>
             작성 순서
           </PopupListTitle>
-          <List>
-          <Line />
-          {writeOrderData.map(participant => (
-            <ListItem key={participant.id}>
-              <ListNumber>{participant.id}</ListNumber>
-              <Avatar src={participant.imageUrl} alt={participant.name} />
-              <Name>{participant.name}</Name>
-            </ListItem>
-          ))}
-        </List>
+          {writeOrderList ?
+            <List>
+              <Line $itemnum={Number(partiCount)} />
+              {writeOrderList
+              .slice()
+              .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
+              .map(participant => (
+                <ListItem key={participant.sequence}>
+                  <ListNumber>{participant.sequence}</ListNumber>
+                  <Avatar src={participant.imageUrl || '/assets/basic_user.svg'} alt={participant.nickname} />
+                  <Name>{participant.nickname}</Name>
+                </ListItem>
+              ))}
+            </List>
+            : <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
+          }
         </PopupList>
       </Popup>
     </Overlay>
@@ -88,6 +120,7 @@ const PopupTitleDetail = styled.div`
 
 const PopupList = styled.div`
   display: flex;
+  max-height: 50vh;
   width: 224px;
   padding: 0px var(--Typography-line_height-l, 40px) 16px var(--Typography-line_height-l, 40px);
   flex-direction: column;
@@ -122,9 +155,13 @@ const List = styled.ul`
   z-index: 2;
   position: relative;
   width: 100%;
-  list-style-type: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ListItem = styled.li`
@@ -165,10 +202,10 @@ const Name = styled.span`
   color: #333;
 `;
 
-const Line = styled.div`
+const Line = styled.div<{ $itemnum: number }>`
   border-left: 1.5px dashed rgba(111, 176, 255, 0.50);
-  height: 80%;
-  top: 35px;
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 60px)`};
+  top: 0px;
   left: 12px;
   position: absolute;
   z-index: 1;
