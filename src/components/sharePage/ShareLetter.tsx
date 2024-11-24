@@ -69,7 +69,7 @@ export const ShareLetter = () => {
   };
 
   const handleStorage = async () => {
-    
+    console.log("참여한 편지함으로 이동")
   }
 
   const createShare = async () => {
