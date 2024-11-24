@@ -53,7 +53,13 @@ export interface Participants {
 export type ParticipantsGetResponse = Participants[];
 
 // 편지 삭제
-export type LetterDeleteResponse = void;
+export type LetterDeleteResponse = void | {
+  success: boolean;
+  status: number;
+  code: string;
+  message: string;
+  info: number;
+};
 
 //편지 기본 정보 조회
 export interface LetterInfoGetResponse {

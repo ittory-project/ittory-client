@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DeleteConfirm } from "./DeleteConfirm";
-import { deleteLetter } from "../../../api/service/LetterService";
+import {
+  deleteLetter,
+  getLetterInfo,
+} from "../../../api/service/LetterService";
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,11 +17,23 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
     setViewDelete(false);
   };
 
+  useEffect(() => {
+    const fetchLetterInfo = async () => {
+      try {
+        const letterData = await getLetterInfo(letterId);
+        console.log(letterData.letterId);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchLetterInfo();
+  }, []);
+
   const handleConfirm = async () => {
     try {
       console.log(letterId);
       const response = await deleteLetter(letterId);
-      //계속 404에러... 포스트맨에서도 해당 letterId 편지 없다고나옴
       console.log(response);
       setViewConfirm(true);
     } catch (err) {

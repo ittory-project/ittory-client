@@ -42,7 +42,6 @@ export const Member = ({
   receiverName,
   title,
   backgroundImage,
-  croppedImage,
   selectfont,
   deliverDay,
   selectedImageIndex,

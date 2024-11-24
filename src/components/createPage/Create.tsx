@@ -13,7 +13,7 @@ export const Create = () => {
   const [deliverDay, setDeliverDay] = useState<Date | null>(null);
   const [title, setTitle] = useState<string>("");
   const [croppedImage, setCroppedImage] = useState<string>("");
-  const [BackgroundImage, setBackgroundImage] = useState<string>("");
+  const [BackgroundImage, setBackgroundImage] = useState<number>(0);
   const [selectfont, setSelectfont] = useState<string>("");
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 

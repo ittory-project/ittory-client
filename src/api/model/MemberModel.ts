@@ -27,7 +27,7 @@ export interface ReceivedGetResponse {
   success: boolean;
   status: number;
   data: {
-    letters: Letter[];
+    letters: ReceiveLetterModel[];
   };
 }
 
@@ -36,17 +36,31 @@ export interface ParticipationGetResponse {
   success: boolean;
   status: number;
   data: {
-    letters: Letter[];
+    letters: ParticipateLetterModel[];
   };
 }
 
-export interface Letter {
-  // 임의 설정
-  id: number;
+export interface ParticipateLetterModel {
+  letterId: number;
+  receiverName: string;
+  coverTypeImage: string;
+  deliveryDate: string;
+}
+
+export interface ReceiveLetterModel {
+  letterId: number;
   title: string;
+  coverTypeImage: string;
+  deliveryDate: string;
 }
 
 //재방문 유저 확인
 export interface VisitGetResponse {
   isVisited: boolean;
+}
+
+//편지함에서 편지 삭제(리스트에서)
+export interface  LetterboxDeleteResponse{
+  success: boolean;
+  status: number;
 }
