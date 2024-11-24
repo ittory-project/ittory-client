@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { decodeLetterId } from "../../api/config/base64";
 import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
 import { getLetterStartInfo } from "../../api/service/LetterService";
+import CountdownGif from "../../../public/img/letter_start_count.gif";
 
 export const WritePage = () => {
   const { letterId } = useParams()
@@ -16,6 +17,7 @@ export const WritePage = () => {
   const [elementCount, setElementCount] = useState<Number | null>()
 
   const [showPopup, setShowPopup] = useState(true);
+  const [showCountdown, setShowCountdown] = useState(false);
 
   const onClose = () => {
     setShowPopup(false);
@@ -41,9 +43,14 @@ export const WritePage = () => {
   // 모달 띄우는 시간 계산
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowPopup(false);
+      setShowCountdown(true);
     }, 15000);
     return () => clearTimeout(timer);
+    // const timer2 = setTimeout(() => {
+    //   setShowPopup(false);
+    //   setShowCountdown(false);
+    // }, 3000)
+    // return () => clearTimeout(timer2);
   }, []);
 
   // 편지 작성 시간 계산
@@ -72,6 +79,9 @@ export const WritePage = () => {
           repeatCount={Number(repeatCount)} 
           elementCount={Number(elementCount)}
           />}
+      {showCountdown &&
+        <Countdown src={CountdownGif} />
+        }
       <Write 
         progressTime={progressTime} 
         setProgressTime={setProgressTime} 
@@ -88,4 +98,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Countdown = styled.img`
 `;
