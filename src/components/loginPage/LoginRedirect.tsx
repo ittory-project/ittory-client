@@ -25,7 +25,8 @@ export const LoginRedirect = () => {
           console.log(`유저 아이디: ${getUserId()}`);
 
           if (localStorage.letterId) {
-            navigate("/join");
+            const letterId = localStorage.letterId;
+            navigate(`/join/${letterId}`);
           } else {
             navigate("/");
           }

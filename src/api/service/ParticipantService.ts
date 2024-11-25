@@ -20,7 +20,7 @@ export async function getDuplicate(
   nickname: string
 ): Promise<DuplicateGetResponse> {
   const response: ApiResponse<DuplicateGetResponse> = await api.get(
-    `https://dev-server.ittory.co.kr/api/participants/duplicate-nickname?letterId=${letterId}&nickname=${nickname}`
+    `https://dev-server.ittory.co.kr/api/participant/duplicate-nickname?letterId=${letterId}&nickname=${nickname}`
   );
   return response.data.data;
 }

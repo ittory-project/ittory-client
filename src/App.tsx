@@ -15,7 +15,6 @@ import { ConnectionPage } from "./pages/connect/ConnectionPage";
 import { AccountPage } from "./pages/account/AccountPage";
 import { LetterBoxPage } from "./pages/letterbox/LetterBoxPage";
 import { ShareLetterPage } from "./pages/share/SharePage";
-import { InvitationPage } from "./pages/join/InvitationPage";
 
 function App() {
   return (
@@ -32,11 +31,10 @@ function App() {
           <Route path="/share" element={<ShareLetterPage />} />
           <Route path="/create" element={<CreatePage />} />
           <Route path="/invite" element={<InvitePage />} />
-          <Route path="/join" element={<JoinPage />} />
+          <Route path="/join/:letterId" element={<JoinPage />} />
           <Route path="/connection" element={<ConnectionPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/letterBox" element={<LetterBoxPage />} />
-          <Route path="/invitation/:letterId" element={<InvitationPage />} />
         </Routes>
       </MainLayout>
     </Router>

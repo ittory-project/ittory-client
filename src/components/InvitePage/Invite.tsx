@@ -33,6 +33,8 @@ export const Invite = ({ exitName, setexitName }: Props) => {
   const [letterId, setLetterId] = useState<number>(getletterId);
 
   useEffect(() => {
+    localStorage.removeItem("letterId");
+
     const fetchParticipants = async () => {
       try {
         const data = await getParticipants(12);
