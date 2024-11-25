@@ -6,11 +6,13 @@ import { getDuplicate } from "../../api/service/ParticipantService";
 interface Props {
   nickname: string;
   setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  visited: boolean;
 }
 
-//버튼 테두리 클릭 시 색상
-export const JoinModal = ({ nickname, setViewModal }: Props) => {
+export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
   const navigate = useNavigate();
+  const letterId = localStorage.letterId;
+  console.log(visited);
 
   const handleCancel = () => {
     setViewModal(false);
@@ -18,31 +20,28 @@ export const JoinModal = ({ nickname, setViewModal }: Props) => {
 
   const handleAccess = async () => {
     try {
-      const letterId = 74;
-      //letterId 어디서 가져오지..
       const response = await getDuplicate(letterId, nickname);
-      console.log(response);
+      if (!response.isDuplicate) {
+        if (visited) {
+          navigate("/Invite", {
+            state: {
+              letterId: letterId,
+              guideOpen: false,
+            },
+          });
+        } else {
+          navigate("/Invite", {
+            state: {
+              letterId: letterId,
+              guideOpen: true,
+            },
+          });
+        }
+      }
     } catch (err) {
       console.error("error:", err);
     }
   };
-
-  /*
-  const navigateToInvite = () => {
-    setGuideOpen(true);
-    navigate("/Invite", {
-      state: {
-        guideOpen: guideOpen,
-        receiverName: receiverName,
-        title: title,
-        croppedImage: croppedImage,
-        backgroundImage: backgroundImage,
-        deliverDay: deliverDay,
-        selectfont: selectfont,
-        selectedImageIndex: selectedImageIndex,
-      },
-    });
-  };*/
 
   return (
     <BackGround>

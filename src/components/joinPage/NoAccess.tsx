@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-//모든 참여자에게 노출
-export const Join = () => {
+import { useNavigate } from "react-router-dom";
+
+export default function NoAccess() {
+  const navigate = useNavigate();
+
+  const handleButton = () => {
+    navigate("/");
+  };
   return (
     <BackGround>
       <Container>
@@ -20,13 +26,12 @@ export const Join = () => {
         <SubTitle>하나의 편지에는 최대 5명까지 입장할 수 있어요</SubTitle>
       </Container>
 
-      <Button>
-        {/* 클릭 시 랜딩페이지로 이동 */}
+      <Button onClick={handleButton}>
         <ButtonTxt>홈으로</ButtonTxt>
       </Button>
     </BackGround>
   );
-};
+}
 
 const BackGround = styled.div`
   display: flex;

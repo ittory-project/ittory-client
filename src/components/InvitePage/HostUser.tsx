@@ -123,7 +123,7 @@ export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
   };
 
   const handle = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/invitation/${letterId}`;
+    const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
     if (navigator.share) {
       try {
         await navigator.share({

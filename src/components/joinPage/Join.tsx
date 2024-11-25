@@ -1,12 +1,61 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { JoinModal } from "./JoinModal";
-import { getMyPage } from "../../api/service/MemberService";
+import { getMyPage, getVisitUser } from "../../api/service/MemberService";
+import { useNavigate, useParams } from "react-router-dom";
+import { getEnterStatus } from "../../api/service/LetterService";
+import NoAccess from "./NoAccess";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [viewModal, setViewModal] = useState<boolean>(false);
+  const [noAccess, setNoAccess] = useState<boolean>(false);
+  const [visited, setVisited] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const params = useParams();
+  const letterId = params.letterId;
+
+  useEffect(() => {
+    if (letterId) {
+      localStorage.setItem("letterId", letterId);
+    }
+  }, [letterId]);
+
+  useEffect(() => {
+    const fetchVisitUser = async () => {
+      try {
+        const visitdata = await getVisitUser();
+
+        if (visitdata.isVisited === true) {
+          setVisited(true);
+          const enterresponse = await getEnterStatus(Number(letterId));
+          console.log(enterresponse.enterStatus);
+          if (enterresponse.enterStatus === false) {
+            setNoAccess(true);
+          }
+        } else if (localStorage.jwt) {
+          setVisited(false);
+          const enterresponse = await getEnterStatus(Number(letterId));
+          console.log(enterresponse.enterStatus);
+          if (enterresponse.enterStatus === false) {
+            setNoAccess(true);
+          }
+        } else {
+          navigate("/login"),
+            {
+              state: {
+                letterId: letterId,
+              },
+            };
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchVisitUser();
+  }, []);
 
   useEffect(() => {
     const fetchMyPageData = async () => {
@@ -25,55 +74,62 @@ export const Join = () => {
   };
 
   return (
-    <BackGround>
-      {!viewModal && (
-        <>
-          <Title>
-            <Text>{name}님, 환영해요!</Text>
-            <Text>편지에 사용할 닉네임을 정해주세요</Text>
-          </Title>
-          <Container>
-            <InputBox>
-              <InputLogo>내 이름</InputLogo>
-              <Input
-                required
-                placeholder="5자까지 입력할 수 있어요"
-                type="text"
-                value={nickname}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.value.length > 5) {
-                    e.target.value = e.target.value.slice(0, 5);
-                  }
-                  setNickname(e.target.value);
+    <>
+      {noAccess && <NoAccess />}
+      <BackGround>
+        {!viewModal && (
+          <>
+            <Title>
+              <Text>{name}님, 환영해요!</Text>
+              <Text>편지에 사용할 닉네임을 정해주세요</Text>
+            </Title>
+            <Container>
+              <InputBox>
+                <InputLogo>내 이름</InputLogo>
+                <Input
+                  required
+                  placeholder="5자까지 입력할 수 있어요"
+                  type="text"
+                  value={nickname}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.target.value.length > 5) {
+                      e.target.value = e.target.value.slice(0, 5);
+                    }
+                    setNickname(e.target.value);
+                  }}
+                  min-length="1"
+                  max-length="5"
+                  spell-check="false"
+                />
+              </InputBox>
+            </Container>
+            {nickname === "" ? (
+              <Button disabled={true} style={{ background: "#ced4da" }}>
+                <ButtonTxt>완료</ButtonTxt>
+              </Button>
+            ) : (
+              <Button
+                style={{
+                  background: "#FFA256",
+                  boxShadow:
+                    "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
                 }}
-                min-length="1"
-                max-length="5"
-                spell-check="false"
-              />
-            </InputBox>
-          </Container>
-          {nickname === "" ? (
-            <Button disabled={true} style={{ background: "#ced4da" }}>
-              <ButtonTxt>완료</ButtonTxt>
-            </Button>
-          ) : (
-            <Button
-              style={{
-                background: "#FFA256",
-                boxShadow:
-                  "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
-              }}
-              onClick={handleModal}
-            >
-              <ButtonTxt>완료</ButtonTxt>
-            </Button>
-          )}
-        </>
-      )}
-      {viewModal && (
-        <JoinModal nickname={nickname} setViewModal={setViewModal} />
-      )}
-    </BackGround>
+                onClick={handleModal}
+              >
+                <ButtonTxt>완료</ButtonTxt>
+              </Button>
+            )}
+          </>
+        )}
+        {viewModal && (
+          <JoinModal
+            visited={visited}
+            nickname={nickname}
+            setViewModal={setViewModal}
+          />
+        )}
+      </BackGround>
+    </>
   );
 };
 
