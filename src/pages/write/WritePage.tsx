@@ -40,17 +40,20 @@ export const WritePage = () => {
     getStartInfo()
   }, []);
 
-  // 모달 띄우는 시간 계산
+  // 모달 띄우는 시간 설정
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const showTimer = setTimeout(() => {
       setShowCountdown(true);
+      
+      const hideTimer = setTimeout(() => {
+        setShowPopup(false)
+        setShowCountdown(false);
+      }, 4000);
+
+      return () => clearTimeout(hideTimer);
     }, 15000);
-    return () => clearTimeout(timer);
-    // const timer2 = setTimeout(() => {
-    //   setShowPopup(false);
-    //   setShowCountdown(false);
-    // }, 3000)
-    // return () => clearTimeout(timer2);
+
+    return () => clearTimeout(showTimer);
   }, []);
 
   // 편지 작성 시간 계산
@@ -101,4 +104,13 @@ const Container = styled.div`
 `;
 
 const Countdown = styled.img`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 6;
 `;
