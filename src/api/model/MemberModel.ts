@@ -60,7 +60,7 @@ export interface VisitGetResponse {
 }
 
 //편지함에서 편지 삭제(리스트에서)
-export interface  LetterboxDeleteResponse{
+export interface LetterboxDeleteResponse {
   success: boolean;
   status: number;
 }
