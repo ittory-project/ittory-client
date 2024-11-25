@@ -1,10 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { JoinModal } from "./JoinModal";
+import { getMyPage } from "../../api/service/MemberService";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [viewModal, setViewModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const myPageData = await getMyPage();
+        setName(myPageData.name);
+      } catch (err) {
+        console.error("Error fetching my page data:", err);
+      }
+    };
+    fetchMyPageData();
+  }, []);
 
   const handleModal = () => {
     setViewModal(true);
@@ -15,8 +29,7 @@ export const Join = () => {
       {!viewModal && (
         <>
           <Title>
-            <Text>닝닝님, 환영해요!</Text>
-            {/* 카카오계정 이름으로 */}
+            <Text>{name}님, 환영해요!</Text>
             <Text>편지에 사용할 닉네임을 정해주세요</Text>
           </Title>
           <Container>
