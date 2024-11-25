@@ -104,6 +104,7 @@ export default function LetterInfo({
         {!keyboardVisible && (
           <Title>
             <Text>{name}님,</Text>
+            <Text>{name}님,</Text>
             <Text>같이 편지를 만들어봐요!</Text>
           </Title>
         )}
@@ -144,8 +145,8 @@ export default function LetterInfo({
                 }
                 setMyName(e.target.value);
               }}
-              min-length="1"
-              max-length="5"
+              min-Length="1"
+              max-Length="5"
               onFocus={handleFocus}
               spellCheck="false"
               //onBlur={handleBlur}
