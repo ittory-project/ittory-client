@@ -48,9 +48,7 @@ export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
   const [memberId, setMemberId] = useState<number>(0);
   const [name, setName] = useState<string>("");
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [entered, setEntered] = useState<boolean>(false);
   const [cropImg, setCropImg] = useState<string>("");
-
   const [deliverDay, setDeliverDay] = useState<Date | null>();
   const [title, setTitle] = useState<string>("");
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
@@ -69,7 +67,6 @@ export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
-        console.log(letterData);
         setCropImg(letterData.coverPhotoUrl);
         setTitle(letterData.title);
         setDeliverDay(parseISO(letterData.deliveryDate));
@@ -106,14 +103,6 @@ export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
     fetchMyPageData();
   }, []);
 
-  useEffect(() => {
-    if (name && !entered) {
-      // name과 entered 상태가 true인 경우만 실행
-      //enterLetterWs(letterId, name);
-      setEntered(true); // 입장 처리 완료
-    }
-  }, [letterId, name, entered]);
-
   const handleUserName = (name: string) => {
     return name.slice(0, 3);
   };
@@ -134,12 +123,12 @@ export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
   };
 
   const handle = async () => {
-    const url = "https://shinsangeun.github.io";
+    const url = `${import.meta.env.VITE_SERVER_URL}/invitation/${letterId}`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "기록하며 성장하기",
-          text: "Hello World",
+          title: "잇토리",
+          text: "초대장",
           url,
         });
         setCopied(true);
@@ -621,25 +610,6 @@ const ProfileImg = styled.div<{ img: string }>`
   background-position: center;
   margin-bottom: 6px;
 `;
-/*
-const UserName = styled.div<{ isLongName: boolean }>`
-  overflow: hidden;
-  color: #000;
-  text-align: center;
-  text-overflow: ellipsis;
-  font-family: SUIT;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 16px;
-  letter-spacing: -0.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  //text-overflow: ${(props) => (props.isLongName ? "ellipsis" : "clip")};
-  &:first-of-type {
-    margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 
-  }
-`;*/
 const UserName = styled.div`
   overflow: hidden;
   color: #000;
@@ -676,7 +646,7 @@ const Button = styled.button`
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
   position: relative;
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 5rem;
   left: 50%;
   transform: translateX(-50%);
 `;

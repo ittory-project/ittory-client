@@ -40,7 +40,6 @@ export const WriteOrder = ({ count, letterId }: Props) => {
         console.error(err);
       }
     };
-    fetchParticipants();
     const fetchTitle = async () => {
       try {
         const data = await getLetterInfo(letterId);
@@ -50,6 +49,7 @@ export const WriteOrder = ({ count, letterId }: Props) => {
       }
     };
 
+    fetchParticipants();
     fetchTitle();
   }, []);
 

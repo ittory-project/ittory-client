@@ -15,7 +15,7 @@ export interface Participants {
 }
 
 interface Props {
-  exitName: string;
+  exitName?: string;
   setexitName?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
