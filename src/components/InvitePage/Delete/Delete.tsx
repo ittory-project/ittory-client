@@ -21,7 +21,7 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
-        console.log(letterData.letterId);
+        console.log(letterData);
       } catch (err) {
         console.error(err);
       }

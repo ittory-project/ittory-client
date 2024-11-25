@@ -38,7 +38,6 @@ export const Member = ({ guideOpen, items, letterId }: Props) => {
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(", ");
-  const [memberId, setMemberId] = useState<number>(0);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 
   const [cropImg, setCropImg] = useState<string>("");

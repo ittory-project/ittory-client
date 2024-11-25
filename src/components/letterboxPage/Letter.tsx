@@ -7,6 +7,7 @@ import { Received_Modal } from "./Received_Modal";
 import { ReceiveLetter } from "../receivePage/ReceiveLetter";
 import { Delete_letterbox } from "./Delete_letterbox";
 import { encodeLetterId, decodeLetterId } from "../../api/config/base64";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,6 +35,7 @@ export const Letter = ({
   openLetter,
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleCancel = () => {
     setOpenLetter(false);
@@ -45,10 +47,6 @@ export const Letter = ({
   useEffect(() => {
     setDeleteName(deleteItem);
   }, [deleteItem]);
-
-  console.log(letterId);
-  const id = encodeLetterId(letterId);
-  console.log(decodeLetterId(id));
 
   return (
     <BackGround>
