@@ -104,7 +104,6 @@ export default function LetterInfo({
         {!keyboardVisible && (
           <Title>
             <Text>{name}님,</Text>
-            <Text>{name}님,</Text>
             <Text>같이 편지를 만들어봐요!</Text>
           </Title>
         )}
