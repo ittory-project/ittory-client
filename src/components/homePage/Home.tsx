@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled, { keyframes } from "styled-components";
 import logo from "../../../public/assets/home/logo.svg";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,9 @@ interface Props {
 
 export const Home = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<HTMLDivElement[]>([]);
+  const [headerBgColor, setHeaderBgColor] = useState<boolean>(false);
 
   const handleButton = () => {
     if (localStorage.jwt) {
@@ -26,24 +29,81 @@ export const Home = () => {
       navigate("/login");
     }
   };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = sectionRefs.current.indexOf(
+            entry.target as HTMLDivElement
+          );
+          if (entry.isIntersecting) {
+            if (index === 0) {
+              setHeaderBgColor(false);
+            } else if (index === 1) {
+              setHeaderBgColor(true);
+            } else {
+              setHeaderBgColor(true);
+            }
+          }
+        });
+      },
+      { threshold: 0.5 } // 요소가 50% 이상 보일 때 감지
+    );
+
+    sectionRefs.current.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <>
-      <Container>
-        <Header />
+      <Container ref={containerRef}>
+        <Header
+          backgroundColor={headerBgColor}
+          setBackgroundColor={setHeaderBgColor}
+        />
         <>
-          <FirstSection img={bg1}>
+          <FirstSection
+            img={bg1}
+            ref={(el) => el && (sectionRefs.current[0] = el)}
+          >
             <Logo img={logo} />
             <ButtonContainer onClick={handleButton}>
               <ButtonTxt>편지 쓰러 가기</ButtonTxt>
             </ButtonContainer>
           </FirstSection>
-          <Section img={bg2} />
-          <Section img={bg3} />
-          <WhiteSection img={bg4} />
-          <WhiteSection img={bg5} />
-          <Section img={bg6} />
-          <WhiteSection img={bg7} />
-          <Section img={bg8} />
+          <Section
+            img={bg2}
+            ref={(el) => el && (sectionRefs.current[1] = el)}
+          />
+          <Section
+            img={bg3}
+            ref={(el) => el && (sectionRefs.current[2] = el)}
+          />
+          <WhiteSection
+            img={bg4}
+            ref={(el) => el && (sectionRefs.current[3] = el)}
+          />
+          <WhiteSection
+            img={bg5}
+            ref={(el) => el && (sectionRefs.current[4] = el)}
+          />
+          <WhiteSection
+            img={bg6}
+            ref={(el) => el && (sectionRefs.current[5] = el)}
+          />
+          <WhiteSection
+            img={bg7}
+            ref={(el) => el && (sectionRefs.current[6] = el)}
+          />
+          <Section img={bg8} ref={(el) => el && (sectionRefs.current[7] = el)}>
+            <FinalButton onClick={handleButton}>
+              <ButtonTxt>편지 쓰러 가기</ButtonTxt>
+            </FinalButton>
+          </Section>
         </>
       </Container>
     </>
@@ -83,6 +143,7 @@ const ButtonContainer = styled.button`
   gap: 8px;
   border-radius: 50px;
   background: #243348;
+  box-sizing: border-box;
   box-shadow:
     -1.5px -1.5px 1.5px 0px var(--Color-secondary-navy, #1c2231) inset,
     -3.5px -1.5px 12px 0px var(--Color-secondary-navy, #1c2231) inset;
@@ -149,4 +210,22 @@ const WhiteSection = styled.div<Props>`
   scroll-snap-align: start;
   overflow-x: hidden;
   background-position: center 3.3rem;
+`;
+const FinalButton = styled.button`
+  display: flex;
+  width: 288px;
+  height: 48px;
+  padding: 8px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 50px;
+  background: #243348;
+  box-sizing: border-box;
+  box-shadow:
+    -1.5px -1.5px 1.5px 0px var(--Color-secondary-navy, #1c2231) inset,
+    -3.5px -1.5px 12px 0px var(--Color-secondary-navy, #1c2231) inset;
+  margin: 0 auto;
+  position: relative;
+  top: 85%;
 `;
