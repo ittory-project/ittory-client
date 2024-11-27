@@ -5,8 +5,14 @@ import menu from "../../../public/assets/home/menulogo.svg";
 import { Menu } from "../../layout/Menu";
 import { useSwipeable } from "react-swipeable";
 
-export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+interface Props {
+  backgroundColor: boolean;
+  setBackgroundColor: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function Header({ backgroundColor, setBackgroundColor }: Props) {
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [bgColor, setBgColor] = useState<boolean>(backgroundColor);
 
   const closeMenu = useCallback(() => {
     setIsMenuOpen(false);
@@ -15,16 +21,17 @@ export default function Header() {
     closeMenu();
   }, [closeMenu]);
 
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => setIsMenuOpen(true),
-  });
-
   const handleMenu = () => {
     setIsMenuOpen(true);
   };
+
+  useEffect(() => {
+    setBgColor(backgroundColor);
+  }, [backgroundColor]);
+
   return (
-    <Container>
-      <Logo src={logo} />
+    <Container color={bgColor}>
+      {bgColor && <Logo src={logo} />}
       <MenuLogo src={menu} onClick={handleMenu} />
       {isMenuOpen && (
         <>
@@ -38,7 +45,8 @@ export default function Header() {
   );
 }
 
-const Container = styled.div`
+const Container = styled.div<{ color: boolean }>`
+  background: ${(props) => (props.color ? "#fff" : "transparent")};
   position: fixed;
   top: 0;
   left: 0;
@@ -50,8 +58,11 @@ const Container = styled.div`
   padding: 0px 4px 0px 16px;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: ${(props) =>
+    props.color ? "0px 4px 4px 0px rgba(0, 0, 0, 0.05)" : "none"};
+  transition:
+    background 0.4s ease,
+    box-shadow 0.4s ease;
 `;
 
 const Logo = styled.img`
@@ -91,6 +102,8 @@ const MenuContainer = styled.div<{ $isOpen: boolean }>`
 `;
 
 const MenuLogo = styled.img`
+  position: fixed;
+  right: 12px;
   display: flex;
   width: 24px;
   height: 24px;
