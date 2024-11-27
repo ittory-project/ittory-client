@@ -91,7 +91,6 @@ export default function CoverStyle({
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [backgroundImage, setBackgroundImageState] = useState<string>("");
 
   useEffect(() => {
     const fetchCoverTypesAndFonts = async () => {

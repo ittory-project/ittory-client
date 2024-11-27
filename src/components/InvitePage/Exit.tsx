@@ -5,18 +5,10 @@ import { quitLetterWs } from "../../api/service/WsService";
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
-  //handleUserExit: (userId: number) => void;
   letterId: number;
-  setEnter: React.Dispatch<React.SetStateAction<boolean>>;
-  setExitMessage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 //방장에게만 적용되는 팝업
-export const Exit = ({
-  setViewExit,
-  letterId,
-  setEnter,
-  setExitMessage,
-}: Props) => {
+export const Exit = ({ setViewExit, letterId }: Props) => {
   const navigate = useNavigate();
   const handleExitCancel = () => {
     setViewExit(false);

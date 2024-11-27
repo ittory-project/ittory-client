@@ -11,7 +11,7 @@ export const WebSocketProvider = ({
   children: React.ReactNode;
   letterId: number;
 }) => {
-  const [exitName, setExitName] = useState<string | null>(null);
+  const [exitName, setexitName] = useState<string | null>(null);
   const [name, setName] = useState<string>("");
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const WebSocketProvider = ({
   // WebSocket 연결 설정
   useEffect(() => {
     if (name && letterId) {
-      enterLetterWs(letterId, name, setExitName);
+      enterLetterWs(letterId, name, setexitName);
     }
   }, [name, letterId]);
 
@@ -38,7 +38,7 @@ export const WebSocketProvider = ({
     <>
       {React.cloneElement(children as React.ReactElement, {
         exitName,
-        setExitName,
+        setexitName,
       })}
     </>
   );

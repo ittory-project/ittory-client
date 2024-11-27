@@ -4,9 +4,10 @@ import X from "../../public/assets/x.svg";
 import direction from "../../public/assets/navigate.svg";
 import letter_create from "../../public/assets/letter_create.svg";
 import letter_receive from "../../public/assets/letter_receive.svg";
-import ask from "../../public/assets/ask.svg";
-import visit from "../../public/assets/visit.svg";
-import graynavi from "../../public/assets/graynavi.svg";
+import ask from "../../public/assets/menu/ask.svg";
+import visit from "../../public/assets/menu/visit.svg";
+import graynavi from "../../public/assets/menu/graynavi.svg";
+import defaultImage from "../../public/assets/menu/profileImg.svg";
 import { useNavigate } from "react-router-dom";
 import { getLetterCounts, getMyPage } from "../api/service/MemberService";
 
@@ -116,11 +117,10 @@ export const Menu = ({ onClose }: Props) => {
       </Cancel>
       <Profile>
         <ImageContainer>
-          {/* 로그인 전, 프로필 사진 없을 시 기본 캐릭터 */}
           {profileImage !== "" ? (
             <ProfileImage src={profileImage} alt="Profile" />
           ) : (
-            <DefaultImage />
+            <ProfileImage src={defaultImage} alt="Profile" />
           )}
         </ImageContainer>
         {user === false ? (
