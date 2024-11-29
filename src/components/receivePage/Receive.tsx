@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
 import { DoorAnimation } from './DoorAnimation';
 
 const Receive = () => {
+  const { letterId } = useParams();
   const [expanded, setExpanded] = useState(false);
   const [showDoorAnimation, setShowDoorAnimation] = useState(false);
   const [hideDoorImg, setHideDoorImg] = useState(false); 
@@ -19,10 +21,10 @@ const Receive = () => {
     setShowDoorAnimation(true);
   };
 
-  return (
+  return ( letterId ?
     <>
       {showDoorAnimation ? (
-        <DoorAnimation />
+        <DoorAnimation letterId={letterId}/>
       ) : (
         <Container onClick={handleClick}>
           <DoorImg expanded={expanded}>
@@ -57,7 +59,7 @@ const Receive = () => {
           }
         </Container>
       )}
-    </>
+    </> : <>조회할 수 없는 편지입니다.</>
   );
 };
 

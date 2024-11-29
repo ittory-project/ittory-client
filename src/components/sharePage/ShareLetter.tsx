@@ -22,6 +22,7 @@ export const ShareLetter = () => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [font, setFont] = useState<FontGetResponse>();
   const [coverType, setCoverType] = useState<CoverTypeGetResponse>()
+  const [elementLength, setElementLength] = useState<number>(0);
 
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,6 +36,7 @@ export const ShareLetter = () => {
   const getSharedLetter = async (letterNumId: number) => {
     const response = await getLetterDetailInfo(letterNumId)
     setLetterInfo(response)
+    setElementLength(response.elements.length)
   }
 
   const getSharedLetterStyle = async () => {
@@ -92,7 +94,7 @@ export const ShareLetter = () => {
         <CoverContainer>
           {renderPageContent()}
         </CoverContainer>
-        <Pagination totalPages={letterInfo.elements.length + 1} />
+        <Pagination totalPages={elementLength + 1} />
         <BtnContainer>
           <StoreBtn onClick={handleStorage}>편지함에 보관하기</StoreBtn>
           <ShareBtn onClick={createShare}>지금 공유하기</ShareBtn>

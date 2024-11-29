@@ -1,16 +1,31 @@
 import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { Pagination } from '../common/Pagination';
-import { useLocation } from 'react-router-dom';
+import { decodeLetterId } from '../../api/config/base64';
 import { ReceiveLetterCover } from './ReceiveLetterCover';
 import { ReceiveLetterSave } from './ReceiveLetterSave';
 import { ReceiveLetterContents } from './ReceiveLetterContents';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
+import { getFontById } from '../../api/service/FontService';
+import { getCoverTypeById } from '../../api/service/CoverTypeService';
 
 function Query() {
   return new URLSearchParams(useLocation().search);
 }
 
 export const ReceiveLetter = () => {
+  const { letterId } = useParams();
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
+  const [font, setFont] = useState<FontGetResponse>();
+  const [coverType, setCoverType] = useState<CoverTypeGetResponse>()
+  const [elementLength, setElementLength] = useState<number>(0);
+
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -19,30 +34,65 @@ export const ReceiveLetter = () => {
     setCurrentPage(page);
   }, [query]);
 
+  const getSharedLetter = async (letterNumId: number) => {
+    const response = await getLetterDetailInfo(letterNumId)
+    setLetterInfo(response)
+    setElementLength(response.elements.length)
+  }
+
+  const getSharedLetterStyle = async () => {
+    if (letterInfo) {
+      const fontResponse = await getFontById(letterInfo.fontId)
+      if (fontResponse) {
+        setFont(fontResponse)
+      }
+      const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId)
+      if (coverTypeResponse) {
+        setCoverType(coverTypeResponse)
+      }
+    }
+  }
+
+  useEffect (() => {
+    getSharedLetter(letterNumId)
+  }, [letterNumId])
+  useEffect(() => {
+    getSharedLetterStyle()
+  }, [letterInfo])
+
   const renderPageContent = () => {
-    if (currentPage === 1) 
-      return  <ReceiveLetterCover /> ;
-    else if (currentPage === 14) 
-      return <ReceiveLetterSave /> ;
-    else 
-      return <ReceiveLetterContents />;
+    if (!letterInfo || !coverType || !font) {
+      return <div>편지를 찾을 수 없습니다.</div>
+    } else {
+      if (currentPage === 1) 
+        return  <ReceiveLetterCover letterStyle={coverType} letterFontStyle={font} letterContent={letterInfo}/> ;
+      else if (currentPage === elementLength + 1) 
+        return <ReceiveLetterSave /> ;
+      else 
+        return <ReceiveLetterContents letterFontStyle={font} letterContent={letterInfo.elements[currentPage - 2]}/>;
+    }
   };
 
   return (
-    <Background>
-      <ToDiv>To. {'선재'}</ToDiv>
-      <CoverContainer>
-        {renderPageContent()}
-      </CoverContainer>
-      <Pagination totalPages={14} />
-    </Background>
+    (letterInfo && coverType && font && elementLength > 0) ? (
+      <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
+        <ToDiv>To. {'선재'}</ToDiv>
+        <CoverContainer>
+          {renderPageContent()}
+        </CoverContainer>
+        <Pagination totalPages={elementLength + 1} />
+      </Background>
+    ) : (
+      <div>편지를 불러올 수 없습니다.</div>
+    )
   );
 };
 
-const Background = styled.div`
+const Background = styled.div<{ $backgroundimg: string }>`
   width: 100%;
   height: 100vh;
-  background: linear-gradient(180deg, #F3C183 0%, #F0F5BF 100%);
+  background-image: url(${(props) => props.$backgroundimg});
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
