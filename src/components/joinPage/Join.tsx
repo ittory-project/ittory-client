@@ -5,6 +5,7 @@ import { getMyPage, getVisitUser } from "../../api/service/MemberService";
 import { useNavigate, useParams } from "react-router-dom";
 import { getEnterStatus } from "../../api/service/LetterService";
 import NoAccess from "./NoAccess";
+import { getDuplicate } from "../../api/service/ParticipantService";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
@@ -12,6 +13,7 @@ export const Join = () => {
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
   const [visited, setVisited] = useState<boolean>(false);
+  const [duplicateError, setDuplicateError] = useState<boolean>(false);
   const navigate = useNavigate();
   const params = useParams();
   const letterId = params.letterId;
@@ -69,6 +71,36 @@ export const Join = () => {
     fetchMyPageData();
   }, []);
 
+  /*
+  useEffect(() => {
+    const fetchDuplicate = async () => {
+      try {
+        if (letterId) {
+          const isDuplicate = await getDuplicate(Number(letterId), name);
+          setDuplicateError(isDuplicate.isDuplicate);
+          console.log(duplicateError);
+        }
+      } catch (err) {
+        console.error("Error checking duplicate::", err);
+      }
+    };
+    if (nickname) {
+      fetchDuplicate();
+    }
+  }, [nickname]);*/
+
+  const handleBlur = async () => {
+    if (nickname) {
+      try {
+        const isDuplicate = await getDuplicate(Number(letterId), nickname);
+        setDuplicateError(isDuplicate.isDuplicate);
+        console.log(duplicateError);
+      } catch (err) {
+        console.error("Error checking duplicate:", err);
+      }
+    }
+  };
+
   const handleModal = () => {
     setViewModal(true);
   };
@@ -84,7 +116,7 @@ export const Join = () => {
               <Text>편지에 사용할 닉네임을 정해주세요</Text>
             </Title>
             <Container>
-              <InputBox>
+              <InputBox hasError={duplicateError}>
                 <InputLogo>내 이름</InputLogo>
                 <Input
                   required
@@ -100,8 +132,13 @@ export const Join = () => {
                   min-length="1"
                   max-length="5"
                   spell-check="false"
+                  onBlur={handleBlur}
+                  spellCheck="false"
                 />
               </InputBox>
+              {duplicateError && nickname && (
+                <ErrorMessage>이미 사용중인 닉네임입니다.</ErrorMessage>
+              )}
             </Container>
             {nickname === "" ? (
               <Button disabled={true} style={{ background: "#ced4da" }}>
@@ -132,6 +169,20 @@ export const Join = () => {
     </>
   );
 };
+
+const ErrorMessage = styled.div`
+  height: 16px;
+  left: 0;
+  color: #ff0004;
+  text-align: center;
+  font-family: var(--Typography-family-title, SUIT);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: -0.5px;
+  margin-top: 2px;
+`;
 
 const BackGround = styled.div`
   display: flex;
@@ -178,12 +229,11 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 16px;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
 `;
-const InputBox = styled.div`
+const InputBox = styled.div<{ hasError: boolean }>`
   display: flex;
   width: 16rem;
   flex-direction: column;
@@ -191,7 +241,8 @@ const InputBox = styled.div`
   height: 3.5rem;
   gap: 6px;
   margin-top: 0;
-  border-bottom: 1px dashed #dee2e6;
+  border-bottom: 1px dashed
+    ${(props) => (props.hasError ? "#ff0004" : "#dee2e6")};
   margin-bottom: 1.8px;
 `;
 const InputLogo = styled.div`

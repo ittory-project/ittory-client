@@ -64,6 +64,8 @@ export const CreatedLetter = ({
         return "#E3F8FF"; // Blue
       case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_THANKYOU.png":
         return "#FFEFF1"; // Pink
+      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_CHRISTMAS.png":
+        return "#FFECE0"; // Christmas
       default:
         return "#FFFFFF"; // Default color
     }

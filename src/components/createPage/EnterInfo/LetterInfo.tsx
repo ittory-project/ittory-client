@@ -94,6 +94,13 @@ export default function LetterInfo({
     };
   }, [keyboardRef]);
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      console.log("사용자가 Enter(완료) 버튼을 눌렀습니다.");
+      // 추가적인 동작을 여기에 추가할 수 있습니다.
+    }
+  };
+
   return (
     <BackGround>
       {isModalOpen && <Overlay />}
@@ -126,6 +133,7 @@ export default function LetterInfo({
               max-length="12"
               onFocus={handleFocus}
               spellCheck="false"
+              onKeyDown={handleKeyDown}
               //onBlur={handleBlur}
             />
           </InputBox>

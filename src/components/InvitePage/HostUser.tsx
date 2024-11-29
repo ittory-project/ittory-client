@@ -176,9 +176,8 @@ export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
                 coverTypes[selectedImageIndex - 1]?.confirmImageUrl
               }
             >
-              <TitleContainer font={fonts[selectfont + 1].family}>
-                {title}
-              </TitleContainer>
+              {/*<TitleContainer font={fonts[selectfont - 1].family}>*/}
+              <TitleContainer font="GmarketSans">{title}</TitleContainer>
               {deliverDay ? (
                 <DeliverDay>
                   {`${format(deliverDay as Date, "yyyy")}. `}

@@ -132,12 +132,10 @@ export default function CompleteModal({
               {` (${format(deliverDay, "E", { locale: ko })})`}
             </DeliverDay>
           )}
-          {selectedImageIndex !== 4 && (
-            <>
-              <Shadow src={shadow} />
-              <BtnImgContainer bgimg={croppedImage} />
-            </>
-          )}
+          <>
+            <Shadow src={shadow} />
+            <BtnImgContainer bgimg={croppedImage} />
+          </>
         </Book>
       </MainContainer>
       <Button onClick={navigateToInvite}>
