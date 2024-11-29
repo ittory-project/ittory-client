@@ -46,3 +46,9 @@ export interface LetterDetail {
   coverImageUrl: string,
   content: string,
 }
+
+// 편지가 저장 가능한지 확인하는 API Response
+export interface LetterStorageCheckGetResponse {
+  isStored: boolean,
+  receiverName: string
+}

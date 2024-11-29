@@ -2,6 +2,10 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 
+interface Props {
+  letterId: string
+};
+
 const rotateHandle = keyframes`
   0% {
     transform: rotate(0deg);
@@ -32,11 +36,11 @@ const reduceHandleSize = keyframes`
   }
 `;
 
-export const DoorAnimation = () => {
+export const DoorAnimation = ({ letterId }: Props) => {
   const navigate = useNavigate();
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('letter')
+      navigate(`/receive/letter/${letterId}`)
     }, 3000);
 
     return () => clearTimeout(timer);
