@@ -33,8 +33,8 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({ onClose, partiCount,
   }, []);
 
   return (
-    <Overlay onClick={onClose}>
-      <Popup onClick={(e) => e.stopPropagation()}>
+    <Overlay>
+      <Popup>
         <PopupTitle>
           {String(partiCount)}명의 참여자가
           <br/>
