@@ -259,51 +259,47 @@ export default function CoverStyle({
             )}
           </TitleContainer>
 
-          {ImageIndex !== 4 ? (
-            croppedImage === "" ? (
-              <>
-                <ButtonContainer
-                  className="img__box"
-                  onClick={onUploadImageButtonClick}
-                >
-                  <input
-                    style={{ display: "none" }}
-                    type="file"
-                    accept="image/*"
-                    ref={imgRef}
-                    onChange={onUploadImage}
-                  />
-                  <img
-                    src={camera}
-                    alt="Camera Icon"
-                    style={{
-                      width: "24px",
-                      height: "24px",
-                      marginLeft: "1.5px",
-                    }}
-                  />
-                  <BtnTxt>사진 추가</BtnTxt>
-                </ButtonContainer>
-              </>
-            ) : (
-              <>
-                <Shadow src={shadow} />
-                <BtnImgContainer
-                  bgimg={croppedImage}
-                  onClick={onUploadImageButtonClick}
-                >
-                  <input
-                    style={{ display: "none" }}
-                    type="file"
-                    accept="image/*"
-                    ref={imgRef}
-                    onChange={onUploadImage}
-                  />
-                </BtnImgContainer>
-              </>
-            )
+          {croppedImage === "" ? (
+            <>
+              <ButtonContainer
+                className="img__box"
+                onClick={onUploadImageButtonClick}
+              >
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  accept="image/*"
+                  ref={imgRef}
+                  onChange={onUploadImage}
+                />
+                <img
+                  src={camera}
+                  alt="Camera Icon"
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    marginLeft: "1.5px",
+                  }}
+                />
+                <BtnTxt>사진 추가</BtnTxt>
+              </ButtonContainer>
+            </>
           ) : (
-            <></>
+            <>
+              <Shadow src={shadow} />
+              <BtnImgContainer
+                bgimg={croppedImage}
+                onClick={onUploadImageButtonClick}
+              >
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  accept="image/*"
+                  ref={imgRef}
+                  onChange={onUploadImage}
+                />
+              </BtnImgContainer>
+            </>
           )}
           <NameBar>
             <NameContainer>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 //모든 참여자에게 노출
+//디자인 반영하기
 export const DeleteConfirm = () => {
   return (
     <BackGround>

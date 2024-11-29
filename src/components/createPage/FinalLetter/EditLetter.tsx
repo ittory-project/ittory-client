@@ -162,7 +162,7 @@ export default function EditLetter({
               style={{ width: "11px", height: "11px" }}
             />
           </EditBtn>
-          {croppedImage === "" || selectedImageIndex === 4 ? (
+          {croppedImage === "" ? (
             <Book
               backgroundImage={coverTypes[backgroundImage - 1]?.editImageUrl}
             >

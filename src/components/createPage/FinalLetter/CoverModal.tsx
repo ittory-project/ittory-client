@@ -228,12 +228,35 @@ export default function CoverModal({
             </KeyboardBar>
           )}
         </TitleContainer>
-        {ImageIndex !== 4 ? (
-          croppedImage === "" ? (
-            <ButtonContainer
-              className="img__box"
+        {croppedImage === "" ? (
+          <ButtonContainer
+            className="img__box"
+            onClick={onUploadImageButtonClick}
+          >
+            <input
+              style={{ display: "none" }}
+              type="file"
+              accept="image/*"
+              ref={imgRef}
+              onChange={onUploadImage}
+            />
+            <img
+              src={camera}
+              alt="Camera Icon"
+              style={{ width: "24px", height: "24px" }}
+            />
+            <BtnTxt>사진 추가</BtnTxt>
+          </ButtonContainer>
+        ) : (
+          <>
+            <Shadow src={shadow} />
+            <BtnImgContainer
+              bgimg={croppedImage}
               onClick={onUploadImageButtonClick}
             >
+              <CameraIcon>
+                <Camera src={camera_mini} alt="camera_icon" />
+              </CameraIcon>
               <input
                 style={{ display: "none" }}
                 type="file"
@@ -241,35 +264,8 @@ export default function CoverModal({
                 ref={imgRef}
                 onChange={onUploadImage}
               />
-              <img
-                src={camera}
-                alt="Camera Icon"
-                style={{ width: "24px", height: "24px" }}
-              />
-              <BtnTxt>사진 추가</BtnTxt>
-            </ButtonContainer>
-          ) : (
-            <>
-              <Shadow src={shadow} />
-              <BtnImgContainer
-                bgimg={croppedImage}
-                onClick={onUploadImageButtonClick}
-              >
-                <CameraIcon>
-                  <Camera src={camera_mini} alt="camera_icon" />
-                </CameraIcon>
-                <input
-                  style={{ display: "none" }}
-                  type="file"
-                  accept="image/*"
-                  ref={imgRef}
-                  onChange={onUploadImage}
-                />
-              </BtnImgContainer>
-            </>
-          )
-        ) : (
-          <></>
+            </BtnImgContainer>
+          </>
         )}
         <NameBar>
           <NameContainer>

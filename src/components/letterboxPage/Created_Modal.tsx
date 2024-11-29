@@ -24,7 +24,7 @@ export const Created_Modal = ({
   };
 
   const handleShare = async () => {
-    const url = "https://shinsangeun.github.io";
+    const url = "";
     if (navigator.share) {
       try {
         await navigator.share({

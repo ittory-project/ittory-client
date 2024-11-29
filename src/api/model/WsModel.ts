@@ -18,4 +18,5 @@ export interface WsExitResponse {
   participantId: number;
   nickname: string;
   action: string; // "EXIT"
+  isManager: boolean;
 }

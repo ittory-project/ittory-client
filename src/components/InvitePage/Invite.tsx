@@ -5,7 +5,12 @@ import { HostUser } from "./HostUser";
 import { Member } from "./Member";
 import { getParticipants } from "../../api/service/LetterService";
 import { getMyPage } from "../../api/service/MemberService";
-import { WebSocketProvider } from "./WebSocketProvider";
+//import { WsEnterResponse } from "../../api/model/WsModel";
+import { enterLetterWs } from "../../api/service/WsService";
+//import { WebSocketProvider } from "./WebSocketProvider";
+//import { enterLetterWs } from "../../api/service/WsService"; // `enterLetterWs` import
+import { stompClient } from "../../api/config/stompInterceptor";
+import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 
 export interface Participants {
   sequence: number;
@@ -14,13 +19,8 @@ export interface Participants {
   imageUrl: string;
 }
 
-interface Props {
-  exitName?: string;
-  setexitName?: React.Dispatch<React.SetStateAction<string | null>>;
-}
-
 //재방문유저 여부
-export const Invite = ({ exitName, setexitName }: Props) => {
+export const Invite = () => {
   const location = useLocation();
   const guideOpen = location.state.guideOpen;
   const getletterId = location.state.letterId;
@@ -29,25 +29,56 @@ export const Invite = ({ exitName, setexitName }: Props) => {
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
+  const [prevParticipants, setPrevParticipants] = useState<Participants[]>([]);
   const [userId, setUserId] = useState<number>(0);
   const [letterId, setLetterId] = useState<number>(getletterId);
+  const [name, setName] = useState<string>("");
+  const [exitName, setExitName] = useState<string>("");
+
+  const fetchParticipants = async () => {
+    try {
+      setPrevParticipants(participants); //이전 멤버들
+      const data = await getParticipants(12);
+      setParticipants(data);
+      console.log(data);
+
+      if (prevParticipants.length > 0 && data.length > 0) {
+        const prevHost = prevParticipants[0];
+        const currentHost = data[0];
+
+        if (prevHost.memberId !== currentHost.memberId) {
+          setExitAlert(`방장 '${prevHost.nickname}'님이 퇴장했어요`);
+          setHostAlert(
+            `참여한 순서대로 '${data[0].nickname}'님이 방장이 되었어요`
+          );
+          setPrevParticipants(data);
+        } else {
+          setExitAlert(`'${prevHost.nickname}'님이 퇴장했어요`);
+          setPrevParticipants(data);
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching participants:", err);
+    }
+  };
+
+  //주기적으로 참가자 갱신
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchParticipants();
+    }, 10000); // 10초마다 실행
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     localStorage.removeItem("letterId");
 
-    const fetchParticipants = async () => {
-      try {
-        const data = await getParticipants(12);
-        setParticipants(data);
-        console.log(data);
-      } catch (err) {
-        console.error("Error fetching participants:", err);
-      }
-    };
     const fetchMydata = async () => {
       try {
         const mydata = await getMyPage();
         setUserId(mydata.memberId);
+        setName(mydata.name);
       } catch (err) {
         console.error("Error fetching mydata:", err);
       }
@@ -56,6 +87,41 @@ export const Invite = ({ exitName, setexitName }: Props) => {
     fetchParticipants();
     fetchMydata();
   }, []);
+
+  useEffect(() => {
+    const client = stompClient();
+
+    client.onConnect = () => {
+      console.log("WebSocket connected");
+      // WebSocket 구독
+      client.subscribe(`/topic/letter/${letterId}`, (message: any) => {
+        console.log("Received message:", message);
+        try {
+          const response: WsEnterResponse | WsExitResponse = JSON.parse(
+            message.body
+          );
+          console.log(response);
+
+          // 퇴장 메시지 처리
+          if (response.action == "EXIT") {
+            setExitName(response.nickname);
+            fetchParticipants();
+          }
+          // 참여 메시지 처리
+          else if (response.action == "ENTER") {
+            // 참여 시 서버에 입장 정보 전송
+            client.publish({
+              destination: `/ws/letter/enter/${letterId}`,
+              body: JSON.stringify({ nickname: name }),
+            });
+          }
+        } catch (err) {
+          console.error("Error parsing WebSocket message:", err);
+        }
+      });
+    };
+    client.activate();
+  }, [userId]);
 
   //방장 인덱스 지정
   useEffect(() => {
@@ -66,15 +132,10 @@ export const Invite = ({ exitName, setexitName }: Props) => {
 
   //퇴장 알림
   useEffect(() => {
-    /*
-    exitName이 방장이였던 경우 
-    setExitAlert(`방장 '${exitName}'님이 퇴장했어요`);
-    */
-    setExitAlert(`'${exitName}'님이 퇴장했어요`);
     const exitTimer = setTimeout(() => {
       setExitAlert(null);
-      if (setexitName) {
-        setexitName(null);
+      if (exitName) {
+        setExitName("");
       }
     }, 5000);
 
@@ -83,8 +144,6 @@ export const Invite = ({ exitName, setexitName }: Props) => {
 
   //방장 바뀜 알림
   useEffect(() => {
-    //const host = participants[0].nickname;
-    //setHostAlert(`참여한 순서대로 '${host}'님이 방장이 되었어요`);
     const hostTimer = setTimeout(() => {
       setHostAlert(null);
     }, 10000);
@@ -93,25 +152,23 @@ export const Invite = ({ exitName, setexitName }: Props) => {
   }, [exitName]);
 
   return (
-    <WebSocketProvider letterId={letterId}>
-      <BackGround>
-        {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
-        {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-        {memberIndex !== 0 ? (
-          <HostUser
-            guideOpen={guideOpen}
-            items={participants}
-            letterId={letterId}
-          />
-        ) : (
-          <Member
-            letterId={letterId}
-            guideOpen={guideOpen}
-            items={participants}
-          />
-        )}
-      </BackGround>
-    </WebSocketProvider>
+    <BackGround>
+      {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
+      {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
+      {memberIndex !== 0 ? (
+        <HostUser
+          guideOpen={guideOpen}
+          items={participants}
+          letterId={letterId}
+        />
+      ) : (
+        <Member
+          letterId={letterId}
+          guideOpen={guideOpen}
+          items={participants}
+        />
+      )}
+    </BackGround>
   );
 };
 
