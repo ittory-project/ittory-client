@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Client } from '@stomp/stompjs';
 import styled from 'styled-components';
@@ -19,6 +19,7 @@ import { WriteLocation } from './WriteLocation';
 import { WriteElement } from './writeElement/WriteElement';
 import { WriteOrderAlert } from './WriteOrderAlert';
 import { WriteQuitAlert } from './WriteQuitAlert';
+import { WriteFinishedModal } from './WriteFinishedModal';
 
 interface WriteElementProps {
   progressTime: number;
@@ -31,6 +32,7 @@ interface WriteElementProps {
 // letterId: base64로 인코딩한 편지 아이디
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
 export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteElementProps) => {
+  const navigate = useNavigate();
   // redux 사용을 위한 dispatch
   const dispatch = useDispatch<AppDispatch>();
   // 편지 아이디 식별
@@ -74,7 +76,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   // 작성 페이지 보여주기
   const [showSubmitPage, setShowSubmitPage] = useState(false);
   // 완료 모달 보여주기
-  const [showFinishedModal, setFinishedModal] = useState(false);
+  const [showFinishedModal, setShowFinishedModal] = useState(false);
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
 
@@ -116,9 +118,12 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       updateOrderAndLockedItems();
       setShowSubmitPage(false)
       setUpdateResponse(false)
-      setProgressTime(100)
     }
   }, [orderData, updateResponse])
+
+  useEffect (() => {
+    setProgressTime(100)
+  }, [nowLetterId])
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
@@ -179,8 +184,8 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       if (currentIndex >= writeOrderList.length - 1) {
         setNowRepeat(prevNowRepeat => prevNowRepeat + 1);
       }
-      if (nowLetterId > nowTotalItem) {
-        setFinishedModal(true)
+      if (nowLetterId >= nowTotalItem) {
+        setShowFinishedModal(true)
       }
     }
   };
@@ -275,6 +280,17 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     }
   }, [exitUser])
 
+  // 완료 모달 띄우는 시간 설정
+  useEffect(() => {
+    if (showFinishedModal) {
+      const Timer = setTimeout(() => {
+        setShowFinishedModal(false)
+        navigate(`/share/${letterId}?page=1`)
+      }, 5000)
+      return () => clearTimeout(Timer);
+    }
+  }, [showFinishedModal]);
+
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {
     dispatch(clearOrderData())
@@ -332,6 +348,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
             <WriteElement sequence={nowLetterId} setShowSubmitPage={setShowSubmitPage} progressTime={progressTime} clientRef={clientRef}/>
           </ModalOverlay>
         )}
+        {showFinishedModal && <WriteFinishedModal />}
       </Container>
     )
     : <>접속 오류</>
