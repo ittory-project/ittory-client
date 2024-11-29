@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Client } from '@stomp/stompjs';
 import styled from 'styled-components';
@@ -19,6 +19,7 @@ import { WriteLocation } from './WriteLocation';
 import { WriteElement } from './writeElement/WriteElement';
 import { WriteOrderAlert } from './WriteOrderAlert';
 import { WriteQuitAlert } from './WriteQuitAlert';
+import { WriteFinishedModal } from './WriteFinishedModal';
 
 interface WriteElementProps {
   progressTime: number;
@@ -31,6 +32,7 @@ interface WriteElementProps {
 // letterId: base64로 인코딩한 편지 아이디
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
 export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteElementProps) => {
+  const navigate = useNavigate();
   // redux 사용을 위한 dispatch
   const dispatch = useDispatch<AppDispatch>();
   // 편지 아이디 식별
@@ -41,7 +43,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const [letterItems, setLetterItems] = useState<LetterItem[]>(data);
   // 진행 순서
   const orderData = useSelector(selectParsedOrderData);
-  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>(orderData)
+  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>([])
   // 현재 유저의 멤버 아이디
   const [nowMemberId, setNowMemberId] = useState(0);
   // 다음 유저의 멤버 아이디 (상단바 설정용)
@@ -73,6 +75,8 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const [hasExitUser, setHasExitUser] = useState(false);
   // 작성 페이지 보여주기
   const [showSubmitPage, setShowSubmitPage] = useState(false);
+  // 완료 모달 보여주기
+  const [showFinishedModal, setShowFinishedModal] = useState(false);
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
 
@@ -92,17 +96,20 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     window.localStorage.setItem('nowRepeat', String(nowRepeat))
   }, [nowRepeat])
   useEffect(() => {
-    setTotalItem(12)
     window.localStorage.setItem('totalItem', String(totalItem))
   }, [totalItem])
   useEffect(() => {
     window.localStorage.setItem('nowTotalItem', String(nowTotalItem))
   }, [nowTotalItem])
+  useEffect(() => {
+    setWriteOrderList(orderData)
+  }, [orderData])
   
   // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
   useEffect (() => {
     setLetterItems(data)
   }, [data])
+
   // 편지 작성 순서가 변경되거나, 새로 작성이 완료됐을 때마다 Redux에서 순서를 불러오고 세팅한다. 
   useEffect (() => {
     setWriteOrderList(orderData)
@@ -111,9 +118,12 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       updateOrderAndLockedItems();
       setShowSubmitPage(false)
       setUpdateResponse(false)
-      setProgressTime(100)
     }
   }, [orderData, updateResponse])
+
+  useEffect (() => {
+    setProgressTime(100)
+  }, [nowLetterId])
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
@@ -161,9 +171,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
   // 편지 아이템이 작성됐을 때
   const updateOrderAndLockedItems = async () => {
-    if (writeOrderList) {
+    if (writeOrderList.length > 0) {
       const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
-      let nextIndex = (currentIndex + 1) % writeOrderList.length;
+      const nextIndex = (currentIndex + 1) % writeOrderList.length;
       // 상태 업데이트
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
@@ -174,7 +184,9 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       if (currentIndex >= writeOrderList.length - 1) {
         setNowRepeat(prevNowRepeat => prevNowRepeat + 1);
       }
-      console.log("여기에 이제 넘어가는 화면 넣어야 함.")
+      if (nowLetterId >= nowTotalItem) {
+        setShowFinishedModal(true)
+      }
     }
   };
 
@@ -188,13 +200,19 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const fetchParticipantsAndUpdateLockedItems = async () => {
     const response: LetterPartiListGetResponse = await getLetterPartiList(letterNumId);
     setPartiNum(response.participants.length);
-    setNowSequence(prevNowLetterId => prevNowLetterId % response.participants.length)
+    if (nowSequence > response.participants.length) {
+      setNowSequence(prevNowLetterId => prevNowLetterId - 1)
+    }
     dispatch(setOrderData(response.participants))
+
     // 계산 로직: 수정해야
-    console.log(`현재 작성 숫자: ${nowLetterId}, 현재 총 아이템 수: ${nowLetterId + (partiNum - nowSequence) + totalItem - nowLetterId - (totalItem - nowLetterId) % partiNum}`)
-    setNowTotalItem(nowLetterId + (partiNum - nowSequence) + totalItem - nowLetterId - (totalItem - nowLetterId) % partiNum)
+    console.log(`현재 작성 숫자: ${nowLetterId}`)
+    console.log(`현재 총 아이템 수: ${totalItem - (totalItem - nowSequence + 1) % partiNum}`)
+    setNowTotalItem(totalItem - (totalItem - nowSequence + 1) % partiNum)
     // writeOrderList가 업데이트 된 후에 locked items 세팅
-    setLockedWriteItems();
+    if (writeOrderList.length > 0) {
+      setLockedWriteItems();
+    }
   };
 
   const fetchRepeatCount = async () => {
@@ -207,10 +225,10 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   // 컴포넌트가 처음 렌더링될 때 참여자 목록을 불러옵니다.
   useEffect(() => {
     const initialize = async () => {
-      await fetchParticipantsAndUpdateLockedItems(); 
       await fetchRepeatCount();
+      await fetchParticipantsAndUpdateLockedItems();
 
-      if (writeOrderList) {
+      if (writeOrderList.length > 0) {
         setNowMemberId(writeOrderList[0].memberId);
         console.log("다음 사람 인덱스: ", 1 % partiNum, "partinum: ", partiNum, "다음 사람 멤버아이디: " , writeOrderList[1 % partiNum].memberId)
         setNextMemberId(writeOrderList[1 % partiNum].memberId)
@@ -225,8 +243,6 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
   const setLockedWriteItems = () => {
     const tempItemNum = nowTotalItem - nowLetterId
     const currentIndex = writeOrderList.findIndex(item => item.sequence === nowSequence);
-    console.log(writeOrderList)
-    // 퇴장할 때 writeOrderList의 currentIndex가 잡히지 않는 문제. 아마도 currentIndex가 제대로 반영되지 않은 채로 잠금 화면들이 만들어지려고 했던듯
     const nowItem: LetterItem = {
       elementId: nowLetterId,
       userId: nowMemberId,
@@ -243,11 +259,13 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
     }
   };
   useEffect(() => {
-    const setRepeatNum = async () => {
-      await fetchRepeatCount()
+    // const setRepeatNum = async () => {
+    //   await fetchRepeatCount()
+    // }
+    // setRepeatNum()
+    if (writeOrderList.length > 0) {
+      setLockedWriteItems(); 
     }
-    setRepeatNum()
-    setLockedWriteItems(); 
   }, [nowRepeat, partiNum, nowSequence, nowLetterId, nowMemberId]);
 
   // 퇴장 감지 후 팝업창 띄우기
@@ -261,6 +279,17 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
       return () => clearTimeout(timer);
     }
   }, [exitUser])
+
+  // 완료 모달 띄우는 시간 설정
+  useEffect(() => {
+    if (showFinishedModal) {
+      const Timer = setTimeout(() => {
+        setShowFinishedModal(false)
+        navigate(`/share/${letterId}?page=1`)
+      }, 5000)
+      return () => clearTimeout(Timer);
+    }
+  }, [showFinishedModal]);
 
   // 처음에 시작하기 전 페이지에 이거 넣기
   const handleClearData = () => {
@@ -291,7 +320,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
 
   // 데이터 삭제버튼
   // <button onClick={handleClearData}>삭삭제</button>
-  return writeOrderList ? 
+  return writeOrderList.length > 0 ? 
     (
       <Container>
         <StickyHeader>
@@ -319,6 +348,7 @@ export const Write = ({ progressTime, setProgressTime, letterTitle }: WriteEleme
             <WriteElement sequence={nowLetterId} setShowSubmitPage={setShowSubmitPage} progressTime={progressTime} clientRef={clientRef}/>
           </ModalOverlay>
         )}
+        {showFinishedModal && <WriteFinishedModal />}
       </Container>
     )
     : <>접속 오류</>
