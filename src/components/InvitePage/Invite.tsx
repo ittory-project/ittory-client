@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { HostUser } from "./HostUser";
 import { Member } from "./Member";
 import { getParticipants } from "../../api/service/LetterService";
@@ -18,6 +18,7 @@ export interface Participants {
 //재방문유저 여부
 export const Invite = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const guideOpen = location.state.guideOpen;
   const getletterId = location.state.letterId;
 
@@ -110,6 +111,12 @@ export const Invite = () => {
             client.publish({
               destination: `/ws/letter/enter/${letterId}`,
               body: JSON.stringify({ nickname: name }),
+            });
+          } else if (response.action == "START") {
+            navigate("/Connection", {
+              state: {
+                letterId: letterId,
+              },
             });
           }
         } catch (err) {

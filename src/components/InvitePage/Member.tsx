@@ -96,14 +96,13 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     quitLetterWs(letterId);
   };
 
-  //url 맞게 수정하기
   const handle = async () => {
-    const url = "";
+    const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "기록하며 성장하기",
-          text: "Hello World",
+          title: "잇토리",
+          text: "초대장",
           url,
         });
         setCopied(true);

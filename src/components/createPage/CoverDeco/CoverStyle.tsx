@@ -17,8 +17,6 @@ import axios from "axios";
 import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
 import { CoverType } from "../../../../src/api/model/CoverType";
-import { getAllFont } from "../../../api/service/FontService";
-import { Font } from "../../../api/model/FontModel";
 import { postFont } from "../../../api/service/FontService";
 
 const fonts = [

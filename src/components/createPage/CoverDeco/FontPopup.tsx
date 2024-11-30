@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
-import { postFont } from "../../../api/service/FontService";
 
 interface Props {
   font: string;

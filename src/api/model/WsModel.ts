@@ -25,3 +25,8 @@ export interface WsEndResponse {
   letterId: number;
   action: string;
 }
+
+export interface WsStartResponse {
+  letterId: number;
+  action: string;
+}
