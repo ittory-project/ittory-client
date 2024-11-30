@@ -71,38 +71,29 @@ export const Join = () => {
     fetchMyPageData();
   }, []);
 
-  /*
-  useEffect(() => {
-    const fetchDuplicate = async () => {
-      try {
-        if (letterId) {
-          const isDuplicate = await getDuplicate(Number(letterId), name);
-          setDuplicateError(isDuplicate.isDuplicate);
-          console.log(duplicateError);
-        }
-      } catch (err) {
-        console.error("Error checking duplicate::", err);
-      }
-    };
-    if (nickname) {
-      fetchDuplicate();
-    }
-  }, [nickname]);*/
-
-  const handleBlur = async () => {
+  const handleModal = async () => {
     if (nickname) {
       try {
         const isDuplicate = await getDuplicate(Number(letterId), nickname);
-        setDuplicateError(isDuplicate.isDuplicate);
-        console.log(duplicateError);
+        if (isDuplicate.isDuplicate) {
+          setDuplicateError(true); // 중복 시 경고 메시지 표시
+          setViewModal(false);
+        } else {
+          setDuplicateError(false);
+          setViewModal(true);
+        }
       } catch (err) {
         console.error("Error checking duplicate:", err);
       }
     }
   };
 
-  const handleModal = () => {
-    setViewModal(true);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length > 5) {
+      e.target.value = e.target.value.slice(0, 5);
+    }
+    setNickname(e.target.value);
+    setDuplicateError(false); // 입력이 변경될 때 duplicateError를 초기화
   };
 
   return (
@@ -123,17 +114,10 @@ export const Join = () => {
                   placeholder="5자까지 입력할 수 있어요"
                   type="text"
                   value={nickname}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (e.target.value.length > 5) {
-                      e.target.value = e.target.value.slice(0, 5);
-                    }
-                    setNickname(e.target.value);
-                  }}
+                  onChange={handleInputChange}
+                  spellCheck={false}
                   min-length="1"
                   max-length="5"
-                  spell-check="false"
-                  onBlur={handleBlur}
-                  spellCheck="false"
                 />
               </InputBox>
               {duplicateError && nickname && (
