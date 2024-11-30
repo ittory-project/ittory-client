@@ -109,19 +109,25 @@ export async function deleteLetter(
 // 편지 삭제 API
 export function deleteLetter(
   letterId: number,
-  onSuccess: (data: LetterDeleteResponse) => void,
+  onSuccess: () => void, // 성공 시 호출, 반환 데이터 없음
   onError: (error: any) => void
 ): void {
   api
     .delete(`https://dev-server.ittory.co.kr/api/letter/${letterId}`)
     .then((response) => {
-      onSuccess(response.data); // 성공 콜백 호출
+      if (response.status === 204) {
+        onSuccess(); // 204 No Content 성공 시 콜백 호출
+      } else {
+        console.error("Unexpected response:", response);
+        onError(new Error("Unexpected response status"));
+      }
     })
     .catch((err) => {
       if (err.response && err.response.data) {
         console.error("API Error Response:", err.response.data);
         onError(err.response.data); // 에러 데이터 콜백 호출
       } else {
+        console.error("Unexpected error:", err);
         onError(err); // 예기치 않은 에러 콜백 호출
       }
     });

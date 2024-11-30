@@ -15,7 +15,7 @@ import {
 } from "../../api/config/state";
 
 export const CompTest = () => {
-  const letterNum = 10;
+  const letterNum = 11;
 
   // 채팅 입장 테스트(소켓)
   const socketTest = () => {

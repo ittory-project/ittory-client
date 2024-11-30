@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { getKakaoCode } from "../../api/config/setToken";
+import MainLogo from "../../../public/img/main_logo.svg";
 
 export const Login = () => {
   const kakaoLogin = () => {
@@ -8,16 +9,32 @@ export const Login = () => {
 
   return (
     <Container>
-      <CloseBtn src="/assets/btn_close.svg" />
       <LoginContainer>
-        <Logo src="" alt="Logo" />
-        <Desc>{"서비스 설명입니다."}</Desc>
+        <CloseBtn src="/assets/btn_close.svg" />
+        <Logo src={MainLogo} alt="Logo" />
+        <Desc>{"마음을 표현하는 새로운 방법!"}</Desc>
         <LoginBtn onClick={kakaoLogin}>
           <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
           {"카카오로 시작하기"}
         </LoginBtn>
         <LoginDesc>
-          {"로그인하시면 개인정보처리방침과 서비스이용약관에 동의하게 됩니다."}
+          {"로그인 하시면 "}
+          <a
+            href="https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {"개인정보처리방침"}
+          </a>{" "}
+          {"과 "}
+          <a
+            href="https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {"서비스이용약관"}
+          </a>{" "}
+          {"에 동의하게 됩니다."}
         </LoginDesc>
       </LoginContainer>
     </Container>
@@ -52,13 +69,13 @@ const CloseBtn = styled.img`
 const Logo = styled.img`
   width: 236px;
   height: 90px;
-  margin-bottom: 20px;
+  margin: 50px 0px 20px;
 `;
 
 const Desc = styled.div`
   font-size: 18px;
   color: #868e96;
-  margin-bottom: 250px;
+  margin-bottom: 200px;
 `;
 
 const Icon = styled.img`
@@ -74,7 +91,7 @@ const LoginBtn = styled.button`
   background-color: #fee500;
   color: black;
   border: none;
-  border-radius: 5px;
+  border-radius: 5rem;
   padding: 0 20px;
   cursor: pointer;
   font-size: 16px;
@@ -85,9 +102,17 @@ const LoginBtn = styled.button`
 `;
 
 const LoginDesc = styled.div`
-  font-size: 14px;
-  color: #868e96;
-  text-align: center;
-  max-width: 400px;
+  font-size: 13px;
+  color: #868E96;
+  max-width: 300px;
   margin-top: 10px;
+
+  a {
+    color: #868E96;
+    text-decoration: underline;
+    cursor: pointer;
+  
+    &:hover {
+    color: #495057;
+  }
 `;
