@@ -1,28 +1,10 @@
 import styled from 'styled-components';
-import { getLetterStorageCheck, postLetterStore } from '../../api/service/LetterService';
-import { useParams } from 'react-router-dom';
-import { useState } from 'react';
-import { decodeLetterId } from '../../api/config/base64';
 
-type AlertState = 'LOADING' | 'SAVED' | 'ISSTORED';
+interface LetterContentProps {
+  handleSaveLetter: () => Promise<void>
+}
 
-export const ReceiveLetterSave = () => {
-  const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  const [saveAlert, setSaveAlert] = useState<AlertState>('LOADING');
-  const [receiver] = useState('선재')
-
-  const handleSaveLetter = async () => {
-    const storeAvailableResponse = await getLetterStorageCheck(letterNumId)
-    if (storeAvailableResponse.isStored) {
-      const storeResponse = await postLetterStore(letterNumId);
-      if (storeResponse) {
-        setSaveAlert('SAVED')
-      }
-    } else {
-      
-    }
-  }
+export const ReceiveLetterSave = ({ handleSaveLetter }: LetterContentProps) => {
 
   return (
     <>
@@ -31,24 +13,6 @@ export const ReceiveLetterSave = () => {
       <Content>받은 편지를<br/>간직하고 싶다면?</Content>
       <ContentImg src='/img/letter_save_contents.png'/>
       <ContentSaveBtn onClick={handleSaveLetter}>편지함에 보관하기</ContentSaveBtn>
-      {saveAlert === 'SAVED' &&
-        <ModalOverlay>
-          <PopupContainer>
-            <PopupTitle>
-              {`${receiver}님만 보관할 수 있어요`}
-            </PopupTitle>
-            <PopupSub>
-              {`받는 사람 이름을 확인해 주세요\n편지함에 보관하시겠어요?`}
-            </PopupSub>
-            <CancelButton>
-              {`취소하기`}
-            </CancelButton>
-            <MoveButton>
-              {`보관하기`}
-            </MoveButton>
-          </PopupContainer>
-        </ModalOverlay>
-      }
     </>
   );
 };
@@ -123,41 +87,4 @@ const ContentSaveBtn = styled.div`
   top: 75%;
   left: 50%;
   transform: translateX(-50%);
-`;
-
-const ModalOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3;
-`;
-
-const PopupContainer = styled.div`
-  display: flex;
-  width: 272px;
-  padding: 24px;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  border-radius: var(--Border-Radius-radius_500, 16px);
-  border: 3px solid var(--Color-secondary-soft_blue, #D3EDFF);
-  background: linear-gradient(144deg, #FFF -0.87%, #FFF 109.18%);
-  z-index: 4;
-`;
-
-const PopupTitle = styled.div`
-`;
-
-const PopupSub = styled.div`
-`;
-
-const CancelButton = styled.div`
-`
-
-const MoveButton = styled.div`
 `;
