@@ -8,9 +8,10 @@ interface LetterContentProps {
   letterStyle: CoverTypeGetResponse
   letterFontStyle: FontGetResponse
   letterContent: LetterDetailGetResponse
+  partiList: string
 }
 
-export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent }: LetterContentProps) => {
+export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent, partiList }: LetterContentProps) => {
   
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = "/img/profile.png";
@@ -26,7 +27,7 @@ export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent
           <ProfileImage src={"" + letterContent.coverPhotoUrl}  onError={handleImageError} />
         </PhotoDiv>
         <DescriptionDiv>
-          {`보내줘`}
+          {partiList}
         </DescriptionDiv>
         </CoverContent>
         </>
