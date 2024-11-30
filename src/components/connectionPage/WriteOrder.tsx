@@ -6,6 +6,7 @@ import { getParticipants } from "../../api/service/LetterService";
 import { getLetterInfo } from "../../api/service/LetterService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
+import { getLetterStartInfo } from "../../api/service/LetterService";
 
 export interface Participants {
   sequence: number;
@@ -14,7 +15,6 @@ export interface Participants {
   imageUrl: string;
 }
 interface Props {
-  count: number;
   letterId: number;
 }
 
@@ -25,11 +25,12 @@ interface PopupProps {
   isVisible: boolean;
 }
 
-export const WriteOrder = ({ count, letterId }: Props) => {
+export const WriteOrder = ({ letterId }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const userNumsRef = useRef<(UserNumElement | null)[]>([]);
   const [items, setItems] = useState<Participants[]>([]);
   const [title, setTitle] = useState<string>("");
+  const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
     const fetchTitle = async () => {
@@ -40,9 +41,18 @@ export const WriteOrder = ({ count, letterId }: Props) => {
         console.error(err);
       }
     };
+    const fetchCount = async () => {
+      try {
+        const data = await getLetterStartInfo(letterId);
+        setCount(data.repeatCount);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
     fetchParticipants();
     fetchTitle();
+    fetchCount();
   }, []);
 
   useEffect(() => {

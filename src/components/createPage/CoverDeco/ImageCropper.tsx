@@ -7,7 +7,6 @@ import axios from "axios";
 import { ImageUrlRequest } from "../../../api/model/ImageModel";
 import { postCoverImage } from "../../../api/service/ImageService";
 
-//post 정상적으로 되면 완료 버튼 누를 시 post되게 하기
 interface Props {
   originalImage: string;
   setCroppedImage: (croppedImgUrl: string) => void;

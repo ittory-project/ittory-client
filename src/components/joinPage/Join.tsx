@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getEnterStatus } from "../../api/service/LetterService";
 import NoAccess from "./NoAccess";
 import { getDuplicate } from "../../api/service/ParticipantService";
+import { postNickname } from "../../api/service/ParticipantService";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
