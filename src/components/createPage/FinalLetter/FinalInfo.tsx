@@ -56,7 +56,7 @@ export default function FinalInfo({
   const [viewEdit, setViewEdit] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [complete, setComplete] = useState(false);
+  const [complete, setComplete] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [visit, setVisit] = useState<boolean>(false);
 
@@ -162,17 +162,13 @@ export default function FinalInfo({
               </EditBtn>
               {croppedImage === "" ? (
                 <Book
-                  backgroundImage={
-                    coverTypes[backgroundImage - 1]?.confirmImageUrl
-                  }
+                  backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}
                 >
                   <BookTitle font={selectfont}>{title}</BookTitle>
                 </Book>
               ) : (
                 <Book
-                  backgroundImage={
-                    coverTypes[backgroundImage - 1]?.confirmImageUrl
-                  }
+                  backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}
                 >
                   <BookTitle font={selectfont}>{title}</BookTitle>
                   <Shadow src={shadow} />
@@ -223,7 +219,7 @@ export default function FinalInfo({
         />
       )}
       {complete &&
-        (!visit ? (
+        (visit ? (
           <UserFinishModal
             setKeyboardVisible={setKeyboardVisible}
             myName={myName}
@@ -398,7 +394,7 @@ const Cover = styled.div`
 `;
 const Shadow = styled.img`
   margin-left: 17.1px;
-  margin-top: 13px;
+  margin-top: 12.5px;
   position: absolute;
   z-index: 1;
   flex-shrink: 0;
@@ -414,7 +410,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 21px;
+  margin-top: 20px;
   margin-left: 24.2px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;

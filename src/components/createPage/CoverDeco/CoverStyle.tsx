@@ -339,7 +339,7 @@ export default function CoverStyle({
           }}
           onClick={() => {
             handleFont();
-            setBackgroundImage(ImageIndex + 1);
+            setBackgroundImage(ImageIndex);
             setSelectfont(font);
             setViewCoverDeco(false);
             setViewFinalInfo(true);

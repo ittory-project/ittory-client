@@ -88,6 +88,7 @@ export async function deleteLetter(
 }*/
 
 //편지 삭제 API
+/*
 export async function deleteLetter(
   letterId: number
 ): Promise<LetterDeleteResponse> {
@@ -104,6 +105,26 @@ export async function deleteLetter(
       throw err; // 예기치 않은 에러 처리
     }
   }
+}*/
+// 편지 삭제 API
+export function deleteLetter(
+  letterId: number,
+  onSuccess: (data: LetterDeleteResponse) => void,
+  onError: (error: any) => void
+): void {
+  api
+    .delete(`https://dev-server.ittory.co.kr/api/letter/${letterId}`)
+    .then((response) => {
+      onSuccess(response.data); // 성공 콜백 호출
+    })
+    .catch((err) => {
+      if (err.response && err.response.data) {
+        console.error("API Error Response:", err.response.data);
+        onError(err.response.data); // 에러 데이터 콜백 호출
+      } else {
+        onError(err); // 예기치 않은 에러 콜백 호출
+      }
+    });
 }
 
 //반복 횟수 API
