@@ -72,13 +72,11 @@ export const CreatedLetter = ({
   };
 
   const openModal = (itemId: number) => {
-    //setItemToDelete(itemId);
     setSelectId(itemId);
     setIsModalOpen(true);
   };
 
   const handleLetter = (itemId: number) => {
-    //setItemToDelete(itemId);
     setSelectId(itemId);
     setOpenLetter(true);
   };
@@ -104,7 +102,7 @@ export const CreatedLetter = ({
 
   return (
     <>
-      {letters.length === 0 ? (
+      {letters.length !== 0 ? (
         <EmptyLetter context="created" />
       ) : (
         <>

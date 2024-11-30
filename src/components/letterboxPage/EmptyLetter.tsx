@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import partiIcon from "../../../public/assets/letterbox/parIcon.svg";
+import recvIcon from "../../../public/assets/letterbox/recIcon.svg";
 
 interface Props {
   context: string;
@@ -10,20 +12,21 @@ export const EmptyLetter = ({ context }: Props) => {
   const navigate = useNavigate();
 
   const navigateToCreate = () => {
-    navigate("/Create");
+    navigate("/create");
   };
 
   return (
     <Container>
-      <ImgArea />
       {context === "created" && (
         <>
+          <Icon src={partiIcon} />
           <TextArea>참여한 편지가 없네요</TextArea>
           <TextArea>편지를 만들어서 마음을 전달해 보아요!</TextArea>
         </>
       )}
       {context === "received" && (
         <>
+          <Icon src={recvIcon} />
           <TextArea>받은 편지가 없네요</TextArea>
           <TextArea>먼저 마음을 전달해 보는 건 어떨까요?</TextArea>
         </>
@@ -44,12 +47,10 @@ const Container = styled.div`
   align-items: center;
   align-self: stretch;
 `;
-const ImgArea = styled.div`
-  display: flex;
+const Icon = styled.img`
   width: 100px;
   height: 100px;
   flex-shrink: 0;
-  background: #d9d9d9;
   margin-bottom: 20px;
 `;
 const TextArea = styled.div`

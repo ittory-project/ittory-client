@@ -105,7 +105,7 @@ export const ReceivedLetter = ({
 
   return (
     <>
-      {letters.length === 0 ? (
+      {letters.length !== 0 ? (
         <EmptyLetter context="received" />
       ) : (
         <>
