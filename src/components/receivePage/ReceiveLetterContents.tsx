@@ -15,7 +15,7 @@ export const ReceiveLetterContents = ({ letterFontStyle, letterContent }: Letter
       <ProductRightSide src='/img/cover/product.svg' />
       <ContentImg src={letterContent.coverImageUrl} />
       <Content>{letterContent.content}</Content>
-      <ContentWriter>카리나</ContentWriter>
+      <ContentWriter>{letterContent.nickname}</ContentWriter>
     </>
   );
 };

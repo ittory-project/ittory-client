@@ -43,8 +43,10 @@ export interface LetterDetailGetResponse {
 // 편지 상세 정보 요소 아이템
 export interface LetterDetail {
   id: number,
+  nickname: string,
   coverImageUrl: string,
   content: string,
+  sequence: number
 }
 
 // 편지가 저장 가능한지 확인하는 API Response

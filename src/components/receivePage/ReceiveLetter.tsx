@@ -22,6 +22,7 @@ export const ReceiveLetter = () => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
+  const [partiList, setPartiList] = useState<string>('');
   const [font, setFont] = useState<FontGetResponse>();
   const [coverType, setCoverType] = useState<CoverTypeGetResponse>()
   const [elementLength, setElementLength] = useState<number>(0);
@@ -37,6 +38,10 @@ export const ReceiveLetter = () => {
   const getSharedLetter = async (letterNumId: number) => {
     const response = await getLetterDetailInfo(letterNumId)
     setLetterInfo(response)
+    const nicknameString = response.elements
+      .map((element) => element.nickname)
+      .join(", ");
+    setPartiList(nicknameString)
     setElementLength(response.elements.length)
   }
 
@@ -65,7 +70,7 @@ export const ReceiveLetter = () => {
       return <div>편지를 찾을 수 없습니다.</div>
     } else {
       if (currentPage === 1) 
-        return  <ReceiveLetterCover letterStyle={coverType} letterFontStyle={font} letterContent={letterInfo}/> ;
+        return  <ReceiveLetterCover letterStyle={coverType} letterFontStyle={font} letterContent={letterInfo} partiList={partiList}/> ;
       else if (currentPage === elementLength + 1) 
         return <ReceiveLetterSave /> ;
       else 
@@ -77,7 +82,7 @@ export const ReceiveLetter = () => {
     (letterInfo && coverType && font && elementLength > 0) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
         <ToDiv>To. {'선재'}</ToDiv>
-        <CoverContainer>
+        <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
           {renderPageContent()}
         </CoverContainer>
         <Pagination totalPages={elementLength + 1} />
@@ -99,20 +104,19 @@ const Background = styled.div<{ $backgroundimg: string }>`
   justify-content: center;
 `;
 
-const CoverContainer = styled.div`
+const CoverContainer = styled.div<{ $boardimg: string }>`
   position: relative;
   width: 272px;
   height: 355px;
   flex-shrink: 0;
   border-radius: 5px 15px 15px 5px;
-  background: linear-gradient(180deg, #F4AC1E 0%, #FFC85E 2.63%, #FFBF44 4.31%, #FFBB35 35%, #FFC34E 100%);
+  background-image: url(${(props) => props.$boardimg})
+  background-size: cover;
   box-shadow: 0 2px 1px rgba(0,0,0,0.09), 
               0 4px 2px rgba(0,0,0,0.09), 
               0 8px 4px rgba(0,0,0,0.09), 
               0 16px 8px rgba(0,0,0,0.09),
               0 32px 16px rgba(0,0,0,0.09);
-  background-color: white;
-
 `;
 
 const ToDiv = styled.div`

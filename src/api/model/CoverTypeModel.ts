@@ -8,4 +8,6 @@ export interface CoverTypeGetResponse {
   confirmImageUrl: string,
   outputBackgroundImageUrl: string,
   loadingBackgroundImageUrl: string,
+  outputBoardImageUrl: string,
+  listColor: string,
 }
