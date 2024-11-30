@@ -92,7 +92,7 @@ export const Invite = () => {
     client.onConnect = () => {
       console.log("WebSocket connected");
       // WebSocket 구독
-      client.subscribe(`/topic/letter/${letterId}`, (message: any) => {
+      client.subscribe(`/topic/letter/${letterId}`, (message) => {
         console.log("Received message:", message);
         try {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
