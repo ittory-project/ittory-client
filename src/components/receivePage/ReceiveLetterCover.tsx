@@ -21,12 +21,12 @@ export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent
     <>
     <CoverImage src={letterStyle.confirmImageUrl} alt="Cover" />
       <CoverContent>
-        <TitleDiv>{letterContent.title}</TitleDiv>
-        <DateDiv>{formatDate(letterContent.deliveryDate)}</DateDiv>
+        <TitleDiv $fonttype={letterFontStyle.name}>{letterContent.title}</TitleDiv>
+        <DateDiv $fonttype={letterFontStyle.name}>{formatDate(letterContent.deliveryDate)}</DateDiv>
         <PhotoDiv>
           <ProfileImage src={"" + letterContent.coverPhotoUrl}  onError={handleImageError} />
         </PhotoDiv>
-        <DescriptionDiv>
+        <DescriptionDiv $fonttype={letterFontStyle.name}>
           {partiList}
         </DescriptionDiv>
         </CoverContent>
@@ -51,7 +51,7 @@ const CoverContent = styled.div`
   color: #333;
 `;
 
-const TitleDiv = styled.div`
+const TitleDiv = styled.div<{ $fonttype: string }>`
   font-size: 22px;
   display: flex;
   font-weight: bold;
@@ -61,7 +61,7 @@ const TitleDiv = styled.div`
   color: var(--color-black-white-white, #FFF);
   text-align: center;
   text-overflow: ellipsis;
-  font-family: var(--Typography-family-number, "Gmarket Sans");
+  font-family: ${(props) => props.$fonttype};
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
@@ -69,7 +69,7 @@ const TitleDiv = styled.div`
   letter-spacing: -0.5px;
 `;
 
-const DateDiv = styled.div`
+const DateDiv = styled.div<{ $fonttype: string }>`
   font-size: 16px;
   display: flex;
   color: #666;
@@ -79,7 +79,7 @@ const DateDiv = styled.div`
   color: rgba(255, 255, 255, 0.80);
   text-align: center;
   text-overflow: ellipsis;
-  font-family: var(--Typography-family-caption, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;
@@ -101,7 +101,7 @@ const ProfileImage = styled.img`
   object-fit: cover;
 `;
 
-const DescriptionDiv = styled.div`
+const DescriptionDiv = styled.div<{ $fonttype: string }>`
   height: 16px;
   font-size: 16px;
   line-height: 1.5;
@@ -110,7 +110,7 @@ const DescriptionDiv = styled.div`
   color: #715142;
   text-align: center;
   text-overflow: ellipsis;
-  font-family: var(--Typography-family-caption, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;
