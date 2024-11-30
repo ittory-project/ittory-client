@@ -14,8 +14,8 @@ export const ReceiveLetterContents = ({ letterFontStyle, letterContent }: Letter
       <ProductLeftSide src='/img/cover/left.svg' />
       <ProductRightSide src='/img/cover/product.svg' />
       <ContentImg src={letterContent.coverImageUrl} />
-      <Content>{letterContent.content}</Content>
-      <ContentWriter>{letterContent.nickname}</ContentWriter>
+      <Content $fonttype={letterFontStyle.name}>{letterContent.content}</Content>
+      <ContentWriter $fonttype={letterFontStyle.name}>{letterContent.nickname}</ContentWriter>
     </>
   );
 };
@@ -47,7 +47,7 @@ const ContentImg = styled.img`
   transform: translate(-47%, -0%);
 `;
 
-const Content = styled.div`
+const Content = styled.div<{ $fonttype: string }>`
   display: flex;
   height: 41px;
   flex-direction: column;
@@ -56,7 +56,7 @@ const Content = styled.div`
   color: #212529;
   text-align: center;
 
-  font-family: var(--Typography-family-body, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -69,7 +69,7 @@ const Content = styled.div`
   transform: translate(-47%, -0%);
 `;
 
-const ContentWriter = styled.div`
+const ContentWriter = styled.div<{ $fonttype: string }>`
   font-size: 16px;
   color: #333;
   line-height: 1.6;
@@ -77,7 +77,7 @@ const ContentWriter = styled.div`
   color: #868E96;
   text-align: right;
 
-  font-family: var(--Typography-family-caption, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: 11px;
   font-style: normal;
   font-weight: 400;

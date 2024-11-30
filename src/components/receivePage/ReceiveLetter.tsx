@@ -71,7 +71,7 @@ export const ReceiveLetter = () => {
     } else {
       if (currentPage === 1) 
         return  <ReceiveLetterCover letterStyle={coverType} letterFontStyle={font} letterContent={letterInfo} partiList={partiList}/> ;
-      else if (currentPage === elementLength + 1) 
+      else if (currentPage === elementLength + 2) 
         return <ReceiveLetterSave /> ;
       else 
         return <ReceiveLetterContents letterFontStyle={font} letterContent={letterInfo.elements[currentPage - 2]}/>;
@@ -81,11 +81,11 @@ export const ReceiveLetter = () => {
   return (
     (letterInfo && coverType && font && elementLength > 0) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
-        <ToDiv>To. {'선재'}</ToDiv>
+        <ToDiv $fonttype={font.name}>To. {'선재'}</ToDiv>
         <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
           {renderPageContent()}
         </CoverContainer>
-        <Pagination totalPages={elementLength + 1} />
+        <Pagination totalPages={elementLength + 2} />
       </Background>
     ) : (
       <div>편지를 불러올 수 없습니다.</div>
@@ -119,7 +119,7 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
               0 32px 16px rgba(0,0,0,0.09);
 `;
 
-const ToDiv = styled.div`
+const ToDiv = styled.div<{ $fonttype: string }>`
   font-size: 24px;
   margin-bottom: 40px;
   padding: 0px 10px;
@@ -127,7 +127,7 @@ const ToDiv = styled.div`
   text-align: center;
 
   /* title/base_bold */
-  font-family: var(--Typography-family-title, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: var(--Typography-size-base, 16px);
   font-style: normal;
   font-weight: 700;
