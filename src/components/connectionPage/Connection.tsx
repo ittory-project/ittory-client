@@ -36,7 +36,6 @@ const hideDuringAnimation = keyframes`
 export const Connection = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const location = useLocation();
-  const count = location.state.count;
   const letterId = location.state.letterId;
   const [coverId, setCoverId] = useState<number>(-1);
 
@@ -122,7 +121,7 @@ export const Connection = () => {
           <Ground groundColor={getGroundColor(coverId)} />
         </BackGround>
       ) : (
-        <WriteOrder count={count} letterId={letterId} />
+        <WriteOrder letterId={letterId} />
       )}
     </>
   );

@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { postRepeatCount } from "../../../api/service/LetterService";
 import { postRandom } from "../../../api/service/ParticipantService";
+import { startLetterWs } from "../../../api/service/WsService";
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +22,6 @@ interface SlideContentProps {
 }
 
 export const Count = ({ setViewCount, member, letterId }: Props) => {
-  member = 2;
   const length = Math.floor(50 / member);
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -49,19 +49,18 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
       console.log(response);
 
       const sequence = await postRandom({ letterId: id });
+      console.log("sequence: ", sequence);
 
+      startLetterWs(letterId);
       navigate("/Connection", {
         state: {
-          count: length,
-          letterId: 12, //임의 값
+          letterId: letterId,
         },
       });
     } catch (err) {
       console.error("API error:", err);
     }
   };
-
-  //작성 순서 api 호출해33서 작성 순서 설정 /random
 
   return (
     <ModalContainer>

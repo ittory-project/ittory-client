@@ -99,3 +99,20 @@ export const endLetterWs = (letterId: number) => {
 
   client.activate();
 };
+
+//편지 시작 API
+export const startLetterWs = (letterId: number) => {
+  const client = stompClient();
+
+  client.onConnect = () => {
+    client.subscribe(`/topic/letter/${letterId}`, (message) => {
+      const response = JSON.parse(message.body);
+      console.log("Received message:", response);
+    });
+    client.publish({
+      destination: `/ws/letter/start/${letterId}`,
+    });
+  };
+
+  client.activate();
+};
