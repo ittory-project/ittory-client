@@ -154,6 +154,7 @@ export const HostUser = ({
       }
     }
   }; //토스트메시지 노출시간 정하기
+
   return (
     <BackGround>
       {guide && <Overlay />}
@@ -183,7 +184,7 @@ export const HostUser = ({
                 coverTypes[selectedImageIndex - 1]?.confirmImageUrl
               }
             >
-              <TitleContainer font={fonts[selectfont - 1].name}>
+              <TitleContainer font={fonts[selectfont + 1].name}>
                 {title}
               </TitleContainer>
               {deliverDay ? (
@@ -196,13 +197,13 @@ export const HostUser = ({
               ) : (
                 <></>
               )}
-              {selectedImageIndex !== 4 && (
-                <>
-                  <Bright src={bright} />
-                  <Shadow src={shadow} />
-                  <BtnImgContainer bgimg={cropImg} />
-                </>
-              )}
+
+              <>
+                <Bright src={bright} />
+                <Shadow src={shadow} />
+                <BtnImgContainer bgimg={cropImg} />
+              </>
+
               <NameBar>
                 <NameContainer>
                   <NameTxt>{namesString}</NameTxt>
