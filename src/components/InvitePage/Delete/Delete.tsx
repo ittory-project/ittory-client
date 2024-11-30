@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DeleteConfirm } from "./DeleteConfirm";
+import { endLetterWs } from "../../../api/service/WsService";
 import {
   deleteLetter,
   getLetterInfo,
@@ -33,7 +34,16 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
   const handleConfirm = async () => {
     try {
       console.log(letterId);
-      const response = await deleteLetter(letterId);
+      const response = deleteLetter(
+        letterId,
+        () => {
+          console.log("삭제 성공");
+        },
+        (error) => {
+          console.error("삭제 실패:", error);
+        }
+      );
+      endLetterWs(letterId);
       console.log(response);
       setViewConfirm(true);
     } catch (err) {

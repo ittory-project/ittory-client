@@ -46,7 +46,6 @@ export default function CompleteModal({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-        console.log(types);
       } catch (err) {
         console.error(err);
       }
@@ -118,9 +117,7 @@ export default function CompleteModal({
         <Receiver>
           To.{receiverName} <LetterImg img={letter} />
         </Receiver>
-        <Book
-          backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
-        >
+        <Book backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
           {deliverDay === null ? (
             <></>
@@ -248,7 +245,7 @@ const DeliverDay = styled.div`
 const Shadow = styled.img`
   width: 175px;
   height: 161px;
-  margin-left: 3px;
+  margin-left: 1px;
   margin-top: 72px;
   position: absolute;
   z-index: 3;
@@ -265,8 +262,8 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 25px;
-  margin-left: 4.6px;
+  margin-top: 27px;
+  margin-left: 2px;
 `;
 
 const Button = styled.button`

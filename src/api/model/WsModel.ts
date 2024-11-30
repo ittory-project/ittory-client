@@ -20,3 +20,8 @@ export interface WsExitResponse {
   action: string; // "EXIT"
   isManager: boolean;
 }
+
+export interface WsEndResponse {
+  letterId: number;
+  action: string;
+}

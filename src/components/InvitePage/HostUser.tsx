@@ -27,6 +27,8 @@ interface Props {
   guideOpen: boolean;
   items: Participants[];
   letterId: number;
+  viewDelete: boolean;
+  setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const fonts = [
@@ -36,11 +38,16 @@ const fonts = [
   { name: "서체4", family: "Cafe24ClassicType-Regular" },
 ];
 
-export const HostUser = ({ guideOpen, items = [], letterId }: Props) => {
+export const HostUser = ({
+  guideOpen,
+  items = [],
+  letterId,
+  viewDelete,
+  setViewDelete,
+}: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
-  const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);

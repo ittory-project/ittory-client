@@ -5,10 +5,6 @@ import { HostUser } from "./HostUser";
 import { Member } from "./Member";
 import { getParticipants } from "../../api/service/LetterService";
 import { getMyPage } from "../../api/service/MemberService";
-//import { WsEnterResponse } from "../../api/model/WsModel";
-import { enterLetterWs } from "../../api/service/WsService";
-//import { WebSocketProvider } from "./WebSocketProvider";
-//import { enterLetterWs } from "../../api/service/WsService"; // `enterLetterWs` import
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 
@@ -34,11 +30,12 @@ export const Invite = () => {
   const [letterId, setLetterId] = useState<number>(getletterId);
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
+  const [viewDelete, setViewDelete] = useState<boolean>(false);
 
   const fetchParticipants = async () => {
     try {
       setPrevParticipants(participants); //이전 멤버들
-      const data = await getParticipants(12);
+      const data = await getParticipants(letterId);
       setParticipants(data);
       console.log(data);
 
@@ -106,9 +103,9 @@ export const Invite = () => {
           if (response.action == "EXIT") {
             setExitName(response.nickname);
             fetchParticipants();
-          }
-          // 참여 메시지 처리
-          else if (response.action == "ENTER") {
+          } else if (response.action == "END") {
+            setViewDelete(true);
+          } else if (response.action == "ENTER") {
             // 참여 시 서버에 입장 정보 전송
             client.publish({
               destination: `/ws/letter/enter/${letterId}`,
@@ -160,12 +157,15 @@ export const Invite = () => {
           guideOpen={guideOpen}
           items={participants}
           letterId={letterId}
+          viewDelete={viewDelete}
+          setViewDelete={setViewDelete}
         />
       ) : (
         <Member
           letterId={letterId}
           guideOpen={guideOpen}
           items={participants}
+          viewDelete={viewDelete}
         />
       )}
     </BackGround>

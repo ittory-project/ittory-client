@@ -17,11 +17,13 @@ import { getLetterInfo } from "../../api/service/LetterService";
 import { CoverType } from "../../api/model/CoverType";
 import { quitLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
+import { DeleteConfirm } from "./Delete/DeleteConfirm";
 
 interface Props {
   guideOpen: boolean;
   items: Participants[];
   letterId: number;
+  viewDelete: boolean;
 }
 const fonts = [
   { name: "서체1", family: "GmarketSans" },
@@ -30,11 +32,10 @@ const fonts = [
   { name: "서체4", family: "Cafe24ClassicType-Regular" },
 ];
 
-export const Member = ({ guideOpen, items, letterId }: Props) => {
+export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
-  const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(", ");
@@ -97,7 +98,7 @@ export const Member = ({ guideOpen, items, letterId }: Props) => {
 
   //url 맞게 수정하기
   const handle = async () => {
-    const url = "https://shinsangeun.github.io";
+    const url = "";
     if (navigator.share) {
       try {
         await navigator.share({
@@ -160,13 +161,11 @@ export const Member = ({ guideOpen, items, letterId }: Props) => {
               ) : (
                 <></>
               )}
-              {selectedImageIndex !== 4 && (
-                <>
-                  <Bright src={bright} />
-                  <Shadow src={shadow} />
-                  <BtnImgContainer bgimg={cropImg} />
-                </>
-              )}
+              <>
+                <Bright src={bright} />
+                <Shadow src={shadow} />
+                <BtnImgContainer bgimg={cropImg} />
+              </>
               <NameBar>
                 <NameContainer>
                   <NameTxt>{namesString}</NameTxt>
@@ -241,6 +240,7 @@ export const Member = ({ guideOpen, items, letterId }: Props) => {
           </MainContainer>
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
+          {viewDelete && <DeleteConfirm />}
         </>
       )}
     </BackGround>

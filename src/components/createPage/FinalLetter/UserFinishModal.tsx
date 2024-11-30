@@ -64,6 +64,35 @@ export default function UserFinishModal({
   };
 
   const navigateToInvite = async () => {
+    setGuideOpen(false);
+
+    const requestBody: LetterRequestBody = {
+      coverTypeId: selectedImageIndex + 1,
+      fontId: fontFamilyToId[selectfont],
+      receiverName: receiverName,
+      deliveryDate: deliverDay?.toISOString() || "",
+      title: title,
+      coverPhotoUrl: croppedImage,
+    };
+    console.log(requestBody);
+
+    try {
+      const response = await postLetter(requestBody);
+      console.log("Response:", response);
+      const letterId = response.letterId;
+
+      navigate("/Invite", {
+        state: {
+          letterId: letterId,
+          guideOpen: guideOpen,
+        },
+      });
+    } catch (error) {
+      console.error("Error posting letter:", error);
+    }
+  };
+
+  const handleguide = async () => {
     setGuideOpen(true);
 
     const requestBody: LetterRequestBody = {
@@ -79,27 +108,17 @@ export default function UserFinishModal({
     try {
       const response = await postLetter(requestBody);
       console.log("Response:", response);
+      const letterId = response.letterId;
 
       navigate("/Invite", {
         state: {
+          letterId: letterId,
           guideOpen: guideOpen,
-          receiverName: receiverName,
-          title: title,
-          croppedImage: croppedImage,
-          backgroundImage: backgroundImage,
-          deliverDay: deliverDay,
-          selectfont: selectfont,
-          selectedImageIndex: selectedImageIndex,
         },
       });
     } catch (error) {
       console.error("Error posting letter:", error);
     }
-  };
-
-  const handleguide = () => {
-    setGuideOpen(true);
-    navigateToInvite();
   };
 
   useEffect(() => {
@@ -129,9 +148,7 @@ export default function UserFinishModal({
         <Receiver>
           To.{receiverName} <LetterImg img={letter} />
         </Receiver>
-        <Book
-          backgroundImage={coverTypes[backgroundImage - 1]?.confirmImageUrl}
-        >
+        <Book backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
           {selectedImageIndex !== 4 && (
             <>
