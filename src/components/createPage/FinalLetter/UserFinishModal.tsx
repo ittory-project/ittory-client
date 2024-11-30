@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import letter from "../../../../public/assets/letter.svg";
 import { useNavigate } from "react-router-dom";
-import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
 import { getCoverTypes } from "../../../api/service/CoverService";
 import { CoverType } from "../../../api/model/CoverType";

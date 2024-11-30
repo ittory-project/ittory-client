@@ -3,6 +3,8 @@ import {
   RandomPostRequest,
   RandomPostResponse,
   DuplicateGetResponse,
+  NicknamePostRequest,
+  NicknamePostResponse,
 } from "../model/ParticipantModel";
 
 export async function postRandom(
@@ -23,4 +25,15 @@ export async function getDuplicate(
     `https://dev-server.ittory.co.kr/api/participant/duplicate-nickname?letterId=${letterId}&nickname=${nickname}`
   );
   return response.data.data;
+}
+
+export async function postNickname(
+  data: NicknamePostRequest,
+  letterId: number
+): Promise<NicknamePostResponse> {
+  const response = await api.post<NicknamePostResponse>(
+    `https://dev-server.ittory.co.kr/api/participant/nickname/${letterId}`,
+    data
+  );
+  return response.data;
 }

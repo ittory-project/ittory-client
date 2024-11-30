@@ -54,23 +54,6 @@ export const CreatedLetter = ({
     fetchLetter();
   }, []);
 
-  const getBackgroundColor = (bookcover: string) => {
-    switch (bookcover) {
-      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_BIRTHDAY.png":
-        return "#FFF6E4"; // Yellow
-      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_LUCKY.png":
-        return "#ECFFE1"; // Green
-      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_LOVE.png":
-        return "#E3F8FF"; // Blue
-      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_THANKYOU.png":
-        return "#FFEFF1"; // Pink
-      case "https://ittory.s3.ap-northeast-2.amazonaws.com/asset/cover-type/LIST_CHRISTMAS.png":
-        return "#FFECE0"; // Christmas
-      default:
-        return "#FFFFFF"; // Default color
-    }
-  };
-
   const openModal = (itemId: number) => {
     setSelectId(itemId);
     setIsModalOpen(true);
@@ -102,7 +85,7 @@ export const CreatedLetter = ({
 
   return (
     <>
-      {letters.length !== 0 ? (
+      {letters.length === 0 ? (
         <EmptyLetter context="created" />
       ) : (
         <>
@@ -121,8 +104,7 @@ export const CreatedLetter = ({
               {letters.map((item) => (
                 <LetterContainer
                   key={item.letterId}
-                  //현재는 letterId에 중복값있어서 경고 발생
-                  bgColor={getBackgroundColor(item.coverTypeImage)}
+                  bgColor={item.coverTypeColor}
                 >
                   <BookCover src={item.coverTypeImage} />
                   <Content

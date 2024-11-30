@@ -15,3 +15,12 @@ export type RandomPostResponse = randomParticipants[];
 export interface DuplicateGetResponse {
   isDuplicate: boolean;
 }
+
+//닉네임 설정
+export interface NicknamePostRequest {
+  nickname: string;
+}
+export interface NicknamePostResponse {
+  isSuccess: boolean;
+  nickname: string;
+}

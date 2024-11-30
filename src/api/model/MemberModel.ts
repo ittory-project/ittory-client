@@ -45,6 +45,7 @@ export interface ParticipateLetterModel {
   receiverName: string;
   coverTypeImage: string;
   deliveryDate: string;
+  coverTypeColor: string;
 }
 
 export interface ReceiveLetterModel {
@@ -52,6 +53,7 @@ export interface ReceiveLetterModel {
   title: string;
   coverTypeImage: string;
   deliveryDate: string;
+  coverTypeColor: string;
 }
 
 //재방문 유저 확인
