@@ -13,11 +13,9 @@ import bookshadow from "../../../../public/assets/book_shadow.svg";
 import FontSelect from "./FontSelect";
 import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
-import axios from "axios";
 import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
 import { CoverType } from "../../../../src/api/model/CoverType";
-import { postFont } from "../../../api/service/FontService";
 
 const fonts = [
   { name: "서체1", family: "GmarketSans" },
@@ -191,15 +189,6 @@ export default function CoverStyle({
     setIsModalOpen(false);
   };
 
-  const handleFont = async () => {
-    try {
-      const newFont = await postFont(font); // 선택한 폰트를 서버에 POST
-      console.log("Font posted successfully:", newFont);
-    } catch (error) {
-      console.error("Error posting font:", error);
-    }
-  };
-
   return (
     <BackGround>
       <Prev
@@ -336,7 +325,6 @@ export default function CoverStyle({
               "-1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
           }}
           onClick={() => {
-            handleFont();
             setBackgroundImage(ImageIndex);
             setSelectfont(font);
             setViewCoverDeco(false);

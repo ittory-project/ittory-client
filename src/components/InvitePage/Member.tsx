@@ -26,10 +26,10 @@ interface Props {
   viewDelete: boolean;
 }
 const fonts = [
-  { name: "서체1", family: "GmarketSans" },
-  { name: "서체2", family: "Ownglyph_UNZ-Rg" },
-  { name: "서체3", family: "CookieRun-Regular" },
-  { name: "서체4", family: "Cafe24ClassicType-Regular" },
+  { name: "GmarketSans" },
+  { name: "Ownglyph_UNZ-Rg" },
+  { name: "CookieRun-Regular" },
+  { name: "Cafe24ClassicType-Regular" },
 ];
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
@@ -147,7 +147,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                 coverTypes[selectedImageIndex - 1]?.confirmImageUrl
               }
             >
-              <TitleContainer font={fonts[selectfont + 1].family}>
+              <TitleContainer font={fonts[selectfont - 1].name}>
                 {title}
               </TitleContainer>
               {deliverDay ? (
