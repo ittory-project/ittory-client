@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import joinblock from "../../../public/assets/join/joinblock.svg";
 
 export default function NoAccess() {
   const navigate = useNavigate();
@@ -11,17 +12,7 @@ export default function NoAccess() {
   return (
     <BackGround>
       <Container>
-        <Icon>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="140"
-            viewBox="0 0 140 140"
-            fill="none"
-          >
-            <circle cx="70" cy="70" r="70" fill="#D9D9D9" />
-          </svg>
-        </Icon>
+        <Icon src={joinblock} />
         <Title>정원 초과로 입장할 수 없어요</Title>
         <SubTitle>하나의 편지에는 최대 5명까지 입장할 수 있어요</SubTitle>
       </Container>
@@ -56,7 +47,7 @@ const Container = styled.div`
   align-items: center;
   align-self: stretch;
 `;
-const Icon = styled.div`
+const Icon = styled.img`
   width: 140px;
   height: 140px;
   margin-bottom: 16px;
@@ -93,21 +84,6 @@ const SubTitle = styled.div`
   letter-spacing: -0.5px;
 `;
 
-const Button = styled.button`
-  box-sizing: border-box;
-  display: flex;
-  height: 48px;
-  padding: var(--Typography-size-s, 14px) 0px;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-  border-radius: 50px;
-  background: #ffa256;
-  box-shadow:
-    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
-    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  width: 21rem;
-`;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
@@ -116,4 +92,25 @@ const ButtonTxt = styled.div`
   line-height: 24px;
   letter-spacing: -0.5px;
   color: #fff;
+`;
+
+const Button = styled.button`
+  width: 288px;
+  cursor: pointer;
+  display: flex;
+  height: 48px;
+  padding: 14px 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 50px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffa256;
+  box-shadow:
+    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
+    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 `;

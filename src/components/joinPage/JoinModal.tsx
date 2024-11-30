@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getDuplicate } from "../../api/service/ParticipantService";
 
 interface Props {
   nickname: string;
@@ -20,23 +19,20 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
 
   const handleAccess = async () => {
     try {
-      const response = await getDuplicate(letterId, nickname);
-      if (!response.isDuplicate) {
-        if (visited) {
-          navigate("/Invite", {
-            state: {
-              letterId: letterId,
-              guideOpen: false,
-            },
-          });
-        } else {
-          navigate("/Invite", {
-            state: {
-              letterId: letterId,
-              guideOpen: true,
-            },
-          });
-        }
+      if (visited) {
+        navigate("/Invite", {
+          state: {
+            letterId: letterId,
+            guideOpen: false,
+          },
+        });
+      } else {
+        navigate("/Invite", {
+          state: {
+            letterId: letterId,
+            guideOpen: true,
+          },
+        });
       }
     } catch (err) {
       console.error("error:", err);

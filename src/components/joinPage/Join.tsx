@@ -99,57 +99,59 @@ export const Join = () => {
   return (
     <>
       {noAccess && <NoAccess />}
-      <BackGround>
-        {!viewModal && (
-          <>
-            <Title>
-              <Text>{name}님, 환영해요!</Text>
-              <Text>편지에 사용할 닉네임을 정해주세요</Text>
-            </Title>
-            <Container>
-              <InputBox hasError={duplicateError}>
-                <InputLogo>내 이름</InputLogo>
-                <Input
-                  required
-                  placeholder="5자까지 입력할 수 있어요"
-                  type="text"
-                  value={nickname}
-                  onChange={handleInputChange}
-                  spellCheck={false}
-                  min-length="1"
-                  max-length="5"
-                />
-              </InputBox>
-              {duplicateError && nickname && (
-                <ErrorMessage>이미 사용중인 닉네임입니다.</ErrorMessage>
+      {!noAccess && (
+        <BackGround>
+          {!viewModal && (
+            <>
+              <Title>
+                <Text>{name}님, 환영해요!</Text>
+                <Text>편지에 사용할 닉네임을 정해주세요</Text>
+              </Title>
+              <Container>
+                <InputBox hasError={duplicateError}>
+                  <InputLogo>내 이름</InputLogo>
+                  <Input
+                    required
+                    placeholder="5자까지 입력할 수 있어요"
+                    type="text"
+                    value={nickname}
+                    onChange={handleInputChange}
+                    spellCheck={false}
+                    min-length="1"
+                    max-length="5"
+                  />
+                </InputBox>
+                {duplicateError && nickname && (
+                  <ErrorMessage>이미 사용중인 닉네임입니다.</ErrorMessage>
+                )}
+              </Container>
+              {nickname === "" ? (
+                <Button disabled={true} style={{ background: "#ced4da" }}>
+                  <ButtonTxt>완료</ButtonTxt>
+                </Button>
+              ) : (
+                <Button
+                  style={{
+                    background: "#FFA256",
+                    boxShadow:
+                      "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
+                  }}
+                  onClick={handleModal}
+                >
+                  <ButtonTxt>완료</ButtonTxt>
+                </Button>
               )}
-            </Container>
-            {nickname === "" ? (
-              <Button disabled={true} style={{ background: "#ced4da" }}>
-                <ButtonTxt>완료</ButtonTxt>
-              </Button>
-            ) : (
-              <Button
-                style={{
-                  background: "#FFA256",
-                  boxShadow:
-                    "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
-                }}
-                onClick={handleModal}
-              >
-                <ButtonTxt>완료</ButtonTxt>
-              </Button>
-            )}
-          </>
-        )}
-        {viewModal && (
-          <JoinModal
-            visited={visited}
-            nickname={nickname}
-            setViewModal={setViewModal}
-          />
-        )}
-      </BackGround>
+            </>
+          )}
+          {viewModal && (
+            <JoinModal
+              visited={visited}
+              nickname={nickname}
+              setViewModal={setViewModal}
+            />
+          )}
+        </BackGround>
+      )}
     </>
   );
 };
