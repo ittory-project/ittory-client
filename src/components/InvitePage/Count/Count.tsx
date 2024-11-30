@@ -5,6 +5,7 @@ import photo from "../../../../public/assets/photo.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { postRepeatCount } from "../../../api/service/LetterService";
+import { postRandom } from "../../../api/service/ParticipantService";
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,6 +21,7 @@ interface SlideContentProps {
 }
 
 export const Count = ({ setViewCount, member, letterId }: Props) => {
+  member = 2;
   const length = Math.floor(50 / member);
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -45,6 +47,8 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
       const requestBody = { letterId: id, repeatCount: count };
       const response = await postRepeatCount(requestBody);
       console.log(response);
+
+      const sequence = await postRandom({ letterId: id });
 
       navigate("/Connection", {
         state: {

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import shadow from "../../../public/assets/bookshadow.svg";
-import bg from "../../../public/assets/connect/bg.svg";
 import book1 from "../../../public/assets/connect/book1.svg";
 import book2 from "../../../public/assets/connect/book2.svg";
 import book3 from "../../../public/assets/connect/book3.svg";
 import book4 from "../../../public/assets/connect/book4.svg";
 import book5 from "../../../public/assets/connect/book5.svg";
+import bg1 from "../../../public/assets/connect/bg1.svg";
+import bg2 from "../../../public/assets/connect/bg2.svg";
+import bg3 from "../../../public/assets/connect/bg3.svg";
+import bg4 from "../../../public/assets/connect/bg4.svg";
+import bg5 from "../../../public/assets/connect/bg5.svg";
 import { WriteOrder } from "./WriteOrder";
 import { useLocation } from "react-router-dom";
 import { getLetterInfo } from "../../api/service/LetterService";
@@ -77,17 +81,16 @@ export const Connection = () => {
   const getTopBackground = (coverId: number) => {
     switch (coverId) {
       case 1:
-        return "linear-gradient(0deg, #B3DAF2 9.5%, #FBFFCE 100%)"; // Example gradient for coverId 1
+        return bg1;
       case 2:
-        return "linear-gradient(0deg, #87D696 100%, #F0F5BF 100%)"; // Example gradient for coverId 2
+        return bg2;
       case 3:
-        return "linear-gradient(0deg, #e9c46a 9.55%, #f1a208 100%)"; // Example gradient for coverId 3
+        return bg3;
       case 4:
-        return "linear-gradient(0deg, #6a4c93 9.55%, #9b8bb0 100%)"; // Example gradient for coverId 4
+        return bg4;
       case 5:
-        return "linear-gradient(0deg, #f4a261 9.55%, #e76f51 100%)"; // Example gradient for coverId 5
-      default:
-        return "linear-gradient(0deg, #edefa4 9.55%, #ffcbd8 100%)"; // Default gradient
+        return bg5;
+      // 기본적으로 book1을 반환
     }
   };
 
@@ -112,8 +115,7 @@ export const Connection = () => {
     <>
       {!isAnimationComplete ? (
         <BackGround>
-          <Top src={bg} />
-          <TopImg src={bg} backgroundColor={getTopBackground(coverId)} />
+          <TopImg src={getTopBackground(coverId)} />
           <Contents>편지 쓰러 가는 중 . . .</Contents>
           <Book src={getBookImage(coverId)} alt="book" />
           <Shadow src={shadow} alt="shadow" />
@@ -135,6 +137,7 @@ const BackGround = styled.div`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  overflow: hidden;
 `;
 const Book = styled.img`
   width: 154px;
@@ -156,41 +159,25 @@ const Shadow = styled.img`
   animation: ${hideDuringAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
 `;
-//커버 종류에 따라 background 색 달라짐
-const Top = styled.img`
-  z-index: 1;
-  position: absolute;
-  top: 0;
-  width: 100vw;
-  height: 60%;
-  flex-shrink: 0;
-  background: linear-gradient(0deg, #edefa4 9.55%, #ffcbd8 100%);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
 const Ground = styled.div<{ groundColor: string }>`
   z-index: 1;
   position: absolute;
   bottom: 0;
   width: 100vw;
-  height: 40%;
+  height: 40vh;
   flex-shrink: 0;
   background: ${(props) => props.groundColor};
+  object-fit: cover;
 `;
-const TopImg = styled.img<{ backgroundColor: string }>`
+const TopImg = styled.img`
   z-index: 1;
   position: absolute;
   top: 0;
-  width: 100vw;
-  height: 60%;
+  width: 101%;
+  height: 60vh;
   flex-shrink: 0;
-  background: ${(props) => props.backgroundColor};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.8;
-  mix-blend-mode: luminosity;
+  overflow: hidden;
+  object-fit: cover;
 `;
 const Contents = styled.div`
   margin-top: 55%;
