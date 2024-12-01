@@ -63,6 +63,7 @@ export const Letter = ({
 
   const handleCancel = () => {
     setOpenLetter(false);
+    navigate({ pathname: "/letterbox", search: "" });
   };
   const handleMore = () => {
     setIsModalOpen(true);
@@ -82,43 +83,39 @@ export const Letter = ({
   }, [query]);
 
   useEffect(() => {
-    const getSharedLetter = async (letterNumId: number) => {
-      const response = await getLetterDetailInfo(letterNumId);
-      setLetterInfo(response);
-      const nicknameString = response.elements
-        .map((element) => element.nickname)
-        .join(", ");
-      setPartiList(nicknameString);
-      setElementLength(response.elements.length);
-    };
-
-    const getSharedLetterStyle = async () => {
-      if (letterInfo) {
-        const fontResponse = await getFontById(letterInfo.fontId);
-        if (fontResponse) {
-          setFont(fontResponse);
-        }
-        const coverTypeResponse = await getCoverTypeById(
-          letterInfo.coverTypeId
-        );
-        if (coverTypeResponse) {
-          setCoverType(coverTypeResponse);
-        }
-      }
-    };
-    console.log(letterId);
-    getSharedLetter(Number(letterId));
-    getSharedLetterStyle();
-  }, []);
-
-  useEffect(() => {
     dispatch(clearOrderData());
     dispatch(clearData());
     window.localStorage.setItem("nowLetterId", "1");
     window.localStorage.setItem("nowSequence", "1");
     window.localStorage.setItem("nowRepeat", "1");
     window.localStorage.setItem("totalItem", "1");
-  }, []);
+
+    const fetchData = async () => {
+      try {
+        // Letter 상세 정보 가져오기
+        const response = await getLetterDetailInfo(Number(letterId));
+        setLetterInfo(response);
+
+        // 참여자 목록 문자열화
+        const nicknameString = response.elements
+          .map((element) => element.nickname)
+          .join(", ");
+        setPartiList(nicknameString);
+        setElementLength(response.elements.length);
+
+        // 스타일 정보 가져오기
+        const fontResponse = await getFontById(response.fontId);
+        if (fontResponse) setFont(fontResponse);
+
+        const coverTypeResponse = await getCoverTypeById(response.coverTypeId);
+        if (coverTypeResponse) setCoverType(coverTypeResponse);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [letterId]);
 
   const renderPageContent = () => {
     if (!coverType || !font || !letterInfo || !letterId) {
@@ -164,7 +161,6 @@ export const Letter = ({
             </CoverContainer>
             <Pagination totalPages={elementLength + 1} />
           </Background>
-          ;
           {isModalOpen &&
             (context === "created" ? (
               <Created_Modal
