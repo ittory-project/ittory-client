@@ -10,6 +10,8 @@ import {
   getLetterCounts,
 } from "../../api/service/MemberService";
 import { ParticipateLetterModel } from "../../api/model/MemberModel";
+import { useNavigate } from "react-router-dom";
+import { encodeLetterId } from "../../api/config/base64";
 
 interface DeliverDayProps {
   deliverDate: string;
@@ -37,6 +39,7 @@ export const CreatedLetter = ({
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<ParticipateLetterModel[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -61,8 +64,11 @@ export const CreatedLetter = ({
 
   const handleLetter = (itemId: number) => {
     setSelectId(itemId);
-    setOpenLetter(true);
   };
+
+  useEffect(() => {
+    navigate(`/letterbox/${selectId}`);
+  }, [selectId]);
 
   const handleDelete = () => {
     setDeleteAlert("편지가 삭제되었어요");

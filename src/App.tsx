@@ -7,7 +7,6 @@ import { ReceivePage } from "./pages/receive/ReceivePage";
 import { HomePage } from "./pages/home/HomePage";
 import { LoginPage } from "./pages/home/LoginPage";
 import { WritePage } from "./pages/write/WritePage";
-import { CompTest } from "./components/common/CompTest";
 import { CreatePage } from "./pages/create/CreatePage";
 import { InvitePage } from "./pages/invite/InvitePage";
 import { JoinPage } from "./pages/join/JoinPage";
@@ -22,19 +21,22 @@ function App() {
       <MainLayout>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/comp" element={<CompTest />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login/redirect" element={<LoginRedirectPage />} />
           <Route path="/write/:letterId" element={<WritePage />} />
-          <Route path="/receive" element={<ReceivePage />} />
-          <Route path="/receive/letter" element={<ReceiveLetterPage />} />
-          <Route path="/share" element={<ShareLetterPage />} />
+          <Route path="/receive/:letterId" element={<ReceivePage />} />
+          <Route
+            path="/receive/letter/:letterId"
+            element={<ReceiveLetterPage />}
+          />
+          <Route path="/share/:letterId" element={<ShareLetterPage />} />
           <Route path="/create" element={<CreatePage />} />
           <Route path="/invite" element={<InvitePage />} />
-          <Route path="/join/:letterId" element={<JoinPage />} />
+          <Route path="/join" element={<JoinPage />} />
           <Route path="/connection" element={<ConnectionPage />} />
           <Route path="/account" element={<AccountPage />} />
-          <Route path="/letterBox" element={<LetterBoxPage />} />
+          <Route path="/letterbox" element={<LetterBoxPage />} />
+          <Route path="/letterbox/:letterId" element={<LetterBoxPage />} />
         </Routes>
       </MainLayout>
     </Router>

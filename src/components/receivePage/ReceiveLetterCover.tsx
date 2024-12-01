@@ -1,21 +1,33 @@
 import styled from 'styled-components';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { formatDate } from '../../api/config/formatData';
 
-const coverImages = {
-  img: '/img/cover/orange.svg'
-};
+interface LetterContentProps {
+  letterStyle: CoverTypeGetResponse
+  letterFontStyle: FontGetResponse
+  letterContent: LetterDetailGetResponse
+  partiList: string
+}
 
-export const ReceiveLetterCover = () => {
+export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent, partiList }: LetterContentProps) => {
+  
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = "/img/profile.png";
+  };
+
   return (
     <>
-    <CoverImage src={coverImages.img} alt="Cover" />
+    <CoverImage src={letterStyle.confirmImageUrl} alt="Cover" />
       <CoverContent>
-        <TitleDiv>일이삼사오육칠팔구십일이</TitleDiv>
-        <DateDiv>2024. 08. 21 (수)</DateDiv>
+        <TitleDiv $fonttype={letterFontStyle.name}>{letterContent.title}</TitleDiv>
+        <DateDiv $fonttype={letterFontStyle.name}>{formatDate(letterContent.deliveryDate)}</DateDiv>
         <PhotoDiv>
-          <ProfileImage src={'/img/profile.png'} alt="Profile" />
+          <ProfileImage src={"" + letterContent.coverPhotoUrl}  onError={handleImageError} />
         </PhotoDiv>
-        <DescriptionDiv>
-          일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오, 일이삼사오
+        <DescriptionDiv $fonttype={letterFontStyle.name}>
+          {partiList}
         </DescriptionDiv>
         </CoverContent>
         </>
@@ -39,7 +51,7 @@ const CoverContent = styled.div`
   color: #333;
 `;
 
-const TitleDiv = styled.div`
+const TitleDiv = styled.div<{ $fonttype: string }>`
   font-size: 22px;
   display: flex;
   font-weight: bold;
@@ -49,8 +61,7 @@ const TitleDiv = styled.div`
   color: var(--color-black-white-white, #FFF);
   text-align: center;
   text-overflow: ellipsis;
-  text-shadow: 0px 2px 14px #EB9F0C;
-  font-family: var(--Typography-family-number, "Gmarket Sans");
+  font-family: ${(props) => props.$fonttype};
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
@@ -58,7 +69,7 @@ const TitleDiv = styled.div`
   letter-spacing: -0.5px;
 `;
 
-const DateDiv = styled.div`
+const DateDiv = styled.div<{ $fonttype: string }>`
   font-size: 16px;
   display: flex;
   color: #666;
@@ -68,7 +79,7 @@ const DateDiv = styled.div`
   color: rgba(255, 255, 255, 0.80);
   text-align: center;
   text-overflow: ellipsis;
-  font-family: var(--Typography-family-caption, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;
@@ -90,7 +101,7 @@ const ProfileImage = styled.img`
   object-fit: cover;
 `;
 
-const DescriptionDiv = styled.div`
+const DescriptionDiv = styled.div<{ $fonttype: string }>`
   height: 16px;
   font-size: 16px;
   line-height: 1.5;
@@ -99,7 +110,7 @@ const DescriptionDiv = styled.div`
   color: #715142;
   text-align: center;
   text-overflow: ellipsis;
-  font-family: var(--Typography-family-caption, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;

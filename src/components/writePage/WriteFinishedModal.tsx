@@ -1,11 +1,6 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { decodeLetterId } from "../../api/config/base64";
 
 export const WriteFinishedModal: React.FC = () => {
-  const { letterId } = useParams()
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
   return (
     <Overlay>

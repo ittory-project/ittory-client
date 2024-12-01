@@ -106,3 +106,30 @@ export interface LetterEnterResponse {
   enterStatus: boolean;
   participantId: number;
 }
+
+// 편지 상세 정보 조회 API Response
+export interface LetterDetailGetResponse {
+  letterId: number;
+  coverTypeId: number;
+  fontId: number;
+  receiverName: string;
+  deliveryDate: string;
+  title: string;
+  coverPhotoUrl: string;
+  elements: LetterDetail[];
+}
+
+// 편지 상세 정보 요소 아이템
+export interface LetterDetail {
+  id: number;
+  nickname: string;
+  coverImageUrl: string;
+  content: string;
+  sequence: number;
+}
+
+// 편지가 저장 가능한지 확인하는 API Response
+export interface LetterStorageCheckGetResponse {
+  isStored: boolean;
+  receiverName: string;
+}

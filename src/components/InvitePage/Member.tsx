@@ -97,7 +97,8 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
 
   const handle = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
+    const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
+    //const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
     if (navigator.share) {
       try {
         await navigator.share({
