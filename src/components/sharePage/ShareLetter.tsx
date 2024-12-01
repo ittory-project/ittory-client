@@ -147,7 +147,7 @@ export const ShareLetter = () => {
         await navigator.share({
           title: `To. ${letterInfo.receiverName}`,
           text: '바스락... 바스락...\n편지함 앞에서 들리는 의문의 소리...',
-          url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+          url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
         });
         console.log('공유 성공');
       } else {
