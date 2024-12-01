@@ -118,8 +118,9 @@ export default function CompleteModal({
       console.log("Response:", response);
       const letterId = response.letterId;
 
-      handleNickname(letterId);
       fetchEnter(letterId);
+      handleNickname(letterId);
+
       navigate("/Invite", {
         state: {
           letterId: letterId,
