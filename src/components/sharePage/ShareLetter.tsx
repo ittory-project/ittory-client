@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Pagination } from '../common/Pagination';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
 import { decodeLetterId } from '../../api/config/base64';
@@ -11,12 +11,22 @@ import { FontGetResponse } from '../../api/model/FontModel';
 import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
 import { getFontById } from '../../api/service/FontService';
 import { getCoverTypeById } from '../../api/service/CoverTypeService';
+import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
+import { useDispatch } from 'react-redux';
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 
 function Query() {
   return new URLSearchParams(useLocation().search);
 }
 
 export const ShareLetter = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
@@ -58,6 +68,14 @@ export const ShareLetter = () => {
   }
 
   useEffect (() => {
+    dispatch(clearOrderData())
+    dispatch(clearData());
+    window.localStorage.setItem('nowLetterId', "1")
+    window.localStorage.setItem('nowSequence', "1")
+    window.localStorage.setItem('nowRepeat', "1")
+    window.localStorage.setItem('totalItem', "1")
+  }, [])
+  useEffect (() => {
     getSharedLetter(letterNumId)
   }, [letterNumId])
   useEffect(() => {
@@ -76,33 +94,78 @@ export const ShareLetter = () => {
   };
 
   const handleStorage = async () => {
-    console.log("참여한 편지함으로 이동")
+    navigate('/LetterBox')
   }
 
-  const createShare = async () => {
-    try {
-      await navigator.share({
-        title: '링크요',
-        text: '링크를 생성할 수 있을 것인가',
-        url: `${import.meta.env.VITE_SERVER_URL}/receive?letter=${encodeURIComponent("편지 번호")}?to=${encodeURIComponent("받을 사람")}`,
+  const { Kakao } = window;
+
+  const shareKakao = () =>{
+    if (letterInfo) {
+      console.log(window.Kakao.isInitialized())
+      Kakao.API.request({
+        url: '/v2/api/talk/memo/default/send',
+        data: {
+          template_object: {
+            object_type: 'feed',
+            content: {
+              title: `To. ${letterInfo.receiverName}`,
+              description: '바스락... 바스락...\n편지함 앞에서 들리는 의문의 소리...',
+              image_url:
+                `/img/share_thumbnail.png`,
+              link: {
+                mobile_web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+                web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+              },
+            },
+            buttons: [
+              {
+                title: '편지 확인하기',
+                link: {
+                  mobile_web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+                  web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+                },
+              },
+            ],
+          },
+        },
+      })
+      .then((response: string) => {
+        console.log(response);
+      })
+      .catch((error: string) => {
+        console.log(error);
       });
-      console.log('공유 성공');
-    } catch (e) {
-      console.log('공유 실패');
     }
   }
+
+  // const createShare = async () => {
+  //   try {
+  //     if (letterInfo) {
+  //       await navigator.share({
+  //         title: `To. ${letterInfo.receiverName}`,
+  //         text: '바스락... 바스락...\n편지함 앞에서 들리는 의문의 소리...',
+  //         url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+  //       });
+  //       console.log('공유 성공');
+  //     } else {
+  //       console.log('공유 실패');
+  //     }
+  //   } catch (e) {
+  //     console.log('공유 실패');
+  //   }
+  // }
 
   return (
     (letterInfo && coverType && font) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
-        <ToDiv>To. {letterInfo.receiverName}</ToDiv>
+        <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
         <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
           {renderPageContent()}
         </CoverContainer>
         <Pagination totalPages={elementLength + 1} />
         <BtnContainer>
           <StoreBtn onClick={handleStorage}>편지함에 보관하기</StoreBtn>
-          <ShareBtn onClick={createShare}>지금 공유하기</ShareBtn>
+          <ShareBtn onClick={shareKakao}>지금 공유하기</ShareBtn>
         </BtnContainer>
       </Background>
     ) : (
@@ -137,7 +200,7 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
               0 32px 16px rgba(0,0,0,0.09);
 `;
 
-const ToDiv = styled.div`
+const ToDiv = styled.div<{ $fonttype: string }>`
   font-size: 24px;
   margin-bottom: 40px;
   padding: 0px 10px;
@@ -145,7 +208,7 @@ const ToDiv = styled.div`
   text-align: center;
 
   /* title/base_bold */
-  font-family: var(--Typography-family-title, SUIT);
+  font-family: ${(props) => props.$fonttype};
   font-size: var(--Typography-size-base, 16px);
   font-style: normal;
   font-weight: 700;
