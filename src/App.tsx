@@ -32,7 +32,7 @@ function App() {
           <Route path="/share/:letterId" element={<ShareLetterPage />} />
           <Route path="/create" element={<CreatePage />} />
           <Route path="/invite" element={<InvitePage />} />
-          <Route path="/join" element={<JoinPage />} />
+          <Route path="/join/:letterId" element={<JoinPage />} />
           <Route path="/connection" element={<ConnectionPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/letterbox" element={<LetterBoxPage />} />
