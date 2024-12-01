@@ -7,6 +7,7 @@ import { getParticipants } from "../../api/service/LetterService";
 import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
+import { postEnter } from "../../api/service/LetterService";
 
 export interface Participants {
   sequence: number;
@@ -35,7 +36,10 @@ export const Invite = () => {
 
   const fetchParticipants = async () => {
     try {
-      setPrevParticipants(participants); //이전 멤버들
+      if (participants) {
+        setPrevParticipants(participants); //이전 멤버들
+      }
+      console.log(letterId);
       const data = await getParticipants(letterId);
       setParticipants(data);
       console.log(data);
@@ -70,8 +74,15 @@ export const Invite = () => {
   }, []);
 
   useEffect(() => {
+    const fetchEnter = async () => {
+      try {
+        const enterresponse = await postEnter(Number(letterId));
+        console.log(enterresponse.enterStatus);
+      } catch (err) {
+        console.error("Error fetching mydata:", err);
+      }
+    };
     localStorage.removeItem("letterId");
-
     const fetchMydata = async () => {
       try {
         const mydata = await getMyPage();
@@ -82,6 +93,7 @@ export const Invite = () => {
       }
     };
 
+    fetchEnter();
     fetchParticipants();
     fetchMydata();
   }, []);
