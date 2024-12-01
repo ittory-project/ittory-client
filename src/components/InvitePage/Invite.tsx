@@ -138,7 +138,7 @@ export const Invite = () => {
     if (participants.length > 0 && participants[0].memberId === userId) {
       setMemberIndex(0);
     }
-  }, [participants, userId]);
+  }, []);
 
   //퇴장 알림
   useEffect(() => {
