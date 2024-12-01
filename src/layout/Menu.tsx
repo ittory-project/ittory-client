@@ -23,8 +23,7 @@ export interface GroupItem {
 
 export const Menu = ({ onClose }: Props) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<boolean>(true);
-  //user여부 (로그인 여부)
+  const [user, setUser] = useState<boolean>(false);
   const [focusCreate, setFocusCreate] = useState<boolean>(false);
   const [focusReceive, setFocusReceive] = useState<boolean>(false);
   const [navigatePath, setNavigatePath] = useState<string | null>(null);
@@ -38,30 +37,35 @@ export const Menu = ({ onClose }: Props) => {
   const [userName, setUserName] = useState<string>("");
 
   useEffect(() => {
-    const fetchLetterCounts = async () => {
-      try {
-        const counts = await getLetterCounts();
-        setPartiLetter(counts.participationLetterCount);
-        setReceiveLetter(counts.receiveLetterCount);
-        console.log("Letter Counts:", counts);
-      } catch (err) {
-        console.error("Error fetching letter counts:", err);
-      }
-    };
+    if (localStorage.jwt) {
+      setUser(true);
+      const fetchLetterCounts = async () => {
+        try {
+          const counts = await getLetterCounts();
+          setPartiLetter(counts.participationLetterCount);
+          setReceiveLetter(counts.receiveLetterCount);
+          console.log("Letter Counts:", counts);
+        } catch (err) {
+          console.error("Error fetching letter counts:", err);
+        }
+      };
 
-    const fetchMyPageData = async () => {
-      try {
-        const myPageData = await getMyPage();
-        setProfileImage(myPageData.profileImage);
-        setUserName(myPageData.name);
-        console.log("My Page Data:", myPageData);
-      } catch (err) {
-        console.error("Error fetching my page data:", err);
-      }
-    };
+      const fetchMyPageData = async () => {
+        try {
+          const myPageData = await getMyPage();
+          setProfileImage(myPageData.profileImage);
+          setUserName(myPageData.name);
+          console.log("My Page Data:", myPageData);
+        } catch (err) {
+          console.error("Error fetching my page data:", err);
+        }
+      };
 
-    fetchLetterCounts();
-    fetchMyPageData();
+      fetchLetterCounts();
+      fetchMyPageData();
+    } else {
+      setUser(false);
+    }
   }, []);
 
   const navigateToAccount = () => {
@@ -74,6 +78,7 @@ export const Menu = ({ onClose }: Props) => {
       navigate(navigatePath, { state: navigateState });
       setNavigatePath(null);
       setNavigateState(null);
+      onClose();
     }
   }, [navigatePath, navigateState]);
 
@@ -82,7 +87,6 @@ export const Menu = ({ onClose }: Props) => {
     setFocusReceive(false);
     setNavigateState({ focusCreate: true, focusReceive: false });
     setNavigatePath("/LetterBox");
-    onClose();
   };
 
   const handleReceive = () => {
@@ -90,7 +94,6 @@ export const Menu = ({ onClose }: Props) => {
     setFocusReceive(true);
     setNavigateState({ focusCreate: false, focusReceive: true });
     setNavigatePath("/LetterBox");
-    onClose();
   };
 
   const handleCancel = () => {

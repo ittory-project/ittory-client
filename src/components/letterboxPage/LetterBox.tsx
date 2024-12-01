@@ -4,10 +4,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { CreatedLetter } from "./CreatedLetter";
 import { ReceivedLetter } from "./ReceivedLetter";
 import prev from "../../../public/assets/prev.svg";
+import { useParams } from "react-router-dom";
 
 export const LetterBox = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { letterId } = useParams();
 
   const [focusOn, setFocusOn] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -19,6 +21,16 @@ export const LetterBox = () => {
   const navigateBack = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    if (Number(letterId) > 0) {
+      // letterId가 존재하면 편지가 열리도록 설정
+      setOpenLetter(true);
+    } else {
+      // letterId가 없으면 닫도록 설정
+      setOpenLetter(false);
+    }
+  }, [letterId, setOpenLetter]);
 
   useEffect(() => {
     const focusCreate = location.state?.focusCreate;

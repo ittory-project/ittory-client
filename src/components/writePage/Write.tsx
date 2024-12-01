@@ -92,7 +92,7 @@ export const Write = ({
   // 총 참여자 수
   const [partiNum, setPartiNum] = useState(-1);
   // 총 반복 횟수
-  const [repeatNum, setRepeatNum] = useState(-1);
+  const [_, setRepeatNum] = useState(-1);
   // 잠금된 아이템
   const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
   // 퇴장 정보
@@ -347,14 +347,14 @@ export const Write = ({
   }, [showFinishedModal]);
 
   // 처음에 시작하기 전 페이지에 이거 넣기
-  const handleClearData = () => {
-    dispatch(clearOrderData());
-    dispatch(clearData());
-    window.localStorage.setItem("nowLetterId", "1");
-    window.localStorage.setItem("nowSequence", "1");
-    window.localStorage.setItem("nowRepeat", "1");
-    window.localStorage.setItem("totalItem", "1");
-  };
+  // const handleClearData = () => {
+  //   dispatch(clearOrderData())
+  //   dispatch(clearData());
+  //   window.localStorage.setItem('nowLetterId', "1")
+  //   window.localStorage.setItem('nowSequence', "1")
+  //   window.localStorage.setItem('nowRepeat', "1")
+  //   window.localStorage.setItem('totalItem', "1")
+  // };
 
   // 위치 버튼 누르면 그 부분으로 이동하는 액션
   const [nowItemId, setNowItemId] = useState<number | undefined>(undefined);
@@ -406,7 +406,7 @@ export const Write = ({
           />
         )}
         {hasExitUser && <WriteQuitAlert name={exitUser} />}
-        <button onClick={handleClearData}>삭제</button>
+        {/* <button onClick={handleClearData}>삭제</button> */}
       </AlertContainer>
       <ScrollableOrderList>
         <WriteOrderList
