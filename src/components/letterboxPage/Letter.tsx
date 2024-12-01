@@ -52,14 +52,13 @@ export const Letter = ({
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
   const navigate = useNavigate();
-  const { paramletterId } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [partiList, setPartiList] = useState<string>("");
   const [font, setFont] = useState<FontGetResponse>();
-  const [coverType, setCoverType] = useState<CoverTypeGetResponse>();
+  const [coverType, setCoverType] = useState<CoverTypeGetResponse | null>(null);
   const [elementLength, setElementLength] = useState<number>(0);
 
   const handleCancel = () => {
@@ -107,7 +106,8 @@ export const Letter = ({
         }
       }
     };
-    getSharedLetter(Number(paramletterId));
+    console.log(letterId);
+    getSharedLetter(Number(letterId));
     getSharedLetterStyle();
   }, []);
 
@@ -121,7 +121,8 @@ export const Letter = ({
   }, []);
 
   const renderPageContent = () => {
-    if (!paramletterId) {
+    if (!coverType || !font || !letterInfo || !letterId) {
+      console.log(coverType, font, letterInfo);
       return <div>편지를 찾을 수 없습니다.</div>;
     } else {
       if (currentPage === 1)
@@ -146,7 +147,7 @@ export const Letter = ({
   return (
     <BackGround>
       {isModalOpen && <Overlay />}
-      {!popup && (
+      {!popup && letterInfo && coverType && font && (
         <>
           <Header>
             <CancelBox>
@@ -156,25 +157,14 @@ export const Letter = ({
               <More src={more} alt="more_icon" onClick={handleMore} />
             </MoreBox>
           </Header>
-          <>
-            {letterInfo && coverType && font ? (
-              <Background
-                $backgroundimg={"" + coverType.outputBackgroundImageUrl}
-              >
-                <ToDiv $fonttype={font.name}>
-                  To. {letterInfo.receiverName}
-                </ToDiv>
-                <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
-                  {renderPageContent()}
-                </CoverContainer>
-                <Pagination totalPages={elementLength + 1} />
-              </Background>
-            ) : (
-              <div>편지를 불러올 수 없습니다.</div>
-            )}
-            ;
-          </>
-
+          <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
+            <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
+            <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
+              {renderPageContent()}
+            </CoverContainer>
+            <Pagination totalPages={elementLength + 1} />
+          </Background>
+          ;
           {isModalOpen &&
             (context === "created" ? (
               <Created_Modal

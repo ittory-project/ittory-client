@@ -6,6 +6,7 @@ import BottomSheet from "./BotttomSheet";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { getMyPage } from "../../../api/service/MemberService";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   myName: string;
@@ -32,6 +33,7 @@ export default function LetterInfo({
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
   const keyboardRef = useRef<HTMLInputElement | null>(null);
   const [name, setName] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMyPageData = async () => {
@@ -44,6 +46,10 @@ export default function LetterInfo({
     };
     fetchMyPageData();
   }, []);
+
+  const handleCancel = () => {
+    navigate("/");
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -104,7 +110,7 @@ export default function LetterInfo({
   return (
     <BackGround>
       {isModalOpen && <Overlay />}
-      <Cancel>
+      <Cancel onClick={handleCancel}>
         <img src={X} alt="X Icon" style={{ width: "14px", height: "14px" }} />
       </Cancel>
       <Container>

@@ -36,7 +36,6 @@ function App() {
           <Route path="/connection" element={<ConnectionPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/letterbox" element={<LetterBoxPage />} />
-          <Route path="/letterbox/:letterId" element={<LetterBoxPage />} />
         </Routes>
       </MainLayout>
     </Router>
