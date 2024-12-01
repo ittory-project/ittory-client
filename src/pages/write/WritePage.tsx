@@ -9,12 +9,12 @@ import { getLetterStartInfo } from "../../api/service/LetterService";
 import CountdownGif from "../../../public/img/letter_start_count.gif";
 
 export const WritePage = () => {
-  const { letterId } = useParams()
+  const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterTitle, setLetterTitle] = useState("");
-  const [partiCount, setPartiCount] = useState<Number | null>()
-  const [repeatCount, setRepeatCount] = useState<Number | null>()
-  const [elementCount, setElementCount] = useState<Number | null>()
+  const [partiCount, setPartiCount] = useState<Number | null>();
+  const [repeatCount, setRepeatCount] = useState<Number | null>();
+  const [elementCount, setElementCount] = useState<Number | null>();
 
   const [showPopup, setShowPopup] = useState(true);
   const [showCountdown, setShowCountdown] = useState(false);
@@ -25,28 +25,29 @@ export const WritePage = () => {
 
   const getStartInfo = async () => {
     if (!letterId) {
-      window.alert("잘못된 접근입니다.")
+      window.alert("잘못된 접근입니다.");
     } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.")
+      window.alert("잘못된 접근입니다.");
     } else {
-      const response: LetterStartInfoGetResponse = await getLetterStartInfo(letterNumId);
-      setLetterTitle(response.title)
-      setPartiCount(response.participantCount)
-      setRepeatCount(response.repeatCount)
-      setElementCount(response.elementCount)
+      const response: LetterStartInfoGetResponse =
+        await getLetterStartInfo(letterNumId);
+      setLetterTitle(response.title);
+      setPartiCount(response.participantCount);
+      setRepeatCount(response.repeatCount);
+      setElementCount(response.elementCount);
     }
-  }
+  };
   useEffect(() => {
-    getStartInfo()
+    getStartInfo();
   }, []);
 
   // 모달 띄우는 시간 설정
   useEffect(() => {
     const showTimer = setTimeout(() => {
       setShowCountdown(true);
-      
+
       const hideTimer = setTimeout(() => {
-        setShowPopup(false)
+        setShowPopup(false);
         setShowCountdown(false);
       }, 4000);
 
@@ -61,7 +62,7 @@ export const WritePage = () => {
   useEffect(() => {
     const totalDuration = 100000;
     const interval = setInterval(() => {
-      setProgressTime(prev => {
+      setProgressTime((prev) => {
         if (prev <= 0) {
           clearInterval(interval);
           return 0;
@@ -75,21 +76,20 @@ export const WritePage = () => {
 
   return (
     <Container>
-      {showPopup && 
-        <WriteMainModal 
-          onClose={onClose} 
-          partiCount={Number(partiCount)} 
-          repeatCount={Number(repeatCount)} 
+      {showPopup && (
+        <WriteMainModal
+          onClose={onClose}
+          partiCount={Number(partiCount)}
+          repeatCount={Number(repeatCount)}
           elementCount={Number(elementCount)}
-          />}
-      {showCountdown &&
-        <Countdown src={CountdownGif} />
-        }
-      <Write 
-        progressTime={progressTime} 
-        setProgressTime={setProgressTime} 
-        letterTitle={letterTitle}
         />
+      )}
+      {showCountdown && <Countdown src={CountdownGif} />}
+      <Write
+        progressTime={progressTime}
+        setProgressTime={setProgressTime}
+        letterTitle={letterTitle}
+      />
     </Container>
   );
 };

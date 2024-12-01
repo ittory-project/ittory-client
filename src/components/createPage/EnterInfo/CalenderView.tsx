@@ -138,7 +138,7 @@ const NextButton = styled.span`
 const Days = styled.div`
   width: 100%;
   height: 1.875rem;
-  padding-top: 6%;
+  padding-top: 7%;
   padding-bottom: 1.5%;
   display: flex;
   gap: 11px;

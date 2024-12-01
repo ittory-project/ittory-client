@@ -2,34 +2,41 @@ import styled from "styled-components";
 import { LetterPartiItem } from "../../api/model/LetterModel";
 
 interface PopoverProps {
-  writeOrderList: LetterPartiItem[]
+  writeOrderList: LetterPartiItem[];
   onClose: () => void;
 }
 
-export const WriteOrderPopover: React.FC<PopoverProps> = ({ writeOrderList, onClose }) => {
+export const WriteOrderPopover: React.FC<PopoverProps> = ({
+  writeOrderList,
+  onClose,
+}) => {
   return (
     // 상단에 순서 버튼 누르면 작게 순서 알려주는거
     <Overlay onClick={onClose}>
       <Popup onClick={(e) => e.stopPropagation()}>
         <ButtonContainer>
-          <img src="/assets/popover_close.svg" onClick={onClose}/>
+          <img src="/assets/popover_close.svg" onClick={onClose} />
         </ButtonContainer>
-        {writeOrderList ?
+        {writeOrderList ? (
           <PopupList>
             <Line $itemnum={Number(writeOrderList.length)} />
             {writeOrderList
               .slice()
               .sort((a, b) => a.sequence - b.sequence)
-              .map(participant => (
-              <ListItem key={participant.sequence}>
-                <ListNumber>{participant.sequence}</ListNumber>
-                <Avatar src={participant.imageUrl || '/assets/basic_user.svg'} alt={participant.nickname} />
-                <Name>{participant.nickname}</Name>
-              </ListItem>
-            ))}
+              .map((participant) => (
+                <ListItem key={participant.sequence}>
+                  <ListNumber>{participant.sequence}</ListNumber>
+                  <Avatar
+                    src={participant.imageUrl || "/assets/basic_user.svg"}
+                    alt={participant.nickname}
+                  />
+                  <Name>{participant.nickname}</Name>
+                </ListItem>
+              ))}
           </PopupList>
-            : <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
-          }
+        ) : (
+          <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
+        )}
       </Popup>
     </Overlay>
   );
@@ -58,8 +65,8 @@ const Popup = styled.div`
   right: 16px;
   top: 72px;
   border-radius: var(--Border-Radius-radius_400, 12px);
-  border: 2px solid var(--Color-secondary-soft_blue, #D3EDFF);
-  background: var(--color-black-white-white, #FFF);
+  border: 2px solid var(--Color-secondary-soft_blue, #d3edff);
+  background: var(--color-black-white-white, #fff);
 `;
 
 const ButtonContainer = styled.div`
@@ -76,7 +83,7 @@ const PopupList = styled.ul`
   padding: 0;
   margin: 0;
   overflow-y: auto;
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -96,7 +103,7 @@ const ListNumber = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  color: var(--color-black-white-white, #FFF);
+  color: var(--color-black-white-white, #fff);
   text-align: center;
   font-family: var(--Typography-family-number, "Gmarket Sans");
   font-size: 12px;
@@ -104,8 +111,8 @@ const ListNumber = styled.div`
   line-height: var(--Typography-line_height-2xs, 16px); /* 160% */
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
   border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: var(--Color-secondary-blue, #D3EDFF);
-  color: var(--color-black-white-white, #4DB4FF);
+  background: var(--Color-secondary-blue, #d3edff);
+  color: var(--color-black-white-white, #4db4ff);
 `;
 
 const Avatar = styled.img`
@@ -121,7 +128,7 @@ const Name = styled.span`
 `;
 
 const Line = styled.div<{ $itemnum: number }>`
-  border-left: 1.5px dashed #D3EDFF;
+  border-left: 1.5px dashed #d3edff;
   height: ${({ $itemnum }) => `calc(${$itemnum} * 55px)`};
   top: 0px;
   left: 12px;
@@ -130,7 +137,7 @@ const Line = styled.div<{ $itemnum: number }>`
 `;
 
 const PopupTitleDetail = styled.div`
-  color: var(--Color-grayscale-gray600, #868E96);
+  color: var(--Color-grayscale-gray600, #868e96);
   text-align: center;
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);

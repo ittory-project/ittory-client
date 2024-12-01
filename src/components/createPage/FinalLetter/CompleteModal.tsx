@@ -4,16 +4,20 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import letter from "../../../../public/assets/letter.svg";
 import { useNavigate } from "react-router-dom";
-import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
+import { CoverType } from "../../../api/model/CoverType";
+import { getCoverTypes } from "../../../api/service/CoverService";
+import { LetterRequestBody } from "../../../api/model/LetterModel";
+import { postLetter } from "../../../api/service/LetterService";
 
 interface Props {
+  myName: string;
   title: string;
   selectedImageIndex: number;
   receiverName: string;
   deliverDay: Date | null;
   croppedImage: string;
-  backgroundImage: string;
+  backgroundImage: number;
   selectfont: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +25,7 @@ interface Props {
 
 export default function CompleteModal({
   title,
+  myName,
   receiverName,
   deliverDay,
   croppedImage,
@@ -32,9 +37,22 @@ export default function CompleteModal({
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [bookimage, setBookimage] = useState<string>(backgroundImage);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypes();
+  }, []);
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
@@ -53,33 +71,53 @@ export default function CompleteModal({
     };
   }, [modalBackground]);
 
-  const navigateToInvite = () => {
+  const fontFamilyToId: { [key: string]: number } = {
+    GmarketSans: 1,
+    "Ownglyph_UNZ-Rg": 2,
+    "CookieRun-Regular": 3,
+    "Cafe24ClassicType-Regular": 4,
+  };
+
+  const navigateToInvite = async () => {
     setGuideOpen(true);
-    navigate("/Invite", {
-      state: {
-        guideOpen: guideOpen,
-        receiverName: receiverName,
-        title: title,
-        croppedImage: croppedImage,
-        backgroundImage: backgroundImage,
-        deliverDay: deliverDay,
-        selectfont: selectfont,
-        selectedImageIndex: selectedImageIndex,
-      },
-    });
+
+    const requestBody: LetterRequestBody = {
+      coverTypeId: selectedImageIndex + 1,
+      fontId: fontFamilyToId[selectfont],
+      receiverName: receiverName,
+      deliveryDate: deliverDay?.toISOString() || "",
+      title: title,
+      coverPhotoUrl: croppedImage,
+    };
+    console.log(requestBody);
+
+    try {
+      const response = await postLetter(requestBody);
+      console.log("Response:", response);
+      const letterId = response.letterId;
+
+      navigate("/Invite", {
+        state: {
+          letterId: letterId,
+          guideOpen: guideOpen,
+        },
+      });
+    } catch (error) {
+      console.error("Error posting letter:", error);
+    }
   };
 
   return (
     <ModalContainer ref={modalBackground}>
       <Header>
-        <Title>카리나님,</Title>
+        <Title>{myName}님,</Title>
         <Title>편지가 만들어졌어요!</Title>
       </Header>
       <MainContainer>
         <Receiver>
           To.{receiverName} <LetterImg img={letter} />
         </Receiver>
-        <Book backgroundImage={bookimage}>
+        <Book backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
           {deliverDay === null ? (
             <></>
@@ -91,13 +129,10 @@ export default function CompleteModal({
               {` (${format(deliverDay, "E", { locale: ko })})`}
             </DeliverDay>
           )}
-          {selectedImageIndex !== 4 && (
-            <>
-              <Bright src={bright} />
-              <Shadow src={shadow} />
-              <BtnImgContainer bgimg={croppedImage} />
-            </>
-          )}
+          <>
+            <Shadow src={shadow} />
+            <BtnImgContainer bgimg={croppedImage} />
+          </>
         </Book>
       </MainContainer>
       <Button onClick={navigateToInvite}>
@@ -111,7 +146,6 @@ const ModalContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   width: 100%;
-  //height: 34rem;
   padding: 24px 24px 20px 24px;
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
@@ -208,20 +242,11 @@ const DeliverDay = styled.div`
   line-height: 14px;
   letter-spacing: -0.5px;
 `;
-const Bright = styled.img`
-  width: 148px;
-  height: 148px;
-  margin-left: 3.9px;
-  margin-top: 80px;
-  position: absolute;
-  z-index: 2;
-  flex-shrink: 0;
-`;
 const Shadow = styled.img`
-  width: 161px;
+  width: 175px;
   height: 161px;
-  margin-left: 2.7px;
-  margin-top: 73px;
+  margin-left: 1px;
+  margin-top: 72px;
   position: absolute;
   z-index: 3;
   flex-shrink: 0;
@@ -237,8 +262,8 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 25px;
-  margin-left: 4.6px;
+  margin-top: 27px;
+  margin-left: 2px;
 `;
 
 const Button = styled.button`

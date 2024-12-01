@@ -5,7 +5,7 @@ import calender from "../../../../public/assets/calendar.svg";
 import BottomSheet from "./BotttomSheet";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useNavigate } from "react-router-dom";
+import { getMyPage } from "../../../api/service/MemberService";
 
 interface Props {
   myName: string;
@@ -28,11 +28,22 @@ export default function LetterInfo({
   setViewCoverDeco,
   setViewStartpage,
 }: Props) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const keyboardRef = useRef<HTMLElement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
+  const keyboardRef = useRef<HTMLInputElement | null>(null);
+  const [name, setName] = useState<string>("");
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const myPageData = await getMyPage();
+        setName(myPageData.name);
+      } catch (err) {
+        console.error("Error fetching my page data:", err);
+      }
+    };
+    fetchMyPageData();
+  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -83,6 +94,13 @@ export default function LetterInfo({
     };
   }, [keyboardRef]);
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      console.log("사용자가 Enter(완료) 버튼을 눌렀습니다.");
+      // 추가적인 동작을 여기에 추가할 수 있습니다.
+    }
+  };
+
   return (
     <BackGround>
       {isModalOpen && <Overlay />}
@@ -92,11 +110,11 @@ export default function LetterInfo({
       <Container>
         {!keyboardVisible && (
           <Title>
-            <Text>카리나님,</Text>
+            <Text>{name}님,</Text>
             <Text>같이 편지를 만들어봐요!</Text>
           </Title>
         )}
-        <MainCotainer shiftUp={keyboardVisible} isOpen={isModalOpen}>
+        <MainCotainer shiftup={keyboardVisible} isopen={isModalOpen}>
           <InputBox>
             <InputLogo>받는 사람</InputLogo>
             <Input
@@ -111,10 +129,11 @@ export default function LetterInfo({
                 }
                 setReceiverName(e.target.value);
               }}
-              minlength="1"
-              maxlength="12"
+              min-length="1"
+              max-length="12"
               onFocus={handleFocus}
-              spellcheck="false"
+              spellCheck="false"
+              onKeyDown={handleKeyDown}
               //onBlur={handleBlur}
             />
           </InputBox>
@@ -133,10 +152,10 @@ export default function LetterInfo({
                 }
                 setMyName(e.target.value);
               }}
-              minlength="1"
-              maxlength="5"
+              min-Length="1"
+              max-Length="5"
               onFocus={handleFocus}
-              spellcheck="false"
+              spellCheck="false"
               //onBlur={handleBlur}
             />
           </InputBox>
@@ -264,7 +283,7 @@ const Text = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
-const MainCotainer = styled.div<{ shiftUp: boolean; isOpen: boolean }>`
+const MainCotainer = styled.div<{ shiftup?: boolean; isopen?: boolean }>`
   display: flex;
   width: 16.5rem;
   height: 14.7rem;
@@ -278,7 +297,7 @@ const MainCotainer = styled.div<{ shiftUp: boolean; isOpen: boolean }>`
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
   transition: transform 0.3s ease;
   transform: ${(props) =>
-    props.shiftUp ? "translateY(0.8rem)" : "translateY(0)"};
+    props.shiftup ? "translateY(0.8rem)" : "translateY(0)"};
 `;
 const InputBox = styled.div`
   display: flex;

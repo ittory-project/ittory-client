@@ -2,7 +2,6 @@ import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { format, isSameMonth, isSameDay, addDays, parse } from "date-fns";
 import React, { useState } from "react";
 import styled from "styled-components";
-//import SelectedImg from "../../assets/selected.png";
 
 interface Props {
   current: Date;
@@ -158,7 +157,7 @@ const Img = styled.img`
 const Txt = styled.span`
   position: absolute;
   text-align: center;
-  font-family: Gmarket Sans;
+  font-family: "Gmarket Sans";
   font-size: 12px;
   font-weight: 400;
   line-height: normal;

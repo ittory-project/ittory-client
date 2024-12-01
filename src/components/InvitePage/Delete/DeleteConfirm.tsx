@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-//모든 참여자에게 노출
+import { useNavigate } from "react-router-dom";
+import deleteIcon from "../../../../public/assets/invite/delete.svg";
+
 export const DeleteConfirm = () => {
+  const navigate = useNavigate();
+
+  const handleButton = () => {
+    navigate("/");
+  };
   return (
     <BackGround>
       <Container>
-        <Icon>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="140"
-            height="140"
-            viewBox="0 0 140 140"
-            fill="none"
-          >
-            <circle cx="70" cy="70" r="70" fill="#D9D9D9" />
-          </svg>
-        </Icon>
+        <Icon src={deleteIcon} />
         <Title>방장이 편지를 삭제하여</Title>
         <Title>종료되었어요</Title>
       </Container>
 
-      <Button>
-        {/* 클릭 시 랜딩페이지로 이동 */}
+      <Button onClick={handleButton}>
         <ButtonTxt>홈으로</ButtonTxt>
       </Button>
     </BackGround>
@@ -51,7 +47,7 @@ const Container = styled.div`
   align-items: center;
   align-self: stretch;
 `;
-const Icon = styled.div`
+const Icon = styled.img`
   width: 140px;
   height: 140px;
   margin-bottom: 16px;

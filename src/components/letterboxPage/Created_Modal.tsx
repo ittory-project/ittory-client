@@ -7,9 +7,14 @@ import share from "../../../public/assets/share.svg";
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  openLetter: boolean;
 }
 
-export const Created_Modal = ({ setIsModalOpen, setPopup }: Props) => {
+export const Created_Modal = ({
+  setIsModalOpen,
+  setPopup,
+  openLetter,
+}: Props) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -19,7 +24,7 @@ export const Created_Modal = ({ setIsModalOpen, setPopup }: Props) => {
   };
 
   const handleShare = async () => {
-    const url = "https://shinsangeun.github.io";
+    const url = "";
     if (navigator.share) {
       try {
         await navigator.share({

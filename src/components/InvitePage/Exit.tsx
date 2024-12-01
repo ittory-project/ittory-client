@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { quitLetterWs } from "../../api/service/WsService";
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
-  handleUserExit: (userId: number) => void;
+  letterId: number;
 }
 //방장에게만 적용되는 팝업
-export const Exit = ({ setViewExit, handleUserExit }: Props) => {
-  const handleExit = () => {
+export const Exit = ({ setViewExit, letterId }: Props) => {
+  const navigate = useNavigate();
+  const handleExitCancel = () => {
     setViewExit(false);
+  };
+
+  const handleExit = () => {
+    quitLetterWs(letterId);
   };
 
   return (
@@ -22,7 +29,7 @@ export const Exit = ({ setViewExit, handleUserExit }: Props) => {
               background: "#CED4DA",
             }}
           >
-            <ButtonTxt style={{ color: "#495057" }} onClick={handleExit}>
+            <ButtonTxt style={{ color: "#495057" }} onClick={handleExitCancel}>
               취소하기
             </ButtonTxt>
           </Button>
@@ -30,6 +37,7 @@ export const Exit = ({ setViewExit, handleUserExit }: Props) => {
             style={{
               background: "#FFA256",
             }}
+            onClick={handleExit}
           >
             <ButtonTxt style={{ color: "#fff" }}>나가기</ButtonTxt>
           </Button>

@@ -4,16 +4,20 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import letter from "../../../../public/assets/letter.svg";
 import { useNavigate } from "react-router-dom";
-import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
+import { getCoverTypes } from "../../../api/service/CoverService";
+import { CoverType } from "../../../api/model/CoverType";
+import { LetterRequestBody } from "../../../api/model/LetterModel";
+import { postLetter } from "../../../api/service/LetterService";
 
 interface Props {
+  myName: string;
   title: string;
   selectedImageIndex: number;
   receiverName: string;
   deliverDay: Date | null;
   croppedImage: string;
-  backgroundImage: string;
+  backgroundImage: number;
   selectfont: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,30 +33,91 @@ export default function UserFinishModal({
   setIsModalOpen,
   selectedImageIndex,
   setKeyboardVisible,
+  myName,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [bookimage, setBookimage] = useState<string>(backgroundImage);
   const [guideOpen, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 
-  const navigateToInvite = () => {
-    navigate("/Invite", {
-      state: {
-        guideOpen: guideOpen,
-        receiverName: receiverName,
-        title: title,
-        croppedImage: croppedImage,
-        backgroundImage: backgroundImage,
-        deliverDay: deliverDay,
-        selectfont: selectfont,
-        selectedImageIndex: selectedImageIndex,
-      },
-    });
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+        console.log(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypes();
+  }, []);
+
+  const fontFamilyToId: { [key: string]: number } = {
+    GmarketSans: 1,
+    "Ownglyph_UNZ-Rg": 2,
+    "CookieRun-Regular": 3,
+    "Cafe24ClassicType-Regular": 4,
   };
 
-  const handleguide = () => {
+  const navigateToInvite = async () => {
+    setGuideOpen(false);
+
+    const requestBody: LetterRequestBody = {
+      coverTypeId: selectedImageIndex + 1,
+      fontId: fontFamilyToId[selectfont],
+      receiverName: receiverName,
+      deliveryDate: deliverDay?.toISOString() || "",
+      title: title,
+      coverPhotoUrl: croppedImage,
+    };
+    console.log(requestBody);
+
+    try {
+      const response = await postLetter(requestBody);
+      console.log("Response:", response);
+      const letterId = response.letterId;
+
+      navigate("/Invite", {
+        state: {
+          letterId: letterId,
+          guideOpen: guideOpen,
+        },
+      });
+    } catch (error) {
+      console.error("Error posting letter:", error);
+    }
+  };
+
+  const handleguide = async () => {
     setGuideOpen(true);
+
+    const requestBody: LetterRequestBody = {
+      coverTypeId: selectedImageIndex + 1,
+      fontId: fontFamilyToId[selectfont],
+      receiverName: receiverName,
+      deliveryDate: deliverDay?.toISOString() || "",
+      title: title,
+      coverPhotoUrl: croppedImage,
+    };
+    console.log(requestBody);
+
+    try {
+      const response = await postLetter(requestBody);
+      console.log("Response:", response);
+      const letterId = response.letterId;
+
+      navigate("/Invite", {
+        state: {
+          letterId: letterId,
+          guideOpen: guideOpen,
+        },
+      });
+    } catch (error) {
+      console.error("Error posting letter:", error);
+    }
   };
 
   useEffect(() => {
@@ -75,18 +140,17 @@ export default function UserFinishModal({
   return (
     <ModalContainer ref={modalBackground}>
       <Header>
-        <Title>카리나님,</Title>
+        <Title>{myName}님,</Title>
         <Title>편지가 만들어졌어요!</Title>
       </Header>
       <MainContainer>
         <Receiver>
           To.{receiverName} <LetterImg img={letter} />
         </Receiver>
-        <Book backgroundImage={bookimage}>
+        <Book backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
-          {selectedImageIndex === 4 && (
+          {selectedImageIndex !== 4 && (
             <>
-              <Bright src={bright} />
               <Shadow src={shadow} />
               <BtnImgContainer bgimg={croppedImage} />
             </>
@@ -131,7 +195,6 @@ const ModalContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   width: 100%;
-  height: 37rem;
   padding: 24px 24px 20px 24px;
   border-radius: 24px 24px 0px 0px;
   background: #fff;
@@ -166,7 +229,7 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 2.5rem;
+  margin-top: 24px;
 `;
 const Receiver = styled.div`
   display: flex;
@@ -214,7 +277,7 @@ const TitleContainer = styled.div<{ font: string }>`
   font-weight: 500;
   letter-spacing: -0.5px;
   line-height: 24px;
-  margin-top: 9px;
+  margin-top: 8px;
 `;
 const DeliverDay = styled.div`
   color: rgba(255, 255, 255, 0.8);
@@ -227,15 +290,6 @@ const DeliverDay = styled.div`
   line-height: 14px;
   letter-spacing: -0.5px;
 `;
-const Bright = styled.img`
-  width: 148px;
-  height: 148px;
-  margin-left: 3.9px;
-  margin-top: 80px;
-  position: absolute;
-  z-index: 2;
-  flex-shrink: 0;
-`;
 const Shadow = styled.img`
   width: 161px;
   height: 161px;
@@ -245,31 +299,15 @@ const Shadow = styled.img`
   z-index: 3;
   flex-shrink: 0;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
-  width: 150px;
-  height: 150px;
-  gap: 4px;
-  z-index: 3;
-  flex-shrink: 0;
-  border-radius: 100px;
-  background-image: url(${(props) => props.bgimg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  margin-top: 18.5px;
-  margin-left: 4.5px;
-`;
-
 const ButtonContainer = styled.div`
-  padding: 0px 16px 20px 16px;
+  padding: 0px 16px 0px 16px;
   box-sizing: border-box;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
   display: flex;
   position: relative;
-  //bottom: 20px;
-  margin-top: 3rem;
+  margin-top: 24px;
   width: 100%; /* 컨테이너의 너비를 조정 */
   justify-content: center; /* 버튼들을 중앙에 배치 */
 `;
@@ -294,4 +332,18 @@ const ButtonTxt = styled.div`
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.5px;
+`;
+const BtnImgContainer = styled.div<{ bgimg: string }>`
+  width: 136px;
+  height: 136px;
+  gap: 4px;
+  z-index: 2;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background-image: url(${(props) => props.bgimg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 25px;
+  margin-left: 4.6px;
 `;

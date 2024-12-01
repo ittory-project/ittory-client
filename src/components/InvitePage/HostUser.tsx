@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
 import out from "../../../public/assets/out.svg";
 import deletebtn from "../../../public/assets/delete.svg";
@@ -16,46 +16,78 @@ import { Count } from "./Count/Count";
 import { Exit } from "./Exit";
 import bright from "../../../public/assets/border.svg";
 import shadow from "../../../public/assets/shadow2.svg";
-
-export interface GroupItem {
-  id: number;
-  profileImage: string;
-  name: string;
-}
+import { getMyPage } from "../../api/service/MemberService";
+import { enterLetterWs } from "../../api/service/WsService";
+import { Participants } from "./Invite";
+import { getCoverTypes } from "../../api/service/CoverService";
+import { CoverType } from "../../api/model/CoverType";
+import { getLetterInfo } from "../../api/service/LetterService";
 
 interface Props {
-  receiverName: string;
-  title: string;
-  backgroundImage: string;
-  croppedImage: string;
-  selectfont: string;
-  deliverDay: Date;
-  selectedImageIndex: number;
   guideOpen: boolean;
-  items: GroupItem[];
-  handleUserExit: (userId: number) => void;
+  items: Participants[];
+  letterId: number;
+  viewDelete: boolean;
+  setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const fonts = [
+  { name: "GmarketSans" },
+  { name: "Ownglyph_UNZ-Rg" },
+  { name: "CookieRun-Regular" },
+  { name: "Cafe24ClassicType-Regular" },
+];
+
 export const HostUser = ({
-  receiverName,
-  title,
-  backgroundImage,
-  croppedImage,
-  selectfont,
-  deliverDay,
-  selectedImageIndex,
   guideOpen,
   items = [],
-  handleUserExit,
+  letterId,
+  viewDelete,
+  setViewDelete,
 }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
-  const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
-  const namesString = items.map((item) => item.name).join(", ");
+  const namesString = items.map((item) => item.nickname).join(", ");
+  const [memberId, setMemberId] = useState<number>(0);
+  const [name, setName] = useState<string>("");
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [cropImg, setCropImg] = useState<string>("");
+  const [deliverDay, setDeliverDay] = useState<Date | null>();
+  const [title, setTitle] = useState<string>("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [selectfont, setSelectfont] = useState<number>(-1);
+  const [receiverName, setReceiverName] = useState<string>("");
+
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    const fetchLetterInfo = async () => {
+      try {
+        const letterData = await getLetterInfo(letterId);
+        setCropImg(letterData.coverPhotoUrl);
+        setTitle(letterData.title);
+        setDeliverDay(parseISO(letterData.deliveryDate));
+        setReceiverName(letterData.receiverName);
+        setSelectedImageIndex(letterData.coverTypeId);
+        setSelectfont(letterData.fontId);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypes();
+    fetchLetterInfo();
+  }, []);
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -63,6 +95,19 @@ export const HostUser = ({
     } else {
       setSliceName(receiverName);
     }
+  }, [receiverName]);
+
+  useEffect(() => {
+    const fetchMyPageData = async () => {
+      try {
+        const myData = await getMyPage();
+        setMemberId(myData.memberId);
+        setName(myData.name);
+      } catch (err) {
+        console.error("Error fetching my data:", err);
+      }
+    };
+    fetchMyPageData();
   }, []);
 
   const handleUserName = (name: string) => {
@@ -85,12 +130,13 @@ export const HostUser = ({
   };
 
   const handle = async () => {
-    const url = "https://shinsangeun.github.io";
+    const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
+    //const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "기록하며 성장하기",
-          text: "Hello World",
+          title: "잇토리",
+          text: "초대장",
           url,
         });
         setCopied(true);
@@ -134,25 +180,31 @@ export const HostUser = ({
             </IconContainer>
           </Header>
           <MainContainer>
-            <Book backgroundImage={backgroundImage}>
-              <TitleContainer font={selectfont}>{title}</TitleContainer>
-              {deliverDay === null ? (
-                <></>
-              ) : (
+            <Book
+              backgroundImage={
+                coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+              }
+            >
+              <TitleContainer font={fonts[selectfont + 1].name}>
+                {title}
+              </TitleContainer>
+              {deliverDay ? (
                 <DeliverDay>
-                  {`${format(deliverDay, "yyyy")}. `}
-                  {`${format(deliverDay, "MM")}. `}
-                  {format(deliverDay, "dd")}
-                  {` (${format(deliverDay, "E", { locale: ko })})`}
+                  {`${format(deliverDay as Date, "yyyy")}. `}
+                  {`${format(deliverDay as Date, "MM")}. `}
+                  {format(deliverDay as Date, "dd")}
+                  {` (${format(deliverDay as Date, "E", { locale: ko })})`}
                 </DeliverDay>
+              ) : (
+                <></>
               )}
-              {selectedImageIndex !== 4 && (
-                <>
-                  <Bright src={bright} />
-                  <Shadow src={shadow} />
-                  <BtnImgContainer bgimg={croppedImage} />
-                </>
-              )}
+
+              <>
+                <Bright src={bright} />
+                <Shadow src={shadow} />
+                <BtnImgContainer bgimg={cropImg} />
+              </>
+
               <NameBar>
                 <NameContainer>
                   <NameTxt>{namesString}</NameTxt>
@@ -169,26 +221,28 @@ export const HostUser = ({
                 <List>
                   {items.map((user, index) =>
                     index === 0 ? (
-                      <MainUser key={user.id}>
+                      <MainUser key={index}>
                         <Crown img={crown} />
                         <User>
-                          <ProfileImg img={items[0].profileImage} />
-                          <UserName>{items[0].name}</UserName>
+                          <ProfileImg img={items[0].imageUrl} />
+                          <UserName>{items[0].nickname}</UserName>
                         </User>
                       </MainUser>
                     ) : (
-                      <InvitedUser key={user.id}>
+                      <InvitedUser key={index}>
                         <User>
-                          <ProfileImg img={user.profileImage} />
-                          {user.name.length > 3 ? (
+                          <ProfileImg img={user.imageUrl} />
+                          {user.nickname.length > 3 ? (
                             <UserNameContainer>
-                              <UserName>{handleUserName(user.name)}</UserName>
+                              <UserName>
+                                {handleUserName(user.nickname)}
+                              </UserName>
                               <UserName style={{ letterSpacing: "-0.2em" }}>
                                 ···
                               </UserName>
                             </UserNameContainer>
                           ) : (
-                            <UserName>{user.name}</UserName>
+                            <UserName>{user.nickname}</UserName>
                           )}
                         </User>
                       </InvitedUser>
@@ -222,16 +276,26 @@ export const HostUser = ({
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
-            <Count setViewCount={setViewCount} member={items.length} />
+            <Count
+              letterId={letterId}
+              setViewCount={setViewCount}
+              member={items.length}
+            />
           )}
         </>
       )}
 
-      {viewDelete && <Delete setViewDelete={setViewDelete} />}
-      {viewExit && (
-        <Exit setViewExit={setViewExit} handleUserExit={handleUserExit} />
+      {viewDelete && (
+        <Delete letterId={letterId} setViewDelete={setViewDelete} />
       )}
-      {popup && <CountPopup setPopup={setPopup} setViewCount={setViewCount} />}
+      {viewExit && <Exit setViewExit={setViewExit} letterId={letterId} />}
+      {popup && (
+        <CountPopup
+          setPopup={setPopup}
+          setViewCount={setViewCount}
+          letterId={letterId}
+        />
+      )}
     </BackGround>
   );
 };
@@ -555,7 +619,7 @@ const ProfileImg = styled.div<{ img: string }>`
   background-position: center;
   margin-bottom: 6px;
 `;
-const UserName = styled.div<{ isLongName: boolean }>`
+const UserName = styled.div`
   overflow: hidden;
   color: #000;
   text-align: center;
@@ -568,11 +632,11 @@ const UserName = styled.div<{ isLongName: boolean }>`
   letter-spacing: -0.5px;
   white-space: nowrap;
   overflow: hidden;
-  //text-overflow: ${(props) => (props.isLongName ? "ellipsis" : "clip")};
   &:first-of-type {
     margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
   }
 `;
+
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
@@ -591,7 +655,7 @@ const Button = styled.button`
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
   position: relative;
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 5rem;
   left: 50%;
   transform: translateX(-50%);
 `;

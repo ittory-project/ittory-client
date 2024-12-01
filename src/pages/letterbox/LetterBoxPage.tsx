@@ -1,4 +1,4 @@
-import { LetterBox } from "../components/letterboxPage/LetterBox";
+import { LetterBox } from "../../components/letterboxPage/LetterBox";
 
 export const LetterBoxPage = () => {
   return (

@@ -1,4 +1,4 @@
-import { Connection } from "../components/connectionPage/Connection";
+import { Connection } from "../../components/connectionPage/Connection";
 
 export const ConnectionPage = () => {
   return (

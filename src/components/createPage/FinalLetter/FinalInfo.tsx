@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -6,8 +6,11 @@ import EditImg from "../../../../public/assets/edit.svg";
 import EditLetter from "../FinalLetter/EditLetter";
 import CoverModal from "./CoverModal";
 import CompleteModal from "./CompleteModal";
-import bright from "../../../../public/assets/border.svg";
+import UserFinishModal from "./UserFinishModal";
 import shadow from "../../../../public/assets/shadow2.svg";
+import { CoverType } from "../../../api/model/CoverType";
+import { getCoverTypes } from "../../../api/service/CoverService";
+import { getVisitUser } from "../../../api/service/MemberService";
 
 interface Props {
   myName: string;
@@ -21,13 +24,17 @@ interface Props {
   selectfont: string;
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   croppedImage: string;
-  backgroundImage: string;
+  backgroundImage: number;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<string>>;
+  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
+interface BookProps {
+  backgroundImage: string;
+  children: ReactNode;
+}
 export default function FinalInfo({
   myName,
   setMyName,
@@ -49,7 +56,25 @@ export default function FinalInfo({
   const [viewEdit, setViewEdit] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [complete, setComplete] = useState(false);
+  const [complete, setComplete] = useState<boolean>(false);
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [visit, setVisit] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+
+        const user = await getVisitUser();
+        setVisit(user.isVisited);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleEditview = () => {
     setViewEdit(true);
@@ -57,8 +82,26 @@ export default function FinalInfo({
   const openCoveredit = () => {
     setCoveropen(true);
   };
+
   const handleComplete = () => {
     setComplete(true);
+  };
+  const Book: React.FC<BookProps> = ({ backgroundImage, children }) => {
+    return (
+      <div
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "120px",
+          height: "157px",
+          boxSizing: "border-box",
+        }}
+      >
+        {children}
+      </div>
+    );
   };
 
   return (
@@ -117,22 +160,25 @@ export default function FinalInfo({
                   style={{ width: "11px", height: "11px" }}
                 />
               </EditBtn>
-              {croppedImage === "" || selectedImageIndex === 4 ? (
-                <Book backgroundImage={backgroundImage}>
+              {croppedImage === "" ? (
+                <Book
+                  backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}
+                >
                   <BookTitle font={selectfont}>{title}</BookTitle>
                 </Book>
               ) : (
-                <Book backgroundImage={backgroundImage}>
+                <Book
+                  backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}
+                >
                   <BookTitle font={selectfont}>{title}</BookTitle>
-                  <Bright src={bright} />
                   <Shadow src={shadow} />
                   <BtnImgContainer bgimg={croppedImage}></BtnImgContainer>
                 </Book>
               )}
             </Cover>
           </Container>
-          <Button>
-            <ButtonTxt onClick={handleComplete}>확인했어요</ButtonTxt>
+          <Button onClick={handleComplete}>
+            <ButtonTxt>확인했어요</ButtonTxt>
           </Button>
         </>
       ) : (
@@ -172,19 +218,34 @@ export default function FinalInfo({
           setSelectedImageIndex={setSelectedImageIndex}
         />
       )}
-      {complete && (
-        <CompleteModal
-          setKeyboardVisible={setKeyboardVisible}
-          receiverName={receiverName}
-          deliverDay={deliverDay}
-          title={title}
-          croppedImage={croppedImage}
-          backgroundImage={backgroundImage}
-          selectfont={selectfont}
-          setIsModalOpen={setComplete}
-          selectedImageIndex={selectedImageIndex}
-        />
-      )}
+      {complete &&
+        (visit ? (
+          <UserFinishModal
+            setKeyboardVisible={setKeyboardVisible}
+            myName={myName}
+            receiverName={receiverName}
+            deliverDay={deliverDay}
+            title={title}
+            croppedImage={croppedImage}
+            backgroundImage={backgroundImage}
+            selectfont={selectfont}
+            setIsModalOpen={setComplete}
+            selectedImageIndex={selectedImageIndex}
+          />
+        ) : (
+          <CompleteModal
+            setKeyboardVisible={setKeyboardVisible}
+            myName={myName}
+            receiverName={receiverName}
+            deliverDay={deliverDay}
+            title={title}
+            croppedImage={croppedImage}
+            backgroundImage={backgroundImage}
+            selectfont={selectfont}
+            setIsModalOpen={setComplete}
+            selectedImageIndex={selectedImageIndex}
+          />
+        ))}
     </BackGround>
   );
 }
@@ -194,12 +255,8 @@ const BackGround = styled.div`
   position: relative;
   flex-direction: column;
   align-items: center;
-  //justify-content: center;
   height: 100vh;
   width: 100vw;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -335,31 +392,9 @@ const Cover = styled.div`
   background: #f8f9fa;
   align-items: center;
 `;
-const Book = styled.div<{ backgroundImage: string }>`
-  width: 120px;
-  height: 157px;
-  position: relative;
-  border-radius: 2.143px 6.429px 6.429px 2.143px;
-  background-image: url(${(props) => props.backgroundImage});
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-size: contain; /* 이미지를 자르지 않고 크기에 맞춰 조정 */
-  background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
-  background-position: center; /* 이미지를 가운데 정렬 */
-`;
-const Bright = styled.img`
-  width: 78px;
-  height: 78px;
-  margin-left: 3px;
-  margin-top: 45px;
-  position: absolute;
-  z-index: 0;
-  flex-shrink: 0;
-`;
 const Shadow = styled.img`
-  margin-left: 2.5px;
-  margin-top: 40px;
+  margin-left: 17.1px;
+  margin-top: 12.5px;
   position: absolute;
   z-index: 1;
   flex-shrink: 0;
@@ -375,8 +410,8 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 21px;
-  margin-left: 2.7px;
+  margin-top: 20px;
+  margin-left: 24.2px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ font: string }>`

@@ -1,4 +1,4 @@
-import { Create } from "../components/createPage/Create";
+import { Create } from "../../components/createPage/Create";
 
 export const CreatePage = () => {
   return (

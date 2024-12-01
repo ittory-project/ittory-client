@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import X from "../../../public/assets/x.svg";
 import delete2 from "../../../public/assets/delete2.svg";
@@ -6,9 +6,14 @@ import delete2 from "../../../public/assets/delete2.svg";
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  openLetter: boolean;
 }
 
-export const Received_Modal = ({ setIsModalOpen, setPopup }: Props) => {
+export const Received_Modal = ({
+  setIsModalOpen,
+  setPopup,
+  openLetter,
+}: Props) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
