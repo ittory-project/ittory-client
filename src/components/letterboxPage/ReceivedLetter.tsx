@@ -11,9 +11,6 @@ import {
 } from "../../api/service/MemberService";
 import { ReceiveLetterModel } from "../../api/model/MemberModel";
 
-//받은 편지함 receiverName->title로 수정 필요
-//실제 데이터 넣어보기
-
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isModalOpen: boolean;
