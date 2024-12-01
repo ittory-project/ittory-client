@@ -78,7 +78,7 @@ export default function UserFinishModal({
   const fetchEnter = async (letterId: Number) => {
     try {
       const enterresponse = await postEnter(Number(letterId));
-      console.log(enterresponse.enterStatus);
+      handleNickname(letterId);
     } catch (err) {
       console.error("Error fetching mydata:", err);
     }
@@ -101,16 +101,17 @@ export default function UserFinishModal({
       const response = await postLetter(requestBody);
       console.log("Response:", response);
       const letterId = response.letterId;
+      console.log("letterId", letterId);
 
       fetchEnter(letterId);
-      handleNickname(letterId);
-
+      //handleNickname(letterId);
+      /*
       navigate("/Invite", {
         state: {
           letterId: letterId,
           guideOpen: guideOpen,
         },
-      });
+      });*/
     } catch (error) {
       console.error("Error posting letter:", error);
     }
@@ -134,12 +135,14 @@ export default function UserFinishModal({
       console.log("Response:", response);
       const letterId = response.letterId;
 
+      fetchEnter(letterId);
+      /*
       navigate("/Invite", {
         state: {
           letterId: letterId,
           guideOpen: guideOpen,
         },
-      });
+      });*/
     } catch (error) {
       console.error("Error posting letter:", error);
     }

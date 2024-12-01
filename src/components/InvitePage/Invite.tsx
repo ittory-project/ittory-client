@@ -75,14 +75,6 @@ export const Invite = () => {
   }, []);
 
   useEffect(() => {
-    const fetchEnter = async () => {
-      try {
-        const enterresponse = await postEnter(Number(letterId));
-        console.log(enterresponse.enterStatus);
-      } catch (err) {
-        console.error("Error fetching mydata:", err);
-      }
-    };
     localStorage.removeItem("letterId");
     const fetchMydata = async () => {
       try {
@@ -94,7 +86,6 @@ export const Invite = () => {
       }
     };
 
-    fetchEnter();
     fetchParticipants();
     fetchMydata();
   }, []);
