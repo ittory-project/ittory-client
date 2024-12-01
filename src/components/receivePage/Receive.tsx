@@ -1,8 +1,17 @@
 import { useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
 import { DoorAnimation } from './DoorAnimation';
 
+function Query() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const Receive = () => {
+  const { letterId } = useParams();
+  const query = Query();
+  const receiver = String(query.get("to"))
+  const receiverName = decodeURIComponent(receiver)
   const [expanded, setExpanded] = useState(false);
   const [showDoorAnimation, setShowDoorAnimation] = useState(false);
   const [hideDoorImg, setHideDoorImg] = useState(false); 
@@ -19,23 +28,23 @@ const Receive = () => {
     setShowDoorAnimation(true);
   };
 
-  return (
+  return ( letterId ?
     <>
       {showDoorAnimation ? (
-        <DoorAnimation />
+        <DoorAnimation letterId={letterId}/>
       ) : (
         <Container onClick={handleClick}>
           <DoorImg expanded={expanded}>
           </DoorImg>
           <AnimatedDiv expanded={expanded}>
-            <Img src="/img/profile.png" />
+            <Img src="/img/letter_christmas_door.svg" />
           </AnimatedDiv>
           {expanded ? (
             // 2번째 화면
             <div onClick={(e) => e.stopPropagation()}>
               {hideDoorImg && 
                 <TextBalloon>
-                  <ExpandTitle>열두글자닉네임안녕하세요님 맞으시죠?<br/>편지가 도착했어요!</ExpandTitle>
+                  <ExpandTitle>{`${receiverName}님 맞으시죠?`}<br/>편지가 도착했어요!</ExpandTitle>
                   <BalloonUnder src='/assets/text_balloon_under.svg' />
                 </TextBalloon>
               }
@@ -49,7 +58,7 @@ const Receive = () => {
               <>
                 <MainTitleContainer>
                   <MainText>띵동~</MainText>
-                  <MainTitle>선재님에게 편지가 도착했어요</MainTitle>
+                  <MainTitle>{`${receiverName}님에게 편지가 도착했어요`}</MainTitle>
                 </MainTitleContainer>
                 <MainInfo>문을 터치해 보세요</MainInfo>
               </>
@@ -57,7 +66,7 @@ const Receive = () => {
           }
         </Container>
       )}
-    </>
+    </> : <>조회할 수 없는 편지입니다.</>
   );
 };
 
@@ -87,8 +96,9 @@ const Container = styled.div`
 const DoorImg = styled.div<{ expanded: boolean }>`
   position: absolute;
   bottom: 0px;
+  left: 0px;
   z-index: 1;
-  width: 90%;
+  width: 100%;
   height: 70%;
   background-image: url(/assets/door.svg);
   background-size: cover;
