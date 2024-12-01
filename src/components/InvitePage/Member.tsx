@@ -148,9 +148,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                 coverTypes[selectedImageIndex - 1]?.confirmImageUrl
               }
             >
-              <TitleContainer font={fonts[selectfont + 1].name}>
-                {title}
-              </TitleContainer>
+              <TitleContainer font="GmarketSans">{title}</TitleContainer>
               {deliverDay ? (
                 <DeliverDay>
                   {`${format(deliverDay as Date, "yyyy")}. `}
