@@ -5,11 +5,7 @@ interface WriteOrderAlertProps {
 }
 
 export const WriteQuitAlert: React.FC<WriteOrderAlertProps> = ({ name }) => {
-  return (
-    <Container>
-      {`${name}님이 퇴장했습니다.`}
-    </Container>
-  );
+  return <Container>{`${name}님이 퇴장했습니다.`}</Container>;
 };
 
 const Container = styled.div`
@@ -20,12 +16,12 @@ const Container = styled.div`
   margin: 8px auto 0px;
   gap: 8px; /* Increased gap for better spacing */
   border-radius: var(--Border-Radius-radius_100, 5px);
-  background: var(--Color-secondary-blue, #4DB4FF);
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.60);
+  background: var(--Color-secondary-blue, #4db4ff);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.6);
   width: auto; /* Ensure width adjusts based on content */
   white-space: nowrap; /* Prevent text from wrapping */
 
-  color: var(--Color-secondary-dark_navy_blue, #060D24);
+  color: var(--Color-secondary-dark_navy_blue, #060d24);
   text-align: center;
 
   /* caption/xsmall_bold */

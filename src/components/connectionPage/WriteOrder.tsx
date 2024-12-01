@@ -2,59 +2,116 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import letter from "../../../public/assets/letter.svg";
 import runner from "../../../public/assets/runner.svg";
+import { getParticipants } from "../../api/service/LetterService";
+import { getLetterInfo } from "../../api/service/LetterService";
+import { stompClient } from "../../api/config/stompInterceptor";
+import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
+import { getLetterStartInfo } from "../../api/service/LetterService";
 
-export interface GroupItem {
-  id: number;
-  profileImage: string;
-  name: string;
+export interface Participants {
+  sequence: number;
+  memberId: number;
+  nickname: string;
+  imageUrl: string;
+}
+interface Props {
+  letterId: number;
 }
 
 interface UserNumElement extends HTMLElement {
   getBoundingClientRect: () => DOMRect;
 }
+interface PopupProps {
+  isVisible: boolean;
+}
 
-export const WriteOrder = () => {
-  //실시간으로 멤버 수 변화 반영
-  const items: GroupItem[] = [
-    {
-      id: 1,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "카리나",
-    },
-
-    {
-      id: 2,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "닝닝",
-    },
-    {
-      id: 3,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "윈터",
-    } /*
-
-    {
-      id: 4,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "아이유우",
-    } 
-
-    {
-      id: 5,
-      profileImage: "../../../public/img/profileimage.svg",
-      name: "예지",
-    },*/,
-  ];
-
+export const WriteOrder = ({ letterId }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const userNumsRef = useRef<(UserNumElement | null)[]>([]);
+  const [items, setItems] = useState<Participants[]>([]);
+  const [title, setTitle] = useState<string>("");
+  const [count, setCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchTitle = async () => {
+      try {
+        const data = await getLetterInfo(letterId);
+        setTitle(data.title);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    const fetchCount = async () => {
+      try {
+        const data = await getLetterStartInfo(letterId);
+        setCount(data.repeatCount);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchParticipants();
+    fetchTitle();
+    fetchCount();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 5);
-
     return () => clearTimeout(timer);
+  }, []);
+
+  const fetchParticipants = async () => {
+    try {
+      const data = await getParticipants(12);
+      setItems(data);
+    } catch (err) {
+      console.error("Error fetching participants:", err);
+    }
+  };
+
+  //주기적으로 참가자 갱신
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchParticipants();
+    }, 10000); // 10초마다 실행
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const client = stompClient();
+
+    client.onConnect = () => {
+      console.log("WebSocket connected");
+      // WebSocket 구독
+      client.subscribe(`/topic/letter/${letterId}`, (message: any) => {
+        console.log("Received message:", message);
+        try {
+          const response: WsEnterResponse | WsExitResponse = JSON.parse(
+            message.body
+          );
+          console.log(response);
+
+          // 퇴장 메시지 처리
+          if (response.action == "EXIT") {
+            fetchParticipants();
+          }
+          // 참여 메시지 처리
+          else if (response.action == "ENTER") {
+            // 참여 시 서버에 입장 정보 전송
+            client.publish({
+              destination: `/ws/letter/enter/${letterId}`,
+              body: JSON.stringify({ nickname: name }),
+            });
+          }
+        } catch (err) {
+          console.error("Error parsing WebSocket message:", err);
+        }
+      });
+    };
+    client.activate();
   }, []);
 
   return (
@@ -62,7 +119,7 @@ export const WriteOrder = () => {
       <Overlay />
       <TitleBar>
         <img src={letter} style={{ width: "18px", height: "14px" }} />
-        <LetterTitle>선재야 생일 축하해</LetterTitle>
+        <LetterTitle>{title}</LetterTitle>
         <Button>
           <img src={runner} style={{ width: "12.5px", height: "14px" }} />
           순서
@@ -73,10 +130,11 @@ export const WriteOrder = () => {
           <Txt>
             {items.length}명의 참여자가
             <br />
-            <span style={{ color: "#FFA256" }}>20번씩</span> 이어 쓸 거예요!
+            <span style={{ color: "#FFA256" }}>{count}번씩</span> 이어 쓸
+            거예요!
           </Txt>
         </Title>
-        <SubTitle>총 60개의 그림이 생성돼요</SubTitle>
+        <SubTitle>총 {count * items.length}개의 그림이 생성돼요</SubTitle>
         <Container>
           <TitleBox>작성 순서</TitleBox>
           {items.map((user, index) => (
@@ -98,8 +156,8 @@ export const WriteOrder = () => {
                   <></>
                 )}
               </NumLine>
-              <UserImage img={user.profileImage} />
-              <UserName>{user.name}</UserName>
+              <UserImage img={user.imageUrl} />
+              <UserName>{user.nickname}</UserName>
             </UserList>
           ))}
         </Container>
@@ -199,7 +257,7 @@ const Button = styled.div`
   line-height: 16px;
   letter-spacing: -0.5px;
 `;
-const Popup = styled.div`
+const Popup = styled.div<PopupProps>`
   z-index: 10;
   display: flex;
   width: 272px;

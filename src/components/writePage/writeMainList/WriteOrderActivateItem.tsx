@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 interface WriteOrderProps {
   letterImageUrl: string | undefined;
@@ -8,15 +8,21 @@ interface WriteOrderProps {
 }
 
 // 지나간 순서(completed) 상태 아이템
-export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({ letterImageUrl, name, content, itemId }) => {
-
-  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({
+  letterImageUrl,
+  name,
+  content,
+  itemId,
+}) => {
+  const handleImageError = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
     event.currentTarget.src = "/img/profile.png";
   };
 
   return (
     <Wrapper>
-      <ProfileImage src={""+letterImageUrl} onError={handleImageError} />
+      <ProfileImage src={"" + letterImageUrl} onError={handleImageError} />
       <ContentWrapper>
         <MainText>{content}</MainText>
         <SubText>
@@ -69,5 +75,5 @@ const LetterNum = styled.div`
   align-items: center;
   gap: var(--Border-Radius-radius_300, 8px);
   border-radius: 40px;
-  background: var(--Color-grayscale-gray800, #343A40);
+  background: var(--Color-grayscale-gray800, #343a40);
 `;

@@ -8,6 +8,8 @@ import BottomSheet from "../EnterInfo/BotttomSheet";
 import CoverModal from "../FinalLetter/CoverModal";
 import shadow from "../../../../public/assets/shadow2.svg";
 import bright from "../../../../public/assets/border.svg";
+import { CoverType } from "../../../api/model/CoverType";
+import { getCoverTypes } from "../../../api/service/CoverService";
 
 interface Props {
   myName: string;
@@ -22,9 +24,9 @@ interface Props {
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   setViewEdit: React.Dispatch<React.SetStateAction<boolean>>;
   croppedImage: string;
-  backgroundImage: string;
+  backgroundImage: number;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<string>>;
+  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -51,6 +53,22 @@ export default function EditLetter({
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [coverOpen, setCoveropen] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+
+  useEffect(() => {
+    const fetchCoverTypes = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+        console.log(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypes();
+  }, []);
+
   const openCalender = () => {
     setCalenderOpen(true);
   };
@@ -82,8 +100,8 @@ export default function EditLetter({
                 }
                 setReceiverName(e.target.value);
               }}
-              minlength="1"
-              maxlength="12"
+              minLength={1}
+              maxLength={12}
             />
           </InputBox>
           <InputBox>
@@ -99,8 +117,8 @@ export default function EditLetter({
                 }
                 setMyName(e.target.value);
               }}
-              minlength="1"
-              maxlength="5"
+              minLength={1}
+              maxLength={5}
             />
           </InputBox>
           <InputBox>
@@ -144,12 +162,16 @@ export default function EditLetter({
               style={{ width: "11px", height: "11px" }}
             />
           </EditBtn>
-          {croppedImage === "" || selectedImageIndex === 4 ? (
-            <Book backgroundImage={backgroundImage}>
+          {croppedImage === "" ? (
+            <Book
+              backgroundImage={coverTypes[backgroundImage - 1]?.editImageUrl}
+            >
               <BookTitle font={selectfont}>{title}</BookTitle>
             </Book>
           ) : (
-            <Book backgroundImage={backgroundImage}>
+            <Book
+              backgroundImage={coverTypes[backgroundImage - 1]?.editImageUrl}
+            >
               <BookTitle font={selectfont}>{title}</BookTitle>
               <Bright src={bright} />
               <Shadow src={shadow} />

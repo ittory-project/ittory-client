@@ -1,18 +1,54 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DeleteConfirm } from "./DeleteConfirm";
+import { endLetterWs } from "../../../api/service/WsService";
+import {
+  deleteLetter,
+  getLetterInfo,
+} from "../../../api/service/LetterService";
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  letterId: number;
 }
 
-export const Delete = ({ setViewDelete }: Props) => {
+export const Delete = ({ setViewDelete, letterId }: Props) => {
   const [viewConfirm, setViewConfirm] = useState<boolean>(false);
   const handleDelete = () => {
     setViewDelete(false);
   };
-  const handleConfirm = () => {
-    setViewConfirm(true);
+
+  useEffect(() => {
+    const fetchLetterInfo = async () => {
+      try {
+        const letterData = await getLetterInfo(letterId);
+        console.log(letterData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchLetterInfo();
+  }, []);
+
+  const handleConfirm = async () => {
+    try {
+      console.log(letterId);
+      const response = deleteLetter(
+        letterId,
+        () => {
+          console.log("삭제 성공");
+        },
+        (error) => {
+          console.error("삭제 실패:", error);
+        }
+      );
+      endLetterWs(letterId);
+      console.log(response);
+      setViewConfirm(true);
+    } catch (err) {
+      console.error("error:", err);
+    }
   };
 
   return (

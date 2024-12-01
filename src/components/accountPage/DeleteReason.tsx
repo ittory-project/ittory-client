@@ -3,6 +3,8 @@ import styled from "styled-components";
 import prev from "../../../public/assets/prev.svg";
 import check from "../../../public/assets/checkbox_gray.svg";
 import checked from "../../../public/assets/checkbox_black.svg";
+import { postWithdraw } from "../../api/service/MemberService";
+import { WithdrawPostRequest } from "../../api/model/MemberModel";
 
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,7 +14,15 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   const [selectedReason, setSelectedReason] = useState<number | null>(null);
   const [otherReason, setOtherReason] = useState<string>("");
   const [buttonEnable, setButtonEnable] = useState<boolean>(false);
-  const [length, setLength] = useState(0);
+  const [length, setLength] = useState<number>(0);
+
+  const withdrawReason: string[] = [
+    "NOT_USE",
+    "ERROR",
+    "INCONVENIENCE",
+    "NOT_FUN",
+    "ETC",
+  ];
 
   const handleCheckboxChange = (reason: number) => {
     setSelectedReason(reason);
@@ -47,6 +57,21 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   ) => {
     setOtherReason(e.target.value);
     setLength(e.target.value.length);
+  };
+  const handleWithdraw = async () => {
+    if (selectedReason !== null) {
+      const data: WithdrawPostRequest = {
+        withdrawReason: withdrawReason[selectedReason],
+        content: otherReason,
+      };
+
+      try {
+        const response = await postWithdraw(data);
+        console.log("Withdrawal successful:", response);
+      } catch (error) {
+        console.error("Error in withdrawal:", error);
+      }
+    }
   };
 
   return (
@@ -111,8 +136,8 @@ export const DeleteReason = ({ setViewReason }: Props) => {
                 placeholder="내용을 입력해 주세요"
                 value={otherReason}
                 onChange={handleOtherReasonChange}
-                spellcheck="false"
-                maxlength="100"
+                spellCheck="false"
+                max-length="100"
               />
               <Count>
                 <CntTxt style={{ color: "#495057" }}>{length}</CntTxt>
@@ -126,7 +151,8 @@ export const DeleteReason = ({ setViewReason }: Props) => {
         {buttonEnable ? (
           <Button
             style={{ background: "#FFA256", bottom: "16px" }}
-            selectedReason={selectedReason}
+            selectedReason={selectedReason ?? 0}
+            onClick={handleWithdraw}
           >
             <ButtonTxt>탈퇴할게요</ButtonTxt>
           </Button>
@@ -134,8 +160,8 @@ export const DeleteReason = ({ setViewReason }: Props) => {
           <Button
             disabled={true}
             style={{ background: "#CED4DA" }}
-            selectedReason={selectedReason}
-            //position={selectedReason === 4 ? "relative" : "absolute"}
+            selectedReason={selectedReason ?? 0}
+            onClick={handleWithdraw}
           >
             <ButtonTxt>탈퇴할게요</ButtonTxt>
           </Button>
@@ -153,6 +179,7 @@ const BackGround = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
+  overflow-y: auto;
 `;
 const Header = styled.div`
   display: flex;

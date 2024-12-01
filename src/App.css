@@ -32,7 +32,7 @@
 .MainLayout {
   width: 100vw;
   height: 100vh;
-  max-width: 375px;
+  /*max-width: 375px;*/
   background-color: white;
   margin: 0 auto;
   box-sizing: border-box;
@@ -50,7 +50,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: hidden;
 }
 
 @font-face {
@@ -61,7 +60,9 @@
   font-style: normal;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -69,6 +70,8 @@ html, body, #root {
 }
 
 .App {
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;

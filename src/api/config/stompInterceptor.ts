@@ -1,5 +1,5 @@
-import { Client } from '@stomp/stompjs';
-import { getJwt } from './setToken';
+import { Client } from "@stomp/stompjs";
+import { getJwt } from "./setToken";
 
 export const stompClient = (): Client => {
   const client = new Client({
@@ -13,11 +13,11 @@ export const stompClient = (): Client => {
   });
 
   client.onStompError = (frame) => {
-    console.error('STOMP error:', frame.headers.message);
+    console.error("STOMP error:", frame.headers.message);
   };
   client.onDisconnect = () => {
-    console.log('Disconnected from WebSocket');
+    console.log("Disconnected from WebSocket");
   };
-  
+
   return client;
 };

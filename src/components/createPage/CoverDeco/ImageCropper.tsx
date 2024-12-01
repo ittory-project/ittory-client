@@ -3,6 +3,9 @@ import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop";
 import styled from "styled-components";
 import getCroppedImg from "./getCrop";
+import axios from "axios";
+import { ImageUrlRequest } from "../../../api/model/ImageModel";
+import { postCoverImage } from "../../../api/service/ImageService";
 
 interface Props {
   originalImage: string;
@@ -13,6 +16,12 @@ interface Props {
   width?: number;
   height?: number;
   borderRadius?: number;
+}
+
+export enum ImageExtension {
+  JPG = "JPG",
+  JPEG = "JPEG",
+  PNG = "PNG",
 }
 
 export default function ImageCropper({
@@ -41,6 +50,7 @@ export default function ImageCropper({
   );
 
   // 크롭된 이미지를 저장하는 함수
+  /*
   const handleSaveClick = async () => {
     if (croppedAreaPixels) {
       const croppedImgUrl = await getCroppedImg(
@@ -57,6 +67,59 @@ export default function ImageCropper({
       closeModal();
       // 여기서 croppedImg를 서버에 업로드하거나 다운로드 링크를 생성
     }
+  };*/
+  const handleSaveClick = async () => {
+    if (croppedAreaPixels) {
+      const croppedImgUrl = await getCroppedImg(
+        originalImage,
+        croppedAreaPixels,
+        {
+          width,
+          height,
+          borderRadius,
+        }
+      );
+      console.log("Cropped Image URL: ", croppedImgUrl);
+      setCroppedImage(croppedImgUrl);
+
+      //Blob으로 변경
+      const responseBlob = await fetch(croppedImgUrl).then((res) => res.blob());
+      console.log(responseBlob);
+
+      // Step 1: URL 발급 요청
+      const imageUrlRequest: ImageUrlRequest = {
+        imgExtension: ImageExtension.JPG, // 적절한 Enum 값 설정
+      };
+
+      try {
+        const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
+        console.log("PreSigned URL: ", preSignedUrl);
+
+        // Step 2: presigned URL로 이미지 업로드
+        await fetch(preSignedUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "image/jpeg", // MIME type 설정
+          },
+          body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
+        });
+
+        // Step 3: 업로드가 완료되면 S3 URL 생성
+        const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
+        console.log("Image uploaded successfully to S3!");
+        console.log("Image URL: ", s3ImageUrl);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            "Error uploading image: ",
+            error.response?.data || (error as Error).message // 타입 단언 추가
+          );
+        } else {
+          console.error("Unexpected error: ", error);
+        }
+      }
+    }
+    closeModal();
   };
 
   return (
@@ -89,6 +152,7 @@ const Container = styled.div`
   bottom: 0;
   border-radius: 20px 20px 0px 0px;
   overflow: hidden;
+  z-index: 100;
 `;
 const Header = styled.div`
   position: absolute;
@@ -116,7 +180,7 @@ const CropContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: 37.5rem;
+  height: 36.5rem;
   overflow: hidden;
 `;
 const Button = styled.button`

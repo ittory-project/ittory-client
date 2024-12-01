@@ -1,24 +1,21 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  ReactNode,
+} from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import PrevImg from "../../../../public/assets/pageprev.svg";
-import basic from "../../../../public/assets/Book1.svg";
-import book2 from "../../../../public/assets/Book2.svg";
-import book3 from "../../../../public/assets/Book3.svg";
-import book4 from "../../../../public/assets/Book4.svg";
-import book5 from "../../../../public/assets/Book5.svg";
 import camera from "../../../../public/assets/camera.svg";
-import image1 from "../../../../public/assets/layer1.svg";
-import image2 from "../../../../public/assets/layer2.svg";
-import image3 from "../../../../public/assets/layer3.svg";
-import image4 from "../../../../public/assets/layer4.svg";
-import image5 from "../../../../public/assets/layer5.svg";
-import bright from "../../../../public/assets/border.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
 import bookshadow from "../../../../public/assets/book_shadow.svg";
 import FontSelect from "./FontSelect";
 import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
+import FontPopup from "./FontPopup";
+import { getCoverTypes } from "../../../../src/api/service/CoverService";
+import { CoverType } from "../../../../src/api/model/CoverType";
 
 const fonts = [
   { name: "서체1", family: "GmarketSans" },
@@ -34,13 +31,37 @@ interface Props {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   croppedImage: string;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<string>>;
+  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   setViewFinalInfo: React.Dispatch<React.SetStateAction<boolean>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
+interface BookProps {
+  backgroundImage: string;
+  children: ReactNode;
+}
 
+const Book: React.FC<BookProps> = React.memo(
+  ({ backgroundImage, children }) => {
+    return (
+      <div
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "224px",
+          height: "292px",
+          marginTop: "48px",
+          boxSizing: "border-box",
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 export default function CoverStyle({
   setViewCoverDeco,
   setViewStartpage,
@@ -57,18 +78,36 @@ export default function CoverStyle({
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
   const [font, setFont] = useState<string>(fonts[0].family);
-  const images = [image1, image2, image3, image4, image5];
-  const books = [basic, book2, book3, book4, book5];
   const imgRef = useRef<HTMLInputElement | null>(null);
-  const inputRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cropperKey, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
+  const [fontPopup, setFontPopup] = useState<boolean>(false);
+  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+
+  useEffect(() => {
+    const fetchCoverTypesAndFonts = async () => {
+      try {
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+        console.log(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCoverTypesAndFonts();
+  }, []);
 
   const handleImageClick = (index: number) => {
     setImageIndex(index);
+  };
+
+  const handlePopup = () => {
+    setFontPopup(true);
   };
 
   useEffect(() => {
@@ -79,6 +118,7 @@ export default function CoverStyle({
   const openModal = () => {
     setIsModalOpen(true);
   };
+  /*
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
       const heightDiff =
@@ -89,6 +129,30 @@ export default function CoverStyle({
       } else {
         setIsKeyboardOpen(false);
         setKeyboardHeight(0);
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+    };
+  }, [inputRef]);*/
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      const heightDiff =
+        window.innerHeight - document.documentElement.clientHeight;
+
+      // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
+      if (inputRef.current && inputRef.current.contains(e.target as Node)) {
+        if (heightDiff > 0) {
+          setIsKeyboardOpen(true);
+          setKeyboardHeight(heightDiff);
+          inputRef.current.focus();
+        } else {
+          setIsKeyboardOpen(false);
+          setKeyboardHeight(0);
+          handlePopup();
+        }
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -143,24 +207,26 @@ export default function CoverStyle({
         <Title>
           <Text>표지를 꾸며주세요!</Text>
         </Title>
-        <Book backgroundImage={books[ImageIndex]}>
-          <TitleContainer ref={inputRef}>
+        <Book backgroundImage={coverTypes[ImageIndex]?.editImageUrl}>
+          <TitleContainer>
             <Input
+              ref={inputRef}
               //onClick={setIsKeyboardOpen}
+              id="title-input" // id 속성 추가
+              name="title" // name 속성 추가
               placeholder="제목 최대 12자"
               type="text"
               value={title}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length > 12) {
-                  e.target.value = e.target.value.slice(0, 12);
-                }
-                setTitle(e.target.value);
+                const newValue = e.target.value.slice(0, 12); // 최대 길이 12자로 제한
+                setTitle(newValue);
               }}
-              minLength="1"
-              maxLength="12"
+              minLength={1}
+              maxLength={12}
               spellCheck="false"
               selectfont={font}
             />
+
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="184"
@@ -171,59 +237,56 @@ export default function CoverStyle({
               <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
             </svg>
 
-            {isKeyboardOpen && (
+            {isKeyboardOpen == true ? (
               <KeyboardBar keyboardHeight={keyboardHeight}>
                 <FontSelect font={font} fonts={fonts} setFont={setFont} />
               </KeyboardBar>
+            ) : (
+              <></>
             )}
           </TitleContainer>
-          {ImageIndex !== 4 ? (
-            croppedImage === "" ? (
-              <>
-                <Bright src={bright} />
-                <ButtonContainer
-                  className="img__box"
-                  onClick={onUploadImageButtonClick}
-                >
-                  <input
-                    style={{ display: "none" }}
-                    type="file"
-                    accept="image/*"
-                    ref={imgRef}
-                    onChange={onUploadImage}
-                  />
-                  <img
-                    src={camera}
-                    alt="Camera Icon"
-                    style={{
-                      width: "24px",
-                      height: "24px",
-                      marginLeft: "1.5px",
-                    }}
-                  />
-                  <BtnTxt>사진 추가</BtnTxt>
-                </ButtonContainer>
-              </>
-            ) : (
-              <>
-                <Bright src={bright} />
-                <Shadow src={shadow} />
-                <BtnImgContainer
-                  bgimg={croppedImage}
-                  onClick={onUploadImageButtonClick}
-                >
-                  <input
-                    style={{ display: "none" }}
-                    type="file"
-                    accept="image/*"
-                    ref={imgRef}
-                    onChange={onUploadImage}
-                  />
-                </BtnImgContainer>
-              </>
-            )
+
+          {croppedImage === "" ? (
+            <>
+              <ButtonContainer
+                className="img__box"
+                onClick={onUploadImageButtonClick}
+              >
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  accept="image/*"
+                  ref={imgRef}
+                  onChange={onUploadImage}
+                />
+                <img
+                  src={camera}
+                  alt="Camera Icon"
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    marginLeft: "1.5px",
+                  }}
+                />
+                <BtnTxt>사진 추가</BtnTxt>
+              </ButtonContainer>
+            </>
           ) : (
-            <></>
+            <>
+              <Shadow src={shadow} />
+              <BtnImgContainer
+                bgimg={croppedImage}
+                onClick={onUploadImageButtonClick}
+              >
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  accept="image/*"
+                  ref={imgRef}
+                  onChange={onUploadImage}
+                />
+              </BtnImgContainer>
+            </>
           )}
           <NameBar>
             <NameContainer>
@@ -235,21 +298,24 @@ export default function CoverStyle({
           <img src={bookshadow} alt="book_shadow" />
         </BookShadow>
         <ImageContainer>
-          {images.map((img, index) => (
+          {coverTypes.map((coverType, index) => (
             <Image
               onClick={() => handleImageClick(index)}
               clicked={ImageIndex === index}
               key={index}
-              img={img}
-              alt={`Image ${index + 1}`}
+              img={
+                ImageIndex === index
+                  ? coverType.selectImageUrl
+                  : coverType.listImageUrl
+              }
               className="image"
             />
           ))}
         </ImageContainer>
       </Container>
-      {title === "" || (ImageIndex === 0 && croppedImage === "") ? (
+      {title === "" || croppedImage === "" ? (
         <Button disabled={true} style={{ background: "#ced4da" }}>
-          <ButtonTxt>완료</ButtonTxt>
+          <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       ) : (
         <Button
@@ -259,13 +325,13 @@ export default function CoverStyle({
               "-1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
           }}
           onClick={() => {
-            setBackgroundImage(books[ImageIndex]);
+            setBackgroundImage(ImageIndex);
             setSelectfont(font);
             setViewCoverDeco(false);
             setViewFinalInfo(true);
           }}
         >
-          <ButtonTxt>완료</ButtonTxt>
+          <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       )}
       {isModalOpen && (
@@ -279,13 +345,21 @@ export default function CoverStyle({
           borderRadius={20}
         />
       )}
+      {fontPopup && (
+        <FontPopup
+          font={font}
+          fonts={fonts}
+          setFont={setFont}
+          setFontPopup={setFontPopup}
+        />
+      )}
     </BackGround>
   );
 }
 const BookShadow = styled.div`
   flex-shrink: 0;
   position: relative;
-  margin-top: 333.1px;
+  margin-top: -7.67px;
 `;
 const BackGround = styled.div`
   display: flex;
@@ -294,9 +368,9 @@ const BackGround = styled.div`
   justify-content: center;
   height: 100vh;
   width: 100vw;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  //position: relative;
+  //left: 50%;
+  //transform: translateX(-50%);
   background: linear-gradient(
     180deg,
     #d3edff 0%,
@@ -317,9 +391,10 @@ const Container = styled.div`
   //position: relative;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
   flex: 1 0 0;
-  align-self: stretch;
+  //align-self: stretch;
+  width: 100%;
+  height: 100%;
   margin-top: 3.5rem;
   margin-bottom: 6rem;
   overflow: hidden;
@@ -372,24 +447,10 @@ const Text = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
-const Book = styled.div<{ backgroundImage: string }>`
-  width: 224px;
-  height: 292px;
-  position: fixed;
-  margin-top: 3.2rem;
-  border-radius: 3.833px 11.5px 11.5px 3.833px;
-  background-image: url(${(props) => props.backgroundImage});
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
 const TitleContainer = styled.div`
   display: flex;
-  width: 224px;
-  padding: 16px 0px 12px 0px;
+  width: 184px;
+  padding: 16px 16px;
   justify-content: center;
   align-items: center;
   justify-content: center;
@@ -472,8 +533,8 @@ const ButtonContainer = styled.button`
   display: flex;
   width: 134px;
   height: 134px;
-  margin-left: 46px;
-  margin-top:16px;
+  margin-left: 45px;
+  margin-top:13px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -487,21 +548,11 @@ const ButtonContainer = styled.button`
     outline: none;
   }
 `;
-const Bright = styled.img`
-  margin-left: 40.5px;
-  margin-top: 10.8px;
-  position: absolute;
-  z-index: 3;
-  flex-shrink: 0;
-  width: 145px;
-  height: 145px;
-  pointer-events: none;
-`;
 const Shadow = styled.img`
   width: 159px;
   height: 159px;
-  margin-left: 33.5px;
-  margin-top: 3.9px;
+  margin-left: 31.5px;
+  margin-top: 0px;
   position: absolute;
   z-index: 3;
   pointer-events: none;
@@ -515,8 +566,8 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   position: relative; 
   width: 134px;
   height: 134px;
-  margin-left: 46px;
-  margin-top:16px;
+  margin-left: 44.2px;
+  margin-top:13.4px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -540,13 +591,10 @@ const BtnTxt = styled.div`
   padding-top: 4spx;
 `;
 const NameBar = styled.div`
-  margin-top: 20px;
+  margin-top: 31.95px;
   width: 224px;
   height: 23px;
   flex-shrink: 0;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-right: none;
-  border-left: none;
   position: relative;
   display: flex;
   justify-content: center;
@@ -556,8 +604,6 @@ const NameContainer = styled.div`
   width: 224px;
   height: 21px;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: 0.823px 0.823px 0.823px 0px rgba(255, 255, 255, 0.25) inset;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -596,7 +642,6 @@ const Image = styled.div<{ clicked: boolean; img: string }>`
   opacity: ${(props) => (props.clicked ? "" : "0.4")};
   border-radius: 10.2px;
   flex-shrink: 0;
-  border: ${(props) => (props.clicked ? "3px solid #ffd0a9" : "")};
   background-image: url(${(props) => props.img});
   background-size: cover; /* 이미지 크기를 컨테이너에 맞게 조정 */
   background-position: center; /* 이미지가 중앙에 위치하도록 */

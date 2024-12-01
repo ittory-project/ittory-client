@@ -72,7 +72,7 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 const Button = styled.button`
-  width: 288px;
+  width: 88%;
   cursor: pointer;
   display: flex;
   height: 48px;
@@ -82,14 +82,14 @@ const Button = styled.button`
   gap: 8px;
   align-self: stretch;
   border-radius: 50px;
-  background: #ffa256;
+  background: #343a40;
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   box-shadow:
-    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14),
-    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3);
+    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
+    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 `;
 const ButtonTxt = styled.div`
   color: #fff;

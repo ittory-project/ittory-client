@@ -1,35 +1,48 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { patchNickname } from "../../api/service/ParticipantService";
 
 interface Props {
   nickname: string;
   setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  visited: boolean;
 }
 
-//버튼 테두리 클릭 시 색상
-export const JoinModal = ({ nickname, setViewModal }: Props) => {
+export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
   const navigate = useNavigate();
+  const letterId = localStorage.letterId;
+  console.log(visited);
 
-  const handleCancel = () => {
-    setViewModal(false);
+  const handleCancel = async () => {
+    const response = await patchNickname(letterId);
+    console.log(response);
+    if (response.success) {
+      setViewModal(false);
+    }
   };
-  /*
-  const navigateToInvite = () => {
-    setGuideOpen(true);
-    navigate("/Invite", {
-      state: {
-        guideOpen: guideOpen,
-        receiverName: receiverName,
-        title: title,
-        croppedImage: croppedImage,
-        backgroundImage: backgroundImage,
-        deliverDay: deliverDay,
-        selectfont: selectfont,
-        selectedImageIndex: selectedImageIndex,
-      },
-    });
-  };*/
+
+  const handleAccess = async () => {
+    try {
+      if (visited) {
+        navigate("/Invite", {
+          state: {
+            letterId: letterId,
+            guideOpen: false,
+          },
+        });
+      } else {
+        navigate("/Invite", {
+          state: {
+            letterId: letterId,
+            guideOpen: true,
+          },
+        });
+      }
+    } catch (err) {
+      console.error("error:", err);
+    }
+  };
 
   return (
     <BackGround>
@@ -50,6 +63,7 @@ export const JoinModal = ({ nickname, setViewModal }: Props) => {
             style={{
               background: "#FFA256",
             }}
+            onClick={handleAccess}
           >
             <ButtonTxt style={{ color: "#fff" }}>네!</ButtonTxt>
           </Button>
