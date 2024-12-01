@@ -45,13 +45,13 @@ export const DoorAnimation = ({ letterId }: Props) => {
 
     return () => clearTimeout(timer);
   }, []);
-    return (
-        <Container>
-            <Door>
-                <Handle src="/assets/doorknob.svg" />
-            </Door>
-        </Container>
-    );
+  return (
+    <Container>
+      <Door>
+        <Handle src="/assets/doorknob.svg" />
+      </Door>
+    </Container>
+  );
 }
 
 const Container = styled.div`

@@ -30,7 +30,7 @@ const Receive = () => {
           <DoorImg expanded={expanded}>
           </DoorImg>
           <AnimatedDiv expanded={expanded}>
-            <Img src="/img/profile.png" />
+            <Img src="/img/letter_christmas_door.svg" />
           </AnimatedDiv>
           {expanded ? (
             // 2번째 화면
