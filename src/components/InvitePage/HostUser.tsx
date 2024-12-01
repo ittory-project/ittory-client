@@ -136,7 +136,7 @@ export const HostUser = ({
       try {
         await navigator.share({
           title: "잇토리",
-          text: "초대장",
+          text: "",
           url,
         });
         setCopied(true);
