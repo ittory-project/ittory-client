@@ -11,11 +11,6 @@ export interface randomParticipants {
 
 export type RandomPostResponse = randomParticipants[];
 
-//사용자 중복 닉네임 확인
-export interface DuplicateGetResponse {
-  isDuplicate: boolean;
-}
-
 //닉네임 설정
 export interface NicknamePostRequest {
   nickname: string;
@@ -23,4 +18,11 @@ export interface NicknamePostRequest {
 export interface NicknamePostResponse {
   isSuccess: boolean;
   nickname: string;
+}
+
+export interface NicknamePatchResponse {
+  success: boolean;
+  status: number;
+  code: string;
+  message: string;
 }
