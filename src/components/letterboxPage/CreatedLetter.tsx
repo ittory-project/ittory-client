@@ -67,7 +67,11 @@ export const CreatedLetter = ({
   };
 
   useEffect(() => {
-    navigate(`/letterbox/${selectId}`);
+    if (selectId > 0) {
+      navigate(`/letterbox/${selectId}`);
+    }
+    //navigate(`/letterbox/${selectId}`);*/
+    setOpenLetter(true);
   }, [selectId]);
 
   const handleDelete = () => {
