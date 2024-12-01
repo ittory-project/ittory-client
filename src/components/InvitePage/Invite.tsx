@@ -95,6 +95,7 @@ export const Invite = () => {
 
     client.onConnect = () => {
       console.log("WebSocket connected");
+
       // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message) => {
         console.log("Received message:", message);
@@ -105,18 +106,12 @@ export const Invite = () => {
           console.log(response);
 
           // 퇴장 메시지 처리
-          if (response.action == "EXIT") {
+          if (response.action === "EXIT") {
             setExitName(response.nickname);
             fetchParticipants();
-          } else if (response.action == "END") {
+          } else if (response.action === "END") {
             setViewDelete(true);
-          } else if (response.action == "ENTER") {
-            // 참여 시 서버에 입장 정보 전송
-            client.publish({
-              destination: `/ws/letter/enter/${letterId}`,
-              body: JSON.stringify({ nickname: name }),
-            });
-          } else if (response.action == "START") {
+          } else if (response.action === "START") {
             navigate("/Connection", {
               state: {
                 letterId: letterId,
@@ -127,7 +122,14 @@ export const Invite = () => {
           console.error("Error parsing WebSocket message:", err);
         }
       });
+
+      // 서버에 입장 정보 전송
+      client.publish({
+        destination: `/ws/letter/enter/${letterId}`,
+        body: JSON.stringify({ nickname: name }),
+      });
     };
+
     client.activate();
   }, [userId]);
 
