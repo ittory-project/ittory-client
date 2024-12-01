@@ -1,13 +1,18 @@
 import styled from 'styled-components';
 
-export const ReceiveLetterSave = () => {
+interface LetterContentProps {
+  handleSaveLetter: () => Promise<void>
+}
+
+export const ReceiveLetterSave = ({ handleSaveLetter }: LetterContentProps) => {
+
   return (
     <>
       <ProductLeftSide src='/img/cover/left.svg' />
       <ProductRightSide src='/img/cover/product.svg' />
       <Content>받은 편지를<br/>간직하고 싶다면?</Content>
       <ContentImg src='/img/letter_save_contents.png'/>
-      <ContentSaveBtn>편지함에 보관하기</ContentSaveBtn>
+      <ContentSaveBtn onClick={handleSaveLetter}>편지함에 보관하기</ContentSaveBtn>
     </>
   );
 };
@@ -83,4 +88,3 @@ const ContentSaveBtn = styled.div`
   left: 50%;
   transform: translateX(-50%);
 `;
-

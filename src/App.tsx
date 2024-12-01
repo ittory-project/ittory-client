@@ -26,9 +26,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/redirect" element={<LoginRedirectPage />} />
         <Route path="/write/:letterId" element={<WritePage />} />
-        <Route path="/receive" element={<ReceivePage />} />
-        <Route path="/receive/letter" element={<ReceiveLetterPage />} />
-        <Route path="/share" element={<ShareLetterPage />} />
+        <Route path="/receive/:letterId" element={<ReceivePage />} />
+        <Route path="/receive/letter/:letterId" element={<ReceiveLetterPage />} />
+        <Route path="/share/:letterId" element={<ShareLetterPage />} />
         <Route path="/Create" element={<CreatePage />} />
         <Route path="/Invite" element={<InvitePage />} />
         <Route path="/Join" element={<JoinPage />} />
