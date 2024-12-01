@@ -7,7 +7,6 @@ import { ReceivePage } from "./pages/receive/ReceivePage";
 import { HomePage } from "./pages/home/HomePage";
 import { LoginPage } from "./pages/home/LoginPage";
 import { WritePage } from "./pages/write/WritePage";
-import { CompTest } from "./components/common/CompTest";
 import { CreatePage } from "./pages/CreatePage";
 import { InvitePage } from "./pages/InvitePage";
 import { JoinPage } from "./pages/JoinPage";
@@ -22,7 +21,6 @@ function App() {
       <MainLayout>
         <Routes>
         <Route path='/' element={<HomePage />} />
-        <Route path='/comp' element={<CompTest />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/login/redirect" element={<LoginRedirectPage />} />
         <Route path="/write/:letterId" element={<WritePage />} />
