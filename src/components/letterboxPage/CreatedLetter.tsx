@@ -64,15 +64,8 @@ export const CreatedLetter = ({
 
   const handleLetter = (itemId: number) => {
     setSelectId(itemId);
-  };
-
-  useEffect(() => {
-    if (selectId > 0) {
-      navigate(`/letterbox/${selectId}`);
-    }
-    //navigate(`/letterbox/${selectId}`);*/
     setOpenLetter(true);
-  }, [selectId]);
+  };
 
   const handleDelete = () => {
     setDeleteAlert("편지가 삭제되었어요");
