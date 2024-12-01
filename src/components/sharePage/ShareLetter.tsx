@@ -98,7 +98,10 @@ export const ShareLetter = () => {
   }
 
   const { Kakao } = window;
-
+  useEffect (() => {
+    window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
+  }, [])
+  
   const shareKakao = () =>{
     if (letterInfo) {
       console.log(window.Kakao.isInitialized())
@@ -113,8 +116,8 @@ export const ShareLetter = () => {
               image_url:
                 `/img/share_thumbnail.png`,
               link: {
-                mobile_web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-                web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+                mobile_web_url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+                web_url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
               },
             },
             buttons: [
@@ -138,22 +141,22 @@ export const ShareLetter = () => {
     }
   }
 
-  // const createShare = async () => {
-  //   try {
-  //     if (letterInfo) {
-  //       await navigator.share({
-  //         title: `To. ${letterInfo.receiverName}`,
-  //         text: '바스락... 바스락...\n편지함 앞에서 들리는 의문의 소리...',
-  //         url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-  //       });
-  //       console.log('공유 성공');
-  //     } else {
-  //       console.log('공유 실패');
-  //     }
-  //   } catch (e) {
-  //     console.log('공유 실패');
-  //   }
-  // }
+  const createShare = async () => {
+    try {
+      if (letterInfo) {
+        await navigator.share({
+          title: `To. ${letterInfo.receiverName}`,
+          text: '바스락... 바스락...\n편지함 앞에서 들리는 의문의 소리...',
+          url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+        });
+        console.log('공유 성공');
+      } else {
+        console.log('공유 실패');
+      }
+    } catch (e) {
+      console.log('공유 실패');
+    }
+  }
 
   return (
     (letterInfo && coverType && font) ? (
@@ -163,6 +166,7 @@ export const ShareLetter = () => {
           {renderPageContent()}
         </CoverContainer>
         <Pagination totalPages={elementLength + 1} />
+        <button style={{ fontSize: "10px" }}onClick={createShare}>링크테스트</button>
         <BtnContainer>
           <StoreBtn onClick={handleStorage}>편지함에 보관하기</StoreBtn>
           <ShareBtn onClick={shareKakao}>지금 공유하기</ShareBtn>
