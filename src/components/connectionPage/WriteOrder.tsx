@@ -64,7 +64,7 @@ export const WriteOrder = ({ letterId }: Props) => {
 
   const fetchParticipants = async () => {
     try {
-      const data = await getParticipants(12);
+      const data = await getParticipants(letterId);
       setItems(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
