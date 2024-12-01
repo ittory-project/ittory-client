@@ -94,7 +94,7 @@ export default function CompleteModal({
   const fetchEnter = async (letterId: Number) => {
     try {
       const enterresponse = await postEnter(Number(letterId));
-      console.log(enterresponse.enterStatus);
+      handleNickname(letterId);
     } catch (err) {
       console.error("Error fetching mydata:", err);
     }
@@ -117,9 +117,9 @@ export default function CompleteModal({
       const response = await postLetter(requestBody);
       console.log("Response:", response);
       const letterId = response.letterId;
+      console.log("letterId", letterId);
 
       fetchEnter(letterId);
-      handleNickname(letterId);
 
       navigate("/Invite", {
         state: {
