@@ -155,12 +155,12 @@ export async function getLetterInfo(
   return response.data.data;
 }
 
-//편지 참여가능 여부 조회
-export async function getEnterStatus(
+//편지 참여 요청
+export async function postEnter(
   letterId: number
 ): Promise<LetterEnterResponse> {
-  const response = await api.get(
-    `https://dev-server.ittory.co.kr/api/letter/${letterId}/enter-status`
+  const response = await api.post(
+    `https://dev-server.ittory.co.kr/api/letter/enter/${letterId}`
   );
 
   return response.data.data;

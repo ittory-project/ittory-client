@@ -2,9 +2,9 @@ import { api, ApiResponse } from "../config/api";
 import {
   RandomPostRequest,
   RandomPostResponse,
-  DuplicateGetResponse,
   NicknamePostRequest,
   NicknamePostResponse,
+  NicknamePatchResponse,
 } from "../model/ParticipantModel";
 
 export async function postRandom(
@@ -17,16 +17,6 @@ export async function postRandom(
   return response.data;
 }
 
-export async function getDuplicate(
-  letterId: number,
-  nickname: string
-): Promise<DuplicateGetResponse> {
-  const response: ApiResponse<DuplicateGetResponse> = await api.get(
-    `https://dev-server.ittory.co.kr/api/participant/duplicate-nickname?letterId=${letterId}&nickname=${nickname}`
-  );
-  return response.data.data;
-}
-
 export async function postNickname(
   data: NicknamePostRequest,
   letterId: number
@@ -34,6 +24,16 @@ export async function postNickname(
   const response = await api.post<NicknamePostResponse>(
     `https://dev-server.ittory.co.kr/api/participant/nickname/${letterId}`,
     data
+  );
+  return response.data;
+}
+
+//닉네임 삭제
+export async function patchNickname(
+  letterId: number
+): Promise<NicknamePatchResponse> {
+  const response = await api.patch<NicknamePatchResponse>(
+    `https://dev-server.ittory.co.kr/api/participant/nickname/${letterId}`
   );
   return response.data;
 }

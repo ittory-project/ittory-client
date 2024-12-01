@@ -101,7 +101,8 @@ export interface LetterInfoGetResponse {
   title: string;
 }
 
-//편지 참여가능 여부 조회
+//편지 참여 요청
 export interface LetterEnterResponse {
   enterStatus: boolean;
+  participantId: number;
 }

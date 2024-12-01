@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { JoinModal } from "./JoinModal";
 import { getMyPage, getVisitUser } from "../../api/service/MemberService";
 import { useNavigate, useParams } from "react-router-dom";
-import { getEnterStatus } from "../../api/service/LetterService";
+import { postEnter } from "../../api/service/LetterService";
 import NoAccess from "./NoAccess";
-import { getDuplicate } from "../../api/service/ParticipantService";
+import { NicknamePostRequest } from "../../api/model/ParticipantModel";
 import { postNickname } from "../../api/service/ParticipantService";
 
 export const Join = () => {
@@ -32,14 +32,14 @@ export const Join = () => {
 
         if (visitdata.isVisited === true) {
           setVisited(true);
-          const enterresponse = await getEnterStatus(Number(letterId));
+          const enterresponse = await postEnter(Number(letterId));
           console.log(enterresponse.enterStatus);
           if (enterresponse.enterStatus === false) {
             setNoAccess(true);
           }
         } else if (localStorage.jwt) {
           setVisited(false);
-          const enterresponse = await getEnterStatus(Number(letterId));
+          const enterresponse = await postEnter(Number(letterId));
           console.log(enterresponse.enterStatus);
           if (enterresponse.enterStatus === false) {
             setNoAccess(true);
@@ -74,17 +74,15 @@ export const Join = () => {
 
   const handleModal = async () => {
     if (nickname) {
-      try {
-        const isDuplicate = await getDuplicate(Number(letterId), nickname);
-        if (isDuplicate.isDuplicate) {
-          setDuplicateError(true); // 중복 시 경고 메시지 표시
-          setViewModal(false);
-        } else {
-          setDuplicateError(false);
-          setViewModal(true);
-        }
-      } catch (err) {
-        console.error("Error checking duplicate:", err);
+      const requestBody: NicknamePostRequest = {
+        nickname: nickname,
+      };
+      const response = await postNickname(requestBody, Number(letterId));
+      if (response.isSuccess) {
+        setDuplicateError(false);
+        setViewModal(true);
+      } else {
+        setDuplicateError(true);
       }
     }
   };

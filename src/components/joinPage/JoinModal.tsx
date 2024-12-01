@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { patchNickname } from "../../api/service/ParticipantService";
 
 interface Props {
   nickname: string;
@@ -13,8 +14,12 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
   const letterId = localStorage.letterId;
   console.log(visited);
 
-  const handleCancel = () => {
-    setViewModal(false);
+  const handleCancel = async () => {
+    const response = await patchNickname(letterId);
+    console.log(response);
+    if (response.success) {
+      setViewModal(false);
+    }
   };
 
   const handleAccess = async () => {
