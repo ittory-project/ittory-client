@@ -8,6 +8,7 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { postEnter } from "../../api/service/LetterService";
+import { postNickname } from "../../api/service/ParticipantService";
 
 export interface Participants {
   sequence: number;

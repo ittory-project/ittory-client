@@ -9,6 +9,9 @@ import { CoverType } from "../../../api/model/CoverType";
 import { getCoverTypes } from "../../../api/service/CoverService";
 import { LetterRequestBody } from "../../../api/model/LetterModel";
 import { postLetter } from "../../../api/service/LetterService";
+import { postNickname } from "../../../api/service/ParticipantService";
+import { NicknamePostRequest } from "../../../api/model/ParticipantModel";
+import { postEnter } from "../../../api/service/LetterService";
 
 interface Props {
   myName: string;
@@ -78,6 +81,25 @@ export default function CompleteModal({
     "Cafe24ClassicType-Regular": 4,
   };
 
+  const handleNickname = async (letterId: Number) => {
+    if (myName) {
+      const requestBody: NicknamePostRequest = {
+        nickname: myName,
+      };
+      const response = await postNickname(requestBody, Number(letterId));
+      console.log(response);
+    }
+  };
+
+  const fetchEnter = async (letterId: Number) => {
+    try {
+      const enterresponse = await postEnter(Number(letterId));
+      console.log(enterresponse.enterStatus);
+    } catch (err) {
+      console.error("Error fetching mydata:", err);
+    }
+  };
+
   const navigateToInvite = async () => {
     setGuideOpen(true);
 
@@ -96,6 +118,8 @@ export default function CompleteModal({
       console.log("Response:", response);
       const letterId = response.letterId;
 
+      handleNickname(letterId);
+      fetchEnter(letterId);
       navigate("/Invite", {
         state: {
           letterId: letterId,
