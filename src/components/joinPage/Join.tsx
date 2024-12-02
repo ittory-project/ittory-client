@@ -28,7 +28,9 @@ export const Join = () => {
   useEffect(() => {
     const fetchVisitUser = async () => {
       try {
-        if (localStorage.jwt) {
+        if (!localStorage.jwt) {
+          navigate("/login");
+        } else {
           const visitdata = await getVisitUser();
           console.log(visitdata);
           if (visitdata.isVisited === true) {
@@ -40,8 +42,6 @@ export const Join = () => {
           if (enterresponse.data.enterStatus === false) {
             setNoAccess(true);
           }
-        } else {
-          navigate("/login");
         }
       } catch (err) {
         console.error(err);
