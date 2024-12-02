@@ -16,13 +16,7 @@ import { Area } from "react-easy-crop";
 import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
 import { CoverType } from "../../../../src/api/model/CoverType";
-
-const fonts = [
-  { name: "서체1", family: "GmarketSans" },
-  { name: "서체2", family: "Ownglyph_UNZ-Rg" },
-  { name: "서체3", family: "CookieRun-Regular" },
-  { name: "서체4", family: "Cafe24ClassicType-Regular" },
-];
+import { getAllFont } from "../../../api/service/FontService";
 
 interface Props {
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,6 +34,10 @@ interface Props {
 interface BookProps {
   backgroundImage: string;
   children: ReactNode;
+}
+export interface fontProps {
+  id: number;
+  name: string;
 }
 
 const Book: React.FC<BookProps> = React.memo(
@@ -77,7 +75,8 @@ export default function CoverStyle({
 }: Props) {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
-  const [font, setFont] = useState<string>(fonts[0].family);
+  const [fonts, setFonts] = useState<fontProps[]>([]);
+  const [font, setFont] = useState<string>("");
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
@@ -93,6 +92,7 @@ export default function CoverStyle({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
+
         console.log(types);
       } catch (err) {
         console.error(err);
@@ -100,6 +100,21 @@ export default function CoverStyle({
     };
 
     fetchCoverTypesAndFonts();
+  }, []);
+
+  useEffect(() => {
+    const fetchFonts = async () => {
+      try {
+        const types = await getAllFont();
+        setFonts(types);
+        setFont(fonts[0].name);
+        console.log(fonts[0].name);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchFonts();
   }, []);
 
   const handleImageClick = (index: number) => {
