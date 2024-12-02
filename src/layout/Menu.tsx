@@ -108,6 +108,9 @@ export const Menu = ({ onClose }: Props) => {
       "_blank"
     );
   };
+  const handleCreateBtn = () => {
+    navigate("/create");
+  };
   return (
     <BackGround>
       <Cancel>
@@ -190,7 +193,7 @@ export const Menu = ({ onClose }: Props) => {
           )}
         </ReceivedLetter>
       </LetterContainer>
-      <Button>
+      <Button onClick={handleCreateBtn}>
         <ButtonTxt>편지 쓰러 가기</ButtonTxt>
       </Button>
       <List>

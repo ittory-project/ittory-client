@@ -13,7 +13,7 @@ export const Create = () => {
   const [deliverDay, setDeliverDay] = useState<Date | null>(null);
   const [title, setTitle] = useState<string>("");
   const [croppedImage, setCroppedImage] = useState<string>("");
-  const [BackgroundImage, setBackgroundImage] = useState<number>(0);
+  const [backgroundimage, setBackgroundimage] = useState<number>(0);
   const [selectfont, setSelectfont] = useState<string>("");
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
@@ -40,10 +40,10 @@ export const Create = () => {
           setTitle={setTitle}
           croppedImage={croppedImage}
           setCroppedImage={setCroppedImage}
-          setBackgroundImage={setBackgroundImage}
           setSelectfont={setSelectfont}
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
+          setBackgroundimage={setBackgroundimage}
         />
       )}
       {viewFinalInfo && (
@@ -58,8 +58,8 @@ export const Create = () => {
           setTitle={setTitle}
           croppedImage={croppedImage}
           setCroppedImage={setCroppedImage}
-          backgroundImage={BackgroundImage}
-          setBackgroundImage={setBackgroundImage}
+          backgroundimage={backgroundimage}
+          setBackgroundimage={setBackgroundimage}
           selectfont={selectfont}
           setSelectfont={setSelectfont}
           selectedImageIndex={selectedImageIndex}
@@ -76,7 +76,7 @@ const BackGround = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

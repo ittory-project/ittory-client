@@ -22,6 +22,7 @@ import { Participants } from "./Invite";
 import { getCoverTypes } from "../../api/service/CoverService";
 import { CoverType } from "../../api/model/CoverType";
 import { getLetterInfo } from "../../api/service/LetterService";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   guideOpen: boolean;
@@ -61,6 +62,7 @@ export const HostUser = ({
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [selectfont, setSelectfont] = useState<number>(-1);
   const [receiverName, setReceiverName] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCoverTypes = async () => {

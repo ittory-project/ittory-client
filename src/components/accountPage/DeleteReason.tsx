@@ -5,6 +5,7 @@ import check from "../../../public/assets/checkbox_gray.svg";
 import checked from "../../../public/assets/checkbox_black.svg";
 import { postWithdraw } from "../../api/service/MemberService";
 import { WithdrawPostRequest } from "../../api/model/MemberModel";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +16,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   const [otherReason, setOtherReason] = useState<string>("");
   const [buttonEnable, setButtonEnable] = useState<boolean>(false);
   const [length, setLength] = useState<number>(0);
+  const navigate = useNavigate();
 
   const withdrawReason: string[] = [
     "NOT_USE",
@@ -68,6 +70,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
       try {
         const response = await postWithdraw(data);
         console.log("Withdrawal successful:", response);
+        navigate("/");
       } catch (error) {
         console.error("Error in withdrawal:", error);
       }
@@ -174,7 +177,7 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

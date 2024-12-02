@@ -16,13 +16,7 @@ import { Area } from "react-easy-crop";
 import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
 import { CoverType } from "../../../../src/api/model/CoverType";
-
-const fonts = [
-  { name: "서체1", family: "GmarketSans" },
-  { name: "서체2", family: "Ownglyph_UNZ-Rg" },
-  { name: "서체3", family: "CookieRun-Regular" },
-  { name: "서체4", family: "Cafe24ClassicType-Regular" },
-];
+import { getAllFont } from "../../../api/service/FontService";
 
 interface Props {
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,23 +25,27 @@ interface Props {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   croppedImage: string;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
+  setBackgroundimage: React.Dispatch<React.SetStateAction<number>>;
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   setViewFinalInfo: React.Dispatch<React.SetStateAction<boolean>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 interface BookProps {
-  backgroundImage: string;
+  backgroundimage: string;
   children: ReactNode;
+}
+export interface fontProps {
+  id: number;
+  name: string;
 }
 
 const Book: React.FC<BookProps> = React.memo(
-  ({ backgroundImage, children }) => {
+  ({ backgroundimage, children }) => {
     return (
       <div
         style={{
-          backgroundImage: `url(${backgroundImage})`,
+          backgroundImage: `url(${backgroundimage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -69,7 +67,7 @@ export default function CoverStyle({
   setTitle,
   croppedImage,
   setCroppedImage,
-  setBackgroundImage,
+  setBackgroundimage,
   setSelectfont,
   setViewFinalInfo,
   selectedImageIndex,
@@ -77,7 +75,8 @@ export default function CoverStyle({
 }: Props) {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
-  const [font, setFont] = useState<string>(fonts[0].family);
+  const [fonts, setFonts] = useState<fontProps[]>([]);
+  const [font, setFont] = useState<string>("");
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
@@ -93,6 +92,7 @@ export default function CoverStyle({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
+
         console.log(types);
       } catch (err) {
         console.error(err);
@@ -101,6 +101,25 @@ export default function CoverStyle({
 
     fetchCoverTypesAndFonts();
   }, []);
+
+  useEffect(() => {
+    const fetchFonts = async () => {
+      try {
+        const types = await getAllFont();
+        setFonts(types);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchFonts();
+  }, []);
+
+  useEffect(() => {
+    if (fonts.length > 0 && fonts[0]?.name) {
+      setFont(fonts[0].name);
+    }
+  }, [fonts]);
 
   const handleImageClick = (index: number) => {
     setImageIndex(index);
@@ -207,7 +226,7 @@ export default function CoverStyle({
         <Title>
           <Text>표지를 꾸며주세요!</Text>
         </Title>
-        <Book backgroundImage={coverTypes[ImageIndex]?.editImageUrl}>
+        <Book backgroundimage={coverTypes[ImageIndex]?.editImageUrl}>
           <TitleContainer>
             <Input
               ref={inputRef}
@@ -325,8 +344,8 @@ export default function CoverStyle({
               "-1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
           }}
           onClick={() => {
-            setBackgroundImage(ImageIndex);
             setSelectfont(font);
+            setBackgroundimage(ImageIndex);
             setViewCoverDeco(false);
             setViewFinalInfo(true);
           }}
@@ -367,7 +386,7 @@ const BackGround = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   //position: relative;
   //left: 50%;
   //transform: translateX(-50%);

@@ -120,7 +120,10 @@ export default function LetterInfo({
             <Text>같이 편지를 만들어봐요!</Text>
           </Title>
         )}
-        <MainCotainer shiftup={keyboardVisible} isopen={isModalOpen}>
+        <MainCotainer
+          shiftup={String(keyboardVisible)}
+          isopen={String(isModalOpen)}
+        >
           <InputBox>
             <InputLogo>받는 사람</InputLogo>
             <Input
@@ -158,8 +161,8 @@ export default function LetterInfo({
                 }
                 setMyName(e.target.value);
               }}
-              min-Length="1"
-              max-Length="5"
+              min-length="1"
+              max-length="5"
               onFocus={handleFocus}
               spellCheck="false"
               //onBlur={handleBlur}
@@ -244,7 +247,7 @@ const BackGround = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -289,7 +292,7 @@ const Text = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
-const MainCotainer = styled.div<{ shiftup?: boolean; isopen?: boolean }>`
+const MainCotainer = styled.div<{ shiftup?: string; isopen?: string }>`
   display: flex;
   width: 16.5rem;
   height: 14.7rem;
@@ -330,6 +333,7 @@ const Input = styled.input`
   height: 24px;
   border: 0;
   padding-left: 0;
+  background-color: #ffffff;
   &::placeholder {
     color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);

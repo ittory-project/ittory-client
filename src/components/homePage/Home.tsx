@@ -283,7 +283,7 @@ export const Home = () => {
 };
 
 const Container = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   //overflow-y: scroll; /* 세로 스크롤 가능 */
   scroll-snap-type: y mandatory;
@@ -330,7 +330,7 @@ const Logo = styled.div<Props>`
 
 const FirstSection = styled.div<Props>`
   height: 100vh; /* 화면 크기만큼 차지 */
-  width: 100vw; /* 화면 크기만큼 차지 */
+  width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
   scroll-snap-align: start;
@@ -339,7 +339,7 @@ const FirstSection = styled.div<Props>`
 
 const Section = styled.div<Props>`
   height: 92vh; /* 화면 크기만큼 차지 */
-  width: 100vw; /* 화면 크기만큼 차지 */
+  width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
   scroll-snap-align: start;
@@ -347,7 +347,7 @@ const Section = styled.div<Props>`
 `;
 const WhiteSection = styled.div<Props>`
   height: 92vh; /* 화면 크기만큼 차지 */
-  width: 100vw; /* 화면 크기만큼 차지 */
+  width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.img}) no-repeat center center`};
   background-size: contain; /* 이미지가 전체 화면을 덮도록 */
   scroll-snap-align: start;
