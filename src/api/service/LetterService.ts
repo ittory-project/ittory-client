@@ -165,7 +165,7 @@ export async function postEnter(
     `https://dev-server.ittory.co.kr/api/letter/enter/${letterId}`
   );
 
-  return response.data;
+  return response.data.data;
 }
 
 // 편지 내용 상세 조회 API
