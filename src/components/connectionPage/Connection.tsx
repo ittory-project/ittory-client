@@ -58,6 +58,7 @@ export const Connection = () => {
   }, []);
 
   useEffect(() => {
+    console.log(letterId);
     const routingTimer = setTimeout(() => {
       navigate(`/write/${encodeLetterId(letterId)}`);
     }, 2500);

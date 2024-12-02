@@ -70,6 +70,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
       try {
         const response = await postWithdraw(data);
         console.log("Withdrawal successful:", response);
+        localStorage.removeItem("jwt");
         navigate("/");
       } catch (error) {
         console.error("Error in withdrawal:", error);
