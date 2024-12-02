@@ -12,8 +12,10 @@ import bg3 from "../../../public/assets/connect/bg3.svg";
 import bg4 from "../../../public/assets/connect/bg4.svg";
 import bg5 from "../../../public/assets/connect/bg5.svg";
 import { WriteOrder } from "./WriteOrder";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getLetterInfo } from "../../api/service/LetterService";
+import { encodeLetterId } from "../../api/config/base64";
+import { Letter } from "../letterboxPage/Letter";
 
 const scaleAnimation = keyframes`
   0% {
@@ -36,7 +38,9 @@ const hideDuringAnimation = keyframes`
 export const Connection = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const location = useLocation();
-  const letterId = location.state.letterId;
+  const navigate = useNavigate();
+  //const letterId = location.state.letterId;
+  const letterId = 12;
   const [coverId, setCoverId] = useState<number>(-1);
 
   useEffect(() => {
@@ -54,12 +58,12 @@ export const Connection = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsAnimationComplete(true);
+    const routingTimer = setTimeout(() => {
+      navigate(`/write/${encodeLetterId(letterId)}`);
     }, 2500);
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => clearTimeout(routingTimer);
+  }, [navigate, letterId]);
 
   const getBookImage = (coverId: number) => {
     switch (coverId) {

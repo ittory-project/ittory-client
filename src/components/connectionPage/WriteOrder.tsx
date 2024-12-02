@@ -85,6 +85,35 @@ export const WriteOrder = ({ letterId }: Props) => {
 
     client.onConnect = () => {
       console.log("WebSocket connected");
+
+      // WebSocket 구독
+      client.subscribe(`/topic/letter/${letterId}`, (message) => {
+        console.log("Received message:", message);
+        try {
+          const response: WsEnterResponse | WsExitResponse = JSON.parse(
+            message.body
+          );
+          console.log(response);
+
+          // 퇴장 메시지 처리
+          if (response.action === "EXIT") {
+            fetchParticipants();
+          }
+        } catch (err) {
+          console.error("Error parsing WebSocket message:", err);
+        }
+      });
+    };
+
+    client.activate();
+  }, []);
+
+  /*
+  useEffect(() => {
+    const client = stompClient();
+
+    client.onConnect = () => {
+      console.log("WebSocket connected");
       // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message: any) => {
         console.log("Received message:", message);
@@ -112,7 +141,7 @@ export const WriteOrder = ({ letterId }: Props) => {
       });
     };
     client.activate();
-  }, []);
+  }, []);*/
 
   return (
     <BackGround>
