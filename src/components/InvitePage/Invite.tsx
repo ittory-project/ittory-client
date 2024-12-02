@@ -93,7 +93,7 @@ export const Invite = () => {
     console.log("start");
   }, [userId]); // 초기화
 
-  //주기적으로 참가자 갱신
+  /*주기적으로 참가자 갱신
   useEffect(() => {
     const intervalId = setInterval(() => {
       console.log("갱신");
@@ -101,7 +101,7 @@ export const Invite = () => {
     }, 10000); // 10초마다 실행
 
     return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 정리
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     const client = stompClient();

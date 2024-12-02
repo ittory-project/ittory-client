@@ -6,7 +6,7 @@ import {
   setJwt,
   setUserId,
 } from "../../api/config/setToken";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { postLogin } from "../../api/service/AuthService";
 
 export const LoginRedirect = () => {
@@ -26,6 +26,7 @@ export const LoginRedirect = () => {
 
           if (localStorage.letterId) {
             const letterId = localStorage.letterId;
+            console.log(letterId);
             navigate(`/join/${letterId}`);
           } else {
             navigate("/");
