@@ -25,14 +25,14 @@ interface Props {
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   croppedImage: string;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
+  setBackgroundimage: React.Dispatch<React.SetStateAction<number>>;
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   setViewFinalInfo: React.Dispatch<React.SetStateAction<boolean>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 interface BookProps {
-  backgroundImage: string;
+  backgroundimage: string;
   children: ReactNode;
 }
 export interface fontProps {
@@ -41,11 +41,11 @@ export interface fontProps {
 }
 
 const Book: React.FC<BookProps> = React.memo(
-  ({ backgroundImage, children }) => {
+  ({ backgroundimage, children }) => {
     return (
       <div
         style={{
-          backgroundImage: `url(${backgroundImage})`,
+          backgroundImage: `url(${backgroundimage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -67,7 +67,7 @@ export default function CoverStyle({
   setTitle,
   croppedImage,
   setCroppedImage,
-  setBackgroundImage,
+  setBackgroundimage,
   setSelectfont,
   setViewFinalInfo,
   selectedImageIndex,
@@ -107,8 +107,6 @@ export default function CoverStyle({
       try {
         const types = await getAllFont();
         setFonts(types);
-        setFont(fonts[0].name);
-        console.log(fonts[0].name);
       } catch (err) {
         console.error(err);
       }
@@ -116,6 +114,12 @@ export default function CoverStyle({
 
     fetchFonts();
   }, []);
+
+  useEffect(() => {
+    if (fonts.length > 0 && fonts[0]?.name) {
+      setFont(fonts[0].name);
+    }
+  }, [fonts]);
 
   const handleImageClick = (index: number) => {
     setImageIndex(index);
@@ -222,7 +226,7 @@ export default function CoverStyle({
         <Title>
           <Text>표지를 꾸며주세요!</Text>
         </Title>
-        <Book backgroundImage={coverTypes[ImageIndex]?.editImageUrl}>
+        <Book backgroundimage={coverTypes[ImageIndex]?.editImageUrl}>
           <TitleContainer>
             <Input
               ref={inputRef}
@@ -340,8 +344,8 @@ export default function CoverStyle({
               "-1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
           }}
           onClick={() => {
-            setBackgroundImage(ImageIndex);
             setSelectfont(font);
+            setBackgroundimage(ImageIndex);
             setViewCoverDeco(false);
             setViewFinalInfo(true);
           }}
