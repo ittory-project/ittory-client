@@ -18,7 +18,7 @@ export const Join = () => {
   const navigate = useNavigate();
   const params = useParams();
   const letterId = params.letterId;
-
+  //letterId 추출
   useEffect(() => {
     if (letterId) {
       localStorage.setItem("letterId", letterId);
@@ -28,11 +28,9 @@ export const Join = () => {
   useEffect(() => {
     const fetchVisitUser = async () => {
       try {
-        const visitdata = await getVisitUser();
-        console.log(visitdata);
-        localStorage.jwt;
-
         if (localStorage.jwt) {
+          const visitdata = await getVisitUser();
+          console.log(visitdata);
           if (visitdata.isVisited === true) {
             setVisited(true);
           } else {
@@ -43,12 +41,7 @@ export const Join = () => {
             setNoAccess(true);
           }
         } else {
-          navigate("/login"),
-            {
-              state: {
-                letterId: letterId,
-              },
-            };
+          navigate("/login");
         }
       } catch (err) {
         console.error(err);
