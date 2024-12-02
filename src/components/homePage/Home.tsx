@@ -283,7 +283,7 @@ export const Home = () => {
 };
 
 const Container = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   //overflow-y: scroll; /* 세로 스크롤 가능 */
   scroll-snap-type: y mandatory;
