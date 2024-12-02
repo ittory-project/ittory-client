@@ -38,7 +38,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 const MenuOverlay = styled.div<{ $isOpen: boolean }>`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -52,7 +52,7 @@ const MenuOverlay = styled.div<{ $isOpen: boolean }>`
   z-index: 10;
 `;
 const MenuContainer = styled.div<{ $isOpen: boolean }>`
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   width: 260px;
