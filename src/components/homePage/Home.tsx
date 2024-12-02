@@ -167,7 +167,7 @@ export const Home = () => {
       "https://www.instagram.com/ittory.official/?igsh=dWI4NXo4OTd5d2Mw&utm_source=qr";
   };
   const handleTwtClick = () => {
-    window.location.href = "https://twitter.com/?mx=1";
+    window.location.href = "https://x.com/ittoryofficial";
   };
 
   return (
