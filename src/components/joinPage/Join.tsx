@@ -29,11 +29,11 @@ export const Join = () => {
     const fetchVisitUser = async () => {
       try {
         const visitdata = await getVisitUser();
+        console.log(visitdata);
 
         if (visitdata.isVisited === true) {
           setVisited(true);
           const enterresponse = await postEnter(Number(letterId));
-          console.log(enterresponse.enterStatus);
           if (enterresponse.enterStatus === false) {
             setNoAccess(true);
           }
@@ -78,7 +78,8 @@ export const Join = () => {
         nickname: nickname,
       };
       const response = await postNickname(requestBody, Number(letterId));
-      if (response.isSuccess) {
+      console.log(response.data.isSuccess);
+      if (response.data.isSuccess == true) {
         setDuplicateError(false);
         setViewModal(true);
       } else {
