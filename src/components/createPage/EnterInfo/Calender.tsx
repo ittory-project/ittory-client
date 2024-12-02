@@ -1,6 +1,6 @@
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
 import { format, isSameMonth, isSameDay, addDays, parse } from "date-fns";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -34,11 +34,16 @@ export default function Calender({
   let day = startDate;
   let formattedDate = "";
 
+  useEffect(() => {
+    if (!selectedDate) {
+      setSelectedDate(current); // 기본값을 current로 설정
+    }
+  }, [current, selectedDate, setSelectedDate]);
+
   while (day <= endDate) {
     for (let i = 0; i < 7; i++) {
       formattedDate = format(day, "d");
       const cloneDay = day;
-
       days.push(
         !isSameMonth(day, monthStart) ? (
           <Disabled key={format(day, "yyyy-MM-dd")}></Disabled>
