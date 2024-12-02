@@ -30,18 +30,16 @@ export const Join = () => {
       try {
         const visitdata = await getVisitUser();
         console.log(visitdata);
+        localStorage.jwt;
 
-        if (visitdata.isVisited === true) {
-          setVisited(true);
-          const enterresponse = await postEnter(Number(letterId));
-          if (enterresponse.enterStatus === false) {
-            setNoAccess(true);
+        if (localStorage.jwt) {
+          if (visitdata.isVisited === true) {
+            setVisited(true);
+          } else {
+            setVisited(false);
           }
-        } else if (localStorage.jwt) {
-          setVisited(false);
           const enterresponse = await postEnter(Number(letterId));
-          console.log(enterresponse.enterStatus);
-          if (enterresponse.enterStatus === false) {
+          if (enterresponse.data.enterStatus === false) {
             setNoAccess(true);
           }
         } else {
@@ -175,7 +173,7 @@ const BackGround = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
