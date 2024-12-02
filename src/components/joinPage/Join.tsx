@@ -30,7 +30,6 @@ export const Join = () => {
     const fetchVisitUser = async () => {
       try {
         if (!localStorage.jwt) {
-          setLogin(false);
           navigate("/login");
         } else {
           setLogin(true);
@@ -57,8 +56,10 @@ export const Join = () => {
   useEffect(() => {
     const fetchMyPageData = async () => {
       try {
-        const myPageData = await getMyPage();
-        setName(myPageData.name);
+        if (login) {
+          const myPageData = await getMyPage();
+          setName(myPageData.name);
+        }
       } catch (err) {
         console.error("Error fetching my page data:", err);
       }
