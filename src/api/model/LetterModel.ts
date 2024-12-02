@@ -103,8 +103,10 @@ export interface LetterInfoGetResponse {
 
 //편지 참여 요청
 export interface LetterEnterResponse {
-  enterStatus: boolean;
-  participantId: number;
+  data: {
+    enterStatus: boolean;
+    participantId: number;
+  };
 }
 
 // 편지 상세 정보 조회 API Response

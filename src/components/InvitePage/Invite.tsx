@@ -37,13 +37,21 @@ export const Invite = () => {
 
   const fetchParticipants = async () => {
     try {
+      const data = await getParticipants(letterId);
+
+      if (userId) {
+        // 방장 여부 체크
+        if (data[0].memberId === userId) {
+          setMemberIndex(0);
+        } else {
+          setMemberIndex(1);
+        }
+      }
+      setParticipants(data);
+
       if (participants) {
         setPrevParticipants(participants); //이전 멤버들
       }
-      console.log(letterId);
-      const data = await getParticipants(letterId);
-      setParticipants(data);
-      console.log(data);
 
       if (prevParticipants.length > 0 && data.length > 0) {
         const prevHost = prevParticipants[0];
@@ -54,28 +62,17 @@ export const Invite = () => {
           setHostAlert(
             `참여한 순서대로 '${data[0].nickname}'님이 방장이 되었어요`
           );
-          setPrevParticipants(data);
         } else {
           setExitAlert(`'${prevHost.nickname}'님이 퇴장했어요`);
-          setPrevParticipants(data);
         }
       }
+      setPrevParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
     }
   };
 
-  //주기적으로 참가자 갱신
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchParticipants();
-    }, 10000); // 10초마다 실행
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    localStorage.removeItem("letterId");
     const fetchMydata = async () => {
       try {
         const mydata = await getMyPage();
@@ -86,8 +83,24 @@ export const Invite = () => {
       }
     };
 
-    fetchParticipants();
     fetchMydata();
+    localStorage.removeItem("letterId");
+    console.log("start");
+  }, []); // 초기화
+
+  useEffect(() => {
+    fetchParticipants();
+    console.log("start");
+  }, [userId]); // 초기화
+
+  //주기적으로 참가자 갱신
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      console.log("갱신");
+      fetchParticipants(); // 주기적으로 참가자 데이터 갱신
+    }, 10000); // 10초마다 실행
+
+    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 정리
   }, []);
 
   useEffect(() => {
@@ -133,13 +146,6 @@ export const Invite = () => {
     client.activate();
   }, [userId]);
 
-  //방장 인덱스 지정
-  useEffect(() => {
-    if (participants.length > 0 && participants[0].memberId === userId) {
-      setMemberIndex(0);
-    }
-  }, []);
-
   //퇴장 알림
   useEffect(() => {
     const exitTimer = setTimeout(() => {
@@ -165,7 +171,7 @@ export const Invite = () => {
     <BackGround>
       {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
       {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {memberIndex !== 0 ? (
+      {memberIndex == 0 && (
         <HostUser
           guideOpen={guideOpen}
           items={participants}
@@ -173,7 +179,8 @@ export const Invite = () => {
           viewDelete={viewDelete}
           setViewDelete={setViewDelete}
         />
-      ) : (
+      )}
+      {memberIndex == 1 && (
         <Member
           letterId={letterId}
           guideOpen={guideOpen}

@@ -9,13 +9,8 @@ import shadow from "../../../../public/assets/shadow2.svg";
 import camera_mini from "../../../../public/assets/camera_mini.svg";
 import { CoverType } from "../../../api/model/CoverType";
 import { getCoverTypes } from "../../../api/service/CoverService";
-
-const fonts = [
-  { name: "서체1", family: "GmarketSans" },
-  { name: "서체2", family: "Ownglyph_UNZ-Rg" },
-  { name: "서체3", family: "CookieRun-Regular" },
-  { name: "서체4", family: "Cafe24ClassicType-Regular" },
-];
+import { getAllFont } from "../../../api/service/FontService";
+import { fontProps } from "../CoverDeco/CoverStyle";
 
 interface Props {
   title: string;
@@ -60,6 +55,21 @@ export default function CoverModal({
   const [ImageIndex, setImageIndex] = useState<number>(selectedImageIndex);
   const [cropOpen, setCropOpen] = useState(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [fonts, setFonts] = useState<fontProps[]>([]);
+
+  useEffect(() => {
+    const fetchFonts = async () => {
+      try {
+        const types = await getAllFont();
+        setFonts(types);
+        setFont(fonts[0].name);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchFonts();
+  }, []);
 
   useEffect(() => {
     const fetchCoverTypes = async () => {

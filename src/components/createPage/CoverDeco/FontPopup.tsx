@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
+import { getAllFont } from "../../../api/service/FontService";
+import { fontProps } from "./CoverStyle";
 
 interface Props {
   font: string;
-  fonts: { name: string; family: string }[];
+  fonts: fontProps[];
   setFont: React.Dispatch<React.SetStateAction<string>>;
   setFontPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -40,6 +42,7 @@ const BackGround = styled.div`
   border-radius: 20px 20px 0px 0px;
   background: #fff;
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
+  overflow-x: hidden;
 `;
 const FontContainer = styled.div`
   display: flex;
@@ -47,6 +50,7 @@ const FontContainer = styled.div`
   margin-top: 15px;
   flex-direction: column;
   align-items: center;
+  overflow-x: auto;
 `;
 const Line = styled.img`
   width: 100%;

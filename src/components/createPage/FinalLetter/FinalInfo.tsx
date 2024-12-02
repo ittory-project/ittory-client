@@ -24,9 +24,9 @@ interface Props {
   selectfont: string;
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   croppedImage: string;
-  backgroundImage: number;
+  backgroundimage: number;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
+  setBackgroundimage: React.Dispatch<React.SetStateAction<number>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -45,9 +45,9 @@ export default function FinalInfo({
   title,
   setTitle,
   croppedImage,
-  backgroundImage,
+  backgroundimage,
   setCroppedImage,
-  setBackgroundImage,
+  setBackgroundimage,
   selectfont,
   setSelectfont,
   selectedImageIndex,
@@ -162,13 +162,13 @@ export default function FinalInfo({
               </EditBtn>
               {croppedImage === "" ? (
                 <Book
-                  backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}
+                  backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
                 >
                   <BookTitle font={selectfont}>{title}</BookTitle>
                 </Book>
               ) : (
                 <Book
-                  backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}
+                  backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
                 >
                   <BookTitle font={selectfont}>{title}</BookTitle>
                   <Shadow src={shadow} />
@@ -193,8 +193,8 @@ export default function FinalInfo({
           setTitle={setTitle}
           croppedImage={croppedImage}
           setCroppedImage={setCroppedImage}
-          backgroundImage={backgroundImage}
-          setBackgroundImage={setBackgroundImage}
+          backgroundimage={backgroundimage}
+          setBackgroundimage={setBackgroundimage}
           selectfont={selectfont}
           setSelectfont={setSelectfont}
           setViewEdit={setViewEdit}
@@ -207,9 +207,9 @@ export default function FinalInfo({
           title={title}
           setTitle={setTitle}
           croppedImage={croppedImage}
-          backgroundImage={backgroundImage}
+          backgroundimage={backgroundimage}
           setCroppedImage={setCroppedImage}
-          setBackgroundImage={setBackgroundImage}
+          setBackgroundimage={setBackgroundimage}
           selectfont={selectfont}
           setSelectfont={setSelectfont}
           setIsModalOpen={setCoveropen}
@@ -227,7 +227,7 @@ export default function FinalInfo({
             deliverDay={deliverDay}
             title={title}
             croppedImage={croppedImage}
-            backgroundImage={backgroundImage}
+            backgroundimage={backgroundimage}
             selectfont={selectfont}
             setIsModalOpen={setComplete}
             selectedImageIndex={selectedImageIndex}
@@ -240,7 +240,7 @@ export default function FinalInfo({
             deliverDay={deliverDay}
             title={title}
             croppedImage={croppedImage}
-            backgroundImage={backgroundImage}
+            backgroundImage={backgroundimage}
             selectfont={selectfont}
             setIsModalOpen={setComplete}
             selectedImageIndex={selectedImageIndex}

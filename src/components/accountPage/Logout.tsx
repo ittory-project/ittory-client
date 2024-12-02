@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { postLogout } from "../../api/service/AuthService";
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export const Logout = ({ setPopup }: Props) => {
+  const navigate = useNavigate();
   const handleDelete = () => {
     setPopup(false);
   };
@@ -15,6 +17,7 @@ export const Logout = ({ setPopup }: Props) => {
     try {
       const logoutResponse = await postLogout();
       console.log("Logout successful:", logoutResponse);
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -54,7 +57,7 @@ const BackGround = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

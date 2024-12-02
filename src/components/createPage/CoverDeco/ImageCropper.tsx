@@ -157,7 +157,7 @@ const Container = styled.div`
 const Header = styled.div`
   position: absolute;
   width: 100%;
-  height: 6rem;
+  height: 8%;
   background: #d9d9d9;
   border-radius: 20px 20px 0px 0px;
   font-family: SUIT;
@@ -180,7 +180,7 @@ const CropContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: 36.5rem;
+  height: 92%;
   overflow: hidden;
 `;
 const Button = styled.button`
@@ -188,7 +188,7 @@ const Button = styled.button`
   bottom: 7%;
   right: 0;
   padding: 10px 10px;
-  background-color: #000;
+  background-color: transparent;
   color: white;
   font-size: 14px;
   font-family: SUIT;
@@ -200,7 +200,7 @@ const CancelBtn = styled.button`
   bottom: 7%;
   left: 0;
   padding: 10px 10px;
-  background-color: #000;
+  background-color: transparent;
   color: white;
   font-size: 14px;
   font-family: SUIT;

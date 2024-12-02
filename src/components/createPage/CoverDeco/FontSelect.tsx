@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { fontProps } from "./CoverStyle";
 
 interface Props {
   font: string;
-  fonts: { name: string; family: string }[];
+  fonts: fontProps[];
   setFont: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -19,14 +20,14 @@ export default function FontSelect({ font, fonts, setFont }: Props) {
       <FontSelectorContainer>
         {fonts.map((fontlist) => (
           <FontItem
-            key={fontlist.family}
-            fontFamily={fontlist.family}
-            selected={fontlist.family === font}
-            onClick={() => handleFontChange(fontlist.family)}
+            key={fontlist.id}
+            fontFamily={fontlist.name}
+            selected={fontlist.name === font}
+            onClick={() => handleFontChange(fontlist.name)}
           >
             <Fonttxt
-              fontFamily={fontlist.family}
-              selected={fontlist.family === font}
+              fontFamily={fontlist.name}
+              selected={fontlist.name === font}
             >
               {fontlist.name}
             </Fonttxt>
