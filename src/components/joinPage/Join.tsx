@@ -13,6 +13,7 @@ export const Join = () => {
   const [name, setName] = useState<string>("");
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
+  const [login, setLogin] = useState<boolean>(false);
   const [visited, setVisited] = useState<boolean>(false);
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -29,8 +30,10 @@ export const Join = () => {
     const fetchVisitUser = async () => {
       try {
         if (!localStorage.jwt) {
+          setLogin(false);
           navigate("/login");
         } else {
+          setLogin(true);
           const visitdata = await getVisitUser();
           console.log(visitdata);
           if (visitdata.isVisited === true) {
@@ -61,7 +64,7 @@ export const Join = () => {
       }
     };
     fetchMyPageData();
-  }, []);
+  }, [login]);
 
   const handleModal = async () => {
     if (nickname) {
