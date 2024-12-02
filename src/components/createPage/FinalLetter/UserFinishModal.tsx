@@ -20,7 +20,7 @@ interface Props {
   receiverName: string;
   deliverDay: Date | null;
   croppedImage: string;
-  backgroundImage: number;
+  backgroundimage: number;
   selectfont: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +31,7 @@ export default function UserFinishModal({
   receiverName,
   deliverDay,
   croppedImage,
-  backgroundImage,
+  backgroundimage,
   selectfont,
   setIsModalOpen,
   selectedImageIndex,
@@ -105,7 +105,6 @@ export default function UserFinishModal({
       console.log("letterId", letterId);
 
       fetchEnter(letterId);
-      //handleNickname(letterId);
 
       navigate("/Invite", {
         state: {
@@ -137,13 +136,13 @@ export default function UserFinishModal({
       const letterId = response.letterId;
 
       fetchEnter(letterId);
-      /*
+
       navigate("/Invite", {
         state: {
           letterId: letterId,
-          guideOpen: guideOpen,
+          guideOpen: true,
         },
-      });*/
+      });
     } catch (error) {
       console.error("Error posting letter:", error);
     }
@@ -176,7 +175,7 @@ export default function UserFinishModal({
         <Receiver>
           To.{receiverName} <LetterImg img={letter} />
         </Receiver>
-        <Book backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
+        <Book backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
           {selectedImageIndex !== 4 && (
             <>

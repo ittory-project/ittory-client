@@ -78,6 +78,7 @@ export default function EditLetter({
   const openCoveredit = () => {
     setCoveropen(true);
   };
+  console.log(backgroundImage);
   return (
     <BackGround>
       {calenderOpen && <Overlay />}
@@ -163,15 +164,11 @@ export default function EditLetter({
             />
           </EditBtn>
           {croppedImage === "" ? (
-            <Book
-              backgroundImage={coverTypes[backgroundImage - 1]?.editImageUrl}
-            >
+            <Book backgroundImage={coverTypes[backgroundImage]?.editImageUrl}>
               <BookTitle font={selectfont}>{title}</BookTitle>
             </Book>
           ) : (
-            <Book
-              backgroundImage={coverTypes[backgroundImage - 1]?.editImageUrl}
-            >
+            <Book backgroundImage={coverTypes[backgroundImage]?.editImageUrl}>
               <BookTitle font={selectfont}>{title}</BookTitle>
               <Bright src={bright} />
               <Shadow src={shadow} />
@@ -355,7 +352,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 24px;
+  margin-top: 19px;
   margin-left: 3px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;

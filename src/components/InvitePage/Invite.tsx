@@ -37,12 +37,16 @@ export const Invite = () => {
 
   const fetchParticipants = async () => {
     try {
+      const data = await getParticipants(letterId);
       if (participants) {
         setPrevParticipants(participants); //이전 멤버들
       }
-      console.log(letterId);
-      const data = await getParticipants(letterId);
       setParticipants(data);
+      // 방장 설정 로직
+
+      if (data.length > 0 && data[0].memberId === userId) {
+        setMemberIndex(0);
+      }
       console.log(data);
 
       if (prevParticipants.length > 0 && data.length > 0) {
@@ -54,16 +58,25 @@ export const Invite = () => {
           setHostAlert(
             `참여한 순서대로 '${data[0].nickname}'님이 방장이 되었어요`
           );
-          setPrevParticipants(data);
         } else {
           setExitAlert(`'${prevHost.nickname}'님이 퇴장했어요`);
-          setPrevParticipants(data);
         }
       }
+      setPrevParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
     }
   };
+  //초기 랜더링
+  useEffect(() => {
+    const initialize = async () => {
+      await fetchParticipants();
+      fetchMydata();
+      localStorage.removeItem("letterId");
+    };
+
+    initialize();
+  }, []); // 의존성 배열 추가
 
   //주기적으로 참가자 갱신
   useEffect(() => {
@@ -72,23 +85,17 @@ export const Invite = () => {
     }, 10000); // 10초마다 실행
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [participants]);
 
-  useEffect(() => {
-    localStorage.removeItem("letterId");
-    const fetchMydata = async () => {
-      try {
-        const mydata = await getMyPage();
-        setUserId(mydata.memberId);
-        setName(mydata.name);
-      } catch (err) {
-        console.error("Error fetching mydata:", err);
-      }
-    };
-
-    fetchParticipants();
-    fetchMydata();
-  }, []);
+  const fetchMydata = async () => {
+    try {
+      const mydata = await getMyPage();
+      setUserId(mydata.memberId);
+      setName(mydata.name);
+    } catch (err) {
+      console.error("Error fetching mydata:", err);
+    }
+  };
 
   useEffect(() => {
     const client = stompClient();
@@ -165,7 +172,7 @@ export const Invite = () => {
     <BackGround>
       {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
       {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {memberIndex !== 0 ? (
+      {memberIndex === 0 ? (
         <HostUser
           guideOpen={guideOpen}
           items={participants}

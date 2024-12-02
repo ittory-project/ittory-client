@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
 import out from "../../../public/assets/out.svg";
@@ -47,6 +47,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [selectfont, setSelectfont] = useState<number>(-1);
   const [receiverName, setReceiverName] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -94,6 +95,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const handleExit = () => {
     console.log(letterId);
     quitLetterWs(letterId);
+    navigate("/");
   };
 
   const handle = async () => {
@@ -388,7 +390,7 @@ const Shadow = styled.img`
   width: 145px;
   height: 145px;
   margin-left: 3.8px;
-  margin-top: 68px;
+  margin-top: 66px;
   position: absolute;
   z-index: 3;
   flex-shrink: 0;
@@ -404,7 +406,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 20.3px;
+  margin-top: 40px;
   margin-left: 4.6px;
 `;
 const NameBar = styled.div`
