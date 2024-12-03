@@ -38,6 +38,7 @@ interface BookProps {
 export interface fontProps {
   id: number;
   name: string;
+  value: string;
 }
 
 const Book: React.FC<BookProps> = React.memo(
@@ -137,24 +138,6 @@ export default function CoverStyle({
   const openModal = () => {
     setIsModalOpen(true);
   };
-  /*
-  useEffect(() => {
-    function handleOutside(e: MouseEvent) {
-      const heightDiff =
-        window.innerHeight - document.documentElement.clientHeight;
-      if (inputRef.current && inputRef.current.contains(e.target as Node)) {
-        setIsKeyboardOpen(true);
-        setKeyboardHeight(heightDiff);
-      } else {
-        setIsKeyboardOpen(false);
-        setKeyboardHeight(0);
-      }
-    }
-    document.addEventListener("mousedown", handleOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleOutside);
-    };
-  }, [inputRef]);*/
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
@@ -207,6 +190,8 @@ export default function CoverStyle({
     setCroppedImage(croppedImgUrl); // 크롭된 이미지 저장
     setIsModalOpen(false);
   };
+
+  console.log(fontPopup);
 
   return (
     <BackGround>
@@ -325,7 +310,7 @@ export default function CoverStyle({
               img={
                 ImageIndex === index
                   ? coverType.selectImageUrl
-                  : coverType.listImageUrl //수정 필요
+                  : coverType.notSelectImageUrl
               }
               className="image"
             />
@@ -447,6 +432,9 @@ const ButtonTxt = styled.div`
 `;
 const Title = styled.div`
   position: fixed;
+  top: 3rem;
+  left: 50%; /* 수평 중앙 정렬 */
+  transform: translateX(-50%); /* 중앙 정렬 보정 */
   display: flex;
   margin-top: 0;
   flex-direction: column;
@@ -500,11 +488,6 @@ const Input = styled.input<{ selectfont: string }>`
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
-    position: absolute; /* Absolute positioning */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* 중앙 정렬 */
-    text-align: center;
   }
   &:valid {
     color: #f1f3f5;
@@ -546,7 +529,7 @@ const KeyboardBar = styled.div<{ keyboardHeight: number }>`
 `;
 
 const ButtonContainer = styled.button`
-  z-index: 1;
+  z-index: 0;
   position: relative;
   cursor:pointer;
   display: flex;
