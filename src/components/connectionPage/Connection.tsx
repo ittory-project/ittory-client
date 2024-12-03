@@ -15,7 +15,7 @@ import { WriteOrder } from "./WriteOrder";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getLetterInfo } from "../../api/service/LetterService";
 import { encodeLetterId } from "../../api/config/base64";
-import { Letter } from "../letterboxPage/Letter";
+import { postRandom } from "../../api/service/ParticipantService";
 
 const scaleAnimation = keyframes`
   0% {
@@ -54,7 +54,18 @@ export const Connection = () => {
         console.error("Error fetching mydata:", err);
       }
     };
+    const postRandomParti = async () => {
+      try {
+        const data = await postRandom({
+          letterId: letterId,
+        });
+        console.log("순서설정:", data);
+      } catch (err) {
+        console.error("Error fetching mydata:", err);
+      }
+    };
     fetchMydata();
+    postRandomParti();
   }, []);
 
   useEffect(() => {
