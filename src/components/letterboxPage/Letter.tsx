@@ -61,9 +61,16 @@ export const Letter = ({
   const [coverType, setCoverType] = useState<CoverTypeGetResponse | null>(null);
   const [elementLength, setElementLength] = useState<number>(0);
 
+  useEffect(() => {
+    // 브라우저의 기본 뒤로가기를 사용할 때 스택에 페이지가 쌓이지 않도록 설정
+    window.history.replaceState(null, "", window.location.href);
+
+    // 필요한 경우에 추가적인 페이지 데이터나 상태를 설정할 수 있습니다.
+  }, []);
+
   const handleCancel = () => {
     setOpenLetter(false);
-    navigate({ pathname: "/letterbox", search: "" });
+    navigate({ pathname: "/letterbox", search: "" }, { replace: true });
   };
   const handleMore = () => {
     setIsModalOpen(true);
@@ -196,7 +203,7 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
