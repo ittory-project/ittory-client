@@ -47,46 +47,42 @@ export const Invite = () => {
           setMemberIndex(1);
         }
       }
-      setParticipants(data);
 
-      if (participants) {
-        setPrevParticipants(participants); //이전 멤버들
-      }
-      setPrevParticipants(data);
+      setPrevParticipants(participants);
+      setParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
     }
   };
 
   useEffect(() => {
-    const fetchMydata = async () => {
+    const fetchInitialData = async () => {
       try {
         const mydata = await getMyPage();
-        setUserId(mydata.memberId);
-        setName(mydata.name);
+        const userIdFromApi = mydata.memberId;
+        const userNameFromApi = mydata.name;
+        setUserId(userIdFromApi);
+        setName(userNameFromApi);
+
+        // Participants 가져오기
+        const participantsData = await getParticipants(letterId);
+        if (userIdFromApi) {
+          if (participantsData[0]?.memberId === userIdFromApi) {
+            setMemberIndex(0); // 방장 여부 체크
+          } else {
+            setMemberIndex(1);
+          }
+        }
+        setParticipants(participantsData);
+        setPrevParticipants(participantsData);
       } catch (err) {
-        console.error("Error fetching mydata:", err);
+        console.error("Error during initial data fetch:", err);
       }
     };
 
-    fetchMydata();
-    console.log("start");
-  }, []); // 초기화
-
-  useEffect(() => {
-    fetchParticipants();
-    console.log("start");
-  }, [userId]); // 초기화
-
-  /*주기적으로 참가자 갱신
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      console.log("갱신");
-      fetchParticipants(); // 주기적으로 참가자 데이터 갱신
-    }, 10000); // 10초마다 실행
-
-    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 정리
-  }, []);*/
+    fetchInitialData();
+    console.log("Initial fetch started");
+  }, []);
 
   useEffect(() => {
     const client = stompClient();
