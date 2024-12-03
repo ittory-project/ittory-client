@@ -48,9 +48,8 @@ export default function Header({ backgroundColor, setBackgroundColor }: Props) {
 
 const Container = styled.div<{ color: boolean }>`
   background: ${(props) => (props.color ? "#fff" : "transparent")};
-  position: fixed;
+  position: absolute;
   top: 0;
-  max-width: 375px;
   display: flex;
   width: 100%;
   margin: 0 auto;

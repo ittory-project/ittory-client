@@ -503,7 +503,7 @@ const ButtonContainer = styled.div`
 `;
 
 const LocationContainer = styled.div`
-  position: fixed;
+  position: absolute;
   bottom: 10px;
   right: 10px;
   z-index: 3;

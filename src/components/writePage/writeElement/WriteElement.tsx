@@ -64,10 +64,10 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
     }
   }, []);
 
-  const handleKeyboardEnterEvent = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
-    handleWriteComplete();
-  }
+  // const handleKeyboardEnterEvent = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  //   e.preventDefault();
+  //   handleWriteComplete();
+  // }
 
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = "/img/profile.png";
@@ -92,11 +92,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
             placeholder="그림을 보고 편지를 채워 주세요"             
             value={text} 
             onChange={e => setText(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                handleKeyboardEnterEvent(e)
-              }
-            }} />
+            />
           <ControlContainer>
             {text.length > 0 ? (
               <>
