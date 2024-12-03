@@ -1,51 +1,30 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { postLogout } from "../../api/service/AuthService";
 
-interface Props {
-  setPopup: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const Logout = ({ setPopup }: Props) => {
+export const WithdrawPopup = () => {
   const navigate = useNavigate();
-  const handleDelete = () => {
-    setPopup(false);
-  };
 
-  const handleLogout = async () => {
-    try {
-      const logoutResponse = await postLogout();
-      localStorage.removeItem("jwt");
-      console.log("Logout successful:", logoutResponse);
-      navigate("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+  const handleHome = () => {
+    navigate("/");
   };
 
   return (
     <BackGround>
       <Modal>
-        <Title>로그아웃 하시겠어요?</Title>
+        <Title>회원 탈퇴가 완료되었어요</Title>
+        <Contents>그동안 함께해 주셔서 고마웠어요 :{`)`}</Contents>
+        <Contents>언제든 다시 놀러 오세요!</Contents>
         <ButtonContainer>
-          <Button
-            style={{
-              background: "#CED4DA",
-            }}
-            onClick={handleDelete}
-          >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
-          </Button>
           <Button
             style={{
               background: "#FFA256",
             }}
-            onClick={handleLogout}
           >
-            <ButtonTxt style={{ color: "#fff" }}>로그아웃</ButtonTxt>
+            <ButtonTxt style={{ color: "#fff" }} onClick={handleHome}>
+              확인
+            </ButtonTxt>
           </Button>
-          {/* 클릭 시 랜딩페이지로 이동 */}
         </ButtonContainer>
       </Modal>
     </BackGround>
@@ -56,17 +35,18 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
   height: 100vh;
   width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.7);
 `;
 const Modal = styled.div`
   display: flex;
   width: 272px;
+  height: 11rem;
   box-sizing: border-box;
   padding: 24px;
   flex-direction: column;
@@ -94,16 +74,33 @@ const Title = styled.div`
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.5px;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
+`;
+const Contents = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--Border-Radius-radius_300, 8px);
+  align-self: stretch;
+  color: #868e96;
+  text-align: center;
+  font-family: var(--Typography-family-caption, SUIT);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: -0.5px;
 `;
 const ButtonContainer = styled.div`
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
   position: relative;
-  justify-content: center;
+  //bottom: 20px;
+  margin-top: 1.35rem;
+  justify-content: center; /* 버튼들을 중앙에 배치 */
   display: flex;
-  width: 100%;
+  width: 224px;
   align-items: center;
 `;
 const Button = styled.button`
@@ -119,12 +116,13 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+  //position: relative;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 14px;
   letter-spacing: -0.5px;
 `;

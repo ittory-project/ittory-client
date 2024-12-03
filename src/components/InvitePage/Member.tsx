@@ -18,6 +18,7 @@ import { CoverType } from "../../api/model/CoverType";
 import { quitLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { DeleteConfirm } from "./Delete/DeleteConfirm";
+import defaultImg from "../../../public/assets/menu/profileImg.svg";
 
 interface Props {
   guideOpen: boolean;
@@ -49,6 +50,8 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [receiverName, setReceiverName] = useState<string>("");
   const navigate = useNavigate();
 
+  console.log("this is member page");
+
   useEffect(() => {
     if (receiverName.length > 9) {
       setSliceName(receiverName.slice(0, 9));
@@ -69,6 +72,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
+        console.log("letterData:", letterData);
         setCropImg(letterData.coverPhotoUrl);
         setDeliverDay(parseISO(letterData.deliveryDate));
         setReceiverName(letterData.receiverName);
@@ -100,36 +104,56 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   const handle = async () => {
     const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
-    //const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
-    if (navigator.share) {
+
+    if (
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
       try {
-        await navigator.share({
-          title: "잇토리",
-          text: "",
-          url,
-        });
+        await navigator.clipboard.writeText(url);
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
       } catch (error) {
-        console.error("Share failed:", error);
+        console.error("Clipboard API failed:", error);
+        fallbackCopyTextToClipboard(url);
       }
     } else {
-      try {
-        await navigator.clipboard.writeText(url); // 링크를 클립보드에 복사
+      // Safari 호환용 대체 복사 방식
+      fallbackCopyTextToClipboard(url);
+    }
+  };
+
+  // 대체 복사 함수
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } catch (error) {
-        console.error("Copy failed:", error);
-        alert("링크 복사에 실패했습니다.");
+      } else {
+        alert("텍스트 복사에 실패했습니다.");
       }
+    } catch (error) {
+      console.error("Fallback copy failed:", error);
+      alert("텍스트 복사에 실패했습니다.");
+    } finally {
+      document.body.removeChild(textArea);
     }
-  }; //토스트메시지 노출시간 정하기
+  };
 
   return (
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && (
+      {!viewDelete && !viewExit && title && (
         <>
           <Header>
             <ReceiverContainer>
@@ -141,7 +165,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
             <IconContainer>
               <Icon src={info} alt="infobtn" onClick={handleGuide} />
               <Icon src={out} alt="outbtn" onClick={handleExit} />{" "}
-              {/*클릭시 즉시 이탈*/}
             </IconContainer>
           </Header>
           <MainContainer>
@@ -200,7 +223,11 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     ) : (
                       <InvitedUser key={user.memberId}>
                         <User>
-                          <ProfileImg img={user.imageUrl} />
+                          {user.imageUrl == "" ? (
+                            <ProfileImg img={defaultImg} />
+                          ) : (
+                            <ProfileImg img={user.imageUrl} />
+                          )}
                           {user.nickname.length > 3 ? (
                             <UserNameContainer>
                               <UserName>
@@ -240,9 +267,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
           </MainContainer>
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
-          {viewDelete && <DeleteConfirm />}
         </>
       )}
+      {viewDelete && <DeleteConfirm />}
     </BackGround>
   );
 };

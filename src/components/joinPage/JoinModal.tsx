@@ -24,6 +24,7 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
 
   const handleAccess = async () => {
     try {
+      localStorage.removeItem("letterId");
       if (visited) {
         navigate("/Invite", {
           state: {
@@ -79,7 +80,7 @@ const BackGround = styled.div`
   align-items: center;
   //justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

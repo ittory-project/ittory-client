@@ -23,13 +23,14 @@ export const Created_Modal = ({
     setPopup(true);
   };
 
+  //편지받기랑연결된 부분임.. 어떤 링크 넣어야될지 모르겠음
   const handleShare = async () => {
     const url = "";
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "기록하며 성장하기",
-          text: "Hello World",
+          title: "잇토리",
+          text: "",
           url,
         });
       } catch (error) {

@@ -40,10 +40,11 @@ export const Join = () => {
           } else {
             setVisited(false);
           }
+
           const enterresponse = await postEnter(Number(letterId));
-          if (enterresponse.data.enterStatus === false) {
+          if (enterresponse.enterStatus !== true) {
             setNoAccess(true);
-          }
+          } //case별로 추가해야함..
         }
       } catch (err) {
         console.error(err);
@@ -73,8 +74,8 @@ export const Join = () => {
         nickname: nickname,
       };
       const response = await postNickname(requestBody, Number(letterId));
-      console.log(response.data.isSuccess);
-      if (response.data.isSuccess == true) {
+      console.log("닉네임", response.isSuccess);
+      if (response.isSuccess == true) {
         setDuplicateError(false);
         setViewModal(true);
       } else {
