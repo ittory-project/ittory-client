@@ -267,18 +267,7 @@ const ProfileImage = styled.img`
   height: 44px;
   border-radius: 120.93px;
 `;
-const DefaultImage = styled.div`
-  width: 44px;
-  height: 44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #ccc;
-  color: #fff;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 44px; /* Center text vertically */
-`;
+
 const UserSet = styled.div`
   display: flex;
   flex-direction: column;

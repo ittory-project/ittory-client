@@ -5,6 +5,7 @@
   background-color: #fff;
   margin: 0 auto;
   box-sizing: border-box;
+  position: relative;
 }
 
 .large-screen {
@@ -23,7 +24,9 @@
   overflow: hidden;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
   height: 100%;
