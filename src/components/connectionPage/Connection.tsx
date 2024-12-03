@@ -39,8 +39,7 @@ export const Connection = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  //const letterId = location.state.letterId;
-  const letterId = 12;
+  const letterId = location.state.letterId;
   const [coverId, setCoverId] = useState<number>(-1);
 
   useEffect(() => {
