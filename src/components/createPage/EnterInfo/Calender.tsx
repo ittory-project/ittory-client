@@ -162,7 +162,7 @@ const Img = styled.img`
 const Txt = styled.span`
   position: absolute;
   text-align: center;
-  font-family: "Gmarket Sans";
+  font-family: var(--Typography-family-number, "Gmarket Sans");
   font-size: 12px;
   font-weight: 400;
   line-height: normal;
@@ -170,4 +170,3 @@ const Txt = styled.span`
   top: 50%;
   transform: translate(-50%, -50%);
 `;
-//클릭 값 저장

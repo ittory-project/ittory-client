@@ -23,6 +23,7 @@ import { getCoverTypes } from "../../api/service/CoverService";
 import { CoverType } from "../../api/model/CoverType";
 import { getLetterInfo } from "../../api/service/LetterService";
 import { useNavigate } from "react-router-dom";
+import defaultImg from "../../../public/assets/menu/profileImg.svg";
 
 interface Props {
   guideOpen: boolean;
@@ -132,6 +133,7 @@ export const HostUser = ({
     setPopup(true);
   };
 
+  /*
   const handle = async () => {
     const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
     try {
@@ -142,7 +144,54 @@ export const HostUser = ({
       console.error("Copy failed:", error);
       alert("링크 복사에 실패했습니다.");
     }
-  }; //토스트메시지 노출시간 정하기
+  }; //토스트메시지 노출시간 정하기*/
+
+  const handle = async () => {
+    const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
+
+    if (
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
+      } catch (error) {
+        console.error("Clipboard API failed:", error);
+        fallbackCopyTextToClipboard(url);
+      }
+    } else {
+      // Safari 호환용 대체 복사 방식
+      fallbackCopyTextToClipboard(url);
+    }
+  };
+
+  // 대체 복사 함수
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
+      } else {
+        alert("텍스트 복사에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Fallback copy failed:", error);
+      alert("텍스트 복사에 실패했습니다.");
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  };
 
   return (
     <BackGround>
@@ -217,7 +266,11 @@ export const HostUser = ({
                     ) : (
                       <InvitedUser key={index}>
                         <User>
-                          <ProfileImg img={user.imageUrl} />
+                          {user.imageUrl == "" ? (
+                            <ProfileImg img={defaultImg} />
+                          ) : (
+                            <ProfileImg img={user.imageUrl} />
+                          )}
                           {user.nickname.length > 3 ? (
                             <UserNameContainer>
                               <UserName>
