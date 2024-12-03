@@ -25,7 +25,8 @@ export async function postNickname(
     `https://dev-server.ittory.co.kr/api/participant/nickname/${letterId}`,
     data
   );
-  return response.data;
+
+  return response.data.data;
 }
 
 //닉네임 삭제

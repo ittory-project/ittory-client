@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { fontProps } from "./CoverStyle";
 
@@ -15,19 +15,23 @@ export default function FontSelect({ font, fonts, setFont }: Props) {
     console.log("Selected Font:", fontFamily);
   };
 
+  useEffect(() => {
+    setFont(fonts[0].value);
+  }, []);
+
   return (
     <Container>
       <FontSelectorContainer>
         {fonts.map((fontlist) => (
           <FontItem
             key={fontlist.id}
-            fontFamily={fontlist.name}
-            selected={fontlist.name === font}
-            onClick={() => handleFontChange(fontlist.name)}
+            fontFamily={fontlist.value}
+            selected={fontlist.value === font}
+            onClick={() => handleFontChange(fontlist.value)}
           >
             <Fonttxt
-              fontFamily={fontlist.name}
-              selected={fontlist.name === font}
+              fontFamily={fontlist.value}
+              selected={fontlist.value === font}
             >
               {fontlist.name}
             </Fonttxt>
