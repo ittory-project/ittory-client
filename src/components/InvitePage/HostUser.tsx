@@ -197,7 +197,7 @@ export const HostUser = ({
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && !popup && title && (
+      {!viewDelete && !viewExit && !popup && items && (
         <>
           <Header>
             <ReceiverContainer>
@@ -670,9 +670,8 @@ const UserName = styled.div`
   line-height: 16px;
   letter-spacing: -0.5px;
   white-space: nowrap;
-  overflow: hidden;
   &:first-of-type {
-    margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
+    margin-right: 0;
   }
 `;
 
