@@ -100,15 +100,50 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   const handle = async () => {
     const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
-    try {
-      await navigator.clipboard.writeText(url); // 링크를 클립보드에 복사
-      setCopied(true);
-      setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-    } catch (error) {
-      console.error("Copy failed:", error);
-      alert("링크 복사에 실패했습니다.");
+
+    if (
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
+      } catch (error) {
+        console.error("Clipboard API failed:", error);
+        fallbackCopyTextToClipboard(url);
+      }
+    } else {
+      // Safari 호환용 대체 복사 방식
+      fallbackCopyTextToClipboard(url);
     }
-  }; //토스트메시지 노출시간 정하기
+  };
+
+  // 대체 복사 함수
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
+      } else {
+        alert("텍스트 복사에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Fallback copy failed:", error);
+      alert("텍스트 복사에 실패했습니다.");
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  };
 
   return (
     <BackGround>
@@ -184,7 +219,11 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     ) : (
                       <InvitedUser key={user.memberId}>
                         <User>
-                          <ProfileImg img={user.imageUrl} />
+                          {user.imageUrl == "" ? (
+                            <ProfileImg img={defaultImg} />
+                          ) : (
+                            <ProfileImg img={user.imageUrl} />
+                          )}
                           {user.nickname.length > 3 ? (
                             <UserNameContainer>
                               <UserName>
