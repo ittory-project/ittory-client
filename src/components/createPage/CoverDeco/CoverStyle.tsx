@@ -325,7 +325,7 @@ export default function CoverStyle({
               img={
                 ImageIndex === index
                   ? coverType.selectImageUrl
-                  : coverType.listImageUrl
+                  : coverType.listImageUrl //수정 필요
               }
               className="image"
             />
