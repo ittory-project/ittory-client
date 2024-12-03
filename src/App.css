@@ -5,7 +5,7 @@
   background-color: #fff;
   margin: 0 auto;
   box-sizing: border-box;
-  position: relative;
+  position: relative; /*메뉴때문에 추가한거*/
 }
 
 .large-screen {

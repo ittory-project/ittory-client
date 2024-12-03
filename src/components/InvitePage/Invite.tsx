@@ -29,11 +29,12 @@ export const Invite = () => {
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
   const [prevParticipants, setPrevParticipants] = useState<Participants[]>([]);
-  const [userId, setUserId] = useState<number>(0);
+  const [userId, setUserId] = useState<number>(-1);
   const [letterId, setLetterId] = useState<number>(getletterId);
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
   const [viewDelete, setViewDelete] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState(1);
 
   const fetchParticipants = async () => {
     try {
@@ -54,6 +55,22 @@ export const Invite = () => {
       console.error("Error fetching participants:", err);
     }
   };
+  const fetchParticipantsData = async () => {
+    try {
+      const participantsData = await getParticipants(letterId);
+      if (userId) {
+        if (participantsData[0].memberId === userId) {
+          setMemberIndex(0); // 방장 여부 체크
+        } else {
+          setMemberIndex(1);
+        }
+      }
+      setParticipants(participantsData);
+      setPrevParticipants(participantsData);
+    } catch (err) {
+      console.error("Error fetching participants:", err);
+    }
+  };
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -63,11 +80,24 @@ export const Invite = () => {
         const userNameFromApi = mydata.name;
         setUserId(userIdFromApi);
         setName(userNameFromApi);
+      } catch (err) {
+        console.error("Error during initial data fetch:", err);
+      }
+    };
+    if (userId) {
+      fetchParticipantsData();
+    }
 
-        // Participants 가져오기
+    fetchInitialData();
+    console.log("Initial fetch started");
+  }, [refresh]);
+  /*
+  useEffect(() => {
+    const fetchParticipantsData = async () => {
+      try {
         const participantsData = await getParticipants(letterId);
-        if (userIdFromApi) {
-          if (participantsData[0]?.memberId === userIdFromApi) {
+        if (userId) {
+          if (participantsData[0].memberId === userId) {
             setMemberIndex(0); // 방장 여부 체크
           } else {
             setMemberIndex(1);
@@ -76,13 +106,12 @@ export const Invite = () => {
         setParticipants(participantsData);
         setPrevParticipants(participantsData);
       } catch (err) {
-        console.error("Error during initial data fetch:", err);
+        console.error("Error fetching participants:", err);
       }
     };
 
-    fetchInitialData();
-    console.log("Initial fetch started");
-  }, []);
+    fetchParticipantsData();
+  }, [userId]);*/
 
   useEffect(() => {
     const client = stompClient();
@@ -117,6 +146,8 @@ export const Invite = () => {
                 letterId: letterId,
               },
             });
+          } else if (response.action === "ENTER") {
+            setRefresh((refresh) => refresh * -1);
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
@@ -158,23 +189,24 @@ export const Invite = () => {
     <BackGround>
       {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
       {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {userId && memberIndex == 0 && (
-        <HostUser
-          guideOpen={guideOpen}
-          items={participants}
-          letterId={letterId}
-          viewDelete={viewDelete}
-          setViewDelete={setViewDelete}
-        />
-      )}
-      {userId && memberIndex == 1 && (
-        <Member
-          letterId={letterId}
-          guideOpen={guideOpen}
-          items={participants}
-          viewDelete={viewDelete}
-        />
-      )}
+      {name != "" &&
+        participants &&
+        (memberIndex === 0 ? (
+          <HostUser
+            guideOpen={guideOpen}
+            items={participants}
+            letterId={letterId}
+            viewDelete={viewDelete}
+            setViewDelete={setViewDelete}
+          />
+        ) : (
+          <Member
+            letterId={letterId}
+            guideOpen={guideOpen}
+            items={participants}
+            viewDelete={viewDelete}
+          />
+        ))}
     </BackGround>
   );
 };
