@@ -72,11 +72,11 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
         setSelectfont(letterData.fontId);
+        setTitle(letterData.title);
       } catch (err) {
         console.error(err);
       }
     };
-    console.log(letterId);
 
     fetchCoverTypes();
     fetchLetterInfo();
