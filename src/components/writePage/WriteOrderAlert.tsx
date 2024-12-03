@@ -21,7 +21,7 @@ export const WriteOrderAlert: React.FC<WriteOrderAlertProps> = ({
 };
 
 const Container = styled.div`
-  display: inline-flex; /* Changed from flex to inline-flex */
+  display: inline-flex;
   align-items: center;
   height: 33px;
   padding: 4px 15px;
