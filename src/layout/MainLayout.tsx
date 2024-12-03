@@ -14,16 +14,23 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const handleOverlayClick = useCallback(() => {
     closeMenu();
   }, [closeMenu]);
-
+  //메뉴를 mainlayout이랑 분리시켜야 할둣..
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => setIsMenuOpen(true),
   });
-
+  //<div className="MainLayout large-screen">{children}</div>
   return (
     <div className="App">
       <MediaQuery minWidth={401}>
-        <div className="MainLayout large-screen">{children}</div>
+        <div className="MainLayout large-screen" {...swipeHandlers}>
+          <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
+          <MenuContainer $isOpen={isMenuOpen}>
+            <Menu onClose={closeMenu} />
+          </MenuContainer>
+          {children}
+        </div>
       </MediaQuery>
+
       <MediaQuery maxWidth={400}>
         <div className="MainLayout small-screen" {...swipeHandlers}>
           <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
@@ -38,11 +45,10 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 const MenuOverlay = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.8);
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
   visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
@@ -52,12 +58,13 @@ const MenuOverlay = styled.div<{ $isOpen: boolean }>`
   z-index: 10;
 `;
 const MenuContainer = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   width: 260px;
-  height: 100%;
+  height: 100vh;
   background: #fff;
+  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
   transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
   transition: transform 0.3s ease;
   z-index: 20;
