@@ -21,13 +21,13 @@ export default function FontSelect({ font, fonts, setFont }: Props) {
         {fonts.map((fontlist) => (
           <FontItem
             key={fontlist.id}
-            fontFamily={fontlist.name}
-            selected={fontlist.name === font}
-            onClick={() => handleFontChange(fontlist.name)}
+            fontFamily={fontlist.value}
+            selected={fontlist.value === font}
+            onClick={() => handleFontChange(fontlist.value)}
           >
             <Fonttxt
-              fontFamily={fontlist.name}
-              selected={fontlist.name === font}
+              fontFamily={fontlist.value}
+              selected={fontlist.value === font}
             >
               {fontlist.name}
             </Fonttxt>
