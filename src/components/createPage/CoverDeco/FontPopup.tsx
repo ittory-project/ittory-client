@@ -53,7 +53,7 @@ const FontContainer = styled.div`
   flex-direction: column;
   align-items: center;
   overflow-x: auto;
-  z-index: 100;
+  z-index: 10;
 `;
 const Line = styled.img`
   width: 100%;
@@ -63,7 +63,7 @@ const Line = styled.img`
 `;
 const Button = styled.button`
   overflow: hidden;
-  z-index: 100;
+  z-index: 10;
   position: fixed;
   width: 288px;
   cursor: pointer;

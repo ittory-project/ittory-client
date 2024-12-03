@@ -16,9 +16,9 @@ interface Props {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   croppedImage: string;
-  backgroundImage: number;
+  backgroundimage: number;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
+  setBackgroundimage: React.Dispatch<React.SetStateAction<number>>;
   selectfont: string;
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,14 +32,14 @@ export default function CoverModal({
   setTitle,
   croppedImage,
   setCroppedImage,
-  backgroundImage,
-  setBackgroundImage,
+  backgroundimage,
   selectfont,
   setSelectfont,
   setIsModalOpen,
   setKeyboardVisible,
   selectedImageIndex,
   setSelectedImageIndex,
+  setBackgroundimage,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -51,7 +51,7 @@ export default function CoverModal({
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [cropperKey, setCropperKey] = useState<number>(0);
-  const [bookimage, setBookimage] = useState<number>(backgroundImage - 1);
+  const [bookimage, setBookimage] = useState<number>(backgroundimage - 1);
   const [ImageIndex, setImageIndex] = useState<number>(selectedImageIndex);
   const [cropOpen, setCropOpen] = useState(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
@@ -62,7 +62,7 @@ export default function CoverModal({
       try {
         const types = await getAllFont();
         setFonts(types);
-        setFont(fonts[0].name);
+        setFont(fonts[0].value);
       } catch (err) {
         console.error(err);
       }
@@ -96,7 +96,7 @@ export default function CoverModal({
 
   const handleFinalCover = () => {
     setSelectedImageIndex(ImageIndex);
-    setBackgroundImage(bookimage);
+    setBackgroundimage(ImageIndex);
     setSelectfont(font);
     setIsModalOpen(false);
   };
@@ -118,10 +118,11 @@ export default function CoverModal({
   }, [modalBackground]);
 
   useEffect(() => {
-    function handleOutside(e: MouseEvent) {
+    function handleResize() {
       const heightDiff =
         window.innerHeight - document.documentElement.clientHeight;
-      if (inputRef.current && inputRef.current.contains(e.target as Node)) {
+      console.log(heightDiff);
+      if (heightDiff > 0) {
         setIsKeyboardOpen(true);
         setKeyboardHeight(heightDiff);
       } else {
@@ -129,9 +130,9 @@ export default function CoverModal({
         setKeyboardHeight(0);
       }
     }
-    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("resize", handleResize);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("resize", handleResize);
     };
   }, [inputRef]);
 
@@ -292,7 +293,7 @@ export default function CoverModal({
             img={
               ImageIndex === index
                 ? coverType.selectImageUrl
-                : coverType.listImageUrl
+                : coverType.notSelectImageUrl
             }
             className="image"
           />
@@ -414,7 +415,7 @@ const Cancel = styled.span`
 const Book = styled.div<{ backgroundImage: string }>`
   width: 224px;
   height: 294px;
-  position: fixed;
+  position: absolute;
   margin-top: 3rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
   background-image: url(${(props) => props.backgroundImage});
@@ -482,10 +483,6 @@ const Input = styled.input<{ font: string }>`
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
-    position: absolute; /* Absolute positioning */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* 중앙 정렬 */
     text-align: center;
   }
   &:valid {

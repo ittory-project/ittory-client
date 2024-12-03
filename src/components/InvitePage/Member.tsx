@@ -100,28 +100,13 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   const handle = async () => {
     const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
-    //const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "잇토리",
-          text: "",
-          url,
-        });
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } catch (error) {
-        console.error("Share failed:", error);
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(url); // 링크를 클립보드에 복사
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } catch (error) {
-        console.error("Copy failed:", error);
-        alert("링크 복사에 실패했습니다.");
-      }
+    try {
+      await navigator.clipboard.writeText(url); // 링크를 클립보드에 복사
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
+    } catch (error) {
+      console.error("Copy failed:", error);
+      alert("링크 복사에 실패했습니다.");
     }
   }; //토스트메시지 노출시간 정하기
 
@@ -129,7 +114,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && (
+      {!viewDelete && !viewExit && title && (
         <>
           <Header>
             <ReceiverContainer>
@@ -141,7 +126,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
             <IconContainer>
               <Icon src={info} alt="infobtn" onClick={handleGuide} />
               <Icon src={out} alt="outbtn" onClick={handleExit} />{" "}
-              {/*클릭시 즉시 이탈*/}
             </IconContainer>
           </Header>
           <MainContainer>
@@ -240,9 +224,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
           </MainContainer>
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
-          {viewDelete && <DeleteConfirm />}
         </>
       )}
+      {viewDelete && <DeleteConfirm />}
     </BackGround>
   );
 };
