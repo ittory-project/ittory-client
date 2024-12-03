@@ -1,8 +1,15 @@
 import styled from "styled-components";
 import { getKakaoCode } from "../../api/config/setToken";
 import MainLogo from "../../../public/img/main_logo.svg";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  const navigate = useNavigate()
+
+  const handleCloseBtn = () => {
+    navigate('/')
+  }
+
   const kakaoLogin = () => {
     getKakaoCode();
   };
@@ -10,7 +17,7 @@ export const Login = () => {
   return (
     <Container>
       <LoginContainer>
-        <CloseBtn src="/assets/btn_close.svg" />
+        <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close.svg" />
         <Logo src={MainLogo} alt="Logo" />
         <Desc>{"마음을 표현하는 새로운 방법!"}</Desc>
         <LoginBtn onClick={kakaoLogin}>
