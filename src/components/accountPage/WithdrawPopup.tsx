@@ -1,72 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { patchNickname } from "../../api/service/ParticipantService";
 
-interface Props {
-  nickname: string;
-  setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
-  visited: boolean;
-}
-
-export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
+export const WithdrawPopup = () => {
   const navigate = useNavigate();
-  const letterId = localStorage.letterId;
-  console.log(visited);
 
-  const handleCancel = async () => {
-    const response = await patchNickname(letterId);
-    console.log(response);
-    if (response.success) {
-      setViewModal(false);
-    }
-  };
-
-  const handleAccess = async () => {
-    try {
-      localStorage.removeItem("letterId");
-      if (visited) {
-        navigate("/Invite", {
-          state: {
-            letterId: letterId,
-            guideOpen: false,
-          },
-        });
-      } else {
-        navigate("/Invite", {
-          state: {
-            letterId: letterId,
-            guideOpen: true,
-          },
-        });
-      }
-    } catch (err) {
-      console.error("error:", err);
-    }
+  const handleHome = () => {
+    navigate("/");
   };
 
   return (
     <BackGround>
       <Modal>
-        <Title>'{nickname}'님</Title>
-        <Title>으로 참여할까요?</Title>
-        <Contents>닉네임은 한번 설정하면 수정할 수 없어요</Contents>
+        <Title>회원 탈퇴가 완료되었어요</Title>
+        <Contents>그동안 함께해 주셔서 고마웠어요 :{`)`}</Contents>
+        <Contents>언제든 다시 놀러 오세요!</Contents>
         <ButtonContainer>
-          <Button
-            style={{
-              background: "#CED4DA",
-            }}
-            onClick={handleCancel}
-          >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
-          </Button>
           <Button
             style={{
               background: "#FFA256",
             }}
-            onClick={handleAccess}
           >
-            <ButtonTxt style={{ color: "#fff" }}>네!</ButtonTxt>
+            <ButtonTxt style={{ color: "#fff" }} onClick={handleHome}>
+              확인
+            </ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>
@@ -84,12 +41,12 @@ const BackGround = styled.div`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.7);
 `;
 const Modal = styled.div`
   display: flex;
   width: 272px;
-  height: 11.6rem;
+  height: 11rem;
   box-sizing: border-box;
   padding: 24px;
   flex-direction: column;
@@ -102,8 +59,6 @@ const Modal = styled.div`
   border: 3px solid #d3edff;
   background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
   z-index: 100;
-  align-items: center;
-  margin: 0;
 `;
 const Title = styled.div`
   display: flex;
@@ -119,6 +74,7 @@ const Title = styled.div`
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.5px;
+  margin-bottom: 8px;
 `;
 const Contents = styled.div`
   display: flex;
@@ -134,18 +90,17 @@ const Contents = styled.div`
   font-weight: 400;
   line-height: 16px;
   letter-spacing: -0.5px;
-  margin-top: 7px;
 `;
 const ButtonContainer = styled.div`
-  display: flex;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
   position: relative;
+  //bottom: 20px;
   margin-top: 1.35rem;
-  justify-content: center;
+  justify-content: center; /* 버튼들을 중앙에 배치 */
   display: flex;
-  width: 100%;
+  width: 224px;
   align-items: center;
 `;
 const Button = styled.button`
@@ -161,8 +116,9 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+  //position: relative;
 `;
-const ButtonTxt = styled.span`
+const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 14px;
   font-style: normal;

@@ -18,6 +18,7 @@ import { CoverType } from "../../api/model/CoverType";
 import { quitLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { DeleteConfirm } from "./Delete/DeleteConfirm";
+import defaultImg from "../../../public/assets/menu/profileImg.svg";
 
 interface Props {
   guideOpen: boolean;
@@ -49,6 +50,8 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [receiverName, setReceiverName] = useState<string>("");
   const navigate = useNavigate();
 
+  console.log("this is member page");
+
   useEffect(() => {
     if (receiverName.length > 9) {
       setSliceName(receiverName.slice(0, 9));
@@ -69,6 +72,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
+        console.log("letterData:", letterData);
         setCropImg(letterData.coverPhotoUrl);
         setDeliverDay(parseISO(letterData.deliveryDate));
         setReceiverName(letterData.receiverName);

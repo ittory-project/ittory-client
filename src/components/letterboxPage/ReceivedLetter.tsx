@@ -89,7 +89,7 @@ export const ReceivedLetter = ({
         <EmptyLetter context="received" />
       ) : (
         <>
-          {!popup && !openLetter && (
+          {!popup && !openLetter && letters && (
             <Container>
               {deleteAlert && <DeleteAlert>{deleteAlert}</DeleteAlert>}
               <NumberHeader>
