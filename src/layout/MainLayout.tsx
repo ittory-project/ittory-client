@@ -21,7 +21,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   //<div className="MainLayout large-screen">{children}</div>
   return (
     <div className="App">
-      <MediaQuery minWidth={401}>
+      <MediaQuery minWidth={431}>
         <div className="MainLayout large-screen" {...swipeHandlers}>
           <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
           <MenuContainer $isOpen={isMenuOpen}>
@@ -30,8 +30,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </div>
       </MediaQuery>
-
-      <MediaQuery maxWidth={400}>
+      <MediaQuery maxWidth={430}>
         <div className="MainLayout small-screen" {...swipeHandlers}>
           <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
           <MenuContainer $isOpen={isMenuOpen}>

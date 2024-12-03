@@ -11,7 +11,7 @@ interface LetterContentProps {
 export const ReceiveLetterContents = ({ letterFontStyle, letterContent }: LetterContentProps) => {
   return (
     <>
-      <ProductLeftSide src='/img/cover/left.svg' />
+      <ProductLeftSide src='/img/cover/left.png' />
       <ProductRightSide src='/img/cover/product.svg' />
       <ContentImg src={letterContent.coverImageUrl} />
       <Content $fonttype={letterFontStyle.name}>{letterContent.content}</Content>
@@ -29,11 +29,11 @@ const ProductRightSide = styled.img`
 `;
 
 const ProductLeftSide = styled.img`
-  width: 67px;
+  width: 94px;
   height: 369px;
   object-fit: fill;
   position: absolute;
-  left: -51px;
+  left: -79px;
   top: -7px;
 `;
 
