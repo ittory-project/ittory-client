@@ -97,50 +97,6 @@ export const ShareLetter = () => {
     navigate('/letterbox')
   }
 
-  const { Kakao } = window;
-  useEffect (() => {
-    window.Kakao.init(import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY);
-  }, [])
-  
-  const shareKakao = () =>{
-    if (letterInfo) {
-      console.log(window.Kakao.isInitialized())
-      Kakao.API.request({
-        url: '/v2/api/talk/memo/default/send',
-        data: {
-          template_object: {
-            object_type: 'feed',
-            content: {
-              title: `To. ${letterInfo.receiverName}`,
-              description: '바스락... 바스락...\n편지함 앞에서 들리는 의문의 소리...',
-              image_url:
-                `/img/share_thumbnail.png`,
-              link: {
-                mobile_web_url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-                web_url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-              },
-            },
-            buttons: [
-              {
-                title: '편지 확인하기',
-                link: {
-                  mobile_web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-                  web_url: `${import.meta.env.VITE_SERVER_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-                },
-              },
-            ],
-          },
-        },
-      })
-      .then((response: string) => {
-        console.log(response);
-      })
-      .catch((error: string) => {
-        console.log(error);
-      });
-    }
-  }
-
   const createShare = async () => {
     try {
       if (letterInfo) {
@@ -166,10 +122,9 @@ export const ShareLetter = () => {
           {renderPageContent()}
         </CoverContainer>
         <Pagination totalPages={elementLength + 1} />
-        <button style={{ fontSize: "10px" }}onClick={createShare}>링크테스트</button>
         <BtnContainer>
           <StoreBtn onClick={handleStorage}>편지함에 보관하기</StoreBtn>
-          <ShareBtn onClick={shareKakao}>지금 공유하기</ShareBtn>
+          <ShareBtn onClick={createShare}>지금 공유하기</ShareBtn>
         </BtnContainer>
       </Background>
     ) : (
