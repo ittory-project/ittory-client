@@ -94,7 +94,7 @@ export const ShareLetter = () => {
   };
 
   const handleStorage = async () => {
-    navigate('/LetterBox')
+    navigate('/letterbox')
   }
 
   const { Kakao } = window;
