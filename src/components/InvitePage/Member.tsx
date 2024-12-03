@@ -26,12 +26,6 @@ interface Props {
   letterId: number;
   viewDelete: boolean;
 }
-const fonts = [
-  { name: "GmarketSans" },
-  { name: "Ownglyph_UNZ-Rg" },
-  { name: "CookieRun-Regular" },
-  { name: "Cafe24ClassicType-Regular" },
-];
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
@@ -78,11 +72,11 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
         setSelectfont(letterData.fontId);
+        setTitle(letterData.title);
       } catch (err) {
         console.error(err);
       }
     };
-    console.log(letterId);
 
     fetchCoverTypes();
     fetchLetterInfo();
@@ -153,7 +147,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && title && (
+      {!viewDelete && !viewExit && (
         <>
           <Header>
             <ReceiverContainer>
