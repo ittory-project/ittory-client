@@ -162,7 +162,7 @@ export const Invite = () => {
     <BackGround>
       {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
       {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {userId && memberIndex == 0 && (
+      {userId && memberIndex == 1 && (
         <HostUser
           guideOpen={guideOpen}
           items={participants}
@@ -171,7 +171,7 @@ export const Invite = () => {
           setViewDelete={setViewDelete}
         />
       )}
-      {userId && memberIndex == 1 && (
+      {userId && memberIndex == 0 && (
         <Member
           letterId={letterId}
           guideOpen={guideOpen}
