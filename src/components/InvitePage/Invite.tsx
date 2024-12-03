@@ -52,20 +52,6 @@ export const Invite = () => {
       if (participants) {
         setPrevParticipants(participants); //이전 멤버들
       }
-      /*
-      if (prevParticipants.length > 0 && data.length > 0) {
-        const prevHost = prevParticipants[0];
-        const currentHost = data[0];
-     
-        if (prevHost.memberId !== currentHost.memberId) {
-          setExitAlert(`방장 '${prevHost.nickname}'님이 퇴장했어요`);
-          setHostAlert(
-            `참여한 순서대로 '${data[0].nickname}'님이 방장이 되었어요`
-          );
-        } else {
-          setExitAlert(`'${prevHost.nickname}'님이 퇴장했어요`);
-        }
-      }*/
       setPrevParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);

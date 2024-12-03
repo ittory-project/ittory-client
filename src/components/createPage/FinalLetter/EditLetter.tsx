@@ -24,9 +24,9 @@ interface Props {
   setSelectfont: React.Dispatch<React.SetStateAction<string>>;
   setViewEdit: React.Dispatch<React.SetStateAction<boolean>>;
   croppedImage: string;
-  backgroundImage: number;
+  backgroundimage: number;
   setCroppedImage: React.Dispatch<React.SetStateAction<string>>;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<number>>;
+  setBackgroundimage: React.Dispatch<React.SetStateAction<number>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -41,9 +41,9 @@ export default function EditLetter({
   title,
   setTitle,
   croppedImage,
-  backgroundImage,
+  backgroundimage,
   setCroppedImage,
-  setBackgroundImage,
+  setBackgroundimage,
   selectfont,
   setSelectfont,
   setViewEdit,
@@ -78,7 +78,7 @@ export default function EditLetter({
   const openCoveredit = () => {
     setCoveropen(true);
   };
-  console.log(backgroundImage);
+
   return (
     <BackGround>
       {calenderOpen && <Overlay />}
@@ -163,12 +163,8 @@ export default function EditLetter({
               style={{ width: "11px", height: "11px" }}
             />
           </EditBtn>
-          {croppedImage === "" ? (
-            <Book backgroundImage={coverTypes[backgroundImage]?.editImageUrl}>
-              <BookTitle font={selectfont}>{title}</BookTitle>
-            </Book>
-          ) : (
-            <Book backgroundImage={coverTypes[backgroundImage]?.editImageUrl}>
+          {coverTypes && (
+            <Book backgroundImage={coverTypes[backgroundimage]?.editImageUrl}>
               <BookTitle font={selectfont}>{title}</BookTitle>
               <Bright src={bright} />
               <Shadow src={shadow} />
@@ -190,9 +186,9 @@ export default function EditLetter({
           title={title}
           setTitle={setTitle}
           croppedImage={croppedImage}
-          backgroundImage={backgroundImage}
+          backgroundimage={backgroundimage}
           setCroppedImage={setCroppedImage}
-          setBackgroundImage={setBackgroundImage}
+          setBackgroundimage={setBackgroundimage}
           selectfont={selectfont}
           setSelectfont={setSelectfont}
           setIsModalOpen={setCoveropen}
@@ -204,7 +200,7 @@ export default function EditLetter({
     </BackGround>
   );
 }
-//캘린더 아예 초기화되는 문제점
+
 const BackGround = styled.div`
   display: flex;
   position: relative;
@@ -212,7 +208,7 @@ const BackGround = styled.div`
   align-items: center;
   //justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

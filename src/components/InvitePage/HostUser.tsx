@@ -82,6 +82,7 @@ export const HostUser = ({
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
         setSelectfont(letterData.fontId);
+        //Id가 아닌 value로 받을 수 있는 지
       } catch (err) {
         console.error(err);
       }
@@ -133,28 +134,13 @@ export const HostUser = ({
 
   const handle = async () => {
     const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
-    //const url = `${import.meta.env.VITE_SERVER_URL}/join/${letterId}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "잇토리",
-          text: "",
-          url,
-        });
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } catch (error) {
-        console.error("Share failed:", error);
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(url); // 링크를 클립보드에 복사
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } catch (error) {
-        console.error("Copy failed:", error);
-        alert("링크 복사에 실패했습니다.");
-      }
+    try {
+      await navigator.clipboard.writeText(url); // 링크를 클립보드에 복사
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
+    } catch (error) {
+      console.error("Copy failed:", error);
+      alert("링크 복사에 실패했습니다.");
     }
   }; //토스트메시지 노출시간 정하기
 
@@ -162,7 +148,7 @@ export const HostUser = ({
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && !popup && (
+      {!viewDelete && !viewExit && !popup && title && (
         <>
           <Header>
             <ReceiverContainer>
