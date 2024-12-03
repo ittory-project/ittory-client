@@ -177,12 +177,10 @@ export default function UserFinishModal({
         </Receiver>
         <Book backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}>
           <TitleContainer font={selectfont}>{title}</TitleContainer>
-          {selectedImageIndex !== 4 && (
-            <>
-              <Shadow src={shadow} />
-              <BtnImgContainer bgimg={croppedImage} />
-            </>
-          )}
+          <>
+            <Shadow src={shadow} />
+            <BtnImgContainer bgimg={croppedImage} />
+          </>
           {deliverDay === null ? (
             <></>
           ) : (
