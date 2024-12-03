@@ -13,11 +13,11 @@
   min-height: 100vh;
   width: 100%;
   background-color: #fff;
+  overflow: hidden;
 }
 
 .small-screen {
   display: flex;
-  border: 1px solid red;
   flex-direction: column;
   width: 100vw;
   overflow: hidden;
