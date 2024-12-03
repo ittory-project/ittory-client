@@ -21,10 +21,10 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="App">
-      <MediaQuery minWidth={481}>
+      <MediaQuery minWidth={401}>
         <div className="MainLayout large-screen">{children}</div>
       </MediaQuery>
-      <MediaQuery maxWidth={480}>
+      <MediaQuery maxWidth={400}>
         <div className="MainLayout small-screen" {...swipeHandlers}>
           <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
           <MenuContainer $isOpen={isMenuOpen}>
