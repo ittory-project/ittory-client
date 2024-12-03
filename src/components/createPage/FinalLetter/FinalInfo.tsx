@@ -256,7 +256,7 @@ const BackGround = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -355,6 +355,7 @@ const InfoBlock = styled.div`
   align-self: stretch;
   position: relative;
   margin-bottom: 0.8rem;
+  background: #fff;
 `;
 const InfoTitle = styled.span`
   color: #868e96;

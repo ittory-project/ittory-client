@@ -241,6 +241,7 @@ const Input = styled.input`
   height: 24px;
   border: 0;
   padding-left: 0;
+  background: #fff;
   &::placeholder {
     color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
