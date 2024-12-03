@@ -8,8 +8,9 @@ import { fontProps } from "./CoverStyle";
 interface Props {
   font: string;
   fonts: fontProps[];
-  setFont: React.Dispatch<React.SetStateAction<string>>;
   setFontPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  setFont: React.Dispatch<React.SetStateAction<string>>;
+  fontPopup: boolean;
 }
 
 export default function FontPopup({
@@ -17,6 +18,7 @@ export default function FontPopup({
   fonts,
   setFont,
   setFontPopup,
+  fontPopup,
 }: Props) {
   const handleButton = () => {
     setFontPopup(false);
@@ -51,6 +53,7 @@ const FontContainer = styled.div`
   flex-direction: column;
   align-items: center;
   overflow-x: auto;
+  z-index: 100;
 `;
 const Line = styled.img`
   width: 100%;
@@ -60,6 +63,7 @@ const Line = styled.img`
 `;
 const Button = styled.button`
   overflow: hidden;
+  z-index: 100;
   position: fixed;
   width: 288px;
   cursor: pointer;
