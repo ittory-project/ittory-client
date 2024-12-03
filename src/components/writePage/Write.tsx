@@ -7,8 +7,6 @@ import styled from "styled-components";
 import {
   addData,
   AppDispatch,
-  clearData,
-  clearOrderData,
   selectParsedData,
   selectParsedOrderData,
   setOrderData,
@@ -129,6 +127,7 @@ export const Write = ({
   }, [nowTotalItem]);
   useEffect(() => {
     setWriteOrderList(orderData);
+    console.log(orderData)
   }, [orderData]);
 
   // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
@@ -226,6 +225,11 @@ export const Write = ({
   };
 
   useEffect(() => {
+    console.log(writeOrderList)
+  }, [writeOrderList])
+  useEffect(() => {
+    console.log(orderData)
+    console.log(writeOrderList)
     console.log(
       `현재 반복 상태: ${nowRepeat}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`
     );
@@ -406,7 +410,6 @@ export const Write = ({
           />
         )}
         {hasExitUser && <WriteQuitAlert name={exitUser} />}
-        {/* <button onClick={handleClearData}>삭제</button> */}
       </AlertContainer>
       <ScrollableOrderList>
         <WriteOrderList
