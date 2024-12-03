@@ -5,7 +5,7 @@ import check from "../../../public/assets/checkbox_gray.svg";
 import checked from "../../../public/assets/checkbox_black.svg";
 import { postWithdraw } from "../../api/service/MemberService";
 import { WithdrawPostRequest } from "../../api/model/MemberModel";
-import { useNavigate } from "react-router-dom";
+import { WithdrawPopup } from "./WithdrawPopup";
 
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,8 +15,8 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   const [selectedReason, setSelectedReason] = useState<number | null>(null);
   const [otherReason, setOtherReason] = useState<string>("");
   const [buttonEnable, setButtonEnable] = useState<boolean>(false);
+  const [popup, setPopup] = useState<boolean>(false);
   const [length, setLength] = useState<number>(0);
-  const navigate = useNavigate();
 
   const withdrawReason: string[] = [
     "NOT_USE",
@@ -71,7 +71,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
         const response = await postWithdraw(data);
         localStorage.removeItem("jwt");
         console.log("Withdrawal successful:", response);
-        navigate("/");
+        setPopup(true);
       } catch (error) {
         console.error("Error in withdrawal:", error);
       }
@@ -79,99 +79,105 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   };
 
   return (
-    <BackGround>
-      <Header>
-        <Prev src={prev} onClick={handleReason} />
-        <HeaderTxt>탈퇴하기</HeaderTxt>
-      </Header>
-      <Container>
-        <TitleContainer>
-          <Title>탈퇴하시려는 이유가 궁금해요</Title>
-          <SubTitle>
-            <Txt>그동안 저희 서비스를 이용해 주셔서 감사했습니다.</Txt>
-            <Txt>소중한 의견을 들려주시면 더 나은 서비스를 만들기 위해</Txt>
-            <Txt>최선을 다하겠습니다.</Txt>
-          </SubTitle>
-        </TitleContainer>
-        <CheckList>
-          <CheckContainer>
-            <CheckBox
-              type="checkbox"
-              onChange={() => handleCheckboxChange(0)}
-              checked={selectedReason === 0}
-            />
-            자주 이용하지 않아요
-          </CheckContainer>
-          <CheckContainer>
-            <CheckBox
-              type="checkbox"
-              onChange={() => handleCheckboxChange(1)}
-              checked={selectedReason === 1}
-            />
-            서비스 이용에 애로 사항이 있어요
-          </CheckContainer>
-          <CheckContainer>
-            <CheckBox
-              type="checkbox"
-              onChange={() => handleCheckboxChange(2)}
-              checked={selectedReason === 2}
-            />
-            편지 작성이 불편해요
-          </CheckContainer>
-          <CheckContainer>
-            <CheckBox
-              type="checkbox"
-              onChange={() => handleCheckboxChange(3)}
-              checked={selectedReason === 3}
-            />
-            서비스가 재미없어요
-          </CheckContainer>
-          <CheckContainer>
-            <CheckBox
-              type="checkbox"
-              onChange={() => handleCheckboxChange(4)}
-              checked={selectedReason === 4}
-            />
-            기타
-          </CheckContainer>
-          {selectedReason === 4 && (
-            <InputArea>
-              <Input
-                placeholder="내용을 입력해 주세요"
-                value={otherReason}
-                onChange={handleOtherReasonChange}
-                spellCheck="false"
-                max-length="100"
-              />
-              <Count>
-                <CntTxt style={{ color: "#495057" }}>{length}</CntTxt>
-                <CntTxt style={{ color: "#868E96" }}>/100자</CntTxt>
-              </Count>
-            </InputArea>
-          )}
-        </CheckList>
-      </Container>
-      <ButtonContainer>
-        {buttonEnable ? (
-          <Button
-            style={{ background: "#FFA256", bottom: "16px" }}
-            selectedReason={selectedReason ?? 0}
-            onClick={handleWithdraw}
-          >
-            <ButtonTxt>탈퇴할게요</ButtonTxt>
-          </Button>
-        ) : (
-          <Button
-            disabled={true}
-            style={{ background: "#CED4DA" }}
-            selectedReason={selectedReason ?? 0}
-            onClick={handleWithdraw}
-          >
-            <ButtonTxt>탈퇴할게요</ButtonTxt>
-          </Button>
-        )}
-      </ButtonContainer>
-    </BackGround>
+    <>
+      {popup ? (
+        <WithdrawPopup />
+      ) : (
+        <BackGround>
+          <Header>
+            <Prev src={prev} onClick={handleReason} />
+            <HeaderTxt>탈퇴하기</HeaderTxt>
+          </Header>
+          <Container>
+            <TitleContainer>
+              <Title>탈퇴하시려는 이유가 궁금해요</Title>
+              <SubTitle>
+                <Txt>그동안 저희 서비스를 이용해 주셔서 감사했습니다.</Txt>
+                <Txt>소중한 의견을 들려주시면 더 나은 서비스를 만들기 위해</Txt>
+                <Txt>최선을 다하겠습니다.</Txt>
+              </SubTitle>
+            </TitleContainer>
+            <CheckList>
+              <CheckContainer>
+                <CheckBox
+                  type="checkbox"
+                  onChange={() => handleCheckboxChange(0)}
+                  checked={selectedReason === 0}
+                />
+                자주 이용하지 않아요
+              </CheckContainer>
+              <CheckContainer>
+                <CheckBox
+                  type="checkbox"
+                  onChange={() => handleCheckboxChange(1)}
+                  checked={selectedReason === 1}
+                />
+                서비스 이용에 애로 사항이 있어요
+              </CheckContainer>
+              <CheckContainer>
+                <CheckBox
+                  type="checkbox"
+                  onChange={() => handleCheckboxChange(2)}
+                  checked={selectedReason === 2}
+                />
+                편지 작성이 불편해요
+              </CheckContainer>
+              <CheckContainer>
+                <CheckBox
+                  type="checkbox"
+                  onChange={() => handleCheckboxChange(3)}
+                  checked={selectedReason === 3}
+                />
+                서비스가 재미없어요
+              </CheckContainer>
+              <CheckContainer>
+                <CheckBox
+                  type="checkbox"
+                  onChange={() => handleCheckboxChange(4)}
+                  checked={selectedReason === 4}
+                />
+                기타
+              </CheckContainer>
+              {selectedReason === 4 && (
+                <InputArea>
+                  <Input
+                    placeholder="내용을 입력해 주세요"
+                    value={otherReason}
+                    onChange={handleOtherReasonChange}
+                    spellCheck="false"
+                    max-length="100"
+                  />
+                  <Count>
+                    <CntTxt style={{ color: "#495057" }}>{length}</CntTxt>
+                    <CntTxt style={{ color: "#868E96" }}>/100자</CntTxt>
+                  </Count>
+                </InputArea>
+              )}
+            </CheckList>
+          </Container>
+          <ButtonContainer>
+            {buttonEnable ? (
+              <Button
+                style={{ background: "#FFA256", bottom: "16px" }}
+                selectedReason={selectedReason ?? 0}
+                onClick={handleWithdraw}
+              >
+                <ButtonTxt>탈퇴할게요</ButtonTxt>
+              </Button>
+            ) : (
+              <Button
+                disabled={true}
+                style={{ background: "#CED4DA" }}
+                selectedReason={selectedReason ?? 0}
+                onClick={handleWithdraw}
+              >
+                <ButtonTxt>탈퇴할게요</ButtonTxt>
+              </Button>
+            )}
+          </ButtonContainer>
+        </BackGround>
+      )}
+    </>
   );
 };
 const BackGround = styled.div`
