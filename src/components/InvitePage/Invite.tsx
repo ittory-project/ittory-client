@@ -35,7 +35,7 @@ export const Invite = () => {
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
   const [viewDelete, setViewDelete] = useState<boolean>(false);
-  const [refresh, setRefresh] = useState(1);
+  const [refresh, setRefresh] = useState<number>(1);
 
   console.log(userName);
 
@@ -101,6 +101,12 @@ export const Invite = () => {
   }, [refresh]);
 
   useEffect(() => {
+    if (letterId && userName) {
+      fetchParticipants(); // 데이터 변경 시 참여자 목록 갱신
+    }
+  }, [letterId, userName, participants]);
+
+  useEffect(() => {
     const client = stompClient();
 
     client.onConnect = () => {
@@ -118,13 +124,14 @@ export const Invite = () => {
           // 퇴장 메시지 처리
           if (response.action === "EXIT") {
             setExitName(response.nickname);
-            if (response.participantId === prevParticipants[0].memberId) {
+            if (response.nickname === prevParticipants[0].nickname) {
               setExitAlert(`방장 '${exitName}'님이 퇴장했어요`);
               setHostAlert(`참여한 순서대로 '${exitName}'님이 방장이 되었어요`);
+              fetchParticipants();
             } else {
               setExitAlert(`'${exitName}'님이 퇴장했어요`);
+              fetchParticipants();
             }
-            fetchParticipants();
           } else if (response.action === "END") {
             setViewDelete(true);
           } else if (response.action === "START") {
@@ -135,7 +142,6 @@ export const Invite = () => {
             });
           } else if (response.action === "ENTER") {
             setRefresh((refresh) => refresh * -1);
-            fetchParticipants();
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
@@ -178,7 +184,7 @@ export const Invite = () => {
       {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
       {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
 
-      {participants && memberIndex > -1 && (
+      {participants && memberIndex > -1 && name != "" && (
         <>
           {memberIndex === 0 && (
             <HostUser
