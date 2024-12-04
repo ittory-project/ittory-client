@@ -83,17 +83,27 @@ export const Menu = ({ onClose }: Props) => {
   }, [navigatePath, navigateState]);
 
   const handleCreate = () => {
-    setFocusCreate(true);
-    setFocusReceive(false);
-    setNavigateState({ focusCreate: true, focusReceive: false });
-    setNavigatePath("/LetterBox");
+    if (!localStorage.jwt) {
+      navigate("/login");
+      onClose();
+    } else {
+      setFocusCreate(true);
+      setFocusReceive(false);
+      setNavigateState({ focusCreate: true, focusReceive: false });
+      setNavigatePath("/LetterBox");
+    }
   };
 
   const handleReceive = () => {
-    setFocusCreate(false);
-    setFocusReceive(true);
-    setNavigateState({ focusCreate: false, focusReceive: true });
-    setNavigatePath("/LetterBox");
+    if (!localStorage.jwt) {
+      navigate("/login");
+      onClose();
+    } else {
+      setFocusCreate(false);
+      setFocusReceive(true);
+      setNavigateState({ focusCreate: false, focusReceive: true });
+      setNavigatePath("/LetterBox");
+    }
   };
 
   const handleCancel = () => {
@@ -101,6 +111,7 @@ export const Menu = ({ onClose }: Props) => {
   };
   const handleLogin = () => {
     navigate("/login");
+    onClose();
   };
   const handleAsk = () => {
     window.open(
@@ -109,7 +120,12 @@ export const Menu = ({ onClose }: Props) => {
     );
   };
   const handleCreateBtn = () => {
-    navigate("/create");
+    if (!localStorage.jwt) {
+      navigate("/login");
+      onClose();
+    } else {
+      navigate("/create");
+    }
   };
   return (
     <BackGround>
