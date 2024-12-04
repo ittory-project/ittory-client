@@ -23,6 +23,7 @@ export const Invite = () => {
   const navigate = useNavigate();
   const guideOpen = location.state.guideOpen;
   const getletterId = location.state.letterId;
+  const userName = location.state.userName;
 
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [hostAlert, setHostAlert] = useState<string | null>(null);
@@ -36,13 +37,15 @@ export const Invite = () => {
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [refresh, setRefresh] = useState(1);
 
+  console.log(userName);
+
   const fetchParticipants = async () => {
     try {
       const data = await getParticipants(letterId);
 
-      if (userId) {
+      if (data) {
         // 방장 여부 체크
-        if (data[0].memberId === userId) {
+        if (data[0].nickname === userName) {
           setMemberIndex(0);
         } else {
           setMemberIndex(1);
@@ -55,63 +58,47 @@ export const Invite = () => {
       console.error("Error fetching participants:", err);
     }
   };
-  const fetchParticipantsData = async () => {
-    try {
-      const participantsData = await getParticipants(letterId);
-      if (userId) {
-        if (participantsData[0].memberId === userId) {
-          setMemberIndex(0); // 방장 여부 체크
-        } else {
-          setMemberIndex(1);
-        }
-      }
-      setParticipants(participantsData);
-      setPrevParticipants(participantsData);
-    } catch (err) {
-      console.error("Error fetching participants:", err);
-    }
-  };
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
         const mydata = await getMyPage();
-        const userIdFromApi = mydata.memberId;
         const userNameFromApi = mydata.name;
-        setUserId(userIdFromApi);
+        const userIdFromApi = mydata.memberId;
         setName(userNameFromApi);
+        setUserId(userIdFromApi);
       } catch (err) {
         console.error("Error during initial data fetch:", err);
       }
     };
-    if (userId) {
-      fetchParticipantsData();
-    }
 
     fetchInitialData();
     console.log("Initial fetch started");
   }, [refresh]);
-  /*
+
   useEffect(() => {
     const fetchParticipantsData = async () => {
       try {
         const participantsData = await getParticipants(letterId);
-        if (userId) {
-          if (participantsData[0].memberId === userId) {
+        console.log("data: ", participantsData);
+        if (participantsData) {
+          if (participantsData[0].nickname == userName) {
             setMemberIndex(0); // 방장 여부 체크
+            setParticipants(participantsData);
+            setPrevParticipants(participantsData);
           } else {
             setMemberIndex(1);
+            setParticipants(participantsData);
+            setPrevParticipants(participantsData);
           }
         }
-        setParticipants(participantsData);
-        setPrevParticipants(participantsData);
       } catch (err) {
         console.error("Error fetching participants:", err);
       }
     };
-
+    setName(userName);
     fetchParticipantsData();
-  }, [userId]);*/
+  }, [refresh]);
 
   useEffect(() => {
     const client = stompClient();
@@ -148,6 +135,7 @@ export const Invite = () => {
             });
           } else if (response.action === "ENTER") {
             setRefresh((refresh) => refresh * -1);
+            fetchParticipants();
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
@@ -162,7 +150,7 @@ export const Invite = () => {
     };
 
     client.activate();
-  }, [userId]);
+  }, []);
 
   //퇴장 알림
   useEffect(() => {
@@ -189,24 +177,29 @@ export const Invite = () => {
     <BackGround>
       {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
       {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {name != "" &&
-        participants &&
-        (memberIndex === 0 ? (
-          <HostUser
-            guideOpen={guideOpen}
-            items={participants}
-            letterId={letterId}
-            viewDelete={viewDelete}
-            setViewDelete={setViewDelete}
-          />
-        ) : (
-          <Member
-            letterId={letterId}
-            guideOpen={guideOpen}
-            items={participants}
-            viewDelete={viewDelete}
-          />
-        ))}
+
+      {participants && memberIndex > -1 && (
+        <>
+          {memberIndex === 0 && (
+            <HostUser
+              guideOpen={guideOpen}
+              items={participants}
+              letterId={letterId}
+              viewDelete={viewDelete}
+              setViewDelete={setViewDelete}
+            />
+          )}
+
+          {memberIndex === 1 && (
+            <Member
+              letterId={letterId}
+              guideOpen={guideOpen}
+              items={participants}
+              viewDelete={viewDelete}
+            />
+          )}
+        </>
+      )}
     </BackGround>
   );
 };
@@ -216,7 +209,7 @@ const BackGround = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

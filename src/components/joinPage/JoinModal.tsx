@@ -30,6 +30,7 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
           state: {
             letterId: letterId,
             guideOpen: false,
+            userName: nickname,
           },
         });
       } else {
@@ -37,6 +38,7 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
           state: {
             letterId: letterId,
             guideOpen: true,
+            userName: nickname,
           },
         });
       }

@@ -52,7 +52,7 @@ export default function CoverModal({
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [cropperKey, setCropperKey] = useState<number>(0);
   const [bookimage, setBookimage] = useState<number>(backgroundimage - 1);
-  const [ImageIndex, setImageIndex] = useState<number>(selectedImageIndex);
+  const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
   const [cropOpen, setCropOpen] = useState(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fonts, setFonts] = useState<fontProps[]>([]);
@@ -89,10 +89,6 @@ export default function CoverModal({
     console.log(selectedImageIndex);
     setImageIndex(selectedImageIndex);
   }, [selectedImageIndex, croppedImage]);
-
-  useEffect(() => {
-    setSelectedImageIndex(ImageIndex);
-  }, [ImageIndex]);
 
   const handleFinalCover = () => {
     setSelectedImageIndex(ImageIndex);
