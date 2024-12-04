@@ -149,7 +149,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
       {viewCount && <Overlay />}
       {!viewDelete && !viewExit && (
         <>
-          {title != "" && (
+          {title != "" && items[0].nickname && receiverName != "" && (
             <>
               <Header>
                 <ReceiverContainer>
