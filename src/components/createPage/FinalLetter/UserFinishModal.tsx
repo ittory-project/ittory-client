@@ -110,6 +110,7 @@ export default function UserFinishModal({
         state: {
           letterId: letterId,
           guideOpen: guideOpen,
+          userName: myName,
         },
       });
     } catch (error) {
@@ -141,6 +142,7 @@ export default function UserFinishModal({
         state: {
           letterId: letterId,
           guideOpen: true,
+          userName: myName,
         },
       });
     } catch (error) {

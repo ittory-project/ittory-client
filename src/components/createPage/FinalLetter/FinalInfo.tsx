@@ -359,7 +359,6 @@ const InfoBlock = styled.div`
   background-color: #fff;
 `;
 const InfoTitle = styled.span`
-  color: #868e96;
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 11px;
   font-style: normal;
@@ -367,11 +366,11 @@ const InfoTitle = styled.span`
   line-height: 16px;
   letter-spacing: -0.5px;
   background-color: #fff;
+  color: #868e96;
 `;
 const InfoTxt = styled.span`
   position: absolute;
   right: 0;
-  color: #21529;
   padding: 6px 0px;
   text-align: center;
   font-family: SUIT;
@@ -381,6 +380,7 @@ const InfoTxt = styled.span`
   line-height: 20px;
   letter-spacing: -0.5px;
   background-color: #fff;
+  color: #212529;
 `;
 const Cover = styled.div`
   display: flex;
