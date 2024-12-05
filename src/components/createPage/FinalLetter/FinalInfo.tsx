@@ -324,7 +324,7 @@ const Info = styled.div`
 `;
 const TitleTxt = styled.span`
   display: block;
-  color: #21529;
+  color: #212529;
   padding: 6px 0px;
   text-align: left;
   font-family: var(--Typography-family-title, SUIT);

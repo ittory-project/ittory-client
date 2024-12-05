@@ -147,7 +147,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && (
+      {!viewDelete && !viewExit && items.length > 0 && (
         <>
           {title != "" && items[0].nickname && receiverName != "" && (
             <>

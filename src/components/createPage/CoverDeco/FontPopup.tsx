@@ -11,6 +11,8 @@ interface Props {
   setFontPopup: React.Dispatch<React.SetStateAction<boolean>>;
   setFont: React.Dispatch<React.SetStateAction<string>>;
   fontPopup: boolean;
+  setSelect: React.Dispatch<React.SetStateAction<string>>;
+  select: string;
 }
 
 export default function FontPopup({
@@ -19,15 +21,34 @@ export default function FontPopup({
   setFont,
   setFontPopup,
   fontPopup,
+  setSelect,
+  select,
 }: Props) {
+  const [selected, setSelected] = useState<string>("");
+
+  useEffect(() => {
+    console.log(font);
+    setSelected(font);
+  }, []);
+
   const handleButton = () => {
+    if (selected !== "") {
+      console.log(selected);
+      setSelect(selected);
+    }
     setFontPopup(false);
   };
 
   return (
     <BackGround>
       <FontContainer>
-        <FontSelect font={font} fonts={fonts} setFont={setFont} />
+        <FontSelect
+          font={font}
+          fonts={fonts}
+          setFont={setFont}
+          setSelect={setSelected}
+          select={selected}
+        />
       </FontContainer>
       <Line src={_Line} />
       <Button onClick={handleButton}>완료</Button>
