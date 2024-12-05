@@ -218,6 +218,7 @@ const WriteTa = styled.textarea`
   gap: 10px;
   align-self: stretch;
   border: none;
+  resize: none;
   background: var(--Color-grayscale-gray50, #F8F9FA);
   overflow: hidden;
   
