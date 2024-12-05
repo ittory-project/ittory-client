@@ -87,6 +87,7 @@ export default function CoverStyle({
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [selectf, setSelectf] = useState<string>("");
 
   useEffect(() => {
     const fetchCoverTypesAndFonts = async () => {
@@ -243,7 +244,13 @@ export default function CoverStyle({
 
             {isKeyboardOpen == true ? (
               <KeyboardBar keyboardHeight={keyboardHeight}>
-                <FontSelect font={font} fonts={fonts} setFont={setFont} />
+                <FontSelect
+                  font={font}
+                  fonts={fonts}
+                  setFont={setFont}
+                  setSelect={setSelectf}
+                  select={selectf}
+                />
               </KeyboardBar>
             ) : (
               <></>
@@ -355,6 +362,9 @@ export default function CoverStyle({
           fonts={fonts}
           setFont={setFont}
           setFontPopup={setFontPopup}
+          fontPopup={fontPopup}
+          select={selectf}
+          setSelect={setSelectf}
         />
       )}
     </BackGround>
