@@ -18,6 +18,7 @@ export default Button;
 
 const Btn = styled.div<{color: string}>`
   background-color: ${(props) => props.color};
+  text: #000;
   width: 100%;
   height: 48px;
   border-radius: 20px;
