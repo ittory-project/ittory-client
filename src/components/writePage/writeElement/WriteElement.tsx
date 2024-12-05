@@ -1,4 +1,4 @@
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { decodeLetterId } from "../../../api/config/base64";
