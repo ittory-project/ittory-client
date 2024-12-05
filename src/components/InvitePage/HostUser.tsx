@@ -186,11 +186,13 @@ export const HostUser = ({
     }
   };
 
+  console.log(items);
+
   return (
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && !popup && items && (
+      {!viewDelete && !viewExit && !popup && items.length > 0 && (
         <>
           {title != "" && items[0].nickname && receiverName != "" && (
             <>
