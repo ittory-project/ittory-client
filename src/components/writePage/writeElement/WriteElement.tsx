@@ -219,6 +219,7 @@ const WriteTa = styled.textarea`
   align-self: stretch;
   border: none;
   resize: none;
+  color: #000;
   background: var(--Color-grayscale-gray50, #F8F9FA);
   overflow: hidden;
   
@@ -239,6 +240,7 @@ const ControlContainer = styled.div`
 `;
 
 const CharacterCount = styled.div`
+  color: #000;
   display: flex;
   font-size: 14px;
 `;
