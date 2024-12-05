@@ -8,7 +8,6 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { postEnter } from "../../api/service/LetterService";
-import { postNickname } from "../../api/service/ParticipantService";
 
 export interface Participants {
   sequence: number;
@@ -37,13 +36,11 @@ export const Invite = () => {
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<number>(1);
 
-  console.log(userName);
-
   const fetchParticipants = async () => {
     try {
       const data = await getParticipants(letterId);
 
-      if (data) {
+      if (data.length > 0) {
         // 방장 여부 체크
         if (data[0].nickname === userName) {
           setMemberIndex(0);
@@ -77,34 +74,57 @@ export const Invite = () => {
   }, [refresh]);
 
   useEffect(() => {
-    const fetchParticipantsData = async () => {
-      try {
-        const participantsData = await getParticipants(letterId);
-        console.log("data: ", participantsData);
-        if (participantsData) {
-          if (participantsData[0].nickname == userName) {
-            setMemberIndex(0); // 방장 여부 체크
-            setParticipants(participantsData);
-            setPrevParticipants(participantsData);
-          } else {
-            setMemberIndex(1);
-            setParticipants(participantsData);
-            setPrevParticipants(participantsData);
-          }
-        }
-      } catch (err) {
-        console.error("Error fetching participants:", err);
+    if (participants.length > 0) {
+      if (participants[0].nickname == userName) {
+        setMemberIndex(0); // 방장 여부 체크
+      } else {
+        setMemberIndex(1);
       }
-    };
-    setName(userName);
-    fetchParticipantsData();
-  }, [refresh]);
+    }
+  }, [participants]);
+
+  const fetchParticipantsData = async () => {
+    try {
+      const participantsData = await getParticipants(letterId);
+      setParticipants(participantsData);
+      console.log("data: ", participantsData);
+    } catch (err) {
+      console.error("Error fetching participants:", err);
+    }
+  };
+  /*
+  // 참가자 목록을 비동기적으로 가져오는 함수
+const fetchParticipantsData = async () => {
+  try {
+    const participantsData = await getParticipants(letterId);
+    
+    // 데이터가 변경되었을 경우에만 상태 업데이트
+    if (JSON.stringify(participantsData) !== JSON.stringify(participants)) {
+      setParticipants(participantsData);
+      console.log("Participants data:", participantsData);
+    }
+  } catch (err) {
+    console.error("Error fetching participants:", err);
+  }
+};
+  */
 
   useEffect(() => {
-    if (letterId && userName) {
-      fetchParticipants(); // 데이터 변경 시 참여자 목록 갱신
+    if (letterId) {
+      fetchParticipantsData(); // 참가자 목록을 비동기적으로 가져오기
     }
-  }, [letterId, userName, participants]);
+  }, [letterId, refresh]);
+
+  useEffect(() => {
+    // participants 배열이 비어있지 않으면, 데이터가 준비된 것이므로 렌더링
+    if (participants.length > 0) {
+      if (participants[0].nickname === userName) {
+        setMemberIndex(0); // 방장 여부 체크
+      } else {
+        setMemberIndex(1);
+      }
+    }
+  }, [participants]);
 
   useEffect(() => {
     const client = stompClient();
