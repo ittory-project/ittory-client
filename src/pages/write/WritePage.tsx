@@ -72,7 +72,7 @@ export const WritePage = () => {
     }, totalDuration / 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [progressTime]);
 
   return (
     <Container>
