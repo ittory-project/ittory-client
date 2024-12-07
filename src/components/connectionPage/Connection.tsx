@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import shadow from "../../../public/assets/bookshadow.svg";
 import book1 from "../../../public/assets/connect/book1.svg";
@@ -12,7 +14,7 @@ import bg3 from "../../../public/assets/connect/bg3.svg";
 import bg4 from "../../../public/assets/connect/bg4.svg";
 import bg5 from "../../../public/assets/connect/bg5.svg";
 import { WriteOrder } from "./WriteOrder";
-import { useLocation, useNavigate } from "react-router-dom";
+import { clearData, clearOrderData } from "../../api/config/state";
 import { getLetterInfo } from "../../api/service/LetterService";
 import { encodeLetterId } from "../../api/config/base64";
 import { Letter } from "../letterboxPage/Letter";
@@ -39,12 +41,20 @@ export const Connection = () => {
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   //const letterId = location.state.letterId;
   const letterId = 12;
   const [coverId, setCoverId] = useState<number>(-1);
 
   useEffect(() => {
+    // 로컬스토리지 지우는 코드 추가했습니다. (샤인)
     localStorage.removeItem("letterId");
+    dispatch(clearOrderData());
+    dispatch(clearData());
+    window.localStorage.setItem("nowLetterId", "1");
+    window.localStorage.setItem("nowSequence", "1");
+    window.localStorage.setItem("nowRepeat", "1");
+    window.localStorage.setItem("totalItem", "1");
 
     const fetchMydata = async () => {
       try {
