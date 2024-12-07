@@ -52,7 +52,7 @@ export const WritePage = () => {
       }, 4000);
 
       return () => clearTimeout(hideTimer);
-    }, 15000);
+    }, 10000);
 
     return () => clearTimeout(showTimer);
   }, []);
