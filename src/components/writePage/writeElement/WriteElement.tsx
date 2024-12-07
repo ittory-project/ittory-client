@@ -9,18 +9,19 @@ import { ElementImgGetResponse } from "../../../api/model/ElementModel";
 interface WriteElementProps {
   sequence: number;
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
+  setWriteTimeOut: React.Dispatch<React.SetStateAction<number>>;
   progressTime: number;
   clientRef: React.MutableRefObject<Client | null>;
 }
 
-export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, clientRef }: WriteElementProps ) => {
+export const WriteElement = ({ sequence, setShowSubmitPage, setWriteTimeOut, progressTime, clientRef }: WriteElementProps ) => {
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   
   const [elementImg, setElementImg] = useState("");
   
-  const getPartiList = async () => {
+  const getLetterImg = async () => {
     if (!letterId) {
       window.alert("잘못된 접근입니다.")
     } else if (!letterNumId) {
@@ -31,18 +32,33 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
     }
   }
   useEffect(() => {
-    getPartiList()
+    getLetterImg()
   }, []);
 
   const handleExit= () => {
     setShowSubmitPage(false)
   }
 
+  useEffect(() => {
+    if (progressTime === 0) {
+      if (text.length > 0) {
+        setWriteTimeOut(-1)
+        handleWriteComplete()
+      } else {
+        console.log(`${sequence} - 타임아웃`)
+        setWriteTimeOut(sequence)
+      }
+    }
+  }, [progressTime])
+
   // 작성 완료 버튼
   const handleWriteComplete = async () => {
     if (!sequence) {
       return window.alert("오류")
     } 
+    if (text.length <= 0) {
+      return
+    }
     try {
       // writeLetterWs 완료 여부를 기다림
       // await writeLetterWs(letterNumId, Number(repeat), text);
