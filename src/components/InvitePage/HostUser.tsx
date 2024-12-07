@@ -33,13 +33,6 @@ interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const fonts = [
-  { name: "GmarketSans" },
-  { name: "Ownglyph_UNZ-Rg" },
-  { name: "CookieRun-Regular" },
-  { name: "Cafe24ClassicType-Regular" },
-];
-
 export const HostUser = ({
   guideOpen,
   items = [],
@@ -193,137 +186,140 @@ export const HostUser = ({
     }
   };
 
+  console.log(items);
+
   return (
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && !popup && title && (
+      {!viewDelete && !viewExit && !popup && items.length > 0 && (
         <>
-          <Header>
-            <ReceiverContainer>
-              <Receiver>To.{sliceName}</Receiver>
-              {receiverName.length > 9 && (
-                <Receiver style={{ letterSpacing: "-0.2em" }}>···</Receiver>
-              )}
-            </ReceiverContainer>
-            <IconContainer>
-              <Icon src={info} alt="infobtn" onClick={handleGuide} />
-              <Icon
-                src={deletebtn}
-                alt="deletebtn"
-                onClick={handleDeleteview}
-              />
-              <Icon src={out} alt="outbtn" onClick={handleExit} />
-            </IconContainer>
-          </Header>
-          <MainContainer>
-            <Book
-              backgroundImage={
-                coverTypes[selectedImageIndex - 1]?.confirmImageUrl
-              }
-            >
-              <TitleContainer font="GmarketSans">{title}</TitleContainer>
-              {deliverDay ? (
-                <DeliverDay>
-                  {`${format(deliverDay as Date, "yyyy")}. `}
-                  {`${format(deliverDay as Date, "MM")}. `}
-                  {format(deliverDay as Date, "dd")}
-                  {` (${format(deliverDay as Date, "E", { locale: ko })})`}
-                </DeliverDay>
-              ) : (
-                <></>
-              )}
-
-              <>
-                <Bright src={bright} />
-                <Shadow src={shadow} />
-                <BtnImgContainer bgimg={cropImg} />
-              </>
-
-              <NameBar>
-                <NameContainer>
-                  <NameTxt>{namesString}</NameTxt>
-                </NameContainer>
-              </NameBar>
-            </Book>
-            <Bar />
-            <BoxContainer>
-              <PinArea>
-                <Pin />
-                <Pin />
-              </PinArea>
-              <Box>
-                <List>
-                  {items.map((user, index) =>
-                    index === 0 ? (
-                      <MainUser key={index}>
-                        <Crown img={crown} />
-                        <User>
-                          <ProfileImg img={items[0].imageUrl} />
-                          <UserName>{items[0].nickname}</UserName>
-                        </User>
-                      </MainUser>
-                    ) : (
-                      <InvitedUser key={index}>
-                        <User>
-                          {user.imageUrl == "" ? (
-                            <ProfileImg img={defaultImg} />
-                          ) : (
-                            <ProfileImg img={user.imageUrl} />
-                          )}
-                          {user.nickname.length > 3 ? (
-                            <UserNameContainer>
-                              <UserName>
-                                {handleUserName(user.nickname)}
-                              </UserName>
-                              <UserName style={{ letterSpacing: "-0.2em" }}>
-                                ···
-                              </UserName>
-                            </UserNameContainer>
-                          ) : (
-                            <UserName>{user.nickname}</UserName>
-                          )}
-                        </User>
-                      </InvitedUser>
-                    )
+          {title != "" && items[0].nickname && receiverName != "" && (
+            <>
+              <Header>
+                <ReceiverContainer>
+                  <Receiver>To.{sliceName}</Receiver>
+                  {receiverName.length > 9 && (
+                    <Receiver style={{ letterSpacing: "-0.2em" }}>···</Receiver>
                   )}
-
-                  {items.length < 5 ? (
-                    <InviteIcon>
-                      {items.length === 1 ? <ToolTip img={tip} /> : <></>}
-                      <User>
-                        <ProfileImg
-                          img={plus}
-                          onClick={() => {
-                            handle();
-                          }}
-                        />
-                        <UserName>친구 초대</UserName>
-                      </User>
-                    </InviteIcon>
+                </ReceiverContainer>
+                <IconContainer>
+                  <Icon src={info} alt="infobtn" onClick={handleGuide} />
+                  <Icon
+                    src={deletebtn}
+                    alt="deletebtn"
+                    onClick={handleDeleteview}
+                  />
+                  <Icon src={out} alt="outbtn" onClick={handleExit} />
+                </IconContainer>
+              </Header>
+              <MainContainer>
+                <Book
+                  backgroundImage={
+                    coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+                  }
+                >
+                  <TitleContainer font="GmarketSans">{title}</TitleContainer>
+                  {deliverDay ? (
+                    <DeliverDay>
+                      {`${format(deliverDay as Date, "yyyy")}. `}
+                      {`${format(deliverDay as Date, "MM")}. `}
+                      {format(deliverDay as Date, "dd")}
+                      {` (${format(deliverDay as Date, "E", { locale: ko })})`}
+                    </DeliverDay>
                   ) : (
                     <></>
                   )}
-                </List>
-              </Box>
-            </BoxContainer>
-            <Button onClick={handleCountview}>
-              <ButtonTxt>이어 쓸 횟수 정하기</ButtonTxt>
-            </Button>
-          </MainContainer>
+                  <>
+                    <Bright src={bright} />
+                    <Shadow src={shadow} />
+                    <BtnImgContainer bgimg={cropImg} />
+                  </>
+                  <NameBar>
+                    <NameContainer>
+                      <NameTxt>{namesString}</NameTxt>
+                    </NameContainer>
+                  </NameBar>
+                </Book>
+                <Bar />
+                <BoxContainer>
+                  <PinArea>
+                    <Pin />
+                    <Pin />
+                  </PinArea>
+                  <Box>
+                    <List>
+                      {items.map((user, index) =>
+                        index === 0 ? (
+                          <MainUser key={index}>
+                            <Crown img={crown} />
+                            <User>
+                              <ProfileImg img={items[0].imageUrl} />
+                              <UserName>{items[0].nickname}</UserName>
+                            </User>
+                          </MainUser>
+                        ) : (
+                          <InvitedUser key={index}>
+                            <User>
+                              {user.imageUrl == "" ? (
+                                <ProfileImg img={defaultImg} />
+                              ) : (
+                                <ProfileImg img={user.imageUrl} />
+                              )}
+                              {user.nickname.length > 3 ? (
+                                <UserNameContainer>
+                                  <UserName>
+                                    {handleUserName(user.nickname)}
+                                  </UserName>
+                                  <UserName style={{ letterSpacing: "-0.2em" }}>
+                                    ···
+                                  </UserName>
+                                </UserNameContainer>
+                              ) : (
+                                <UserName>{user.nickname}</UserName>
+                              )}
+                            </User>
+                          </InvitedUser>
+                        )
+                      )}
 
-          {guide && <UserGuide setGuide={setGuide} />}
-          {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
-          {viewCount && (
-            <Count
-              letterId={letterId}
-              setViewCount={setViewCount}
-              member={items.length}
-            />
+                      {items.length < 5 ? (
+                        <InviteIcon>
+                          {items.length === 1 ? <ToolTip img={tip} /> : <></>}
+                          <User>
+                            <ProfileImg
+                              img={plus}
+                              onClick={() => {
+                                handle();
+                              }}
+                            />
+                            <UserName>친구 초대</UserName>
+                          </User>
+                        </InviteIcon>
+                      ) : (
+                        <></>
+                      )}
+                    </List>
+                  </Box>
+                </BoxContainer>
+                <Button onClick={handleCountview}>
+                  <ButtonTxt>이어 쓸 횟수 정하기</ButtonTxt>
+                </Button>
+              </MainContainer>
+
+              {guide && <UserGuide setGuide={setGuide} />}
+              {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
+              {viewCount && (
+                <Count
+                  letterId={letterId}
+                  setViewCount={setViewCount}
+                  member={items.length}
+                />
+              )}
+            </>
           )}
         </>
       )}
-
       {viewDelete && (
         <Delete letterId={letterId} setViewDelete={setViewDelete} />
       )}
@@ -343,10 +339,10 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  //justify-content: center;
+  justify-content: center;
   height: 100vh;
   overflow: hidden;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -387,7 +383,11 @@ const CopyAlert = styled.div`
 `;
 
 const Header = styled.div`
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
   display: flex;
+  width: 100%;
   padding: 0px 20px 0px 20px;
   justify-content: space-between;
   align-items: center;
@@ -396,6 +396,7 @@ const Header = styled.div`
 `;
 const ReceiverContainer = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
   height: 48px;
 `;
@@ -670,9 +671,8 @@ const UserName = styled.div`
   line-height: 16px;
   letter-spacing: -0.5px;
   white-space: nowrap;
-  overflow: hidden;
   &:first-of-type {
-    margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
+    margin-right: 0;
   }
 `;
 

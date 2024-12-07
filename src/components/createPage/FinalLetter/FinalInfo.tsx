@@ -256,7 +256,7 @@ const BackGround = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -319,11 +319,12 @@ const Info = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: var(--Border-Radius-radius_300, 8px);
+  background-color: #fff;
   //align-self: stretch;
 `;
 const TitleTxt = styled.span`
   display: block;
-  color: #21529;
+  color: #212529;
   padding: 6px 0px;
   text-align: left;
   font-family: var(--Typography-family-title, SUIT);
@@ -355,20 +356,21 @@ const InfoBlock = styled.div`
   align-self: stretch;
   position: relative;
   margin-bottom: 0.8rem;
+  background-color: #fff;
 `;
 const InfoTitle = styled.span`
-  color: #868e96;
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 11px;
   font-style: normal;
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
+  background-color: #fff;
+  color: #868e96;
 `;
 const InfoTxt = styled.span`
   position: absolute;
   right: 0;
-  color: #21529;
   padding: 6px 0px;
   text-align: center;
   font-family: SUIT;
@@ -377,6 +379,8 @@ const InfoTxt = styled.span`
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.5px;
+  background-color: #fff;
+  color: #212529;
 `;
 const Cover = styled.div`
   display: flex;

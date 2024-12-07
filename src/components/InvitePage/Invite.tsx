@@ -8,7 +8,6 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { postEnter } from "../../api/service/LetterService";
-import { postNickname } from "../../api/service/ParticipantService";
 
 export interface Participants {
   sequence: number;
@@ -23,70 +22,136 @@ export const Invite = () => {
   const navigate = useNavigate();
   const guideOpen = location.state.guideOpen;
   const getletterId = location.state.letterId;
+  const userName = location.state.userName;
 
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
   const [prevParticipants, setPrevParticipants] = useState<Participants[]>([]);
-  const [userId, setUserId] = useState<number>(0);
+  const [userId, setUserId] = useState<number>(-1);
   const [letterId, setLetterId] = useState<number>(getletterId);
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
   const [viewDelete, setViewDelete] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<number>(1);
+  const [loading, setLoading] = useState<number>(-1);
+  const [load, setLoad] = useState<boolean>(true);
 
   const fetchParticipants = async () => {
     try {
       const data = await getParticipants(letterId);
 
-      if (userId) {
+      if (data.length > 0) {
         // 방장 여부 체크
-        if (data[0].memberId === userId) {
+        if (data[0].nickname === userName) {
           setMemberIndex(0);
         } else {
           setMemberIndex(1);
         }
       }
-      setParticipants(data);
 
-      if (participants) {
-        setPrevParticipants(participants); //이전 멤버들
-      }
-      setPrevParticipants(data);
+      setPrevParticipants(participants);
+      setParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
     }
   };
 
   useEffect(() => {
-    const fetchMydata = async () => {
+    const fetchInitialData = async () => {
       try {
         const mydata = await getMyPage();
-        setUserId(mydata.memberId);
-        setName(mydata.name);
+        const userNameFromApi = mydata.name;
+        const userIdFromApi = mydata.memberId;
+        setName(userNameFromApi);
+        setUserId(userIdFromApi);
       } catch (err) {
-        console.error("Error fetching mydata:", err);
+        console.error("Error during initial data fetch:", err);
       }
     };
 
-    fetchMydata();
-    console.log("start");
-  }, []); // 초기화
+    fetchInitialData();
+    console.log("Initial fetch started");
+  }, []);
 
   useEffect(() => {
-    fetchParticipants();
-    console.log("start");
-  }, [userId]); // 초기화
+    if (participants.length > 0) {
+      if (participants[0].nickname == userName) {
+        setMemberIndex(0); // 방장 여부 체크
+        setLoad(true);
+      } else {
+        setMemberIndex(1);
+        setLoad(true);
+      }
+    }
+  }, [participants]);
 
-  /*주기적으로 참가자 갱신
+  // 참가자 목록을 비동기적으로 가져오는 함수
+  const fetchParticipantsData = async () => {
+    try {
+      setLoad(true);
+      const participantsData = await getParticipants(letterId);
+
+      // 데이터가 변경되었을 경우에만 상태 업데이트
+      if (participantsData.length > 0) {
+        console.log(participantsData);
+        if (participantsData[0].nickname == userName) {
+          console.log(participantsData[0].nickname);
+          console.log(userName);
+          setLoading(0);
+          setMemberIndex(0); // 방장 여부 체크
+          console.log("방장여부체크");
+          setParticipants(participantsData);
+          setLoad(false);
+        } else {
+          setMemberIndex(1);
+          setLoading(1);
+          console.log("방장여부체크");
+          setParticipants(participantsData);
+          setLoad(false);
+        }
+        setLoad(false);
+        console.log("Participants data:", participantsData);
+        console.log(memberIndex);
+        //setParticipants(participantsData);
+        //setLoading(false);
+      }
+    } catch (err) {
+      console.error("Error fetching participants:", err);
+    }
+  };
+
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      console.log("갱신");
-      fetchParticipants(); // 주기적으로 참가자 데이터 갱신
-    }, 10000); // 10초마다 실행
+    if (loading === 1) {
+      setMemberIndex(1);
+    } else {
+      setMemberIndex(0);
+    }
+    setLoad(false);
+  }, [loading]);
 
-    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 정리
-  }, []);*/
+  useEffect(() => {
+    console.log("memberIndex has changed:", memberIndex);
+  }, [memberIndex]);
+
+  useEffect(() => {
+    if (letterId) {
+      fetchParticipantsData(); // 참가자 목록을 비동기적으로 가져오기
+      console.log("fetchparti start");
+    }
+  }, [refresh]);
+
+  useEffect(() => {
+    // participants 배열이 비어있지 않으면, 데이터가 준비된 것이므로 렌더링
+    if (participants.length > 0) {
+      if (participants[0].nickname === userName) {
+        setMemberIndex(0); // 방장 여부 체크
+      } else {
+        setMemberIndex(1);
+      }
+    }
+  }, [participants]);
 
   useEffect(() => {
     const client = stompClient();
@@ -106,13 +171,14 @@ export const Invite = () => {
           // 퇴장 메시지 처리
           if (response.action === "EXIT") {
             setExitName(response.nickname);
-            if (response.participantId === prevParticipants[0].memberId) {
+            if (response.nickname === prevParticipants[0].nickname) {
               setExitAlert(`방장 '${exitName}'님이 퇴장했어요`);
               setHostAlert(`참여한 순서대로 '${exitName}'님이 방장이 되었어요`);
+              fetchParticipants();
             } else {
               setExitAlert(`'${exitName}'님이 퇴장했어요`);
+              fetchParticipants();
             }
-            fetchParticipants();
           } else if (response.action === "END") {
             setViewDelete(true);
           } else if (response.action === "START") {
@@ -121,6 +187,8 @@ export const Invite = () => {
                 letterId: letterId,
               },
             });
+          } else if (response.action === "ENTER") {
+            setRefresh((refresh) => refresh * -1);
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
@@ -135,7 +203,7 @@ export const Invite = () => {
     };
 
     client.activate();
-  }, [userId]);
+  }, []);
 
   //퇴장 알림
   useEffect(() => {
@@ -157,27 +225,38 @@ export const Invite = () => {
 
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
+  //participants && memberIndex !== -1 && name != "" &&
 
   return (
     <BackGround>
-      {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
-      {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-      {memberIndex == 0 && (
-        <HostUser
-          guideOpen={guideOpen}
-          items={participants}
-          letterId={letterId}
-          viewDelete={viewDelete}
-          setViewDelete={setViewDelete}
-        />
-      )}
-      {memberIndex == 1 && (
-        <Member
-          letterId={letterId}
-          guideOpen={guideOpen}
-          items={participants}
-          viewDelete={viewDelete}
-        />
+      {memberIndex === -1 ? (
+        <></>
+      ) : (
+        <>
+          {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
+          {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
+
+          {participants.length > 0 && memberIndex !== -1 && name !== "" && (
+            <>
+              {memberIndex === 0 ? (
+                <HostUser
+                  guideOpen={guideOpen}
+                  items={participants}
+                  letterId={letterId}
+                  viewDelete={viewDelete}
+                  setViewDelete={setViewDelete}
+                />
+              ) : (
+                <Member
+                  letterId={letterId}
+                  guideOpen={guideOpen}
+                  items={participants}
+                  viewDelete={viewDelete}
+                />
+              )}
+            </>
+          )}
+        </>
       )}
     </BackGround>
   );
@@ -188,7 +267,7 @@ const BackGround = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

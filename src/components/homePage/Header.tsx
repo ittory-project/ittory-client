@@ -31,7 +31,7 @@ export default function Header({ backgroundColor, setBackgroundColor }: Props) {
 
   return (
     <Container color={bgColor}>
-      {bgColor && <Logo src={logo} />}
+      {bgColor && <Logo src={logo} />}{" "}
       {/*<Logo src={logo} $isVisible={bgColor} />*/}
       <MenuLogo src={menu} onClick={handleMenu} />
       {isMenuOpen && (
@@ -48,13 +48,11 @@ export default function Header({ backgroundColor, setBackgroundColor }: Props) {
 
 const Container = styled.div<{ color: boolean }>`
   background: ${(props) => (props.color ? "#fff" : "transparent")};
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 0;
   display: flex;
   width: 100%;
-  //max-width: 480px;
-  //margin: 0 auto;
+  margin: 0 auto;
   height: 3rem;
   box-sizing: border-box;
   z-index: 1;
@@ -77,14 +75,15 @@ const Logo = styled.img`
   gap: 16px;
   flex-shrink: 0;
 `;
-//  //visibility: ${(props) => (props.$isVisible ? "visible" : "hidden")};
 
 const MenuOverlay = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  //max-width: 115px;
+  height: auto;
+  min-height: 100vh;
   background: rgba(0, 0, 0, 0.8);
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
   visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
@@ -94,11 +93,12 @@ const MenuOverlay = styled.div<{ $isOpen: boolean }>`
   z-index: 10;
 `;
 const MenuContainer = styled.div<{ $isOpen: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   width: 260px;
-  height: 100%;
+  height: auto;
+  min-height: 100vh;
   background: #fff;
   transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
   transition: transform 0.3s ease;
@@ -106,7 +106,7 @@ const MenuContainer = styled.div<{ $isOpen: boolean }>`
 `;
 
 const MenuLogo = styled.img`
-  position: fixed;
+  position: absolute;
   right: 12px;
   display: flex;
   width: 24px;
