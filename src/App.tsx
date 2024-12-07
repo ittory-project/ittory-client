@@ -1,5 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Helmet } from 'react-helmet';
 import { MainLayout } from "./layout/MainLayout";
 import { ReceiveLetterPage } from "./pages/receive/ReceiveLetterPage";
 import { LoginRedirectPage } from "./pages/home/LoginRedirectPage";
@@ -20,7 +21,15 @@ function App() {
     <Router>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage />}>
+            {/* <Helmet>
+              <title>Home - My App</title>
+              <meta property="og:title" content="잇토리" />
+              <meta property="og:description" content="Welcome to the homepage!" />
+              <meta property="og:image" content="../public/img/main_logo.svg" />
+              <meta property="og:url" content="https://example.com/" />
+            </Helmet> */}
+          </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login/redirect" element={<LoginRedirectPage />} />
           <Route path="/write/:letterId" element={<WritePage />} />
