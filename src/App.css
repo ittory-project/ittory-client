@@ -1,9 +1,11 @@
 .MainLayout {
   width: 100vw;
   height: 100vh;
-  background-color: #fff;
+  background-color: #37414e;
   margin: 0 auto;
+  border: 0;
   box-sizing: border-box;
+  position: relative; /*메뉴때문에 추가한거*/
 }
 
 .large-screen {
@@ -11,7 +13,8 @@
   flex-direction: column;
   max-width: 430px;
   min-height: 100vh;
-  background-color: #fff;
+  background-color: #37414e;
+  border: 0;
   overflow: hidden;
 }
 
@@ -20,9 +23,12 @@
   flex-direction: column;
   width: 100%;
   overflow: hidden;
+  background-color: #37414e;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -34,7 +40,7 @@ html, body, #root {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #37414e;
 }
 
 @font-face {

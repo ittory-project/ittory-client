@@ -6,17 +6,31 @@ interface Props {
   font: string;
   fonts: fontProps[];
   setFont: React.Dispatch<React.SetStateAction<string>>;
+  setSelect: React.Dispatch<React.SetStateAction<string>>;
+  select: string;
 }
 
-export default function FontSelect({ font, fonts, setFont }: Props) {
+export default function FontSelect({
+  font,
+  fonts,
+  setFont,
+  setSelect,
+  select,
+}: Props) {
   // 폰트 선택 핸들러
   const handleFontChange = (fontFamily: string) => {
     setFont(fontFamily);
+    setSelect(fontFamily);
     console.log("Selected Font:", fontFamily);
   };
 
   useEffect(() => {
-    setFont(fonts[0].value);
+    console.log(select);
+    if (select != "") {
+      setFont(select);
+    } else {
+      setFont(fonts[0].value);
+    }
   }, []);
 
   return (

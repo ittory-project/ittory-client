@@ -120,9 +120,11 @@ export default function CompleteModal({
       console.log("letterId", letterId);
 
       fetchEnter(letterId);
+      console.log(myName);
 
       navigate("/Invite", {
         state: {
+          userName: myName,
           letterId: letterId,
           guideOpen: guideOpen,
         },

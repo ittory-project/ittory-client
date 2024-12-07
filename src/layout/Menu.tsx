@@ -83,17 +83,27 @@ export const Menu = ({ onClose }: Props) => {
   }, [navigatePath, navigateState]);
 
   const handleCreate = () => {
-    setFocusCreate(true);
-    setFocusReceive(false);
-    setNavigateState({ focusCreate: true, focusReceive: false });
-    setNavigatePath("/LetterBox");
+    if (!localStorage.jwt) {
+      navigate("/login");
+      onClose();
+    } else {
+      setFocusCreate(true);
+      setFocusReceive(false);
+      setNavigateState({ focusCreate: true, focusReceive: false });
+      setNavigatePath("/LetterBox");
+    }
   };
 
   const handleReceive = () => {
-    setFocusCreate(false);
-    setFocusReceive(true);
-    setNavigateState({ focusCreate: false, focusReceive: true });
-    setNavigatePath("/LetterBox");
+    if (!localStorage.jwt) {
+      navigate("/login");
+      onClose();
+    } else {
+      setFocusCreate(false);
+      setFocusReceive(true);
+      setNavigateState({ focusCreate: false, focusReceive: true });
+      setNavigatePath("/LetterBox");
+    }
   };
 
   const handleCancel = () => {
@@ -101,6 +111,7 @@ export const Menu = ({ onClose }: Props) => {
   };
   const handleLogin = () => {
     navigate("/login");
+    onClose();
   };
   const handleAsk = () => {
     window.open(
@@ -109,7 +120,12 @@ export const Menu = ({ onClose }: Props) => {
     );
   };
   const handleCreateBtn = () => {
-    navigate("/create");
+    if (!localStorage.jwt) {
+      navigate("/login");
+      onClose();
+    } else {
+      navigate("/create");
+    }
   };
   return (
     <BackGround>
@@ -267,18 +283,7 @@ const ProfileImage = styled.img`
   height: 44px;
   border-radius: 120.93px;
 `;
-const DefaultImage = styled.div`
-  width: 44px;
-  height: 44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #ccc;
-  color: #fff;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 44px; /* Center text vertically */
-`;
+
 const UserSet = styled.div`
   display: flex;
   flex-direction: column;

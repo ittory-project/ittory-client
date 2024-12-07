@@ -26,12 +26,6 @@ interface Props {
   letterId: number;
   viewDelete: boolean;
 }
-const fonts = [
-  { name: "GmarketSans" },
-  { name: "Ownglyph_UNZ-Rg" },
-  { name: "CookieRun-Regular" },
-  { name: "Cafe24ClassicType-Regular" },
-];
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
@@ -78,11 +72,11 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
         setSelectfont(letterData.fontId);
+        setTitle(letterData.title);
       } catch (err) {
         console.error(err);
       }
     };
-    console.log(letterId);
 
     fetchCoverTypes();
     fetchLetterInfo();
@@ -153,120 +147,128 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     <BackGround>
       {guide && <Overlay />}
       {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && title && (
+      {!viewDelete && !viewExit && items.length > 0 && (
         <>
-          <Header>
-            <ReceiverContainer>
-              <Receiver>To.{sliceName}</Receiver>
-              {receiverName.length > 9 && (
-                <Receiver style={{ letterSpacing: "-0.2em" }}>···</Receiver>
-              )}
-            </ReceiverContainer>
-            <IconContainer>
-              <Icon src={info} alt="infobtn" onClick={handleGuide} />
-              <Icon src={out} alt="outbtn" onClick={handleExit} />{" "}
-            </IconContainer>
-          </Header>
-          <MainContainer>
-            <Book
-              backgroundImage={
-                coverTypes[selectedImageIndex - 1]?.confirmImageUrl
-              }
-            >
-              <TitleContainer font="GmarketSans">{title}</TitleContainer>
-              {deliverDay ? (
-                <DeliverDay>
-                  {`${format(deliverDay as Date, "yyyy")}. `}
-                  {`${format(deliverDay as Date, "MM")}. `}
-                  {format(deliverDay as Date, "dd")}
-                  {` (${format(deliverDay as Date, "E", { locale: ko })})`}
-                </DeliverDay>
-              ) : (
-                <></>
-              )}
-              <>
-                <Bright src={bright} />
-                <Shadow src={shadow} />
-                <BtnImgContainer bgimg={cropImg} />
-              </>
-              <NameBar>
-                <NameContainer>
-                  <NameTxt>{namesString}</NameTxt>
-                </NameContainer>
-              </NameBar>
-            </Book>
-            <Bar />
-            <Notice>
-              <img
-                src={notice}
-                alt="notice Icon"
-                style={{ width: "14px", height: "12px", marginBottom: "1px" }}
-              />
-              방장이 이어 쓸 횟수를 정하면 편지가 시작돼요!
-            </Notice>
-            <BoxContainer>
-              <PinArea>
-                <Pin />
-                <Pin />
-              </PinArea>
-              <Box>
-                <List>
-                  {items.map((user, index) =>
-                    index === 0 ? (
-                      <MainUser key={user.memberId}>
-                        <Crown img={crown} />
-                        <User>
-                          <ProfileImg img={items[0].imageUrl} />
-                          <UserName>{items[0].nickname}</UserName>
-                        </User>
-                      </MainUser>
-                    ) : (
-                      <InvitedUser key={user.memberId}>
-                        <User>
-                          {user.imageUrl == "" ? (
-                            <ProfileImg img={defaultImg} />
-                          ) : (
-                            <ProfileImg img={user.imageUrl} />
-                          )}
-                          {user.nickname.length > 3 ? (
-                            <UserNameContainer>
-                              <UserName>
-                                {handleUserName(user.nickname)}
-                              </UserName>
-                              <UserName style={{ letterSpacing: "-0.2em" }}>
-                                ···
-                              </UserName>
-                            </UserNameContainer>
-                          ) : (
-                            <UserName>{user.nickname}</UserName>
-                          )}
-                        </User>
-                      </InvitedUser>
-                    )
+          {title != "" && items[0].nickname && receiverName != "" && (
+            <>
+              <Header>
+                <ReceiverContainer>
+                  <Receiver>To.{sliceName}</Receiver>
+                  {receiverName.length > 9 && (
+                    <Receiver style={{ letterSpacing: "-0.2em" }}>···</Receiver>
                   )}
-
-                  {items.length < 5 ? (
-                    <InviteIcon>
-                      {items.length === 1 ? <ToolTip img={tip} /> : <></>}
-                      <User>
-                        <ProfileImg
-                          img={plus}
-                          onClick={() => {
-                            handle();
-                          }}
-                        />
-                        <UserName>친구 초대</UserName>
-                      </User>
-                    </InviteIcon>
+                </ReceiverContainer>
+                <IconContainer>
+                  <Icon src={info} alt="infobtn" onClick={handleGuide} />
+                  <Icon src={out} alt="outbtn" onClick={handleExit} />{" "}
+                </IconContainer>
+              </Header>
+              <MainContainer>
+                <Book
+                  backgroundImage={
+                    coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+                  }
+                >
+                  <TitleContainer font="GmarketSans">{title}</TitleContainer>
+                  {deliverDay ? (
+                    <DeliverDay>
+                      {`${format(deliverDay as Date, "yyyy")}. `}
+                      {`${format(deliverDay as Date, "MM")}. `}
+                      {format(deliverDay as Date, "dd")}
+                      {` (${format(deliverDay as Date, "E", { locale: ko })})`}
+                    </DeliverDay>
                   ) : (
                     <></>
                   )}
-                </List>
-              </Box>
-            </BoxContainer>
-          </MainContainer>
-          {guide && <UserGuide setGuide={setGuide} />}
-          {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
+                  <>
+                    <Bright src={bright} />
+                    <Shadow src={shadow} />
+                    <BtnImgContainer bgimg={cropImg} />
+                  </>
+                  <NameBar>
+                    <NameContainer>
+                      <NameTxt>{namesString}</NameTxt>
+                    </NameContainer>
+                  </NameBar>
+                </Book>
+                <Bar />
+                <Notice>
+                  <img
+                    src={notice}
+                    alt="notice Icon"
+                    style={{
+                      width: "14px",
+                      height: "12px",
+                      marginBottom: "1px",
+                    }}
+                  />
+                  방장이 이어 쓸 횟수를 정하면 편지가 시작돼요!
+                </Notice>
+                <BoxContainer>
+                  <PinArea>
+                    <Pin />
+                    <Pin />
+                  </PinArea>
+                  <Box>
+                    <List>
+                      {items.map((user, index) =>
+                        index === 0 ? (
+                          <MainUser key={user.memberId}>
+                            <Crown img={crown} />
+                            <User>
+                              <ProfileImg img={items[0].imageUrl} />
+                              <UserName>{items[0].nickname}</UserName>
+                            </User>
+                          </MainUser>
+                        ) : (
+                          <InvitedUser key={user.memberId}>
+                            <User>
+                              {user.imageUrl == "" ? (
+                                <ProfileImg img={defaultImg} />
+                              ) : (
+                                <ProfileImg img={user.imageUrl} />
+                              )}
+                              {user.nickname.length > 3 ? (
+                                <UserNameContainer>
+                                  <UserName>
+                                    {handleUserName(user.nickname)}
+                                  </UserName>
+                                  <UserName style={{ letterSpacing: "-0.2em" }}>
+                                    ···
+                                  </UserName>
+                                </UserNameContainer>
+                              ) : (
+                                <UserName>{user.nickname}</UserName>
+                              )}
+                            </User>
+                          </InvitedUser>
+                        )
+                      )}
+
+                      {items.length < 5 ? (
+                        <InviteIcon>
+                          {items.length === 1 ? <ToolTip img={tip} /> : <></>}
+                          <User>
+                            <ProfileImg
+                              img={plus}
+                              onClick={() => {
+                                handle();
+                              }}
+                            />
+                            <UserName>친구 초대</UserName>
+                          </User>
+                        </InviteIcon>
+                      ) : (
+                        <></>
+                      )}
+                    </List>
+                  </Box>
+                </BoxContainer>
+              </MainContainer>
+              {guide && <UserGuide setGuide={setGuide} />}
+              {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
+            </>
+          )}
         </>
       )}
       {viewDelete && <DeleteConfirm />}
@@ -280,7 +282,7 @@ const BackGround = styled.div`
   align-items: center;
   //justify-content: center;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -323,6 +325,10 @@ const CopyAlert = styled.div`
 
 const Header = styled.div`
   display: flex;
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+
   padding: 0px 20px 0px 20px;
   justify-content: space-between;
   align-items: center;
@@ -331,6 +337,7 @@ const Header = styled.div`
 `;
 const ReceiverContainer = styled.div`
   display: flex;
+  position: relative;
   align-items: center;
 `;
 const Receiver = styled.span`
