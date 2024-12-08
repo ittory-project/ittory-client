@@ -45,7 +45,8 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
     <Overlay>
       <Popup>
         <PopupTitle>
-          {String(partiCount)}명의 참여자가
+          {/* 참여자 수가 제대로 불러와지지 않음 - 임시방편: writeOrderList.length 값 넣음 */}
+          {String(writeOrderList?.length)}명의 참여자가
           <br />
           {String(repeatCount)}번씩 이어 쓸 거예요!
         </PopupTitle>
