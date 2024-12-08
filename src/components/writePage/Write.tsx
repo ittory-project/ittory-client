@@ -218,7 +218,7 @@ export const Write = ({
       console.log(
         "다음 사람 인덱스: ",
         (nextIndex + 1) % partiNum,
-        "다음 사람 멤버아이디 누구: ",
+        "다음 사람 누구 (멤버 아이디): ",
         writeOrderList[(nextIndex + 1) % partiNum].memberId
       );
       setNextMemberId(writeOrderList[(nextIndex + 1) % partiNum].memberId);
