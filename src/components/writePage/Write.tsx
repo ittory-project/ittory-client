@@ -103,8 +103,6 @@ export const Write = ({
   const [showFinishedModal, setShowFinishedModal] = useState(false);
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
-  // 작성 시간 초괴 flag
-  const [writeTimeOut, setWriteTimeOut] = useState(-1);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -141,7 +139,7 @@ export const Write = ({
   useEffect(() => {
     setWriteOrderList(orderData);
     // orderData의 변경 외에, 응답이 왔을 때 응답에 대한 내용을 처라히기 위함
-    if (updateResponse && writeTimeOut === -1) {
+    if (updateResponse && !(progressTime <= 0)) {
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
       setUpdateResponse(false);
@@ -149,15 +147,15 @@ export const Write = ({
   }, [orderData, updateResponse]);
 
   useEffect(() => {
-    if (writeTimeOut !== -1) {
+    if (progressTime <= 0) {
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
     }
-  }, [writeTimeOut])
+  }, [progressTime])
 
   useEffect(() => {
     setProgressTime(100);
-  }, [nowLetterId, writeTimeOut]);
+  }, [nowLetterId]);
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
@@ -222,16 +220,13 @@ export const Write = ({
         writeOrderList[(nextIndex + 1) % partiNum].memberId
       );
       setNextMemberId(writeOrderList[(nextIndex + 1) % partiNum].memberId);
-      console.log(`타임아웃 상태: ${writeTimeOut}`)
-      if (writeTimeOut === -1) {
+      if (progressTime <= 0) {
+        setProgressTime(100);
+      } else {
         setNowLetterId((prevNowLetterId) => prevNowLetterId + 1);
-      }
-
-      if (currentIndex >= writeOrderList.length - 1) {
-        setNowRepeat((prevNowRepeat) => prevNowRepeat + 1);
-      }
-      if (nowLetterId >= nowTotalItem) {
-        setShowFinishedModal(true);
+        if (nowLetterId >= nowTotalItem) {
+          setShowFinishedModal(true);
+        }
       }
     }
   };
@@ -461,7 +456,6 @@ export const Write = ({
             sequence={nowLetterId}
             setShowSubmitPage={setShowSubmitPage}
             progressTime={progressTime}
-            setWriteTimeOut={setWriteTimeOut}
             clientRef={clientRef}
           />
         </ModalOverlay>

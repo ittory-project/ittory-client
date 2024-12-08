@@ -9,12 +9,11 @@ import { ElementImgGetResponse } from "../../../api/model/ElementModel";
 interface WriteElementProps {
   sequence: number;
   setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
-  setWriteTimeOut: React.Dispatch<React.SetStateAction<number>>;
   progressTime: number;
   clientRef: React.MutableRefObject<Client | null>;
 }
 
-export const WriteElement = ({ sequence, setShowSubmitPage, setWriteTimeOut, progressTime, clientRef }: WriteElementProps ) => {
+export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, clientRef }: WriteElementProps ) => {
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
@@ -42,11 +41,9 @@ export const WriteElement = ({ sequence, setShowSubmitPage, setWriteTimeOut, pro
   useEffect(() => {
     if (progressTime === 0) {
       if (text.length > 0) {
-        setWriteTimeOut(-1)
         handleWriteComplete()
       } else {
-        console.log(`${sequence} - 타임아웃`)
-        setWriteTimeOut(sequence)
+
       }
     }
   }, [progressTime])
