@@ -1,6 +1,24 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { decodeLetterId } from "../../api/config/base64";
 import styled from "styled-components";
+import { postPartiLetterBox } from "../../api/service/LetterBoxService";
 
 export const WriteFinishedModal: React.FC = () => {
+  const { letterId } = useParams();
+  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  
+  const storeNowLetter = async () => {
+    const response: boolean = await postPartiLetterBox(letterNumId)
+    if (response) {
+      console.log('저장 성공')
+    } else {
+      console.log('저장 실패')
+    }
+  }
+  useEffect(() => {
+    storeNowLetter()
+  }, [])
 
   return (
     <Overlay>
