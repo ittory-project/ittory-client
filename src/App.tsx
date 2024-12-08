@@ -21,15 +21,7 @@ function App() {
     <Router>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<HomePage />}>
-            {/* <Helmet>
-              <title>Home - My App</title>
-              <meta property="og:title" content="잇토리" />
-              <meta property="og:description" content="Welcome to the homepage!" />
-              <meta property="og:image" content="../public/img/main_logo.svg" />
-              <meta property="og:url" content="https://example.com/" />
-            </Helmet> */}
-          </Route>
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login/redirect" element={<LoginRedirectPage />} />
           <Route path="/write/:letterId" element={<WritePage />} />
