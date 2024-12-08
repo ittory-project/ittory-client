@@ -201,8 +201,13 @@ export const Invite = () => {
         body: JSON.stringify({ nickname: name }),
       });
     };
-
     client.activate();
+
+    return () => {
+      (async () => {
+        client.deactivate();
+      })();
+    };
   }, []);
 
   //퇴장 알림
