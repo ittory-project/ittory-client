@@ -14,12 +14,6 @@ import { getCoverTypeById } from '../../api/service/CoverTypeService';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { useDispatch } from 'react-redux';
 
-declare global {
-  interface Window {
-    Kakao: any;
-  }
-}
-
 function Query() {
   return new URLSearchParams(useLocation().search);
 }
