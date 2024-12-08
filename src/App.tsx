@@ -1,6 +1,5 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Helmet } from 'react-helmet';
 import { MainLayout } from "./layout/MainLayout";
 import { ReceiveLetterPage } from "./pages/receive/ReceiveLetterPage";
 import { LoginRedirectPage } from "./pages/home/LoginRedirectPage";
