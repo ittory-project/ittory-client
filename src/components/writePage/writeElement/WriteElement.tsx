@@ -39,7 +39,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
   }
 
   useEffect(() => {
-    if (progressTime === 0) {
+    if (progressTime <= 0) {
       if (text.length > 0) {
         handleWriteComplete()
       } else {
@@ -57,6 +57,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
       return
     }
     try {
+      console.log(sequence, text)
       // writeLetterWs 완료 여부를 기다림
       // await writeLetterWs(letterNumId, Number(repeat), text);
       // clientRef를 통해 client 객체에 접근
