@@ -36,6 +36,7 @@ export const Invite = () => {
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
+  const [loadstatus, setLoadstaus] = useState<boolean>(true);
 
   const fetchParticipants = async () => {
     try {
@@ -83,7 +84,7 @@ export const Invite = () => {
       } catch (err) {
         console.error("Error during data fetching:", err);
       } finally {
-        setLoad(false); // 로딩 종료
+        //setLoad(false); // 로딩 종료
       }
     };
 
@@ -93,10 +94,11 @@ export const Invite = () => {
   useEffect(() => {
     console.log("로딩중");
     if (memberIndex != -1 && name != "") {
-      setLoad(false);
+      //setLoad(false);
+      setLoadstaus(false);
       console.log("로딩끝");
     }
-  }, [memberIndex, load]);
+  }, [memberIndex, name, participants]);
 
   useEffect(() => {
     const client = stompClient();
@@ -178,8 +180,8 @@ export const Invite = () => {
 
   return (
     <BackGround>
-      {load ? (
-        <Loading />
+      {loadstatus && load ? (
+        <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
