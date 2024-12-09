@@ -96,7 +96,7 @@ export const Invite = () => {
       setLoad(false);
       console.log("로딩끝");
     }
-  }, [memberIndex]);
+  }, [memberIndex, load]);
 
   useEffect(() => {
     const client = stompClient();
