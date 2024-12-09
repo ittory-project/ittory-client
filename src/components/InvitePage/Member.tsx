@@ -47,12 +47,13 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   console.log("this is member page");
 
   useEffect(() => {
+    console.log(receiverName);
     if (receiverName.length > 9) {
       setSliceName(receiverName.slice(0, 9));
     } else {
       setSliceName(receiverName);
     }
-  }, []);
+  }, [receiverName]);
 
   useEffect(() => {
     const fetchCoverTypes = async () => {

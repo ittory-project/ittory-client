@@ -194,7 +194,7 @@ export const HostUser = ({
       {viewCount && <Overlay />}
       {!viewDelete && !viewExit && !popup && items.length > 0 && (
         <>
-          {title != "" && items[0].nickname && receiverName != "" && (
+          {title !== "" && items[0].nickname && receiverName !== "" && (
             <>
               <Header>
                 <ReceiverContainer>

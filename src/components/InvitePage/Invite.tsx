@@ -93,7 +93,7 @@ export const Invite = () => {
 
   useEffect(() => {
     console.log("로딩중");
-    if (memberIndex != -1 && name != "") {
+    if (memberIndex !== -1 && name !== "") {
       //setLoad(false);
       setLoadstaus(false);
       console.log("로딩끝");
@@ -186,7 +186,7 @@ export const Invite = () => {
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-          {memberIndex === 0 ? (
+          {memberIndex == 0 && (
             <HostUser
               guideOpen={guideOpen}
               items={participants}
@@ -194,7 +194,8 @@ export const Invite = () => {
               viewDelete={viewDelete}
               setViewDelete={setViewDelete}
             />
-          ) : (
+          )}
+          {memberIndex == 1 && (
             <Member
               letterId={letterId}
               guideOpen={guideOpen}
