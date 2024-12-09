@@ -280,8 +280,9 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  //justify-content: center;
+  justify-content: center;
   height: 100vh;
+  overflow: hidden;
   width: 100%;
   position: relative;
   left: 50%;
@@ -322,13 +323,12 @@ const CopyAlert = styled.div`
   transform: translateX(-50%);
   white-space: nowrap;
 `;
-
 const Header = styled.div`
-  display: flex;
   position: absolute;
   box-sizing: border-box;
   top: 0;
-
+  display: flex;
+  width: 100%;
   padding: 0px 20px 0px 20px;
   justify-content: space-between;
   align-items: center;
@@ -351,7 +351,7 @@ const Receiver = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
   &:first-of-type {
-    margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
+    margin-right: 0;
   }
 `;
 const IconContainer = styled.div`
@@ -365,6 +365,7 @@ const Icon = styled.img`
   height: 24px;
   margin-right: 0;
 `;
+
 const MainContainer = styled.div`
   display: flex;
   width: 288px;
@@ -440,7 +441,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 40px;
+  margin-top: 20.3px;
   margin-left: 4.6px;
 `;
 const NameBar = styled.div`
