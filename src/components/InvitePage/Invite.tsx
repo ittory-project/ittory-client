@@ -75,16 +75,19 @@ export const Invite = () => {
             setMemberIndex(0); // 방장 여부 체크
             console.log("방장여부체크");
             setParticipants(participantsData);
+            setLoadstaus(false);
           } else {
             setMemberIndex(1);
             console.log("방장여부체크");
             setParticipants(participantsData);
+            setLoadstaus(false);
           }
+          setLoadstaus(false);
         }
       } catch (err) {
         console.error("Error during data fetching:", err);
       } finally {
-        //setLoad(false); // 로딩 종료
+        //setLoadstaus(false); // 로딩 종료
       }
     };
 
@@ -94,7 +97,6 @@ export const Invite = () => {
   useEffect(() => {
     console.log("로딩중");
     if (memberIndex !== -1 && name !== "") {
-      //setLoad(false);
       setLoadstaus(false);
       console.log("로딩끝");
     }
@@ -180,13 +182,18 @@ export const Invite = () => {
 
   return (
     <BackGround>
-      {loadstatus && load ? (
-        <Loading loadstatus={loadstatus} setLoad={setLoad} />
+      {loadstatus || load ? (
+        <Loading
+          loadstatus={loadstatus}
+          setLoad={setLoad}
+          setLoadstatus={setLoadstaus}
+          memberIndex={memberIndex}
+        />
       ) : (
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-          {memberIndex == 0 && (
+          {memberIndex === 0 && (
             <HostUser
               guideOpen={guideOpen}
               items={participants}
@@ -195,7 +202,7 @@ export const Invite = () => {
               setViewDelete={setViewDelete}
             />
           )}
-          {memberIndex == 1 && (
+          {memberIndex === 1 && (
             <Member
               letterId={letterId}
               guideOpen={guideOpen}
