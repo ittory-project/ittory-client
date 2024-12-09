@@ -12,9 +12,10 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
     if (loadstatus === true) {
       console.log(loadstatus);
     } else {
-      console.log(loadstatus);
       setLoad(false);
+      console.log(loadstatus);
     }
   }, [loadstatus]);
-  return <div>로딩중</div>;
+
+  return <div></div>;
 };
