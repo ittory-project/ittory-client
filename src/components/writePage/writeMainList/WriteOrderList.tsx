@@ -65,7 +65,7 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({
                     key={item.elementId}
                     elementId={item.elementId}
                     nowUserId={item.userId}
-                    time={progressTime}
+                    time={Math.max(0, progressTime)}
                   />
                 )}
               {!item.userNickname && (

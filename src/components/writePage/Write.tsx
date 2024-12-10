@@ -36,8 +36,8 @@ import { WriteQuitAlert } from "./WriteQuitAlert";
 import { WriteFinishedModal } from "./WriteFinishedModal";
 
 interface WriteElementProps {
-  progressTime: number;
-  setProgressTime: React.Dispatch<React.SetStateAction<number>>;
+  remainingTime: number;
+  setResetTime: React.Dispatch<React.SetStateAction<number>>;
   letterTitle: string;
 }
 
@@ -46,8 +46,8 @@ interface WriteElementProps {
 // letterId: base64로 인코딩한 편지 아이디
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
 export const Write = ({
-  progressTime,
-  setProgressTime,
+  remainingTime,
+  setResetTime,
   letterTitle,
 }: WriteElementProps) => {
   const navigate = useNavigate();
@@ -138,8 +138,9 @@ export const Write = ({
   // 편지 작성 순서가 변경되거나, 새로 작성이 완료됐을 때마다 Redux에서 순서를 불러오고 세팅한다.
   useEffect(() => {
     setWriteOrderList(orderData);
-    // orderData의 변경 외에, 응답이 왔을 때 응답에 대한 내용을 처라히기 위함
-    if (updateResponse && !(progressTime <= 0)) {
+    // orderData의 변경 외에, 응답이 왔을 때 응답에 대한 내용을 처리하기 위함
+    // response를 받았을 때
+    if (updateResponse && (remainingTime > -5)) {
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
       setUpdateResponse(false);
@@ -147,14 +148,15 @@ export const Write = ({
   }, [orderData, updateResponse]);
 
   useEffect(() => {
-    if (progressTime <= 0) {
+    // 5초를 기다렸는데도 response가 오지 않았을 때
+    if (remainingTime <= -5) {
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
     }
-  }, [progressTime])
+  }, [remainingTime])
 
   useEffect(() => {
-    setProgressTime(100);
+    setResetTime(Date.now() + 100 * 1000);
   }, [nowLetterId]);
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
@@ -220,8 +222,8 @@ export const Write = ({
         writeOrderList[(nextIndex + 1) % partiNum].memberId
       );
       setNextMemberId(writeOrderList[(nextIndex + 1) % partiNum].memberId);
-      if (progressTime <= 0) {
-        setProgressTime(100);
+      if (remainingTime <= -5) {
+        setResetTime(Date.now() + 100 * 1000);
       } else {
         setNowLetterId((prevNowLetterId) => prevNowLetterId + 1);
         if (nowLetterId >= nowTotalItem) {
@@ -238,10 +240,10 @@ export const Write = ({
     console.log(orderData)
     console.log(writeOrderList)
     console.log(
-      `현재 반복 상태: ${nowRepeat}, 현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`
+      `현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`
     );
-    console.log(`다음 멤버 아이디: ${nextMemberId}, 나: ${nowMemberId}`);
-  }, [nowSequence, nowMemberId, nowLetterId, nowRepeat]);
+    console.log(`다음 멤버 아이디: ${nextMemberId}, 현재 멤버 아이디: ${nowMemberId}, 나: ${Number(getUserId())}`);
+  }, [nowSequence, nowMemberId, nowLetterId]);
 
   // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
   // 유저 퇴장 또는 시작 시
@@ -254,7 +256,7 @@ export const Write = ({
     }
     dispatch(setOrderData(response.participants));
 
-    // 계산 로직: 수정해야
+    // 계산 로직
     console.log(`현재 작성 숫자: ${nowLetterId}`);
     console.log(
       `현재 총 아이템 수: ${totalItem - ((totalItem - nowSequence + 1) % partiNum)}`
@@ -422,7 +424,7 @@ export const Write = ({
         <WriteOrderList
           letterItems={[...letterItems, ...lockedItems]}
           nowItemId={nowItemId}
-          progressTime={progressTime}
+          progressTime={remainingTime}
         />
       </ScrollableOrderList>
       {nowMemberId === Number(getUserId()) ? (
@@ -432,7 +434,7 @@ export const Write = ({
       ) : (
         <LocationContainer onClick={goWritePage}>
           <WriteLocation
-            progressTime={progressTime}
+            progressTime={Math.max(0, remainingTime)}
             name={
               writeOrderList[
                 writeOrderList.findIndex(
@@ -455,7 +457,7 @@ export const Write = ({
           <WriteElement
             sequence={nowLetterId}
             setShowSubmitPage={setShowSubmitPage}
-            progressTime={progressTime}
+            progressTime={remainingTime}
             clientRef={clientRef}
           />
         </ModalOverlay>
