@@ -58,21 +58,18 @@ export const WritePage = () => {
   }, []);
 
   // 편지 작성 시간 계산
-  const [progressTime, setProgressTime] = useState(100);
+  const [resetTime, setResetTime] = useState(Date.now() + 100 * 1000); // 초기값: 현재 시간 + 100초
+  const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
+
+  // 남은 시간을 업데이트하는 useEffect
   useEffect(() => {
-    const totalDuration = 100000;
     const interval = setInterval(() => {
-      setProgressTime((prev) => {
-        if (prev <= 0) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 0.1;
-      });
-    }, totalDuration / 1000);
+      const timeLeft = (resetTime - Date.now()) / 1000; // 남은 시간을 초 단위로 계산
+      setRemainingTime(timeLeft);
+    }, 100);
 
     return () => clearInterval(interval);
-  }, [progressTime]);
+  }, [resetTime]);
 
   return (
     <Container>
@@ -86,8 +83,8 @@ export const WritePage = () => {
       )}
       {showCountdown && <Countdown src={CountdownGif} />}
       <Write
-        progressTime={progressTime}
-        setProgressTime={setProgressTime}
+        remainingTime={remainingTime}
+        setResetTime={setResetTime}
         letterTitle={letterTitle}
       />
     </Container>
