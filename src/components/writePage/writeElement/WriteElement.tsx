@@ -39,7 +39,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
   }
 
   useEffect(() => {
-    if (progressTime <= 0) {
+    if (progressTime <= 0.5) {
       if (text.length > 0) {
         handleWriteComplete()
       } else {
@@ -93,7 +93,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
         <Header>
         <ClockText>
           <ClockIcon src="/assets/write/clock.svg" />
-          {Math.floor(progressTime)}초
+          {Math.max(0, Math.floor(progressTime))}초
         </ClockText>
           <CloseBtn onClick={handleExit} src='/assets/btn_close.svg' />
         </Header>
