@@ -165,20 +165,51 @@ export const Write = ({
   }, [nowLetterId]);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+  
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        console.log("App is in the background. Setting timeout...");
+        // 타이머 설정: 20초 내 복귀하지 않으면 종료로 간주
+        timeoutId = setTimeout(() => {
+          console.log("Assuming app is terminated (background timeout).");
+          quitLetterWs(letterNumId)
+          clientRef.current?.deactivate(); // 퇴장 처리
+        }, 20000);
+      } else {
+        console.log("App is active again.");
+        clearTimeout(timeoutId); // 복귀 시 타이머 취소
+      }
+    };
+  
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      console.log("Window or tab is about to be closed!");
+      console.log("Browser tab or window is about to close.");
       quitLetterWs(letterNumId)
-      clientRef.current?.deactivate();
+      clientRef.current?.deactivate(); // 브라우저 종료 시 처리
       event.preventDefault();
       event.returnValue = "";
     };
   
+    const handlePageHide = (event: PageTransitionEvent) => {
+      if (!event.persisted) {
+        console.log("Page is completely closed (pagehide event).");
+        quitLetterWs(letterNumId)
+        clientRef.current?.deactivate(); // 페이지 완전 닫힘 처리
+      }
+    };
+  
+    // 이벤트 리스너 등록
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("pagehide", handlePageHide);
   
     return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("pagehide", handlePageHide);
+      clearTimeout(timeoutId); // 타이머 제거
     };
-  }, []);
+  }, []);  
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
