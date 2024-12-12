@@ -147,6 +147,8 @@ export const Write = ({
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
       setUpdateResponse(false);
+      setResetTime(Date.now() + 100 * 1000);
+      window.localStorage.setItem("resetTime", String(Date.now() + 100 * 1000));
     }
   }, [orderData, updateResponse]);
 
@@ -158,11 +160,11 @@ export const Write = ({
     }
   }, [remainingTime])
 
-  useEffect(() => {
-    if (resetTime !== null) {
-      setResetTime(Date.now() + 100 * 1000);
-    }
-  }, [nowLetterId]);
+  // useEffect(() => {
+  //   if (resetTime !== null) {
+  //     setResetTime(Date.now() + 100 * 1000);
+  //   }
+  // }, [nowLetterId]);
 
   // 편지 작성 시 이탈 처리
   useEffect(() => {  
@@ -249,6 +251,7 @@ export const Write = ({
       setNextMemberId(writeOrderList[(nextIndex + 1) % partiNum].memberId);
       if (remainingTime <= -5) {
         setResetTime(Date.now() + 100 * 1000);
+        window.localStorage.setItem("resetTime", String(Date.now() + 100 * 1000));
       } else {
         setNowLetterId((prevNowLetterId) => prevNowLetterId + 1);
         if (nowLetterId >= nowTotalItem) {
