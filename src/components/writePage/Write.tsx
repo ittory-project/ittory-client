@@ -34,6 +34,7 @@ import { WriteElement } from "./writeElement/WriteElement";
 import { WriteOrderAlert } from "./WriteOrderAlert";
 import { WriteQuitAlert } from "./WriteQuitAlert";
 import { WriteFinishedModal } from "./WriteFinishedModal";
+import { quitLetterWs } from "../../api/service/WsService";
 
 interface WriteElementProps {
   remainingTime: number;
@@ -162,6 +163,22 @@ export const Write = ({
       setResetTime(Date.now() + 100 * 1000);
     }
   }, [nowLetterId]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      console.log("Window or tab is about to be closed!");
+      quitLetterWs(letterNumId)
+      clientRef.current?.deactivate();
+      event.preventDefault();
+      event.returnValue = "";
+    };
+  
+    window.addEventListener("beforeunload", handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
