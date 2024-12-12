@@ -10,7 +10,6 @@ import { useParams } from "react-router-dom";
 import { decodeLetterId } from "../../../api/config/base64";
 
 interface WriteModalProps {
-  onClose: () => void;
   partiCount: number;
   repeatCount: number;
   elementCount: number;
@@ -18,7 +17,6 @@ interface WriteModalProps {
 }
 
 export const WriteMainModal: React.FC<WriteModalProps> = ({
-  onClose,
   partiCount,
   repeatCount,
   elementCount,

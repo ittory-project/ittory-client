@@ -95,7 +95,6 @@ export const WritePage = () => {
     <Container>
       {showPopup && (
         <WriteMainModal
-          onClose={onClose}
           partiCount={Number(partiCount)}
           repeatCount={Number(repeatCount)}
           elementCount={Number(elementCount)}
