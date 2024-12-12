@@ -4,7 +4,11 @@ import { decodeLetterId } from "../../api/config/base64";
 import styled from "styled-components";
 import { postPartiLetterBox } from "../../api/service/LetterBoxService";
 
-export const WriteFinishedModal: React.FC = () => {
+interface FinishModalProps {
+  isFirstUser: boolean
+}
+
+export const WriteFinishedModal = ({ isFirstUser }: FinishModalProps) => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   
@@ -17,7 +21,9 @@ export const WriteFinishedModal: React.FC = () => {
     }
   }
   useEffect(() => {
-    storeNowLetter()
+    if (isFirstUser) {
+      storeNowLetter()
+    }
   }, [])
 
   return (
