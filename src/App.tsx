@@ -14,11 +14,20 @@ import { ConnectionPage } from "./pages/connect/ConnectionPage";
 import { AccountPage } from "./pages/account/AccountPage";
 import { LetterBoxPage } from "./pages/letterbox/LetterBoxPage";
 import { ShareLetterPage } from "./pages/share/SharePage";
+import { Helmet } from "react-helmet-async";
 
 function App() {
   return (
     <Router>
       <MainLayout>
+        <Helmet>
+          <title>잇토리타이틀테스트</title>
+          <meta name="description" content="잇토리 설명" />
+          <meta property="og:title" content="잇토리" />
+          <meta property="og:description" content="잇토리 설명 og" />
+          <meta property="og:image" content="../public/img/main_logo.svg" />"
+          <meta property="og:url" content={`${import.meta.env.VITE_FRONT_URL}`} />
+        </Helmet>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
