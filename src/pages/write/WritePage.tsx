@@ -20,14 +20,11 @@ export const WritePage = () => {
   const [showPopup, setShowPopup] = useState(true);
   const [showCountdown, setShowCountdown] = useState(false);
   // 편지 작성 시간 계산
-  const [resetTime, setResetTime] = useState<number | null>(null);
+  const storedResetTime = window.localStorage.getItem("resetTime");
+  const [resetTime, setResetTime] = useState<number | null>(Number(storedResetTime));
   const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
   // 편지 시작까지 남은 시간 계산
   const [startCountdown, setStartCountdown] = useState<number>(10);
-
-  const onClose = () => {
-    setShowPopup(false);
-  };
 
   const getStartInfo = async () => {
     if (!letterId) {
@@ -49,6 +46,11 @@ export const WritePage = () => {
 
   // 모달 띄우는 시간 설정
   useEffect(() => {
+    if (resetTime) {
+      setShowPopup(false)
+      setShowCountdown(false)
+      return;
+    }
     let countdownTimer: number;
     countdownTimer = window.setInterval(() => {
       setStartCountdown((prev) => {
@@ -67,6 +69,7 @@ export const WritePage = () => {
         setShowPopup(false);
         setShowCountdown(false);
         setResetTime(Date.now() + 100 * 1000);
+        window.localStorage.setItem("resetTime", String(resetTime));
       }, 4000);
 
       return () => {
