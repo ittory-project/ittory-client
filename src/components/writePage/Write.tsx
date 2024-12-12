@@ -80,7 +80,7 @@ export const Write = ({
   );
   // 현재 반복 횟수
   const storedNowRepeat = window.localStorage.getItem("nowRepeat");
-  const [nowRepeat, setNowRepeat] = useState(Number(storedNowRepeat || 1));
+  const [nowRepeat] = useState(Number(storedNowRepeat || 1));
   // 전체 편지 아이템 횟수
   const storedTotalItem = window.localStorage.getItem("totalItem");
   const [totalItem, setTotalItem] = useState(Number(storedTotalItem || 1));
