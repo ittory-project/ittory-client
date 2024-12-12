@@ -22,7 +22,6 @@ export const ReceiveLetter = () => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [partiList, setPartiList] = useState<string>('');
   const [font, setFont] = useState<FontGetResponse>();
   const [coverType, setCoverType] = useState<CoverTypeGetResponse>()
   const [elementLength, setElementLength] = useState<number>(0);
@@ -38,10 +37,6 @@ export const ReceiveLetter = () => {
   const getSharedLetter = async (letterNumId: number) => {
     const response = await getLetterDetailInfo(letterNumId)
     setLetterInfo(response)
-    const nicknameString = response.elements
-      .map((element) => element.nickname)
-      .join(", ");
-    setPartiList(nicknameString)
     setElementLength(response.elements.length)
   }
 
@@ -94,7 +89,7 @@ export const ReceiveLetter = () => {
       return <div>편지를 찾을 수 없습니다.</div>
     } else {
       if (currentPage === 1) 
-        return  <ReceiveLetterCover letterStyle={coverType} letterFontStyle={font} letterContent={letterInfo} partiList={partiList}/> ;
+        return  <ReceiveLetterCover letterStyle={coverType} letterFontStyle={font} letterContent={letterInfo}/> ;
       else if (currentPage === elementLength + 2) 
         return <ReceiveLetterSave handleSaveLetter={handleSaveLetter}/> ;
       else 

@@ -8,7 +8,7 @@ export const ReceiveLetterSave = ({ handleSaveLetter }: LetterContentProps) => {
 
   return (
     <>
-      <ProductLeftSide src='/img/cover/left.svg' />
+      <ProductLeftSide src='/img/cover/left.png' />
       <ProductRightSide src='/img/cover/product.svg' />
       <Content>받은 편지를<br/>간직하고 싶다면?</Content>
       <ContentImg src='/img/letter_save_contents.png'/>
@@ -26,11 +26,11 @@ const ProductRightSide = styled.img`
 `;
 
 const ProductLeftSide = styled.img`
-  width: 67px;
+  width: 94px;
   height: 369px;
   object-fit: fill;
   position: absolute;
-  left: -51px;
+  left: -79px;
   top: -7px;
 `;
 

@@ -11,13 +11,19 @@ import CountdownGif from "../../../public/img/letter_start_count.gif";
 export const WritePage = () => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  // 불러온 편지 정보
   const [letterTitle, setLetterTitle] = useState("");
   const [partiCount, setPartiCount] = useState<Number | null>();
   const [repeatCount, setRepeatCount] = useState<Number | null>();
   const [elementCount, setElementCount] = useState<Number | null>();
-
+  // 초기 팝업 띄우기
   const [showPopup, setShowPopup] = useState(true);
   const [showCountdown, setShowCountdown] = useState(false);
+  // 편지 작성 시간 계산
+  const [resetTime, setResetTime] = useState<number | null>(null);
+  const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
+  // 편지 시작까지 남은 시간 계산
+  const [startCountdown, setStartCountdown] = useState<number>(10);
 
   const onClose = () => {
     setShowPopup(false);
@@ -43,26 +49,40 @@ export const WritePage = () => {
 
   // 모달 띄우는 시간 설정
   useEffect(() => {
+    let countdownTimer: number;
+    countdownTimer = window.setInterval(() => {
+      setStartCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(countdownTimer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
     const showTimer = setTimeout(() => {
       setShowCountdown(true);
 
       const hideTimer = setTimeout(() => {
         setShowPopup(false);
         setShowCountdown(false);
+        setResetTime(Date.now() + 100 * 1000);
       }, 4000);
 
-      return () => clearTimeout(hideTimer);
+      return () => {
+        clearTimeout(hideTimer);
+      }
     }, 10000);
 
-    return () => clearTimeout(showTimer);
+    return () => {
+      clearTimeout(showTimer)
+      clearTimeout(countdownTimer)
+    };
   }, []);
-
-  // 편지 작성 시간 계산
-  const [resetTime, setResetTime] = useState(Date.now() + 100 * 1000); // 초기값: 현재 시간 + 100초
-  const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
 
   // 남은 시간을 업데이트하는 useEffect
   useEffect(() => {
+    if (resetTime === null) return;
     const interval = setInterval(() => {
       const timeLeft = (resetTime - Date.now()) / 1000; // 남은 시간을 초 단위로 계산
       setRemainingTime(timeLeft);
@@ -79,11 +99,13 @@ export const WritePage = () => {
           partiCount={Number(partiCount)}
           repeatCount={Number(repeatCount)}
           elementCount={Number(elementCount)}
+          startCountdown={startCountdown}
         />
       )}
       {showCountdown && <Countdown src={CountdownGif} />}
       <Write
-        remainingTime={remainingTime}
+        remainingTime={resetTime ? remainingTime : 100}
+        resetTime={resetTime}
         setResetTime={setResetTime}
         letterTitle={letterTitle}
       />
