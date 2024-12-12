@@ -164,41 +164,42 @@ export const Write = ({
     }
   }, [nowLetterId]);
 
+  // 편지 작성 시 이탈 처리
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-  
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
-        console.log("App is in the background. Setting timeout...");
+        console.log("20초 시작");
         // 타이머 설정: 20초 내 복귀하지 않으면 종료로 간주
         timeoutId = setTimeout(() => {
-          console.log("Assuming app is terminated (background timeout).");
-          quitLetterWs(letterNumId)
-          clientRef.current?.deactivate(); // 퇴장 처리
+          console.log("20초 끝");
+          quitLetterWs(letterNumId);
+          clientRef.current?.deactivate();
         }, 20000);
       } else {
-        console.log("App is active again.");
-        clearTimeout(timeoutId); // 복귀 시 타이머 취소
+        console.log("다시 돌아옴");
+        clearTimeout(timeoutId);
       }
     };
   
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      console.log("Browser tab or window is about to close.");
-      quitLetterWs(letterNumId)
-      clientRef.current?.deactivate(); // 브라우저 종료 시 처리
+      console.log("Before unload");
+      quitLetterWs(letterNumId);
+      clientRef.current?.deactivate();
       event.preventDefault();
       event.returnValue = "";
     };
   
     const handlePageHide = (event: PageTransitionEvent) => {
       if (!event.persisted) {
-        console.log("Page is completely closed (pagehide event).");
-        quitLetterWs(letterNumId)
-        clientRef.current?.deactivate(); // 페이지 완전 닫힘 처리
+        console.log("Page hide");
+        quitLetterWs(letterNumId);
+        clientRef.current?.deactivate();
+      } else {
+        console.log("캐시상태");
       }
     };
-  
-    // 이벤트 리스너 등록
+    // 리스너
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("beforeunload", handleBeforeUnload);
     window.addEventListener("pagehide", handlePageHide);
@@ -207,9 +208,9 @@ export const Write = ({
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("pagehide", handlePageHide);
-      clearTimeout(timeoutId); // 타이머 제거
+      clearTimeout(timeoutId);
     };
-  }, []);  
+  }, [letterNumId, quitLetterWs]);  
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
@@ -313,7 +314,8 @@ export const Write = ({
     console.log(
       `현재 총 아이템 수: ${totalItem - ((totalItem - nowSequence + 1) % partiNum)}`
     );
-    setNowTotalItem(totalItem - ((totalItem - nowSequence + 1) % partiNum));
+    // setNowTotalItem(totalItem - ((totalItem - nowSequence + 1) % partiNum));
+    setNowTotalItem(totalItem)
     // writeOrderList가 업데이트 된 후에 locked items 세팅
     if (writeOrderList.length > 0) {
       setLockedWriteItems();
