@@ -8,11 +8,13 @@ interface LetterContentProps {
   letterStyle: CoverTypeGetResponse
   letterFontStyle: FontGetResponse
   letterContent: LetterDetailGetResponse
-  partiList: string
 }
 
-export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent, partiList }: LetterContentProps) => {
-  
+export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent }: LetterContentProps) => {
+  const partiList = letterContent.participantNames
+    .map((element) => element)
+    .join(", ");
+
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = "/img/profile.png";
   };
