@@ -118,6 +118,7 @@ export interface LetterDetailGetResponse {
   deliveryDate: string;
   title: string;
   coverPhotoUrl: string;
+  participantNames: string[],
   elements: LetterDetail[];
 }
 
