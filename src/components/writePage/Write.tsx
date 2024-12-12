@@ -166,14 +166,7 @@ export const Write = ({
 
   // 편지 작성 시 이탈 처리
   useEffect(() => {  
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      console.log("Before unload");
-      quitLetterWs(letterNumId);
-      event.preventDefault();
-      event.returnValue = true;
-      clientRef.current?.deactivate();
-    };
-  
+
     const handlePageHide = (event: PageTransitionEvent) => {
       if (!event.persisted) {
         console.log("Page hide");
@@ -184,11 +177,9 @@ export const Write = ({
       }
     };
     // 리스너
-    window.addEventListener("beforeunload", handleBeforeUnload);
     window.addEventListener("pagehide", handlePageHide);
   
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("pagehide", handlePageHide);
     };
   }, [letterNumId, quitLetterWs]);  
