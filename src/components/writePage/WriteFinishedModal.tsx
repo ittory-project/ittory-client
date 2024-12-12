@@ -21,6 +21,7 @@ export const WriteFinishedModal = ({ isFirstUser }: FinishModalProps) => {
     }
   }
   useEffect(() => {
+    console.log("저장할 유저인가?: ", isFirstUser)
     if (isFirstUser) {
       storeNowLetter()
     }
