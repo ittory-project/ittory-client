@@ -14,6 +14,7 @@ interface WriteModalProps {
   partiCount: number;
   repeatCount: number;
   elementCount: number;
+  startCountdown: number;
 }
 
 export const WriteMainModal: React.FC<WriteModalProps> = ({
@@ -21,6 +22,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
   partiCount,
   repeatCount,
   elementCount,
+  startCountdown,
 }) => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
@@ -76,6 +78,10 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
             <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
           )}
         </PopupList>
+        <ClockText>
+          <ClockIcon src="/assets/write/clock_gray.svg" />
+          {Math.floor(Number(startCountdown))}초 후 편지 시작
+        </ClockText>
       </Popup>
     </Overlay>
   );
@@ -224,4 +230,27 @@ const Line = styled.div<{ $itemnum: number }>`
   left: 12px;
   position: absolute;
   z-index: 1;
+`;
+
+const ClockIcon = styled.img`
+  display: flex;
+  width: 12px;
+  height: 13px;
+  margin: 1px 5px 0px 0px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ClockText = styled.div`
+  margin: 2px 0px 0px 0px;
+  display: flex;
+  color: var(--Color-secondary-soft_navy_blue, #99ADC9);
+
+  /* caption/xsmall_bold */
+  font-family: var(--Typography-family-caption, SUIT);
+  font-size: var(--Typography-size-xs, 0.75rem);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--Typography-line_height-2xs, 1rem); /* 133.333% */
+  letter-spacing: var(--Typography-letter_spacing-default, -0.03125rem);
 `;
