@@ -165,29 +165,13 @@ export const Write = ({
   }, [nowLetterId]);
 
   // 편지 작성 시 이탈 처리
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        console.log("20초 시작");
-        // 타이머 설정: 20초 내 복귀하지 않으면 종료로 간주
-        timeoutId = setTimeout(() => {
-          console.log("20초 끝");
-          quitLetterWs(letterNumId);
-          clientRef.current?.deactivate();
-        }, 20000);
-      } else {
-        console.log("다시 돌아옴");
-        clearTimeout(timeoutId);
-      }
-    };
-  
+  useEffect(() => {  
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       console.log("Before unload");
       quitLetterWs(letterNumId);
-      clientRef.current?.deactivate();
       event.preventDefault();
-      event.returnValue = "";
+      event.returnValue = true;
+      clientRef.current?.deactivate();
     };
   
     const handlePageHide = (event: PageTransitionEvent) => {
@@ -200,15 +184,12 @@ export const Write = ({
       }
     };
     // 리스너
-    document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("beforeunload", handleBeforeUnload);
     window.addEventListener("pagehide", handlePageHide);
   
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("pagehide", handlePageHide);
-      clearTimeout(timeoutId);
     };
   }, [letterNumId, quitLetterWs]);  
 
@@ -304,6 +285,7 @@ export const Write = ({
     const response: LetterPartiListGetResponse =
       await getLetterPartiList(letterNumId);
     setPartiNum(response.participants.length);
+    // 마지막 순서에서 이탈했다면
     if (nowSequence > response.participants.length) {
       setNowSequence((prevNowLetterId) => prevNowLetterId - 1);
     }
@@ -388,7 +370,8 @@ export const Write = ({
     if (writeOrderList.length > 0) {
       setLockedWriteItems();
     }
-  }, [nowRepeat, partiNum, nowSequence, nowLetterId, nowMemberId]);
+    // [퇴장]: writeOrderList를 추가함
+  }, [nowRepeat, partiNum, nowSequence, nowLetterId, nowMemberId, writeOrderList]);
 
   // 퇴장 감지 후 팝업창 띄우기
   useEffect(() => {
