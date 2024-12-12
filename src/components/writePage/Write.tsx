@@ -37,7 +37,8 @@ import { WriteFinishedModal } from "./WriteFinishedModal";
 
 interface WriteElementProps {
   remainingTime: number;
-  setResetTime: React.Dispatch<React.SetStateAction<number>>;
+  resetTime: number | null;
+  setResetTime: React.Dispatch<React.SetStateAction<number | null>>;
   letterTitle: string;
 }
 
@@ -47,6 +48,7 @@ interface WriteElementProps {
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
 export const Write = ({
   remainingTime,
+  resetTime,
   setResetTime,
   letterTitle,
 }: WriteElementProps) => {
@@ -156,7 +158,9 @@ export const Write = ({
   }, [remainingTime])
 
   useEffect(() => {
-    setResetTime(Date.now() + 100 * 1000);
+    if (resetTime !== null) {
+      setResetTime(Date.now() + 100 * 1000);
+    }
   }, [nowLetterId]);
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
