@@ -466,7 +466,7 @@ export const Write = ({
           />
         </ModalOverlay>
       )}
-      {showFinishedModal && <WriteFinishedModal />}
+      {showFinishedModal && <WriteFinishedModal isFirstUser={writeOrderList[0].memberId === Number(getUserId())}/>}
     </Container>
   ) : (
     <>접속 오류</>
