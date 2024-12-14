@@ -45,7 +45,6 @@ export const Logout = ({ setPopup }: Props) => {
           >
             <ButtonTxt style={{ color: "#fff" }}>로그아웃</ButtonTxt>
           </Button>
-          {/* 클릭 시 랜딩페이지로 이동 */}
         </ButtonContainer>
       </Modal>
     </BackGround>

@@ -20,10 +20,9 @@ export const WithdrawPopup = () => {
             style={{
               background: "#FFA256",
             }}
+            onClick={handleHome}
           >
-            <ButtonTxt style={{ color: "#fff" }} onClick={handleHome}>
-              확인
-            </ButtonTxt>
+            <ButtonTxt style={{ color: "#fff" }}>확인</ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>

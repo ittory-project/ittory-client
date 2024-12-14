@@ -45,14 +45,16 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const navigate = useNavigate();
 
   console.log("this is member page");
+  //폰트수정하기
 
   useEffect(() => {
+    console.log(receiverName);
     if (receiverName.length > 9) {
       setSliceName(receiverName.slice(0, 9));
     } else {
       setSliceName(receiverName);
     }
-  }, []);
+  }, [receiverName]);
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
@@ -165,11 +167,11 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
               </Header>
               <MainContainer>
                 <Book
-                  backgroundImage={
+                  $backgroundImage={
                     coverTypes[selectedImageIndex - 1]?.confirmImageUrl
                   }
                 >
-                  <TitleContainer font="GmarketSans">{title}</TitleContainer>
+                  <TitleContainer $font="GmarketSans">{title}</TitleContainer>
                   {deliverDay ? (
                     <DeliverDay>
                       {`${format(deliverDay as Date, "yyyy")}. `}
@@ -183,7 +185,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                   <>
                     <Bright src={bright} />
                     <Shadow src={shadow} />
-                    <BtnImgContainer bgimg={cropImg} />
+                    <BtnImgContainer $bgimg={cropImg} />
                   </>
                   <NameBar>
                     <NameContainer>
@@ -214,9 +216,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                       {items.map((user, index) =>
                         index === 0 ? (
                           <MainUser key={user.memberId}>
-                            <Crown img={crown} />
+                            <Crown $img={crown} />
                             <User>
-                              <ProfileImg img={items[0].imageUrl} />
+                              <ProfileImg $img={items[0].imageUrl} />
                               <UserName>{items[0].nickname}</UserName>
                             </User>
                           </MainUser>
@@ -224,9 +226,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                           <InvitedUser key={user.memberId}>
                             <User>
                               {user.imageUrl == "" ? (
-                                <ProfileImg img={defaultImg} />
+                                <ProfileImg $img={defaultImg} />
                               ) : (
-                                <ProfileImg img={user.imageUrl} />
+                                <ProfileImg $img={user.imageUrl} />
                               )}
                               {user.nickname.length > 3 ? (
                                 <UserNameContainer>
@@ -247,10 +249,10 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
                       {items.length < 5 ? (
                         <InviteIcon>
-                          {items.length === 1 ? <ToolTip img={tip} /> : <></>}
+                          {items.length === 1 ? <ToolTip $img={tip} /> : <></>}
                           <User>
                             <ProfileImg
-                              img={plus}
+                              $img={plus}
                               onClick={() => {
                                 handle();
                               }}
@@ -280,8 +282,9 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  //justify-content: center;
+  justify-content: center;
   height: 100vh;
+  overflow: hidden;
   width: 100%;
   position: relative;
   left: 50%;
@@ -322,13 +325,12 @@ const CopyAlert = styled.div`
   transform: translateX(-50%);
   white-space: nowrap;
 `;
-
 const Header = styled.div`
-  display: flex;
   position: absolute;
   box-sizing: border-box;
   top: 0;
-
+  display: flex;
+  width: 100%;
   padding: 0px 20px 0px 20px;
   justify-content: space-between;
   align-items: center;
@@ -351,7 +353,7 @@ const Receiver = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
   &:first-of-type {
-    margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
+    margin-right: 0;
   }
 `;
 const IconContainer = styled.div`
@@ -365,18 +367,19 @@ const Icon = styled.img`
   height: 24px;
   margin-right: 0;
 `;
+
 const MainContainer = styled.div`
   display: flex;
   width: 288px;
   flex-direction: column;
   align-items: center;
 `;
-const Book = styled.div<{ backgroundImage: string }>`
+const Book = styled.div<{ $backgroundImage: string }>`
   width: 200px;
   height: 261px;
   margin-top: 2rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -384,7 +387,7 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat;
   background-position: center;
 `;
-const TitleContainer = styled.div<{ font: string }>`
+const TitleContainer = styled.div<{ $font: string }>`
   display: flex;
   margin-top: 9px;
   width: 224px;
@@ -392,9 +395,9 @@ const TitleContainer = styled.div<{ font: string }>`
   padding: 16px 0px 12px 0px;
   justify-content: center;
   align-items: center;
-  font-family: ${(props) => props.font};
+  font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.font === "Ownglyph_UNZ-Rg" ? "20.286px" : "14.286px"};
+    props.$font === "Ownglyph_UNZ-Rg" ? "20.286px" : "14.286px"};
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.446px;
@@ -429,18 +432,18 @@ const Shadow = styled.img`
   z-index: 3;
   flex-shrink: 0;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
+const BtnImgContainer = styled.div<{ $bgimg: string }>`
   width: 121px;
   height: 121px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
   border-radius: 17.647px;
-  background-image: url(${(props) => props.bgimg});
+  background-image: url(${(props) => props.$bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 40px;
+  margin-top: 20.3px;
   margin-left: 4.6px;
 `;
 const NameBar = styled.div`
@@ -591,30 +594,30 @@ const InviteIcon = styled.div`
   align-items: center;
   position: relative;
 `;
-const Crown = styled.span<{ img: string }>`
+const Crown = styled.span<{ $img: string }>`
   width: 14px;
   height: 8px;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   position: absolute;
   top: -6px; /* ProfileImg의 위에 위치 */
   left: 50%;
   transform: translateX(-50%);
 `;
-const ToolTip = styled.span<{ img: string }>`
+const ToolTip = styled.span<{ $img: string }>`
   width: 104px;
   height: 56px;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   position: absolute;
   top: -65px; /* ProfileImg의 위에 위치 */
   left: 50%;
   transform: translateX(-50%);
 `;
-const ProfileImg = styled.div<{ img: string }>`
+const ProfileImg = styled.div<{ $img: string }>`
   width: 40px;
   height: 40px;
   border-radius: 40px;
   border: 2px solid #fff;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

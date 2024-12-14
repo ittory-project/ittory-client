@@ -194,7 +194,7 @@ export const HostUser = ({
       {viewCount && <Overlay />}
       {!viewDelete && !viewExit && !popup && items.length > 0 && (
         <>
-          {title != "" && items[0].nickname && receiverName != "" && (
+          {title !== "" && items[0].nickname && receiverName !== "" && (
             <>
               <Header>
                 <ReceiverContainer>
@@ -215,11 +215,11 @@ export const HostUser = ({
               </Header>
               <MainContainer>
                 <Book
-                  backgroundImage={
+                  $backgroundImage={
                     coverTypes[selectedImageIndex - 1]?.confirmImageUrl
                   }
                 >
-                  <TitleContainer font="GmarketSans">{title}</TitleContainer>
+                  <TitleContainer $font="GmarketSans">{title}</TitleContainer>
                   {deliverDay ? (
                     <DeliverDay>
                       {`${format(deliverDay as Date, "yyyy")}. `}
@@ -233,7 +233,7 @@ export const HostUser = ({
                   <>
                     <Bright src={bright} />
                     <Shadow src={shadow} />
-                    <BtnImgContainer bgimg={cropImg} />
+                    <BtnImgContainer $bgimg={cropImg} />
                   </>
                   <NameBar>
                     <NameContainer>
@@ -252,9 +252,9 @@ export const HostUser = ({
                       {items.map((user, index) =>
                         index === 0 ? (
                           <MainUser key={index}>
-                            <Crown img={crown} />
+                            <Crown $img={crown} />
                             <User>
-                              <ProfileImg img={items[0].imageUrl} />
+                              <ProfileImg $img={items[0].imageUrl} />
                               <UserName>{items[0].nickname}</UserName>
                             </User>
                           </MainUser>
@@ -262,9 +262,9 @@ export const HostUser = ({
                           <InvitedUser key={index}>
                             <User>
                               {user.imageUrl == "" ? (
-                                <ProfileImg img={defaultImg} />
+                                <ProfileImg $img={defaultImg} />
                               ) : (
-                                <ProfileImg img={user.imageUrl} />
+                                <ProfileImg $img={user.imageUrl} />
                               )}
                               {user.nickname.length > 3 ? (
                                 <UserNameContainer>
@@ -285,10 +285,10 @@ export const HostUser = ({
 
                       {items.length < 5 ? (
                         <InviteIcon>
-                          {items.length === 1 ? <ToolTip img={tip} /> : <></>}
+                          {items.length === 1 ? <ToolTip $img={tip} /> : <></>}
                           <User>
                             <ProfileImg
-                              img={plus}
+                              $img={plus}
                               onClick={() => {
                                 handle();
                               }}
@@ -430,12 +430,12 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const Book = styled.div<{ backgroundImage: string }>`
+const Book = styled.div<{ $backgroundImage: string }>`
   width: 200px;
   height: 261px;
   margin-top: 1.5rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -443,7 +443,7 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat;
   background-position: center;
 `;
-const TitleContainer = styled.div<{ font: string }>`
+const TitleContainer = styled.div<{ $font: string }>`
   display: flex;
   margin-top: 8px;
   width: 224px;
@@ -451,9 +451,9 @@ const TitleContainer = styled.div<{ font: string }>`
   padding: 16px 0px 12px 0px;
   justify-content: center;
   align-items: center;
-  font-family: ${(props) => props.font};
+  font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.font === "Ownglyph_UNZ-Rg" ? "20.286px" : "14.286px"};
+    props.$font === "Ownglyph_UNZ-Rg" ? "20.286px" : "14.286px"};
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.446px;
@@ -488,14 +488,14 @@ const Shadow = styled.img`
   z-index: 3;
   flex-shrink: 0;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
+const BtnImgContainer = styled.div<{ $bgimg: string }>`
   width: 121px;
   height: 121px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
   border-radius: 17.647px;
-  background-image: url(${(props) => props.bgimg});
+  background-image: url(${(props) => props.$bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -630,30 +630,30 @@ const InviteIcon = styled.div`
   align-items: center;
   position: relative;
 `;
-const Crown = styled.span<{ img: string }>`
+const Crown = styled.span<{ $img: string }>`
   width: 14px;
   height: 8px;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   position: absolute;
   top: -6px; /* ProfileImg의 위에 위치 */
   left: 50%;
   transform: translateX(-50%);
 `;
-const ToolTip = styled.span<{ img: string }>`
+const ToolTip = styled.span<{ $img: string }>`
   width: 104px;
   height: 56px;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   position: absolute;
   top: -65px; /* ProfileImg의 위에 위치 */
   left: 50%;
   transform: translateX(-50%);
 `;
-const ProfileImg = styled.div<{ img: string }>`
+const ProfileImg = styled.div<{ $img: string }>`
   width: 40px;
   height: 40px;
   border-radius: 40px;
   border: 2px solid #fff;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
