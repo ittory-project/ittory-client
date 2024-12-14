@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import MediaQuery from "react-responsive";
 import styled from "styled-components";
 import "../App.css";
@@ -7,7 +7,6 @@ import { useSwipeable } from "react-swipeable";
 
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [height, setHeight] = useState(window.innerHeight);
 
   const closeMenu = useCallback(() => {
     setIsMenuOpen(false);
@@ -19,19 +18,6 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => setIsMenuOpen(true),
   });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setHeight(window.innerHeight);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
 
   //<div className="MainLayout large-screen">{children}</div>
   return (
@@ -46,7 +32,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </MediaQuery>
       <MediaQuery maxWidth={430}>
-        <div className="MainLayout small-screen" {...swipeHandlers} style={{ height: `${height}px` }}>
+        <div className="MainLayout small-screen" {...swipeHandlers}>
           <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
           <MenuContainer $isOpen={isMenuOpen}>
             <Menu onClose={closeMenu} />
