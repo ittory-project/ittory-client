@@ -42,12 +42,20 @@ export const Invite = () => {
     try {
       const data = await getParticipants(letterId);
 
-      if (data.length > 0) {
+      if (data.length > 0 || participants.length > 0) {
         // 방장 여부 체크
         if (data[0].nickname === userName) {
           setMemberIndex(0);
+          setLoadstatus(false);
         } else {
           setMemberIndex(1);
+          setLoadstatus(false);
+        }
+      } else {
+        const data = await getParticipants(letterId);
+        if (data.length < 1) {
+          console.log("데이터없음-함수refresh할거임");
+          window.location.reload();
         }
       }
       if (participants) {
@@ -63,23 +71,55 @@ export const Invite = () => {
     const fetchData = async () => {
       try {
         const mydata = await getMyPage();
-        const participantsData = await getParticipants(letterId);
-        setParticipants(participantsData);
-
         const userNameFromApi = mydata.name;
         const userIdFromApi = mydata.memberId;
 
         setName(userNameFromApi);
         setUserId(userIdFromApi);
+        if (participants.length < 1) {
+          fetchParticipants();
+          console.log("데이터없음-useEffect");
+        } else {
+          if (participants[0].nickname === userName) {
+            setMemberIndex(0);
+            setLoadstatus(false);
+          } else {
+            setMemberIndex(1);
+            setLoadstatus(false);
+          }
+        }
       } catch (err) {
         console.error("Error during data fetching:", err);
-      } finally {
-        if (participants.length > 0) {
-          console.log("participant데이터 들어옴");
-          fetchUserData();
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const mydata = await getMyPage();
+        const data = await getParticipants(letterId);
+        setParticipants(data);
+        const userNameFromApi = mydata.name;
+        const userIdFromApi = mydata.memberId;
+        setName(userNameFromApi);
+        setUserId(userIdFromApi);
+
+        if (participants.length < 1) {
+          fetchParticipants();
         } else {
-          console.log("participant데이터 안들어옴");
+          if (participants[0].nickname === userName) {
+            setMemberIndex(0);
+            setLoadstatus(false);
+          } else {
+            setMemberIndex(1);
+            setLoadstatus(false);
+          }
         }
+      } catch (err) {
+        console.error("Error during data fetching:", err);
       }
     };
 
@@ -87,45 +127,10 @@ export const Invite = () => {
   }, [refresh]);
 
   useEffect(() => {
-    const UserData = async () => {
-      console.log(participants);
-      console.log(participants.length);
-
-      if (participants.length > 0) {
-        console.log(participants);
-        if (participants[0].nickname == userName) {
-          setMemberIndex(0); // 방장 여부 체크
-          console.log("방장여부체크");
-          setLoadstatus(false);
-        } else {
-          setMemberIndex(1);
-          console.log("방장여부체크");
-          setLoadstatus(false);
-        }
-      } else {
-        setRefresh((refresh) => refresh * -1);
-      }
-    };
-    UserData();
-  }, [rerfresh]);
-
-  const fetchUserData = () => {
-    console.log(participants);
-    console.log(participants.length);
-
-    if (participants.length > 0) {
-      console.log(participants);
-      if (participants[0].nickname == userName) {
-        setMemberIndex(0); // 방장 여부 체크
-        console.log("방장여부체크");
-        setLoadstatus(false);
-      } else {
-        setMemberIndex(1);
-        console.log("방장여부체크");
-        setLoadstatus(false);
-      }
+    if (memberIndex > -1) {
+      setLoadstatus(false);
     }
-  };
+  }, [memberIndex]);
 
   useEffect(() => {
     const client = stompClient();
@@ -161,9 +166,22 @@ export const Invite = () => {
                 letterId: letterId,
               },
             });
-          } else if (response.action === "ENTER") {
-            fetchParticipants();
-            setRefresh((refresh) => refresh * -1);
+          } else if (
+            response.action === "ENTER" &&
+            "participants" in response
+          ) {
+            setParticipants(response.participants);
+            if (response.participants) {
+              if (response.participants[0].nickname === response.nickname) {
+                setMemberIndex(0);
+                setRefresh((refresh) => refresh * -1);
+                setLoadstatus(false);
+              } else {
+                setMemberIndex(1);
+                setRefresh((refresh) => refresh * -1);
+                setLoadstatus(false);
+              }
+            }
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
@@ -206,9 +224,15 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
+  /**
+   {load ? (
+        <Loading loadstatus={loadstatus} setLoad={setLoad} />
+      ) : (
+   */
+
   return (
     <BackGround>
-      {loadstatus || load ? (
+      {load ? (
         <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
@@ -221,6 +245,7 @@ export const Invite = () => {
               letterId={letterId}
               viewDelete={viewDelete}
               setViewDelete={setViewDelete}
+              hostname={name}
             />
           )}
           {memberIndex === 1 && (
