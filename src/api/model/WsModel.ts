@@ -1,8 +1,16 @@
+export interface Participants {
+  sequence: number;
+  memberId: number;
+  nickname: string;
+  imageUrl: string;
+}
+
 export interface WsEnterResponse {
   participantId: number;
   nickname: string;
   imageUrl: string;
   action: string;
+  participants: Participants[];
 }
 
 export interface LetterItemResponse {
