@@ -97,20 +97,8 @@ export const Invite = () => {
         console.log("방장여부체크");
         setLoadstatus(false);
       }
-    } else {
-      setRefresh((refresh) => refresh * -1);
     }
   };
-
-  useEffect(() => {
-    console.log("로딩중");
-    if (memberIndex !== -1 && name !== "") {
-      setLoadstatus(false);
-      console.log("로딩끝");
-    } else {
-      fetchUserData();
-    }
-  }, [memberIndex, name, participants, loadstatus]);
 
   useEffect(() => {
     const client = stompClient();
