@@ -51,18 +51,20 @@ export const Menu = ({ onClose }: Props) => {
       };
 
       const fetchMyPageData = async () => {
-        try {
-          const myPageData = await getMyPage();
-          setProfileImage(myPageData.profileImage);
-          setUserName(myPageData.name);
-          console.log("My Page Data:", myPageData);
-        } catch (err) {
-          console.error("Error fetching my page data:", err);
+        if (localStorage.jwt) {
+          try {
+            const myPageData = await getMyPage();
+            setProfileImage(myPageData.profileImage);
+            setUserName(myPageData.name);
+            console.log("My Page Data:", myPageData);
+          } catch (err) {
+            console.error("Error fetching my page data:", err);
+          }
         }
-      };
 
-      fetchLetterCounts();
-      fetchMyPageData();
+        fetchLetterCounts();
+        fetchMyPageData();
+      };
     } else {
       setUser(false);
     }
