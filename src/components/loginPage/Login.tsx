@@ -49,7 +49,7 @@ export const Login = () => {
 };
 
 const Container = styled.div`
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 `;
 
 const LoginContainer = styled.div`

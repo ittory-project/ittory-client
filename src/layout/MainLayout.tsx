@@ -48,7 +48,7 @@ const MenuOverlay = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 0;
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background: rgba(0, 0, 0, 0.8);
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
   visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
@@ -62,7 +62,7 @@ const MenuContainer = styled.div<{ $isOpen: boolean }>`
   top: 0;
   right: 0;
   width: 260px;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background: #fff;
   visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
   transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
