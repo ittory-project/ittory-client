@@ -240,7 +240,7 @@ export const Menu = ({ onClose }: Props) => {
 
 const BackGround = styled.div`
   width: 260px;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;

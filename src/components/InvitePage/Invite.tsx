@@ -178,7 +178,7 @@ export const Invite = () => {
           ) {
             setParticipants(response.participants);
             if (response.participants) {
-              if (response.participants[0].nickname === response.nickname) {
+              if (response.participants[0].nickname == response.nickname) {
                 setMemberIndex(0);
                 setRefresh((refresh) => refresh * -1);
                 setLoadstatus(false);
@@ -272,7 +272,7 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: relative;
   left: 50%;

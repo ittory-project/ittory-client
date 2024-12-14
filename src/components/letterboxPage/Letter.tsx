@@ -203,7 +203,7 @@ export const Letter = ({
 const BackGround = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: fixed;
   top: 0;
@@ -267,7 +267,7 @@ const More = styled.img`
 
 const Background = styled.div<{ $backgroundimg: string }>`
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background-image: url(${(props) => props.$backgroundimg});
   background-size: cover;
   display: flex;
