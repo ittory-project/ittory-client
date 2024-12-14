@@ -106,7 +106,7 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
 const BackGround = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: relative;
   left: 50%;

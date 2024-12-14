@@ -126,7 +126,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
 };
 
 const Container = styled.div`
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
   padding: 10px 0;
   background-color: #212529;
