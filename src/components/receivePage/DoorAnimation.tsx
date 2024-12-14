@@ -57,7 +57,7 @@ export const DoorAnimation = ({ letterId }: Props) => {
 const Container = styled.div`
     background: linear-gradient(162deg, #FFF2CA 0%, #AE8D57 100%);
     width: 100%;
-    height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 `;
 
 const Door = styled.div`

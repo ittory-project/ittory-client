@@ -328,7 +328,7 @@ const Logo = styled.div<$Props>`
 `;
 
 const FirstSection = styled.div<$Props>`
-  height: 100vh; /* 화면 크기만큼 차지 */
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
@@ -337,7 +337,7 @@ const FirstSection = styled.div<$Props>`
 `;
 
 const Section = styled.div<$Props>`
-  height: 92vh; /* 화면 크기만큼 차지 */
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
@@ -345,7 +345,7 @@ const Section = styled.div<$Props>`
   overflow-x: hidden;
 `;
 const WhiteSection = styled.div<$Props>`
-  height: 92vh; /* 화면 크기만큼 차지 */
+  height: calc(var(--vh, 1vh) * 100 - 8);
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: contain; /* 이미지가 전체 화면을 덮도록 */
