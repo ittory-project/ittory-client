@@ -36,7 +36,6 @@ export const Invite = () => {
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
-  const [finalLoad, setFinalLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
 
   const fetchParticipants = async () => {
@@ -73,56 +72,45 @@ export const Invite = () => {
       } catch (err) {
         console.error("Error during data fetching:", err);
       }
-    };
 
+      if (participants.length > 0) {
+        fetchUserData();
+      } else {
+        setRefresh((refresh) => refresh * -1);
+      }
+    };
     fetchData();
   }, [refresh]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchUserData = () => {
+    console.log(participants);
+    console.log(participants.length);
+
+    if (participants.length > 0) {
       console.log(participants);
-      console.log(participants.length);
-
-      try {
-        if (participants.length <= 0) {
-          setRefresh((refresh) => refresh * -1);
-        } else if (participants.length > 0) {
-          console.log(participants);
-          if (participants[0].nickname == userName) {
-            setMemberIndex(0); // 방장 여부 체크
-            console.log("방장여부체크");
-            setLoadstatus(false);
-          } else {
-            setMemberIndex(1);
-            console.log("방장여부체크");
-            setLoadstatus(false);
-          }
-        }
-      } catch (err) {
-        console.error("Error during data fetching:", err);
+      if (participants[0].nickname == userName) {
+        setMemberIndex(0); // 방장 여부 체크
+        console.log("방장여부체크");
+        setLoadstatus(false);
+      } else {
+        setMemberIndex(1);
+        console.log("방장여부체크");
+        setLoadstatus(false);
       }
-    };
-
-    fetchData();
-  }, [participants, name]);
-
+    } else {
+      setRefresh((refresh) => refresh * -1);
+    }
+  };
+  /*
   useEffect(() => {
     console.log("로딩중");
     if (memberIndex !== -1 && name !== "") {
       setLoadstatus(false);
       console.log("로딩끝");
     } else {
-      setRefresh((refresh) => refresh * -1);
+      fetchUserData();
     }
-  }, [memberIndex, name, participants, loadstatus]);
-
-  useEffect(() => {
-    if (load) {
-      setFinalLoad(true);
-    } else {
-      setFinalLoad(false);
-    }
-  }, [load]);
+  }, [memberIndex, name, participants, loadstatus]);*/
 
   useEffect(() => {
     const client = stompClient();
@@ -204,7 +192,7 @@ export const Invite = () => {
 
   return (
     <BackGround>
-      {load && finalLoad ? (
+      {load ? (
         <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
