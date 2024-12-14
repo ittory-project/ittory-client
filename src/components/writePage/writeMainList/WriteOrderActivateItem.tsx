@@ -17,7 +17,7 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
-    event.currentTarget.src = "/img/profile.png";
+    event.currentTarget.src = "/assets/write/img_error.svg";
   };
 
   return (
