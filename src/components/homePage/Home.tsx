@@ -292,6 +292,7 @@ const Container = styled.div`
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-x: hidden;
+  background: #fff;
 
   /* 스크롤바 숨기기 */
   &::-webkit-scrollbar {
