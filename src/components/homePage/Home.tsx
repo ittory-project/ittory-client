@@ -281,7 +281,7 @@ export const Home = () => {
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   z-index: 2;
   //overflow-y: scroll; /* 세로 스크롤 가능 */
   scroll-snap-type: y mandatory;
