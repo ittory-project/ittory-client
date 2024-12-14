@@ -82,11 +82,11 @@ export const Invite = () => {
     const fetchData = async () => {
       console.log(participants);
       console.log(participants.length);
-      if (participants.length <= 0) {
-        setRefresh((refresh) => refresh * -1);
-      }
+
       try {
-        if (participants.length > 0) {
+        if (participants.length <= 0) {
+          setRefresh((refresh) => refresh * -1);
+        } else if (participants.length > 0) {
           console.log(participants);
           if (participants[0].nickname == userName) {
             setMemberIndex(0); // 방장 여부 체크
@@ -111,6 +111,8 @@ export const Invite = () => {
     if (memberIndex !== -1 && name !== "") {
       setLoadstatus(false);
       console.log("로딩끝");
+    } else {
+      setRefresh((refresh) => refresh * -1);
     }
   }, [memberIndex, name, participants, loadstatus]);
 
