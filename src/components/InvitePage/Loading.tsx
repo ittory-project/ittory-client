@@ -19,5 +19,5 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
     }
   }, [loadstatus]);
 
-  return <div>로딩중</div>;
+  return <div></div>;
 };
