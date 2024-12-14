@@ -49,7 +49,9 @@ export const Invite = () => {
           setMemberIndex(1);
         }
       }
-      setPrevParticipants(participants);
+      if (participants) {
+        setPrevParticipants(participants);
+      }
       setParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
@@ -71,15 +73,38 @@ export const Invite = () => {
       } catch (err) {
         console.error("Error during data fetching:", err);
       }
-
-      if (participants.length > 0) {
-        fetchUserData();
-      } else {
-        setRefresh((refresh) => refresh * -1);
-      }
     };
+    if (participants.length > 0) {
+      console.log("participant데이터 들어옴");
+      fetchUserData();
+    } else {
+      console.log("participant데이터 안들어옴");
+      setRefresh((refresh) => refresh * -1);
+    }
     fetchData();
   }, [refresh]);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      console.log(participants);
+      console.log(participants.length);
+
+      if (participants.length > 0) {
+        console.log(participants);
+        if (participants[0].nickname == userName) {
+          setMemberIndex(0); // 방장 여부 체크
+          console.log("방장여부체크");
+          setLoadstatus(false);
+        } else {
+          setMemberIndex(1);
+          console.log("방장여부체크");
+          setLoadstatus(false);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [participants]);
 
   const fetchUserData = () => {
     console.log(participants);
@@ -134,6 +159,7 @@ export const Invite = () => {
               },
             });
           } else if (response.action === "ENTER") {
+            fetchParticipants();
             setRefresh((refresh) => refresh * -1);
           }
         } catch (err) {
