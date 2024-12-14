@@ -80,7 +80,6 @@ export default function ImageCropper({
         }
       );
       console.log("Cropped Image URL: ", croppedImgUrl);
-      setCroppedImage(croppedImgUrl);
 
       //Blob으로 변경
       const responseBlob = await fetch(croppedImgUrl).then((res) => res.blob());
@@ -108,6 +107,7 @@ export default function ImageCropper({
         const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
         console.log("Image uploaded successfully to S3!");
         console.log("Image URL: ", s3ImageUrl);
+        setCroppedImage(s3ImageUrl);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error(

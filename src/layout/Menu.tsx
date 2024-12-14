@@ -55,12 +55,12 @@ export const Menu = ({ onClose }: Props) => {
           const myPageData = await getMyPage();
           setProfileImage(myPageData.profileImage);
           setUserName(myPageData.name);
+
           console.log("My Page Data:", myPageData);
         } catch (err) {
           console.error("Error fetching my page data:", err);
         }
       };
-
       fetchLetterCounts();
       fetchMyPageData();
     } else {

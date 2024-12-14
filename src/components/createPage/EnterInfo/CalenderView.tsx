@@ -35,7 +35,7 @@ export default function CalenderView({ setValue, deliverDay }: Props) {
           {format(currentMonth, "MM") === format(current, "MM") ? (
             <>
               <PrevButton>
-                <img src={NonPrev} alt="nonprev" />
+                <img src={Prev} alt="nonprev" />
               </PrevButton>
             </>
           ) : (
@@ -153,7 +153,7 @@ const Day = styled.span`
   font-size: 0.75rem;
   font-weight: 400;
   display: flex;
-  padding: 0.5rem 0.6rem 0.7rem 0.6rem;
+  padding: 0.5rem 0.78rem 0.7rem 0.7rem;
   text-align: center;
 `;
 const Body = styled.div`

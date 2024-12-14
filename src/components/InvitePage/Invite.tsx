@@ -7,7 +7,7 @@ import { getParticipants } from "../../api/service/LetterService";
 import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
-import { postEnter } from "../../api/service/LetterService";
+import { Loading } from "./Loading";
 
 export interface Participants {
   sequence: number;
@@ -16,7 +16,6 @@ export interface Participants {
   imageUrl: string;
 }
 
-//재방문유저 여부
 export const Invite = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,8 +34,9 @@ export const Invite = () => {
   const [exitName, setExitName] = useState<string>("");
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<number>(1);
-  const [loading, setLoading] = useState<number>(-1);
   const [load, setLoad] = useState<boolean>(true);
+  const [loadstatus, setLoadstatus] = useState<boolean>(true);
+  const [rerfresh, setRerfresh] = useState<number>(1);
 
   const fetchParticipants = async () => {
     try {
@@ -50,8 +50,9 @@ export const Invite = () => {
           setMemberIndex(1);
         }
       }
-
-      setPrevParticipants(participants);
+      if (participants) {
+        setPrevParticipants(participants);
+      }
       setParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
@@ -59,99 +60,72 @@ export const Invite = () => {
   };
 
   useEffect(() => {
-    const fetchInitialData = async () => {
+    const fetchData = async () => {
       try {
         const mydata = await getMyPage();
+        const participantsData = await getParticipants(letterId);
+        setParticipants(participantsData);
+
         const userNameFromApi = mydata.name;
         const userIdFromApi = mydata.memberId;
+
         setName(userNameFromApi);
         setUserId(userIdFromApi);
       } catch (err) {
-        console.error("Error during initial data fetch:", err);
+        console.error("Error during data fetching:", err);
+      } finally {
+        if (participants.length > 0) {
+          console.log("participant데이터 들어옴");
+          fetchUserData();
+        } else {
+          console.log("participant데이터 안들어옴");
+        }
       }
     };
 
-    fetchInitialData();
-    console.log("Initial fetch started");
-  }, []);
-
-  useEffect(() => {
-    if (participants.length > 0) {
-      if (participants[0].nickname == userName) {
-        setMemberIndex(0); // 방장 여부 체크
-        setLoad(true);
-      } else {
-        setMemberIndex(1);
-        setLoad(true);
-      }
-    }
-  }, [participants]);
-
-  // 참가자 목록을 비동기적으로 가져오는 함수
-  const fetchParticipantsData = async () => {
-    try {
-      setLoad(true);
-      const participantsData = await getParticipants(letterId);
-
-      // 데이터가 변경되었을 경우에만 상태 업데이트
-      if (participantsData.length > 0) {
-        console.log(participantsData);
-        if (participantsData[0].nickname == userName) {
-          console.log(participantsData[0].nickname);
-          console.log(userName);
-          setLoading(0);
-          setMemberIndex(0); // 방장 여부 체크
-          console.log("방장여부체크");
-          setParticipants(participantsData);
-          setLoad(false);
-        } else {
-          setMemberIndex(1);
-          setLoading(1);
-          console.log("방장여부체크");
-          setParticipants(participantsData);
-          setLoad(false);
-        }
-        setLoad(false);
-        console.log("Participants data:", participantsData);
-        console.log(memberIndex);
-        //setParticipants(participantsData);
-        //setLoading(false);
-      }
-    } catch (err) {
-      console.error("Error fetching participants:", err);
-    }
-  };
-
-  useEffect(() => {
-    if (loading === 1) {
-      setMemberIndex(1);
-    } else {
-      setMemberIndex(0);
-    }
-    setLoad(false);
-  }, [loading]);
-
-  useEffect(() => {
-    console.log("memberIndex has changed:", memberIndex);
-  }, [memberIndex]);
-
-  useEffect(() => {
-    if (letterId) {
-      fetchParticipantsData(); // 참가자 목록을 비동기적으로 가져오기
-      console.log("fetchparti start");
-    }
+    fetchData();
   }, [refresh]);
 
   useEffect(() => {
-    // participants 배열이 비어있지 않으면, 데이터가 준비된 것이므로 렌더링
+    const UserData = async () => {
+      console.log(participants);
+      console.log(participants.length);
+
+      if (participants.length > 0) {
+        console.log(participants);
+        if (participants[0].nickname == userName) {
+          setMemberIndex(0); // 방장 여부 체크
+          console.log("방장여부체크");
+          setLoadstatus(false);
+        } else {
+          setMemberIndex(1);
+          console.log("방장여부체크");
+          setLoadstatus(false);
+        }
+      } else {
+        setRefresh((refresh) => refresh * -1);
+      }
+    };
+    UserData();
+  }, [rerfresh]);
+
+  const fetchUserData = () => {
+    console.log(participants);
+    console.log(participants.length);
+
     if (participants.length > 0) {
-      if (participants[0].nickname === userName) {
+      console.log(participants);
+      if (participants[0].nickname == userName) {
         setMemberIndex(0); // 방장 여부 체크
+        console.log("방장여부체크");
+        setLoadstatus(false);
       } else {
         setMemberIndex(1);
+        console.log("방장여부체크");
+        setLoadstatus(false);
       }
     }
-  }, [participants]);
+  };
 
   useEffect(() => {
     const client = stompClient();
@@ -188,6 +162,7 @@ export const Invite = () => {
               },
             });
           } else if (response.action === "ENTER") {
+            fetchParticipants();
             setRefresh((refresh) => refresh * -1);
           }
         } catch (err) {
@@ -230,36 +205,31 @@ export const Invite = () => {
 
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
-  //participants && memberIndex !== -1 && name != "" &&
 
   return (
     <BackGround>
-      {memberIndex === -1 ? (
-        <></>
+      {loadstatus || load ? (
+        <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
-          {exitName && <ExitAlert>{exitAlert}</ExitAlert>}
+          {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-
-          {participants.length > 0 && memberIndex !== -1 && name !== "" && (
-            <>
-              {memberIndex === 0 ? (
-                <HostUser
-                  guideOpen={guideOpen}
-                  items={participants}
-                  letterId={letterId}
-                  viewDelete={viewDelete}
-                  setViewDelete={setViewDelete}
-                />
-              ) : (
-                <Member
-                  letterId={letterId}
-                  guideOpen={guideOpen}
-                  items={participants}
-                  viewDelete={viewDelete}
-                />
-              )}
-            </>
+          {memberIndex === 0 && (
+            <HostUser
+              guideOpen={guideOpen}
+              items={participants}
+              letterId={letterId}
+              viewDelete={viewDelete}
+              setViewDelete={setViewDelete}
+            />
+          )}
+          {memberIndex === 1 && (
+            <Member
+              letterId={letterId}
+              guideOpen={guideOpen}
+              items={participants}
+              viewDelete={viewDelete}
+            />
           )}
         </>
       )}
