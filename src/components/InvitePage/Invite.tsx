@@ -44,7 +44,7 @@ export const Invite = () => {
 
       if (data.length > 0 || participants.length > 0) {
         // 방장 여부 체크
-        if (data[0].nickname == name) {
+        if (data[0].nickname == name || data[0].nickname == userName) {
           setMemberIndex(0);
           setLoadstatus(false);
         } else {
@@ -80,7 +80,10 @@ export const Invite = () => {
           fetchParticipants();
           console.log("데이터없음-useEffect");
         } else {
-          if (participants[0].nickname == name) {
+          if (
+            participants[0].nickname == name ||
+            participants[0].nickname == userName
+          ) {
             setMemberIndex(0);
             setLoadstatus(false);
           } else {
@@ -110,7 +113,10 @@ export const Invite = () => {
         if (participants.length < 1) {
           fetchParticipants();
         } else {
-          if (participants[0].nickname === userName) {
+          if (
+            participants[0].nickname == userName ||
+            participants[0].nickname == name
+          ) {
             setMemberIndex(0);
             setLoadstatus(false);
           } else {
@@ -172,7 +178,7 @@ export const Invite = () => {
           ) {
             setParticipants(response.participants);
             if (response.participants) {
-              if (response.participants[0].nickname === response.nickname) {
+              if (response.participants[0].nickname == response.nickname) {
                 setMemberIndex(0);
                 setRefresh((refresh) => refresh * -1);
                 setLoadstatus(false);
