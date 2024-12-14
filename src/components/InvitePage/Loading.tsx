@@ -5,12 +5,6 @@ import { getParticipants } from "../../api/service/LetterService";
 interface Props {
   loadstatus: boolean;
   setLoad: React.Dispatch<React.SetStateAction<boolean>>;
-  setLoadstatus: React.Dispatch<React.SetStateAction<boolean>>;
-  memberIndex: number;
-  setParticipants: React.Dispatch<React.SetStateAction<Participants[]>>;
-  letterId: number;
-  setMemberIndex: React.Dispatch<React.SetStateAction<number>>;
-  userName: string;
 }
 
 export const Loading = ({ loadstatus, setLoad }: Props) => {
