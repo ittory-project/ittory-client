@@ -20,11 +20,8 @@ const bg6 = "/assets/home/05.jpg";
 const bg7 = "/assets/home/06.jpg";
 const bg8 = "/assets/home/07.jpg";
 
-//메인화면 스크롤 인터렉션 반영
-//스크롤 속도 조절..
-
-interface Props {
-  img: string;
+interface $Props {
+  $img: string;
 }
 
 export const Home = () => {
@@ -179,10 +176,10 @@ export const Home = () => {
         />
         <>
           <FirstSection
-            img={bg1}
+            $img={bg1}
             ref={(el) => el && (sectionRefs.current[0] = el)}
           >
-            <Logo img={logo} />
+            <Logo $img={logo} />
             <ButtonContainer onClick={handleButton}>
               <ButtonTxt>편지 쓰러 가기</ButtonTxt>
             </ButtonContainer>
@@ -202,35 +199,35 @@ export const Home = () => {
             />
           </FirstSection>
           <Section
-            img={bg2}
+            $img={bg2}
             ref={(el) => el && (sectionRefs.current[1] = el)}
           />
           <Section
-            img={bg3}
+            $img={bg3}
             ref={(el) => el && (sectionRefs.current[2] = el)}
           />
           <WhiteSection
-            img={bg4}
+            $img={bg4}
             ref={(el) => el && (sectionRefs.current[3] = el)}
           />
           <WhiteSection
             //onTouchStart={() => handleScroll(4)}
-            img={bg5}
+            $img={bg5}
             ref={(el) => el && (sectionRefs.current[4] = el)}
           />
           <WhiteSection
             //onTouchStart={() => handleScroll(5)}
-            img={bg6}
+            $img={bg6}
             ref={(el) => el && (sectionRefs.current[5] = el)}
           />
           <WhiteSection
             //onTouchStart={() => handleScroll(6)}
-            img={bg7}
+            $img={bg7}
             ref={(el) => el && (sectionRefs.current[6] = el)}
           />
           <Section
             //onTouchStart={() => handleScroll(7)}
-            img={bg8}
+            $img={bg8}
             ref={(el) => el && (sectionRefs.current[7] = el)}
           >
             <FinalButton onClick={handleButton}>
@@ -292,6 +289,7 @@ const Container = styled.div`
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-x: hidden;
+  background: #fff;
 
   /* 스크롤바 숨기기 */
   &::-webkit-scrollbar {
@@ -317,10 +315,10 @@ const fadeInDown = keyframes`
     transform: translateY(0);
   }
 `;
-const Logo = styled.div<Props>`
+const Logo = styled.div<$Props>`
   width: 170px;
   height: 94px;
-  background: ${(props) => `url(${props.img}) no-repeat center center`};
+  background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: contain;
   position: relative;
   margin: 0 auto;
@@ -329,27 +327,27 @@ const Logo = styled.div<Props>`
   pointer-events: none;
 `;
 
-const FirstSection = styled.div<Props>`
+const FirstSection = styled.div<$Props>`
   height: 100vh; /* 화면 크기만큼 차지 */
   width: 100%; /* 화면 크기만큼 차지 */
-  background: ${(props) => `url(${props.img}) no-repeat center center`};
+  background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
   scroll-snap-align: start;
   background-position: center;
 `;
 
-const Section = styled.div<Props>`
+const Section = styled.div<$Props>`
   height: 92vh; /* 화면 크기만큼 차지 */
   width: 100%; /* 화면 크기만큼 차지 */
-  background: ${(props) => `url(${props.img}) no-repeat center center`};
+  background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
   scroll-snap-align: start;
   overflow-x: hidden;
 `;
-const WhiteSection = styled.div<Props>`
+const WhiteSection = styled.div<$Props>`
   height: 92vh; /* 화면 크기만큼 차지 */
   width: 100%; /* 화면 크기만큼 차지 */
-  background: ${(props) => `url(${props.img}) no-repeat center center`};
+  background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: contain; /* 이미지가 전체 화면을 덮도록 */
   scroll-snap-align: start;
   overflow-x: hidden;
