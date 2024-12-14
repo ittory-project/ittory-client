@@ -262,9 +262,6 @@ export const Write = ({
   };
 
   useEffect(() => {
-    console.log(writeOrderList)
-  }, [writeOrderList])
-  useEffect(() => {
     console.log(orderData)
     console.log(writeOrderList)
     console.log(
@@ -313,7 +310,7 @@ export const Write = ({
       await fetchParticipantsAndUpdateLockedItems();
 
       if (writeOrderList.length > 0) {
-        setNowMemberId(writeOrderList[0].memberId);
+        setNowMemberId(writeOrderList[nowSequence - 1].memberId);
         console.log(
           "다음 사람 인덱스: ",
           1 % partiNum,
@@ -323,7 +320,6 @@ export const Write = ({
           writeOrderList[1 % partiNum].memberId
         );
         setNextMemberId(writeOrderList[1 % partiNum].memberId);
-        setNowSequence(writeOrderList[0].sequence);
       }
     };
     initialize();
