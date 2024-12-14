@@ -142,10 +142,10 @@ export default function CompleteModal({
       </Header>
       <MainContainer>
         <Receiver>
-          To.{receiverName} <LetterImg img={letter} />
+          To.{receiverName} <LetterImg $img={letter} />
         </Receiver>
-        <Book backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
-          <TitleContainer font={selectfont}>{title}</TitleContainer>
+        <Book $backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
+          <TitleContainer $font={selectfont}>{title}</TitleContainer>
           {deliverDay === null ? (
             <></>
           ) : (
@@ -158,7 +158,7 @@ export default function CompleteModal({
           )}
           <>
             <Shadow src={shadow} />
-            <BtnImgContainer bgimg={croppedImage} />
+            <BtnImgContainer $bgimg={croppedImage} />
           </>
         </Book>
       </MainContainer>
@@ -222,20 +222,20 @@ const Receiver = styled.div`
   line-height: 20px;
   letter-spacing: -0.5px;
 `;
-const LetterImg = styled.div<{ img: string }>`
+const LetterImg = styled.div<{ $img: string }>`
   width: 19px;
   height: 14px;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   background-size: cover;
   background-repeat: no-repeat;
   margin-left: 2px;
 `;
-const Book = styled.div<{ backgroundImage: string }>`
+const Book = styled.div<{ $backgroundImage: string }>`
   width: 224px;
   height: 292px;
   margin-botom: 24px;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -243,15 +243,16 @@ const Book = styled.div<{ backgroundImage: string }>`
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
 `;
-const TitleContainer = styled.div<{ font: string }>`
+const TitleContainer = styled.div<{ $font: string }>`
   display: flex;
   width: 224px;
   color: #fff;
   padding: 16px 0px 12px 0px;
   justify-content: center;
   align-items: center;
-  font-family: ${(props) => props.font};
-  font-size: ${(props) => (props.font === "Ownglyph_UNZ-Rg" ? "21px" : "16px")};
+  font-family: ${(props) => props.$font};
+  font-size: ${(props) =>
+    props.$font === "Ownglyph_UNZ-Rg" ? "21px" : "16px"};
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.5px;
@@ -278,14 +279,14 @@ const Shadow = styled.img`
   z-index: 3;
   flex-shrink: 0;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
+const BtnImgContainer = styled.div<{ $bgimg: string }>`
   width: 136px;
   height: 136px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
   border-radius: 20px;
-  background-image: url(${(props) => props.bgimg});
+  background-image: url(${(props) => props.$bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

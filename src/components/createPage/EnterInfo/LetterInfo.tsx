@@ -121,8 +121,8 @@ export default function LetterInfo({
           </Title>
         )}
         <MainCotainer
-          shiftup={String(keyboardVisible)}
-          isopen={String(isModalOpen)}
+          $shiftup={String(keyboardVisible)}
+          $isopen={String(isModalOpen)}
         >
           <InputBox>
             <InputLogo>받는 사람</InputLogo>
@@ -138,8 +138,8 @@ export default function LetterInfo({
                 }
                 setReceiverName(e.target.value);
               }}
-              min-length="1"
-              max-length="12"
+              $minLength={1}
+              $maxLength={12}
               onFocus={handleFocus}
               spellCheck="false"
               onKeyDown={handleKeyDown}
@@ -161,8 +161,8 @@ export default function LetterInfo({
                 }
                 setMyName(e.target.value);
               }}
-              min-length="1"
-              max-length="5"
+              $minLength={1}
+              $maxLength={5}
               onFocus={handleFocus}
               spellCheck="false"
               //onBlur={handleBlur}
@@ -292,7 +292,7 @@ const Text = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
-const MainCotainer = styled.div<{ shiftup?: string; isopen?: string }>`
+const MainCotainer = styled.div<{ $shiftup?: string; $isopen?: string }>`
   display: flex;
   width: 16.5rem;
   height: 14.7rem;
@@ -306,7 +306,7 @@ const MainCotainer = styled.div<{ shiftup?: string; isopen?: string }>`
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
   transition: transform 0.3s ease;
   transform: ${(props) =>
-    props.shiftup ? "translateY(0.8rem)" : "translateY(0)"};
+    props.$shiftup ? "translateY(0.8rem)" : "translateY(0)"};
 `;
 const InputBox = styled.div`
   display: flex;
@@ -328,7 +328,7 @@ const InputLogo = styled.div`
   line-height: 16px;
   letter-spacing: -0.5px;
 `;
-const Input = styled.input`
+const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
   width: 232px;
   height: 24px;
   border: 0;
