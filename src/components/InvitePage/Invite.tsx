@@ -16,7 +16,6 @@ export interface Participants {
   imageUrl: string;
 }
 
-//재방문유저 여부
 export const Invite = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -180,7 +179,7 @@ export const Invite = () => {
 
   return (
     <BackGround>
-      {load ? (
+      {loadstatus || load ? (
         <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>

@@ -45,6 +45,13 @@ export const Join = () => {
           if (enterresponse.enterStatus !== true) {
             setNoAccess(true);
           } //case별로 추가해야함..
+          /*
+          // Enum 값
+성공: ENTER
+인원초과: EXCEEDED
+이미진행: STARTED
+편지삭제: DELETED
+          */
         }
       } catch (err) {
         console.error(err);
