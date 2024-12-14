@@ -43,8 +43,7 @@ export const Invite = () => {
       const data = await getParticipants(letterId);
 
       if (data.length > 0 || participants.length > 0) {
-        // 방장 여부 체크
-        if (data[0].nickname == name || data[0].nickname == userName) {
+        if (data[0].nickname === name || data[0].nickname === userName) {
           setMemberIndex(0);
           setLoadstatus(false);
         } else {
@@ -81,8 +80,8 @@ export const Invite = () => {
           console.log("데이터없음-useEffect");
         } else {
           if (
-            participants[0].nickname == name ||
-            participants[0].nickname == userName
+            participants[0].nickname === name ||
+            participants[0].nickname === userName
           ) {
             setMemberIndex(0);
             setLoadstatus(false);
@@ -114,8 +113,8 @@ export const Invite = () => {
           fetchParticipants();
         } else {
           if (
-            participants[0].nickname == userName ||
-            participants[0].nickname == name
+            participants[0].nickname === userName ||
+            participants[0].nickname === name
           ) {
             setMemberIndex(0);
             setLoadstatus(false);
@@ -177,8 +176,9 @@ export const Invite = () => {
             "participants" in response
           ) {
             setParticipants(response.participants);
+            /*
             if (response.participants) {
-              if (response.participants[0].nickname == response.nickname) {
+              if (response.participants[0].nickname === response.nickname) {
                 setMemberIndex(0);
                 setRefresh((refresh) => refresh * -1);
                 setLoadstatus(false);
@@ -187,7 +187,7 @@ export const Invite = () => {
                 setRefresh((refresh) => refresh * -1);
                 setLoadstatus(false);
               }
-            }
+            }*/
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
