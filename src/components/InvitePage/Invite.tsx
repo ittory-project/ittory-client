@@ -101,7 +101,7 @@ export const Invite = () => {
       setRefresh((refresh) => refresh * -1);
     }
   };
-  /*
+
   useEffect(() => {
     console.log("로딩중");
     if (memberIndex !== -1 && name !== "") {
@@ -110,7 +110,7 @@ export const Invite = () => {
     } else {
       fetchUserData();
     }
-  }, [memberIndex, name, participants, loadstatus]);*/
+  }, [memberIndex, name, participants, loadstatus]);
 
   useEffect(() => {
     const client = stompClient();
