@@ -398,6 +398,7 @@ export const Write = ({
   //   window.localStorage.setItem('nowSequence', "1")
   //   window.localStorage.setItem('nowRepeat', "1")
   //   window.localStorage.setItem('totalItem', "1")
+  //   window.localStorage.setItem('resetTime', "")
   // };
 
   // 위치 버튼 누르면 그 부분으로 이동하는 액션
