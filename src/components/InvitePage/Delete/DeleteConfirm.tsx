@@ -7,7 +7,7 @@ export const DeleteConfirm = () => {
   const navigate = useNavigate();
 
   const handleButton = () => {
-    navigate("/");
+    navigate("/", { replace: true });
   };
   return (
     <BackGround>
