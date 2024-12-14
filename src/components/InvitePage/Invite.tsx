@@ -36,6 +36,7 @@ export const Invite = () => {
   const [refresh, setRefresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
+  const [rerfresh, setRerfresh] = useState<number>(1);
 
   const fetchParticipants = async () => {
     try {
@@ -72,20 +73,21 @@ export const Invite = () => {
         setUserId(userIdFromApi);
       } catch (err) {
         console.error("Error during data fetching:", err);
+      } finally {
+        if (participants.length > 0) {
+          console.log("participant데이터 들어옴");
+          fetchUserData();
+        } else {
+          console.log("participant데이터 안들어옴");
+        }
       }
     };
-    if (participants.length > 0) {
-      console.log("participant데이터 들어옴");
-      fetchUserData();
-    } else {
-      console.log("participant데이터 안들어옴");
-      setRefresh((refresh) => refresh * -1);
-    }
+
     fetchData();
   }, [refresh]);
 
   useEffect(() => {
-    const fetchUserData = () => {
+    const UserData = async () => {
       console.log(participants);
       console.log(participants.length);
 
@@ -100,11 +102,12 @@ export const Invite = () => {
           console.log("방장여부체크");
           setLoadstatus(false);
         }
+      } else {
+        setRefresh((refresh) => refresh * -1);
       }
     };
-
-    fetchUserData();
-  }, [participants]);
+    UserData();
+  }, [rerfresh]);
 
   const fetchUserData = () => {
     console.log(participants);
