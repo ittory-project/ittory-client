@@ -21,7 +21,7 @@ export const WritePage = () => {
   const [showCountdown, setShowCountdown] = useState(false);
   // 편지 작성 시간 계산
   const storedResetTime = window.localStorage.getItem("resetTime");
-  const [resetTime, setResetTime] = useState<number | null>(Number(storedResetTime));
+  const [resetTime, setResetTime] = useState<number | null>(storedResetTime ? Number(storedResetTime) : null);
   const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
   // 편지 시작까지 남은 시간 계산
   const [startCountdown, setStartCountdown] = useState<number>(10);
@@ -43,6 +43,10 @@ export const WritePage = () => {
   useEffect(() => {
     getStartInfo();
   }, []);
+
+  useEffect(() => {
+    console.log('리셋타임', resetTime)
+  }, [resetTime])
 
   // 모달 띄우는 시간 설정
   useEffect(() => {
