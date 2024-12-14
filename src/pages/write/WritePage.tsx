@@ -44,10 +44,6 @@ export const WritePage = () => {
     getStartInfo();
   }, []);
 
-  useEffect(() => {
-    console.log('리셋타임', resetTime)
-  }, [resetTime])
-
   // 모달 띄우는 시간 설정
   useEffect(() => {
     if (resetTime) {
@@ -73,7 +69,7 @@ export const WritePage = () => {
         setShowPopup(false);
         setShowCountdown(false);
         setResetTime(Date.now() + 100 * 1000);
-        window.localStorage.setItem("resetTime", String(resetTime));
+        window.localStorage.setItem("resetTime", String(Date.now() + 100 * 1000));
       }, 4000);
 
       return () => {
