@@ -36,7 +36,8 @@ export const Invite = () => {
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
-  const [loadstatus, setLoadstaus] = useState<boolean>(true);
+  const [finalLoad, setFinalLoad] = useState<boolean>(true);
+  const [loadstatus, setLoadstatus] = useState<boolean>(true);
 
   const fetchParticipants = async () => {
     try {
@@ -61,33 +62,16 @@ export const Invite = () => {
     const fetchData = async () => {
       try {
         const mydata = await getMyPage();
+        const participantsData = await getParticipants(letterId);
+        setParticipants(participantsData);
+
         const userNameFromApi = mydata.name;
         const userIdFromApi = mydata.memberId;
 
         setName(userNameFromApi);
         setUserId(userIdFromApi);
-
-        const participantsData = await getParticipants(letterId);
-
-        if (participantsData.length > 0) {
-          console.log(participantsData);
-          if (participantsData[0].nickname == userName) {
-            setMemberIndex(0); // 방장 여부 체크
-            console.log("방장여부체크");
-            setParticipants(participantsData);
-            setLoadstaus(false);
-          } else {
-            setMemberIndex(1);
-            console.log("방장여부체크");
-            setParticipants(participantsData);
-            setLoadstaus(false);
-          }
-          setLoadstaus(false);
-        }
       } catch (err) {
         console.error("Error during data fetching:", err);
-      } finally {
-        //setLoadstaus(false); // 로딩 종료
       }
     };
 
@@ -95,12 +79,48 @@ export const Invite = () => {
   }, [refresh]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      console.log(participants);
+      console.log(participants.length);
+      if (participants.length <= 0) {
+        setRefresh((refresh) => refresh * -1);
+      }
+      try {
+        if (participants.length > 0) {
+          console.log(participants);
+          if (participants[0].nickname == userName) {
+            setMemberIndex(0); // 방장 여부 체크
+            console.log("방장여부체크");
+            setLoadstatus(false);
+          } else {
+            setMemberIndex(1);
+            console.log("방장여부체크");
+            setLoadstatus(false);
+          }
+        }
+      } catch (err) {
+        console.error("Error during data fetching:", err);
+      }
+    };
+
+    fetchData();
+  }, [participants, name]);
+
+  useEffect(() => {
     console.log("로딩중");
     if (memberIndex !== -1 && name !== "") {
-      setLoadstaus(false);
+      setLoadstatus(false);
       console.log("로딩끝");
     }
-  }, [memberIndex, name, participants]);
+  }, [memberIndex, name, participants, loadstatus]);
+
+  useEffect(() => {
+    if (load) {
+      setFinalLoad(true);
+    } else {
+      setFinalLoad(false);
+    }
+  }, [load]);
 
   useEffect(() => {
     const client = stompClient();
@@ -182,13 +202,8 @@ export const Invite = () => {
 
   return (
     <BackGround>
-      {loadstatus || load ? (
-        <Loading
-          loadstatus={loadstatus}
-          setLoad={setLoad}
-          setLoadstatus={setLoadstaus}
-          memberIndex={memberIndex}
-        />
+      {load && finalLoad ? (
+        <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}

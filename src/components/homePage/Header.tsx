@@ -30,7 +30,7 @@ export default function Header({ backgroundColor, setBackgroundColor }: Props) {
   }, [backgroundColor]);
 
   return (
-    <Container color={bgColor}>
+    <Container $color={bgColor}>
       {bgColor && <Logo src={logo} />}{" "}
       {/*<Logo src={logo} $isVisible={bgColor} />*/}
       <MenuLogo src={menu} onClick={handleMenu} />
@@ -46,8 +46,8 @@ export default function Header({ backgroundColor, setBackgroundColor }: Props) {
   );
 }
 
-const Container = styled.div<{ color: boolean }>`
-  background: ${(props) => (props.color ? "#fff" : "transparent")};
+const Container = styled.div<{ $color: boolean }>`
+  background: ${(props) => (props.$color ? "#fff" : "transparent")};
   position: absolute;
   top: 0;
   display: flex;
