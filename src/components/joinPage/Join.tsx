@@ -7,6 +7,8 @@ import { postEnter } from "../../api/service/LetterService";
 import NoAccess from "./NoAccess";
 import { NicknamePostRequest } from "../../api/model/ParticipantModel";
 import { postNickname } from "../../api/service/ParticipantService";
+import Started from "./Started";
+import Deleted from "./Deleted";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
@@ -16,6 +18,8 @@ export const Join = () => {
   const [login, setLogin] = useState<boolean>(false);
   const [visited, setVisited] = useState<boolean>(false);
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
+  const [started, setStarted] = useState<boolean>(false);
+  const [deleted, setDeleted] = useState<boolean>(false);
   const navigate = useNavigate();
   const params = useParams();
   const letterId = params.letterId;
@@ -43,15 +47,14 @@ export const Join = () => {
 
           const enterresponse = await postEnter(Number(letterId));
           if (enterresponse.enterStatus !== true) {
-            setNoAccess(true);
-          } //case별로 추가해야함..
-          /*
-          // Enum 값
-성공: ENTER
-인원초과: EXCEEDED
-이미진행: STARTED
-편지삭제: DELETED
-          */
+            if (enterresponse.enterAction === "EXCEEDED") {
+              setNoAccess(true);
+            } else if (enterresponse.enterAction === "STARTED") {
+              setStarted(true);
+            } else if (enterresponse.enterAction === "DELETED") {
+              setDeleted(true);
+            }
+          }
         }
       } catch (err) {
         console.error(err);
@@ -102,7 +105,9 @@ export const Join = () => {
   return (
     <>
       {noAccess && <NoAccess />}
-      {!noAccess && (
+      {started && <Started />}
+      {deleted && <Deleted />}
+      {!noAccess && !started && !deleted && (
         <BackGround>
           {!viewModal && (
             <>

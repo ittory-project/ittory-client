@@ -24,9 +24,9 @@ export interface LetterItemResponse {
 
 export interface WsExitResponse {
   participantId: number;
-  nickname: string;
-  action: string; // "EXIT"
+  action: string;
   isManager: boolean;
+  nickname: string;
 }
 
 export interface WsEndResponse {

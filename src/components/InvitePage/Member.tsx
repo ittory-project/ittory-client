@@ -19,6 +19,7 @@ import { quitLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { DeleteConfirm } from "./Delete/DeleteConfirm";
 import defaultImg from "../../../public/assets/menu/profileImg.svg";
+import { getMyPage } from "../../api/service/MemberService";
 
 interface Props {
   guideOpen: boolean;
