@@ -26,7 +26,7 @@ export default function FontSelect({
 
   useEffect(() => {
     console.log(select);
-    if (select != "") {
+    if (select !== "") {
       setFont(select);
     } else {
       setFont(fonts[0].value);
@@ -39,13 +39,13 @@ export default function FontSelect({
         {fonts.map((fontlist) => (
           <FontItem
             key={fontlist.id}
-            fontFamily={fontlist.value}
-            selected={fontlist.value === font}
+            $fontFamily={fontlist.value}
+            $selected={fontlist.value === font}
             onClick={() => handleFontChange(fontlist.value)}
           >
             <Fonttxt
-              fontFamily={fontlist.value}
-              selected={fontlist.value === font}
+              $fontFamily={fontlist.value}
+              $selected={fontlist.value === font}
             >
               {fontlist.name}
             </Fonttxt>
@@ -83,7 +83,7 @@ const FontSelectorContainer = styled.div`
     background-color: #f1f1f1;
   }
 `;
-const FontItem = styled.div<{ fontFamily: string; selected: boolean }>`
+const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   display: inline-flex;
   width: 80px;
   height: 34px;
@@ -95,19 +95,19 @@ const FontItem = styled.div<{ fontFamily: string; selected: boolean }>`
   text-align: center;
   border-radius: 50px;
   border: ${(props) =>
-    props.selected ? "1px solid #ffa256" : "1px solid #ced4da"};
-  background: ${(props) => (props.selected ? "#fff2e8" : "#f1f3f5")};
+    props.$selected ? "1px solid #ffa256" : "1px solid #ced4da"};
+  background: ${(props) => (props.$selected ? "#fff2e8" : "#f1f3f5")};
   cursor: pointer;
   transition: background-color 0.3s;
 `;
-const Fonttxt = styled.span<{ fontFamily: string; selected: boolean }>`
-  color: ${(props) => (props.selected ? "#ffa256" : "#858e96")};
-  font-family: ${(props) => props.fontFamily};
+const Fonttxt = styled.span<{ $fontFamily: string; $selected: boolean }>`
+  color: ${(props) => (props.$selected ? "#ffa256" : "#858e96")};
+  font-family: ${(props) => props.$fontFamily};
   font-size: ${(props) =>
-    props.fontFamily === "Ownglyph_UNZ-Rg" ? "20px" : "14px"};
+    props.$fontFamily === "Ownglyph_UNZ-Rg" ? "20px" : "14px"};
   font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.5px;
   margin-top: ${(props) =>
-    props.fontFamily === "GmarketSans" ? "3px" : "1px"};
+    props.$fontFamily === "GmarketSans" ? "3px" : "1px"};
 `;
