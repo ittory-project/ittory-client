@@ -49,7 +49,7 @@ export async function postLetter(
   data: LetterRequestBody
 ): Promise<LetterPostResponse> {
   const response = await api.post<ApiLetterResponse<LetterPostResponse>>(
-    "https://dev-server.ittory.co.kr/api/letter",
+    `/api/letter`,
     data
   );
   return response.data.data;
@@ -162,9 +162,7 @@ export async function postEnter(
   letterId: number
 ): Promise<LetterEnterResponse> {
   try {
-    const response = await api.post(
-      `https://dev-server.ittory.co.kr/api/letter/enter/${letterId}`
-    );
+    const response = await api.post(`api/letter/enter/${letterId}`);
     return response.data.data;
   } catch (error) {
     console.error("Error in postEnter:", error); // 확인용 로그
