@@ -46,20 +46,19 @@ export const Invite = () => {
         if (data[0].nickname === name || data[0].nickname === userName) {
           setMemberIndex(0);
           setLoadstatus(false);
-          window.location.reload();
         } else {
           setMemberIndex(1);
           setLoadstatus(false);
-          window.location.reload();
         }
       } else {
         const data = await getParticipants(letterId);
         if (data.length < 1) {
           setParticipants(data);
           window.location.reload();
+          /*
           if (participants.length < 1) {
             window.location.reload();
-          }
+          }*/
         }
       }
 
