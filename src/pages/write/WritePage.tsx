@@ -63,10 +63,10 @@ export const WritePage = () => {
     }, 1000);
 
     const showTimer = setTimeout(() => {
+      setShowPopup(false);
       setShowCountdown(true);
 
       const hideTimer = setTimeout(() => {
-        setShowPopup(false);
         setShowCountdown(false);
         setResetTime(Date.now() + 100 * 1000);
         window.localStorage.setItem("resetTime", String(Date.now() + 100 * 1000));
@@ -132,6 +132,6 @@ const Countdown = styled.img`
   right: 0;
   width: 100%;
   height: 100%;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 6;
 `;
