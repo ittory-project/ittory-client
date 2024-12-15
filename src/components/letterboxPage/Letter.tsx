@@ -61,25 +61,23 @@ export const Letter = ({
   const [coverType, setCoverType] = useState<CoverTypeGetResponse | null>(null);
   const [elementLength, setElementLength] = useState<number>(0);
 
-  useEffect(() => {
-    // 브라우저의 기본 뒤로가기를 사용할 때 스택에 페이지가 쌓이지 않도록 설정
-    window.history.replaceState(null, "", window.location.href);
-
-    // 필요한 경우에 추가적인 페이지 데이터나 상태를 설정할 수 있습니다.
-  }, []);
-
   const handleCancel = () => {
     setOpenLetter(false);
-    navigate({ pathname: "/letterbox", search: "" }, { replace: true });
+    window.history.replaceState({}, "", "/letterbox");
+    navigate("/letterbox", { replace: true });
   };
   const handleMore = () => {
     setIsModalOpen(true);
   };
 
   useEffect(() => {
+    // URL을 쿼리 없는 상태로 덮어쓰기
+    navigate("/letterbox", { replace: true });
+  }, []);
+
+  useEffect(() => {
     setDeleteName(deleteItem);
   }, [deleteItem]);
-  //여기까지
 
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
@@ -88,6 +86,22 @@ export const Letter = ({
     const page = Number(query.get("page")) || 1;
     setCurrentPage(page);
   }, [query]);
+  /*
+  useEffect(() => {
+    const page = Number(query.get("page")) || 1;
+    setCurrentPage(page);
+
+    // 쿼리 파라미터에 page가 있을 경우
+    if (query.has("page")) {
+      // page가 존재하면 삭제하지 않고 그대로 유지
+      const newQuery = new URLSearchParams(query.toString()); // 기존 query 복사
+
+      // 새로운 URL로 리디렉션하며 히스토리 스택을 대체
+      navigate(`${location.pathname}?${newQuery.toString()}`, {
+        replace: true,
+      });
+    }
+  }, [location, query, navigate]);*/
 
   useEffect(() => {
     dispatch(clearOrderData());
@@ -96,7 +110,7 @@ export const Letter = ({
     window.localStorage.setItem("nowSequence", "1");
     window.localStorage.setItem("nowRepeat", "1");
     window.localStorage.setItem("totalItem", "1");
-    window.localStorage.setItem('resetTime', "")
+    window.localStorage.setItem("resetTime", "");
 
     const fetchData = async () => {
       try {
@@ -136,7 +150,7 @@ export const Letter = ({
             letterStyle={coverType}
             letterFontStyle={font}
             letterContent={letterInfo}
-            partiList={partiList}
+            //partiList={partiList}
           />
         );
       else
@@ -150,68 +164,67 @@ export const Letter = ({
   };
 
   return (
-    <BackGround>
-      {isModalOpen && <Overlay />}
-      {!popup && letterInfo && coverType && font && (
-        <>
-          <Header>
-            <CancelBox>
-              <Cancel src={x} alt="x_icon" onClick={handleCancel} />
-            </CancelBox>
-            <MoreBox>
-              <More src={more} alt="more_icon" onClick={handleMore} />
-            </MoreBox>
-          </Header>
-          <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
+    coverType && (
+      <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
+        {isModalOpen && <Overlay />}
+        {!popup && letterInfo && font && (
+          <>
+            <Header>
+              <CancelBox>
+                <Cancel src={x} alt="x_icon" onClick={handleCancel} />
+              </CancelBox>
+              <MoreBox>
+                <More src={more} alt="more_icon" onClick={handleMore} />
+              </MoreBox>
+            </Header>
+
             <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
             <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
               {renderPageContent()}
             </CoverContainer>
             <Pagination totalPages={elementLength + 1} />
-          </Background>
-          {isModalOpen &&
-            (context === "created" ? (
-              <Created_Modal
-                setIsModalOpen={setIsModalOpen}
-                setPopup={setPopup}
-                openLetter={openLetter}
-              />
-            ) : context === "received" ? (
-              <Received_Modal
-                setIsModalOpen={setIsModalOpen}
-                setPopup={setPopup}
-                openLetter={openLetter}
-              />
-            ) : null)}
-        </>
-      )}
-      {popup && (
-        <Delete_letterbox
-          setOpenLetter={setOpenLetter}
-          setPopup={setPopup}
-          onDelete={onDelete}
-          setIsModalOpen={setIsModalOpen}
-          context="created"
-          deleteItem={deleteName}
-          letterId={letterId}
-        />
-      )}
-    </BackGround>
+
+            {isModalOpen &&
+              (context === "created" ? (
+                <Created_Modal
+                  setIsModalOpen={setIsModalOpen}
+                  setPopup={setPopup}
+                  openLetter={openLetter}
+                />
+              ) : context === "received" ? (
+                <Received_Modal
+                  setIsModalOpen={setIsModalOpen}
+                  setPopup={setPopup}
+                  openLetter={openLetter}
+                />
+              ) : null)}
+          </>
+        )}
+        {popup && (
+          <Delete_letterbox
+            setOpenLetter={setOpenLetter}
+            setPopup={setPopup}
+            onDelete={onDelete}
+            setIsModalOpen={setIsModalOpen}
+            context="created"
+            deleteItem={deleteName}
+            letterId={letterId}
+          />
+        )}
+      </Background>
+    )
   );
 };
 
-const BackGround = styled.div`
+const Background = styled.div<{ $backgroundimg: string }>`
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+  background-image: url(${(props) => props.$backgroundimg});
+  background-size: cover;
   display: flex;
   flex-direction: column;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: linear-gradient(180deg, #f3c183 0%, #f0f5bf 100%);
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -226,6 +239,8 @@ const Overlay = styled.div`
 const Header = styled.div`
   display: flex;
   width: 100%;
+  position: absolute;
+  top: 0;
   padding: 0px 4px;
   align-items: center;
 `;
@@ -244,6 +259,7 @@ const Cancel = styled.img`
   flex-shrink: 0;
   margin-left: 5px;
   margin-top: 5px;
+  cursor: pointer;
 `;
 const MoreBox = styled.div`
   display: flex;
@@ -263,17 +279,7 @@ const More = styled.img`
   flex-shrink: 0;
   margin-right: 10.5px;
   margin-top: 4px;
-`;
-
-const Background = styled.div<{ $backgroundimg: string }>`
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
-  background-image: url(${(props) => props.$backgroundimg});
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  cursor: pointer;
 `;
 
 const CoverContainer = styled.div<{ $boardimg: string }>`

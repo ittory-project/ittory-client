@@ -12,23 +12,22 @@ interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
   member: number;
   letterId: number;
+  coverId: number;
 }
 
 interface SlideContentProps {
-  isActive: boolean;
-  index: number;
-  activeIndex: number;
-  totalSlides: number;
+  $isActive: boolean;
+  $index: number;
+  $activeIndex: number;
+  $totalSlides: number;
 }
 
-export const Count = ({ setViewCount, member, letterId }: Props) => {
+export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const length = Math.floor(50 / member);
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectNumber, setSelectNumber] = useState(1);
   const navigate = useNavigate();
-
-  console.log(length);
 
   useEffect(() => {
     setSelectNumber(activeIndex + 1);
@@ -38,10 +37,13 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
     setViewCount(false);
   };
 
+  console.log(coverId);
+
   const handleSubmit = async () => {
     try {
       const count = Number(selectNumber);
       const id = letterId;
+      const coverid = coverId;
       console.log("Request body:", { letterId: id, repeatCount: count }); // 로그 출력
 
       const requestBody = { letterId: id, repeatCount: count };
@@ -55,6 +57,7 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
       navigate("/Connection", {
         state: {
           letterId: letterId,
+          coverId: coverid,
         },
       });
     } catch (err) {
@@ -88,10 +91,10 @@ export const Count = ({ setViewCount, member, letterId }: Props) => {
                 {list.map((no, index) => (
                   <SwiperSlide key={no} style={{ height: "calc(15rem / 4)" }}>
                     <SlideContent
-                      isActive={index === activeIndex}
-                      index={index}
-                      activeIndex={activeIndex}
-                      totalSlides={list.length}
+                      $isActive={index === activeIndex}
+                      $index={index}
+                      $activeIndex={activeIndex}
+                      $totalSlides={list.length}
                     >
                       {no}
                     </SlideContent>
@@ -228,42 +231,42 @@ const SlideContent = styled.div<SlideContentProps>`
   letter-spacing: -0.096px;
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.isActive ? "#ffa256" : "#CED4DA")};
+  color: ${(props) => (props.$isActive ? "#ffa256" : "#CED4DA")};
   opacity: ${(props) => {
-    const { index, activeIndex, totalSlides } = props;
+    const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
-      (index - activeIndex + totalSlides) % totalSlides
+      ($index - $activeIndex + $totalSlides) % $totalSlides
     );
 
     if (distance === 0) {
       return "1";
-    } else if (distance === 1 || distance === totalSlides - 1) {
+    } else if (distance === 1 || distance === $totalSlides - 1) {
       return "1";
     }
     return "0.5";
   }};
   letter-spacing: ${(props) => {
-    const { index, activeIndex, totalSlides } = props;
+    const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
-      (index - activeIndex + totalSlides) % totalSlides
+      ($index - $activeIndex + $totalSlides) % $totalSlides
     );
 
     if (distance === 0) {
       return "-0.096px";
-    } else if (distance === 1 || distance === totalSlides - 1) {
+    } else if (distance === 1 || distance === $totalSlides - 1) {
       return "-0.088px";
     }
     return "-0.08px";
   }};
   font-size: ${(props) => {
-    const { index, activeIndex, totalSlides } = props;
+    const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
-      (index - activeIndex + totalSlides) % totalSlides
+      ($index - $activeIndex + $totalSlides) % $totalSlides
     );
 
     if (distance === 0) {
       return "24px";
-    } else if (distance === 1 || distance === totalSlides - 1) {
+    } else if (distance === 1 || distance === $totalSlides - 1) {
       return "22px";
     }
     return "20px";

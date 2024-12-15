@@ -164,11 +164,11 @@ export default function EditLetter({
             />
           </EditBtn>
           {coverTypes && (
-            <Book backgroundImage={coverTypes[backgroundimage]?.editImageUrl}>
-              <BookTitle font={selectfont}>{title}</BookTitle>
+            <Book $backgroundImage={coverTypes[backgroundimage]?.editImageUrl}>
+              <BookTitle $font={selectfont}>{title}</BookTitle>
               <Bright src={bright} />
               <Shadow src={shadow} />
-              <BtnImgContainer bgimg={croppedImage}></BtnImgContainer>
+              <BtnImgContainer $bgimg={croppedImage}></BtnImgContainer>
             </Book>
           )}
         </Cover>
@@ -246,11 +246,11 @@ const Info = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: var(--Border-Radius-radius_300, 8px);
-  //align-self: stretch;
+  background-color: #fff;
 `;
 const TitleTxt = styled.span`
   display: block;
-  color: #21529;
+  color: #212529;
   padding: 6px 0px;
   text-align: left;
   font-family: var(--Typography-family-title, SUIT);
@@ -307,13 +307,13 @@ const Cover = styled.div`
   background: #f8f9fa;
   align-items: center;
 `;
-const Book = styled.div<{ backgroundImage: string }>`
+const Book = styled.div<{ $backgroundImage: string }>`
   width: 120px;
   height: 156.429px;
   position: relative;
   margin-top: 15px;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -337,22 +337,22 @@ const Shadow = styled.img`
   z-index: 1;
   flex-shrink: 0;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
+const BtnImgContainer = styled.div<{ $bgimg: string }>`
   z-index: 0;
   width: 73px;
   height: 73px;
   gap: 4px;
   flex-shrink: 0;
   border-radius: 10px;
-  background-image: url(${(props) => props.bgimg});
+  background-image: url(${(props) => props.$bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 19px;
-  margin-left: 3px;
+  margin-top: 24px;
+  margin-left: 0.2px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
-const BookTitle = styled.div<{ font: string }>`
+const BookTitle = styled.div<{ $font: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -361,9 +361,9 @@ const BookTitle = styled.div<{ font: string }>`
   color: #fff;
   text-align: center;
   text-overflow: ellipsis;
-  font-family: ${(props) => props.font};
+  font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.font === "Ownglyph_UNZ-Rg" ? "12px" : "8.571px"};
+    props.$font === "Ownglyph_UNZ-Rg" ? "12px" : "8.571px"};
 `;
 const InputBox = styled.div`
   display: flex;
@@ -375,6 +375,7 @@ const InputBox = styled.div`
   margin-top: 0;
   border-bottom: 1px dashed #dee2e6;
   margin-bottom: 1.8px;
+  background-color: #fff;
 `;
 const InputLogo = styled.div`
   color: #868e96;
@@ -390,6 +391,7 @@ const Input = styled.input`
   height: 24px;
   border: 0;
   padding-left: 0;
+  background-color: #fff;
   &::placeholder {
     color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
