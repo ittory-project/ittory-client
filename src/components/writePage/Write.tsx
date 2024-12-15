@@ -106,6 +106,8 @@ export const Write = ({
   const [showFinishedModal, setShowFinishedModal] = useState(false);
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
+  // 퇴장 flag - 소켓 response가 안 와서 턴이 넘어갈 때
+  const [forceExit, setForceExit] = useState(false);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -157,6 +159,7 @@ export const Write = ({
     if (remainingTime <= -5) {
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
+      setForceExit(true)
     }
   }, [remainingTime])
 
@@ -169,6 +172,26 @@ export const Write = ({
   // 편지 작성 시 이탈 처리
   useEffect(() => {  
 
+    const handleVisibilityChange = () => {
+      let hiddenStartTime: number | null = null;
+      if (document.visibilityState === "hidden") {
+        console.log("백그라운드 전환");
+      } else if (document.visibilityState === "visible") {
+        console.log("다시돌아옴");
+        const storedResetTime = window.localStorage.getItem("resetTime");
+        if (Date.now() > Number(storedResetTime)) {
+        //if (forceExit) {
+          console.log("턴이 넘어가서 퇴장됨");
+          clientRef.current?.deactivate();
+          window.alert('장시간 자리를 이탈하여 퇴장되었습니다.')
+          quitLetterWs(letterNumId)
+          clientRef.current?.deactivate();
+          navigate('/')
+        }
+        hiddenStartTime = null;
+      }
+    };
+
     const handlePageHide = (event: PageTransitionEvent) => {
       if (!event.persisted) {
         console.log("Page hide");
@@ -179,9 +202,11 @@ export const Write = ({
       }
     };
     // 리스너
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("pagehide", handlePageHide);
   
     return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("pagehide", handlePageHide);
     };
   }, [letterNumId, quitLetterWs]);  
