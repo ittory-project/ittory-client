@@ -26,6 +26,7 @@ export default function FontSelect({
     setSelect(fontFamily);
     setSelectFid(fontId);
     setSelectId(fontId);
+    console.log(fontId);
   };
 
   useEffect(() => {

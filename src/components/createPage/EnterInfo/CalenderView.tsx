@@ -32,10 +32,11 @@ export default function CalenderView({ setValue, deliverDay }: Props) {
     <Wrapper>
       <Container>
         <Header>
-          {format(currentMonth, "MM") === format(current, "MM") ? (
+          {format(currentMonth, "MM") === format(current, "MM") &&
+          format(currentMonth, "yyyy") === format(current, "yyyy") ? (
             <>
               <PrevButton>
-                <img src={Prev} alt="nonprev" />
+                <img src={NonPrev} alt="nonprev" />
               </PrevButton>
             </>
           ) : (

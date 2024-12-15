@@ -40,8 +40,8 @@ export default function CoverModal({
   setKeyboardVisible,
   selectedImageIndex,
   setSelectedImageIndex,
-  setBackgroundimage,
   setSelecteFid,
+  setBackgroundimage,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -60,6 +60,7 @@ export default function CoverModal({
   const [fonts, setFonts] = useState<fontProps[]>([]);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [selectf, setSelectf] = useState<string>("");
+  const [selectfid, setSelectfid] = useState<number>(0);
 
   useEffect(() => {
     const fetchFonts = async () => {
@@ -89,7 +90,6 @@ export default function CoverModal({
   }, []);
 
   useEffect(() => {
-    console.log(selectedImageIndex);
     setImageIndex(selectedImageIndex);
   }, [selectedImageIndex, croppedImage]);
 
@@ -98,6 +98,7 @@ export default function CoverModal({
     setBackgroundimage(ImageIndex);
     setSelectfont(font);
     setIsModalOpen(false);
+    setSelecteFid(selectfid);
   };
 
   useEffect(() => {
@@ -315,6 +316,8 @@ export default function CoverModal({
           select={selectfont}
           setSelect={setSelectf}
           setSelectFid={setSelecteFid}
+          setSelectfid={setSelectfid}
+          selectfid={selectfid}
         />
       )}
     </ModalContainer>

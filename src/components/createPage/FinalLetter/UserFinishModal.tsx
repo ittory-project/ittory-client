@@ -51,12 +51,10 @@ export default function UserFinishModal({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-        console.log(types);
       } catch (err) {
         console.error(err);
       }
     };
-
     fetchCoverTypes();
   }, []);
 
@@ -66,20 +64,19 @@ export default function UserFinishModal({
         nickname: myName,
       };
       const response = await postNickname(requestBody, Number(letterId));
-      console.log("nickname:", response);
+      console.log(response);
     }
   };
 
   const fetchEnter = async (letterId: Number) => {
     try {
       const enterresponse = await postEnter(Number(letterId));
-      console.log("postenter:", enterresponse);
+      console.log(enterresponse);
       handleNickname(letterId);
     } catch (err) {
       console.error("Error fetching mydata:", err);
     }
   };
-  console.log(selectFid);
 
   const navigateToInvite = async () => {
     setGuideOpen(true);
@@ -101,6 +98,7 @@ export default function UserFinishModal({
       console.log("letterId", letterId);
 
       fetchEnter(letterId);
+      console.log(myName);
 
       navigate("/Invite", {
         state: {
@@ -131,13 +129,14 @@ export default function UserFinishModal({
       const response = await postLetter(requestBody);
       console.log("Response:", response);
       const letterId = response.letterId;
+      console.log("letterId", letterId);
 
       fetchEnter(letterId);
 
       navigate("/Invite", {
         state: {
           letterId: letterId,
-          guideOpen: true,
+          guideOpen: guideOpen,
           userName: myName,
         },
       });
@@ -196,19 +195,17 @@ export default function UserFinishModal({
           style={{
             background: "#CED4DA",
           }}
+          onClick={handleguide}
         >
-          <ButtonTxt style={{ color: "#495057" }} onClick={handleguide}>
-            사용법 보기
-          </ButtonTxt>
+          <ButtonTxt style={{ color: "#495057" }}>사용법 보기</ButtonTxt>
         </Button>
         <Button
           style={{
             background: "#FFA256",
           }}
+          onClick={navigateToInvite}
         >
-          <ButtonTxt style={{ color: "#fff" }} onClick={navigateToInvite}>
-            맘에 들어요!
-          </ButtonTxt>
+          <ButtonTxt style={{ color: "#fff" }}>맘에 들어요!</ButtonTxt>
         </Button>
       </ButtonContainer>
     </ModalContainer>

@@ -15,7 +15,7 @@ export const Create = () => {
   const [croppedImage, setCroppedImage] = useState<string>("");
   const [backgroundimage, setBackgroundimage] = useState<number>(0);
   const [selectfont, setSelectfont] = useState<string>("");
-  const [selectFid, setSelectFid] = useState<number>(0);
+  const [selectFid, setSelectFid] = useState<number>(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
   console.log(selectFid);

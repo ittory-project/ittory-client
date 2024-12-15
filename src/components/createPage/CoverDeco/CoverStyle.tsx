@@ -90,6 +90,7 @@ export default function CoverStyle({
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [selectf, setSelectf] = useState<string>("");
+  const [selectfid, setSelectfid] = useState<number>(0);
 
   useEffect(() => {
     const fetchCoverTypesAndFonts = async () => {
@@ -144,9 +145,6 @@ export default function CoverStyle({
     function handleOutside(e: MouseEvent) {
       const heightDiff =
         window.innerHeight - document.documentElement.clientHeight;
-      console.log(window.innerHeight);
-      console.log(document.documentElement.clientHeight);
-      console.log(heightDiff);
 
       // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
@@ -341,6 +339,7 @@ export default function CoverStyle({
             setBackgroundimage(ImageIndex);
             setViewCoverDeco(false);
             setViewFinalInfo(true);
+            setSelectFid(selectfid);
           }}
         >
           <ButtonTxt>꾸미기 완료</ButtonTxt>
@@ -366,6 +365,8 @@ export default function CoverStyle({
           select={selectf}
           setSelect={setSelectf}
           setSelectFid={setSelectFid}
+          setSelectfid={setSelectfid}
+          selectfid={selectfid}
         />
       )}
     </BackGround>
