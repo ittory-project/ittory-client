@@ -161,11 +161,15 @@ export async function getLetterInfo(
 export async function postEnter(
   letterId: number
 ): Promise<LetterEnterResponse> {
-  const response = await api.post(
-    `https://dev-server.ittory.co.kr/api/letter/enter/${letterId}`
-  );
-
-  return response.data.data;
+  try {
+    const response = await api.post(
+      `https://dev-server.ittory.co.kr/api/letter/enter/${letterId}`
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error in postEnter:", error); // 확인용 로그
+    throw error; // 에러를 호출부로 전달
+  }
 }
 
 // 편지 내용 상세 조회 API
