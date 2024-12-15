@@ -79,6 +79,8 @@ const errorHandler = (
     alert(`서버 연결에 실패하였습니다.`);
   }
 
+  console.log(Promise.reject(error));
+
   return Promise.reject(error);
 };
 
