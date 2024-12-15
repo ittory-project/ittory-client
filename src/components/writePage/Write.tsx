@@ -168,7 +168,6 @@ export const Write = ({
 
   // 편지 작성 시 이탈 처리
   useEffect(() => {  
-
     const handleVisibilityChange = () => {
       let hiddenStartTime: number | null = null;
       if (document.visibilityState === "hidden") {
@@ -189,12 +188,13 @@ export const Write = ({
     };
 
     const handlePageHide = (event: PageTransitionEvent) => {
+      window.alert(event)
       if (!event.persisted) {
         console.log("Page hide");
         quitLetterWs(letterNumId);
         clientRef.current?.deactivate();
-      } else {
-        console.log("캐시상태");
+        event.preventDefault();
+        event.returnValue = true; // 경고창 표시
       }
     };
     // 리스너
