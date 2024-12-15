@@ -37,7 +37,6 @@ export const Invite = () => {
   const [refresh, setRefresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
-  const [rerfresh, setRerfresh] = useState<number>(1);
 
   const fetchParticipants = async () => {
     try {
@@ -47,20 +46,23 @@ export const Invite = () => {
         if (data[0].nickname === name || data[0].nickname === userName) {
           setMemberIndex(0);
           setLoadstatus(false);
+          window.location.reload();
         } else {
           setMemberIndex(1);
           setLoadstatus(false);
+          window.location.reload();
         }
       } else {
         const data = await getParticipants(letterId);
         if (data.length < 1) {
-          console.log("데이터없음-함수refresh할거임");
+          setParticipants(data);
           window.location.reload();
+          if (participants.length < 1) {
+            window.location.reload();
+          }
         }
       }
-      if (participants) {
-        setPrevParticipants(participants);
-      }
+
       setParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
@@ -160,7 +162,10 @@ export const Invite = () => {
                   `참여한 순서대로 '${participants[1].nickname}'님이 방장이 되었어요`
                 );
               }
-              fetchParticipants();
+              setPrevParticipants(participants);
+              if (participants.length !== 1) {
+                fetchParticipants();
+              }
             } else {
               setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
               fetchParticipants();
