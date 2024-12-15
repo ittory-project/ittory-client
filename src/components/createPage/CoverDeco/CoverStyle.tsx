@@ -144,6 +144,9 @@ export default function CoverStyle({
     function handleOutside(e: MouseEvent) {
       const heightDiff =
         window.innerHeight - document.documentElement.clientHeight;
+      console.log(window.innerHeight);
+      console.log(document.documentElement.clientHeight);
+      console.log(heightDiff);
 
       // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
@@ -166,7 +169,6 @@ export default function CoverStyle({
 
   const onUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      //const reader = new FileReader();
       if (!e.target.files) {
         return;
       }
@@ -191,8 +193,6 @@ export default function CoverStyle({
     setCroppedImage(croppedImgUrl); // 크롭된 이미지 저장
     setIsModalOpen(false);
   };
-
-  console.log(fontPopup);
 
   return (
     <BackGround>
@@ -229,7 +229,7 @@ export default function CoverStyle({
               minLength={1}
               maxLength={12}
               spellCheck="false"
-              selectfont={font}
+              $selectfont={font}
             />
 
             <svg
@@ -241,9 +241,8 @@ export default function CoverStyle({
             >
               <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
             </svg>
-
             {isKeyboardOpen == true ? (
-              <KeyboardBar keyboardHeight={keyboardHeight}>
+              <KeyboardBar $keyboardHeight={keyboardHeight}>
                 <FontSelect
                   font={font}
                   fonts={fonts}
@@ -286,7 +285,7 @@ export default function CoverStyle({
             <>
               <Shadow src={shadow} />
               <BtnImgContainer
-                bgimg={croppedImage}
+                $bgimg={croppedImage}
                 onClick={onUploadImageButtonClick}
               >
                 <input
@@ -312,9 +311,9 @@ export default function CoverStyle({
           {coverTypes.map((coverType, index) => (
             <Image
               onClick={() => handleImageClick(index)}
-              clicked={ImageIndex === index}
+              $clicked={ImageIndex === index}
               key={index}
-              img={
+              $img={
                 ImageIndex === index
                   ? coverType.selectImageUrl
                   : coverType.notSelectImageUrl
@@ -475,7 +474,7 @@ const TitleContainer = styled.div`
   flex-direction: column;
 `;
 
-const Input = styled.input<{ selectfont: string }>`
+const Input = styled.input<{ $selectfont: string }>`
   box-sizing: border-box;
   display: flex;
   width: 184px;
@@ -492,9 +491,9 @@ const Input = styled.input<{ selectfont: string }>`
     color: #f1f3f5;
     text-align: center;
     text-overflow: ellipsis;
-    font-family: ${(props) => props.selectfont};
+    font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
-      props.selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -503,9 +502,9 @@ const Input = styled.input<{ selectfont: string }>`
     color: #f1f3f5;
     text-align: center;
     text-overflow: ellipsis;
-    font-family: ${(props) => props.selectfont};
+    font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
-      props.selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -516,9 +515,9 @@ const Input = styled.input<{ selectfont: string }>`
   }
 `;
 
-const KeyboardBar = styled.div<{ keyboardHeight: number }>`
+const KeyboardBar = styled.div<{ $keyboardHeight: number }>`
   position: fixed;
-  bottom: ${(props) => props.keyboardHeight}px;
+  bottom: ${(props) => props.$keyboardHeight}px;
   left: 0;
   right: 0;
   width: 100%;
@@ -571,9 +570,8 @@ const Shadow = styled.img`
   flex-shrink: 0;
   object-fit: cover;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
+const BtnImgContainer = styled.div<{ $bgimg: string }>`
   display: flex;
-  z-index: 2;
   cursor:pointer;
   position: relative; 
   width: 134px;
@@ -586,7 +584,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   gap: 4px
   flex-shrink: 0;
   border-radius: 20px;
-  background-image: url(${(props) => props.bgimg});
+  background-image: url(${(props) => props.$bgimg});
   background-size: cover; /* 이미지 크기를 컨테이너에 맞게 조정 */
   background-position: center; /* 이미지가 중앙에 위치하도록 */
   background-repeat: no-repeat; /* 이미지가 반복되지 않도록 */
@@ -646,15 +644,15 @@ const ImageContainer = styled.div`
   left: 50%;
   transform: translateX(-50%);
 `;
-const Image = styled.div<{ clicked: boolean; img: string }>`
+const Image = styled.div<{ $clicked: boolean; $img: string }>`
   cursor: pointer;
   transition: all 0.2s ease;
-  width: ${(props) => (props.clicked ? "56px" : "48px")};
-  height: ${(props) => (props.clicked ? "56px" : "48px")};
-  opacity: ${(props) => (props.clicked ? "" : "0.4")};
+  width: ${(props) => (props.$clicked ? "56px" : "48px")};
+  height: ${(props) => (props.$clicked ? "56px" : "48px")};
+  opacity: ${(props) => (props.$clicked ? "" : "0.4")};
   border-radius: 10.2px;
   flex-shrink: 0;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   background-size: cover; /* 이미지 크기를 컨테이너에 맞게 조정 */
   background-position: center; /* 이미지가 중앙에 위치하도록 */
   background-repeat: no-repeat; /* 이미지가 반복되지 않도록 */
