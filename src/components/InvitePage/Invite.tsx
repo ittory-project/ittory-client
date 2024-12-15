@@ -153,7 +153,8 @@ export const Invite = () => {
           console.log(response);
 
           // 퇴장 메시지 처리
-          if (response.action === "EXIT") {
+          if (response.action === "EXIT" && "nickname" in response) {
+            console.log(response);
             setExitName(response.nickname);
             if (response.nickname === prevParticipants[0].nickname) {
               setExitAlert(`방장 '${exitName}'님이 퇴장했어요`);
@@ -176,25 +177,12 @@ export const Invite = () => {
             "participants" in response
           ) {
             setParticipants(response.participants);
-            /*
-            if (response.participants) {
-              if (response.participants[0].nickname === response.nickname) {
-                setMemberIndex(0);
-                setRefresh((refresh) => refresh * -1);
-                setLoadstatus(false);
-              } else {
-                setMemberIndex(1);
-                setRefresh((refresh) => refresh * -1);
-                setLoadstatus(false);
-              }
-            }*/
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
         }
       });
 
-      // 서버에 입장 정보 전송
       client.publish({
         destination: `/ws/letter/enter/${letterId}`,
         body: JSON.stringify({ nickname: name }),
