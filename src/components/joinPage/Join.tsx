@@ -9,6 +9,7 @@ import { NicknamePostRequest } from "../../api/model/ParticipantModel";
 import { postNickname } from "../../api/service/ParticipantService";
 import Started from "./Started";
 import Deleted from "./Deleted";
+import { DeleteConfirm } from "../InvitePage/Delete/DeleteConfirm";
 import axios from "axios";
 
 export const Join = () => {
@@ -21,10 +22,11 @@ export const Join = () => {
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
   const [started, setStarted] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
+  const [deleteConf, setDeleteConf] = useState<boolean>(false);
   const navigate = useNavigate();
   const params = useParams();
   const letterId = params.letterId;
-  //letterId 추출
+
   useEffect(() => {
     if (letterId) {
       localStorage.setItem("letterId", letterId);
@@ -45,17 +47,15 @@ export const Join = () => {
           } else {
             setVisited(false);
           }
-
           try {
             const enterresponse = await postEnter(Number(letterId));
-
             if (enterresponse.enterStatus !== true) {
               if (enterresponse.enterAction === "EXCEEDED") {
                 setNoAccess(true);
               } else if (enterresponse.enterAction === "STARTED") {
                 setStarted(true);
               } else if (enterresponse.enterAction === "DELETED") {
-                setDeleted(true);
+                setDeleteConf(true);
               }
             }
           } catch (error) {
@@ -63,6 +63,12 @@ export const Join = () => {
             if (axios.isAxiosError(error) && error.response?.status === 400) {
               console.error("400 Error:", error.response.data);
               navigate("/");
+            } else if (
+              axios.isAxiosError(error) &&
+              error.response?.status === 404
+            ) {
+              console.error("404 Error:", error.response.data);
+              setDeleted(true);
             }
           }
         }
@@ -70,7 +76,6 @@ export const Join = () => {
         console.error(err);
       }
     };
-
     fetchVisitUser();
   }, []);
 
@@ -117,7 +122,8 @@ export const Join = () => {
       {noAccess && <NoAccess />}
       {started && <Started />}
       {deleted && <Deleted />}
-      {!noAccess && !started && !deleted && (
+      {deleteConf && <DeleteConfirm />}
+      {!noAccess && !started && !deleted && !deleteConf && (
         <BackGround>
           {!viewModal && (
             <>
