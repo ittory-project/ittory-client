@@ -3,7 +3,7 @@ import { Area } from "react-easy-crop";
 export default async function getCroppedImg(
   imageSrc: string,
   crop: Area,
-  size: { width: number; height: number; borderRadius: number }
+  size: { width: number; height: number }
 ): Promise<string> {
   const image = new Image();
   image.src = imageSrc;
@@ -21,7 +21,6 @@ export default async function getCroppedImg(
     throw new Error("Could not get canvas context");
   }
 
-  // Set canvas size to the desired cropped area size
   canvas.width = size.width;
   canvas.height = size.height;
 
@@ -33,9 +32,8 @@ export default async function getCroppedImg(
   const cropX = crop.x * scaleX;
   const cropY = crop.y * scaleY;
   const cropWidth = crop.width * scaleX;
-  const cropHeight = crop.height * scaleY;
+  const cropHeight = crop.height * scaleY * 1.25;
 
-  // Draw the image on the canvas
   ctx.drawImage(
     image,
     cropX,
@@ -47,44 +45,6 @@ export default async function getCroppedImg(
     size.width,
     size.height
   );
-
-  // Apply rounded corners by clipping
-  ctx.beginPath();
-  ctx.moveTo(size.borderRadius, 0);
-  ctx.lineTo(size.width - size.borderRadius, 0);
-  ctx.arc(
-    size.width - size.borderRadius,
-    size.borderRadius,
-    size.borderRadius,
-    -Math.PI / 2,
-    0
-  );
-  ctx.lineTo(size.width, size.height - size.borderRadius);
-  ctx.arc(
-    size.width - size.borderRadius,
-    size.height - size.borderRadius,
-    size.borderRadius,
-    0,
-    Math.PI / 2
-  );
-  ctx.lineTo(size.borderRadius, size.height);
-  ctx.arc(
-    size.borderRadius,
-    size.height - size.borderRadius,
-    size.borderRadius,
-    Math.PI / 2,
-    Math.PI
-  );
-  ctx.lineTo(0, size.borderRadius);
-  ctx.arc(
-    size.borderRadius,
-    size.borderRadius,
-    size.borderRadius,
-    Math.PI,
-    -Math.PI / 2
-  );
-  ctx.closePath();
-  ctx.clip();
 
   // Convert canvas to blob and return as a data URL
   return new Promise<string>((resolve, reject) => {

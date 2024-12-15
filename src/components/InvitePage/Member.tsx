@@ -215,11 +215,26 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     <List>
                       {items.map((user, index) =>
                         index === 0 ? (
-                          <MainUser key={user.memberId}>
+                          <MainUser key={index}>
                             <Crown $img={crown} />
                             <User>
-                              <ProfileImg $img={items[0].imageUrl} />
-                              <UserName>{items[0].nickname}</UserName>
+                              {!user.imageUrl ? (
+                                <ProfileImg $img={defaultImg} />
+                              ) : (
+                                <ProfileImg $img={user.imageUrl} />
+                              )}
+                              {user.nickname && user.nickname.length > 3 ? (
+                                <UserNameContainer>
+                                  <UserName>
+                                    {handleUserName(user.nickname)}
+                                  </UserName>
+                                  <UserName style={{ letterSpacing: "-0.2em" }}>
+                                    ···
+                                  </UserName>
+                                </UserNameContainer>
+                              ) : (
+                                <UserName>{user.nickname}</UserName>
+                              )}
                             </User>
                           </MainUser>
                         ) : (

@@ -241,6 +241,19 @@ export default function CoverStyle({
             >
               <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
             </svg>
+            {isKeyboardOpen == true ? (
+              <KeyboardBar $keyboardHeight={keyboardHeight}>
+                <FontSelect
+                  font={font}
+                  fonts={fonts}
+                  setFont={setFont}
+                  setSelect={setSelectf}
+                  select={selectf}
+                />
+              </KeyboardBar>
+            ) : (
+              <></>
+            )}
           </TitleContainer>
 
           {croppedImage === "" ? (
@@ -559,7 +572,6 @@ const Shadow = styled.img`
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
   display: flex;
-  z-index: 2;
   cursor:pointer;
   position: relative; 
   width: 134px;
