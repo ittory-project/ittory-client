@@ -16,7 +16,7 @@ export const Exit = ({ setViewExit, letterId }: Props) => {
 
   const handleExit = () => {
     quitLetterWs(letterId);
-    //navigate("/", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
