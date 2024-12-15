@@ -9,6 +9,7 @@ import { NicknamePostRequest } from "../../api/model/ParticipantModel";
 import { postNickname } from "../../api/service/ParticipantService";
 import Started from "./Started";
 import Deleted from "./Deleted";
+import axios from "axios";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
@@ -45,14 +46,23 @@ export const Join = () => {
             setVisited(false);
           }
 
-          const enterresponse = await postEnter(Number(letterId));
-          if (enterresponse.enterStatus !== true) {
-            if (enterresponse.enterAction === "EXCEEDED") {
-              setNoAccess(true);
-            } else if (enterresponse.enterAction === "STARTED") {
-              setStarted(true);
-            } else if (enterresponse.enterAction === "DELETED") {
-              setDeleted(true);
+          try {
+            const enterresponse = await postEnter(Number(letterId));
+
+            if (enterresponse.enterStatus !== true) {
+              if (enterresponse.enterAction === "EXCEEDED") {
+                setNoAccess(true);
+              } else if (enterresponse.enterAction === "STARTED") {
+                setStarted(true);
+              } else if (enterresponse.enterAction === "DELETED") {
+                setDeleted(true);
+              }
+            }
+          } catch (error) {
+            console.log(error);
+            if (axios.isAxiosError(error) && error.response?.status === 400) {
+              console.error("400 Error:", error.response.data);
+              navigate("/"); // 호출부에서 navigate
             }
           }
         }
@@ -116,7 +126,7 @@ export const Join = () => {
                 <Text>편지에 사용할 닉네임을 정해주세요</Text>
               </Title>
               <Container>
-                <InputBox hasError={duplicateError}>
+                <InputBox $hasError={duplicateError}>
                   <InputLogo>내 이름</InputLogo>
                   <Input
                     required
@@ -227,7 +237,7 @@ const Container = styled.div`
   background: #fff;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
 `;
-const InputBox = styled.div<{ hasError: boolean }>`
+const InputBox = styled.div<{ $hasError: boolean }>`
   display: flex;
   width: 16rem;
   flex-direction: column;
@@ -236,7 +246,7 @@ const InputBox = styled.div<{ hasError: boolean }>`
   gap: 6px;
   margin-top: 0;
   border-bottom: 1px dashed
-    ${(props) => (props.hasError ? "#ff0004" : "#dee2e6")};
+    ${(props) => (props.$hasError ? "#ff0004" : "#dee2e6")};
   margin-bottom: 1.8px;
 `;
 const InputLogo = styled.div`
