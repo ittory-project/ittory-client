@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { deleteLetterboxLetter } from "../../api/service/MemberService";
 
-//200은 뜨는데 실제로 삭제는 안된다..
-
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -82,7 +80,7 @@ const BackGround = styled.div`
   flex-direction: column;
   align-items: center;
   height: calc(var(--vh, 1vh) * 100);
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

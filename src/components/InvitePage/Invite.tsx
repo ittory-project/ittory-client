@@ -8,6 +8,8 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { Loading } from "./Loading";
+import { response } from "express";
+import { off } from "process";
 
 export interface Participants {
   sequence: number;
@@ -36,23 +38,27 @@ export const Invite = () => {
   const [refresh, setRefresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
-  const [rerfresh, setRerfresh] = useState<number>(1);
 
   const fetchParticipants = async () => {
     try {
       const data = await getParticipants(letterId);
 
-      if (data.length > 0) {
-        // 방장 여부 체크
-        if (data[0].nickname === userName) {
+      if (data.length > 0 || participants.length > 0) {
+        if (data[0].nickname === name || data[0].nickname === userName) {
           setMemberIndex(0);
+          setLoadstatus(false);
         } else {
           setMemberIndex(1);
+          setLoadstatus(false);
+        }
+      } else {
+        const data = await getParticipants(letterId);
+        if (data.length < 1) {
+          setParticipants(data);
+          window.location.reload();
         }
       }
-      if (participants) {
-        setPrevParticipants(participants);
-      }
+
       setParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
@@ -63,23 +69,61 @@ export const Invite = () => {
     const fetchData = async () => {
       try {
         const mydata = await getMyPage();
-        const participantsData = await getParticipants(letterId);
-        setParticipants(participantsData);
-
         const userNameFromApi = mydata.name;
         const userIdFromApi = mydata.memberId;
 
         setName(userNameFromApi);
         setUserId(userIdFromApi);
+        if (participants.length < 1) {
+          fetchParticipants();
+          console.log("데이터없음-useEffect");
+        } else {
+          if (
+            participants[0].nickname === name ||
+            participants[0].nickname === userName
+          ) {
+            setMemberIndex(0);
+            setLoadstatus(false);
+          } else {
+            setMemberIndex(1);
+            setLoadstatus(false);
+          }
+        }
       } catch (err) {
         console.error("Error during data fetching:", err);
-      } finally {
-        if (participants.length > 0) {
-          console.log("participant데이터 들어옴");
-          fetchUserData();
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const mydata = await getMyPage();
+        const data = await getParticipants(letterId);
+        setParticipants(data);
+        const userNameFromApi = mydata.name;
+        const userIdFromApi = mydata.memberId;
+        setName(userNameFromApi);
+        setUserId(userIdFromApi);
+
+        if (participants.length < 1) {
+          fetchParticipants();
         } else {
-          console.log("participant데이터 안들어옴");
+          if (
+            participants[0].nickname === userName ||
+            participants[0].nickname === name
+          ) {
+            setMemberIndex(0);
+            setLoadstatus(false);
+          } else {
+            setMemberIndex(1);
+            setLoadstatus(false);
+          }
         }
+      } catch (err) {
+        console.error("Error during data fetching:", err);
       }
     };
 
@@ -87,45 +131,10 @@ export const Invite = () => {
   }, [refresh]);
 
   useEffect(() => {
-    const UserData = async () => {
-      console.log(participants);
-      console.log(participants.length);
-
-      if (participants.length > 0) {
-        console.log(participants);
-        if (participants[0].nickname == userName) {
-          setMemberIndex(0); // 방장 여부 체크
-          console.log("방장여부체크");
-          setLoadstatus(false);
-        } else {
-          setMemberIndex(1);
-          console.log("방장여부체크");
-          setLoadstatus(false);
-        }
-      } else {
-        setRefresh((refresh) => refresh * -1);
-      }
-    };
-    UserData();
-  }, [rerfresh]);
-
-  const fetchUserData = () => {
-    console.log(participants);
-    console.log(participants.length);
-
-    if (participants.length > 0) {
-      console.log(participants);
-      if (participants[0].nickname == userName) {
-        setMemberIndex(0); // 방장 여부 체크
-        console.log("방장여부체크");
-        setLoadstatus(false);
-      } else {
-        setMemberIndex(1);
-        console.log("방장여부체크");
-        setLoadstatus(false);
-      }
+    if (memberIndex > -1) {
+      setLoadstatus(false);
     }
-  };
+  }, [memberIndex]);
 
   useEffect(() => {
     const client = stompClient();
@@ -140,17 +149,24 @@ export const Invite = () => {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
             message.body
           );
-          console.log(response);
 
-          // 퇴장 메시지 처리
-          if (response.action === "EXIT") {
-            setExitName(response.nickname);
-            if (response.nickname === prevParticipants[0].nickname) {
-              setExitAlert(`방장 '${exitName}'님이 퇴장했어요`);
-              setHostAlert(`참여한 순서대로 '${exitName}'님이 방장이 되었어요`);
+          if (
+            response.action === "EXIT" &&
+            "nickname" in response &&
+            "isManager" in response
+          ) {
+            if (response.isManager) {
+              console.log("방장 퇴장 감지");
+              setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
               fetchParticipants();
+              console.log(participants);
+              if (participants[0]) {
+                setHostAlert(
+                  `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`
+                );
+              }
             } else {
-              setExitAlert(`'${exitName}'님이 퇴장했어요`);
+              setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
               fetchParticipants();
             }
           } else if (response.action === "END") {
@@ -161,16 +177,21 @@ export const Invite = () => {
                 letterId: letterId,
               },
             });
-          } else if (response.action === "ENTER") {
-            fetchParticipants();
-            setRefresh((refresh) => refresh * -1);
+          } else if (
+            response.action === "ENTER" &&
+            "participants" in response
+          ) {
+            console.log(response.action);
+            if (response.participants) {
+              setParticipants(response.participants);
+            }
+            console.log(participants);
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
         }
       });
 
-      // 서버에 입장 정보 전송
       client.publish({
         destination: `/ws/letter/enter/${letterId}`,
         body: JSON.stringify({ nickname: name }),
@@ -206,9 +227,15 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
+  /**
+   {load ? (
+        <Loading loadstatus={loadstatus} setLoad={setLoad} />
+      ) : (
+   */
+
   return (
     <BackGround>
-      {loadstatus || load ? (
+      {load ? (
         <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
@@ -221,6 +248,7 @@ export const Invite = () => {
               letterId={letterId}
               viewDelete={viewDelete}
               setViewDelete={setViewDelete}
+              hostname={name}
             />
           )}
           {memberIndex === 1 && (

@@ -147,7 +147,7 @@ export default function ImageCropper({
 
 const Container = styled.div`
   width: 100%;
-  height: 98%;
+  height: 96%;
   position: absolute;
   bottom: 0;
   border-radius: 20px 20px 0px 0px;

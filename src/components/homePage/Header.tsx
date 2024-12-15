@@ -114,4 +114,5 @@ const MenuLogo = styled.img`
   padding: 5px 3px;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
