@@ -36,13 +36,17 @@ export const LetterBox = () => {
     const focusCreate = location.state?.focusCreate;
     const focusReceive = location.state?.focusReceive;
 
+    console.log(focusCreate, focusReceive);
+
     if (focusCreate !== undefined) {
       setCreate(focusCreate);
-    }
-    if (focusReceive !== undefined) {
+    } else if (focusReceive !== undefined) {
       setReceive(focusReceive);
+    } else {
+      setCreate(true);
+      setReceive(false);
     }
-  }, [location.state]);
+  }, []);
 
   useEffect(() => {
     if (focusOn === "create") {

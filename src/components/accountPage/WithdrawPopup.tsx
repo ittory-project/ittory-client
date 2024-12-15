@@ -6,7 +6,7 @@ export const WithdrawPopup = () => {
   const navigate = useNavigate();
 
   const handleHome = () => {
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   return (

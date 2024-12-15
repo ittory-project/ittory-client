@@ -159,7 +159,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
             {buttonEnable ? (
               <Button
                 style={{ background: "#FFA256", bottom: "16px" }}
-                selectedReason={selectedReason ?? 0}
+                $selectedReason={selectedReason ?? 0}
                 onClick={handleWithdraw}
               >
                 <ButtonTxt>탈퇴할게요</ButtonTxt>
@@ -168,7 +168,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
               <Button
                 disabled={true}
                 style={{ background: "#CED4DA" }}
-                selectedReason={selectedReason ?? 0}
+                $selectedReason={selectedReason ?? 0}
                 onClick={handleWithdraw}
               >
                 <ButtonTxt>탈퇴할게요</ButtonTxt>
@@ -355,7 +355,7 @@ const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
 `;
-const Button = styled.button<{ selectedReason: number }>`
+const Button = styled.button<{ $selectedReason: number }>`
   box-sizing: border-box;
   display: flex;
   height: 48px;
@@ -368,7 +368,7 @@ const Button = styled.button<{ selectedReason: number }>`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  margin-top: ${(props) => (props.selectedReason !== 4 ? "2.5rem" : "0")};
+  margin-top: ${(props) => (props.$selectedReason !== 4 ? "2.5rem" : "0")};
 `;
 
 const ButtonTxt = styled.div`

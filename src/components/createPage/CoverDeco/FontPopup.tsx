@@ -27,11 +27,13 @@ export default function FontPopup({
   const [selected, setSelected] = useState<string>("");
 
   useEffect(() => {
-    console.log(font);
+    console.log(select);
     setSelected(font);
   }, []);
 
   const handleButton = () => {
+    setSelected(font);
+    console.log(font);
     if (selected !== "") {
       console.log(selected);
       setSelect(selected);
@@ -47,7 +49,7 @@ export default function FontPopup({
           fonts={fonts}
           setFont={setFont}
           setSelect={setSelected}
-          select={selected}
+          select={select}
         />
       </FontContainer>
       <Line src={_Line} />
