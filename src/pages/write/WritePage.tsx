@@ -107,7 +107,7 @@ export const WritePage = () => {
       {showCountdown && <Countdown src={CountdownGif} />}
       <Write
         remainingTime={resetTime ? remainingTime : 100}
-        resetTime={resetTime}
+        // resetTime={resetTime}
         setResetTime={setResetTime}
         letterTitle={letterTitle}
       />
