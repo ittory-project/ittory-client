@@ -8,6 +8,7 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { Loading } from "./Loading";
+import { response } from "express";
 
 export interface Participants {
   sequence: number;
@@ -150,18 +151,18 @@ export const Invite = () => {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
             message.body
           );
-          console.log(response);
-
           // 퇴장 메시지 처리
           if (response.action === "EXIT" && "nickname" in response) {
-            console.log(response);
-            setExitName(response.nickname);
-            if (response.nickname === prevParticipants[0].nickname) {
-              setExitAlert(`방장 '${exitName}'님이 퇴장했어요`);
-              setHostAlert(`참여한 순서대로 '${exitName}'님이 방장이 되었어요`);
+            if (response.nickname == participants[0].nickname) {
+              setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
+              if (participants[1]) {
+                setHostAlert(
+                  `참여한 순서대로 '${participants[1].nickname}'님이 방장이 되었어요`
+                );
+              }
               fetchParticipants();
             } else {
-              setExitAlert(`'${exitName}'님이 퇴장했어요`);
+              setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
               fetchParticipants();
             }
           } else if (response.action === "END") {
