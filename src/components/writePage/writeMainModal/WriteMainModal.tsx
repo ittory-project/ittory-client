@@ -10,14 +10,14 @@ import { useParams } from "react-router-dom";
 import { decodeLetterId } from "../../../api/config/base64";
 
 interface WriteModalProps {
-  partiCount: number;
+  // partiCount: number;
   repeatCount: number;
   elementCount: number;
   startCountdown: number;
 }
 
 export const WriteMainModal: React.FC<WriteModalProps> = ({
-  partiCount,
+  // partiCount,
   repeatCount,
   elementCount,
   startCountdown,
@@ -57,13 +57,17 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           <PopupListTitle>작성 순서</PopupListTitle>
           {writeOrderList ? (
             <List>
-              <Line $itemnum={Number(partiCount)} />
+              {writeOrderList.length > 1 &&
+                <Line $itemnum={Number(writeOrderList.length)} />
+              }
               {writeOrderList
                 .slice()
                 .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
                 .map((participant) => (
                   <ListItem key={participant.sequence}>
-                    <ListNumber>{participant.sequence}</ListNumber>
+                    {writeOrderList.length > 1 &&
+                      <ListNumber>{participant.sequence}</ListNumber>
+                    }
                     <Avatar
                       src={participant.imageUrl || "/assets/basic_user.svg"}
                       alt={participant.nickname}
@@ -223,8 +227,8 @@ const Name = styled.span`
 
 const Line = styled.div<{ $itemnum: number }>`
   border-left: 1.5px dashed rgba(111, 176, 255, 0.5);
-  height: ${({ $itemnum }) => `calc(${$itemnum} * 60px)`};
-  top: 0px;
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 60px - 34px)`};
+  top: 18px;
   left: 12px;
   position: absolute;
   z-index: 1;

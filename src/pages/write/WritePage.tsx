@@ -13,7 +13,7 @@ export const WritePage = () => {
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   // 불러온 편지 정보
   const [letterTitle, setLetterTitle] = useState("");
-  const [partiCount, setPartiCount] = useState<Number | null>();
+  // const [partiCount, setPartiCount] = useState<Number | null>();
   const [repeatCount, setRepeatCount] = useState<Number | null>();
   const [elementCount, setElementCount] = useState<Number | null>();
   // 초기 팝업 띄우기
@@ -35,7 +35,7 @@ export const WritePage = () => {
       const response: LetterStartInfoGetResponse =
         await getLetterStartInfo(letterNumId);
       setLetterTitle(response.title);
-      setPartiCount(response.participantCount);
+      // setPartiCount(response.participantCount);
       setRepeatCount(response.repeatCount);
       setElementCount(response.elementCount);
     }
@@ -98,7 +98,7 @@ export const WritePage = () => {
     <Container>
       {showPopup && (
         <WriteMainModal
-          partiCount={Number(partiCount)}
+          // partiCount={Number(partiCount)}
           repeatCount={Number(repeatCount)}
           elementCount={Number(elementCount)}
           startCountdown={startCountdown}
