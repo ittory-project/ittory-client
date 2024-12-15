@@ -38,7 +38,7 @@ import { quitLetterWs } from "../../api/service/WsService";
 
 interface WriteElementProps {
   remainingTime: number;
-  resetTime: number | null;
+  // resetTime: number | null;
   setResetTime: React.Dispatch<React.SetStateAction<number | null>>;
   letterTitle: string;
 }
@@ -49,7 +49,7 @@ interface WriteElementProps {
 // [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
 export const Write = ({
   remainingTime,
-  resetTime,
+  /// resetTime,
   setResetTime,
   letterTitle,
 }: WriteElementProps) => {
@@ -375,6 +375,32 @@ export const Write = ({
     }
   }, [exitUser]);
 
+  // 현재 유저 감지 후 팝업창 띄우기
+  const [nowUserPopup, setNowUserPopup] = useState<number | null>(null)
+  useEffect(() => {
+    if (Number(getUserId()) === nowMemberId && writeOrderList.length > 1) {
+      setNowUserPopup(nowMemberId);
+      const timer = setTimeout(() => {
+        setNowUserPopup(null);
+        setExitUser("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [nowMemberId]);
+
+  // 다음 유저 감지 후 팝업창 띄우기
+  const [nextUserPopup, setNextUserPopup] = useState<number | null>(null)
+  useEffect(() => {
+    if (Number(getUserId()) === nextMemberId && writeOrderList.length > 1) {
+      setNextUserPopup(nextMemberId);
+      const timer = setTimeout(() => {
+        setNextUserPopup(null);
+        setExitUser("");
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [nextMemberId]);
+
   // 완료 모달 띄우는 시간 설정
   useEffect(() => {
     if (showFinishedModal) {
@@ -422,7 +448,7 @@ export const Write = ({
         <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
       </StickyHeader>
       <AlertContainer>
-        {Number(getUserId()) === nextMemberId && (
+        {nextUserPopup && (
           <WriteOrderAlert
             name={
               writeOrderList[
@@ -434,7 +460,7 @@ export const Write = ({
             isNextAlert={true}
           />
         )}
-        {Number(getUserId()) === nowMemberId && (
+        {nowUserPopup && (
           <WriteOrderAlert
             name={
               writeOrderList[
