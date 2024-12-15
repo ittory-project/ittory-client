@@ -62,7 +62,7 @@ export const Join = () => {
             console.log(error);
             if (axios.isAxiosError(error) && error.response?.status === 400) {
               console.error("400 Error:", error.response.data);
-              navigate("/"); // 호출부에서 navigate
+              navigate("/");
             }
           }
         }

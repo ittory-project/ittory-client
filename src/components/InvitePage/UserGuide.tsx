@@ -50,7 +50,7 @@ export const UserGuide = ({ setGuide }: Props) => {
         />
         <Description>{descriptions[currentIndex]}</Description>
         <ButtonContainer>
-          <PrevButton onClick={handlePrevImage} disabled={currentIndex === 0}>
+          <PrevButton onClick={handlePrevImage} $disabled={currentIndex === 0}>
             이전
           </PrevButton>
           <BubbleContainer>
@@ -145,20 +145,21 @@ const Gray = styled.img`
   width: 6px;
   height: 6px;
 `;
-const PrevButton = styled.div<{ disabled: boolean }>`
+const PrevButton = styled.div<{ $disabled: boolean }>`
   display: flex;
   box-sizing: border-box;
   padding: 8px;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  color: ${(props) => (props.disabled ? "#ADB5BD" : "#495057")};
+  color: ${(props) => (props.$disabled ? "#ADB5BD" : "#495057")};
   text-align: center;
   font-family: SUIT;
   font-size: 12px;
   font-weight: 700;
   line-height: 16px;
   letter-spacing: -0.5px;
+  cursor: pointer;
   cursor: pointer;
 `;
 const NextButton = styled.div`
@@ -175,6 +176,7 @@ const NextButton = styled.div`
   line-height: 16px;
   letter-spacing: -0.5px;
   color: #495057;
+  cursor: pointer;
 `;
 const CompleteButton = styled.div`
   display: flex;
@@ -190,4 +192,5 @@ const CompleteButton = styled.div`
   font-weight: 700;
   line-height: 16px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
