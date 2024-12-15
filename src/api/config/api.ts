@@ -72,7 +72,7 @@ const errorHandler = (
       alert(`${error.response.data.message}`);
       console.error(error.response.data);
     } else {
-      alert(`서버 연결에 실패하였습니다.`);
+      //alert(`서버 연결에 실패하였습니다.`);
     }
   } else {
     console.error(`${error}`);

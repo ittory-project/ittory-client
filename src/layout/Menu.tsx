@@ -258,6 +258,7 @@ const Cancel = styled.div`
   box-sizing: border-box;
   right: 12px;
   top: 12px;
+  cursor: pointer;
 `;
 const Profile = styled.div`
   display: flex;
@@ -312,6 +313,7 @@ const UserSetting = styled.div`
   font-weight: 400;
   line-height: 16px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const NavigateLogin = styled.div`
   display: flex;
@@ -354,6 +356,7 @@ const CreatedLetter = styled.div`
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const ReceivedLetter = styled.div`
   display: flex;
@@ -371,6 +374,7 @@ const ReceivedLetter = styled.div`
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const LetterNum = styled.div`
   color: #343a40;
@@ -430,6 +434,7 @@ const VisitContainer = styled.div`
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const AskContainer = styled.div`
   display: flex;
@@ -447,6 +452,7 @@ const AskContainer = styled.div`
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const Navi = styled.div`
   display: flex;

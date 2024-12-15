@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import deleteIcon from "../../../../public/assets/invite/delete.svg";
+import timeblock from "../../../public/assets/join/timeblock.svg";
 
-export const DeleteConfirm = () => {
+export default function Started() {
   const navigate = useNavigate();
 
   const handleButton = () => {
-    navigate("/", { replace: true });
+    navigate("/");
   };
   return (
     <BackGround>
       <Container>
-        <Icon src={deleteIcon} />
-        <Title>방장이 편지를 삭제하여</Title>
-        <Title>종료되었어요</Title>
+        <Icon src={timeblock} />
+        <Title>이미 편지가 진행되어</Title>
+        <Title>입장할 수 없어요</Title>
       </Container>
 
       <Button onClick={handleButton}>
@@ -22,7 +21,7 @@ export const DeleteConfirm = () => {
       </Button>
     </BackGround>
   );
-};
+}
 
 const BackGround = styled.div`
   display: flex;
@@ -30,7 +29,7 @@ const BackGround = styled.div`
   flex-direction: column;
   align-items: center;
   //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100vh;
   width: 100%;
   position: relative;
   left: 50%;
@@ -68,21 +67,6 @@ const Title = styled.div`
   letter-spacing: -0.5px;
 `;
 
-const Button = styled.button`
-  box-sizing: border-box;
-  display: flex;
-  height: 48px;
-  padding: var(--Typography-size-s, 14px) 0px;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-  border-radius: 50px;
-  background: #ffa256;
-  box-shadow:
-    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
-    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  width: 100%;
-`;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
@@ -91,4 +75,25 @@ const ButtonTxt = styled.div`
   line-height: 24px;
   letter-spacing: -0.5px;
   color: #fff;
+`;
+
+const Button = styled.button`
+  width: 288px;
+  cursor: pointer;
+  display: flex;
+  height: 48px;
+  padding: 14px 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 50px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffa256;
+  box-shadow:
+    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
+    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 `;
