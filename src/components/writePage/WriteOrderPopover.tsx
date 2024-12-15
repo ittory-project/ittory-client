@@ -19,13 +19,17 @@ export const WriteOrderPopover: React.FC<PopoverProps> = ({
         </ButtonContainer>
         {writeOrderList ? (
           <PopupList>
-            <Line $itemnum={Number(writeOrderList.length)} />
+            {writeOrderList.length > 1 &&
+              <Line $itemnum={Number(writeOrderList.length)} />
+            }
             {writeOrderList
               .slice()
               .sort((a, b) => a.sequence - b.sequence)
               .map((participant) => (
                 <ListItem key={participant.sequence}>
-                  <ListNumber>{participant.sequence}</ListNumber>
+                  {writeOrderList.length > 1 &&
+                    <ListNumber>{participant.sequence}</ListNumber>
+                  }
                   <Avatar
                     src={participant.imageUrl || "/assets/basic_user.svg"}
                     alt={participant.nickname}
@@ -129,8 +133,8 @@ const Name = styled.span`
 
 const Line = styled.div<{ $itemnum: number }>`
   border-left: 1.5px dashed #d3edff;
-  height: ${({ $itemnum }) => `calc(${$itemnum} * 55px)`};
-  top: 0px;
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 55px - 28px)`};
+  top: 7px;
   left: 12px;
   position: absolute;
   z-index: 1;
