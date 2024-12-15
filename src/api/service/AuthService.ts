@@ -18,8 +18,6 @@ export async function postLogin(
 
 //로그아웃
 export async function postLogout(): Promise<LogoutResponse> {
-  const response = await api.post<LogoutResponse>(
-    "https://dev-server.ittory.co.kr/api/auth/logout"
-  );
+  const response = await api.post<LogoutResponse>(`/api/auth/logout`);
   return response.data;
 }

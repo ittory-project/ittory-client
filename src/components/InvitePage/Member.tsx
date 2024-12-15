@@ -18,7 +18,8 @@ import { CoverType } from "../../api/model/CoverType";
 import { quitLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { DeleteConfirm } from "./Delete/DeleteConfirm";
-import defaultImg from "../../../public/assets/menu/profileImg.svg";
+import defaultImg from "../../../public/assets/menu/logindefault.svg";
+import { getFontById } from "../../api/service/FontService";
 
 interface Props {
   guideOpen: boolean;
@@ -40,12 +41,12 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [deliverDay, setDeliverDay] = useState<Date | null>(null);
   const [title, setTitle] = useState<string>("");
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-  const [selectfont, setSelectfont] = useState<number>(-1);
+  const [selectfont, setSelectfont] = useState<string>("");
+  const [fontId, setFontId] = useState<number>(-1);
   const [receiverName, setReceiverName] = useState<string>("");
   const navigate = useNavigate();
 
   console.log("this is member page");
-  //폰트수정하기
 
   useEffect(() => {
     console.log(receiverName);
@@ -73,7 +74,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         setDeliverDay(parseISO(letterData.deliveryDate));
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
-        setSelectfont(letterData.fontId);
+        setFontId(letterData.fontId);
         setTitle(letterData.title);
       } catch (err) {
         console.error(err);
@@ -97,6 +98,17 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     quitLetterWs(letterId);
     navigate("/");
   };
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      const fontdata = await getFontById(fontId);
+      setSelectfont(fontdata.value);
+      console.log(selectfont);
+    };
+    if (fontId > -1) {
+      fetchFont();
+    }
+  }, [fontId]);
 
   const handle = async () => {
     const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
@@ -171,7 +183,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     coverTypes[selectedImageIndex - 1]?.confirmImageUrl
                   }
                 >
-                  <TitleContainer $font="GmarketSans">{title}</TitleContainer>
+                  <TitleContainer $font={selectfont}>{title}</TitleContainer>
                   {deliverDay ? (
                     <DeliverDay>
                       {`${format(deliverDay as Date, "yyyy")}. `}

@@ -4,10 +4,9 @@ import styled from "styled-components";
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
-  letterId: number;
 }
 
-export const CountPopup = ({ setPopup, setViewCount, letterId }: Props) => {
+export const CountPopup = ({ setPopup, setViewCount }: Props) => {
   const handleCancel = () => {
     setPopup(false);
   };

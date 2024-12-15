@@ -15,7 +15,6 @@ import bg4 from "../../../public/assets/connect/bg4.svg";
 import bg5 from "../../../public/assets/connect/bg5.svg";
 import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from "../../api/config/state";
-import { getLetterInfo } from "../../api/service/LetterService";
 import { encodeLetterId } from "../../api/config/base64";
 import { postRandom } from "../../api/service/ParticipantService";
 
@@ -43,10 +42,11 @@ export const Connection = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const letterId = location.state.letterId;
-  const [coverId, setCoverId] = useState<number>(-1);
+  const coverId = location.state.coverId;
+
+  console.log(coverId);
 
   useEffect(() => {
-    // 로컬스토리지 지우는 코드 추가했습니다. (샤인)
     localStorage.removeItem("letterId");
     dispatch(clearOrderData());
     dispatch(clearData());
@@ -54,16 +54,8 @@ export const Connection = () => {
     window.localStorage.setItem("nowSequence", "1");
     window.localStorage.setItem("nowRepeat", "1");
     window.localStorage.setItem("totalItem", "1");
-    window.localStorage.setItem('resetTime', "")
+    window.localStorage.setItem("resetTime", "");
 
-    const fetchMydata = async () => {
-      try {
-        const data = await getLetterInfo(letterId);
-        setCoverId(data.coverTypeId + 1);
-      } catch (err) {
-        console.error("Error fetching mydata:", err);
-      }
-    };
     const postRandomParti = async () => {
       try {
         const data = await postRandom({
@@ -74,12 +66,11 @@ export const Connection = () => {
         console.error("Error fetching mydata:", err);
       }
     };
-    fetchMydata();
+
     postRandomParti();
   }, []);
 
   useEffect(() => {
-    console.log(letterId);
     const routingTimer = setTimeout(() => {
       navigate(`/write/${encodeLetterId(letterId)}`);
     }, 2500);
@@ -99,7 +90,6 @@ export const Connection = () => {
         return book4;
       case 5:
         return book5;
-      // 기본적으로 book1을 반환
     }
   };
 
@@ -115,7 +105,6 @@ export const Connection = () => {
         return bg4;
       case 5:
         return bg5;
-      // 기본적으로 book1을 반환
     }
   };
 
@@ -131,10 +120,10 @@ export const Connection = () => {
         return "linear-gradient(0deg, rgba(242, 245, 163, 0.80) 9.55%, rgba(253, 255, 199, 0.80) 100%)"; // Example gradient for coverId 4
       case 5:
         return "linear-gradient(0deg, rgba(211, 246, 255, 0.80) 9.55%, rgba(228, 249, 255, 0.80) 100%)"; // Example gradient for coverId 5
-      default:
-        return "linear-gradient(0deg, #edefa4 9.55%, #ffcbd8 100%)"; // Default gradient
     }
   };
+
+  console.log(coverId);
 
   return (
     <>
@@ -144,7 +133,7 @@ export const Connection = () => {
           <Contents>편지 쓰러 가는 중 . . .</Contents>
           <Book src={getBookImage(coverId)} alt="book" />
           <Shadow src={shadow} alt="shadow" />
-          <Ground groundColor={getGroundColor(coverId)} />
+          <Ground $groundColor={String(getGroundColor(coverId))} />
         </BackGround>
       ) : (
         <WriteOrder letterId={letterId} />
@@ -184,14 +173,14 @@ const Shadow = styled.img`
   animation: ${hideDuringAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
 `;
-const Ground = styled.div<{ groundColor: string }>`
+const Ground = styled.div<{ $groundColor: string }>`
   z-index: 1;
   position: absolute;
   bottom: 0;
   width: 100vw;
   height: 40vh;
   flex-shrink: 0;
-  background: ${(props) => props.groundColor};
+  background: ${(props) => props.$groundColor};
   object-fit: cover;
 `;
 const TopImg = styled.img`

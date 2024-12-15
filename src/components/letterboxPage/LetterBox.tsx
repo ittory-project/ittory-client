@@ -17,17 +17,16 @@ export const LetterBox = () => {
   const [openLetter, setOpenLetter] = useState<boolean>(false);
   const [create, setCreate] = useState<boolean>(false);
   const [receive, setReceive] = useState<boolean>(false);
+  const [prevUrl, setPrevUrl] = useState<string | null>(null);
 
   const navigateBack = () => {
-    navigate(-1);
+    navigate("/");
   };
 
   useEffect(() => {
     if (Number(letterId) > 0) {
-      // letterId가 존재하면 편지가 열리도록 설정
       setOpenLetter(true);
     } else {
-      // letterId가 없으면 닫도록 설정
       setOpenLetter(false);
     }
   }, [letterId, setOpenLetter]);
@@ -38,9 +37,9 @@ export const LetterBox = () => {
 
     console.log(focusCreate, focusReceive);
 
-    if (focusCreate !== undefined) {
+    if (focusCreate) {
       setCreate(focusCreate);
-    } else if (focusReceive !== undefined) {
+    } else if (focusReceive) {
       setReceive(focusReceive);
     } else {
       setCreate(true);
@@ -76,10 +75,10 @@ export const LetterBox = () => {
             <HeaderTxt>편지함</HeaderTxt>
           </Header>
           <TitleContainer>
-            <CreatedLetterBox focus={create} onClick={handleFocusCreate}>
+            <CreatedLetterBox $focus={create} onClick={handleFocusCreate}>
               참여한 편지
             </CreatedLetterBox>
-            <ReceivedLetterBox focus={receive} onClick={handleFocusReceive}>
+            <ReceivedLetterBox $focus={receive} onClick={handleFocusReceive}>
               받은 편지
             </ReceivedLetterBox>
           </TitleContainer>
@@ -164,8 +163,9 @@ const TitleContainer = styled.div`
   align-self: stretch;
   width: 100%;
 `;
-const CreatedLetterBox = styled.div<{ focus: boolean }>`
+const CreatedLetterBox = styled.div<{ $focus: boolean }>`
   display: flex;
+    cursor: pointer;
   box-sizing: border-box;
   padding: 12px 0px;
   flex-direction: column;
@@ -178,11 +178,12 @@ const CreatedLetterBox = styled.div<{ focus: boolean }>`
   font-weight: 500;
   line-height: 20px;
   letter-spacing:;-0.5px;
-  color: ${(props) => (props.focus ? "#212529" : "#ADB5BD")};
-  border-bottom:${(props) => (props.focus ? "1px solid #212529" : "1px solid #dee2e6")};
+  color: ${(props) => (props.$focus ? "#212529" : "#ADB5BD")};
+  border-bottom:${(props) => (props.$focus ? "1px solid #212529" : "1px solid #dee2e6")};
 `;
-const ReceivedLetterBox = styled.div<{ focus: boolean }>`
+const ReceivedLetterBox = styled.div<{ $focus: boolean }>`
   display: flex;
+    cursor: pointer;
   box-sizing: border-box;
   padding: 12px 0px;
   flex-direction: column;
@@ -195,6 +196,6 @@ const ReceivedLetterBox = styled.div<{ focus: boolean }>`
   font-weight: 500;
   line-height: 20px;
   letter-spacing:;-0.5px;
-  color: ${(props) => (props.focus ? "#212529" : "#ADB5BD")};
-    border-bottom:${(props) => (props.focus ? "1px solid #212529" : "1px solid #dee2e6")};
+  color: ${(props) => (props.$focus ? "#212529" : "#ADB5BD")};
+    border-bottom:${(props) => (props.$focus ? "1px solid #212529" : "1px solid #dee2e6")};
 `;

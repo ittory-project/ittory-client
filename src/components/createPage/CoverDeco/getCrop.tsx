@@ -20,19 +20,20 @@ export default async function getCroppedImg(
   if (!ctx) {
     throw new Error("Could not get canvas context");
   }
-
+  // 크롭된 영역을 캔버스에 그리기 위한 코드
   canvas.width = size.width;
   canvas.height = size.height;
 
-  // Calculate the scale factors based on the original image and crop size
+  // 이미지 크기와 크롭 영역을 맞추기 위한 비율 계산
   const scaleX = image.width / size.width;
   const scaleY = image.height / size.height;
+  console.log(scaleX, scaleY);
 
-  // Calculate the cropping area in the image coordinates
-  const cropX = crop.x * scaleX;
+  // 크롭 영역의 위치와 크기 계산
+  const cropX = crop.x * scaleX + 100;
   const cropY = crop.y * scaleY;
-  const cropWidth = crop.width * scaleX;
-  const cropHeight = crop.height * scaleY * 1.25;
+  const cropWidth = crop.width * scaleX * 1.32; // 크롭 영역의 너비
+  const cropHeight = crop.height * scaleY * 1.32; //높이
 
   ctx.drawImage(
     image,
