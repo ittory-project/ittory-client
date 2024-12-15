@@ -257,4 +257,5 @@ const MoreButton = styled.img`
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  cursor: pointer;
 `;

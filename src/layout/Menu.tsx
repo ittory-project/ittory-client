@@ -10,6 +10,7 @@ import graynavi from "../../public/assets/menu/graynavi.svg";
 import defaultImage from "../../public/assets/menu/profileImg.svg";
 import { useNavigate } from "react-router-dom";
 import { getLetterCounts, getMyPage } from "../api/service/MemberService";
+import logindefault from "../../public/assets/menu/logindefault.svg";
 
 interface Props {
   onClose: () => void;
@@ -139,10 +140,12 @@ export const Menu = ({ onClose }: Props) => {
       </Cancel>
       <Profile>
         <ImageContainer>
-          {profileImage ? (
+          {!user ? (
             <ProfileImage src={profileImage} alt="Profile" />
-          ) : (
+          ) : profileImage ? (
             <ProfileImage src={defaultImage} alt="Profile" />
+          ) : (
+            <ProfileImage src={logindefault} alt="Profile" />
           )}
         </ImageContainer>
         {user === false ? (

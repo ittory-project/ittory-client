@@ -94,13 +94,11 @@ export default function CoverStyle({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-
         console.log(types);
       } catch (err) {
         console.error(err);
       }
     };
-
     fetchCoverTypesAndFonts();
   }, []);
 
@@ -239,7 +237,7 @@ export default function CoverStyle({
               viewBox="0 0 184 2"
               fill="none"
             >
-              <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
+              <path d="M0 1H184" stroke="white" strokeDasharray="6 6" />
             </svg>
             {isKeyboardOpen == true ? (
               <KeyboardBar $keyboardHeight={keyboardHeight}>
@@ -352,7 +350,6 @@ export default function CoverStyle({
           croppedAreaPixels={croppedAreaPixels}
           setCroppedImage={handleSaveCroppedImage} // 크롭된 이미지를 저장하는 함수
           setCroppedAreaPixels={setCroppedAreaPixels}
-          borderRadius={20}
         />
       )}
       {fontPopup && (
@@ -501,7 +498,6 @@ const Input = styled.input<{ $selectfont: string }>`
   &:valid {
     color: #f1f3f5;
     text-align: center;
-    text-overflow: ellipsis;
     font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
       props.$selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
@@ -509,7 +505,7 @@ const Input = styled.input<{ $selectfont: string }>`
     font-weight: 500;
     letter-spacing: -0.5px;
     line-height: 24px;
-  } //언즈체일때 글씨 크기
+  }
   &:focus {
     outline: none;
   }

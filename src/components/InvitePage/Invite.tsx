@@ -8,8 +8,6 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { Loading } from "./Loading";
-import { response } from "express";
-import { off } from "process";
 
 export interface Participants {
   sequence: number;
@@ -56,6 +54,9 @@ export const Invite = () => {
         if (data.length < 1) {
           setParticipants(data);
           window.location.reload();
+          if (participants.length < 1) {
+            window.location.reload();
+          }
         }
       }
 

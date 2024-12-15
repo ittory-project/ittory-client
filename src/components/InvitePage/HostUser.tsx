@@ -17,13 +17,12 @@ import { Exit } from "./Exit";
 import bright from "../../../public/assets/border.svg";
 import shadow from "../../../public/assets/shadow2.svg";
 import { getMyPage } from "../../api/service/MemberService";
-import { enterLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { getCoverTypes } from "../../api/service/CoverService";
 import { CoverType } from "../../api/model/CoverType";
 import { getLetterInfo } from "../../api/service/LetterService";
-import { useNavigate } from "react-router-dom";
-import defaultImg from "../../../public/assets/menu/profileImg.svg";
+import defaultImg from "../../../public/assets/menu/logindefault.svg";
+import { getFontById } from "../../api/service/FontService";
 
 interface Props {
   guideOpen: boolean;
@@ -40,7 +39,6 @@ export const HostUser = ({
   letterId,
   viewDelete,
   setViewDelete,
-  hostname,
 }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
@@ -56,9 +54,9 @@ export const HostUser = ({
   const [deliverDay, setDeliverDay] = useState<Date | null>();
   const [title, setTitle] = useState<string>("");
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-  const [selectfont, setSelectfont] = useState<number>(-1);
+  const [fontId, setFontId] = useState<number>(-1);
+  const [selectfont, setSelectfont] = useState<string>("");
   const [receiverName, setReceiverName] = useState<string>("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
@@ -77,8 +75,7 @@ export const HostUser = ({
         setDeliverDay(parseISO(letterData.deliveryDate));
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
-        setSelectfont(letterData.fontId);
-        //Id가 아닌 value로 받을 수 있는 지
+        setFontId(letterData.fontId);
       } catch (err) {
         console.error(err);
       }
@@ -98,6 +95,17 @@ export const HostUser = ({
     fetchLetterInfo();
     fetchMyPageData();
   }, []);
+
+  useEffect(() => {
+    const fetchFont = async () => {
+      const fontdata = await getFontById(fontId);
+      setSelectfont(fontdata.value);
+      console.log(selectfont);
+    };
+    if (fontId > -1) {
+      fetchFont();
+    }
+  }, [fontId]);
 
   useEffect(() => {
     if (receiverName.length > 9) {
@@ -172,7 +180,7 @@ export const HostUser = ({
       document.body.removeChild(textArea);
     }
   };
-  //          {title !== "" && items[0].nickname && receiverName !== "" &&
+
   return (
     <BackGround>
       {guide && <Overlay />}
@@ -202,7 +210,7 @@ export const HostUser = ({
                 coverTypes[selectedImageIndex - 1]?.confirmImageUrl
               }
             >
-              <TitleContainer $font="GmarketSans">{title}</TitleContainer>
+              <TitleContainer $font={selectfont}>{title}</TitleContainer>
               {deliverDay ? (
                 <DeliverDay>
                   {`${format(deliverDay as Date, "yyyy")}. `}
@@ -311,6 +319,7 @@ export const HostUser = ({
           {viewCount && (
             <Count
               letterId={letterId}
+              coverId={selectedImageIndex}
               setViewCount={setViewCount}
               member={items.length}
             />
@@ -321,13 +330,7 @@ export const HostUser = ({
         <Delete letterId={letterId} setViewDelete={setViewDelete} />
       )}
       {viewExit && <Exit setViewExit={setViewExit} letterId={letterId} />}
-      {popup && (
-        <CountPopup
-          setPopup={setPopup}
-          setViewCount={setViewCount}
-          letterId={letterId}
-        />
-      )}
+      {popup && <CountPopup setPopup={setPopup} setViewCount={setViewCount} />}
     </BackGround>
   );
 };
