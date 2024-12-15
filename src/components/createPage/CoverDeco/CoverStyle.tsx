@@ -462,7 +462,7 @@ const Text = styled.span`
 `;
 const TitleContainer = styled.div`
   display: flex;
-  width: 184px;
+  width: 190px;
   padding: 16px 16px;
   justify-content: center;
   align-items: center;
@@ -474,8 +474,7 @@ const TitleContainer = styled.div`
 const Input = styled.input<{ $selectfont: string }>`
   box-sizing: border-box;
   display: flex;
-  width: 184px;
-  padding: var(--Border-Radius-radius_300, 8px) 16px;
+  width: 100%;
   justify-content: center;
   align-items: center;
   height: 40px;

@@ -141,9 +141,9 @@ export const Menu = ({ onClose }: Props) => {
       <Profile>
         <ImageContainer>
           {!user ? (
-            <ProfileImage src={profileImage} alt="Profile" />
-          ) : profileImage ? (
             <ProfileImage src={defaultImage} alt="Profile" />
+          ) : profileImage ? (
+            <ProfileImage src={profileImage} alt="Profile" />
           ) : (
             <ProfileImage src={logindefault} alt="Profile" />
           )}

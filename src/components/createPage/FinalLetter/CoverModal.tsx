@@ -315,7 +315,7 @@ export default function CoverModal({
           setFont={setFont}
           setFontPopup={setFontPopup}
           fontPopup={fontPopup}
-          select={selectf}
+          select={selectfont}
           setSelect={setSelectf}
         />
       )}
