@@ -83,7 +83,7 @@ export const HostUser = ({
         console.error(err);
       }
     };
-    /*
+
     const fetchMyPageData = async () => {
       try {
         const myData = await getMyPage();
@@ -92,11 +92,11 @@ export const HostUser = ({
       } catch (err) {
         console.error("Error fetching my data:", err);
       }
-    };*/
+    };
 
     fetchCoverTypes();
     fetchLetterInfo();
-    //fetchMyPageData();
+    fetchMyPageData();
   }, []);
 
   useEffect(() => {
@@ -290,6 +290,7 @@ export const HostUser = ({
                           onClick={() => {
                             handle();
                           }}
+                          style={{ cursor: "pointer" }}
                         />
                         <UserName>친구 초대</UserName>
                       </User>
