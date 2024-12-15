@@ -24,6 +24,7 @@ interface Props {
   selectfont: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  selectFid: number;
 }
 
 export default function UserFinishModal({
@@ -37,6 +38,7 @@ export default function UserFinishModal({
   selectedImageIndex,
   setKeyboardVisible,
   myName,
+  selectFid,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -58,13 +60,6 @@ export default function UserFinishModal({
     fetchCoverTypes();
   }, []);
 
-  const fontFamilyToId: { [key: string]: number } = {
-    GmarketSans: 1,
-    "Ownglyph_UNZ-Rg": 2,
-    "CookieRun-Regular": 3,
-    "Cafe24ClassicType-Regular": 4,
-  };
-
   const handleNickname = async (letterId: Number) => {
     if (myName) {
       const requestBody: NicknamePostRequest = {
@@ -84,13 +79,14 @@ export default function UserFinishModal({
       console.error("Error fetching mydata:", err);
     }
   };
+  console.log(selectFid);
 
   const navigateToInvite = async () => {
     setGuideOpen(true);
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
-      fontId: fontFamilyToId[selectfont],
+      fontId: selectFid,
       receiverName: receiverName,
       deliveryDate: deliverDay?.toISOString() || "",
       title: title,
@@ -123,7 +119,7 @@ export default function UserFinishModal({
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
-      fontId: fontFamilyToId[selectfont],
+      fontId: selectFid,
       receiverName: receiverName,
       deliveryDate: deliverDay?.toISOString() || "",
       title: title,
@@ -374,5 +370,5 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 27px;
-  margin-left: -0.4px;
+  margin-left: 2.6px;
 `;

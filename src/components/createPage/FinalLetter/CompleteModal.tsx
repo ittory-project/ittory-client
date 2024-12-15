@@ -291,7 +291,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 26.5px;
-  margin-left: -0.4px;
+  margin-left: 2.56px;
 `;
 
 const Button = styled.button`

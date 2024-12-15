@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
 import camera from "../../../../public/assets/camera.svg";
-import FontSelect from "../CoverDeco/FontSelect";
 import ImageCropper from "../CoverDeco/ImageCropper";
 import { Area } from "react-easy-crop";
 import shadow from "../../../../public/assets/shadow2.svg";
@@ -26,6 +25,7 @@ interface Props {
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelecteFid: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function CoverModal({
@@ -41,6 +41,7 @@ export default function CoverModal({
   selectedImageIndex,
   setSelectedImageIndex,
   setBackgroundimage,
+  setSelecteFid,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -65,7 +66,6 @@ export default function CoverModal({
       try {
         const types = await getAllFont();
         setFonts(types);
-        setFont(fonts[0].value);
       } catch (err) {
         console.error(err);
       }
@@ -124,9 +124,6 @@ export default function CoverModal({
     function handleOutside(e: MouseEvent) {
       const heightDiff =
         window.innerHeight - document.documentElement.clientHeight;
-      console.log(window.innerHeight);
-      console.log(document.documentElement.clientHeight);
-      console.log(heightDiff);
 
       // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
@@ -225,7 +222,7 @@ export default function CoverModal({
             viewBox="0 0 184 2"
             fill="none"
           >
-            <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
+            <path d="M0 1H184" stroke="white" strokeDasharray="6 6" />
           </svg>
           {/*
           {isKeyboardOpen && (
@@ -317,6 +314,7 @@ export default function CoverModal({
           fontPopup={fontPopup}
           select={selectfont}
           setSelect={setSelectf}
+          setSelectFid={setSelecteFid}
         />
       )}
     </ModalContainer>
