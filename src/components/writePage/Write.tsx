@@ -207,21 +207,6 @@ export const Write = ({
     };
   }, [letterNumId, quitLetterWs]);
 
-  // 이탈하려고 할 때 꼭 '페이지를 나가시겠습니까? 뜰 수 있도록 -> 이후 퇴장 동작 실행
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      console.log("Browser tab or window is about to close.");
-      quitLetterWs(letterNumId);
-      event.preventDefault();
-      event.returnValue = "";
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-  
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [letterNumId, quitLetterWs]);  
-
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
   // 외부 값 받아오기 위해 구독만 + 퇴장 감지
