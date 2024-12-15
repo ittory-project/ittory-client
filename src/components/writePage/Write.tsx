@@ -106,8 +106,6 @@ export const Write = ({
   const [showFinishedModal, setShowFinishedModal] = useState(false);
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
-  // 퇴장 flag - 소켓 response가 안 와서 턴이 넘어갈 때
-  const [forceExit, setForceExit] = useState(false);
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
@@ -159,7 +157,6 @@ export const Write = ({
     if (remainingTime <= -5) {
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
-      setForceExit(true)
     }
   }, [remainingTime])
 
@@ -179,8 +176,7 @@ export const Write = ({
       } else if (document.visibilityState === "visible") {
         console.log("다시돌아옴");
         const storedResetTime = window.localStorage.getItem("resetTime");
-        if (Date.now() > Number(storedResetTime)) {
-        //if (forceExit) {
+        if (!storedResetTime && Date.now() > Number(storedResetTime)) {
           console.log("턴이 넘어가서 퇴장됨");
           clientRef.current?.deactivate();
           window.alert('장시간 자리를 이탈하여 퇴장되었습니다.')
@@ -208,6 +204,21 @@ export const Write = ({
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("pagehide", handlePageHide);
+    };
+  }, [letterNumId, quitLetterWs]);
+
+  // 이탈하려고 할 때 꼭 '페이지를 나가시겠습니까? 뜰 수 있도록 -> 이후 퇴장 동작 실행
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      console.log("Browser tab or window is about to close.");
+      quitLetterWs(letterNumId);
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [letterNumId, quitLetterWs]);  
 
