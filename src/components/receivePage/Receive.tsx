@@ -37,7 +37,7 @@ const Receive = () => {
           <DoorImg expanded={expanded}>
           </DoorImg>
           <AnimatedDiv expanded={expanded}>
-            <Img src="/img/letter_christmas_door.svg" />
+            <Img data="/img/letter_christmas_door.png" />
           </AnimatedDiv>
           {expanded ? (
             // 2번째 화면
@@ -136,7 +136,7 @@ const AnimatedDiv = styled.div<{ expanded: boolean }>`
   `}
 `;
 
-const Img = styled.img`
+const Img = styled.object`
   width: 30px;
   height: 30px;
   object-fit: cover;
