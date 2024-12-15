@@ -69,7 +69,6 @@ export default function FinalInfo({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-
         const user = await getVisitUser();
         setVisit(user.isVisited);
       } catch (err) {
