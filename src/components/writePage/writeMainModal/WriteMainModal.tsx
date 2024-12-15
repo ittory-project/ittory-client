@@ -54,7 +54,10 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           총 {String(elementCount)}개의 그림이 생성돼요
         </PopupTitleDetail>
         <PopupList>
-          <PopupListTitle>작성 순서</PopupListTitle>
+          {writeOrderList && writeOrderList.length > 1 ?
+            <PopupListTitle>작성 순서</PopupListTitle>
+            : <div style={{ padding: '3px' }}></div>
+          }
           {writeOrderList ? (
             <List>
               {writeOrderList.length > 1 &&
