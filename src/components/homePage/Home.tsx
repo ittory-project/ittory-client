@@ -345,7 +345,7 @@ const Section = styled.div<$Props>`
   overflow-x: hidden;
 `;
 const WhiteSection = styled.div<$Props>`
-  height: calc(var(--vh, 1vh) * 100 - 8);
+  height: calc(var(--vh, 1vh) * 100);
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: contain; /* 이미지가 전체 화면을 덮도록 */
