@@ -13,6 +13,7 @@ interface Props {
   fontPopup: boolean;
   setSelect: React.Dispatch<React.SetStateAction<string>>;
   select: string;
+  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function FontPopup({
@@ -23,8 +24,10 @@ export default function FontPopup({
   fontPopup,
   setSelect,
   select,
+  setSelectFid,
 }: Props) {
   const [selected, setSelected] = useState<string>("");
+  const [selectId, setSelectId] = useState<number>(0);
 
   useEffect(() => {
     console.log(select);
@@ -37,6 +40,8 @@ export default function FontPopup({
     if (selected !== "") {
       console.log(selected);
       setSelect(selected);
+      setSelectFid(selectId);
+      console.log(selectId);
     }
     setFontPopup(false);
   };
@@ -50,6 +55,8 @@ export default function FontPopup({
           setFont={setFont}
           setSelect={setSelected}
           select={select}
+          setSelectFid={setSelectFid}
+          setSelectId={setSelectId}
         />
       </FontContainer>
       <Line src={_Line} />

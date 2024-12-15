@@ -30,6 +30,7 @@ interface Props {
   setViewFinalInfo: React.Dispatch<React.SetStateAction<boolean>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
 }
 interface BookProps {
   backgroundimage: string;
@@ -73,6 +74,7 @@ export default function CoverStyle({
   setViewFinalInfo,
   selectedImageIndex,
   setSelectedImageIndex,
+  setSelectFid,
 }: Props) {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
@@ -239,7 +241,8 @@ export default function CoverStyle({
             >
               <path d="M0 1H184" stroke="white" strokeDasharray="6 6" />
             </svg>
-            {isKeyboardOpen == true ? (
+
+            {/*isKeyboardOpen == true ? (
               <KeyboardBar $keyboardHeight={keyboardHeight}>
                 <FontSelect
                   font={font}
@@ -247,11 +250,12 @@ export default function CoverStyle({
                   setFont={setFont}
                   setSelect={setSelectf}
                   select={selectf}
+                  setSelectFid={setSelectFid}
                 />
               </KeyboardBar>
             ) : (
               <></>
-            )}
+            )*/}
           </TitleContainer>
 
           {croppedImage === "" ? (
@@ -348,7 +352,7 @@ export default function CoverStyle({
           setIsModalOpen={setIsModalOpen}
           originalImage={originalImage}
           croppedAreaPixels={croppedAreaPixels}
-          setCroppedImage={handleSaveCroppedImage} // 크롭된 이미지를 저장하는 함수
+          setCroppedImage={handleSaveCroppedImage}
           setCroppedAreaPixels={setCroppedAreaPixels}
         />
       )}
@@ -361,6 +365,7 @@ export default function CoverStyle({
           fontPopup={fontPopup}
           select={selectf}
           setSelect={setSelectf}
+          setSelectFid={setSelectFid}
         />
       )}
     </BackGround>
