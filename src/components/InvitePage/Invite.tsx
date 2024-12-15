@@ -9,6 +9,7 @@ import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { Loading } from "./Loading";
 import { response } from "express";
+import { off } from "process";
 
 export interface Participants {
   sequence: number;
@@ -55,10 +56,6 @@ export const Invite = () => {
         if (data.length < 1) {
           setParticipants(data);
           window.location.reload();
-          /*
-          if (participants.length < 1) {
-            window.location.reload();
-          }*/
         }
       }
 
@@ -152,18 +149,21 @@ export const Invite = () => {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
             message.body
           );
-          // 퇴장 메시지 처리
-          if (response.action === "EXIT" && "nickname" in response) {
-            if (response.nickname == participants[0].nickname) {
+
+          if (
+            response.action === "EXIT" &&
+            "nickname" in response &&
+            "isManager" in response
+          ) {
+            if (response.isManager) {
+              console.log("방장 퇴장 감지");
               setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
-              if (participants[1]) {
+              fetchParticipants();
+              console.log(participants);
+              if (participants[0]) {
                 setHostAlert(
-                  `참여한 순서대로 '${participants[1].nickname}'님이 방장이 되었어요`
+                  `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`
                 );
-              }
-              setPrevParticipants(participants);
-              if (participants.length !== 1) {
-                fetchParticipants();
               }
             } else {
               setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
@@ -181,7 +181,11 @@ export const Invite = () => {
             response.action === "ENTER" &&
             "participants" in response
           ) {
-            setParticipants(response.participants);
+            console.log(response.action);
+            if (response.participants) {
+              setParticipants(response.participants);
+            }
+            console.log(participants);
           }
         } catch (err) {
           console.error("Error parsing WebSocket message:", err);
