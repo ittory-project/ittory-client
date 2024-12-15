@@ -90,6 +90,7 @@ const Cancel = styled.img`
   height: 12px;
   flex-shrink: 0;
   margin-right: 7.3px;
+  cursor: pointer;
 `;
 const Contents = styled.div`
   display: flex;
@@ -111,11 +112,13 @@ const ShareIcon = styled.img`
   flex-shrink: 0;
   margin-left: 4px;
   margin-right: 4px;
+  cursor: pointer;
 `;
 const DeleteIcon = styled.img`
   width: 24px;
   height: 24px;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 const Txt = styled.div`
   color: #212529;
@@ -124,4 +127,5 @@ const Txt = styled.div`
   font-style: normal;
   line-height: 24px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;

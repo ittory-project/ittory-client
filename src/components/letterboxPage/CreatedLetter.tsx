@@ -235,6 +235,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  cursor: pointer;
 `;
 const BookName = styled.div`
   flex: 1 0 0;
@@ -260,4 +261,5 @@ const MoreButton = styled.img`
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  cursor: pointer;
 `;
