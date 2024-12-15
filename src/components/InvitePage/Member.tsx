@@ -225,7 +225,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                         ) : (
                           <InvitedUser key={user.memberId}>
                             <User>
-                              {user.imageUrl == "" ? (
+                              {!user.imageUrl ? (
                                 <ProfileImg $img={defaultImg} />
                               ) : (
                                 <ProfileImg $img={user.imageUrl} />

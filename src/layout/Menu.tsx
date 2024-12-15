@@ -139,7 +139,7 @@ export const Menu = ({ onClose }: Props) => {
       </Cancel>
       <Profile>
         <ImageContainer>
-          {profileImage !== "" ? (
+          {profileImage ? (
             <ProfileImage src={profileImage} alt="Profile" />
           ) : (
             <ProfileImage src={defaultImage} alt="Profile" />
@@ -181,7 +181,7 @@ export const Menu = ({ onClose }: Props) => {
             <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
           ) : (
             <LetterNum>
-              <>{partiLetter}개</>
+              <>{String(partiLetter)}개</>
             </LetterNum>
           )}
         </CreatedLetter>
@@ -204,7 +204,7 @@ export const Menu = ({ onClose }: Props) => {
             <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
           ) : (
             <LetterNum>
-              <>{receiveLetter}개</>
+              <>{String(partiLetter)}개</>
             </LetterNum>
           )}
         </ReceivedLetter>

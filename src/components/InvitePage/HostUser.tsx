@@ -259,7 +259,7 @@ export const HostUser = ({
                     ) : (
                       <InvitedUser key={index}>
                         <User>
-                          {user.imageUrl == "" ? (
+                          {!user.imageUrl ? (
                             <ProfileImg $img={defaultImg} />
                           ) : (
                             <ProfileImg $img={user.imageUrl} />
