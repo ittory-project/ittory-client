@@ -40,7 +40,7 @@ export default function ImageCropper({
   const closeModal = () => {
     setIsModalOpen(false);
     setCroppedAreaPixels(null);
-  }; //초기화 안됨 오류..같은거 선택시 크롭기능활성화 안됨
+  };
 
   const onCropComplete = useCallback(
     (croppedAreaPixels: Area) => {
@@ -49,8 +49,6 @@ export default function ImageCropper({
     [setCroppedAreaPixels]
   );
 
-  // 크롭된 이미지를 저장하는 함수
-  /*
   const handleSaveClick = async () => {
     if (croppedAreaPixels) {
       const croppedImgUrl = await getCroppedImg(
@@ -59,24 +57,6 @@ export default function ImageCropper({
         {
           width,
           height,
-          borderRadius,
-        }
-      );
-      console.log("Cropped Image URL: ", croppedImgUrl);
-      setCroppedImage(croppedImgUrl);
-      closeModal();
-      // 여기서 croppedImg를 서버에 업로드하거나 다운로드 링크를 생성
-    }
-  };*/
-  const handleSaveClick = async () => {
-    if (croppedAreaPixels) {
-      const croppedImgUrl = await getCroppedImg(
-        originalImage,
-        croppedAreaPixels,
-        {
-          width,
-          height,
-          borderRadius,
         }
       );
       console.log("Cropped Image URL: ", croppedImgUrl);
@@ -87,7 +67,7 @@ export default function ImageCropper({
 
       // Step 1: URL 발급 요청
       const imageUrlRequest: ImageUrlRequest = {
-        imgExtension: ImageExtension.JPG, // 적절한 Enum 값 설정
+        imgExtension: ImageExtension.JPG,
       };
 
       try {

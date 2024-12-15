@@ -237,7 +237,7 @@ export const HostUser = ({
                       <MainUser key={index}>
                         <Crown $img={crown} />
                         <User>
-                          {user.imageUrl == "" ? (
+                          {!user.imageUrl ? (
                             <ProfileImg $img={defaultImg} />
                           ) : (
                             <ProfileImg $img={user.imageUrl} />

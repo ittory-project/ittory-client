@@ -11,6 +11,7 @@ import { CoverType } from "../../../api/model/CoverType";
 import { getCoverTypes } from "../../../api/service/CoverService";
 import { getAllFont } from "../../../api/service/FontService";
 import { fontProps } from "../CoverDeco/CoverStyle";
+import FontPopup from "../CoverDeco/FontPopup";
 
 interface Props {
   title: string;
@@ -56,6 +57,8 @@ export default function CoverModal({
   const [cropOpen, setCropOpen] = useState(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fonts, setFonts] = useState<fontProps[]>([]);
+  const [fontPopup, setFontPopup] = useState<boolean>(false);
+  const [selectf, setSelectf] = useState<string>("");
 
   useEffect(() => {
     const fetchFonts = async () => {
@@ -113,41 +116,36 @@ export default function CoverModal({
     };
   }, [modalBackground]);
 
+  const handlePopup = () => {
+    setFontPopup(true);
+  };
+
   useEffect(() => {
-    function handleResize() {
+    function handleOutside(e: MouseEvent) {
       const heightDiff =
         window.innerHeight - document.documentElement.clientHeight;
+      console.log(window.innerHeight);
+      console.log(document.documentElement.clientHeight);
       console.log(heightDiff);
-      if (heightDiff > 0) {
-        setIsKeyboardOpen(true);
-        setKeyboardHeight(heightDiff);
-      } else {
-        setIsKeyboardOpen(false);
-        setKeyboardHeight(0);
+
+      // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
+      if (inputRef.current && inputRef.current.contains(e.target as Node)) {
+        if (heightDiff > 0) {
+          setIsKeyboardOpen(true);
+          setKeyboardHeight(heightDiff);
+          inputRef.current.focus();
+        } else {
+          setIsKeyboardOpen(false);
+          setKeyboardHeight(0);
+          handlePopup();
+        }
       }
     }
-    document.addEventListener("resize", handleResize);
+    document.addEventListener("mousedown", handleOutside);
     return () => {
-      document.removeEventListener("resize", handleResize);
+      document.removeEventListener("mousedown", handleOutside);
     };
   }, [inputRef]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const heightDiff =
-        window.innerHeight - document.documentElement.clientHeight;
-      if (heightDiff > 100) {
-        setIsKeyboardOpen(true);
-        setKeyboardHeight(heightDiff);
-      } else {
-        setIsKeyboardOpen(false);
-        setKeyboardHeight(0);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const onUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,11 +227,13 @@ export default function CoverModal({
           >
             <path d="M0 1H184" stroke="white" stroke-dasharray="6 6" />
           </svg>
+          {/*
           {isKeyboardOpen && (
             <KeyboardBar keyboardHeight={keyboardHeight}>
               <FontSelect font={font} fonts={fonts} setFont={setFont} />
             </KeyboardBar>
           )}
+          */}
         </TitleContainer>
         {croppedImage === "" ? (
           <ButtonContainer
@@ -306,6 +306,17 @@ export default function CoverModal({
           croppedAreaPixels={croppedAreaPixels}
           setCroppedImage={handleSaveCroppedImage} // 크롭된 이미지를 저장하는 함수
           setCroppedAreaPixels={setCroppedAreaPixels}
+        />
+      )}
+      {fontPopup && (
+        <FontPopup
+          font={font}
+          fonts={fonts}
+          setFont={setFont}
+          setFontPopup={setFontPopup}
+          fontPopup={fontPopup}
+          select={selectf}
+          setSelect={setSelectf}
         />
       )}
     </ModalContainer>
