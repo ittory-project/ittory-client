@@ -162,6 +162,7 @@ const Cancel = styled.span`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 const Contents = styled.div`
   display: flex;
