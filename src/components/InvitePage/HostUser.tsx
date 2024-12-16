@@ -21,7 +21,7 @@ import { Participants } from "./Invite";
 import { getCoverTypes } from "../../api/service/CoverService";
 import { CoverType } from "../../api/model/CoverType";
 import { getLetterInfo } from "../../api/service/LetterService";
-import defaultImg from "../../../public/assets/menu/logindefault.svg";
+import defaultImg from "../../../public/assets/menu/logindefault.png";
 import { getFontById } from "../../api/service/FontService";
 
 interface Props {

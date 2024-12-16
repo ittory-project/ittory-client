@@ -7,10 +7,10 @@ import letter_receive from "../../public/assets/letter_receive.svg";
 import ask from "../../public/assets/menu/ask.svg";
 import visit from "../../public/assets/menu/visit.svg";
 import graynavi from "../../public/assets/menu/graynavi.svg";
-import defaultImage from "../../public/assets/menu/profileImg.svg";
+import defaultImage from "../../public/assets/menu/profileImg.png";
 import { useNavigate } from "react-router-dom";
 import { getLetterCounts, getMyPage } from "../api/service/MemberService";
-import logindefault from "../../public/assets/menu/logindefault.svg";
+import logindefault from "../../public/assets/menu/logindefault.png";
 
 interface Props {
   onClose: () => void;
