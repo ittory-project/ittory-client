@@ -24,6 +24,7 @@ interface Props {
   selectfont: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  selectFid: number;
 }
 
 export default function UserFinishModal({
@@ -37,6 +38,7 @@ export default function UserFinishModal({
   selectedImageIndex,
   setKeyboardVisible,
   myName,
+  selectFid,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -49,21 +51,12 @@ export default function UserFinishModal({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-        console.log(types);
       } catch (err) {
         console.error(err);
       }
     };
-
     fetchCoverTypes();
   }, []);
-
-  const fontFamilyToId: { [key: string]: number } = {
-    GmarketSans: 1,
-    "Ownglyph_UNZ-Rg": 2,
-    "CookieRun-Regular": 3,
-    "Cafe24ClassicType-Regular": 4,
-  };
 
   const handleNickname = async (letterId: Number) => {
     if (myName) {
@@ -71,14 +64,14 @@ export default function UserFinishModal({
         nickname: myName,
       };
       const response = await postNickname(requestBody, Number(letterId));
-      console.log("nickname:", response);
+      console.log(response);
     }
   };
 
   const fetchEnter = async (letterId: Number) => {
     try {
       const enterresponse = await postEnter(Number(letterId));
-      console.log("postenter:", enterresponse);
+      console.log(enterresponse);
       handleNickname(letterId);
     } catch (err) {
       console.error("Error fetching mydata:", err);
@@ -90,7 +83,7 @@ export default function UserFinishModal({
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
-      fontId: fontFamilyToId[selectfont],
+      fontId: selectFid,
       receiverName: receiverName,
       deliveryDate: deliverDay?.toISOString() || "",
       title: title,
@@ -105,11 +98,12 @@ export default function UserFinishModal({
       console.log("letterId", letterId);
 
       fetchEnter(letterId);
+      console.log(myName);
 
       navigate("/Invite", {
         state: {
           letterId: letterId,
-          guideOpen: guideOpen,
+          guideOpen: false,
           userName: myName,
         },
       });
@@ -123,7 +117,7 @@ export default function UserFinishModal({
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
-      fontId: fontFamilyToId[selectfont],
+      fontId: selectFid,
       receiverName: receiverName,
       deliveryDate: deliverDay?.toISOString() || "",
       title: title,
@@ -135,6 +129,7 @@ export default function UserFinishModal({
       const response = await postLetter(requestBody);
       console.log("Response:", response);
       const letterId = response.letterId;
+      console.log("letterId", letterId);
 
       fetchEnter(letterId);
 
@@ -200,19 +195,17 @@ export default function UserFinishModal({
           style={{
             background: "#CED4DA",
           }}
+          onClick={handleguide}
         >
-          <ButtonTxt style={{ color: "#495057" }} onClick={handleguide}>
-            사용법 보기
-          </ButtonTxt>
+          <ButtonTxt style={{ color: "#495057" }}>사용법 보기</ButtonTxt>
         </Button>
         <Button
           style={{
             background: "#FFA256",
           }}
+          onClick={navigateToInvite}
         >
-          <ButtonTxt style={{ color: "#fff" }} onClick={navigateToInvite}>
-            맘에 들어요!
-          </ButtonTxt>
+          <ButtonTxt style={{ color: "#fff" }}>맘에 들어요!</ButtonTxt>
         </Button>
       </ButtonContainer>
     </ModalContainer>
@@ -322,7 +315,7 @@ const DeliverDay = styled.div`
 const Shadow = styled.img`
   width: 161px;
   height: 161px;
-  margin-left: 2.7px;
+  margin-left: 0px;
   margin-top: 73px;
   position: absolute;
   z-index: 3;
@@ -373,6 +366,6 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 27px;
-  margin-left: -0.4px;
+  margin-top: 28px;
+  margin-left: 2.38px;
 `;

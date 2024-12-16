@@ -207,7 +207,7 @@ export const Menu = ({ onClose }: Props) => {
             <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
           ) : (
             <LetterNum>
-              <>{String(partiLetter)}개</>
+              <>{String(receiveLetter)}개</>
             </LetterNum>
           )}
         </ReceivedLetter>

@@ -43,6 +43,9 @@ export const Connection = () => {
   const dispatch = useDispatch();
   const letterId = location.state.letterId;
   const coverId = location.state.coverId;
+  const [bookImage, setBookImage] = useState<string | undefined>();
+  const [topBackground, setTopBackground] = useState<string | undefined>();
+  const [groundColor, setGroundColor] = useState<string | undefined>();
 
   console.log(coverId);
 
@@ -78,50 +81,45 @@ export const Connection = () => {
     return () => clearTimeout(routingTimer);
   }, [navigate, letterId]);
 
-  const getBookImage = (coverId: number) => {
+  useEffect(() => {
     switch (coverId) {
       case 1:
-        return book1;
+        setBookImage(book1);
+        setTopBackground(bg1);
+        setGroundColor("linear-gradient(0deg, #D9F0FF 9.55%, #CEECFF 100%)");
+        break;
       case 2:
-        return book2;
+        setBookImage(book2);
+        setTopBackground(bg2);
+        setGroundColor("linear-gradient(0deg, #EAFFF1 9.55%, #ECFFCC 100%)");
+        break;
       case 3:
-        return book3;
+        setBookImage(book3);
+        setTopBackground(bg3);
+        setGroundColor(
+          "linear-gradient(0deg, rgba(241, 244, 167, 0.80) 9.55%, rgba(253, 255, 199, 0.80) 100%);"
+        );
+        break;
       case 4:
-        return book4;
+        setBookImage(book4);
+        setTopBackground(bg4);
+        setGroundColor(
+          "linear-gradient(0deg, rgba(242, 245, 163, 0.80) 9.55%, rgba(253, 255, 199, 0.80) 100%)"
+        );
+        break;
       case 5:
-        return book5;
+        setBookImage(book5);
+        setTopBackground(bg5);
+        setGroundColor(
+          "linear-gradient(0deg, rgba(211, 246, 255, 0.80) 9.55%, rgba(228, 249, 255, 0.80) 100%)"
+        );
+        break;
+      default:
+        setBookImage(undefined);
+        setTopBackground(undefined);
+        setGroundColor(undefined);
     }
-  };
-
-  const getTopBackground = (coverId: number) => {
-    switch (coverId) {
-      case 1:
-        return bg1;
-      case 2:
-        return bg2;
-      case 3:
-        return bg3;
-      case 4:
-        return bg4;
-      case 5:
-        return bg5;
-    }
-  };
-
-  const getGroundColor = (coverId: number) => {
-    switch (coverId) {
-      case 1:
-        return "linear-gradient(0deg, #D9F0FF 9.55%, #CEECFF 100%)"; // Example gradient for coverId 1
-      case 2:
-        return "linear-gradient(0deg, #EAFFF1 9.55%, #ECFFCC 100%)"; // Example gradient for coverId 2
-      case 3:
-        return "linear-gradient(0deg, #e9c46a 9.55%, #f1a208 100%)"; // Example gradient for coverId 3
-      case 4:
-        return "linear-gradient(0deg, rgba(242, 245, 163, 0.80) 9.55%, rgba(253, 255, 199, 0.80) 100%)"; // Example gradient for coverId 4
-      case 5:
-        return "linear-gradient(0deg, rgba(211, 246, 255, 0.80) 9.55%, rgba(228, 249, 255, 0.80) 100%)"; // Example gradient for coverId 5
-    }
-  };
+  }, [coverId]);
 
   console.log(coverId);
 
@@ -129,11 +127,11 @@ export const Connection = () => {
     <>
       {!isAnimationComplete ? (
         <BackGround>
-          <TopImg src={getTopBackground(coverId)} />
+          <TopImg src={topBackground} />
           <Contents>편지 쓰러 가는 중 . . .</Contents>
-          <Book src={getBookImage(coverId)} alt="book" />
+          <Book src={bookImage} alt="book" />
           <Shadow src={shadow} alt="shadow" />
-          <Ground $groundColor={String(getGroundColor(coverId))} />
+          <Ground $groundColor={String(groundColor)} />
         </BackGround>
       ) : (
         <WriteOrder letterId={letterId} />
@@ -194,6 +192,7 @@ const TopImg = styled.img`
   object-fit: cover;
 `;
 const Contents = styled.div`
+  position: absolute;
   margin-top: 55%;
   z-index: 2;
   display: inline-flex;

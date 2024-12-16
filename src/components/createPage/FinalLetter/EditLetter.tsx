@@ -29,6 +29,7 @@ interface Props {
   setBackgroundimage: React.Dispatch<React.SetStateAction<number>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function EditLetter({
@@ -49,6 +50,7 @@ export default function EditLetter({
   setViewEdit,
   selectedImageIndex,
   setSelectedImageIndex,
+  setSelectFid,
 }: Props) {
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [coverOpen, setCoveropen] = useState(false);
@@ -164,7 +166,9 @@ export default function EditLetter({
             />
           </EditBtn>
           {coverTypes && (
-            <Book $backgroundImage={coverTypes[backgroundimage]?.editImageUrl}>
+            <Book
+              $backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
+            >
               <BookTitle $font={selectfont}>{title}</BookTitle>
               <Bright src={bright} />
               <Shadow src={shadow} />
@@ -195,6 +199,7 @@ export default function EditLetter({
           setKeyboardVisible={setKeyboardVisible}
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
+          setSelecteFid={setSelectFid}
         />
       )}
     </BackGround>
@@ -349,7 +354,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 24px;
-  margin-left: 0.2px;
+  margin-left: 2.9px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ $font: string }>`

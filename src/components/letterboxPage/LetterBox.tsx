@@ -20,7 +20,7 @@ export const LetterBox = () => {
   const [prevUrl, setPrevUrl] = useState<string | null>(null);
 
   const navigateBack = () => {
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {

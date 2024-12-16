@@ -104,7 +104,7 @@ export const ReceivedLetter = ({
               {letters.map((item) => (
                 <LetterContainer
                   key={item.letterId}
-                  bgColor={item.coverTypeColor}
+                  $bgColor={item.coverTypeColor}
                 >
                   <BookCover src={item.coverTypeImage} />
                   <Content
@@ -135,7 +135,7 @@ export const ReceivedLetter = ({
               )}
             </Container>
           )}
-          {popup && (
+          {popup && !openLetter && (
             <Delete_letterbox
               setOpenLetter={setOpenLetter}
               setPopup={setPopup}
@@ -196,6 +196,9 @@ const Container = styled.div`
   align-items: center;
   align-self: stretch;
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const NumberHeader = styled.div`
   display: flex;
@@ -212,7 +215,7 @@ const NumberTxt = styled.span`
   line-height: 16px;
   letter-spacing: -0.5px;
 `;
-const LetterContainer = styled.div<{ bgColor: string }>`
+const LetterContainer = styled.div<{ $bgColor: string }>`
   display: flex;
   width: 100%;
   margin-bottom: 16px;
@@ -221,7 +224,7 @@ const LetterContainer = styled.div<{ bgColor: string }>`
   align-items: flex-start;
   gap: 12px;
   border-radius: 12px;
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.$bgColor};
 `;
 
 const BookCover = styled.img`
