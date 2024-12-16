@@ -366,6 +366,6 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 28px;
+  margin-top: 27.2px;
   margin-left: 2.38px;
 `;

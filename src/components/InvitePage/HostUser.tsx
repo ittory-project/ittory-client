@@ -486,7 +486,7 @@ const Bright = styled.img`
 const Shadow = styled.img`
   width: 145px;
   height: 145px;
-  margin-left: 3.8px;
+  margin-left: -1px;
   margin-top: 68px;
   position: absolute;
   z-index: 3;
@@ -504,7 +504,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 20.6px;
-  margin-left: 4.6px;
+  margin-left: 4.5px;
 `;
 const NameBar = styled.div`
   margin-top: 20px;
