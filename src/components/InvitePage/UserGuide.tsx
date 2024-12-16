@@ -54,11 +54,11 @@ export const UserGuide = ({ setGuide }: Props) => {
             이전
           </PrevButton>
           <BubbleContainer>
-            {numbers.map((number) =>
+            {numbers.map((number, index) =>
               number === currentIndex ? (
-                <Blue src={blue} />
+                <Blue key={index} src={blue} />
               ) : (
-                <Gray src={gray} />
+                <Gray key={index} src={gray} />
               )
             )}
           </BubbleContainer>

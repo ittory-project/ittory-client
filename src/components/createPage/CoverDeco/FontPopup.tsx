@@ -30,24 +30,19 @@ export default function FontPopup({
   setSelectfid,
   selectfid,
 }: Props) {
-  const [selected, setSelected] = useState<string>("");
-  const [selectId, setSelectId] = useState<number>(0);
+  const [selected, setSelected] = useState<string>("서체 1");
+  const [selectId, setSelectId] = useState<number>(1);
 
   useEffect(() => {
-    console.log(select);
     setSelected(font);
+    //setFont(font);
     setSelectId(selectfid);
   }, []);
 
   const handleButton = () => {
-    setSelected(font);
-    console.log(font);
-    if (selected !== "") {
-      console.log(selected);
-      setSelect(selected);
-      setSelectfid(selectId);
-      console.log(selectId);
-    }
+    setSelected(selected);
+    setSelect(selected);
+    setSelectfid(selectId);
     setFontPopup(false);
   };
 
@@ -73,28 +68,37 @@ export default function FontPopup({
 const BackGround = styled.div`
   display: flex;
   width: 100%;
-  height: 159px;
   position: absolute;
   bottom: 0px;
   border-radius: 20px 20px 0px 0px;
   background: #fff;
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
+  overflow-y: hidden;
+
+  @media (min-width: 431px) {
+    height: 149px; // 데스크톱
+  }
+
+  @media (max-width: 430px) {
+    height: 64px;
+  }
 `;
 const FontContainer = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 15px;
+  margin-top: 5px;
   flex-direction: column;
   align-items: center;
   overflow-x: auto;
   z-index: 10;
+  overflow-y: hidden;
 `;
 const Line = styled.img`
   width: 100%;
   position: absolute;
   left: 0;
-  margin-top: 75px;
+  margin-top: 65px;
 `;
 const Button = styled.button`
   overflow: hidden;
@@ -121,4 +125,12 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+
+  @media (min-width: 431px) {
+    display: flex; // 데스크톱
+  }
+
+  @media (max-width: 430px) {
+    display: none;
+  }
 `;

@@ -33,6 +33,7 @@ export const Delete_letterbox = ({
   const handleDelete = async () => {
     try {
       const deleteData = await deleteLetterboxLetter(letterId);
+      window.location.reload();
       onDelete();
       setPopup(false);
       setIsModalOpen(false);

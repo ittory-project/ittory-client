@@ -29,7 +29,6 @@ const BackGround = styled.div`
   box-sizing: border-box;
   flex-direction: column;
   align-items: center;
-  //justify-content: center;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: relative;
@@ -72,7 +71,8 @@ const Button = styled.button`
   box-sizing: border-box;
   display: flex;
   height: 48px;
-  padding: var(--Typography-size-s, 14px) 0px;
+  width: 100%;
+  padding: 14px 20px;
   align-items: center;
   gap: 8px;
   justify-content: center;
@@ -81,7 +81,6 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  width: 100%;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);

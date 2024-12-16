@@ -268,7 +268,7 @@ const DeliverDay = styled.div`
 const Shadow = styled.img`
   width: 175px;
   height: 161px;
-  margin-left: 1px;
+  margin-left: 0px;
   margin-top: 72px;
   position: absolute;
   z-index: 3;
@@ -285,8 +285,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 26.5px;
-  margin-left: 2.56px;
+  margin-top: 28px;
+  margin-left: 2.36px;
 `;
 
 const Button = styled.button`

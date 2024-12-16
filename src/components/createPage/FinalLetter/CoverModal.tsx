@@ -61,6 +61,15 @@ export default function CoverModal({
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [selectf, setSelectf] = useState<string>("");
   const [selectfid, setSelectfid] = useState<number>(0);
+  const [backgroundImage, setBackgroundImage] = useState<string>("");
+
+  useEffect(() => {
+    const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
+
+    if (imageUrl) {
+      setBackgroundImage(imageUrl);
+    }
+  }, [ImageIndex, coverTypes]);
 
   useEffect(() => {
     const fetchFonts = async () => {
@@ -189,8 +198,8 @@ export default function CoverModal({
   return (
     <ModalContainer
       ref={modalBackground}
-      keyboardHeight={keyboardHeight}
-      isKeyboardOpen={isKeyboardOpen}
+      $keyboardHeight={keyboardHeight}
+      $isKeyboardOpen={isKeyboardOpen}
     >
       <Header>
         <Title>표지 수정하기</Title>
@@ -198,8 +207,7 @@ export default function CoverModal({
           <img src={X} alt="X Icon" style={{ width: "12px", height: "12px" }} />
         </Cancel>
       </Header>
-
-      <Book backgroundImage={coverTypes[ImageIndex]?.editImageUrl}>
+      <Book $backgroundImage={backgroundImage}>
         <TitleContainer ref={inputRef}>
           <Input
             placeholder="제목 최대 12자"
@@ -214,7 +222,7 @@ export default function CoverModal({
             minLength={1}
             maxLength={12}
             spellCheck="false"
-            font={font}
+            $font={font}
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +264,7 @@ export default function CoverModal({
           <>
             <Shadow src={shadow} />
             <BtnImgContainer
-              bgimg={croppedImage}
+              $bgimg={croppedImage}
               onClick={onUploadImageButtonClick}
             >
               <CameraIcon>
@@ -272,11 +280,10 @@ export default function CoverModal({
             </BtnImgContainer>
           </>
         )}
-        <NameBar>
-          <NameContainer>
-            <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
-          </NameContainer>
-        </NameBar>
+
+        <NameContainer $book={ImageIndex}>
+          <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
+        </NameContainer>
       </Book>
       <ImageContainer>
         {coverTypes.map((coverType, index) => (
@@ -346,15 +353,15 @@ const Camera = styled.img`
   flex-shrink: 0;
 `;
 const ModalContainer = styled.div<{
-  keyboardHeight: number;
-  isKeyboardOpen: boolean;
+  $keyboardHeight: number;
+  $isKeyboardOpen: boolean;
 }>`
   position: absolute;
   box-sizing: border-box;
   display: flex;
   width: 100%;
-  height: ${({ isKeyboardOpen, keyboardHeight }) =>
-    isKeyboardOpen ? `calc(33rem - ${keyboardHeight}px)` : "33rem"};
+  height: ${({ $isKeyboardOpen, $keyboardHeight }) =>
+    $isKeyboardOpen ? `calc(33rem - ${$keyboardHeight}px)` : "33rem"};
   padding: 24px 24px 20px 24px;
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
@@ -420,13 +427,13 @@ const Cancel = styled.span`
   cursor: pointer;
   right: 4.17px;
 `;
-const Book = styled.div<{ backgroundImage: string }>`
+const Book = styled.div<{ $backgroundImage: string }>`
   width: 224px;
   height: 294px;
   position: absolute;
   margin-top: 3rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
-  background-image: url(${(props) => props.backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage});
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -445,7 +452,7 @@ const Shadow = styled.img`
   flex-shrink: 0;
   object-fit: cover;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
+const BtnImgContainer = styled.div<{ $bgimg: string }>`
   width: 134px;
   z-index: 2;
   cursor: pointer;
@@ -454,7 +461,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   gap: 4px;
   flex-shrink: 0;
   border-radius: 20px;
-  background-image: url(${(props) => props.bgimg});
+  background-image: url(${(props) => props.$bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -468,7 +475,7 @@ const TitleContainer = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-const Input = styled.input<{ font: string }>`
+const Input = styled.input<{ $font: string }>`
   box-sizing: border-box;
   display: flex;
   width: 179px;
@@ -485,9 +492,9 @@ const Input = styled.input<{ font: string }>`
     color: #f1f3f5;
     text-align: center;
     text-overflow: ellipsis;
-    font-family: ${(props) => props.font};
+    font-family: ${(props) => props.$font};
     font-size: ${(props) =>
-      props.font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -497,9 +504,9 @@ const Input = styled.input<{ font: string }>`
     color: #f1f3f5;
     text-align: center;
     text-overflow: ellipsis;
-    font-family: ${(props) => props.font};
+    font-family: ${(props) => props.$font};
     font-size: ${(props) =>
-      props.font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -509,17 +516,7 @@ const Input = styled.input<{ font: string }>`
     outline: none;
   }
 `;
-const NameBar = styled.div`
-  margin-top: 32px;
-  width: 224px;
-  height: 23px;
-  flex-shrink: 0;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const NameContainer = styled.div`
+const NameContainer = styled.div<{ $book: number }>`
   width: 224px;
   height: 21px;
   flex-shrink: 0;
@@ -527,6 +524,8 @@ const NameContainer = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
+  margin-top: ${(props) =>
+    props.$book === 0 || props.$book === 1 ? "34px" : "25px"};
 `;
 const NameTxt = styled.div`
   padding: 0 12px 0 12px;

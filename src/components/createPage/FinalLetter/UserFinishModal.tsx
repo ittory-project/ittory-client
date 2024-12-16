@@ -103,7 +103,7 @@ export default function UserFinishModal({
       navigate("/Invite", {
         state: {
           letterId: letterId,
-          guideOpen: guideOpen,
+          guideOpen: false,
           userName: myName,
         },
       });
@@ -136,7 +136,7 @@ export default function UserFinishModal({
       navigate("/Invite", {
         state: {
           letterId: letterId,
-          guideOpen: guideOpen,
+          guideOpen: true,
           userName: myName,
         },
       });
@@ -315,7 +315,7 @@ const DeliverDay = styled.div`
 const Shadow = styled.img`
   width: 161px;
   height: 161px;
-  margin-left: 2.7px;
+  margin-left: 0px;
   margin-top: 73px;
   position: absolute;
   z-index: 3;
@@ -366,6 +366,6 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 27px;
-  margin-left: 2.6px;
+  margin-top: 28px;
+  margin-left: 2.38px;
 `;

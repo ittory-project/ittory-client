@@ -26,13 +26,14 @@ export default function FontSelect({
     setSelect(fontFamily);
     setSelectFid(fontId);
     setSelectId(fontId);
-    console.log(fontId);
   };
 
   useEffect(() => {
     console.log(select);
-    if (select !== "") {
-      setFont(select);
+    if (select === "") {
+      setFont(fonts[0].value);
+      setSelectId(fonts[0].id);
+      setSelectFid(fonts[0].id);
     } else {
       setFont(fonts[0].value);
     }

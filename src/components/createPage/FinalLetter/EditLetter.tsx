@@ -166,7 +166,9 @@ export default function EditLetter({
             />
           </EditBtn>
           {coverTypes && (
-            <Book $backgroundImage={coverTypes[backgroundimage]?.editImageUrl}>
+            <Book
+              $backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
+            >
               <BookTitle $font={selectfont}>{title}</BookTitle>
               <Bright src={bright} />
               <Shadow src={shadow} />
@@ -352,7 +354,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 24px;
-  margin-left: 0.2px;
+  margin-left: 2.9px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ $font: string }>`
