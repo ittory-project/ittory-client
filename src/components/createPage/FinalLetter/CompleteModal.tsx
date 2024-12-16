@@ -121,7 +121,7 @@ export default function CompleteModal({
         state: {
           userName: myName,
           letterId: letterId,
-          guideOpen: guideOpen,
+          guideOpen: true,
         },
       });
     } catch (error) {
@@ -285,7 +285,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 28px;
+  margin-top: 27.15px;
   margin-left: 2.36px;
 `;
 

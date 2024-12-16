@@ -30,6 +30,7 @@ interface Props {
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
   setSelectFid: React.Dispatch<React.SetStateAction<number>>;
+  selectFid: number;
 }
 
 export default function EditLetter({
@@ -51,6 +52,7 @@ export default function EditLetter({
   selectedImageIndex,
   setSelectedImageIndex,
   setSelectFid,
+  selectFid,
 }: Props) {
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [coverOpen, setCoveropen] = useState(false);
@@ -199,7 +201,8 @@ export default function EditLetter({
           setKeyboardVisible={setKeyboardVisible}
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
-          setSelecteFid={setSelectFid}
+          setSelectFid={setSelectFid}
+          selectFid={selectFid}
         />
       )}
     </BackGround>
@@ -227,7 +230,7 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   transition: background 0.3s ease;
-  z-index: 99;
+  z-index: 49;
 `;
 const Container = styled.div`
   margin-top: 3rem;

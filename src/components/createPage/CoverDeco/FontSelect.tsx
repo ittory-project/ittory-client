@@ -10,6 +10,7 @@ interface Props {
   select: string;
   setSelectFid: React.Dispatch<React.SetStateAction<number>>;
   setSelectId: React.Dispatch<React.SetStateAction<number>>;
+  selectfid: number;
 }
 
 export default function FontSelect({
@@ -20,8 +21,10 @@ export default function FontSelect({
   setSelect,
   select,
   setSelectId,
+  selectfid,
 }: Props) {
   const handleFontChange = (fontFamily: string, fontId: number) => {
+    console.log(fontFamily);
     setFont(fontFamily);
     setSelect(fontFamily);
     setSelectFid(fontId);
@@ -35,7 +38,8 @@ export default function FontSelect({
       setSelectId(fonts[0].id);
       setSelectFid(fonts[0].id);
     } else {
-      setFont(fonts[0].value);
+      setFont(select);
+      setSelect(select);
     }
   }, []);
 
