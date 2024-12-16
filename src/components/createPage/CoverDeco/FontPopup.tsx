@@ -97,7 +97,8 @@ const BackGround = styled.div<{ $bottomOffset: number }>`
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
   overflow-y: hidden;
-  == @media (min-width: 431px) {
+
+  @media (min-width: 431px) {
     height: 149px; // 데스크톱
   }
 
