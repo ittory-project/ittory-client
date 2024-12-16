@@ -77,8 +77,7 @@ export default function CoverStyle({
 }: Props) {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
-  const [fonts, setFonts] = useState<fontProps[]>([]);
-  const [font, setFont] = useState<string>("");
+
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
@@ -88,6 +87,8 @@ export default function CoverStyle({
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [fonts, setFonts] = useState<fontProps[]>([]);
+  const [font, setFont] = useState<string>("");
   const [selectf, setSelectf] = useState<string>("");
   const [selectfid, setSelectfid] = useState<number>(1);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
@@ -130,7 +131,8 @@ export default function CoverStyle({
 
   useEffect(() => {
     if (fonts.length > 0 && fonts[0]?.name) {
-      setFont(fonts[0].name);
+      setFont(fonts[0].value);
+      setSelectfid(fonts[0].id);
     }
   }, [fonts]);
 

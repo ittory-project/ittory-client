@@ -64,6 +64,8 @@ export default function FinalInfo({
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [visit, setVisit] = useState<boolean>(false);
 
+  console.log(selectFid);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -204,6 +206,7 @@ export default function FinalInfo({
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
           setSelectFid={setSelectFid}
+          selectFid={selectFid}
         />
       )}
       {coverOpen && (
@@ -220,7 +223,8 @@ export default function FinalInfo({
           setKeyboardVisible={setKeyboardVisible}
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
-          setSelecteFid={setSelectFid}
+          setSelectFid={setSelectFid}
+          selectFid={selectFid}
         />
       )}
       {complete &&
@@ -273,7 +277,7 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   transition: background 0.3s ease;
-  z-index: 99;
+  z-index: 4;
 `;
 const Header = styled.div`
   display: flex;
@@ -421,8 +425,8 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 20px;
-  margin-left: 24.2px;
+  margin-top: 20.8px;
+  margin-left: 24px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ font: string }>`

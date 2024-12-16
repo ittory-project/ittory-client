@@ -121,7 +121,7 @@ export default function CompleteModal({
         state: {
           userName: myName,
           letterId: letterId,
-          guideOpen: guideOpen,
+          guideOpen: true,
         },
       });
     } catch (error) {
