@@ -90,7 +90,7 @@ const BackGround = styled.div<{ $bottomOffset: number }>`
   display: flex;
   width: 100%;
   position: absolute;
-  bottom: ${(props) => props.$bottomOffset}px
+  bottom: ${(props) => props.$bottomOffset}px;
   border-radius: 20px 20px 0px 0px;
   background: #fff;
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
@@ -127,7 +127,6 @@ const Button = styled.button`
   position: fixed;
   width: 288px;
   cursor: pointer;
-  display: flex;
   height: 48px;
   padding: 14px 20px;
   align-items: center;
