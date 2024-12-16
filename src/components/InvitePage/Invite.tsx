@@ -23,6 +23,8 @@ export const Invite = () => {
   const getletterId = location.state.letterId;
   const userName = location.state.userName;
 
+  console.log(guideOpen);
+
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);

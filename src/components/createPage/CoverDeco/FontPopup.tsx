@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef, Ref } from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
@@ -13,82 +13,89 @@ interface Props {
   fontPopup: boolean;
   setSelect: React.Dispatch<React.SetStateAction<string>>;
   select: string;
-  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
   setSelectfid: React.Dispatch<React.SetStateAction<number>>;
   selectfid: number;
-  ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-export default function FontPopup({
-  font,
-  fonts,
-  setFont,
-  setFontPopup,
-  fontPopup,
-  setSelect,
-  select,
-  setSelectFid,
-  setSelectfid,
-  selectfid,
-  ref,
-}: Props) {
-  const [selected, setSelected] = useState<string>("서체 1");
-  const [selectId, setSelectId] = useState<number>(1);
-  const [bottomOffset, setBottomOffset] = useState<number>(0);
+const FontPopup = forwardRef<HTMLDivElement, Props>(
+  (
+    {
+      font,
+      fonts,
+      setFont,
+      setFontPopup,
+      fontPopup,
+      setSelect,
+      select,
+      setSelectfid,
+      selectfid,
+    },
+    ref
+  ) => {
+    const [selected, setSelected] = useState<string>("");
+    const [selectId, setSelectId] = useState<number>(1);
+    const [bottomOffset, setBottomOffset] = useState<number>(0);
 
-  useEffect(() => {
-    setSelected(font);
-    //setFont(font);
-    setSelectId(selectfid);
-  }, []);
+    useEffect(() => {
+      setSelected(font);
+      setFont(font);
+      setSelectId(selectfid);
+      setSelectfid(selectfid);
+    }, []);
 
-  const handleButton = () => {
-    setSelected(selected);
-    setSelect(selected);
-    setSelectfid(selectId);
-    setFontPopup(false);
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.visualViewport) {
-        const keyboardHeight =
-          window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
-        setBottomOffset(keyboardHeight > 0 ? keyboardHeight : 0); // 키보드 높이가 0 이상인 경우만 설정
-      }
+    const handleButton = () => {
+      console.log(selected);
+      console.log(selectId);
+      setSelected(selected);
+      setSelect(selected);
+      setSelectfid(selectId);
+      setFontPopup(false);
     };
 
-    window.visualViewport?.addEventListener("resize", handleResize);
-    window.visualViewport?.addEventListener("scroll", handleResize);
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.visualViewport) {
+          const keyboardHeight =
+            window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+          setBottomOffset(keyboardHeight > 0 ? keyboardHeight : 0); // 키보드 높이가 0 이상인 경우만 설정
+        }
+      };
 
-    handleResize();
+      window.visualViewport?.addEventListener("resize", handleResize);
+      window.visualViewport?.addEventListener("scroll", handleResize);
 
-    return () => {
-      window.visualViewport?.removeEventListener("resize", handleResize);
-      window.visualViewport?.removeEventListener("scroll", handleResize);
-    };
-  }, []);
+      handleResize();
 
-  return (
-    <div ref={ref} className={ParentDiv}>
-      <BackGround $bottomOffset={bottomOffset}>
-        <FontContainer>
-          <FontSelect
-            font={font}
-            fonts={fonts}
-            setFont={setFont}
-            setSelect={setSelected}
-            select={select}
-            setSelectFid={setSelectfid}
-            setSelectId={setSelectId}
-          />
-        </FontContainer>
-        <Line src={_Line} />
-        <Button onClick={handleButton}>완료</Button>
-      </BackGround>
-    </div>
-  );
-}
+      return () => {
+        window.visualViewport?.removeEventListener("resize", handleResize);
+        window.visualViewport?.removeEventListener("scroll", handleResize);
+      };
+    }, []);
+
+    return (
+      <div ref={ref} className={ParentDiv}>
+        <BackGround $bottomOffset={bottomOffset}>
+          <FontContainer>
+            <FontSelect
+              font={font}
+              fonts={fonts}
+              setFont={setFont}
+              setSelect={setSelected}
+              select={select}
+              selectfid={selectfid}
+              setSelectFid={setSelectfid}
+              setSelectId={setSelectId}
+            />
+          </FontContainer>
+          <Line src={_Line} />
+          <Button onClick={handleButton}>완료</Button>
+        </BackGround>
+      </div>
+    );
+  }
+);
+
+export default FontPopup;
 
 const ParentDiv = styled.div`
   position: relative;
@@ -98,7 +105,7 @@ const ParentDiv = styled.div`
 const BackGround = styled.div<{ $bottomOffset: number }>`
   display: flex;
   width: 100%;
-  z-index: 3;
+  z-index: 100;
   position: absolute;
   bottom: ${(props) => props.$bottomOffset - 2}px;
   border-radius: 20px 20px 0px 0px;
