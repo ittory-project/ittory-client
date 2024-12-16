@@ -18,7 +18,7 @@ import { CoverType } from "../../api/model/CoverType";
 import { quitLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { DeleteConfirm } from "./Delete/DeleteConfirm";
-import defaultImg from "../../../public/assets/menu/logindefault.svg";
+import defaultImg from "../../../public/assets/menu/logindefault.png";
 import { getFontById } from "../../api/service/FontService";
 
 interface Props {
