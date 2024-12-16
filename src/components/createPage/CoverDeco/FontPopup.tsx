@@ -142,15 +142,7 @@ const BackGround = styled.div<{
     bottom 0.3s ease,
     height 0.3s ease;
 `;
-/*
- @media (min-width: 431px) {
-    height: 149px; // 데스크톱
-  }
 
-  @media (max-width: 430px) {
-    height: 64px;
-  }
-*/
 const FontContainer = styled.div`
   display: flex;
   width: 100%;
@@ -193,10 +185,3 @@ const Button = styled.button<{ $isKeyboardVisible: boolean }>`
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
   display: ${(props) => (props.$isKeyboardVisible ? "none" : "flex")};
 `;
-/*@media (min-width: 431px) {
-    display: flex; // 데스크톱
-  }
-
-  @media (max-width: 430px) {
-    display: none;
-  }*/
