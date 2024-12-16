@@ -89,15 +89,15 @@ export default function FontPopup({
 const BackGround = styled.div<{ $bottomOffset: number }>`
   display: flex;
   width: 100%;
+  z-index: 3;
   position: absolute;
-  bottom: ${(props) => props.$bottomOffset}px;
+  bottom: ${(props) => props.$bottomOffset - 2}px;
   border-radius: 20px 20px 0px 0px;
   background: #fff;
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
   overflow-y: hidden;
-
-  @media (min-width: 431px) {
+  == @media (min-width: 431px) {
     height: 149px; // 데스크톱
   }
 
