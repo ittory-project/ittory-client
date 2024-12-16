@@ -300,7 +300,7 @@ export default function CoverModal({
           />
         ))}
       </ImageContainer>
-      <Button onClick={handleFinalCover} isKeyboardOpen={isKeyboardOpen}>
+      <Button onClick={handleFinalCover} $isKeyboardOpen={isKeyboardOpen}>
         <ButtonTxt>완료</ButtonTxt>
       </Button>
       {cropOpen && (
@@ -454,7 +454,7 @@ const Shadow = styled.img`
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
   width: 134px;
-  z-index: 2;
+  z-index: 0;
   cursor: pointer;
   position: relative;
   height: 134px;
@@ -540,24 +540,6 @@ const NameTxt = styled.div`
   line-height: 13px;
   letter-spacing: -0.5px;
 `;
-const KeyboardBar = styled.div<{ keyboardHeight: number }>`
-  position: fixed;
-  bottom: ${(props) => props.keyboardHeight}px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 56px;
-  flex-shrink: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) -61.61%,
-    #fff 18.75%
-  );
-  box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 const ImageContainer = styled.div`
   position: relative;
   margin-top: 21rem;
@@ -583,10 +565,10 @@ const Image = styled.div<{ clicked: boolean; img: string }>`
   background-repeat: no-repeat;
 `;
 
-const Button = styled.button<{ isKeyboardOpen: boolean }>`
+const Button = styled.button<{ $isKeyboardOpen: boolean }>`
   box-sizing: border-box;
   display: ${(props) =>
-    props.isKeyboardOpen
+    props.$isKeyboardOpen
       ? "none"
       : "flex"}; /* 키보드가 올라왔을 때 버튼 숨김 */
   width: 288px;
