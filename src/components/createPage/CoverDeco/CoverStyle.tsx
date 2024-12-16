@@ -91,6 +91,7 @@ export default function CoverStyle({
   const [selectf, setSelectf] = useState<string>("");
   const [selectfid, setSelectfid] = useState<number>(1);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
+  const popupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
@@ -166,7 +167,12 @@ export default function CoverStyle({
           handlePopup();
         }
       }
-      if (inputRef.current && !inputRef.current.contains(e.target as Node)) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(e.target as Node) &&
+        popupRef.current &&
+        !popupRef.current.contains(e.target as Node)
+      ) {
         setFontPopup(false); // fontPopup 숨기기
       }
     }
@@ -360,6 +366,7 @@ export default function CoverStyle({
           setSelectFid={setSelectFid}
           setSelectfid={setSelectfid}
           selectfid={selectfid}
+          ref={popupRef}
         />
       )}
     </BackGround>
@@ -373,7 +380,7 @@ const BookShadow = styled.div`
 const BackGround = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  //align-items: center;
   justify-content: center;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
