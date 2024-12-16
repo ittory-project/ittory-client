@@ -32,6 +32,7 @@ export default function FontPopup({
 }: Props) {
   const [selected, setSelected] = useState<string>("서체 1");
   const [selectId, setSelectId] = useState<number>(1);
+  const [bottomOffset, setBottomOffset] = useState<number>(0);
 
   useEffect(() => {
     setSelected(font);
@@ -46,8 +47,28 @@ export default function FontPopup({
     setFontPopup(false);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.visualViewport) {
+        const keyboardHeight =
+          window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+        setBottomOffset(keyboardHeight > 0 ? keyboardHeight : 0); // 키보드 높이가 0 이상인 경우만 설정
+      }
+    };
+
+    window.visualViewport?.addEventListener("resize", handleResize);
+    window.visualViewport?.addEventListener("scroll", handleResize);
+
+    handleResize();
+
+    return () => {
+      window.visualViewport?.removeEventListener("resize", handleResize);
+      window.visualViewport?.removeEventListener("scroll", handleResize);
+    };
+  }, []);
+
   return (
-    <BackGround>
+    <BackGround $bottomOffset={bottomOffset}>
       <FontContainer>
         <FontSelect
           font={font}
@@ -65,11 +86,11 @@ export default function FontPopup({
   );
 }
 
-const BackGround = styled.div`
+const BackGround = styled.div<{ $bottomOffset: number }>`
   display: flex;
   width: 100%;
   position: absolute;
-  bottom: 0px;
+  bottom: ${(props) => props.$bottomOffset}px
   border-radius: 20px 20px 0px 0px;
   background: #fff;
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
