@@ -25,7 +25,8 @@ interface Props {
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
-  setSelecteFid: React.Dispatch<React.SetStateAction<number>>;
+  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
+  selectFid: number;
 }
 
 export default function CoverModal({
@@ -40,16 +41,16 @@ export default function CoverModal({
   setKeyboardVisible,
   selectedImageIndex,
   setSelectedImageIndex,
-  setSelecteFid,
+  setSelectFid,
   setBackgroundimage,
+  selectFid,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
-  const [font, setFont] = useState<string>(selectfont);
   const imgRef = useRef<HTMLInputElement | null>(null);
-  const inputRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [cropperKey, setCropperKey] = useState<number>(0);
@@ -57,11 +58,13 @@ export default function CoverModal({
   const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
   const [cropOpen, setCropOpen] = useState(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [fonts, setFonts] = useState<fontProps[]>([]);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
+  const [backgroundImage, setBackgroundImage] = useState<string>("");
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  const [fonts, setFonts] = useState<fontProps[]>([]);
+  const [font, setFont] = useState<string>(selectfont);
   const [selectf, setSelectf] = useState<string>("");
   const [selectfid, setSelectfid] = useState<number>(0);
-  const [backgroundImage, setBackgroundImage] = useState<string>("");
 
   useEffect(() => {
     const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
@@ -82,6 +85,7 @@ export default function CoverModal({
     };
 
     fetchFonts();
+    setSelectfid(selectFid);
   }, []);
 
   useEffect(() => {
@@ -107,7 +111,7 @@ export default function CoverModal({
     setBackgroundimage(ImageIndex);
     setSelectfont(font);
     setIsModalOpen(false);
-    setSelecteFid(selectfid);
+    setSelectFid(selectfid);
   };
 
   useEffect(() => {
@@ -135,7 +139,6 @@ export default function CoverModal({
       const heightDiff =
         window.innerHeight - document.documentElement.clientHeight;
 
-      // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
         if (heightDiff > 0) {
           setIsKeyboardOpen(true);
@@ -146,6 +149,14 @@ export default function CoverModal({
           setKeyboardHeight(0);
           handlePopup();
         }
+      }
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(e.target as Node) &&
+        popupRef.current &&
+        !popupRef.current.contains(e.target as Node)
+      ) {
+        setFontPopup(false); // fontPopup 숨기기
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -208,8 +219,9 @@ export default function CoverModal({
         </Cancel>
       </Header>
       <Book $backgroundImage={backgroundImage}>
-        <TitleContainer ref={inputRef}>
+        <TitleContainer>
           <Input
+            ref={inputRef}
             placeholder="제목 최대 12자"
             type="text"
             value={title}
@@ -233,13 +245,6 @@ export default function CoverModal({
           >
             <path d="M0 1H184" stroke="white" strokeDasharray="6 6" />
           </svg>
-          {/*
-          {isKeyboardOpen && (
-            <KeyboardBar keyboardHeight={keyboardHeight}>
-              <FontSelect font={font} fonts={fonts} setFont={setFont} />
-            </KeyboardBar>
-          )}
-          */}
         </TitleContainer>
         {croppedImage === "" ? (
           <ButtonContainer
@@ -289,9 +294,9 @@ export default function CoverModal({
         {coverTypes.map((coverType, index) => (
           <Image
             onClick={() => handleImageClick(index)}
-            clicked={ImageIndex === index}
+            $clicked={ImageIndex === index}
             key={index}
-            img={
+            $img={
               ImageIndex === index
                 ? coverType.selectImageUrl
                 : coverType.notSelectImageUrl
@@ -320,11 +325,11 @@ export default function CoverModal({
           setFont={setFont}
           setFontPopup={setFontPopup}
           fontPopup={fontPopup}
-          select={selectfont}
+          select={selectf}
           setSelect={setSelectf}
-          setSelectFid={setSelecteFid}
           setSelectfid={setSelectfid}
           selectfid={selectfid}
+          ref={popupRef}
         />
       )}
     </ModalContainer>
@@ -362,13 +367,13 @@ const ModalContainer = styled.div<{
   width: 100%;
   height: ${({ $isKeyboardOpen, $keyboardHeight }) =>
     $isKeyboardOpen ? `calc(33rem - ${$keyboardHeight}px)` : "33rem"};
-  padding: 24px 24px 20px 24px;
+  padding: 24px 24px 20px 0px;
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
   background: #fff;
-  z-index: 100;
+  z-index: 99;
   flex-direction: column;
-  align-items: center;
+  //align-items: center;
   box-shadow: -4px 0px 14px 0px rgba(0, 0, 0, 0.05);
 `;
 const ButtonContainer = styled.button`
@@ -408,6 +413,7 @@ const Header = styled.div`
   gap: 10px;
   align-self: stretch;
   position: relative;
+  padding-left: 24px;
 `;
 const Title = styled.span`
   flex: 1 0 0;
@@ -440,6 +446,8 @@ const Book = styled.div<{ $backgroundImage: string }>`
   background-size: cover; /* 이미지를 자르지 않고 크기에 맞춰 조정 */
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
+  left: 50%;
+  transform: translateX(-50%);
 `;
 const Shadow = styled.img`
   width: 158px;
@@ -465,7 +473,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 17.7px;
+  margin-top: 18.2px;
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -551,15 +559,15 @@ const ImageContainer = styled.div`
   align-self: stretch;
 `;
 
-const Image = styled.div<{ clicked: boolean; img: string }>`
+const Image = styled.div<{ $clicked: boolean; $img: string }>`
   cursor: pointer;
   transition: all 0.2s ease;
-  width: ${(props) => (props.clicked ? "56px" : "48px")};
-  height: ${(props) => (props.clicked ? "56px" : "48px")};
-  opacity: ${(props) => (props.clicked ? "" : "0.4")};
+  width: ${(props) => (props.$clicked ? "56px" : "48px")};
+  height: ${(props) => (props.$clicked ? "56px" : "48px")};
+  opacity: ${(props) => (props.$clicked ? "" : "0.4")};
   border-radius: 10.2px;
   flex-shrink: 0;
-  background-image: url(${(props) => props.img});
+  background-image: url(${(props) => props.$img});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

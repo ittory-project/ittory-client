@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef, Ref } from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
@@ -13,92 +13,122 @@ interface Props {
   fontPopup: boolean;
   setSelect: React.Dispatch<React.SetStateAction<string>>;
   select: string;
-  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
   setSelectfid: React.Dispatch<React.SetStateAction<number>>;
   selectfid: number;
-  ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-export default function FontPopup({
-  font,
-  fonts,
-  setFont,
-  setFontPopup,
-  fontPopup,
-  setSelect,
-  select,
-  setSelectFid,
-  setSelectfid,
-  selectfid,
-  ref,
-}: Props) {
-  const [selected, setSelected] = useState<string>("서체 1");
-  const [selectId, setSelectId] = useState<number>(1);
-  const [bottomOffset, setBottomOffset] = useState<number>(0);
+const FontPopup = forwardRef<HTMLDivElement, Props>(
+  (
+    {
+      font,
+      fonts,
+      setFont,
+      setFontPopup,
+      fontPopup,
+      setSelect,
+      select,
+      setSelectfid,
+      selectfid,
+    },
+    ref
+  ) => {
+    const [selected, setSelected] = useState<string>("");
+    const [selectId, setSelectId] = useState<number>(1);
+    const [bottomOffset, setBottomOffset] = useState<number>(0);
+    const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+    const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
-  useEffect(() => {
-    setSelected(font);
-    //setFont(font);
-    setSelectId(selectfid);
-  }, []);
+    useEffect(() => {
+      setSelected(font);
+      setFont(font);
+      setSelectId(selectfid);
+      setSelectfid(selectfid);
+    }, []);
 
-  const handleButton = () => {
-    setSelected(selected);
-    setSelect(selected);
-    setSelectfid(selectId);
-    setFontPopup(false);
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.visualViewport) {
-        const keyboardHeight =
-          window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
-        setBottomOffset(keyboardHeight > 0 ? keyboardHeight : 0); // 키보드 높이가 0 이상인 경우만 설정
-      }
+    const handleButton = () => {
+      console.log(selected);
+      console.log(selectId);
+      setSelected(selected);
+      setSelect(selected);
+      setSelectfid(selectId);
+      setIsCompleted(true);
+      setFontPopup(false);
     };
 
-    window.visualViewport?.addEventListener("resize", handleResize);
-    window.visualViewport?.addEventListener("scroll", handleResize);
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.visualViewport) {
+          const keyboardHeight =
+            window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+          setBottomOffset(keyboardHeight > 0 ? keyboardHeight : 0); // 키보드 높이가 0 이상인 경우만 설정
+          setIsKeyboardVisible(keyboardHeight > 0);
+        }
+      };
 
-    handleResize();
+      window.visualViewport?.addEventListener("resize", handleResize);
+      window.visualViewport?.addEventListener("scroll", handleResize);
 
-    return () => {
-      window.visualViewport?.removeEventListener("resize", handleResize);
-      window.visualViewport?.removeEventListener("scroll", handleResize);
+      handleResize();
+
+      return () => {
+        window.visualViewport?.removeEventListener("resize", handleResize);
+        window.visualViewport?.removeEventListener("scroll", handleResize);
+      };
+    }, []);
+
+    const handleInputBlur = () => {
+      // 입력 필드에서 blur 발생 시 서체 선택 영역을 내려가도록 처리
+      setIsCompleted(true); // 완료 상태로 설정
     };
-  }, []);
 
-  return (
-    <div ref={ref} className={ParentDiv}>
-      <BackGround $bottomOffset={bottomOffset}>
-        <FontContainer>
-          <FontSelect
-            font={font}
-            fonts={fonts}
-            setFont={setFont}
-            setSelect={setSelected}
-            select={select}
-            setSelectFid={setSelectfid}
-            setSelectId={setSelectId}
-          />
-        </FontContainer>
-        <Line src={_Line} />
-        <Button onClick={handleButton}>완료</Button>
-      </BackGround>
-    </div>
-  );
-}
+    return (
+      <div ref={ref} className={ParentDiv}>
+        <BackGround
+          $bottomOffset={bottomOffset}
+          $isKeyboardVisible={isKeyboardVisible}
+        >
+          <FontContainer>
+            <FontSelect
+              font={font}
+              fonts={fonts}
+              setFont={setFont}
+              setSelect={setSelected}
+              select={select}
+              selectfid={selectfid}
+              setSelectFid={setSelectfid}
+              setSelectId={setSelectId}
+            />
+          </FontContainer>
+          <Line src={_Line} />
+          <Button onClick={handleButton} $isKeyboardVisible={isKeyboardVisible}>
+            완료
+          </Button>
+        </BackGround>
+        {/* 키보드가 올라오면 이 필드가 focus되며 완료버튼을 눌렀을 때 키보드가 내려가게 처리 */}
+        <input
+          type="text"
+          style={{ opacity: 0 }}
+          onBlur={handleInputBlur} // blur 발생 시 서체 선택 영역을 내려가도록 설정
+        />
+      </div>
+    );
+  }
+);
+
+export default FontPopup;
 
 const ParentDiv = styled.div`
   position: relative;
   width: 100%;
 `;
 
-const BackGround = styled.div<{ $bottomOffset: number }>`
+const BackGround = styled.div<{
+  $bottomOffset: number;
+  $isKeyboardVisible: boolean;
+}>`
   display: flex;
   width: 100%;
-  z-index: 3;
+  z-index: 100;
   position: absolute;
   bottom: ${(props) => props.$bottomOffset - 2}px;
   border-radius: 20px 20px 0px 0px;
@@ -106,15 +136,21 @@ const BackGround = styled.div<{ $bottomOffset: number }>`
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
   overflow-y: hidden;
+  height: ${(props) => (props.$isKeyboardVisible ? "64px" : "149px")};
 
-  @media (min-width: 431px) {
+  transition:
+    bottom 0.3s ease,
+    height 0.3s ease;
+`;
+/*
+ @media (min-width: 431px) {
     height: 149px; // 데스크톱
   }
 
   @media (max-width: 430px) {
     height: 64px;
   }
-`;
+*/
 const FontContainer = styled.div`
   display: flex;
   width: 100%;
@@ -131,7 +167,7 @@ const Line = styled.img`
   left: 0;
   margin-top: 65px;
 `;
-const Button = styled.button`
+const Button = styled.button<{ $isKeyboardVisible: boolean }>`
   overflow: hidden;
   z-index: 10;
   position: fixed;
@@ -155,12 +191,12 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-
-  @media (min-width: 431px) {
+  display: ${(props) => (props.$isKeyboardVisible ? "none" : "flex")};
+`;
+/*@media (min-width: 431px) {
     display: flex; // 데스크톱
   }
 
   @media (max-width: 430px) {
     display: none;
-  }
-`;
+  }*/
