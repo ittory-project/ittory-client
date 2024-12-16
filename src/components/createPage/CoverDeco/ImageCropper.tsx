@@ -15,7 +15,6 @@ interface Props {
   croppedAreaPixels: Area | null;
   width?: number;
   height?: number;
-  borderRadius?: number;
 }
 
 export enum ImageExtension {
@@ -32,7 +31,6 @@ export default function ImageCropper({
   croppedAreaPixels,
   width = 134,
   height = 134,
-  borderRadius = 20,
 }: Props) {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -137,16 +135,19 @@ const Container = styled.div`
 const Header = styled.div`
   position: absolute;
   width: 100%;
-  height: 8%;
+  z-index: 3;
+  height: 50px;
   background: #d9d9d9;
   border-radius: 20px 20px 0px 0px;
   font-family: SUIT;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center;
 `;
 const Text = styled.span`
   display: block;
+  margin-top: 12px;
   color: #243348;
   text-align: center;
-  margin-top: 0.8rem;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
@@ -160,13 +161,13 @@ const CropContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: 92%;
+  height: 99%;
   overflow: hidden;
 `;
 const Button = styled.button`
   position: absolute;
-  bottom: 7%;
-  right: 0;
+  bottom: 5%;
+  right: 1%;
   padding: 10px 10px;
   background-color: transparent;
   color: white;
@@ -177,8 +178,8 @@ const Button = styled.button`
 `;
 const CancelBtn = styled.button`
   position: absolute;
-  bottom: 7%;
-  left: 0;
+  bottom: 5%;
+  left: 1%;
   padding: 10px 10px;
   background-color: transparent;
   color: white;

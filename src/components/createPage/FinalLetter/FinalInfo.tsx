@@ -29,6 +29,8 @@ interface Props {
   setBackgroundimage: React.Dispatch<React.SetStateAction<number>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
+  selectFid: number;
 }
 
 interface BookProps {
@@ -52,6 +54,8 @@ export default function FinalInfo({
   setSelectfont,
   selectedImageIndex,
   setSelectedImageIndex,
+  setSelectFid,
+  selectFid,
 }: Props) {
   const [viewEdit, setViewEdit] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState(false);
@@ -65,7 +69,6 @@ export default function FinalInfo({
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
-
         const user = await getVisitUser();
         setVisit(user.isVisited);
       } catch (err) {
@@ -200,6 +203,7 @@ export default function FinalInfo({
           setViewEdit={setViewEdit}
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
+          setSelectFid={setSelectFid}
         />
       )}
       {coverOpen && (
@@ -216,6 +220,7 @@ export default function FinalInfo({
           setKeyboardVisible={setKeyboardVisible}
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
+          setSelecteFid={setSelectFid}
         />
       )}
       {complete &&
@@ -231,6 +236,7 @@ export default function FinalInfo({
             selectfont={selectfont}
             setIsModalOpen={setComplete}
             selectedImageIndex={selectedImageIndex}
+            selectFid={selectFid}
           />
         ) : (
           <CompleteModal
@@ -244,6 +250,7 @@ export default function FinalInfo({
             selectfont={selectfont}
             setIsModalOpen={setComplete}
             selectedImageIndex={selectedImageIndex}
+            selectFid={selectFid}
           />
         ))}
     </BackGround>

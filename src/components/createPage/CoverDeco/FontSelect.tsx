@@ -8,26 +8,32 @@ interface Props {
   setFont: React.Dispatch<React.SetStateAction<string>>;
   setSelect: React.Dispatch<React.SetStateAction<string>>;
   select: string;
+  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
+  setSelectId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function FontSelect({
   font,
   fonts,
   setFont,
+  setSelectFid,
   setSelect,
   select,
+  setSelectId,
 }: Props) {
-  // 폰트 선택 핸들러
-  const handleFontChange = (fontFamily: string) => {
+  const handleFontChange = (fontFamily: string, fontId: number) => {
     setFont(fontFamily);
     setSelect(fontFamily);
-    console.log("Selected Font:", fontFamily);
+    setSelectFid(fontId);
+    setSelectId(fontId);
   };
 
   useEffect(() => {
     console.log(select);
-    if (select !== "") {
-      setFont(select);
+    if (select === "") {
+      setFont(fonts[0].value);
+      setSelectId(fonts[0].id);
+      setSelectFid(fonts[0].id);
     } else {
       setFont(fonts[0].value);
     }
@@ -41,7 +47,7 @@ export default function FontSelect({
             key={fontlist.id}
             $fontFamily={fontlist.value}
             $selected={fontlist.value === font}
-            onClick={() => handleFontChange(fontlist.value)}
+            onClick={() => handleFontChange(fontlist.value, fontlist.id)}
           >
             <Fonttxt
               $fontFamily={fontlist.value}

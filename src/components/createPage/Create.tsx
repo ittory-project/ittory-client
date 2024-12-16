@@ -15,7 +15,10 @@ export const Create = () => {
   const [croppedImage, setCroppedImage] = useState<string>("");
   const [backgroundimage, setBackgroundimage] = useState<number>(0);
   const [selectfont, setSelectfont] = useState<string>("");
+  const [selectFid, setSelectFid] = useState<number>(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+
+  console.log(selectFid);
 
   return (
     <BackGround>
@@ -44,6 +47,7 @@ export const Create = () => {
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
           setBackgroundimage={setBackgroundimage}
+          setSelectFid={setSelectFid}
         />
       )}
       {viewFinalInfo && (
@@ -64,6 +68,8 @@ export const Create = () => {
           setSelectfont={setSelectfont}
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
+          setSelectFid={setSelectFid}
+          selectFid={selectFid}
         />
       )}
     </BackGround>

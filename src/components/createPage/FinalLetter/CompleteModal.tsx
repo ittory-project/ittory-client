@@ -24,6 +24,7 @@ interface Props {
   selectfont: string;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  selectFid: number;
 }
 
 export default function CompleteModal({
@@ -37,6 +38,7 @@ export default function CompleteModal({
   setIsModalOpen,
   selectedImageIndex,
   setKeyboardVisible,
+  selectFid,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -74,13 +76,6 @@ export default function CompleteModal({
     };
   }, [modalBackground]);
 
-  const fontFamilyToId: { [key: string]: number } = {
-    GmarketSans: 1,
-    "Ownglyph_UNZ-Rg": 2,
-    "CookieRun-Regular": 3,
-    "Cafe24ClassicType-Regular": 4,
-  };
-
   const handleNickname = async (letterId: Number) => {
     if (myName) {
       const requestBody: NicknamePostRequest = {
@@ -105,7 +100,7 @@ export default function CompleteModal({
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
-      fontId: fontFamilyToId[selectfont],
+      fontId: selectFid,
       receiverName: receiverName,
       deliveryDate: deliverDay?.toISOString() || "",
       title: title,
@@ -273,7 +268,7 @@ const DeliverDay = styled.div`
 const Shadow = styled.img`
   width: 175px;
   height: 161px;
-  margin-left: 1px;
+  margin-left: 0px;
   margin-top: 72px;
   position: absolute;
   z-index: 3;
@@ -290,8 +285,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 26.5px;
-  margin-left: -0.4px;
+  margin-top: 28px;
+  margin-left: 2.36px;
 `;
 
 const Button = styled.button`

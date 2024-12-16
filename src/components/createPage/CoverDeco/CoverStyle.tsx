@@ -10,7 +10,6 @@ import PrevImg from "../../../../public/assets/pageprev.svg";
 import camera from "../../../../public/assets/camera.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
 import bookshadow from "../../../../public/assets/book_shadow.svg";
-import FontSelect from "./FontSelect";
 import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
 import FontPopup from "./FontPopup";
@@ -30,6 +29,7 @@ interface Props {
   setViewFinalInfo: React.Dispatch<React.SetStateAction<boolean>>;
   selectedImageIndex: number;
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSelectFid: React.Dispatch<React.SetStateAction<number>>;
 }
 interface BookProps {
   backgroundimage: string;
@@ -73,6 +73,7 @@ export default function CoverStyle({
   setViewFinalInfo,
   selectedImageIndex,
   setSelectedImageIndex,
+  setSelectFid,
 }: Props) {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
@@ -88,6 +89,16 @@ export default function CoverStyle({
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [selectf, setSelectf] = useState<string>("");
+  const [selectfid, setSelectfid] = useState<number>(1);
+  const [backgroundImage, setBackgroundImage] = useState<string>("");
+
+  useEffect(() => {
+    const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
+
+    if (imageUrl) {
+      setBackgroundImage(imageUrl);
+    }
+  }, [ImageIndex, coverTypes]);
 
   useEffect(() => {
     const fetchCoverTypesAndFonts = async () => {
@@ -107,6 +118,7 @@ export default function CoverStyle({
       try {
         const types = await getAllFont();
         setFonts(types);
+        console.log(types);
       } catch (err) {
         console.error(err);
       }
@@ -142,11 +154,7 @@ export default function CoverStyle({
     function handleOutside(e: MouseEvent) {
       const heightDiff =
         window.innerHeight - document.documentElement.clientHeight;
-      console.log(window.innerHeight);
-      console.log(document.documentElement.clientHeight);
-      console.log(heightDiff);
 
-      // 키보드가 열리는 조건 - 이부분 나중에 테스트 필요!!
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
         if (heightDiff > 0) {
           setIsKeyboardOpen(true);
@@ -157,6 +165,9 @@ export default function CoverStyle({
           setKeyboardHeight(0);
           handlePopup();
         }
+      }
+      if (inputRef.current && !inputRef.current.contains(e.target as Node)) {
+        setFontPopup(false); // fontPopup 숨기기
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -210,7 +221,7 @@ export default function CoverStyle({
         <Title>
           <Text>표지를 꾸며주세요!</Text>
         </Title>
-        <Book backgroundimage={coverTypes[ImageIndex]?.editImageUrl}>
+        <Book backgroundimage={backgroundImage}>
           <TitleContainer>
             <Input
               ref={inputRef}
@@ -229,7 +240,6 @@ export default function CoverStyle({
               spellCheck="false"
               $selectfont={font}
             />
-
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="184"
@@ -239,19 +249,6 @@ export default function CoverStyle({
             >
               <path d="M0 1H184" stroke="white" strokeDasharray="6 6" />
             </svg>
-            {isKeyboardOpen == true ? (
-              <KeyboardBar $keyboardHeight={keyboardHeight}>
-                <FontSelect
-                  font={font}
-                  fonts={fonts}
-                  setFont={setFont}
-                  setSelect={setSelectf}
-                  select={selectf}
-                />
-              </KeyboardBar>
-            ) : (
-              <></>
-            )}
           </TitleContainer>
 
           {croppedImage === "" ? (
@@ -296,11 +293,9 @@ export default function CoverStyle({
               </BtnImgContainer>
             </>
           )}
-          <NameBar>
-            <NameContainer>
-              <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
-            </NameContainer>
-          </NameBar>
+          <NameContainer $book={ImageIndex}>
+            <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
+          </NameContainer>
         </Book>
         <BookShadow>
           <img src={bookshadow} alt="book_shadow" />
@@ -335,6 +330,7 @@ export default function CoverStyle({
           onClick={() => {
             setSelectfont(font);
             setBackgroundimage(ImageIndex);
+            setSelectFid(selectfid);
             setViewCoverDeco(false);
             setViewFinalInfo(true);
           }}
@@ -348,7 +344,7 @@ export default function CoverStyle({
           setIsModalOpen={setIsModalOpen}
           originalImage={originalImage}
           croppedAreaPixels={croppedAreaPixels}
-          setCroppedImage={handleSaveCroppedImage} // 크롭된 이미지를 저장하는 함수
+          setCroppedImage={handleSaveCroppedImage}
           setCroppedAreaPixels={setCroppedAreaPixels}
         />
       )}
@@ -361,6 +357,9 @@ export default function CoverStyle({
           fontPopup={fontPopup}
           select={selectf}
           setSelect={setSelectf}
+          setSelectFid={setSelectFid}
+          setSelectfid={setSelectfid}
+          selectfid={selectfid}
         />
       )}
     </BackGround>
@@ -595,17 +594,7 @@ const BtnTxt = styled.div`
   letter-spacing: -0.5px;
   padding-top: 4spx;
 `;
-const NameBar = styled.div`
-  margin-top: 31.95px;
-  width: 224px;
-  height: 23px;
-  flex-shrink: 0;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const NameContainer = styled.div`
+const NameContainer = styled.div<{ $book: number }>`
   width: 224px;
   height: 21px;
   flex-shrink: 0;
@@ -613,6 +602,8 @@ const NameContainer = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
+  margin-top: ${(props) =>
+    props.$book === 0 || props.$book === 1 ? "34px" : "25px"};
 `;
 const NameTxt = styled.div`
   padding: 0 12px 0 12px;
