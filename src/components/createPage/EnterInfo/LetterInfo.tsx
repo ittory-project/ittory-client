@@ -55,35 +55,9 @@ export default function LetterInfo({
     setIsModalOpen(true);
   };
 
-  const handleFocus = () => {
-    setKeyboardVisible(true);
-  };
-
   const handleBlur = () => {
     setKeyboardVisible(false);
   };
-  /*
-  const navigateToCoverDeco = () => {
-    navigate("/CoverDeco");
-  };
- 
-  useEffect(() => {
-    const handleResize = () => {
-      // 키패드가 나타나면 화면의 높이가 줄어드므로, 이를 감지
-      if (window.innerHeight < window.outerHeight) {
-        setKeyboardVisible(true);
-      } else {
-        setKeyboardVisible(false);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);*/
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
@@ -100,12 +74,25 @@ export default function LetterInfo({
     };
   }, [keyboardRef]);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      console.log("사용자가 Enter(완료) 버튼을 눌렀습니다.");
-      // 추가적인 동작을 여기에 추가할 수 있습니다.
-    }
-  };
+  console.log(keyboardVisible);
+  console.log(window.innerHeight);
+  console.log(document.documentElement.clientHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerHeight < document.documentElement.clientHeight) {
+        setKeyboardVisible(true); // 키보드 올라옴
+        console.log("키보드올라옴");
+      } else {
+        setKeyboardVisible(false); // 키보드 내려옴
+      }
+    };
+
+    // resize 이벤트 감지
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <BackGround>
@@ -139,10 +126,7 @@ export default function LetterInfo({
               }}
               $minLength={1}
               $maxLength={12}
-              onFocus={handleFocus}
               spellCheck="false"
-              onKeyDown={handleKeyDown}
-              //onBlur={handleBlur}
             />
           </InputBox>
           <InputBox>
@@ -154,7 +138,6 @@ export default function LetterInfo({
               type="text"
               value={myName}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setKeyboardVisible(true);
                 if (e.target.value.length > 5) {
                   e.target.value = e.target.value.slice(0, 5);
                 }
@@ -162,7 +145,6 @@ export default function LetterInfo({
               }}
               $minLength={1}
               $maxLength={5}
-              onFocus={handleFocus}
               spellCheck="false"
               //onBlur={handleBlur}
             />
@@ -283,16 +265,7 @@ const Title = styled.div<{ $keyboardVisible: boolean }>`
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
-
-  // 데스크톱에서는 항상 보이도록 설정
-  @media (min-width: 431px) {
-    display: flex; // 데스크톱에서는 항상 보이도록 설정
-  }
-
-  // 모바일에서는 키보드가 보일 때만 숨기도록 설정
-  @media (max-width: 430px) {
-    display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
-  }
+  display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
 `;
 
 const Text = styled.span`
@@ -404,15 +377,8 @@ const Button = styled.button<{ $keyboardVisible: boolean }>`
   left: 50%;
   transform: translateX(-50%);
 
-  // 데스크톱에서는 항상 보이도록 설정
-  @media (min-width: 431px) {
-    display: flex; // 데스크톱에서는 항상 보이도록 설정
-  }
-
-  // 모바일에서는 키보드가 보일 때만 숨기도록 설정
-  @media (max-width: 430px) {
-    display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
-  }
+  // 키보드가 보일 때 버튼 숨기기
+  display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
 `;
 const ButtonTxt = styled.div`
   color: #fff;

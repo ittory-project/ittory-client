@@ -228,7 +228,7 @@ export default function FinalInfo({
         />
       )}
       {complete &&
-        (visit ? (
+        (!visit ? (
           <UserFinishModal
             setKeyboardVisible={setKeyboardVisible}
             myName={myName}
