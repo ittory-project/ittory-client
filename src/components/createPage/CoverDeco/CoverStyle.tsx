@@ -169,7 +169,6 @@ export default function CoverStyle({
           handlePopup();
         }
       }
-      /*
       if (
         inputRef.current &&
         !inputRef.current.contains(e.target as Node) &&
@@ -177,7 +176,7 @@ export default function CoverStyle({
         !popupRef.current.contains(e.target as Node)
       ) {
         setFontPopup(false); // fontPopup 숨기기
-      }*/
+      }
     }
     document.addEventListener("mousedown", handleOutside);
     return () => {
