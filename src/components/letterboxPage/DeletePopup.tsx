@@ -29,6 +29,7 @@ export const DeletePopup = ({
   };
   const handleDelete = () => {
     onDelete();
+    window.location.reload();
     setPopup(false);
     setIsModalOpen(false);
     setOpenLetter(false);
@@ -70,8 +71,8 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100vw;
+  height: 100vh;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

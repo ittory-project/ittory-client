@@ -73,6 +73,7 @@ button:focus-visible {
   font-weight: normal;
   font-style: normal;
 }
+/*
 @font-face {
   font-family: "GmarketSans";
   font-weight: 700;
@@ -88,7 +89,7 @@ button:focus-visible {
     url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSansBold.ttf")
       format("truetype");
   font-display: swap;
-}
+}*/
 @font-face {
   font-family: "Ownglyph_UNZ-Rg";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2406-1@1.0/Ownglyph_UNZ-Rg.woff2")

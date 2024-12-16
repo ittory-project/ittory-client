@@ -114,12 +114,11 @@ export default function LetterInfo({
         <img src={X} alt="X Icon" style={{ width: "14px", height: "14px" }} />
       </Cancel>
       <Container>
-        {!keyboardVisible && (
-          <Title>
-            <Text>{name}님,</Text>
-            <Text>같이 편지를 만들어봐요!</Text>
-          </Title>
-        )}
+        <Title $keyboardVisible={keyboardVisible}>
+          <Text>{name}님,</Text>
+          <Text>같이 편지를 만들어봐요!</Text>
+        </Title>
+
         <MainCotainer
           $shiftup={String(keyboardVisible)}
           $isopen={String(isModalOpen)}
@@ -200,26 +199,30 @@ export default function LetterInfo({
           </InputBox>
         </MainCotainer>
       </Container>
-      {!keyboardVisible &&
-        (myName === "" || receiverName === "" || deliverDay === null ? (
-          <Button disabled={true} style={{ background: "#ced4da" }}>
-            <ButtonTxt>다음</ButtonTxt>
-          </Button>
-        ) : (
-          <Button
-            style={{
-              background: "#FFA256",
-              boxShadow:
-                "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
-            }}
-            onClick={() => {
-              setViewCoverDeco(true);
-              setViewStartpage(false);
-            }}
-          >
-            <ButtonTxt>다음</ButtonTxt>
-          </Button>
-        ))}
+      {myName === "" || receiverName === "" || deliverDay === null ? (
+        <Button
+          disabled={true}
+          style={{ background: "#ced4da" }}
+          $keyboardVisible={keyboardVisible}
+        >
+          <ButtonTxt>다음</ButtonTxt>
+        </Button>
+      ) : (
+        <Button
+          $keyboardVisible={keyboardVisible}
+          style={{
+            background: "#FFA256",
+            boxShadow:
+              "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
+          }}
+          onClick={() => {
+            setViewCoverDeco(true);
+            setViewStartpage(false);
+          }}
+        >
+          <ButtonTxt>다음</ButtonTxt>
+        </Button>
+      )}
       {isModalOpen && (
         <BottomSheet
           deliverDay={deliverDay}
@@ -273,14 +276,25 @@ const Cancel = styled.span`
   top: 10px;
   right: 16px;
 `;
-const Title = styled.div`
+const Title = styled.div<{ $keyboardVisible: boolean }>`
   display: flex;
   margin-top: 0;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 24px;
+
+  // 데스크톱에서는 항상 보이도록 설정
+  @media (min-width: 431px) {
+    display: flex; // 데스크톱에서는 항상 보이도록 설정
+  }
+
+  // 모바일에서는 키보드가 보일 때만 숨기도록 설정
+  @media (max-width: 430px) {
+    display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
+  }
 `;
+
 const Text = styled.span`
   display: block;
   color: #243348;
@@ -374,7 +388,7 @@ const Calender = styled.span`
   cursor: pointer;
   right: 1rem;
 `;
-const Button = styled.button`
+const Button = styled.button<{ $keyboardVisible: boolean }>`
   width: 288px;
   cursor: pointer;
   display: flex;
@@ -389,6 +403,16 @@ const Button = styled.button`
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+
+  // 데스크톱에서는 항상 보이도록 설정
+  @media (min-width: 431px) {
+    display: flex; // 데스크톱에서는 항상 보이도록 설정
+  }
+
+  // 모바일에서는 키보드가 보일 때만 숨기도록 설정
+  @media (max-width: 430px) {
+    display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
+  }
 `;
 const ButtonTxt = styled.div`
   color: #fff;
