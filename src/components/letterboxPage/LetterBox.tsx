@@ -17,11 +17,6 @@ export const LetterBox = () => {
   const [openLetter, setOpenLetter] = useState<boolean>(false);
   const [create, setCreate] = useState<boolean>(false);
   const [receive, setReceive] = useState<boolean>(false);
-  const [prevUrl, setPrevUrl] = useState<string | null>(null);
-
-  const navigateBack = () => {
-    navigate("/", { replace: true });
-  };
 
   useEffect(() => {
     if (Number(letterId) > 0) {
@@ -63,6 +58,10 @@ export const LetterBox = () => {
 
   const handleFocusReceive = () => {
     setFocusOn("receive");
+  };
+
+  const navigateBack = () => {
+    navigate("/", { replace: true });
   };
 
   return (
