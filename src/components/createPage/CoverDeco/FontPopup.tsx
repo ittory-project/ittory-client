@@ -16,6 +16,7 @@ interface Props {
   setSelectFid: React.Dispatch<React.SetStateAction<number>>;
   setSelectfid: React.Dispatch<React.SetStateAction<number>>;
   selectfid: number;
+  ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 export default function FontPopup({
@@ -29,6 +30,7 @@ export default function FontPopup({
   setSelectFid,
   setSelectfid,
   selectfid,
+  ref,
 }: Props) {
   const [selected, setSelected] = useState<string>("서체 1");
   const [selectId, setSelectId] = useState<number>(1);
@@ -68,23 +70,30 @@ export default function FontPopup({
   }, []);
 
   return (
-    <BackGround $bottomOffset={bottomOffset}>
-      <FontContainer>
-        <FontSelect
-          font={font}
-          fonts={fonts}
-          setFont={setFont}
-          setSelect={setSelected}
-          select={select}
-          setSelectFid={setSelectfid}
-          setSelectId={setSelectId}
-        />
-      </FontContainer>
-      <Line src={_Line} />
-      <Button onClick={handleButton}>완료</Button>
-    </BackGround>
+    <div ref={ref} className={ParentDiv}>
+      <BackGround $bottomOffset={bottomOffset}>
+        <FontContainer>
+          <FontSelect
+            font={font}
+            fonts={fonts}
+            setFont={setFont}
+            setSelect={setSelected}
+            select={select}
+            setSelectFid={setSelectfid}
+            setSelectId={setSelectId}
+          />
+        </FontContainer>
+        <Line src={_Line} />
+        <Button onClick={handleButton}>완료</Button>
+      </BackGround>
+    </div>
   );
 }
+
+const ParentDiv = styled.div`
+  position: relative;
+  width: 100%;
+`;
 
 const BackGround = styled.div<{ $bottomOffset: number }>`
   display: flex;
