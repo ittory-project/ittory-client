@@ -365,7 +365,6 @@ export default function CoverStyle({
           fontPopup={fontPopup}
           select={selectf}
           setSelect={setSelectf}
-          setSelectFid={setSelectFid}
           setSelectfid={setSelectfid}
           selectfid={selectfid}
           ref={popupRef}

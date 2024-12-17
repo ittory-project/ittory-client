@@ -486,15 +486,15 @@ const Bright = styled.img`
 const Shadow = styled.img`
   width: 145px;
   height: 145px;
-  margin-left: -1px;
-  margin-top: 68px;
+  margin-left: 1px;
+  margin-top: 66px;
   position: absolute;
   z-index: 3;
   flex-shrink: 0;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
-  width: 121px;
-  height: 121px;
+  width: 121.8px;
+  height: 121.8px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
@@ -503,8 +503,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 20.6px;
-  margin-left: 4.5px;
+  margin-top: 20.28px;
+  margin-left: 2.05px;
 `;
 const NameBar = styled.div`
   margin-top: 20px;
