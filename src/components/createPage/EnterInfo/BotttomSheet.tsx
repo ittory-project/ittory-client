@@ -6,14 +6,14 @@ interface Props {
   deliverDay: Date | null;
   setDeliverDay: React.Dispatch<React.SetStateAction<Date | null>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  //setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function BottomSheet({
   deliverDay,
   setDeliverDay,
   setIsModalOpen,
-  setKeyboardVisible,
+  //setKeyboardVisible,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -25,9 +25,8 @@ export default function BottomSheet({
         !modalBackground.current.contains(e.target as Node)
         //컴포넌트 특정 영역 외 클릭 감지
       ) {
-        setKeyboardVisible(false);
         closeModal();
-      } else setKeyboardVisible(true);
+      }
     }
     document.addEventListener("mousedown", handleOutside);
     return () => {
@@ -38,7 +37,7 @@ export default function BottomSheet({
   const handleButton = () => {
     if (deliverDay !== null) {
       console.log(deliverDay);
-      setKeyboardVisible(false);
+      //setKeyboardVisible(false);
       closeModal();
     }
   };
