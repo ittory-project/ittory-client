@@ -96,7 +96,7 @@ const FontSelectorContainer = styled.div`
 const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   display: inline-flex;
   width: 80px;
-  height: 34px;
+  height: 38px;
   box-sizing: border-box;
   padding: 6px 16px;
   justify-content: center;
@@ -115,9 +115,10 @@ const Fonttxt = styled.span<{ $fontFamily: string; $selected: boolean }>`
   font-family: ${(props) => props.$fontFamily};
   font-size: ${(props) =>
     props.$fontFamily === "Ownglyph_UNZ-Rg" ? "20px" : "14px"};
-  font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.5px;
   margin-top: ${(props) =>
     props.$fontFamily === "GmarketSans" ? "3px" : "1px"};
+  font-weight: ${(props) =>
+    props.$fontFamily === "GmarketSans" ? "bold" : "regular"};
 `;
