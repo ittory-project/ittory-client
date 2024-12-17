@@ -29,18 +29,6 @@ export const WithdrawPopup = () => {
   );
 };
 
-const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
-`;
 const Modal = styled.div`
   display: flex;
   width: 272px;
@@ -56,7 +44,7 @@ const Modal = styled.div`
   border-radius: 16px;
   border: 3px solid #d3edff;
   background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
-  z-index: 100;
+  z-index: 120;
 `;
 const Title = styled.div`
   display: flex;
