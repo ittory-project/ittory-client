@@ -22,6 +22,10 @@ interface Props {
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
   popup: boolean;
   openLetter: boolean;
+  setDeleteAlert: React.Dispatch<React.SetStateAction<string | null>>;
+  setDeletedAlert: React.Dispatch<React.SetStateAction<string | null>>;
+  deleteAlert: string | null;
+  deletedAlert: string | null;
 }
 
 export const CreatedLetter = ({
@@ -31,8 +35,10 @@ export const CreatedLetter = ({
   popup,
   setOpenLetter,
   openLetter,
+  deleteAlert,
+  setDeleteAlert,
+  setDeletedAlert,
 }: Props) => {
-  const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
   const [deleteName, setDeleteName] = useState<string>("");
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
@@ -64,15 +70,25 @@ export const CreatedLetter = ({
     setOpenLetter(true);
   };
 
-  const handleDelete = () => {
-    setDeleteAlert("편지가 삭제되었어요");
-    setTimeout(() => {
-      setDeleteAlert(null);
-      window.location.reload();
-    }, 3000); // 5초 후에 alert 를 숨기기
-  };
-  //현재는 alert후 업데이트됨
-  //업데이트후 alert로 수정하기
+  useEffect(() => {
+    const fetchLetter = async () => {
+      if (deleteAlert !== null) {
+        try {
+          const letterdata = await getParticipatedLetter();
+          const counts = await getLetterCounts();
+          setLetterCounts(counts.participationLetterCount);
+          setLetters(letterdata.data.letters);
+
+          const deletedMessage = localStorage.getItem("deletedLetter");
+          setDeletedAlert(deletedMessage);
+        } catch (err) {
+          console.error("Error fetching letter counts:", err);
+        }
+      }
+    };
+
+    fetchLetter();
+  }, [deleteAlert]);
 
   const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
     const date = new Date(deliverDate);
@@ -97,7 +113,6 @@ export const CreatedLetter = ({
         <>
           {!openLetter && letters && (
             <Container>
-              {deleteAlert && <DeleteAlert>{deleteAlert}</DeleteAlert>}
               <NumberHeader>
                 <NumberTxt style={{ fontWeight: "400", marginRight: "2.5px" }}>
                   총
@@ -145,11 +160,12 @@ export const CreatedLetter = ({
             <Delete_letterbox
               setOpenLetter={setOpenLetter}
               setPopup={setPopup}
-              onDelete={handleDelete}
               setIsModalOpen={setIsModalOpen}
               context="created"
               deleteItem={deleteName}
               letterId={selectId}
+              setDeleteAlert={setDeleteAlert}
+              deleteAlert={deleteAlert}
             />
           )}
           {openLetter && (
@@ -159,11 +175,12 @@ export const CreatedLetter = ({
               isModalOpen={isModalOpen}
               setPopup={setPopup}
               popup={popup}
-              onDelete={handleDelete}
               deleteItem={deleteName}
               letterId={selectId}
               setIsModalOpen={setIsModalOpen}
               openLetter={openLetter}
+              setDeleteAlert={setDeleteAlert}
+              deleteAlert={deleteAlert}
             />
           )}
         </>
@@ -171,29 +188,6 @@ export const CreatedLetter = ({
     </>
   );
 };
-
-const DeleteAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
-  font-family: SUIT;
-  font-weight: 500;
-  font-size: 12px;
-  font-style: normal;
-  line-height: 16px;
-  letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
-  transform: translateX(-50%);
-`;
 
 const Container = styled.div`
   display: flex;

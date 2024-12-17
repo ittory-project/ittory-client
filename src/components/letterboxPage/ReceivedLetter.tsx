@@ -18,6 +18,10 @@ interface Props {
   popup: boolean;
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
   openLetter: boolean;
+  setDeleteAlert: React.Dispatch<React.SetStateAction<string | null>>;
+  setDeletedAlert: React.Dispatch<React.SetStateAction<string | null>>;
+  deleteAlert: string | null;
+  deletedAlert: string | null;
 }
 
 interface DeliverDayProps {
@@ -31,8 +35,10 @@ export const ReceivedLetter = ({
   popup,
   setOpenLetter,
   openLetter,
+  deleteAlert,
+  setDeleteAlert,
+  setDeletedAlert,
 }: Props) => {
-  const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
   const [deleteTitle, setDeleteTitle] = useState<string>("");
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
@@ -64,12 +70,25 @@ export const ReceivedLetter = ({
     setOpenLetter(true);
   };
 
-  const handleDelete = () => {
-    setDeleteAlert("편지가 삭제되었어요");
-    setTimeout(() => {
-      setDeleteAlert(null);
-    }, 5000); // 5초 후에 alert 를 숨기기
-  };
+  useEffect(() => {
+    const fetchLetter = async () => {
+      if (deleteAlert !== null) {
+        try {
+          const letterdata = await getReceivedLetter();
+          const counts = await getLetterCounts();
+          setLetterCounts(counts.receiveLetterCount);
+          setLetters(letterdata.data.letters);
+
+          const deletedMessage = localStorage.getItem("deletedLetter");
+          setDeletedAlert(deletedMessage);
+        } catch (err) {
+          console.error("Error fetching letter counts:", err);
+        }
+      }
+    };
+
+    fetchLetter();
+  }, [deleteAlert]);
 
   const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
     const date = new Date(deliverDate);
@@ -142,11 +161,12 @@ export const ReceivedLetter = ({
             <Delete_letterbox
               setOpenLetter={setOpenLetter}
               setPopup={setPopup}
-              onDelete={handleDelete}
               setIsModalOpen={setIsModalOpen}
               context="received"
               deleteItem={deleteTitle}
               letterId={selectId}
+              setDeleteAlert={setDeleteAlert}
+              deleteAlert={deleteAlert}
             />
           )}
           {openLetter && (
@@ -156,11 +176,12 @@ export const ReceivedLetter = ({
               isModalOpen={isModalOpen}
               setPopup={setPopup}
               popup={popup}
-              onDelete={handleDelete}
               deleteItem={deleteTitle}
               setIsModalOpen={setIsModalOpen}
               letterId={selectId}
               openLetter={openLetter}
+              setDeleteAlert={setDeleteAlert}
+              deleteAlert={deleteAlert}
             />
           )}
         </>
