@@ -68,8 +68,11 @@ export const CreatedLetter = ({
     setDeleteAlert("편지가 삭제되었어요");
     setTimeout(() => {
       setDeleteAlert(null);
-    }, 5000); // 5초 후에 alert 를 숨기기
+      window.location.reload();
+    }, 3000); // 5초 후에 alert 를 숨기기
   };
+  //현재는 alert후 업데이트됨
+  //업데이트후 alert로 수정하기
 
   const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
     const date = new Date(deliverDate);
