@@ -70,13 +70,6 @@ export const ReceivedLetter = ({
     setOpenLetter(true);
   };
 
-  const handleDelete = () => {
-    setDeleteAlert("편지가 삭제되었어요");
-    setTimeout(() => {
-      setDeleteAlert(null);
-    }, 5000); // 5초 후에 alert 를 숨기기
-  };
-
   useEffect(() => {
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
@@ -183,11 +176,12 @@ export const ReceivedLetter = ({
               isModalOpen={isModalOpen}
               setPopup={setPopup}
               popup={popup}
-              onDelete={handleDelete}
               deleteItem={deleteTitle}
               setIsModalOpen={setIsModalOpen}
               letterId={selectId}
               openLetter={openLetter}
+              setDeleteAlert={setDeleteAlert}
+              deleteAlert={deleteAlert}
             />
           )}
         </>

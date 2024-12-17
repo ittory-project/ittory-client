@@ -74,8 +74,6 @@ export const LetterBox = () => {
         setDeletedAlert(null); // 3초 후 알림 숨기기
         localStorage.removeItem("deletedLetter");
       }, 3000);
-
-      // cleanup: 타이머를 정리하여 불필요한 타이머를 방지
       return () => clearTimeout(timer);
     } else {
       const deletedMessage = localStorage.getItem("deletedLetter");
@@ -126,6 +124,10 @@ export const LetterBox = () => {
           popup={popup}
           setOpenLetter={setOpenLetter}
           openLetter={openLetter}
+          deleteAlert={deleteAlert}
+          setDeleteAlert={setDeleteAlert}
+          deletedAlert={deletedAlert}
+          setDeletedAlert={setDeletedAlert}
         />
       )}
     </BackGround>
