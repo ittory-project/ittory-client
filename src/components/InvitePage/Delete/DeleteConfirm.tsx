@@ -31,7 +31,7 @@ const BackGround = styled.div`
   align-items: center;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
-  position: relative;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
   background: #fff;

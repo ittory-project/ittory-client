@@ -17,6 +17,8 @@ export const LetterBox = () => {
   const [openLetter, setOpenLetter] = useState<boolean>(false);
   const [create, setCreate] = useState<boolean>(false);
   const [receive, setReceive] = useState<boolean>(false);
+  const [deleteAlert, setDeleteAlert] = useState<string | null>(null);
+  const [deletedAlert, setDeletedAlert] = useState<string | null>(null);
 
   useEffect(() => {
     if (Number(letterId) > 0) {
@@ -64,11 +66,30 @@ export const LetterBox = () => {
     navigate("/", { replace: true });
   };
 
+  useEffect(() => {
+    if (deletedAlert) {
+      console.log(deletedAlert);
+      // deletedAlert 값이 있을 때만 타이머 설정
+      const timer = setTimeout(() => {
+        setDeletedAlert(null); // 3초 후 알림 숨기기
+        localStorage.removeItem("deletedLetter");
+      }, 3000);
+
+      // cleanup: 타이머를 정리하여 불필요한 타이머를 방지
+      return () => clearTimeout(timer);
+    } else {
+      const deletedMessage = localStorage.getItem("deletedLetter");
+      console.log("삭제된 메시지:", deletedMessage);
+      setDeletedAlert(deletedMessage);
+    }
+  }, [deletedAlert]);
+
   return (
     <BackGround>
       {(isModalOpen || popup) && <Overlay />}
       {!openLetter && (
         <>
+          {deletedAlert && <DeleteAlert>{deletedAlert}</DeleteAlert>}
           <Header>
             <Prev src={prev} onClick={navigateBack} />
             <HeaderTxt>편지함</HeaderTxt>
@@ -91,6 +112,10 @@ export const LetterBox = () => {
           popup={popup}
           setOpenLetter={setOpenLetter}
           openLetter={openLetter}
+          deleteAlert={deleteAlert}
+          setDeleteAlert={setDeleteAlert}
+          deletedAlert={deletedAlert}
+          setDeletedAlert={setDeletedAlert}
         />
       )}
       {receive && (
@@ -106,6 +131,29 @@ export const LetterBox = () => {
     </BackGround>
   );
 };
+
+const DeleteAlert = styled.div`
+  display: flex;
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center;
+  font-family: SUIT;
+  font-weight: 500;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 16px;
+  letter-spacing: -0.5px;
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+`;
 
 const BackGround = styled.div`
   display: flex;

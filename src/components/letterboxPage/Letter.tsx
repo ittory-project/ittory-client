@@ -188,7 +188,6 @@ export const Letter = ({
           <Delete_letterbox
             setOpenLetter={setOpenLetter}
             setPopup={setPopup}
-            onDelete={onDelete}
             setIsModalOpen={setIsModalOpen}
             context="created"
             deleteItem={deleteName}
