@@ -55,69 +55,25 @@ export default function LetterInfo({
     setIsModalOpen(true);
   };
 
-  /*
-  const handleBlur = () => {
-    setKeyboardVisible(false);
-  };
-
-  useEffect(() => {
-    function handleOutside(e: MouseEvent) {
-      if (
-        keyboardRef.current &&
-        !keyboardRef.current.contains(e.target as Node)
-      ) {
-        handleBlur();
-      }
-    }
-    document.addEventListener("mousedown", handleOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleOutside);
-    };
-  }, [keyboardRef]);
-
-  console.log(keyboardVisible);
-  console.log(window.innerHeight);
-  console.log(document.documentElement.clientHeight);
-
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerHeight < document.documentElement.clientHeight) {
-        setKeyboardVisible(true); // 키보드 올라옴
-        console.log("키보드올라옴");
-      } else {
-        setKeyboardVisible(false); // 키보드 내려옴
+      if (window.visualViewport) {
+        const keyboardHeight =
+          window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+        setKeyboardVisible(keyboardHeight > 0);
       }
     };
 
-    // resize 이벤트 감지
-    window.addEventListener("resize", handleResize);
+    window.visualViewport?.addEventListener("resize", handleResize);
+    window.visualViewport?.addEventListener("scroll", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);*/
+    handleResize();
 
-  useEffect(() => {
-    function handleOutside(e: MouseEvent) {
-      const heightDiff =
-        window.innerHeight - document.documentElement.clientHeight;
-
-      if (
-        keyboardRef.current &&
-        keyboardRef.current.contains(e.target as Node)
-      ) {
-        if (heightDiff > 0) {
-          setKeyboardVisible(true);
-
-          keyboardRef.current.focus();
-        } else {
-          setKeyboardVisible(false);
-        }
-      }
-    }
-    document.addEventListener("mousedown", handleOutside);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      window.visualViewport?.removeEventListener("resize", handleResize);
+      window.visualViewport?.removeEventListener("scroll", handleResize);
     };
-  }, [keyboardRef]);
+  }, []);
 
   return (
     <BackGround>
@@ -171,7 +127,6 @@ export default function LetterInfo({
               $minLength={1}
               $maxLength={5}
               spellCheck="false"
-              //onBlur={handleBlur}
             />
           </InputBox>
           <InputBox>
@@ -192,9 +147,7 @@ export default function LetterInfo({
               <Calender
                 onClick={() => {
                   openModal();
-                  setKeyboardVisible(true);
                 }}
-                ref={keyboardRef}
               >
                 <img
                   src={calender}
@@ -235,7 +188,6 @@ export default function LetterInfo({
           deliverDay={deliverDay}
           setDeliverDay={setDeliverDay}
           setIsModalOpen={setIsModalOpen}
-          setKeyboardVisible={setKeyboardVisible}
         />
       )}
     </BackGround>
@@ -326,7 +278,6 @@ const InputBox = styled.div`
   flex-direction: column;
   justify-content: center;
   height: 3.5rem;
-  gap: 6px;
   margin-top: 0;
   border-bottom: 1px dashed #dee2e6;
   margin-bottom: 1.8px;
@@ -339,10 +290,11 @@ const InputLogo = styled.div`
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
+  margin-bottom: 6px;
 `;
 const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
   width: 232px;
-  height: 24px;
+  height: 26px;
   border: 0;
   padding-left: 0;
   background-color: #ffffff;
