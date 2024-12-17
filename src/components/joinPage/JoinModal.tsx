@@ -48,7 +48,7 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
   };
 
   return (
-    <BackGround>
+    <>
       <Modal>
         <Title>'{nickname}'님</Title>
         <Title>으로 참여할까요?</Title>
@@ -72,22 +72,10 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
           </Button>
         </ButtonContainer>
       </Modal>
-    </BackGround>
+    </>
   );
 };
 
-const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-`;
 const Modal = styled.div`
   display: flex;
   width: 272px;

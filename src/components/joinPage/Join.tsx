@@ -123,9 +123,11 @@ export const Join = () => {
       {started && <Started />}
       {deleted && <Deleted />}
       {deleteConf && <DeleteConfirm />}
+
       {!noAccess && !started && !deleted && !deleteConf && (
         <BackGround>
-          {!viewModal && (
+          {viewModal && <Overlay />}
+          {
             <>
               <Title>
                 <Text>{name}님, 환영해요!</Text>
@@ -166,7 +168,7 @@ export const Join = () => {
                 </Button>
               )}
             </>
-          )}
+          }
           {viewModal && (
             <JoinModal
               visited={visited}
@@ -180,6 +182,16 @@ export const Join = () => {
   );
 };
 
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  transition: background 0.3s ease;
+  z-index: 99;
+`;
 const ErrorMessage = styled.div`
   height: 16px;
   left: 0;

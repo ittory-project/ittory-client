@@ -1,21 +1,28 @@
-import styled from 'styled-components';
-import { LetterDetail } from '../../api/model/LetterModel';
-import { FontGetResponse } from '../../api/model/FontModel';
+import styled from "styled-components";
+import { LetterDetail } from "../../api/model/LetterModel";
+import { FontGetResponse } from "../../api/model/FontModel";
 
 interface LetterContentProps {
   // letterStyle: CoverTypeGetResponse
-  letterFontStyle: FontGetResponse
-  letterContent: LetterDetail
+  letterFontStyle: FontGetResponse;
+  letterContent: LetterDetail;
 }
 
-export const ReceiveLetterContents = ({ letterFontStyle, letterContent }: LetterContentProps) => {
+export const ReceiveLetterContents = ({
+  letterFontStyle,
+  letterContent,
+}: LetterContentProps) => {
   return (
     <>
-      <ProductLeftSide src='/img/cover/left.png' />
-      <ProductRightSide src='/img/cover/product.svg' />
+      <ProductLeftSide src="/img/cover/left.png" />
+      <ProductRightSide src="/img/cover/product.svg" />
       <ContentImg src={letterContent.coverImageUrl} />
-      <Content $fonttype={letterFontStyle.name}>{letterContent.content}</Content>
-      <ContentWriter $fonttype={letterFontStyle.name}>{letterContent.nickname}</ContentWriter>
+      <Content $fonttype={letterFontStyle.name}>
+        {letterContent.content}
+      </Content>
+      <ContentWriter $fonttype={letterFontStyle.name}>
+        {letterContent.nickname}
+      </ContentWriter>
     </>
   );
 };
@@ -62,7 +69,7 @@ const Content = styled.div<{ $fonttype: string }>`
   font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.5px;
-  
+
   position: absolute;
   top: 65%;
   left: 50%;
@@ -74,7 +81,7 @@ const ContentWriter = styled.div<{ $fonttype: string }>`
   color: #333;
   line-height: 1.6;
 
-  color: #868E96;
+  color: #868e96;
   text-align: right;
 
   font-family: ${(props) => props.$fonttype};
@@ -83,9 +90,8 @@ const ContentWriter = styled.div<{ $fonttype: string }>`
   font-weight: 400;
   line-height: 16px;
   letter-spacing: -0.5px;
-  
+
   position: absolute;
   top: 85%;
   right: 40px;
 `;
-
