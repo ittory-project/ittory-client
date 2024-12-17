@@ -39,6 +39,7 @@ const BackGround = styled.div`
   justify-content: space-between;
   flex: 1 0 0;
   align-self: stretch;
+  z-index: 30;
 `;
 const Container = styled.div`
   display: flex;
