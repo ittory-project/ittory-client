@@ -1,5 +1,5 @@
 import { stompClient } from "../config/stompInterceptor";
-import { WsEnterResponse, WsExitResponse } from "../model/WsModel";
+import { WsEnterResponse } from "../model/WsModel";
 
 // 편지 입장 API
 // param: 편지 ID, 설정할 유저 닉네임

@@ -33,7 +33,7 @@ export default function ImageCropper({
   height = 134,
 }: Props) {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState<number>(1);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -125,7 +125,7 @@ export default function ImageCropper({
 
 const Container = styled.div`
   width: 100%;
-  height: 96%;
+  height: 36rem;
   position: absolute;
   bottom: 0;
   border-radius: 20px 20px 0px 0px;

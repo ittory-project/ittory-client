@@ -3,7 +3,6 @@ import {
   LetterPostResponse,
   LetterRequestBody,
   ParticipantsGetResponse,
-  LetterDeleteResponse,
   ApiLetterResponse,
   CountRequestBody,
   CountPostResponse,
@@ -70,44 +69,13 @@ export async function getParticipants(
     data: {
       participants: ParticipantsGetResponse;
     };
-  }>(`https://dev-server.ittory.co.kr/api/letter/participant/${letterId}`, {
+  }>(`api/letter/participant/${letterId}`, {
     params,
   });
 
   return response.data.data.participants;
 }
 
-/*
-//편지삭제 api
-export async function deleteLetter(
-  letterId: number
-): Promise<LetterDeleteResponse> {
-  const response = await api.delete(
-    `https://dev-server.ittory.co.kr/api/letter/${letterId}`
-  );
-
-  return response.data;
-}*/
-
-//편지 삭제 API
-/*
-export async function deleteLetter(
-  letterId: number
-): Promise<LetterDeleteResponse> {
-  try {
-    const response = await api.delete(
-      `https://dev-server.ittory.co.kr/api/letter/${letterId}`
-    );
-    return response.data;
-  } catch (err: any) {
-    if (err.response && err.response.data) {
-      console.error("API Error Response:", err.response.data);
-      throw err.response.data; // 에러 데이터를 그대로 throw
-    } else {
-      throw err; // 예기치 않은 에러 처리
-    }
-  }
-}*/
 // 편지 삭제 API
 export function deleteLetter(
   letterId: number,
@@ -115,7 +83,7 @@ export function deleteLetter(
   onError: (error: any) => void
 ): void {
   api
-    .delete(`https://dev-server.ittory.co.kr/api/letter/${letterId}`)
+    .delete(`api/letter/${letterId}`)
     .then((response) => {
       if (response.status === 204) {
         onSuccess(); // 204 No Content 성공 시 콜백 호출
@@ -140,7 +108,7 @@ export async function postRepeatCount(
   data: CountRequestBody
 ): Promise<CountPostResponse> {
   const response = await api.post<CountPostResponse>(
-    "https://dev-server.ittory.co.kr/api/letter/repeat-count",
+    `api/letter/repeat-count`,
     data
   );
   return response.data;
@@ -150,9 +118,7 @@ export async function postRepeatCount(
 export async function getLetterInfo(
   letterId: number
 ): Promise<LetterInfoGetResponse> {
-  const response = await api.get(
-    `https://dev-server.ittory.co.kr/api/letter/info/${letterId}`
-  );
+  const response = await api.get(`api/letter/info/${letterId}`);
 
   return response.data.data;
 }

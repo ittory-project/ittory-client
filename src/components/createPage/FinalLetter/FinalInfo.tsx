@@ -58,8 +58,8 @@ export default function FinalInfo({
   selectFid,
 }: Props) {
   const [viewEdit, setViewEdit] = useState<boolean>(false);
-  const [coverOpen, setCoveropen] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [coverOpen, setCoveropen] = useState<boolean>(false);
+  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [visit, setVisit] = useState<boolean>(false);
@@ -169,15 +169,15 @@ export default function FinalInfo({
                 <Book
                   backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
                 >
-                  <BookTitle font={selectfont}>{title}</BookTitle>
+                  <BookTitle $font={selectfont}>{title}</BookTitle>
                 </Book>
               ) : (
                 <Book
                   backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
                 >
-                  <BookTitle font={selectfont}>{title}</BookTitle>
+                  <BookTitle $font={selectfont}>{title}</BookTitle>
                   <Shadow src={shadow} />
-                  <BtnImgContainer bgimg={croppedImage}></BtnImgContainer>
+                  <BtnImgContainer $bgimg={croppedImage}></BtnImgContainer>
                 </Book>
               )}
             </Cover>
@@ -274,10 +274,10 @@ const Overlay = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100);
   background: rgba(0, 0, 0, 0.6);
   transition: background 0.3s ease;
-  z-index: 4;
+  z-index: 50;
 `;
 const Header = styled.div`
   display: flex;
@@ -414,14 +414,14 @@ const Shadow = styled.img`
   z-index: 1;
   flex-shrink: 0;
 `;
-const BtnImgContainer = styled.div<{ bgimg: string }>`
+const BtnImgContainer = styled.div<{ $bgimg: string }>`
   z-index: 0;
   width: 73px;
   height: 73px;
   gap: 4px;
   flex-shrink: 0;
   border-radius: 10px;
-  background-image: url(${(props) => props.bgimg});
+  background-image: url(${(props) => props.$bgimg});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -429,7 +429,7 @@ const BtnImgContainer = styled.div<{ bgimg: string }>`
   margin-left: 24px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
-const BookTitle = styled.div<{ font: string }>`
+const BookTitle = styled.div<{ $font: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -438,9 +438,9 @@ const BookTitle = styled.div<{ font: string }>`
   color: #fff;
   text-align: center;
   text-overflow: ellipsis;
-  font-family: ${(props) => props.font};
+  font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.font === "Ownglyph_UNZ-Rg" ? "12px" : "8.571px"};
+    props.$font === "Ownglyph_UNZ-Rg" ? "12px" : "8.571px"};
 `;
 const Button = styled.button`
   position: absolute;

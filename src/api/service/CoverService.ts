@@ -1,5 +1,5 @@
 import { api, ApiResponse } from "../config/api";
-import { CoverType, CoverTypeGetResponse } from "../model/CoverType";
+import { CoverTypeGetResponse } from "../model/CoverType";
 
 // 커버 타입 조회 API
 export async function getCoverTypes(): Promise<CoverTypeGetResponse> {

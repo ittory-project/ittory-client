@@ -14,7 +14,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const handleOverlayClick = useCallback(() => {
     closeMenu();
   }, [closeMenu]);
-  //메뉴를 mainlayout이랑 분리시켜야 할둣..
+
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => setIsMenuOpen(true),
   });

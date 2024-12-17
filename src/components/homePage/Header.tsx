@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components";
 import logo from "../../../public/assets/home/smalllogo.svg";
 import menu from "../../../public/assets/home/menulogo.svg";
 import { Menu } from "../../layout/Menu";
-import { useSwipeable } from "react-swipeable";
 
 interface Props {
   backgroundColor: boolean;

@@ -10,7 +10,7 @@ import { WithdrawPopup } from "./WithdrawPopup";
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
 }
-//버튼 간격
+
 export const DeleteReason = ({ setViewReason }: Props) => {
   const [selectedReason, setSelectedReason] = useState<number | null>(null);
   const [otherReason, setOtherReason] = useState<string>("");
