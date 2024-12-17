@@ -9,7 +9,7 @@ export const WithdrawPopup = () => {
   };
 
   return (
-    <BackGround>
+    <>
       <Modal>
         <Title>회원 탈퇴가 완료되었어요</Title>
         <Contents>그동안 함께해 주셔서 고마웠어요 :{`)`}</Contents>
@@ -25,7 +25,7 @@ export const WithdrawPopup = () => {
           </Button>
         </ButtonContainer>
       </Modal>
-    </BackGround>
+    </>
   );
 };
 
@@ -35,11 +35,11 @@ const BackGround = styled.div`
   align-items: center;
   //justify-content: center;
   height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
+  width: 100vw;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.6);
 `;
 const Modal = styled.div`
   display: flex;

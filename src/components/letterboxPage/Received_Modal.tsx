@@ -19,6 +19,7 @@ export const Received_Modal = ({
   };
 
   const handlePopup = () => {
+    setIsModalOpen(false);
     setPopup(true);
   };
 

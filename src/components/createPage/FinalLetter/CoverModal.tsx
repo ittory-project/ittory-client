@@ -140,10 +140,17 @@ export default function CoverModal({
         window.innerHeight - document.documentElement.clientHeight;
 
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
-        if (heightDiff > 0) {
-          setIsKeyboardOpen(true);
-          setKeyboardHeight(heightDiff);
-          inputRef.current.focus();
+        if (keyboardHeight > 0) {
+          if (window.innerWidth < 431) {
+            setIsKeyboardOpen(true);
+            setIsKeyboardOpen(true);
+            setKeyboardHeight(heightDiff);
+            inputRef.current.focus();
+          } else {
+            setIsKeyboardOpen(false);
+            setKeyboardHeight(0);
+            handlePopup();
+          }
         } else {
           setIsKeyboardOpen(false);
           setKeyboardHeight(0);
