@@ -187,7 +187,7 @@ export const HostUser = ({
       {viewDelete && <Overlay />}
       {viewExit && <Overlay />}
       {popup && <Overlay />}
-      {!viewDelete && items.length > 0 && fontId > -1 && (
+      {items.length > 0 && fontId > -1 && (
         <>
           <Header>
             <ReceiverContainer>
