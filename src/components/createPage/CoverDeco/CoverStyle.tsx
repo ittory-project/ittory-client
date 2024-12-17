@@ -517,28 +517,6 @@ const Input = styled.input<{ $selectfont: string }>`
   }
 `;
 
-const KeyboardBar = styled.div<{ $keyboardHeight: number }>`
-  position: fixed;
-  bottom: ${(props) => props.$keyboardHeight}px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 56px;
-  flex-shrink: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) -61.61%,
-    #fff 18.75%
-  );
-  box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  overflow-x: auto;
-  overflow-y: hidden;
-`;
-
 const ButtonContainer = styled.button`
   z-index: 0;
   position: relative;

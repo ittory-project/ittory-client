@@ -229,7 +229,7 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   transition: background 0.3s ease;
-  z-index: 60;
+  z-index: 50;
 `;
 const Container = styled.div`
   margin-top: 3rem;
