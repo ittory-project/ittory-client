@@ -55,6 +55,7 @@ export default function LetterInfo({
     setIsModalOpen(true);
   };
 
+  /*
   const handleBlur = () => {
     setKeyboardVisible(false);
   };
@@ -92,7 +93,31 @@ export default function LetterInfo({
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, []);*/
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      const heightDiff =
+        window.innerHeight - document.documentElement.clientHeight;
+
+      if (
+        keyboardRef.current &&
+        keyboardRef.current.contains(e.target as Node)
+      ) {
+        if (heightDiff > 0) {
+          setKeyboardVisible(true);
+
+          keyboardRef.current.focus();
+        } else {
+          setKeyboardVisible(false);
+        }
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+    };
+  }, [keyboardRef]);
 
   return (
     <BackGround>

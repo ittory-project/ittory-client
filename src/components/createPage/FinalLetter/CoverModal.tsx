@@ -461,11 +461,11 @@ const Shadow = styled.img`
   object-fit: cover;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
-  width: 134px;
+  width: 135.5px;
+  height: 135.5px;
   z-index: 0;
   cursor: pointer;
   position: relative;
-  height: 134px;
   gap: 4px;
   flex-shrink: 0;
   border-radius: 20px;
@@ -473,7 +473,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 18.2px;
+  margin-top: 18px;
 `;
 const TitleContainer = styled.div`
   display: flex;
