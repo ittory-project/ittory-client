@@ -521,6 +521,7 @@ const Input = styled.input<{ $selectfont: string }>`
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
+    opacity: 0.5;
   }
   &:valid {
     color: #f1f3f5;

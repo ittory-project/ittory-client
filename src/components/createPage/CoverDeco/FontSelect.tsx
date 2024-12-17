@@ -119,6 +119,5 @@ const Fonttxt = styled.span<{ $fontFamily: string; $selected: boolean }>`
   letter-spacing: -0.5px;
   margin-top: ${(props) =>
     props.$fontFamily === "GmarketSans" ? "3px" : "1px"};
-  font-weight: ${(props) =>
-    props.$fontFamily === "GmarketSans" ? "bold" : "regular"};
+  font-weight: ${(props) => (props.$fontFamily === "GmarketSans" ? 500 : 400)};
 `;
