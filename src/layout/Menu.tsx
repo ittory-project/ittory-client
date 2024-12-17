@@ -216,16 +216,6 @@ export const Menu = ({ onClose }: Props) => {
         <ButtonTxt>편지 쓰러 가기</ButtonTxt>
       </Button>
       <List>
-        <VisitContainer>
-          <img
-            src={visit}
-            style={{ width: "16px", height: "16px", marginBottom: "1.2px" }}
-          />
-          방명록
-          <Navi>
-            <img src={graynavi} style={{ width: "5px", height: "10px" }} />
-          </Navi>
-        </VisitContainer>
         <AskContainer onClick={handleAsk}>
           <img
             src={ask}

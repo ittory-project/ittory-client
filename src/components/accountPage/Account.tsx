@@ -23,7 +23,8 @@ export const Account = () => {
   };
   return (
     <BackGround>
-      {popup === false && viewDelete === false && (
+      {popup && <Overlay />}
+      {viewDelete === false && (
         <>
           <Prev src={prev} onClick={navigateBack} />
           <List>
@@ -47,7 +48,16 @@ export const Account = () => {
     </BackGround>
   );
 };
-
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  transition: background 0.3s ease;
+  z-index: 10;
+`;
 const BackGround = styled.div`
   display: flex;
   flex-direction: column;
