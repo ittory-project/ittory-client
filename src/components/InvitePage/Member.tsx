@@ -161,141 +161,154 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
       {viewExit && <Overlay />}
       {items.length > 0 && (
         <>
-          {title != "" && items[0].nickname && receiverName != "" && (
-            <>
-              <Header>
-                <ReceiverContainer>
-                  <Receiver>To.{sliceName}</Receiver>
-                  {receiverName.length > 9 && (
-                    <Receiver style={{ letterSpacing: "-0.2em" }}>···</Receiver>
-                  )}
-                </ReceiverContainer>
-                <IconContainer>
-                  <Icon src={info} alt="infobtn" onClick={handleGuide} />
-                  <Icon src={out} alt="outbtn" onClick={handleExit} />{" "}
-                </IconContainer>
-              </Header>
-              <MainContainer>
-                <Book
-                  $backgroundImage={
-                    coverTypes[selectedImageIndex - 1]?.confirmImageUrl
-                  }
-                >
-                  <TitleContainer $font={selectfont}>{title}</TitleContainer>
-                  {deliverDay ? (
-                    <DeliverDay>
-                      {`${format(deliverDay as Date, "yyyy")}. `}
-                      {`${format(deliverDay as Date, "MM")}. `}
-                      {format(deliverDay as Date, "dd")}
-                      {` (${format(deliverDay as Date, "E", { locale: ko })})`}
-                    </DeliverDay>
-                  ) : (
-                    <></>
-                  )}
-                  <>
-                    <Bright src={bright} />
-                    <Shadow src={shadow} />
-                    <BtnImgContainer $bgimg={cropImg} />
-                  </>
-                  <NameBar>
-                    <NameContainer>
-                      <NameTxt>{namesString}</NameTxt>
-                    </NameContainer>
-                  </NameBar>
-                </Book>
-                <Bar />
-                <Notice>
-                  <img
-                    src={notice}
-                    alt="notice Icon"
-                    style={{
-                      width: "14px",
-                      height: "12px",
-                      marginBottom: "1px",
-                    }}
-                  />
-                  방장이 이어 쓸 횟수를 정하면 편지가 시작돼요!
-                </Notice>
-                <BoxContainer>
-                  <PinArea>
-                    <Pin />
-                    <Pin />
-                  </PinArea>
-                  <Box>
-                    <List>
-                      {items.map((user, index) =>
-                        index === 0 ? (
-                          <MainUser key={index}>
-                            <Crown $img={crown} />
-                            <User>
-                              {!user.imageUrl ? (
-                                <ProfileImg $img={defaultImg} />
-                              ) : (
-                                <ProfileImg $img={user.imageUrl} />
-                              )}
-                              {user.nickname && user.nickname.length > 3 ? (
-                                <UserNameContainer>
-                                  <UserName>
-                                    {handleUserName(user.nickname)}
-                                  </UserName>
-                                  <UserName style={{ letterSpacing: "-0.2em" }}>
-                                    ···
-                                  </UserName>
-                                </UserNameContainer>
-                              ) : (
-                                <UserName>{user.nickname}</UserName>
-                              )}
-                            </User>
-                          </MainUser>
-                        ) : (
-                          <InvitedUser key={user.memberId}>
-                            <User>
-                              {!user.imageUrl ? (
-                                <ProfileImg $img={defaultImg} />
-                              ) : (
-                                <ProfileImg $img={user.imageUrl} />
-                              )}
-                              {user.nickname.length > 3 ? (
-                                <UserNameContainer>
-                                  <UserName>
-                                    {handleUserName(user.nickname)}
-                                  </UserName>
-                                  <UserName style={{ letterSpacing: "-0.2em" }}>
-                                    ···
-                                  </UserName>
-                                </UserNameContainer>
-                              ) : (
-                                <UserName>{user.nickname}</UserName>
-                              )}
-                            </User>
-                          </InvitedUser>
-                        )
-                      )}
+          {!viewDelete &&
+            title != "" &&
+            items[0].nickname &&
+            receiverName != "" && (
+              <>
+                <Header>
+                  <ReceiverContainer>
+                    <Receiver>To.{sliceName}</Receiver>
+                    {receiverName.length > 9 && (
+                      <Receiver style={{ letterSpacing: "-0.2em" }}>
+                        ···
+                      </Receiver>
+                    )}
+                  </ReceiverContainer>
+                  <IconContainer>
+                    <Icon src={info} alt="infobtn" onClick={handleGuide} />
+                    <Icon src={out} alt="outbtn" onClick={handleExit} />{" "}
+                  </IconContainer>
+                </Header>
+                <MainContainer>
+                  <Book
+                    $backgroundImage={
+                      coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+                    }
+                  >
+                    <TitleContainer $font={selectfont}>{title}</TitleContainer>
+                    {deliverDay ? (
+                      <DeliverDay>
+                        {`${format(deliverDay as Date, "yyyy")}. `}
+                        {`${format(deliverDay as Date, "MM")}. `}
+                        {format(deliverDay as Date, "dd")}
+                        {` (${format(deliverDay as Date, "E", { locale: ko })})`}
+                      </DeliverDay>
+                    ) : (
+                      <></>
+                    )}
+                    <>
+                      <Bright src={bright} />
+                      <Shadow src={shadow} />
+                      <BtnImgContainer $bgimg={cropImg} />
+                    </>
+                    <NameBar>
+                      <NameContainer>
+                        <NameTxt>{namesString}</NameTxt>
+                      </NameContainer>
+                    </NameBar>
+                  </Book>
+                  <Bar />
+                  <Notice>
+                    <img
+                      src={notice}
+                      alt="notice Icon"
+                      style={{
+                        width: "14px",
+                        height: "12px",
+                        marginBottom: "1px",
+                      }}
+                    />
+                    방장이 이어 쓸 횟수를 정하면 편지가 시작돼요!
+                  </Notice>
+                  <BoxContainer>
+                    <PinArea>
+                      <Pin />
+                      <Pin />
+                    </PinArea>
+                    <Box>
+                      <List>
+                        {items.map((user, index) =>
+                          index === 0 ? (
+                            <MainUser key={index}>
+                              <Crown $img={crown} />
+                              <User>
+                                {!user.imageUrl ? (
+                                  <ProfileImg $img={defaultImg} />
+                                ) : (
+                                  <ProfileImg $img={user.imageUrl} />
+                                )}
+                                {user.nickname && user.nickname.length > 3 ? (
+                                  <UserNameContainer>
+                                    <UserName>
+                                      {handleUserName(user.nickname)}
+                                    </UserName>
+                                    <UserName
+                                      style={{ letterSpacing: "-0.2em" }}
+                                    >
+                                      ···
+                                    </UserName>
+                                  </UserNameContainer>
+                                ) : (
+                                  <UserName>{user.nickname}</UserName>
+                                )}
+                              </User>
+                            </MainUser>
+                          ) : (
+                            <InvitedUser key={user.memberId}>
+                              <User>
+                                {!user.imageUrl ? (
+                                  <ProfileImg $img={defaultImg} />
+                                ) : (
+                                  <ProfileImg $img={user.imageUrl} />
+                                )}
+                                {user.nickname.length > 3 ? (
+                                  <UserNameContainer>
+                                    <UserName>
+                                      {handleUserName(user.nickname)}
+                                    </UserName>
+                                    <UserName
+                                      style={{ letterSpacing: "-0.2em" }}
+                                    >
+                                      ···
+                                    </UserName>
+                                  </UserNameContainer>
+                                ) : (
+                                  <UserName>{user.nickname}</UserName>
+                                )}
+                              </User>
+                            </InvitedUser>
+                          )
+                        )}
 
-                      {items.length < 5 ? (
-                        <InviteIcon>
-                          {items.length === 1 ? <ToolTip $img={tip} /> : <></>}
-                          <User>
-                            <ProfileImg
-                              $img={plus}
-                              onClick={() => {
-                                handle();
-                              }}
-                            />
-                            <UserName>친구 초대</UserName>
-                          </User>
-                        </InviteIcon>
-                      ) : (
-                        <></>
-                      )}
-                    </List>
-                  </Box>
-                </BoxContainer>
-              </MainContainer>
-              {guide && <UserGuide setGuide={setGuide} />}
-              {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
-            </>
-          )}
+                        {items.length < 5 ? (
+                          <InviteIcon>
+                            {items.length === 1 ? (
+                              <ToolTip $img={tip} />
+                            ) : (
+                              <></>
+                            )}
+                            <User>
+                              <ProfileImg
+                                $img={plus}
+                                onClick={() => {
+                                  handle();
+                                }}
+                              />
+                              <UserName>친구 초대</UserName>
+                            </User>
+                          </InviteIcon>
+                        ) : (
+                          <></>
+                        )}
+                      </List>
+                    </Box>
+                  </BoxContainer>
+                </MainContainer>
+                {guide && <UserGuide setGuide={setGuide} />}
+                {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
+              </>
+            )}
         </>
       )}
       {viewDelete && <DeleteConfirm />}

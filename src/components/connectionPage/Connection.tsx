@@ -152,16 +152,7 @@ const BackGround = styled.div`
   transform: translateX(-50%);
   overflow: hidden;
 `;
-const Book = styled.img`
-  width: 154px;
-  height: 83px;
-  flex-shrink: 0;
-  position: absolute;
-  bottom: 39.7%;
-  z-index: 2;
-  animation: ${scaleAnimation} 1.2s ease-in-out;
-  animation-delay: 1.6s;
-`;
+
 const Shadow = styled.img`
   width: 350px;
   height: 124px;
@@ -171,16 +162,6 @@ const Shadow = styled.img`
   z-index: 2;
   animation: ${hideDuringAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
-`;
-const Ground = styled.div<{ $groundColor: string }>`
-  z-index: 1;
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-  height: 40vh;
-  flex-shrink: 0;
-  background: ${(props) => props.$groundColor};
-  object-fit: cover;
 `;
 const TopImg = styled.img`
   z-index: 1;
@@ -192,6 +173,27 @@ const TopImg = styled.img`
   overflow: hidden;
   object-fit: cover;
 `;
+const Ground = styled.div<{ $groundColor: string }>`
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  height: 40vh;
+  flex-shrink: 0;
+  background: ${(props) => props.$groundColor};
+  object-fit: cover;
+`;
+const Book = styled.img`
+  width: 154px;
+  height: 83px;
+  flex-shrink: 0;
+  position: absolute;
+  bottom: 39.7%;
+  z-index: 2;
+  animation: ${scaleAnimation} 1.2s ease-in-out;
+  animation-delay: 1.6s;
+`;
+
 const Contents = styled.div`
   position: absolute;
   margin-top: 55%;
@@ -214,9 +216,3 @@ const Contents = styled.div`
   animation: ${hideDuringAnimation} 2s ease-in-out;
   animation-delay: 1s;
 `;
-
-/*
-const WriteOrderContainer = styled.div`
-  opacity: ${(props) => (props.isVisible ? 1 : 0)};
-  transition: opacity 1s ease-in-out;
-`;*/
