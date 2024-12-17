@@ -45,7 +45,7 @@ export const Delete_letterbox = ({
   };
 
   return (
-    <BackGround>
+    <>
       <Modal>
         {context === "created" && <Title>'To.{deleteName}'</Title>}
         {context === "received" && <Title>'{deleteName}'</Title>}
@@ -56,23 +56,21 @@ export const Delete_letterbox = ({
             style={{
               background: "#CED4DA",
             }}
+            onClick={cancelDelete}
           >
-            <ButtonTxt style={{ color: "#495057" }} onClick={cancelDelete}>
-              취소하기
-            </ButtonTxt>
+            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
           </Button>
           <Button
             style={{
               background: "#FFA256",
             }}
+            onClick={handleDelete}
           >
-            <ButtonTxt style={{ color: "#fff" }} onClick={handleDelete}>
-              삭제하기
-            </ButtonTxt>
+            <ButtonTxt style={{ color: "#fff" }}>삭제하기</ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>
-    </BackGround>
+    </>
   );
 };
 

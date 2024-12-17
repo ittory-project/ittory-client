@@ -66,8 +66,8 @@ export const LetterBox = () => {
 
   return (
     <BackGround>
-      {isModalOpen && !openLetter && <Overlay />}
-      {!popup && !openLetter && (
+      {(isModalOpen || popup) && <Overlay />}
+      {!openLetter && (
         <>
           <Header>
             <Prev src={prev} onClick={navigateBack} />
