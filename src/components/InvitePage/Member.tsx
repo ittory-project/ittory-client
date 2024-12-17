@@ -15,11 +15,11 @@ import shadow from "../../../public/assets/shadow2.svg";
 import { getCoverTypes } from "../../api/service/CoverService";
 import { getLetterInfo } from "../../api/service/LetterService";
 import { CoverType } from "../../api/model/CoverType";
-import { quitLetterWs } from "../../api/service/WsService";
 import { Participants } from "./Invite";
 import { DeleteConfirm } from "./Delete/DeleteConfirm";
 import defaultImg from "../../../public/assets/menu/logindefault.png";
 import { getFontById } from "../../api/service/FontService";
+import { Exit } from "./ExitMember";
 
 interface Props {
   guideOpen: boolean;
@@ -94,9 +94,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
 
   const handleExit = () => {
-    console.log(letterId);
-    quitLetterWs(letterId);
-    navigate("/");
+    setViewExit(true);
   };
 
   useEffect(() => {
@@ -160,8 +158,8 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   return (
     <BackGround>
       {guide && <Overlay />}
-      {viewCount && <Overlay />}
-      {!viewDelete && !viewExit && items.length > 0 && (
+      {viewExit && <Overlay />}
+      {items.length > 0 && (
         <>
           {title != "" && items[0].nickname && receiverName != "" && (
             <>
@@ -301,6 +299,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         </>
       )}
       {viewDelete && <DeleteConfirm />}
+      {viewExit && <Exit setViewExit={setViewExit} letterId={letterId} />}
     </BackGround>
   );
 };

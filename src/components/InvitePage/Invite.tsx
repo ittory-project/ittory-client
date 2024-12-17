@@ -226,12 +226,6 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  /**
-   {load ? (
-        <Loading loadstatus={loadstatus} setLoad={setLoad} />
-      ) : (
-   */
-
   return (
     <BackGround>
       {load ? (
@@ -240,17 +234,19 @@ export const Invite = () => {
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-          {memberIndex === 0 && (
-            <HostUser
-              guideOpen={guideOpen}
-              items={participants}
-              letterId={letterId}
-              viewDelete={viewDelete}
-              setViewDelete={setViewDelete}
-              hostname={name}
-            />
-          )}
           {memberIndex === 1 && (
+            <>
+              <HostUser
+                guideOpen={guideOpen}
+                items={participants}
+                letterId={letterId}
+                viewDelete={viewDelete}
+                setViewDelete={setViewDelete}
+                hostname={name}
+              />
+            </>
+          )}
+          {memberIndex === 0 && (
             <Member
               letterId={letterId}
               guideOpen={guideOpen}
