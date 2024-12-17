@@ -4,10 +4,9 @@ import more from "../../../public/assets/more_white.svg";
 import x from "../../../public/assets/x_white.svg";
 import { Created_Modal } from "./Created_Modal";
 import { Received_Modal } from "./Received_Modal";
-import { ReceiveLetter } from "../receivePage/ReceiveLetter";
 import { Delete_letterbox } from "./Delete_letterbox";
-import { encodeLetterId, decodeLetterId } from "../../api/config/base64";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { decodeLetterId } from "../../api/config/base64";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch, clearData, clearOrderData } from "../../api/config/state";
 import { useDispatch } from "react-redux";
 import { ReceiveLetterContents } from "../receivePage/ReceiveLetterContents";
@@ -86,22 +85,6 @@ export const Letter = ({
     const page = Number(query.get("page")) || 1;
     setCurrentPage(page);
   }, [query]);
-  /*
-  useEffect(() => {
-    const page = Number(query.get("page")) || 1;
-    setCurrentPage(page);
-
-    // 쿼리 파라미터에 page가 있을 경우
-    if (query.has("page")) {
-      // page가 존재하면 삭제하지 않고 그대로 유지
-      const newQuery = new URLSearchParams(query.toString()); // 기존 query 복사
-
-      // 새로운 URL로 리디렉션하며 히스토리 스택을 대체
-      navigate(`${location.pathname}?${newQuery.toString()}`, {
-        replace: true,
-      });
-    }
-  }, [location, query, navigate]);*/
 
   useEffect(() => {
     dispatch(clearOrderData());

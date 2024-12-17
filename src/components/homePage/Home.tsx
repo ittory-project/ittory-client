@@ -8,8 +8,6 @@ import twitter from "../../../public/assets/home/twitter.svg";
 import insta from "../../../public/assets/home/insta.svg";
 import animation from "../../../public/assets/home/animation.json";
 import Player, { LottieRefCurrentProps } from "lottie-react";
-import { LottieRef } from "lottie-react";
-import { Parallax } from "react-parallax";
 
 const bg1 = "/assets/home/main.jpg";
 const bg2 = "/assets/home/01.jpg";
@@ -30,8 +28,6 @@ export const Home = () => {
   const sectionRefs = useRef<HTMLDivElement[]>([]);
   const [headerBgColor, setHeaderBgColor] = useState<boolean>(false);
   const lottieRef = useRef<LottieRefCurrentProps | null>(null);
-  //const [isScrolling, setIsScrolling] = useState<boolean>(false);
-  const isScrolling = useRef<boolean>(false);
 
   const handleButton = () => {
     if (localStorage.jwt) {
@@ -40,67 +36,6 @@ export const Home = () => {
       navigate("/login");
     }
   };
-
-  /*
-  const smoothScroll = (target: HTMLElement) => {
-    let start = window.scrollY;
-    let end = target.offsetTop;
-    let distance = end - start; // 이동할 거리
-    let duration = 1300; // 스크롤 속도
-
-    let startTime: number;
-
-    const step = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      let progress = timestamp - startTime;
-      let scrollY = start + distance * (progress / duration);
-      window.scrollTo(0, scrollY);
-
-      if (progress < duration) {
-        requestAnimationFrame(step);
-      } else {
-        window.scrollTo(0, end);
-        isScrolling.current = false; // 정확하게 끝지점에 맞추기
-      }
-    };
-    isScrolling.current = true;
-    requestAnimationFrame(step);
-  };
-
-  const handleScroll = (event: WheelEvent) => {
-    if (isScrolling) return; // 이미 스크롤 중이면 무시
-
-    const delta = event.deltaY;
-
-    const currentIndex = sectionRefs.current.findIndex((section) => {
-      const rect = section.getBoundingClientRect();
-      return (
-        rect.top <= window.innerHeight / 2 &&
-        rect.bottom > window.innerHeight / 2
-      );
-    });
-
-    if (delta > 0) {
-      // 아래로 이동
-      if (currentIndex < sectionRefs.current.length - 1) {
-        smoothScroll(sectionRefs.current[currentIndex + 1]);
-      }
-    } else {
-      // 위로 이동
-      if (currentIndex > 0) {
-        smoothScroll(sectionRefs.current[currentIndex - 1]);
-      }
-    }
-  };
-
-  useEffect(() => {
-    // 휠 이벤트
-    window.addEventListener("wheel", handleScroll, { passive: false });
-
-    return () => {
-      window.removeEventListener("wheel", handleScroll);
-    };
-  }, [isScrolling]);*/
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -138,10 +73,6 @@ export const Home = () => {
   }, []);
 
   const handleLottieClick = () => {
-    /*
-    if (sectionRefs.current[1]) {
-      smoothScroll(sectionRefs.current[1]);
-    }*/
     if (sectionRefs.current[1]) {
       sectionRefs.current[1].scrollIntoView({
         behavior: "smooth", // 부드럽게 스크롤
@@ -211,25 +142,18 @@ export const Home = () => {
             ref={(el) => el && (sectionRefs.current[3] = el)}
           />
           <WhiteSection
-            //onTouchStart={() => handleScroll(4)}
             $img={bg5}
             ref={(el) => el && (sectionRefs.current[4] = el)}
           />
           <WhiteSection
-            //onTouchStart={() => handleScroll(5)}
             $img={bg6}
             ref={(el) => el && (sectionRefs.current[5] = el)}
           />
           <WhiteSection
-            //onTouchStart={() => handleScroll(6)}
             $img={bg7}
             ref={(el) => el && (sectionRefs.current[6] = el)}
           />
-          <Section
-            //onTouchStart={() => handleScroll(7)}
-            $img={bg8}
-            ref={(el) => el && (sectionRefs.current[7] = el)}
-          >
+          <Section $img={bg8} ref={(el) => el && (sectionRefs.current[7] = el)}>
             <FinalButton onClick={handleButton}>
               <ButtonTxt>편지 쓰러 가기</ButtonTxt>
             </FinalButton>

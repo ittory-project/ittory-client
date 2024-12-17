@@ -2,7 +2,6 @@ import React, { useState, useEffect, forwardRef, Ref } from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
-import { getAllFont } from "../../../api/service/FontService";
 import { fontProps } from "./CoverStyle";
 
 interface Props {
@@ -35,7 +34,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
     const [selected, setSelected] = useState<string>("");
     const [selectId, setSelectId] = useState<number>(1);
     const [bottomOffset, setBottomOffset] = useState<number>(0);
-    const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+    const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
     const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
     useEffect(() => {

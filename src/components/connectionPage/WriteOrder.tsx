@@ -26,7 +26,7 @@ interface PopupProps {
 }
 
 export const WriteOrder = ({ letterId }: Props) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const userNumsRef = useRef<(UserNumElement | null)[]>([]);
   const [items, setItems] = useState<Participants[]>([]);
   const [title, setTitle] = useState<string>("");
@@ -229,7 +229,7 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100vh;
   width: 100vw;
   position: relative;
   left: 50%;

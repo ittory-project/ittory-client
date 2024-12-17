@@ -9,12 +9,8 @@ interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
   openLetter: boolean;
 }
-
-export const Created_Modal = ({
-  setIsModalOpen,
-  setPopup,
-  openLetter,
-}: Props) => {
+//링크 적용 필요
+export const Created_Modal = ({ setIsModalOpen, setPopup }: Props) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -23,7 +19,6 @@ export const Created_Modal = ({
     setPopup(true);
   };
 
-  //편지받기랑연결된 부분임.. 어떤 링크 넣어야될지 모르겠음
   const handleShare = async () => {
     const url = "";
     if (navigator.share) {

@@ -56,7 +56,7 @@ export default function CoverModal({
   const [cropperKey, setCropperKey] = useState<number>(0);
   const [bookimage, setBookimage] = useState<number>(backgroundimage - 1);
   const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
-  const [cropOpen, setCropOpen] = useState(false);
+  const [cropOpen, setCropOpen] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
@@ -371,7 +371,7 @@ const ModalContainer = styled.div<{
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
   background: #fff;
-  z-index: 99;
+  z-index: 50;
   flex-direction: column;
   //align-items: center;
   box-shadow: -4px 0px 14px 0px rgba(0, 0, 0, 0.05);

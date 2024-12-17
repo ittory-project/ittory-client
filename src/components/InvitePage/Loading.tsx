@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Participants } from "./Invite";
-import { getParticipants } from "../../api/service/LetterService";
 
 interface Props {
   loadstatus: boolean;

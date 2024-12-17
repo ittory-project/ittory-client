@@ -37,7 +37,8 @@ const hideDuringAnimation = keyframes`
 `;
 
 export const Connection = () => {
-  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
+  const [isAnimationComplete, setIsAnimationComplete] =
+    useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -25,8 +25,8 @@ interface SlideContentProps {
 export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const length = Math.floor(50 / member);
   const list = Array.from({ length }, (_, index) => index + 1);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [selectNumber, setSelectNumber] = useState(1);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [selectNumber, setSelectNumber] = useState<number>(1);
   const navigate = useNavigate();
 
   useEffect(() => {
