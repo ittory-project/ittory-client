@@ -341,6 +341,7 @@ const Calender = styled.span`
   position: absolute;
   cursor: pointer;
   right: 1rem;
+  margin-top: 10px;
 `;
 const Button = styled.button<{ $keyboardVisible: boolean }>`
   width: 288px;
