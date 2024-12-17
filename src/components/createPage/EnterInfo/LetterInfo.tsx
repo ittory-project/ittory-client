@@ -277,10 +277,10 @@ const InputBox = styled.div`
   width: 16rem;
   flex-direction: column;
   justify-content: center;
-  height: 3.5rem;
   margin-top: 0;
   border-bottom: 1px dashed #dee2e6;
-  margin-bottom: 1.8px;
+  height: 60px;
+  position: relative;
 `;
 const InputLogo = styled.div`
   color: #495057;
@@ -290,13 +290,16 @@ const InputLogo = styled.div`
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
-  margin-bottom: 6px;
+  position: absolute; /* 위치 고정 */
+  top: 0; /* 고정 위치 */
+  left: 0;
 `;
 const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
   width: 232px;
   height: 26px;
   border: 0;
   padding-left: 0;
+  margin-top: 10px;
   background-color: #ffffff;
   &::placeholder {
     color: #adb5bd;
@@ -332,6 +335,7 @@ const SelectDate = styled.span`
   font-weight: 400;
   line-height: 24px;
   letter-spacing: -0.5px;
+  margin-top: 10px;
 `;
 const Calender = styled.span`
   position: absolute;

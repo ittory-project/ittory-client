@@ -29,7 +29,6 @@ export const Invite = () => {
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
-  const [prevParticipants, setPrevParticipants] = useState<Participants[]>([]);
   const [userId, setUserId] = useState<number>(-1);
   const [letterId, setLetterId] = useState<number>(getletterId);
   const [name, setName] = useState<string>("");
