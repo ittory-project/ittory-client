@@ -254,6 +254,7 @@ const InputBox = styled.div<{ $hasError: boolean }>`
   border-bottom: 1px dashed
     ${(props) => (props.$hasError ? "#ff0004" : "#dee2e6")};
   margin-bottom: 1.8px;
+  cursor: pointer;
 `;
 const InputLogo = styled.div`
   color: #495057;
