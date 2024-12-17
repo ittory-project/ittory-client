@@ -36,7 +36,7 @@ export const DeletePopup = ({
   };
 
   return (
-    <BackGround>
+    <>
       <Modal>
         {context === "created" && <Title>'To.{deleteName}'</Title>}
         {context === "received" && <Title>'{deleteName}'</Title>}
@@ -63,22 +63,10 @@ export const DeletePopup = ({
           </Button>
         </ButtonContainer>
       </Modal>
-    </BackGround>
+    </>
   );
 };
 
-const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 99;
-`;
 const Modal = styled.div`
   display: flex;
   width: 272px;

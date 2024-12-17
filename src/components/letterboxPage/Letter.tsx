@@ -150,7 +150,8 @@ export const Letter = ({
     coverType && (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
         {isModalOpen && <Overlay />}
-        {!popup && letterInfo && font && (
+        {popup && <Overlay />}
+        {letterInfo && font && (
           <>
             <Header>
               <CancelBox>
