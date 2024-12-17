@@ -116,6 +116,7 @@ export const Letter = ({
 
         const coverTypeResponse = await getCoverTypeById(response.coverTypeId);
         if (coverTypeResponse) setCoverType(coverTypeResponse);
+        console.log(coverTypeResponse);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -165,7 +166,7 @@ export const Letter = ({
             </Header>
 
             <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
-            <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
+            <CoverContainer $boardimg={"" + coverType.editImageUrl}>
               {renderPageContent()}
             </CoverContainer>
             <Pagination totalPages={elementLength + 1} />

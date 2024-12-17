@@ -1,40 +1,52 @@
-import styled from 'styled-components';
-import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
-import { FontGetResponse } from '../../api/model/FontModel';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { formatDate } from '../../api/config/formatData';
+import styled from "styled-components";
+import { CoverTypeGetResponse } from "../../api/model/CoverTypeModel";
+import { FontGetResponse } from "../../api/model/FontModel";
+import { LetterDetailGetResponse } from "../../api/model/LetterModel";
+import { formatDate } from "../../api/config/formatData";
 
 interface LetterContentProps {
-  letterStyle: CoverTypeGetResponse
-  letterFontStyle: FontGetResponse
-  letterContent: LetterDetailGetResponse
+  letterStyle: CoverTypeGetResponse;
+  letterFontStyle: FontGetResponse;
+  letterContent: LetterDetailGetResponse;
 }
 
-export const ReceiveLetterCover = ({ letterStyle, letterFontStyle, letterContent }: LetterContentProps) => {
+export const ReceiveLetterCover = ({
+  letterStyle,
+  letterFontStyle,
+  letterContent,
+}: LetterContentProps) => {
   const partiList = letterContent.participantNames
     .map((element) => element)
     .join(", ");
 
-  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImageError = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
     event.currentTarget.src = "/img/profile.png";
   };
 
   return (
     <>
-    <CoverImage src={letterStyle.confirmImageUrl} alt="Cover" />
+      <CoverImage src={letterStyle.editImageUrl} alt="Cover" />
       <CoverContent>
-        <TitleDiv $fonttype={letterFontStyle.name}>{letterContent.title}</TitleDiv>
-        <DateDiv $fonttype={letterFontStyle.name}>{formatDate(letterContent.deliveryDate)}</DateDiv>
+        <TitleDiv $fonttype={letterFontStyle.name}>
+          {letterContent.title}
+        </TitleDiv>
+        <DateDiv $fonttype={letterFontStyle.name}>
+          {formatDate(letterContent.deliveryDate)}
+        </DateDiv>
         <PhotoDiv>
-          <ProfileImage src={"" + letterContent.coverPhotoUrl}  onError={handleImageError} />
+          <ProfileImage
+            src={"" + letterContent.coverPhotoUrl}
+            onError={handleImageError}
+          />
         </PhotoDiv>
         <DescriptionDiv $fonttype={letterFontStyle.name}>
           {partiList}
         </DescriptionDiv>
-        </CoverContent>
-        </>
-      );
-  
+      </CoverContent>
+    </>
+  );
 };
 
 const CoverImage = styled.img`
@@ -60,7 +72,7 @@ const TitleDiv = styled.div<{ $fonttype: string }>`
   margin-bottom: 10px;
   justify-content: center;
   overflow: hidden;
-  color: var(--color-black-white-white, #FFF);
+  color: var(--color-black-white-white, #fff);
   text-align: center;
   text-overflow: ellipsis;
   font-family: ${(props) => props.$fonttype};
@@ -78,7 +90,7 @@ const DateDiv = styled.div<{ $fonttype: string }>`
   margin-bottom: 20px;
   justify-content: center;
   overflow: hidden;
-  color: rgba(255, 255, 255, 0.80);
+  color: rgba(255, 255, 255, 0.8);
   text-align: center;
   text-overflow: ellipsis;
   font-family: ${(props) => props.$fonttype};

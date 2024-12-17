@@ -1,74 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { patchNickname } from "../../api/service/ParticipantService";
 
 interface Props {
-  nickname: string;
-  setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
-  visited: boolean;
+  setPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
+  onDelete: () => void;
+  context: string;
+  deleteItem: string;
 }
 
-export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
-  const navigate = useNavigate();
-  const letterId = localStorage.letterId;
-  console.log(visited);
+export const DeletePopup = ({
+  setPopup,
+  onDelete,
+  setIsModalOpen,
+  context,
+  deleteItem,
+  setOpenLetter,
+}: Props) => {
+  const [deleteName, setDeleteName] = useState<string>("");
 
-  const handleCancel = async () => {
-    const response = await patchNickname(letterId);
-    console.log(response);
-    if (response.success) {
-      setViewModal(false);
-    }
+  useEffect(() => {
+    setDeleteName(deleteItem);
+  }, [deleteItem]);
+
+  const cancelDelete = () => {
+    setPopup(false);
   };
-
-  const handleAccess = async () => {
-    try {
-      localStorage.removeItem("letterId");
-      if (visited) {
-        navigate("/Invite", {
-          state: {
-            letterId: letterId,
-            guideOpen: false,
-            userName: nickname,
-          },
-        });
-      } else {
-        navigate("/Invite", {
-          state: {
-            letterId: letterId,
-            guideOpen: true,
-            userName: nickname,
-          },
-        });
-      }
-    } catch (err) {
-      console.error("error:", err);
-    }
+  const handleDelete = () => {
+    onDelete();
+    window.location.reload();
+    setPopup(false);
+    setIsModalOpen(false);
+    setOpenLetter(false);
   };
 
   return (
     <>
       <Modal>
-        <Title>'{nickname}'님</Title>
-        <Title>으로 참여할까요?</Title>
-        <Contents>닉네임은 한번 설정하면 수정할 수 없어요</Contents>
+        {context === "created" && <Title>'To.{deleteName}'</Title>}
+        {context === "received" && <Title>'{deleteName}'</Title>}
+        <Title>편지를 정말 삭제시겠어요?</Title>
+        <Contents>삭제한 편지는 복구할 수 없어요</Contents>
         <ButtonContainer>
           <Button
             style={{
               background: "#CED4DA",
             }}
-            onClick={handleCancel}
           >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+            <ButtonTxt style={{ color: "#495057" }} onClick={cancelDelete}>
+              취소하기
+            </ButtonTxt>
           </Button>
           <Button
             style={{
               background: "#FFA256",
             }}
-            onClick={handleAccess}
           >
-            <ButtonTxt style={{ color: "#fff" }}>네!</ButtonTxt>
+            <ButtonTxt style={{ color: "#fff" }} onClick={handleDelete}>
+              삭제하기
+            </ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>
@@ -79,7 +70,6 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
 const Modal = styled.div`
   display: flex;
   width: 272px;
-  height: 11.6rem;
   box-sizing: border-box;
   padding: 24px;
   flex-direction: column;
@@ -92,8 +82,6 @@ const Modal = styled.div`
   border: 3px solid #d3edff;
   background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
   z-index: 100;
-  align-items: center;
-  margin: 0;
 `;
 const Title = styled.div`
   display: flex;
@@ -111,6 +99,7 @@ const Title = styled.div`
   letter-spacing: -0.5px;
 `;
 const Contents = styled.div`
+  margin-top: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -124,15 +113,13 @@ const Contents = styled.div`
   font-weight: 400;
   line-height: 16px;
   letter-spacing: -0.5px;
-  margin-top: 7px;
 `;
 const ButtonContainer = styled.div`
-  display: flex;
+  margin-top: 20px;
   align-items: flex-start;
   gap: 8px;
   align-self: stretch;
   position: relative;
-  margin-top: 1.35rem;
   justify-content: center;
   display: flex;
   width: 100%;
@@ -152,11 +139,11 @@ const Button = styled.button`
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 `;
-const ButtonTxt = styled.span`
+const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: 14px;
+  line-height: 20px;
   letter-spacing: -0.5px;
 `;
