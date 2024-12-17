@@ -1,84 +1,48 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { DeleteConfirm } from "./DeleteConfirm";
-import { endLetterWs } from "../../../api/service/WsService";
-import {
-  deleteLetter,
-  getLetterInfo,
-} from "../../../api/service/LetterService";
+import { useNavigate } from "react-router-dom";
+import { quitLetterWs } from "../../api/service/WsService";
 
 interface Props {
-  setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
+  setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
   letterId: number;
 }
-
-export const Delete = ({ setViewDelete, letterId }: Props) => {
-  const [viewConfirm, setViewConfirm] = useState<boolean>(false);
-  const handleDelete = () => {
-    setViewDelete(false);
+//방장에게만 적용되는 팝업
+export const Exit = ({ setViewExit, letterId }: Props) => {
+  const navigate = useNavigate();
+  const handleExitCancel = () => {
+    setViewExit(false);
   };
 
-  useEffect(() => {
-    const fetchLetterInfo = async () => {
-      try {
-        const letterData = await getLetterInfo(letterId);
-        console.log(letterData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchLetterInfo();
-  }, []);
-
-  const handleConfirm = async () => {
-    try {
-      console.log(letterId);
-      const response = deleteLetter(
-        letterId,
-        () => {
-          console.log("삭제 성공");
-        },
-        (error) => {
-          console.error("삭제 실패:", error);
-        }
-      );
-      endLetterWs(letterId);
-      console.log(response);
-      setViewConfirm(true);
-    } catch (err) {
-      console.error("error:", err);
-    }
+  const handleExit = () => {
+    quitLetterWs(letterId);
+    navigate("/", { replace: true });
   };
 
   return (
     <>
-      {!viewConfirm && (
-        <Modal>
-          <Title>정말 삭제시겠어요?</Title>
-          <Contents>지금 삭제하시면 작성한 모든 내용이 사라지며,</Contents>
-          <Contents>다른 참여자들도 편지를 작성할 수 없게 됩니다.</Contents>
-          <ButtonContainer>
-            <Button
-              style={{
-                background: "#CED4DA",
-              }}
-              onClick={handleDelete}
-            >
-              <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
-            </Button>
-            <Button
-              style={{
-                background: "#FFA256",
-              }}
-              onClick={handleConfirm}
-            >
-              <ButtonTxt style={{ color: "#fff" }}>삭제하기</ButtonTxt>
-            </Button>
-          </ButtonContainer>
-        </Modal>
-      )}
-      {viewConfirm && <DeleteConfirm />}
+      <Modal>
+        <Title>정말 나가시겠어요?</Title>
+        <Contents>편지가 시작되기 전까진 다시 참여할 수 있어요</Contents>
+        <ButtonContainer>
+          <Button
+            style={{
+              background: "#CED4DA",
+            }}
+            onClick={handleExitCancel}
+          >
+            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+          </Button>
+          <Button
+            style={{
+              background: "#FFA256",
+            }}
+            onClick={handleExit}
+          >
+            <ButtonTxt style={{ color: "#fff" }}>나가기</ButtonTxt>
+          </Button>
+        </ButtonContainer>
+      </Modal>
     </>
   );
 };
@@ -86,7 +50,7 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
 const Modal = styled.div`
   display: flex;
   width: 272px;
-  height: 11rem;
+  height: 10rem;
   box-sizing: border-box;
   padding: 24px;
   flex-direction: column;
@@ -98,7 +62,7 @@ const Modal = styled.div`
   border-radius: 16px;
   border: 3px solid #d3edff;
   background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
-  z-index: 30;
+  z-index: 100;
 `;
 const Title = styled.div`
   display: flex;

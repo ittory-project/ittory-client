@@ -20,7 +20,7 @@ export const Exit = ({ setViewExit, letterId }: Props) => {
   };
 
   return (
-    <BackGround>
+    <>
       <Modal>
         <Title>정말 나가시겠어요?</Title>
         <Contents>지금 나가게 되면 다른 참여자가 방장이 될 거예요</Contents>
@@ -29,10 +29,9 @@ export const Exit = ({ setViewExit, letterId }: Props) => {
             style={{
               background: "#CED4DA",
             }}
+            onClick={handleExitCancel}
           >
-            <ButtonTxt style={{ color: "#495057" }} onClick={handleExitCancel}>
-              취소하기
-            </ButtonTxt>
+            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
           </Button>
           <Button
             style={{
@@ -44,22 +43,10 @@ export const Exit = ({ setViewExit, letterId }: Props) => {
           </Button>
         </ButtonContainer>
       </Modal>
-    </BackGround>
+    </>
   );
 };
 
-const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-`;
 const Modal = styled.div`
   display: flex;
   width: 272px;
