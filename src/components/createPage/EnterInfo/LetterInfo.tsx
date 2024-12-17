@@ -60,7 +60,19 @@ export default function LetterInfo({
       if (window.visualViewport) {
         const keyboardHeight =
           window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
-        setKeyboardVisible(keyboardHeight > 0);
+        if (keyboardHeight > 0) {
+          if (window.innerWidth < 431) {
+            setKeyboardVisible(true);
+          } else {
+            setKeyboardVisible(false);
+          }
+        } else {
+          setKeyboardVisible(false);
+        }
+
+        console.log(window.innerHeight);
+        console.log(window.visualViewport.height);
+        console.log(keyboardHeight);
       }
     };
 
@@ -86,7 +98,6 @@ export default function LetterInfo({
           <Text>{name}님,</Text>
           <Text>같이 편지를 만들어봐요!</Text>
         </Title>
-
         <MainCotainer
           $shiftup={String(keyboardVisible)}
           $isopen={String(isModalOpen)}
