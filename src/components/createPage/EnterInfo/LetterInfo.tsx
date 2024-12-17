@@ -66,7 +66,10 @@ export default function LetterInfo({
           } else {
             setKeyboardVisible(false);
           }
+        } else {
+          setKeyboardVisible(false);
         }
+
         console.log(window.innerHeight);
         console.log(window.visualViewport.height);
         console.log(keyboardHeight);
