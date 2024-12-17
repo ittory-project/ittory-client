@@ -54,9 +54,9 @@ export default function EditLetter({
   setSelectFid,
   selectFid,
 }: Props) {
-  const [calenderOpen, setCalenderOpen] = useState(false);
-  const [coverOpen, setCoveropen] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [calenderOpen, setCalenderOpen] = useState<boolean>(false);
+  const [coverOpen, setCoveropen] = useState<boolean>(false);
+  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 
   useEffect(() => {
@@ -184,7 +184,6 @@ export default function EditLetter({
           deliverDay={deliverDay}
           setDeliverDay={setDeliverDay}
           setIsModalOpen={setCalenderOpen}
-          setKeyboardVisible={setKeyboardVisible}
         />
       )}
       {coverOpen && (
@@ -230,7 +229,7 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   transition: background 0.3s ease;
-  z-index: 49;
+  z-index: 60;
 `;
 const Container = styled.div`
   margin-top: 3rem;

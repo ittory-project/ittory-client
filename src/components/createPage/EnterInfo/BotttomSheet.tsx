@@ -6,14 +6,12 @@ interface Props {
   deliverDay: Date | null;
   setDeliverDay: React.Dispatch<React.SetStateAction<Date | null>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  //setKeyboardVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function BottomSheet({
   deliverDay,
   setDeliverDay,
   setIsModalOpen,
-  //setKeyboardVisible,
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -37,7 +35,6 @@ export default function BottomSheet({
   const handleButton = () => {
     if (deliverDay !== null) {
       console.log(deliverDay);
-      //setKeyboardVisible(false);
       closeModal();
     }
   };

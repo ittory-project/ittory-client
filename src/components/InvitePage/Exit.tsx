@@ -42,10 +42,6 @@ export const Exit = ({ setViewExit, letterId }: Props) => {
           >
             <ButtonTxt style={{ color: "#fff" }}>나가기</ButtonTxt>
           </Button>
-          {/* 
-          - 랜딩페이지로 이동
-          - handleUserExit() 실행
-          */}
         </ButtonContainer>
       </Modal>
     </BackGround>
