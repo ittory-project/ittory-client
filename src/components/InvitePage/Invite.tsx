@@ -55,9 +55,6 @@ export const Invite = () => {
         if (data.length < 1) {
           setParticipants(data);
           window.location.reload();
-          if (participants.length < 1) {
-            window.location.reload();
-          }
         }
       }
 

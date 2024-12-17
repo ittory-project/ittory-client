@@ -213,6 +213,7 @@ export default function CoverStyle({
 
   return (
     <BackGround>
+      <Overlay $isOpen={isModalOpen} />
       <Prev
         onClick={() => {
           setViewCoverDeco(false);
@@ -373,6 +374,19 @@ export default function CoverStyle({
     </BackGround>
   );
 }
+const Overlay = styled.div<{ $isOpen: boolean }>`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+  background: rgba(0, 0, 0, 0.6);
+  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
+  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  z-index: 10;
+`;
 const BookShadow = styled.div`
   flex-shrink: 0;
   position: relative;
