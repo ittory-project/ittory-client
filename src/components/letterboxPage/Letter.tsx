@@ -26,11 +26,12 @@ interface Props {
   context: string | null;
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
   popup: boolean;
-  onDelete: () => void;
   deleteItem: string;
   isModalOpen: boolean;
   letterId: number;
   openLetter: boolean;
+  setDeleteAlert: React.Dispatch<React.SetStateAction<string | null>>;
+  deleteAlert: string | null;
 }
 
 function Query() {
@@ -42,12 +43,13 @@ export const Letter = ({
   context,
   setPopup,
   popup,
-  onDelete,
   deleteItem,
   setIsModalOpen,
   isModalOpen,
   letterId,
   openLetter,
+  setDeleteAlert,
+  deleteAlert,
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
   const navigate = useNavigate();
@@ -188,11 +190,12 @@ export const Letter = ({
           <Delete_letterbox
             setOpenLetter={setOpenLetter}
             setPopup={setPopup}
-            onDelete={onDelete}
             setIsModalOpen={setIsModalOpen}
             context="created"
             deleteItem={deleteName}
             letterId={letterId}
+            setDeleteAlert={setDeleteAlert}
+            deleteAlert={deleteAlert}
           />
         )}
       </Background>

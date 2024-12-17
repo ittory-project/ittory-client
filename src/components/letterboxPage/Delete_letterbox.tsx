@@ -6,20 +6,22 @@ interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
-  onDelete: () => void;
   context: string;
   deleteItem: string;
   letterId: number;
+  setDeleteAlert: React.Dispatch<React.SetStateAction<string | null>>;
+  deleteAlert: string | null;
 }
 
 export const Delete_letterbox = ({
   setPopup,
-  onDelete,
   setIsModalOpen,
   context,
   deleteItem,
   setOpenLetter,
   letterId,
+  setDeleteAlert,
+  deleteAlert,
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
 
@@ -33,11 +35,13 @@ export const Delete_letterbox = ({
   const handleDelete = async () => {
     try {
       const deleteData = await deleteLetterboxLetter(letterId);
-      //window.location.reload();
-      onDelete();
+      localStorage.setItem("deletedLetter", "편지가 삭제되었어요");
       setPopup(false);
       setIsModalOpen(false);
       setOpenLetter(false);
+
+      setDeleteAlert("편지가 삭제되었어요");
+
       console.log(deleteData);
     } catch (error) {
       console.error("Failed to delete letter:", error);
