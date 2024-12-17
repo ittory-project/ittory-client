@@ -18,7 +18,7 @@ export const CountPopup = ({ setPopup, setViewCount }: Props) => {
   console.log("count popup");
 
   return (
-    <BackGround>
+    <>
       <Modal>
         <Title>이어 쓸 횟수를 정하면</Title>
         <Title>편지 작성이 바로 시작돼요</Title>
@@ -42,26 +42,14 @@ export const CountPopup = ({ setPopup, setViewCount }: Props) => {
           </Button>
         </ButtonContainer>
       </Modal>
-    </BackGround>
+    </>
   );
 };
 
-const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-`;
 const Modal = styled.div`
   display: flex;
   width: 272px;
-  height: 11.6rem;
+  height: 11rem;
   box-sizing: border-box;
   padding: 24px;
   flex-direction: column;
@@ -73,10 +61,9 @@ const Modal = styled.div`
   border-radius: 16px;
   border: 3px solid #d3edff;
   background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
-  z-index: 100;
-  align-items: center;
-  margin: 0;
+  z-index: 30;
 `;
+
 const Title = styled.div`
   display: flex;
   flex-direction: column;

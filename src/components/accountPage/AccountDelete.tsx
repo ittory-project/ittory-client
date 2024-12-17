@@ -5,7 +5,6 @@ import bell from "../../../public/assets/bell.svg";
 import check from "../../../public/assets/check.svg";
 import { DeleteReason } from "./DeleteReason";
 import { getMyPage } from "../../api/service/MemberService";
-import { useNavigate } from "react-router-dom";
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,7 +13,6 @@ interface Props {
 export const AccountDelete = ({ setViewDelete }: Props) => {
   const [viewReason, setViewReason] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMyPageData = async () => {

@@ -55,9 +55,6 @@ export const Invite = () => {
         if (data.length < 1) {
           setParticipants(data);
           window.location.reload();
-          if (participants.length < 1) {
-            window.location.reload();
-          }
         }
       }
 
@@ -229,12 +226,6 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  /**
-   {load ? (
-        <Loading loadstatus={loadstatus} setLoad={setLoad} />
-      ) : (
-   */
-
   return (
     <BackGround>
       {load ? (
@@ -244,14 +235,16 @@ export const Invite = () => {
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
           {memberIndex === 0 && (
-            <HostUser
-              guideOpen={guideOpen}
-              items={participants}
-              letterId={letterId}
-              viewDelete={viewDelete}
-              setViewDelete={setViewDelete}
-              hostname={name}
-            />
+            <>
+              <HostUser
+                guideOpen={guideOpen}
+                items={participants}
+                letterId={letterId}
+                viewDelete={viewDelete}
+                setViewDelete={setViewDelete}
+                hostname={name}
+              />
+            </>
           )}
           {memberIndex === 1 && (
             <Member

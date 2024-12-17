@@ -25,7 +25,7 @@ export const Logout = ({ setPopup }: Props) => {
   };
 
   return (
-    <BackGround>
+    <>
       <Modal>
         <Title>로그아웃 하시겠어요?</Title>
         <ButtonContainer>
@@ -47,7 +47,7 @@ export const Logout = ({ setPopup }: Props) => {
           </Button>
         </ButtonContainer>
       </Modal>
-    </BackGround>
+    </>
   );
 };
 
