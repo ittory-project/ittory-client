@@ -37,7 +37,6 @@ export const CreatedLetter = ({
   openLetter,
   deleteAlert,
   setDeleteAlert,
-  deletedAlert,
   setDeletedAlert,
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
@@ -161,7 +160,6 @@ export const CreatedLetter = ({
             <Delete_letterbox
               setOpenLetter={setOpenLetter}
               setPopup={setPopup}
-              //onDelete={handleDelete}
               setIsModalOpen={setIsModalOpen}
               context="created"
               deleteItem={deleteName}
@@ -177,11 +175,12 @@ export const CreatedLetter = ({
               isModalOpen={isModalOpen}
               setPopup={setPopup}
               popup={popup}
-              onDelete={handleDelete}
               deleteItem={deleteName}
               letterId={selectId}
               setIsModalOpen={setIsModalOpen}
               openLetter={openLetter}
+              setDeleteAlert={setDeleteAlert}
+              deleteAlert={deleteAlert}
             />
           )}
         </>

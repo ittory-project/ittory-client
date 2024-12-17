@@ -6,7 +6,6 @@ interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
-  //onDelete: () => void;
   context: string;
   deleteItem: string;
   letterId: number;
@@ -16,7 +15,6 @@ interface Props {
 
 export const Delete_letterbox = ({
   setPopup,
-  //onDelete,
   setIsModalOpen,
   context,
   deleteItem,
@@ -37,7 +35,6 @@ export const Delete_letterbox = ({
   const handleDelete = async () => {
     try {
       const deleteData = await deleteLetterboxLetter(letterId);
-      //onDelete();
       localStorage.setItem("deletedLetter", "편지가 삭제되었어요");
       setPopup(false);
       setIsModalOpen(false);
