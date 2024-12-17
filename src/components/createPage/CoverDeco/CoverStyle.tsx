@@ -159,10 +159,17 @@ export default function CoverStyle({
         window.innerHeight - document.documentElement.clientHeight;
 
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
-        if (heightDiff > 0) {
-          setIsKeyboardOpen(true);
-          setKeyboardHeight(heightDiff);
-          inputRef.current.focus();
+        if (keyboardHeight > 0) {
+          if (window.innerWidth < 431) {
+            setIsKeyboardOpen(true);
+            setIsKeyboardOpen(true);
+            setKeyboardHeight(heightDiff);
+            inputRef.current.focus();
+          } else {
+            setIsKeyboardOpen(false);
+            setKeyboardHeight(0);
+            handlePopup();
+          }
         } else {
           setIsKeyboardOpen(false);
           setKeyboardHeight(0);
@@ -377,7 +384,7 @@ export default function CoverStyle({
 const Overlay = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 0;
-  width: 100%;
+  width: 100vw;
   height: calc(var(--vh, 1vh) * 100);
   background: rgba(0, 0, 0, 0.6);
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};

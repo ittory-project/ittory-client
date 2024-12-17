@@ -16,6 +16,7 @@ export const Created_Modal = ({ setIsModalOpen, setPopup }: Props) => {
   };
 
   const handlePopup = () => {
+    setIsModalOpen(false);
     setPopup(true);
   };
 

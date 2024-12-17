@@ -92,7 +92,7 @@ export const CreatedLetter = ({
         <EmptyLetter context="created" />
       ) : (
         <>
-          {!popup && !openLetter && letters && (
+          {!openLetter && letters && (
             <Container>
               {deleteAlert && <DeleteAlert>{deleteAlert}</DeleteAlert>}
               <NumberHeader>
@@ -191,6 +191,7 @@ const DeleteAlert = styled.div`
   bottom: 32px;
   transform: translateX(-50%);
 `;
+
 const Container = styled.div`
   display: flex;
   box-sizing: border-box;
