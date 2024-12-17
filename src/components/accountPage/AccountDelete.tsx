@@ -92,7 +92,6 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
             >
               <ButtonTxt style={{ color: "#fff" }}>확인했어요!</ButtonTxt>
             </Button>
-            {/* 클릭 시 랜딩페이지로 이동 */}
           </ButtonContainer>
         </>
       )}
