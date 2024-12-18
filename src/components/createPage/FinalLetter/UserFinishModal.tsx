@@ -356,8 +356,8 @@ const ButtonTxt = styled.div`
   letter-spacing: -0.5px;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
-  width: 136.4px;
-  height: 136.4px;
+  width: 136.6px;
+  height: 136.6px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
@@ -366,6 +366,6 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 27px;
-  margin-left: 2px;
+  margin-top: 26.6px;
+  margin-left: 0.98px;
 `;
