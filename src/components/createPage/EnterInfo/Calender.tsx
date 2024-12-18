@@ -152,17 +152,11 @@ const Valid = styled.div`
   align-items: center;
   box-sizing: border-box;
 `;
-const Img = styled.img`
-  position: relative;
-  padding-top: 0.2rem;
-  width: 100%;
-  height: 1.85rem;
-  object-fit: contain;
-`;
+
 const Txt = styled.span`
   position: absolute;
   text-align: center;
-  font-family: var(--Typography-family-number, "Gmarket Sans");
+  font-family: "GmarketSans";
   font-size: 12px;
   font-weight: 400;
   line-height: normal;
