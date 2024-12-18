@@ -5,7 +5,6 @@ import direction from "../../public/assets/navigate.svg";
 import letter_create from "../../public/assets/letter_create.svg";
 import letter_receive from "../../public/assets/letter_receive.svg";
 import ask from "../../public/assets/menu/ask.svg";
-import visit from "../../public/assets/menu/visit.svg";
 import graynavi from "../../public/assets/menu/graynavi.svg";
 import defaultImage from "../../public/assets/menu/profileImg.png";
 import { useNavigate } from "react-router-dom";
@@ -134,7 +133,7 @@ export const Menu = ({ onClose }: Props) => {
         <img
           src={X}
           alt="X"
-          style={{ width: "14px", height: "14px" }}
+          style={{ width: "18px", height: "18px" }}
           onClick={handleCancel}
         />
       </Cancel>
@@ -152,7 +151,12 @@ export const Menu = ({ onClose }: Props) => {
           <>
             <NavigateLogin onClick={handleLogin}>
               로그인하고 이용하기
-              {<img src={direction} style={{ width: "5px", height: "10px" }} />}
+              {
+                <img
+                  src={direction}
+                  style={{ width: "18px", height: "18px" }}
+                />
+              }
             </NavigateLogin>
           </>
         ) : (
@@ -183,7 +187,9 @@ export const Menu = ({ onClose }: Props) => {
           {user === false ? (
             <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
           ) : (
-            <LetterNum>
+            <LetterNum
+              style={{ color: partiLetter == 0 ? "#ADB5BD" : "inherit" }}
+            >
               <>{String(partiLetter)}개</>
             </LetterNum>
           )}
@@ -206,7 +212,9 @@ export const Menu = ({ onClose }: Props) => {
           {user === false ? (
             <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
           ) : (
-            <LetterNum>
+            <LetterNum
+              style={{ color: receiveLetter == 0 ? "#ADB5BD" : "inherit" }}
+            >
               <>{String(receiveLetter)}개</>
             </LetterNum>
           )}
@@ -216,6 +224,15 @@ export const Menu = ({ onClose }: Props) => {
         <ButtonTxt>편지 쓰러 가기</ButtonTxt>
       </Button>
       <List>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="260"
+          height="2"
+          viewBox="0 0 260 2"
+          fill="none"
+        >
+          <path d="M0 1L260 1.00002" stroke="#F1F3F5" />
+        </svg>
         <AskContainer onClick={handleAsk}>
           <img
             src={ask}
@@ -245,7 +262,6 @@ const Cancel = styled.div`
   display: flex;
   width: 24px;
   height: 24px;
-  padding: 5px;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
@@ -258,19 +274,19 @@ const Profile = styled.div`
   height: 52px;
   align-items: center;
   gap: 8px;
+  width: 100%;
   flex-shrink: 0;
   margin-top: 72px;
-  margin-left: 16px;
-  margin-right: 38px;
+  position: relative;
 `;
 const ImageContainer = styled.div`
   width: 52px;
   height: 52px;
   display: flex;
-  padding: 4px;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
+  margin-left: 16px;
 `;
 const ProfileImage = styled.img`
   width: 44px;
@@ -410,24 +426,6 @@ const List = styled.div`
   align-items: center;
   position: absolute;
   bottom: 1.5rem;
-`;
-const VisitContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 16px 0px;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-  color: #212529;
-  font-family: SUIT;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 16px;
-  letter-spacing: -0.5px;
-  cursor: pointer;
 `;
 const AskContainer = styled.div`
   display: flex;

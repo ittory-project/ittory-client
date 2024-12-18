@@ -52,7 +52,7 @@ const Container = styled.div<{ $color: boolean }>`
   display: flex;
   width: 100%;
   margin: 0 auto;
-  height: 3rem;
+  height: 72px;
   box-sizing: border-box;
   z-index: 1;
   padding: 0px 4px 0px 16px;
