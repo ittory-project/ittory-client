@@ -169,13 +169,12 @@ export const Write = ({
   // 편지 작성 시 이탈 처리
   useEffect(() => {  
     const handleVisibilityChange = () => {
-      let hiddenStartTime: number | null = null;
       if (document.visibilityState === "hidden") {
         console.log("백그라운드 전환");
       } else if (document.visibilityState === "visible") {
         console.log("다시돌아옴");
         const storedResetTime = window.localStorage.getItem("resetTime");
-        if (!storedResetTime && Date.now() > Number(storedResetTime)) {
+        if (storedResetTime && Date.now() > Number(storedResetTime)) {
           console.log("턴이 넘어가서 퇴장됨");
           clientRef.current?.deactivate();
           window.alert('장시간 자리를 이탈하여 퇴장되었습니다.')
@@ -183,7 +182,6 @@ export const Write = ({
           clientRef.current?.deactivate();
           navigate('/')
         }
-        hiddenStartTime = null;
       }
     };
 
