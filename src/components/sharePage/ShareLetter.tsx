@@ -87,6 +87,10 @@ export const ShareLetter = () => {
     navigate('/letterbox')
   }
 
+  const handleCloseBtn = () => {
+    navigate('/')
+  }
+
   const createShare = async () => {
     try {
       if (letterInfo) {
@@ -107,14 +111,15 @@ export const ShareLetter = () => {
   return (
     (letterInfo && coverType && font) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
+        <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close_white.svg" />
         <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
         <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
           {renderPageContent()}
         </CoverContainer>
         <Pagination totalPages={elementLength + 1} />
         <BtnContainer>
-          <StoreBtn onClick={handleStorage}>편지함에 보관하기</StoreBtn>
-          <ShareBtn onClick={createShare}>지금 공유하기</ShareBtn>
+          <StoreBtn onClick={handleStorage}>편지함 이동하기</StoreBtn>
+          <ShareBtn onClick={createShare}>지금 전달하기</ShareBtn>
         </BtnContainer>
       </Background>
     ) : (
@@ -132,6 +137,15 @@ const Background = styled.div<{ $backgroundimg: string }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
+
+const CloseBtn = styled.img`
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer
 `;
 
 const CoverContainer = styled.div<{ $boardimg: string }>`
