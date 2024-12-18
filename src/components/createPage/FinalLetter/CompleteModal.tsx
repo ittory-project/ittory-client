@@ -275,8 +275,8 @@ const Shadow = styled.img`
   flex-shrink: 0;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
-  width: 136.4px;
-  height: 136.4px;
+  width: 136.6px;
+  height: 136.6px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
@@ -285,8 +285,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 26.9px;
-  margin-left: 1.8px;
+  margin-top: 26.56px;
+  margin-left: 0.98px;
 `;
 
 const Button = styled.button`

@@ -145,7 +145,7 @@ export const Home = () => {
             $img={bg5}
             ref={(el) => el && (sectionRefs.current[4] = el)}
           />
-          <WhiteSection
+          <Section
             $img={bg6}
             ref={(el) => el && (sectionRefs.current[5] = el)}
           />
@@ -293,7 +293,7 @@ const FinalButton = styled.button`
     -3.5px -1.5px 12px 0px var(--Color-secondary-navy, #1c2231) inset;
   margin: 0 auto;
   position: relative;
-  top: 86%;
+  top: 89.6%;
 `;
 const ButtonContainer = styled.button`
   display: flex;
