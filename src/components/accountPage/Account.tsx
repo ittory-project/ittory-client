@@ -36,7 +36,7 @@ export const Account = () => {
             </Container>
             <Container>
               <Area onClick={handleDelete}>
-                <img src={out} style={{ width: "14px", height: "14px" }} />
+                <img src={out} style={{ width: "18px", height: "18px" }} />
                 <span>탈퇴하기</span>
               </Area>
             </Container>
