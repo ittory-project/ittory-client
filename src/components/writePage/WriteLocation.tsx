@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import img from '../../../public/assets/location.svg';
 
@@ -10,9 +10,18 @@ interface LocationProps {
 
 // 위치 컴포넌트
 export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, profileImage }) => {
+  const circleRef = useRef<SVGCircleElement>(null);
+
   const radius = 25;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - progressTime / 100);
+
+  useEffect(() => {
+    if (circleRef.current) {
+      const offset = circumference * (1 - progressTime / 100);
+      circleRef.current.style.strokeDashoffset = `${-offset}`;
+    }
+  }, [progressTime, circumference]);
+
   const isWarning = progressTime <= 10;
 
   return (
@@ -26,6 +35,7 @@ export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, pro
             xmlns="http://www.w3.org/2000/svg"
           >
             <Circle
+              ref={circleRef}
               cx="28"
               cy="28"
               r={radius}
@@ -33,15 +43,10 @@ export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, pro
               strokeWidth="3"
               fill="none"
               strokeDasharray={circumference}
-              strokeDashoffset={-offset} 
-              transform="rotate(-90 28 28)" 
+              transform="rotate(-90 28 28)"
             />
           </Svg>
-          <Name
-            color={isWarning ? '#FFA256' : 'white'} 
-          >
-            {name}
-          </Name>
+          <Name color={isWarning ? '#FFA256' : 'white'}>{name}</Name>
         </Contents>
       </Profile>
     </Background>
@@ -62,7 +67,7 @@ const Profile = styled.div<{ profileImage: string | undefined }>`
   height: 56px;
   border-radius: 50%;
   margin: 4px 0 0 0;
-  background-image: url(${({ profileImage }) => profileImage});
+  background-image: url(${({ profileImage }) => profileImage ? profileImage : '/assets/basic_user.svg'});
   background-size: cover;
   background-position: center;
   display: flex;

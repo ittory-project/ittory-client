@@ -128,6 +128,7 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
 const Container = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
+  min-width: 300px;
   padding: 10px 0;
   background-color: #212529;
   display: flex;
