@@ -1,4 +1,4 @@
-import { ApiResponse } from "../config/api";
+import { api, ApiResponse } from "../config/api";
 import { CoverImagePostResponse, ImageUrlRequest } from "../model/ImageModel";
 import axios from "axios";
 
@@ -6,7 +6,7 @@ export async function postCoverImage(
   imageUrlRequest: ImageUrlRequest
 ): Promise<CoverImagePostResponse> {
   try {
-    const response: ApiResponse<CoverImagePostResponse> = await axios.post(
+    const response: ApiResponse<CoverImagePostResponse> = await api.post(
       `api/image/letter-cover`,
       imageUrlRequest,
       {
