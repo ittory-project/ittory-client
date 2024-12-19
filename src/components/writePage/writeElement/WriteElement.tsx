@@ -193,6 +193,7 @@ const WriteContent = styled.div`
   padding: 16px;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   align-self: stretch;
   border-radius: var(--Border-Radius-radius_300, 8px);
@@ -226,8 +227,9 @@ const LetterImage = styled.img`
 
 const WriteTa = styled.textarea`
   display: flex;
-  width: 230px;
+  width: 80%;
   padding: 16px;
+  margin: 0 auto;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
