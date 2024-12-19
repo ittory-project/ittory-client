@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
 import out from "../../../public/assets/out.svg";
@@ -32,7 +31,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
-  const [viewCount, setViewCount] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(", ");
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
@@ -44,7 +42,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [selectfont, setSelectfont] = useState<string>("");
   const [fontId, setFontId] = useState<number>(-1);
   const [receiverName, setReceiverName] = useState<string>("");
-  const navigate = useNavigate();
 
   console.log("this is member page");
 

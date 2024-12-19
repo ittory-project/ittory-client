@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop";
 import styled from "styled-components";
@@ -116,7 +116,6 @@ export default function ImageCropper({
           onZoomChange={setZoom}
         />
       </CropContainer>
-
       <CancelBtn onClick={closeModal}>취소</CancelBtn>
       <Button onClick={handleSaveClick}>선택</Button>
     </Container>

@@ -5,7 +5,7 @@ import x from "../../../public/assets/x_white.svg";
 import { Created_Modal } from "./Created_Modal";
 import { Received_Modal } from "./Received_Modal";
 import { Delete_letterbox } from "./Delete_letterbox";
-import { decodeLetterId } from "../../api/config/base64";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppDispatch, clearData, clearOrderData } from "../../api/config/state";
 import { useDispatch } from "react-redux";
@@ -55,9 +55,8 @@ export const Letter = ({
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [partiList, setPartiList] = useState<string>("");
+  const [, setPartiList] = useState<string>("");
   const [font, setFont] = useState<FontGetResponse>();
   const [coverType, setCoverType] = useState<CoverTypeGetResponse | null>(null);
   const [elementLength, setElementLength] = useState<number>(0);
@@ -182,7 +181,6 @@ export const Letter = ({
                 <Received_Modal
                   setIsModalOpen={setIsModalOpen}
                   setPopup={setPopup}
-                  openLetter={openLetter}
                 />
               ) : null)}
           </>

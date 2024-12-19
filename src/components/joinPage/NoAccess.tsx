@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import joinblock from "../../../public/assets/join/joinblock.svg";
@@ -31,7 +30,7 @@ const BackGround = styled.div`
   align-items: center;
   //justify-content: center;
   height: calc(var(--vh, 1vh) * 100);
-  width: 100vw;
+  width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);

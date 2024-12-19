@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled, { keyframes } from "styled-components";
 import logo from "../../../public/assets/home/logo.png";
 import { useNavigate } from "react-router-dom";
@@ -101,10 +101,7 @@ export const Home = () => {
   return (
     <>
       <Container ref={containerRef}>
-        <Header
-          backgroundColor={headerBgColor}
-          setBackgroundColor={setHeaderBgColor}
-        />
+        <Header backgroundColor={headerBgColor} />
         <>
           <FirstSection
             $img={bg1}

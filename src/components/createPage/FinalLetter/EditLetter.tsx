@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -56,7 +56,7 @@ export default function EditLetter({
 }: Props) {
   const [calenderOpen, setCalenderOpen] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState<boolean>(false);
-  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
+  const [, setKeyboardVisible] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 
   useEffect(() => {

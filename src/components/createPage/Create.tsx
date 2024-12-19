@@ -1,5 +1,5 @@
 import LetterInfo from "./EnterInfo/LetterInfo";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import CoverDeco from "./CoverDeco/CoverStyle";
 import FinalInfo from "./FinalLetter/FinalInfo";

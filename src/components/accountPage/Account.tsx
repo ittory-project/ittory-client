@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import prev from "../../../public/assets/prev.svg";
 import { useNavigate } from "react-router-dom";

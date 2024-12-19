@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import X from "../../public/assets/x.svg";
 import direction from "../../public/assets/navigate.svg";
@@ -24,8 +24,8 @@ export interface GroupItem {
 export const Menu = ({ onClose }: Props) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<boolean>(false);
-  const [focusCreate, setFocusCreate] = useState<boolean>(false);
-  const [focusReceive, setFocusReceive] = useState<boolean>(false);
+  const [, setFocusCreate] = useState<boolean>(false);
+  const [, setFocusReceive] = useState<boolean>(false);
   const [navigatePath, setNavigatePath] = useState<string | null>(null);
   const [navigateState, setNavigateState] = useState<{
     focusCreate: boolean;

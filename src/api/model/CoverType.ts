@@ -1,4 +1,5 @@
 export interface CoverType {
+  notSelectImageUrl: string;
   id: number;
   name: string;
   listImageUrl: string;
