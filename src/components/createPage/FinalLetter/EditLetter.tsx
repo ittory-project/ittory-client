@@ -355,8 +355,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 24.4px;
-  margin-left: 2.35px;
+  margin-top: 24.3px;
+  margin-left: 2.3px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ $font: string }>`
