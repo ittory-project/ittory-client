@@ -27,6 +27,7 @@ const Btn = styled.div<{color: string}>`
   justify-content: center;
   align-items: center;
   font-size: 16px;
+  font-weight: 700;
 
   border: solid rgba(100, 100, 100, 0.3);
   border-top-color: rgba(255, 255, 255, 0.3);
