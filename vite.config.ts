@@ -7,8 +7,6 @@ export default defineConfig({
   define: {
     global: "window",
   },
-  root: '.',
-  publicDir: 'public',
   build: {
     outDir: 'build',
     emptyOutDir: true,
