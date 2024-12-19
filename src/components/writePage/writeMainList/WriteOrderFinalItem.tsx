@@ -33,7 +33,7 @@ const Icon = styled.img`
 const Content = styled.div`
   color: var(--Color-primary-orange, #FFA256);
   font-family: var(--Typography-family-body, SUIT);
-  font-size: var(--Typography-size-s, 16px);
+  font-size: var(--Typography-size-s, 18px);
   font-style: normal;
   font-weight: 400;
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
