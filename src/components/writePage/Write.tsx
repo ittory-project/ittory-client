@@ -545,7 +545,7 @@ export const Write = ({
 const Container = styled.div`
   height: 100%;
   width: 100%;
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #212529;
   display: flex;
   flex-direction: column;

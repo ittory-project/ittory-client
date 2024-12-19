@@ -55,7 +55,7 @@ const ContentWrapper = styled.div`
 `;
 
 const MainText = styled.div`
-  font-size: 16px;
+  font-size: 18px;
   color: #ffffff;
 `;
 
