@@ -23,6 +23,8 @@
   width: 100%;
   overflow: hidden;
   background-color: #37414e;
+  min-height: 300px;
+  min-width: 200px;
 }
 
 html,
