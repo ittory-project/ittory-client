@@ -20,7 +20,7 @@ export const Created_Modal = ({
   letterId,
 }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [copied, setCopied] = useState<boolean>(false);
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -40,8 +40,7 @@ export const Created_Modal = ({
     getSharedLetter();
   }, [letterId]);
 
-  /*
-  const handle = async () => {
+  const handleShare = async () => {
     try {
       if (letterInfo) {
         await navigator.share({
@@ -57,55 +56,6 @@ export const Created_Modal = ({
       }
     } catch (e) {
       console.log("공유 실패");
-    }
-  };*/
-
-  const handleShare = async () => {
-    if (letterInfo) {
-      const url = `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`;
-
-      if (
-        navigator.clipboard &&
-        typeof navigator.clipboard.writeText === "function"
-      ) {
-        try {
-          await navigator.clipboard.writeText(url);
-          setCopied(true);
-          setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-        } catch (error) {
-          console.error("Clipboard API failed:", error);
-          fallbackCopyTextToClipboard(url);
-        }
-      } else {
-        // Safari 호환용 대체 복사 방식
-        fallbackCopyTextToClipboard(url);
-      }
-    }
-  };
-
-  // 대체 복사 함수
-  const fallbackCopyTextToClipboard = (text: string) => {
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
-    textArea.style.top = "-9999px";
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      const successful = document.execCommand("copy");
-      if (successful) {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } else {
-        alert("텍스트 복사에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("Fallback copy failed:", error);
-      alert("텍스트 복사에 실패했습니다.");
-    } finally {
-      document.body.removeChild(textArea);
     }
   };
 
