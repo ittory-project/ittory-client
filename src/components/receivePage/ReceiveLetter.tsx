@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Pagination } from '../common/Pagination';
@@ -20,6 +20,7 @@ function Query() {
 
 export const ReceiveLetter = () => {
   const { letterId } = useParams();
+  const navigate = useNavigate();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [font, setFont] = useState<FontGetResponse>();
@@ -78,6 +79,7 @@ export const ReceiveLetter = () => {
       window.alert(storeResponse)
     }
     setSaveAlert('LOADING')
+    navigate('/letterbox')
   }
 
   const handleCancelBtn = async () => {
