@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, Ref } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
@@ -23,7 +23,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
       fonts,
       setFont,
       setFontPopup,
-      fontPopup,
       setSelect,
       select,
       setSelectfid,
@@ -35,7 +34,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
     const [selectId, setSelectId] = useState<number>(1);
     const [bottomOffset, setBottomOffset] = useState<number>(0);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
-    const [isCompleted, setIsCompleted] = useState<boolean>(false);
+    const [, setIsCompleted] = useState<boolean>(false);
 
     useEffect(() => {
       setSelected(font);

@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import partiIcon from "../../../public/assets/letterbox/parIcon.svg";

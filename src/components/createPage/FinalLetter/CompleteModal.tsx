@@ -42,7 +42,7 @@ export default function CompleteModal({
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [guideOpen, setGuideOpen] = useState<boolean>(false);
+  const [, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 
@@ -89,6 +89,7 @@ export default function CompleteModal({
   const fetchEnter = async (letterId: Number) => {
     try {
       const enterresponse = await postEnter(Number(letterId));
+      console.log(enterresponse);
       handleNickname(letterId);
     } catch (err) {
       console.error("Error fetching mydata:", err);

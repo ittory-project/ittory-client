@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
-import styled, { keyframes } from "styled-components";
+import { useState, useEffect, useCallback } from "react";
+import styled from "styled-components";
 import logo from "../../../public/assets/home/smalllogo.svg";
 import menu from "../../../public/assets/home/menulogo.svg";
 import { Menu } from "../../layout/Menu";
 
 interface Props {
   backgroundColor: boolean;
-  setBackgroundColor: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Header({ backgroundColor, setBackgroundColor }: Props) {
+export default function Header({ backgroundColor }: Props) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [bgColor, setBgColor] = useState<boolean>(backgroundColor);
 
@@ -31,7 +30,6 @@ export default function Header({ backgroundColor, setBackgroundColor }: Props) {
   return (
     <Container $color={bgColor}>
       {bgColor && <Logo src={logo} />}{" "}
-      {/*<Logo src={logo} $isVisible={bgColor} />*/}
       <MenuLogo src={menu} onClick={handleMenu} />
       {isMenuOpen && (
         <>

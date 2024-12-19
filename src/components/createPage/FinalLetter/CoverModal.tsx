@@ -54,7 +54,7 @@ export default function CoverModal({
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [cropperKey, setCropperKey] = useState<number>(0);
-  const [bookimage, setBookimage] = useState<number>(backgroundimage - 1);
+  const [, setBookimage] = useState<number>(backgroundimage - 1);
   const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
   const [cropOpen, setCropOpen] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);

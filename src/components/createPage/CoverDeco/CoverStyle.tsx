@@ -75,7 +75,7 @@ export default function CoverStyle({
   setSelectedImageIndex,
   setSelectFid,
 }: Props) {
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
+  const [, setIsKeyboardOpen] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
 
   const imgRef = useRef<HTMLInputElement | null>(null);

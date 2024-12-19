@@ -34,6 +34,11 @@ export interface LetterStartPartiGetResponse {
   elementCount: number;
 }
 
+export interface ApiLetterResponse<T> {
+  success: boolean;
+  status: number;
+  data: T;
+}
 //편지 작성 POST
 export interface LetterRequestBody {
   coverTypeId: number;
@@ -43,11 +48,7 @@ export interface LetterRequestBody {
   title: string;
   coverPhotoUrl: string;
 }
-export interface ApiLetterResponse<T> {
-  success: boolean;
-  status: number;
-  data: T;
-}
+
 export interface LetterPostResponse {
   coverPhotoUrl: string;
   coverTypeId: number;
@@ -103,10 +104,9 @@ export interface LetterInfoGetResponse {
 
 //편지 참여 요청
 export interface LetterEnterResponse {
-  data: {
-    enterStatus: boolean;
-    participantId: number;
-  };
+  enterAction: string;
+  enterStatus: boolean;
+  participantId: number;
 }
 
 // 편지 상세 정보 조회 API Response
@@ -118,7 +118,6 @@ export interface LetterDetailGetResponse {
   deliveryDate: string;
   title: string;
   coverPhotoUrl: string;
-  participantNames: string[],
   elements: LetterDetail[];
 }
 

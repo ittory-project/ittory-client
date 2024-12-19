@@ -19,7 +19,6 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
     onSwipedLeft: () => setIsMenuOpen(true),
   });
 
-  //<div className="MainLayout large-screen">{children}</div>
   return (
     <div className="App">
       <MediaQuery minWidth={431}>
