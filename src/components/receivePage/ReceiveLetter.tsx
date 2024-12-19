@@ -79,7 +79,12 @@ export const ReceiveLetter = () => {
       window.alert(storeResponse)
     }
     setSaveAlert('LOADING')
-    navigate('/letterbox')
+    navigate("/LetterBox", {
+      state: {
+        focusCreate: false,
+        focusReceive: true,
+      },
+    }); 
   }
 
   const handleCancelBtn = async () => {
