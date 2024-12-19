@@ -35,7 +35,7 @@ function App() {
     <Router>
       <MainLayout>
         <Helmet>
-          <title>잇토리</title>
+          <title>잇토리test</title>
           <meta name="description" content="잇토리 설명" />
           <meta property="og:title" content="잇토리" />
           <meta property="og:description" content="잇토리 설명 og" />
