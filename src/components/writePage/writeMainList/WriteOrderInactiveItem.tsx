@@ -34,6 +34,6 @@ const Icon = styled.img`
 `;
 
 const Content = styled.div`
-  font-size: 16px;
+  font-size: 18px;
   color: #868e96;
 `;

@@ -59,15 +59,15 @@ const LoginContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 12px 10px;
   box-sizing: border-box;
   background-color: white;
   position: relative;
 `;
 
 const CloseBtn = styled.img`
-  height: 24px;
-  width: 24px;
+  height: 20px;
+  width: 20px;
   position: absolute;
   top: 20px;
   right: 20px;
@@ -76,11 +76,11 @@ const CloseBtn = styled.img`
 const Logo = styled.img`
   width: 236px;
   height: 90px;
-  margin: 50px 0px 20px;
+  margin: 50px 0px 16px;
 `;
 
 const Desc = styled.div`
-  font-size: 18px;
+  font-size: 14px;
   color: #868e96;
   margin-bottom: 200px;
 `;
@@ -92,24 +92,24 @@ const Icon = styled.img`
 `;
 
 const LoginBtn = styled.button`
-  width: 90%;
+  width: 288px;
   max-width: 400px;
   height: 48px;
   background-color: #fee500;
   color: black;
   border: none;
-  border-radius: 5rem;
+  border-radius: 2rem;
   padding: 0 20px;
   cursor: pointer;
   font-size: 16px;
-  margin-bottom: 20px;
+  margin: 0 auto 16px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const LoginDesc = styled.div`
-  font-size: 13px;
+  font-size: 12px;
   color: #868E96;
   max-width: 300px;
   margin-top: 10px;
