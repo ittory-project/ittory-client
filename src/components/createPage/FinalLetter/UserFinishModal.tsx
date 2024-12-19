@@ -42,7 +42,7 @@ export default function UserFinishModal({
 }: Props) {
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [guideOpen, setGuideOpen] = useState<boolean>(false);
+  const [, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 

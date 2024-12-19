@@ -11,7 +11,7 @@ interface Props {
   deliverDay: Date | null;
 }
 export default function CalenderView({ setValue, deliverDay }: Props) {
-  const [current, setCurrent] = useState<Date>(new Date());
+  const [current] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 

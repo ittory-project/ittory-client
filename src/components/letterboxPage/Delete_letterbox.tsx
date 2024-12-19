@@ -21,7 +21,6 @@ export const Delete_letterbox = ({
   setOpenLetter,
   letterId,
   setDeleteAlert,
-  deleteAlert,
 }: Props) => {
   const [deleteName, setDeleteName] = useState<string>("");
 
@@ -78,18 +77,6 @@ export const Delete_letterbox = ({
   );
 };
 
-const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 99;
-`;
 const Modal = styled.div`
   display: flex;
   width: 272px;

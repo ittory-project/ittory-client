@@ -21,7 +21,6 @@ export default function FontSelect({
   setSelect,
   select,
   setSelectId,
-  selectfid,
 }: Props) {
   const handleFontChange = (fontFamily: string, fontId: number) => {
     console.log(fontFamily);

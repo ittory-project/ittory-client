@@ -1,6 +1,7 @@
 export interface Font {
   id: number;
   name: string;
+  value: string;
 }
 
 export type FontAllResponse = Font[];
@@ -9,4 +10,5 @@ export type FontAllResponse = Font[];
 export interface FontGetResponse {
   id: number;
   name: string;
+  value: string;
 }
