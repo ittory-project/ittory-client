@@ -67,7 +67,7 @@ const Profile = styled.div<{ profileImage: string | undefined }>`
   height: 56px;
   border-radius: 50%;
   margin: 4px 0 0 0;
-  background-image: url(${({ profileImage }) => profileImage ? profileImage : '/assets/basic_user.svg'});
+  background-image: url(${({ profileImage }) => profileImage ? profileImage : '/assets/common/profile_bunny.svg'});
   background-size: cover;
   background-position: center;
   display: flex;
