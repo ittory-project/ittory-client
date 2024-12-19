@@ -106,7 +106,7 @@ const Overlay = styled.div`
 
 const Popup = styled.div`
   display: flex;
-  width: 80%;
+  min-width: 320px;
   padding: 32px 15px 24px 15px;
   flex-direction: column;
   align-items: center;

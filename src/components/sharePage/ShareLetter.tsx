@@ -13,6 +13,7 @@ import { getFontById } from '../../api/service/FontService';
 import { getCoverTypeById } from '../../api/service/CoverTypeService';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { useDispatch } from 'react-redux';
+import { formatDate } from '../../api/config/formatData';
 
 function Query() {
   return new URLSearchParams(useLocation().search);
@@ -96,7 +97,9 @@ export const ShareLetter = () => {
       if (letterInfo) {
         await navigator.share({
           title: `To. ${letterInfo.receiverName}`,
-          text: '바스락... 바스락...\n편지함 앞에서 들리는 의문의 소리...',
+          text: `${letterInfo.title}\n${formatDate(letterInfo.deliveryDate)} From. ${letterInfo.participantNames
+            .map((element) => element)
+            .join(", ")}`,
           url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
         });
         console.log('공유 성공');
@@ -112,7 +115,6 @@ export const ShareLetter = () => {
     (letterInfo && coverType && font) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
         <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close_white.svg" />
-        <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
         <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
           {renderPageContent()}
         </CoverContainer>
@@ -161,24 +163,6 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
               0 8px 4px rgba(0,0,0,0.09), 
               0 16px 8px rgba(0,0,0,0.09),
               0 32px 16px rgba(0,0,0,0.09);
-`;
-
-const ToDiv = styled.div<{ $fonttype: string }>`
-  font-size: 24px;
-  margin-bottom: 40px;
-  padding: 0px 10px;
-  color: var(--color-black-white-white, #FFF);
-  text-align: center;
-
-  /* title/base_bold */
-  font-family: ${(props) => props.$fonttype};
-  font-size: var(--Typography-size-base, 16px);
-  font-style: normal;
-  font-weight: 700;
-  line-height: var(--Typography-line_height-s, 24px); /* 150% */
-  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
-
-  border-bottom: 2px dashed rgba(255, 255, 255, 0.50);
 `;
 
 const BtnContainer = styled.div`
