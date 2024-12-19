@@ -24,8 +24,7 @@ export const Join = () => {
   const [deleted, setDeleted] = useState<boolean>(false);
   const [deleteConf, setDeleteConf] = useState<boolean>(false);
   const navigate = useNavigate();
-  const params = useParams();
-  const letterId = params.letterId;
+  const { letterId } = useParams();
 
   useEffect(() => {
     if (letterId) {
@@ -99,8 +98,7 @@ export const Join = () => {
         nickname: nickname,
       };
       const response = await postNickname(requestBody, Number(letterId));
-      console.log("닉네임", response.isSuccess);
-      if (response.isSuccess == true) {
+      if (response.isSuccess) {
         setDuplicateError(false);
         setViewModal(true);
       } else {

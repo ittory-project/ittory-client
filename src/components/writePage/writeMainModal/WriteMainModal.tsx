@@ -71,7 +71,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
                       <ListNumber>{participant.sequence}</ListNumber>
                     }
                     <Avatar
-                      src={participant.imageUrl || "/assets/basic_user.svg"}
+                      src={participant.imageUrl || "/assets/common/profile_bunny.svg"}
                       alt={participant.nickname}
                     />
                     <Name>{participant.nickname}</Name>
