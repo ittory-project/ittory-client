@@ -90,6 +90,8 @@ export const ReceivedLetter = ({
     fetchLetter();
   }, [deleteAlert]);
 
+  console.log(selectId);
+
   const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
     const date = new Date(deliverDate);
 
