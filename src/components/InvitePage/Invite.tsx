@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { HostUser } from "./HostUser";
@@ -29,12 +29,12 @@ export const Invite = () => {
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
-  const [userId, setUserId] = useState<number>(-1);
-  const [letterId, setLetterId] = useState<number>(getletterId);
+  const [, setUserId] = useState<number>(-1);
+  const [letterId] = useState<number>(getletterId);
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
   const [viewDelete, setViewDelete] = useState<boolean>(false);
-  const [refresh, setRefresh] = useState<number>(1);
+  const [refresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
 

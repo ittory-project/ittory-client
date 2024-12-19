@@ -152,7 +152,6 @@ export const ReceivedLetter = ({
                 <Received_Modal
                   setIsModalOpen={setIsModalOpen}
                   setPopup={setPopup}
-                  openLetter={openLetter}
                 />
               )}
             </Container>

@@ -46,8 +46,8 @@ export const HostUser = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(", ");
-  const [memberId, setMemberId] = useState<number>(0);
-  const [name, setName] = useState<string>("");
+  const [, setMemberId] = useState<number>(0);
+  const [, setName] = useState<string>("");
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [cropImg, setCropImg] = useState<string>("");
   const [deliverDay, setDeliverDay] = useState<Date | null>();

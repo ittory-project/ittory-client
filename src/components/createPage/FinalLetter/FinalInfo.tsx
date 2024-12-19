@@ -59,7 +59,7 @@ export default function FinalInfo({
 }: Props) {
   const [viewEdit, setViewEdit] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState<boolean>(false);
-  const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
+  const [, setKeyboardVisible] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [visit, setVisit] = useState<boolean>(false);

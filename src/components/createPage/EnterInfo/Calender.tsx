@@ -1,6 +1,6 @@
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
-import { format, isSameMonth, isSameDay, addDays, parse } from "date-fns";
-import React, { useState, useEffect } from "react";
+import { format, isSameMonth, isSameDay, addDays } from "date-fns";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -17,7 +17,6 @@ export default function Calender({
   currentMonth,
   selectedDate,
   setSelectedDate,
-  setValue,
   deliverDay,
 }: Props) {
   const monthStart = startOfMonth(currentMonth);

@@ -6,7 +6,6 @@ import checked from "../../../public/assets/checkbox_black.svg";
 import { postWithdraw } from "../../api/service/MemberService";
 import { WithdrawPostRequest } from "../../api/model/MemberModel";
 import { WithdrawPopup } from "./WithdrawPopup";
-import { AccountDelete } from "./AccountDelete";
 
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
