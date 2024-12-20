@@ -38,23 +38,6 @@ export const Invite = () => {
   const [load, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
 
-  useEffect(() => {
-    // 현재 페이지 상태를 푸시하여 뒤로가기 막기
-    window.history.pushState(null, "", window.location.href);
-
-    const handlePopState = (event: PopStateEvent) => {
-      // 뒤로 가기를 막고 새 페이지로 이동하지 않도록
-      window.history.pushState(null, "", window.location.href);
-    };
-
-    // popstate 이벤트를 감지하여 뒤로 가기 방지
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
-
   const fetchParticipants = async () => {
     try {
       const data = await getParticipants(letterId);
@@ -71,10 +54,7 @@ export const Invite = () => {
         const data = await getParticipants(letterId);
 
         if (data.length < 1) {
-          const data = await getParticipants(letterId);
-          if (data.length < 1) {
-            window.location.reload();
-          }
+          window.location.reload();
         }
       }
 
