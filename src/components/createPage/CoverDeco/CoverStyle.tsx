@@ -621,7 +621,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   width: 135px;
   height: 135px;
   margin-left: 44.5px;
-  margin-top:13px;
+  margin-top:12.4px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
