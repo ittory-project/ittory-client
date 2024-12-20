@@ -209,50 +209,52 @@ export default function CoverStyle({
       {
         if (croppedAreaPixels) {
         }
+        if (originalImage !== "") {
+          //Blob으로 변경
+          const responseBlob = await fetch(originalImage).then((res) =>
+            res.blob()
+          );
+          console.log(responseBlob);
 
-        //Blob으로 변경
-        const responseBlob = await fetch(originalImage).then((res) =>
-          res.blob()
-        );
-        console.log(responseBlob);
+          // Step 1: URL 발급 요청
+          const imageUrlRequest: ImageUrlRequest = {
+            imgExtension: ImageExtension.JPG,
+          };
 
-        // Step 1: URL 발급 요청
-        const imageUrlRequest: ImageUrlRequest = {
-          imgExtension: ImageExtension.JPG,
-        };
+          try {
+            const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
+            console.log("PreSigned URL: ", preSignedUrl);
 
-        try {
-          const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
-          console.log("PreSigned URL: ", preSignedUrl);
+            // Step 2: presigned URL로 이미지 업로드
+            await fetch(preSignedUrl, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "image/jpeg", // MIME type 설정
+              },
+              body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
+            });
 
-          // Step 2: presigned URL로 이미지 업로드
-          await fetch(preSignedUrl, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "image/jpeg", // MIME type 설정
-            },
-            body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
-          });
-
-          // Step 3: 업로드가 완료되면 S3 URL 생성
-          const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
-          console.log("Image uploaded successfully to S3!");
-          console.log("Image URL: ", s3ImageUrl);
-          setCroppedImage(s3ImageUrl);
-          setCroppedAreaPixels(null);
-        } catch (error) {
-          if (axios.isAxiosError(error)) {
-            console.error(
-              "Error uploading image: ",
-              error.response?.data || (error as Error).message // 타입 단언 추가
-            );
-          } else {
-            console.error("Unexpected error: ", error);
+            // Step 3: 업로드가 완료되면 S3 URL 생성
+            const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
+            console.log("Image uploaded successfully to S3!");
+            console.log("Image URL: ", s3ImageUrl);
+            setCroppedImage(s3ImageUrl);
+            setCroppedAreaPixels(null);
+          } catch (error) {
+            if (axios.isAxiosError(error)) {
+              console.error(
+                "Error uploading image: ",
+                error.response?.data || (error as Error).message // 타입 단언 추가
+              );
+            } else {
+              console.error("Unexpected error: ", error);
+            }
           }
+          setCroppedAreaPixels(null);
         }
-        setCroppedAreaPixels(null);
       }
     };
+
     handleSaveClick();
   }, [originalImage]);
 
