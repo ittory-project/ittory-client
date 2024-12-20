@@ -35,6 +35,7 @@ import { WriteOrderAlert } from "./WriteOrderAlert";
 import { WriteQuitAlert } from "./WriteQuitAlert";
 import { WriteFinishedModal } from "./WriteFinishedModal";
 import { quitLetterWs } from "../../api/service/WsService";
+import { WriteExit } from "./WriteExit";
 
 interface WriteElementProps {
   remainingTime: number;
@@ -104,6 +105,8 @@ export const Write = ({
   const [showSubmitPage, setShowSubmitPage] = useState(false);
   // 완료 모달 보여주기
   const [showFinishedModal, setShowFinishedModal] = useState(false);
+  // 퇴장 페이지
+  const [showExitPage, setShowExitPage] = useState(false);
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
 
@@ -177,10 +180,9 @@ export const Write = ({
         if (storedResetTime && Date.now() > Number(storedResetTime)) {
           console.log("턴이 넘어가서 퇴장됨");
           clientRef.current?.deactivate();
-          window.alert('장시간 자리를 이탈하여 퇴장되었습니다.')
+          setShowExitPage(true)
           quitLetterWs(letterNumId)
           clientRef.current?.deactivate();
-          navigate('/')
         }
       }
     };
@@ -536,6 +538,7 @@ export const Write = ({
         </ModalOverlay>
       )}
       {showFinishedModal && <WriteFinishedModal isFirstUser={writeOrderList[0].memberId === Number(getUserId())}/>}
+      {showExitPage && <WriteExit />}
     </Container>
   ) : (
     <>접속 오류</>
