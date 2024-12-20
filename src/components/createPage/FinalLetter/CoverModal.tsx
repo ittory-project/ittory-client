@@ -294,7 +294,9 @@ export default function CoverModal({
         )}
 
         <NameContainer $book={ImageIndex}>
-          <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
+          <NameTxt $book={ImageIndex}>
+            자동으로 참여자 이름이 들어갈 거예요
+          </NameTxt>
         </NameContainer>
       </Book>
       <ImageContainer>
@@ -468,8 +470,8 @@ const Shadow = styled.img`
   object-fit: cover;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
-  width: 135.5px;
-  height: 135.5px;
+  width: 135.7px;
+  height: 135.7px;
   z-index: 0;
   cursor: pointer;
   position: relative;
@@ -480,7 +482,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 18px;
+  margin-top: 17px;
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -542,10 +544,9 @@ const NameContainer = styled.div<{ $book: number }>`
   margin-top: ${(props) =>
     props.$book === 0 || props.$book === 1 ? "34px" : "25px"};
 `;
-const NameTxt = styled.div`
+const NameTxt = styled.div<{ $book: number }>`
   padding: 0 12px 0 12px;
   width: 200px;
-  color: #715142;
   text-align: center;
   text-overflow: ellipsis;
   font-family: SUIT;
@@ -554,6 +555,13 @@ const NameTxt = styled.div`
   font-weight: 700;
   line-height: 13px;
   letter-spacing: -0.5px;
+  color: ${({ $book }) => {
+    if ($book === 0) return "#715142";
+    if ($book === 1) return "#335839";
+    if ($book === 2) return "#985566";
+    if ($book === 3) return "#232D3D";
+    if ($book === 4) return "#232D3D";
+  }};
 `;
 const ImageContainer = styled.div`
   position: relative;

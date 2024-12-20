@@ -40,16 +40,11 @@ export default function ImageCropper({
     setCroppedAreaPixels(null);
   };
 
-  const onCropComplete = useCallback(
-    (croppedAreaPixels: Area) => {
-      setCroppedAreaPixels(croppedAreaPixels);
-    },
-    [setCroppedAreaPixels]
-  );
-
   const handleSaveClick = async () => {
-    if (croppedAreaPixels) {
-      const croppedImgUrl = await getCroppedImg(
+    {
+      if (croppedAreaPixels) {
+      }
+      /*const croppedImgUrl = await getCroppedImg(
         originalImage,
         croppedAreaPixels,
         {
@@ -57,10 +52,10 @@ export default function ImageCropper({
           height,
         }
       );
-      console.log("Cropped Image URL: ", croppedImgUrl);
+      console.log("Cropped Image URL: ", croppedImgUrl);*/
 
       //Blob으로 변경
-      const responseBlob = await fetch(croppedImgUrl).then((res) => res.blob());
+      const responseBlob = await fetch(originalImage).then((res) => res.blob());
       console.log(responseBlob);
 
       // Step 1: URL 발급 요청
@@ -103,9 +98,14 @@ export default function ImageCropper({
   return (
     <Container>
       <Header>
-        <Text>사진 선택</Text>
+        <Text>사진을 업로드 하시겠습니까?</Text>
       </Header>
-      <CropContainer>
+      <CancelBtn onClick={closeModal}>취소</CancelBtn>
+      <Button onClick={handleSaveClick}>선택</Button>
+    </Container>
+  );
+}
+/*<CropContainer>
         <Cropper
           image={originalImage}
           crop={crop}
@@ -115,16 +115,11 @@ export default function ImageCropper({
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
         />
-      </CropContainer>
-      <CancelBtn onClick={closeModal}>취소</CancelBtn>
-      <Button onClick={handleSaveClick}>선택</Button>
-    </Container>
-  );
-}
+      </CropContainer>*/
 
 const Container = styled.div`
   width: 100%;
-  height: 95%;
+  height: 60%;
   position: absolute;
   bottom: 0;
   border-radius: 20px 20px 0px 0px;
@@ -165,8 +160,8 @@ const CropContainer = styled.div`
 `;
 const Button = styled.button`
   position: absolute;
-  bottom: 5%;
-  right: 1%;
+  bottom: 50%;
+  right: 30%;
   padding: 10px 10px;
   background-color: transparent;
   color: white;
@@ -177,8 +172,8 @@ const Button = styled.button`
 `;
 const CancelBtn = styled.button`
   position: absolute;
-  bottom: 5%;
-  left: 1%;
+  bottom: 50%;
+  left: 30%;
   padding: 10px 10px;
   background-color: transparent;
   color: white;

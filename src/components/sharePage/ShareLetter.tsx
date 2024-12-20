@@ -13,7 +13,6 @@ import { getFontById } from '../../api/service/FontService';
 import { getCoverTypeById } from '../../api/service/CoverTypeService';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { useDispatch } from 'react-redux';
-import { formatDate } from '../../api/config/formatData';
 
 function Query() {
   return new URLSearchParams(useLocation().search);

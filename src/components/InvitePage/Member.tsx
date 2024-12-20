@@ -201,7 +201,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     </>
                     <NameBar>
                       <NameContainer>
-                        <NameTxt>{namesString}</NameTxt>
+                        <NameTxt $book={selectedImageIndex}>
+                          {namesString}
+                        </NameTxt>
                       </NameContainer>
                     </NameBar>
                   </Book>
@@ -469,8 +471,8 @@ const Shadow = styled.img`
   flex-shrink: 0;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
-  width: 121.8px;
-  height: 121.8px;
+  width: 122.5px;
+  height: 122.5px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
@@ -479,8 +481,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 19.5px;
-  margin-left: 2.06px;
+  margin-top: 19.3px;
+  margin-left: 2.23px;
 `;
 const NameBar = styled.div`
   margin-top: 20px;
@@ -506,10 +508,9 @@ const NameContainer = styled.div`
   align-items: center;
   text-align: center;
 `;
-const NameTxt = styled.div`
+const NameTxt = styled.div<{ $book: number }>`
   padding: 0 12px 0 12px;
   width: 200px;
-  color: #715142;
   text-align: center;
   text-overflow: ellipsis;
   font-family: SUIT;
@@ -518,8 +519,14 @@ const NameTxt = styled.div`
   font-weight: 700;
   line-height: 12px;
   letter-spacing: -0.4px;
+  color: ${({ $book }) => {
+    if ($book === 0) return "#715142";
+    if ($book === 1) return "#335839";
+    if ($book === 2) return "#985566";
+    if ($book === 3) return "#232D3D";
+    if ($book === 4) return "#232D3D";
+  }};
 `;
-
 const Bar = styled.div`
   width: 200px;
   height: 14px;

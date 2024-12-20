@@ -10,12 +10,14 @@ import PrevImg from "../../../../public/assets/pageprev.svg";
 import camera from "../../../../public/assets/camera.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
 import bookshadow from "../../../../public/assets/book_shadow.svg";
-import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
 import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
 import { CoverType } from "../../../../src/api/model/CoverType";
 import { getAllFont } from "../../../api/service/FontService";
+import axios from "axios";
+import { ImageUrlRequest } from "../../../api/model/ImageModel";
+import { postCoverImage } from "../../../api/service/ImageService";
 
 interface Props {
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,6 +41,11 @@ export interface fontProps {
   id: number;
   name: string;
   value: string;
+}
+export enum ImageExtension {
+  JPG = "JPG",
+  JPEG = "JPEG",
+  PNG = "PNG",
 }
 
 const Book: React.FC<BookProps> = React.memo(
@@ -82,8 +89,8 @@ export default function CoverStyle({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [cropperKey, setCropperKey] = useState<number>(0);
+  const [isModalOpen] = useState<boolean>(false);
+  const [, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
@@ -149,10 +156,6 @@ export default function CoverStyle({
     setSelectedImageIndex(ImageIndex);
   }, [ImageIndex]);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
       const heightDiff =
@@ -191,6 +194,60 @@ export default function CoverStyle({
     };
   }, [inputRef]);
 
+  useEffect(() => {
+    const handleSaveClick = async () => {
+      {
+        if (croppedAreaPixels) {
+        }
+        if (originalImage !== "") {
+          //Blob으로 변경
+          const responseBlob = await fetch(originalImage).then((res) =>
+            res.blob()
+          );
+          console.log(responseBlob);
+
+          // Step 1: URL 발급 요청
+          const imageUrlRequest: ImageUrlRequest = {
+            imgExtension: ImageExtension.JPG,
+          };
+
+          try {
+            const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
+            console.log("PreSigned URL: ", preSignedUrl);
+
+            // Step 2: presigned URL로 이미지 업로드
+            await fetch(preSignedUrl, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "image/jpeg", // MIME type 설정
+              },
+              body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
+            });
+
+            // Step 3: 업로드가 완료되면 S3 URL 생성
+            const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
+            console.log("Image uploaded successfully to S3!");
+            console.log("Image URL: ", s3ImageUrl);
+            setCroppedImage(s3ImageUrl);
+            setCroppedAreaPixels(null);
+          } catch (error) {
+            if (axios.isAxiosError(error)) {
+              console.error(
+                "Error uploading image: ",
+                error.response?.data || (error as Error).message // 타입 단언 추가
+              );
+            } else {
+              console.error("Unexpected error: ", error);
+            }
+          }
+          setCroppedAreaPixels(null);
+        }
+      }
+    };
+
+    handleSaveClick();
+  }, [originalImage]);
+
   const onUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) {
@@ -201,7 +258,6 @@ export default function CoverStyle({
       setOriginalImage(newImageUrl); // 원본 이미지를 설정
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
-      openModal();
     },
     []
   );
@@ -212,11 +268,6 @@ export default function CoverStyle({
       imgRef.current.click();
     }
   }, []);
-
-  const handleSaveCroppedImage = (croppedImgUrl: string) => {
-    setCroppedImage(croppedImgUrl); // 크롭된 이미지 저장
-    setIsModalOpen(false);
-  };
 
   return (
     <BackGround>
@@ -241,7 +292,6 @@ export default function CoverStyle({
           <TitleContainer>
             <Input
               ref={inputRef}
-              //onClick={setIsKeyboardOpen}
               id="title-input" // id 속성 추가
               name="title" // name 속성 추가
               placeholder="제목 최대 12자"
@@ -310,7 +360,9 @@ export default function CoverStyle({
             </>
           )}
           <NameContainer $book={ImageIndex}>
-            <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
+            <NameTxt $book={ImageIndex}>
+              자동으로 참여자 이름이 들어갈 거예요
+            </NameTxt>
           </NameContainer>
         </Book>
         <BookShadow>
@@ -353,16 +405,6 @@ export default function CoverStyle({
         >
           <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
-      )}
-      {isModalOpen && (
-        <ImageCropper
-          key={cropperKey}
-          setIsModalOpen={setIsModalOpen}
-          originalImage={originalImage}
-          croppedAreaPixels={croppedAreaPixels}
-          setCroppedImage={handleSaveCroppedImage}
-          setCroppedAreaPixels={setCroppedAreaPixels}
-        />
       )}
       {fontPopup && (
         <FontPopup
@@ -562,8 +604,8 @@ const ButtonContainer = styled.button`
   }
 `;
 const Shadow = styled.img`
-  width: 159px;
-  height: 159px;
+  width: 160px;
+  height: 160px;
   margin-left: 31.5px;
   margin-top: 0px;
   position: absolute;
@@ -576,10 +618,10 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   display: flex;
   cursor:pointer;
   position: relative; 
-  width: 134.5px;
-  height: 134.5px;
-  margin-left: 44.2px;
-  margin-top:13.4px;
+  width: 135px;
+  height: 135px;
+  margin-left: 44.5px;
+  margin-top:12.4px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -613,10 +655,9 @@ const NameContainer = styled.div<{ $book: number }>`
   margin-top: ${(props) =>
     props.$book === 0 || props.$book === 1 ? "34px" : "25px"};
 `;
-const NameTxt = styled.div`
+const NameTxt = styled.div<{ $book: number }>`
   padding: 0 12px 0 12px;
   width: 200px;
-  color: #715142;
   text-align: center;
   text-overflow: ellipsis;
   font-family: SUIT;
@@ -625,6 +666,13 @@ const NameTxt = styled.div`
   font-weight: 700;
   line-height: 13px;
   letter-spacing: -0.5px;
+  color: ${({ $book }) => {
+    if ($book === 0) return "#715142";
+    if ($book === 1) return "#335839";
+    if ($book === 2) return "#985566";
+    if ($book === 3) return "#232D3D";
+    if ($book === 4) return "#232D3D";
+  }};
 `;
 const ImageContainer = styled.div`
   position: fixed;

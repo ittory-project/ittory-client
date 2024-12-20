@@ -105,6 +105,8 @@ export const CreatedLetter = ({
     );
   };
 
+  console.log(selectId);
+
   return (
     <>
       {letters.length === 0 ? (
@@ -152,6 +154,7 @@ export const CreatedLetter = ({
                   setIsModalOpen={setIsModalOpen}
                   setPopup={setPopup}
                   openLetter={openLetter}
+                  letterId={selectId}
                 />
               )}
             </Container>
