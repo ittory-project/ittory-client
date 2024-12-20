@@ -5,7 +5,6 @@ import delete2 from "../../../public/assets/delete2.svg";
 import share from "../../../public/assets/share.svg";
 import { LetterDetailGetResponse } from "../../api/model/LetterModel";
 import { getLetterDetailInfo } from "../../api/service/LetterService";
-import { formatDate } from "../../api/config/formatData";
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
