@@ -95,7 +95,8 @@ export const ShareLetter = () => {
     try {
       if (letterInfo) {
         await navigator.share({
-          title: `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
+          title: `To. ${letterInfo.receiverName}`,
+          text: `\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
             .map((element) => element)
             .join(", ")}`,
           url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
