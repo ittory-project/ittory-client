@@ -40,13 +40,6 @@ export default function ImageCropper({
     setCroppedAreaPixels(null);
   };
 
-  const onCropComplete = useCallback(
-    (croppedAreaPixels: Area) => {
-      setCroppedAreaPixels(croppedAreaPixels);
-    },
-    [setCroppedAreaPixels]
-  );
-
   const handleSaveClick = async () => {
     {
       if (croppedAreaPixels) {
