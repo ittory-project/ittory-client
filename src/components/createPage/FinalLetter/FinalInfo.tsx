@@ -408,7 +408,8 @@ const Cover = styled.div`
   align-items: center;
 `;
 const Shadow = styled.img`
-  margin-left: 17.1px;
+  width: 90px;
+  margin-left: 16px;
   margin-top: 12.5px;
   position: absolute;
   z-index: 1;
@@ -425,7 +426,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 20px;
+  margin-top: 20.8px;
   margin-left: 24px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
