@@ -10,7 +10,6 @@ import PrevImg from "../../../../public/assets/pageprev.svg";
 import camera from "../../../../public/assets/camera.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
 import bookshadow from "../../../../public/assets/book_shadow.svg";
-import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
 import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
@@ -90,8 +89,8 @@ export default function CoverStyle({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [cropperKey, setCropperKey] = useState<number>(0);
+  const [isModalOpen] = useState<boolean>(false);
+  const [, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
@@ -157,10 +156,6 @@ export default function CoverStyle({
     setSelectedImageIndex(ImageIndex);
   }, [ImageIndex]);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
       const heightDiff =
@@ -198,11 +193,6 @@ export default function CoverStyle({
       document.removeEventListener("mousedown", handleOutside);
     };
   }, [inputRef]);
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setCroppedAreaPixels(null);
-  };
 
   useEffect(() => {
     const handleSaveClick = async () => {
@@ -302,7 +292,6 @@ export default function CoverStyle({
           <TitleContainer>
             <Input
               ref={inputRef}
-              //onClick={setIsKeyboardOpen}
               id="title-input" // id 속성 추가
               name="title" // name 속성 추가
               placeholder="제목 최대 12자"
@@ -415,17 +404,6 @@ export default function CoverStyle({
           <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       )}
-
-      {/*isModalOpen && (
-        <ImageCropper
-          key={cropperKey}
-          setIsModalOpen={setIsModalOpen}
-          originalImage={originalImage}
-          croppedAreaPixels={croppedAreaPixels}
-          setCroppedImage={handleSaveCroppedImage}
-          setCroppedAreaPixels={setCroppedAreaPixels}
-        />
-      )*/}
       {fontPopup && (
         <FontPopup
           font={font}
