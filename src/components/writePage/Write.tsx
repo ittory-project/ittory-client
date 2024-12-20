@@ -538,7 +538,7 @@ export const Write = ({
         </ModalOverlay>
       )}
       {showFinishedModal && <WriteFinishedModal isFirstUser={writeOrderList[0].memberId === Number(getUserId())}/>}
-      {showExitPage && <WriteExit />}
+      {showExitPage && <WriteExit reasonText={"장시간 접속하지 않아서"} />}
     </Container>
   ) : (
     <>접속 오류</>
