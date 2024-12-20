@@ -541,6 +541,26 @@ const NameTxt = styled.div`
   line-height: 12px;
   letter-spacing: -0.4px;
 `;
+/*
+const NameTxt = styled.div<{ $book: number }>`
+  padding: 0 12px 0 12px;
+  width: 200px;
+  text-align: center;
+  text-overflow: ellipsis;
+  font-family: SUIT;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 12px;
+  letter-spacing: -0.4px;
+  color: ${({ $book }) => {
+    if ($book === 0) return "#715142";
+    if ($book === 1) return "#335839";
+    if ($book === 2) return "#985566";
+    if ($book === 3) return "#232D3D";
+    if ($book === 4) return "#232D3D";
+  }};
+`;*/
 const Bar = styled.div`
   width: 288px;
   height: 14px;
