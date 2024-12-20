@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { LetterPartiItem } from "../../api/model/LetterModel";
+import defaultImg from "../../../public/assets/menu/logindefault.png";
 
 interface PopoverProps {
   writeOrderList: LetterPartiItem[];
@@ -31,7 +32,7 @@ export const WriteOrderPopover: React.FC<PopoverProps> = ({
                     <ListNumber>{participant.sequence}</ListNumber>
                   }
                   <Avatar
-                    src={participant.imageUrl || "/assets/common/profile_bunny.svg"}
+                    src={participant.imageUrl || defaultImg}
                     alt={participant.nickname}
                   />
                   <Name>{participant.nickname}</Name>
