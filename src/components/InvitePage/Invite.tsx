@@ -55,8 +55,8 @@ export const Invite = () => {
         console.log("데이터없음-fetch함수");
 
         if (data.length < 1) {
-          console.log("원래는 새로고침");
-          //window.location.reload();
+          console.log("새로고침");
+          window.location.reload();
         }
       }
 
