@@ -106,7 +106,8 @@ const Overlay = styled.div`
 
 const Popup = styled.div`
   display: flex;
-  min-width: 320px;
+  width: 80%;
+  margin: auto;
   padding: 32px 15px 24px 15px;
   flex-direction: column;
   align-items: center;
@@ -145,7 +146,8 @@ const PopupTitleDetail = styled.div`
 const PopupList = styled.div`
   display: flex;
   max-height: 50vh;
-  width: 224px;
+  width: 70%;
+  margin: 0 auto;
   padding: 0px var(--Typography-line_height-l, 40px) 16px
     var(--Typography-line_height-l, 40px);
   flex-direction: column;
