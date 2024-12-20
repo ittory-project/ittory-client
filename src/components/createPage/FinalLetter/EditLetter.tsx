@@ -338,8 +338,8 @@ const Bright = styled.img`
   flex-shrink: 0;
 `;
 const Shadow = styled.img`
-  margin-left: 2.6px;
-  margin-top: 39.8px;
+  margin-left: 01px;
+  margin-top: 39px;
   position: absolute;
   z-index: 1;
   flex-shrink: 0;

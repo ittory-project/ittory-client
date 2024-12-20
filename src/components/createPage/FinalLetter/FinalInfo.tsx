@@ -416,8 +416,8 @@ const Shadow = styled.img`
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
   z-index: 0;
-  width: 73.7px;
-  height: 73.7px;
+  width: 74px;
+  height: 74px;
   gap: 4px;
   flex-shrink: 0;
   border-radius: 10px;
