@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
 import camera from "../../../../public/assets/camera.svg";
-import ImageCropper from "../CoverDeco/ImageCropper";
+import axios from "axios";
 import { Area } from "react-easy-crop";
 import shadow from "../../../../public/assets/shadow2.svg";
 import camera_mini from "../../../../public/assets/camera_mini.svg";
@@ -11,6 +11,8 @@ import { getCoverTypes } from "../../../api/service/CoverService";
 import { getAllFont } from "../../../api/service/FontService";
 import { fontProps } from "../CoverDeco/CoverStyle";
 import FontPopup from "../CoverDeco/FontPopup";
+import { postCoverImage } from "../../../api/service/ImageService";
+import { ImageUrlRequest } from "../../../api/model/ImageModel";
 
 interface Props {
   title: string;
@@ -27,6 +29,11 @@ interface Props {
   setSelectedImageIndex: React.Dispatch<React.SetStateAction<number>>;
   setSelectFid: React.Dispatch<React.SetStateAction<number>>;
   selectFid: number;
+}
+export enum ImageExtension {
+  JPG = "JPG",
+  JPEG = "JPEG",
+  PNG = "PNG",
 }
 
 export default function CoverModal({
@@ -53,10 +60,9 @@ export default function CoverModal({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [cropperKey, setCropperKey] = useState<number>(0);
+  const [, setCropperKey] = useState<number>(0);
   const [, setBookimage] = useState<number>(backgroundimage - 1);
   const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
-  const [cropOpen, setCropOpen] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
@@ -172,9 +178,62 @@ export default function CoverModal({
     };
   }, [inputRef]);
 
+  useEffect(() => {
+    const handleSaveClick = async () => {
+      {
+        if (croppedAreaPixels) {
+        }
+        if (originalImage !== "") {
+          //Blob으로 변경
+          const responseBlob = await fetch(originalImage).then((res) =>
+            res.blob()
+          );
+          console.log(responseBlob);
+
+          // Step 1: URL 발급 요청
+          const imageUrlRequest: ImageUrlRequest = {
+            imgExtension: ImageExtension.JPG,
+          };
+
+          try {
+            const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
+            console.log("PreSigned URL: ", preSignedUrl);
+
+            // Step 2: presigned URL로 이미지 업로드
+            await fetch(preSignedUrl, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "image/jpeg", // MIME type 설정
+              },
+              body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
+            });
+
+            // Step 3: 업로드가 완료되면 S3 URL 생성
+            const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
+            console.log("Image uploaded successfully to S3!");
+            console.log("Image URL: ", s3ImageUrl);
+            setCroppedImage(s3ImageUrl);
+            setCroppedAreaPixels(null);
+          } catch (error) {
+            if (axios.isAxiosError(error)) {
+              console.error(
+                "Error uploading image: ",
+                error.response?.data || (error as Error).message // 타입 단언 추가
+              );
+            } else {
+              console.error("Unexpected error: ", error);
+            }
+          }
+          setCroppedAreaPixels(null);
+        }
+      }
+    };
+
+    handleSaveClick();
+  }, [originalImage]);
+
   const onUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      //const reader = new FileReader();
       if (!e.target.files) {
         return;
       }
@@ -183,30 +242,20 @@ export default function CoverModal({
       setOriginalImage(newImageUrl); // 원본 이미지를 설정
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
-      openModal();
     },
     []
   );
 
   const onUploadImageButtonClick = useCallback(() => {
     if (imgRef.current) {
-      imgRef.current.value = "";
+      imgRef.current.value = ""; // 파일 입력 필드를 초기화
       imgRef.current.click();
     }
   }, []);
 
-  const handleSaveCroppedImage = (croppedImgUrl: string) => {
-    setCroppedImage(croppedImgUrl); // 크롭된 이미지 저장
-    setCropOpen(false);
-  };
-
   const handleImageClick = (index: number) => {
     setImageIndex(index);
     setBookimage(index);
-  };
-
-  const openModal = () => {
-    setCropOpen(true);
   };
 
   const closeCoverModal = () => {
@@ -317,16 +366,6 @@ export default function CoverModal({
       <Button onClick={handleFinalCover} $isKeyboardOpen={isKeyboardOpen}>
         <ButtonTxt>완료</ButtonTxt>
       </Button>
-      {cropOpen && (
-        <ImageCropper
-          key={cropperKey}
-          setIsModalOpen={setCropOpen}
-          originalImage={originalImage}
-          croppedAreaPixels={croppedAreaPixels}
-          setCroppedImage={handleSaveCroppedImage} // 크롭된 이미지를 저장하는 함수
-          setCroppedAreaPixels={setCroppedAreaPixels}
-        />
-      )}
       {fontPopup && (
         <FontPopup
           font={font}
