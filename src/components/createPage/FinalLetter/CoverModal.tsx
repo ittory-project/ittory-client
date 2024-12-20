@@ -480,7 +480,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 18px;
+  margin-top: 17.3px;
 `;
 const TitleContainer = styled.div`
   display: flex;
