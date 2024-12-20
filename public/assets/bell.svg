@@ -1,0 +1,10 @@
+<svg width="32" height="36" viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="shape">
+<path id="Rectangle 42047" d="M5 13C5 6.92487 9.92487 2 16 2C22.0751 2 27 6.92487 27 13V29H5V13Z" fill="#99ADC9"/>
+<path id="Rectangle 42048" d="M5.33333 23H26.6667L30.2106 28.9804C31.0007 30.3136 30.0397 32 28.49 32H3.50998C1.96027 32 0.999349 30.3136 1.7894 28.9804L5.33333 23Z" fill="#99ADC9"/>
+<circle id="Ellipse 502" cx="16" cy="31" r="5" fill="#99ADC9"/>
+<rect id="Rectangle 42049" x="14" width="4" height="6" rx="2" fill="#99ADC9"/>
+<circle id="Ellipse 503" cx="16" cy="24.5" r="1.5" fill="white"/>
+<rect id="Rectangle 42050" x="14.5" y="9" width="3" height="12" rx="1.5" fill="white"/>
+</g>
+</svg>
