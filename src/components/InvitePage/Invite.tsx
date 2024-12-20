@@ -52,8 +52,10 @@ export const Invite = () => {
         }
       } else {
         const data = await getParticipants(letterId);
+        console.log("데이터없음-fetch함수");
 
         if (data.length < 1) {
+          console.log("새로고침");
           window.location.reload();
         }
       }
