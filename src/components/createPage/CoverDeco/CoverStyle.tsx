@@ -16,6 +16,9 @@ import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
 import { CoverType } from "../../../../src/api/model/CoverType";
 import { getAllFont } from "../../../api/service/FontService";
+import axios from "axios";
+import { ImageUrlRequest } from "../../../api/model/ImageModel";
+import { postCoverImage } from "../../../api/service/ImageService";
 
 interface Props {
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,6 +42,11 @@ export interface fontProps {
   id: number;
   name: string;
   value: string;
+}
+export enum ImageExtension {
+  JPG = "JPG",
+  JPEG = "JPEG",
+  PNG = "PNG",
 }
 
 const Book: React.FC<BookProps> = React.memo(
@@ -191,6 +199,63 @@ export default function CoverStyle({
     };
   }, [inputRef]);
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCroppedAreaPixels(null);
+  };
+
+  useEffect(() => {
+    const handleSaveClick = async () => {
+      {
+        if (croppedAreaPixels) {
+        }
+
+        //Blob으로 변경
+        const responseBlob = await fetch(originalImage).then((res) =>
+          res.blob()
+        );
+        console.log(responseBlob);
+
+        // Step 1: URL 발급 요청
+        const imageUrlRequest: ImageUrlRequest = {
+          imgExtension: ImageExtension.JPG,
+        };
+
+        try {
+          const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
+          console.log("PreSigned URL: ", preSignedUrl);
+
+          // Step 2: presigned URL로 이미지 업로드
+          await fetch(preSignedUrl, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "image/jpeg", // MIME type 설정
+            },
+            body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
+          });
+
+          // Step 3: 업로드가 완료되면 S3 URL 생성
+          const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
+          console.log("Image uploaded successfully to S3!");
+          console.log("Image URL: ", s3ImageUrl);
+          setCroppedImage(s3ImageUrl);
+          setCroppedAreaPixels(null);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            console.error(
+              "Error uploading image: ",
+              error.response?.data || (error as Error).message // 타입 단언 추가
+            );
+          } else {
+            console.error("Unexpected error: ", error);
+          }
+        }
+        setCroppedAreaPixels(null);
+      }
+    };
+    handleSaveClick();
+  }, [originalImage]);
+
   const onUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) {
@@ -201,7 +266,6 @@ export default function CoverStyle({
       setOriginalImage(newImageUrl); // 원본 이미지를 설정
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
-      openModal();
     },
     []
   );
@@ -212,11 +276,6 @@ export default function CoverStyle({
       imgRef.current.click();
     }
   }, []);
-
-  const handleSaveCroppedImage = (croppedImgUrl: string) => {
-    setCroppedImage(croppedImgUrl); // 크롭된 이미지 저장
-    setIsModalOpen(false);
-  };
 
   return (
     <BackGround>
@@ -354,7 +413,8 @@ export default function CoverStyle({
           <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       )}
-      {isModalOpen && (
+
+      {/*isModalOpen && (
         <ImageCropper
           key={cropperKey}
           setIsModalOpen={setIsModalOpen}
@@ -363,7 +423,7 @@ export default function CoverStyle({
           setCroppedImage={handleSaveCroppedImage}
           setCroppedAreaPixels={setCroppedAreaPixels}
         />
-      )}
+      )*/}
       {fontPopup && (
         <FontPopup
           font={font}
@@ -562,8 +622,8 @@ const ButtonContainer = styled.button`
   }
 `;
 const Shadow = styled.img`
-  width: 159px;
-  height: 159px;
+  width: 160px;
+  height: 160px;
   margin-left: 31.5px;
   margin-top: 0px;
   position: absolute;
