@@ -10,7 +10,6 @@ import PrevImg from "../../../../public/assets/pageprev.svg";
 import camera from "../../../../public/assets/camera.svg";
 import shadow from "../../../../public/assets/shadow2.svg";
 import bookshadow from "../../../../public/assets/book_shadow.svg";
-import ImageCropper from "./ImageCropper";
 import { Area } from "react-easy-crop";
 import FontPopup from "./FontPopup";
 import { getCoverTypes } from "../../../../src/api/service/CoverService";
@@ -90,8 +89,8 @@ export default function CoverStyle({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [cropperKey, setCropperKey] = useState<number>(0);
+  const [isModalOpen] = useState<boolean>(false);
+  const [, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
@@ -157,10 +156,6 @@ export default function CoverStyle({
     setSelectedImageIndex(ImageIndex);
   }, [ImageIndex]);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
       const heightDiff =
@@ -198,11 +193,6 @@ export default function CoverStyle({
       document.removeEventListener("mousedown", handleOutside);
     };
   }, [inputRef]);
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setCroppedAreaPixels(null);
-  };
 
   useEffect(() => {
     const handleSaveClick = async () => {
@@ -302,7 +292,6 @@ export default function CoverStyle({
           <TitleContainer>
             <Input
               ref={inputRef}
-              //onClick={setIsKeyboardOpen}
               id="title-input" // id 속성 추가
               name="title" // name 속성 추가
               placeholder="제목 최대 12자"
@@ -371,7 +360,9 @@ export default function CoverStyle({
             </>
           )}
           <NameContainer $book={ImageIndex}>
-            <NameTxt>자동으로 참여자 이름이 들어갈 거예요</NameTxt>
+            <NameTxt $book={ImageIndex}>
+              자동으로 참여자 이름이 들어갈 거예요
+            </NameTxt>
           </NameContainer>
         </Book>
         <BookShadow>
@@ -415,17 +406,6 @@ export default function CoverStyle({
           <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       )}
-
-      {/*isModalOpen && (
-        <ImageCropper
-          key={cropperKey}
-          setIsModalOpen={setIsModalOpen}
-          originalImage={originalImage}
-          croppedAreaPixels={croppedAreaPixels}
-          setCroppedImage={handleSaveCroppedImage}
-          setCroppedAreaPixels={setCroppedAreaPixels}
-        />
-      )*/}
       {fontPopup && (
         <FontPopup
           font={font}
@@ -638,10 +618,10 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   display: flex;
   cursor:pointer;
   position: relative; 
-  width: 134.5px;
-  height: 134.5px;
-  margin-left: 44.3px;
-  margin-top:13.4px;
+  width: 135px;
+  height: 135px;
+  margin-left: 44.5px;
+  margin-top:13px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -675,10 +655,9 @@ const NameContainer = styled.div<{ $book: number }>`
   margin-top: ${(props) =>
     props.$book === 0 || props.$book === 1 ? "34px" : "25px"};
 `;
-const NameTxt = styled.div`
+const NameTxt = styled.div<{ $book: number }>`
   padding: 0 12px 0 12px;
   width: 200px;
-  color: #715142;
   text-align: center;
   text-overflow: ellipsis;
   font-family: SUIT;
@@ -687,6 +666,13 @@ const NameTxt = styled.div`
   font-weight: 700;
   line-height: 13px;
   letter-spacing: -0.5px;
+  color: ${({ $book }) => {
+    if ($book === 0) return "#715142";
+    if ($book === 1) return "#335839";
+    if ($book === 2) return "#985566";
+    if ($book === 3) return "#232D3D";
+    if ($book === 4) return "#232D3D";
+  }};
 `;
 const ImageContainer = styled.div`
   position: fixed;
