@@ -346,8 +346,8 @@ const Shadow = styled.img`
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
   z-index: 0;
-  width: 73px;
-  height: 73px;
+  width: 74px;
+  height: 74px;
   gap: 4px;
   flex-shrink: 0;
   border-radius: 10px;
@@ -355,8 +355,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 24.3px;
-  margin-left: 2.3px;
+  margin-top: 23.5px;
+  margin-left: 2.6px;
   border: 1px rgba(255, 255, 255, 0.7);
 `;
 const BookTitle = styled.div<{ $font: string }>`
