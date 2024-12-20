@@ -479,8 +479,8 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-top: 19.5px;
-  margin-left: 2.06px;
+  margin-top: 18.7px;
+  margin-left: 4px;
 `;
 const NameBar = styled.div`
   margin-top: 20px;
