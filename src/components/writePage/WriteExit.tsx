@@ -2,7 +2,11 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import exitImg from "../../../public/assets/write/img_exit.svg";
 
-export const WriteExit = () => {
+interface WriteExitProps {
+  reasonText: string | null;
+}
+
+export const WriteExit = ({ reasonText }: WriteExitProps) => {
   const navigate = useNavigate();
 
   const handleButton = () => {
@@ -12,7 +16,7 @@ export const WriteExit = () => {
     <BackGround>
       <Container>
         <Icon src={exitImg} />
-        <Title>2번 이상 편지를 적지 않아서</Title>
+        <Title>{reasonText || "알 수 없는 이유가 발생하여"}</Title>
         <Title>자동으로 퇴장되었어요</Title>
       </Container>
 
