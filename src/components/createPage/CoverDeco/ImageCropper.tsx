@@ -48,8 +48,10 @@ export default function ImageCropper({
   );
 
   const handleSaveClick = async () => {
-    if (croppedAreaPixels) {
-      const croppedImgUrl = await getCroppedImg(
+    {
+      if (croppedAreaPixels) {
+      }
+      /*const croppedImgUrl = await getCroppedImg(
         originalImage,
         croppedAreaPixels,
         {
@@ -57,7 +59,7 @@ export default function ImageCropper({
           height,
         }
       );
-      console.log("Cropped Image URL: ", croppedImgUrl);
+      console.log("Cropped Image URL: ", croppedImgUrl);*/
 
       //Blob으로 변경
       const responseBlob = await fetch(originalImage).then((res) => res.blob());
@@ -103,30 +105,28 @@ export default function ImageCropper({
   return (
     <Container>
       <Header>
-        <Text>사진을 업로드하기겠습니까?</Text>
+        <Text>사진을 업로드 하시겠습니까?</Text>
       </Header>
       <CancelBtn onClick={closeModal}>취소</CancelBtn>
-      <Button onClick={handleSaveClick}>확인</Button>
+      <Button onClick={handleSaveClick}>선택</Button>
     </Container>
   );
 }
-/*
-
-      <CropContainer>
+/*<CropContainer>
         <Cropper
           image={originalImage}
           crop={crop}
           zoom={zoom}
-          onZoomChange={setZoom}
           aspect={width / height}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
+          onZoomChange={setZoom}
         />
-      </CropContainer>
-*/
+      </CropContainer>*/
+
 const Container = styled.div`
   width: 100%;
-  height: 50%;
+  height: 60%;
   position: absolute;
   bottom: 0;
   border-radius: 20px 20px 0px 0px;
@@ -167,7 +167,7 @@ const CropContainer = styled.div`
 `;
 const Button = styled.button`
   position: absolute;
-  bottom: 20%;
+  bottom: 50%;
   right: 30%;
   padding: 10px 10px;
   background-color: transparent;
@@ -179,7 +179,7 @@ const Button = styled.button`
 `;
 const CancelBtn = styled.button`
   position: absolute;
-  bottom: 20%;
+  bottom: 50%;
   left: 30%;
   padding: 10px 10px;
   background-color: transparent;
