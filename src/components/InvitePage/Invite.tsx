@@ -52,8 +52,12 @@ export const Invite = () => {
         }
       } else {
         const data = await getParticipants(letterId);
+
         if (data.length < 1) {
-          window.location.reload();
+          const data = await getParticipants(letterId);
+          if (data.length < 1) {
+            window.location.reload();
+          }
         }
       }
 

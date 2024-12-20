@@ -176,6 +176,7 @@ export const Letter = ({
                   setIsModalOpen={setIsModalOpen}
                   setPopup={setPopup}
                   openLetter={openLetter}
+                  letterId={letterId}
                 />
               ) : context === "received" ? (
                 <Received_Modal
