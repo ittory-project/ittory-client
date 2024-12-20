@@ -75,7 +75,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
       </Header>
       <Contents>
         <List>
-          <Select>번씩</Select>
+          <Select>&nbsp;번씩</Select>
           <Picker>
             <div style={{ width: "100%", height: "14rem", overflow: "hidden" }}>
               <Swiper
@@ -224,7 +224,7 @@ const SlideContent = styled.div<SlideContentProps>`
   height: calc(14rem / 5);
   display: flex;
   text-align: center;
-  font-family: var(--Typography-family-number, "Gmarket Sans");
+  font-family: "GmarketSans";
   font-style: normal;
   font-weight: 400;
   line-height: normal;
