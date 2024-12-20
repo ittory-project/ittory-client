@@ -260,6 +260,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  cursor: pointer;
 `;
 const BookName = styled.div`
   flex: 1 0 0;
