@@ -52,6 +52,7 @@ export const Invite = () => {
         }
       } else {
         const data = await getParticipants(letterId);
+
         if (data.length < 1) {
           const data = await getParticipants(letterId);
           if (data.length < 1) {
