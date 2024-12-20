@@ -500,8 +500,8 @@ const Book = styled.div<{ $backgroundImage: string }>`
 const Shadow = styled.img`
   width: 158px;
   height: 153px;
-  margin-left: -2px;
-  margin-top: 77px;
+  margin-left: -3px;
+  margin-top: 76px;
   position: absolute;
   z-index: 3;
   pointer-events: none;
