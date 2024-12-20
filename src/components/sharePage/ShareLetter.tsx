@@ -13,7 +13,6 @@ import { getFontById } from '../../api/service/FontService';
 import { getCoverTypeById } from '../../api/service/CoverTypeService';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { useDispatch } from 'react-redux';
-import { formatDate } from '../../api/config/formatData';
 
 function Query() {
   return new URLSearchParams(useLocation().search);
@@ -96,8 +95,7 @@ export const ShareLetter = () => {
     try {
       if (letterInfo) {
         await navigator.share({
-          title: `To. ${letterInfo.receiverName}`,
-          text: `${letterInfo.title}\n${formatDate(letterInfo.deliveryDate)} From. ${letterInfo.participantNames
+          title: `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
             .map((element) => element)
             .join(", ")}`,
           url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
