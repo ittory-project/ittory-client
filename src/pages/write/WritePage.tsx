@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { WriteMainModal } from "../../components/writePage/writeMainModal/WriteMainModal";
 import { Write } from "../../components/writePage/Write";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { decodeLetterId } from "../../api/config/base64";
 import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
 import { getLetterStartInfo } from "../../api/service/LetterService";
@@ -10,6 +10,7 @@ import CountdownGif from "../../../public/img/letter_start_count.gif";
 
 export const WritePage = () => {
   const { letterId } = useParams();
+  const navigate = useNavigate();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   // 불러온 편지 정보
   const [letterTitle, setLetterTitle] = useState("");
@@ -25,6 +26,19 @@ export const WritePage = () => {
   const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
   // 편지 시작까지 남은 시간 계산
   const [startCountdown, setStartCountdown] = useState<number>(10);
+
+  const handleGoBack = ()=>{
+    navigate('/');
+  }
+  useEffect(()=>{
+    history.pushState(null,"",window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return ()=>{
+        window.removeEventListener("popstate", handleGoBack);
+    }
+  },[]);
 
   const getStartInfo = async () => {
     if (!letterId) {
