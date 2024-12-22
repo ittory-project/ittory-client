@@ -99,7 +99,7 @@ export const ShareLetter = () => {
           text: `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
             .map((element) => element)
             .join(", ")}`,
-          url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+          url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=letterInfo.receiverName}`,
         });
         console.log('공유 성공');
       } else {
