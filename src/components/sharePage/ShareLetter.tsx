@@ -51,6 +51,7 @@ export const ShareLetter = () => {
       }
       const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId)
       if (coverTypeResponse) {
+        console.log(coverTypeResponse)
         setCoverType(coverTypeResponse)
       }
     }
@@ -98,7 +99,7 @@ export const ShareLetter = () => {
           text: `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
             .map((element) => element)
             .join(", ")}`,
-          url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
+          url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
         });
         console.log('공유 성공');
       } else {
@@ -113,9 +114,11 @@ export const ShareLetter = () => {
     (letterInfo && coverType && font) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
         <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close_white.svg" />
-        <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
-          {renderPageContent()}
-        </CoverContainer>
+        <CoverShadow id='hi'>
+          <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
+            {renderPageContent()}
+          </CoverContainer>
+        </CoverShadow>
         <Pagination totalPages={elementLength + 1} />
         <BtnContainer>
           <StoreBtn onClick={handleStorage}>편지함 이동하기</StoreBtn>
@@ -155,6 +158,12 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
   flex-shrink: 0;
   border-radius: 5px 15px 15px 5px;
   background-image: url(${(props) => props.$boardimg})
+`;
+
+const CoverShadow = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 5px 15px 15px 5px;
   background-size: cover;
   box-shadow: 0 2px 1px rgba(0,0,0,0.09), 
               0 4px 2px rgba(0,0,0,0.09), 

@@ -11,7 +11,6 @@ const Receive = () => {
   const { letterId } = useParams();
   const query = Query();
   const receiver = String(query.get("to"))
-  const receiverName = decodeURIComponent(receiver)
   const [expanded, setExpanded] = useState(false);
   const [showDoorAnimation, setShowDoorAnimation] = useState(false);
   const [hideDoorImg, setHideDoorImg] = useState(false); 
@@ -44,7 +43,7 @@ const Receive = () => {
             <div onClick={(e) => e.stopPropagation()}>
               {hideDoorImg && 
                 <TextBalloon>
-                  <ExpandTitle>{`${receiverName}님 맞으시죠?`}<br/>편지가 도착했어요!</ExpandTitle>
+                  <ExpandTitle>{`${receiver}님 맞으시죠?`}<br/>편지가 도착했어요!</ExpandTitle>
                   <BalloonUnder src='/assets/text_balloon_under.svg' />
                 </TextBalloon>
               }
@@ -58,7 +57,7 @@ const Receive = () => {
               <>
                 <MainTitleContainer>
                   <MainText>띵동~</MainText>
-                  <MainTitle>{`${receiverName}님에게 편지가 도착했어요`}</MainTitle>
+                  <MainTitle>{`${receiver}님에게 편지가 도착했어요`}</MainTitle>
                 </MainTitleContainer>
                 <MainInfo>문을 터치해 보세요</MainInfo>
               </>
