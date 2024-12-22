@@ -41,7 +41,7 @@ export const ReceiveLetterCover = ({
             onError={handleImageError}
           />
         </PhotoDiv>
-        <DescriptionDiv $fonttype={letterFontStyle.name}>
+        <DescriptionDiv $coverId={letterStyle.id} $fonttype={letterFontStyle.name}>
           {partiList}
         </DescriptionDiv>
       </CoverContent>
@@ -105,7 +105,6 @@ const PhotoDiv = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 35px;
-  margin-bottom: 45px;
 `;
 
 const ProfileImage = styled.img`
@@ -115,19 +114,27 @@ const ProfileImage = styled.img`
   object-fit: cover;
 `;
 
-const DescriptionDiv = styled.div<{ $fonttype: string }>`
+const DescriptionDiv = styled.div<{ $coverId: number; $fonttype: string }>`
   height: 16px;
   font-size: 16px;
   line-height: 1.5;
   text-align: center;
   overflow: hidden;
-  color: #715142;
   text-align: center;
   text-overflow: ellipsis;
   font-family: ${(props) => props.$fonttype};
+  color: ${({ $coverId }) => {
+    if ($coverId === 0) return "#715142";
+    if ($coverId === 1) return "#335839";
+    if ($coverId === 2) return "#985566";
+    if ($coverId === 3) return "#232D3D";
+    if ($coverId === 4) return "#232D3D";
+  }};
+  margin-top: ${(props) =>
+    props.$coverId === 0 || props.$coverId === 1 ? "45px" : "35px"};
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;
-  line-height: var(--Typography-line_height-2xs, 16px); /* 145.455% */
+  line-height: var(--Typography-line_height-2xs, 16px);
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
