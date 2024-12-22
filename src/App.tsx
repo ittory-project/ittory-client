@@ -1,6 +1,6 @@
 import "./App.css";
 import { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { MainLayout } from "./layout/MainLayout";
 import { ReceiveLetterPage } from "./pages/receive/ReceiveLetterPage";
 import { LoginRedirectPage } from "./pages/home/LoginRedirectPage";
@@ -30,30 +30,6 @@ function App() {
       window.removeEventListener("resize", setVh);
     };
   }, []);
-
-  const navigate = useNavigate();
-
-  const goHome = () => {
-    navigate('/')
-  }
-
-  useEffect(() => {
-    const handlePopState = () => {
-      const confirmLeave = window.confirm("이 페이지를 떠나시겠습니까?");
-      if (confirmLeave) {
-        goHome();
-      } else {
-        history.pushState(null, "", window.location.href); 
-      }
-    };
-  
-    history.pushState(null, "", window.location.href);
-    window.addEventListener("popstate", handlePopState);
-  
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [navigate]);
 
   return (
     <Router>
