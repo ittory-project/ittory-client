@@ -28,7 +28,7 @@ export const WritePage = () => {
   const [startCountdown, setStartCountdown] = useState<number>(10);
 
   const handleGoBack = ()=>{
-    navigate('/');
+    window.location.href = window.location.href
   }
   useEffect(()=>{
     history.pushState(null,"",window.location.href);
