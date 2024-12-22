@@ -502,7 +502,7 @@ export const Write = ({
           progressTime={remainingTime}
         />
       </ScrollableOrderList>
-      {nowMemberId !== Number(getUserId()) ? (
+      {nowMemberId === Number(getUserId()) ? (
         <ButtonContainer>
           <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
         </ButtonContainer>
