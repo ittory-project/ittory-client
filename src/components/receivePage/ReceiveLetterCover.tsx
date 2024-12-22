@@ -27,7 +27,7 @@ export const ReceiveLetterCover = ({
 
   return (
     <>
-      <CoverImage src={letterStyle.confirmImageUrl} alt="Cover" />
+      <CoverImage src={letterStyle.editImageUrl} alt="Cover" />
       <CoverContent>
         <TitleDiv $fonttype={letterFontStyle.name}>
           {letterContent.title}
