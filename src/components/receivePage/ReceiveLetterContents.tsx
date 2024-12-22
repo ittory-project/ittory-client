@@ -3,7 +3,6 @@ import { LetterDetail } from "../../api/model/LetterModel";
 import { FontGetResponse } from "../../api/model/FontModel";
 
 interface LetterContentProps {
-  // letterStyle: CoverTypeGetResponse
   letterFontStyle: FontGetResponse;
   letterContent: LetterDetail;
 }

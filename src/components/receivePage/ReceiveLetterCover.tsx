@@ -124,14 +124,14 @@ const DescriptionDiv = styled.div<{ $coverId: number; $fonttype: string }>`
   text-overflow: ellipsis;
   font-family: ${(props) => props.$fonttype};
   color: ${({ $coverId }) => {
-    if ($coverId === 0) return "#715142";
-    if ($coverId === 1) return "#335839";
-    if ($coverId === 2) return "#985566";
-    if ($coverId === 3) return "#232D3D";
+    if ($coverId === 1) return "#715142";
+    if ($coverId === 2) return "#335839";
+    if ($coverId === 3) return "#985566";
     if ($coverId === 4) return "#232D3D";
+    if ($coverId === 5) return "#232D3D";
   }};
   margin-top: ${(props) =>
-    props.$coverId === 0 || props.$coverId === 1 ? "45px" : "35px"};
+    props.$coverId === 1 || props.$coverId === 2 ? "45px" : "35px"};
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;
