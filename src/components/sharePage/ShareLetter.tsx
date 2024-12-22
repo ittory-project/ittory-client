@@ -137,21 +137,22 @@ export const ShareLetter = () => {
         .join(", ")}`
 
       if (!isMobile) {
+        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === "function"
         ) {
           try {
-            await navigator.clipboard.writeText(shareText);
+            await navigator.clipboard.writeText(shareTextPc);
             setCopied(true);
             setTimeout(() => setCopied(false), 3000);
           } catch (error) {
             console.error("공유 실패: ", error);
-            fallbackCopyTextToClipboard(shareText);
+            fallbackCopyTextToClipboard(shareTextPc);
           }
         } else {
           // Safari 호환용 대체 복사 방식
-          fallbackCopyTextToClipboard(shareText);
+          fallbackCopyTextToClipboard(shareTextPc);
         }
       } else {
         try {
