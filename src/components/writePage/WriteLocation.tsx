@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import img from '../../../public/assets/location.svg';
 
@@ -10,6 +10,19 @@ interface LocationProps {
 
 // 위치 컴포넌트
 export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, profileImage }) => {
+  const [isMobile, setIsMobile] = useState(false)
+
+  const handleResize = () => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false)
+  }
+  useEffect(() => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false)
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   const circleRef = useRef<SVGCircleElement>(null);
 
   const radius = 25;
@@ -17,8 +30,9 @@ export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, pro
 
   useEffect(() => {
     if (circleRef.current) {
-      const offset = circumference * (1 - progressTime / 100);
-      circleRef.current.style.strokeDashoffset = `${-offset}`;
+      const offset = isMobile ? circumference * progressTime / 100 : - (circumference * (1 - progressTime / 100))
+      // const offset = circumference * (1 - progressTime / 100);
+      circleRef.current.style.strokeDashoffset = `${offset}`;
     }
   }, [progressTime, circumference]);
 
