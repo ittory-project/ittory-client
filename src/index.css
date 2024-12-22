@@ -1,5 +1,6 @@
 :root {
   width: 100vw;
+  height: calc(var(--vh, 1vh) * 100);
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -29,7 +30,7 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: calc(var(--vh, 1vh) * 100);
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 h1 {
