@@ -60,7 +60,10 @@ export const Invite = () => {
           const data = await getParticipants(letterId);
           //window.location.reload();
           if (data.length < 1) {
-            window.location.reload();
+            console.log("새로고침");
+            setTimeout(() => {
+              window.location.reload();
+            }, 1200); // 1.5초 후에 새로고침
           }
         }
       }
