@@ -22,7 +22,6 @@ import { CoverType } from "../../api/model/CoverType";
 import { getLetterInfo } from "../../api/service/LetterService";
 import defaultImg from "../../../public/assets/menu/logindefault.png";
 import { getFontById } from "../../api/service/FontService";
-import { useNavigate } from "react-router-dom";
 
 interface Props {
   guideOpen: boolean;
@@ -57,7 +56,6 @@ export const HostUser = ({
   const [fontId, setFontId] = useState<number>(-1);
   const [selectfont, setSelectfont] = useState<string>("");
   const [receiverName, setReceiverName] = useState<string>("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
@@ -543,11 +541,11 @@ const NameTxt = styled.div<{ $book: number }>`
   line-height: 12px;
   letter-spacing: -0.4px;
   color: ${({ $book }) => {
-    if ($book === 0) return "#715142";
-    if ($book === 1) return "#335839";
-    if ($book === 2) return "#985566";
-    if ($book === 3) return "#232D3D";
+    if ($book === 1) return "#715142";
+    if ($book === 2) return "#335839";
+    if ($book === 3) return "#985566";
     if ($book === 4) return "#232D3D";
+    if ($book === 5) return "#232D3D";
   }};
 `;
 
