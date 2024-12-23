@@ -108,9 +108,11 @@ export const ReceiveLetter = () => {
     (letterInfo && coverType && font && elementLength > 0) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
         <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
-        <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
-          {renderPageContent()}
-        </CoverContainer>
+        <CoverShadow>
+          <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
+            {renderPageContent()}
+          </CoverContainer>
+        </CoverShadow>
         <Pagination totalPages={elementLength + 2} />
         {saveAlert === 'SAVED' &&
           <ModalOverlay>
@@ -174,6 +176,12 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
   flex-shrink: 0;
   border-radius: 5px 15px 15px 5px;
   background-image: url(${(props) => props.$boardimg})
+`;
+
+const CoverShadow = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 5px 15px 15px 5px;
   background-size: cover;
   box-shadow: 0 2px 1px rgba(0,0,0,0.09), 
               0 4px 2px rgba(0,0,0,0.09), 

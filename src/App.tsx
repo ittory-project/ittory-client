@@ -15,7 +15,6 @@ import { ConnectionPage } from "./pages/connect/ConnectionPage";
 import { AccountPage } from "./pages/account/AccountPage";
 import { LetterBoxPage } from "./pages/letterbox/LetterBoxPage";
 import { ShareLetterPage } from "./pages/share/SharePage";
-import { Helmet } from "react-helmet-async";
 
 function App() {
   useEffect(() => {
@@ -34,9 +33,6 @@ function App() {
   return (
     <Router>
       <MainLayout>
-        <Helmet>
-          <title>잇토리</title>
-        </Helmet>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

@@ -1,17 +1,25 @@
-import { Helmet } from "react-helmet";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Receive from "../../components/receivePage/Receive";
-import ThumbnailImg from "../../../public/img/icon_main.svg"
 
 export const ReceivePage = () => {
+  const navigate = useNavigate()
+
+  const handleGoBack = ()=>{
+    navigate('/');
+  }
+  useEffect(()=>{
+    history.pushState(null,"",window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return ()=>{
+        window.removeEventListener("popstate", handleGoBack);
+    }
+  },[]);
+  
   return (
     <div>
-      <Helmet>
-        <title>편지 받기임</title>
-        <meta property="og:title" content="잇토리편지받기" />
-        <meta property="og:description" content="Welcome to the homepage!" />
-        <meta property="og:image" content={ThumbnailImg} />
-        <meta property="og:url" content={`${import.meta.env.VITE_FRONT_URL}/receive/:letterId`} />
-      </Helmet>
       <Receive />
     </div>
   );
