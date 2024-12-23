@@ -56,8 +56,12 @@ export const Invite = () => {
         console.log("데이터없음-fetch함수");
 
         if (data.length < 1) {
-          console.log("새로고침");
-          window.location.reload();
+          //console.log("새로고침");
+          const data = await getParticipants(letterId);
+          //window.location.reload();
+          if (data.length < 1) {
+            window.location.reload();
+          }
         }
       }
 
