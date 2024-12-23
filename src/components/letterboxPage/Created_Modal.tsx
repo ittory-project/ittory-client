@@ -19,6 +19,8 @@ export const Created_Modal = ({
   letterId,
 }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -39,42 +41,127 @@ export const Created_Modal = ({
     getSharedLetter();
   }, [letterId]);
 
-  const handleShare = async () => {
+  // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
+  const handleResize = () => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false);
+  };
+  useEffect(() => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
     try {
-      if (letterInfo) {
-        await navigator.share({
-          text: `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
-            .map((element) => element)
-            .join(", ")}`,
-          url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-        });
-        console.log("공유 성공");
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
       } else {
-        console.log("공유 실패");
+        alert("텍스트 복사에 실패했습니다.");
       }
-    } catch (e) {
-      console.log("공유 실패");
+    } catch (error) {
+      console.error("Fallback copy failed:", error);
+      alert("텍스트 복사에 실패했습니다.");
+    } finally {
+      document.body.removeChild(textArea);
     }
   };
 
+  // 모바일, 데스크톱 화면 구분해서 공유하게 함
+  const handleShare = async () => {
+    if (letterInfo) {
+      const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
+        .map((element) => element)
+        .join(", ")}`;
+      if (!isMobile) {
+        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`;
+        if (
+          navigator.clipboard &&
+          typeof navigator.clipboard.writeText === "function"
+        ) {
+          try {
+            await navigator.clipboard.writeText(shareTextPc);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 3000);
+          } catch (error) {
+            console.error("공유 실패: ", error);
+            fallbackCopyTextToClipboard(shareTextPc);
+          }
+        } else {
+          // Safari 호환용 대체 복사 방식
+          fallbackCopyTextToClipboard(shareTextPc);
+        }
+      } else {
+        // 모바일이면
+        try {
+          await navigator.share({
+            text: shareText,
+            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
+          });
+          console.log("공유 성공");
+        } catch (e) {
+          console.log("공유 실패");
+        }
+      }
+    } else {
+      console.log("공유 실패");
+    }
+  };
   return (
-    <ModalContainer>
-      <Header>
-        <Cancel src={X} alt="cancel" onClick={closeModal} />
-      </Header>
-      <Contents>
-        <List onClick={handleShare}>
-          <ShareIcon src={share} alt="share" />
-          <Txt>공유하기</Txt>
-        </List>
-        <List onClick={handlePopup}>
-          <DeleteIcon src={delete2} alt="delete" />
-          <Txt>삭제하기</Txt>
-        </List>
-      </Contents>
-    </ModalContainer>
+    <>
+      <ModalContainer>
+        <Header>
+          <Cancel src={X} alt="cancel" onClick={closeModal} />
+        </Header>
+        <Contents>
+          <List onClick={handleShare}>
+            <ShareIcon src={share} alt="share" />
+            <Txt>공유하기</Txt>
+          </List>
+          <List onClick={handlePopup}>
+            <DeleteIcon src={delete2} alt="delete" />
+            <Txt>삭제하기</Txt>
+          </List>
+        </Contents>
+      </ModalContainer>
+      {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
+    </>
   );
 };
+
+const CopyAlert = styled.div`
+  display: flex;
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center;
+  font-family: SUIT;
+  font-weight: 500;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 16px;
+  letter-spacing: -0.5px;
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+`;
 
 const ModalContainer = styled.div`
   position: absolute;

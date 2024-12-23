@@ -23,6 +23,8 @@ export const ShareLetter = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [isMobile, setIsMobile] = useState(false)
+  const [copied, setCopied] = useState<boolean>(false);
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [font, setFont] = useState<FontGetResponse>();
   const [coverType, setCoverType] = useState<CoverTypeGetResponse>()
@@ -35,6 +37,17 @@ export const ShareLetter = () => {
     const page = Number(query.get("page")) || 1;
     setCurrentPage(page);
   }, [query]);
+
+  const handleResize = () => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false)
+  }
+  useEffect(() => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false)
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
 
   const getSharedLetter = async (letterNumId: number) => {
@@ -51,6 +64,7 @@ export const ShareLetter = () => {
       }
       const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId)
       if (coverTypeResponse) {
+        console.log(coverTypeResponse)
         setCoverType(coverTypeResponse)
       }
     }
@@ -91,20 +105,67 @@ export const ShareLetter = () => {
     navigate('/')
   }
 
-  const createShare = async () => {
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
     try {
-      if (letterInfo) {
-        await navigator.share({
-          text: `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
-            .map((element) => element)
-            .join(", ")}`,
-          url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodeURIComponent(letterInfo.receiverName)}`,
-        });
-        console.log('공유 성공');
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
       } else {
+        alert("텍스트 복사에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Fallback copy failed:", error);
+      alert("텍스트 복사에 실패했습니다.");
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  };
+
+  const createShare = async () => {
+    if (letterInfo) {
+      const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
+        .map((element) => element)
+        .join(", ")}`
+
+      if (!isMobile) {
+        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`
+        if (
+          navigator.clipboard &&
+          typeof navigator.clipboard.writeText === "function"
+        ) {
+          try {
+            await navigator.clipboard.writeText(shareTextPc);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 3000);
+          } catch (error) {
+            console.error("공유 실패: ", error);
+            fallbackCopyTextToClipboard(shareTextPc);
+          }
+        } else {
+          // Safari 호환용 대체 복사 방식
+          fallbackCopyTextToClipboard(shareTextPc);
+        }
+      } else {
+        try {
+          await navigator.share({
+            text: shareText,
+            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
+          });
+          console.log('공유 성공');
+        } catch (e) {
         console.log('공유 실패');
       }
-    } catch (e) {
+      } 
+    } else {
       console.log('공유 실패');
     }
   }
@@ -113,14 +174,17 @@ export const ShareLetter = () => {
     (letterInfo && coverType && font) ? (
       <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
         <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close_white.svg" />
-        <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
-          {renderPageContent()}
-        </CoverContainer>
+        <CoverShadow>
+          <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
+            {renderPageContent()}
+          </CoverContainer>
+        </CoverShadow>
         <Pagination totalPages={elementLength + 1} />
         <BtnContainer>
           <StoreBtn onClick={handleStorage}>편지함 이동하기</StoreBtn>
           <ShareBtn onClick={createShare}>지금 전달하기</ShareBtn>
         </BtnContainer>
+        {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
       </Background>
     ) : (
       <div>편지를 불러올 수 없습니다.</div>
@@ -155,6 +219,12 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
   flex-shrink: 0;
   border-radius: 5px 15px 15px 5px;
   background-image: url(${(props) => props.$boardimg})
+`;
+
+const CoverShadow = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 5px 15px 15px 5px;
   background-size: cover;
   box-shadow: 0 2px 1px rgba(0,0,0,0.09), 
               0 4px 2px rgba(0,0,0,0.09), 
@@ -222,4 +292,27 @@ const ShareBtn = styled.button`
   &:focus {
     outline: none;
   }
+`;
+
+const CopyAlert = styled.div`
+  display: flex;
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-align: center;
+  font-family: SUIT;
+  font-weight: 500;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 16px;
+  letter-spacing: -0.5px;
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
 `;
