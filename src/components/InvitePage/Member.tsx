@@ -520,11 +520,11 @@ const NameTxt = styled.div<{ $book: number }>`
   line-height: 12px;
   letter-spacing: -0.4px;
   color: ${({ $book }) => {
-    if ($book === 0) return "#715142";
-    if ($book === 1) return "#335839";
-    if ($book === 2) return "#985566";
-    if ($book === 3) return "#232D3D";
+    if ($book === 1) return "#715142";
+    if ($book === 2) return "#335839";
+    if ($book === 3) return "#985566";
     if ($book === 4) return "#232D3D";
+    if ($book === 5) return "#232D3D";
   }};
 `;
 const Bar = styled.div`

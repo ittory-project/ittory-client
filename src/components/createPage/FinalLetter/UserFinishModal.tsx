@@ -97,8 +97,14 @@ export default function UserFinishModal({
       const letterId = response.letterId;
       console.log("letterId", letterId);
 
+      /*
+      localStorage.setItem("letterId", String(letterId));
+      localStorage.setItem("guideOpen", String(false));
+      localStorage.setItem("userName", myName);*/
+
       fetchEnter(letterId);
-      console.log(myName);
+
+      console.log(letterId, myName);
 
       navigate("/Invite", {
         state: {
@@ -131,15 +137,21 @@ export default function UserFinishModal({
       const letterId = response.letterId;
       console.log("letterId", letterId);
 
+      localStorage.setItem("letterId", String(letterId));
+      localStorage.setItem("guideOpen", String(true));
+      localStorage.setItem("userName", myName);
+
       fetchEnter(letterId);
 
-      navigate("/Invite", {
+      navigate(
+        "/Invite" /*{
         state: {
           letterId: letterId,
           guideOpen: true,
           userName: myName,
         },
-      });
+      }*/
+      );
     } catch (error) {
       console.error("Error posting letter:", error);
     }

@@ -77,7 +77,9 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
         <List>
           <Select>&nbsp;번씩</Select>
           <Picker>
-            <div style={{ width: "100%", height: "14rem", overflow: "hidden" }}>
+            <div
+              style={{ width: "250px", height: "14rem", overflow: "hidden" }}
+            >
               <Swiper
                 direction={"vertical"}
                 slidesPerView={5}
