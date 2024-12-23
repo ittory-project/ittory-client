@@ -115,6 +115,11 @@ export default function CompleteModal({
       const letterId = response.letterId;
       console.log("letterId", letterId);
 
+      /*
+      localStorage.setItem("letterId", String(letterId));
+      localStorage.setItem("guideOpen", String(true));
+      localStorage.setItem("userName", myName);*/
+
       fetchEnter(letterId);
       console.log(myName);
 
