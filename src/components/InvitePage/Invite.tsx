@@ -19,17 +19,18 @@ export interface Participants {
 export const Invite = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const guideOpen = location.state.guideOpen;
-  const getletterId = location.state.letterId;
-  const userName = location.state.userName;
-
-  console.log(guideOpen);
 
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
   const [, setUserId] = useState<number>(-1);
+
+  const getletterId = location.state.letterId;
+  const userName = location.state.userName;
+  const guideOpen = location.state.guideOpen;
+
+  console.log(guideOpen);
   const [letterId] = useState<number>(getletterId);
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
