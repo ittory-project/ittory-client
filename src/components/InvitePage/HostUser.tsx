@@ -493,8 +493,8 @@ const Shadow = styled.img`
   flex-shrink: 0;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
-  width: 122.8px;
-  height: 122.8px;
+  width: 123px;
+  height: 123px;
   gap: 4px;
   z-index: 2;
   flex-shrink: 0;
@@ -504,7 +504,7 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 20px;
-  margin-left: 2.2px;
+  margin-left: 2.5px;
 `;
 const NameBar = styled.div`
   margin-top: 20px;
