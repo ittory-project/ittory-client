@@ -97,7 +97,7 @@ export default function UserFinishModal({
   };
 
   const navigateToInvite = async () => {
-    setGuideOpen(true);
+    setGuideOpen(false);
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
@@ -114,6 +114,10 @@ export default function UserFinishModal({
       console.log("Response:", response);
       const letterId = response.letterId;
       console.log("letterId", letterId);
+
+      localStorage.setItem("letterId", String(letterId));
+      localStorage.setItem("guideOpen", String(false));
+      localStorage.setItem("userName", myName);
 
       fetchEnter(letterId);
 
