@@ -475,7 +475,7 @@ const Container = styled.div`
   //align-self: stretch;
   width: 100%;
   height: 100%;
-  margin-top: 3.5rem;
+  margin-top: 48px;
   margin-bottom: 6rem;
   overflow: hidden;
 `;
@@ -566,7 +566,7 @@ const Input = styled.input<{ $selectfont: string }>`
     opacity: 0.5;
   }
   &:valid {
-    color: #f1f3f5;
+    color: #fff;
     text-align: center;
     font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
@@ -596,7 +596,7 @@ const ButtonContainer = styled.button`
   gap: 4px
   flex-shrink: 0;
   border-radius: 20px;
-  background: #e9ecef;
+  background: #fff;
   border: 1px solid var(--Color-grayscale-gray200, #E9ECEF);
   &:focus {
   border: none;

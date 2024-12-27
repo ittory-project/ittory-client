@@ -78,7 +78,6 @@ export const UserGuide = ({ setGuide }: Props) => {
 const ModalContainer = styled.div`
   display: flex;
   width: 272px;
-  height: 25rem;
   box-sizing: border-box;
   padding: 24px 0px 16px 0px;
   flex-direction: column;
@@ -123,7 +122,6 @@ const Description = styled.div`
   line-height: 22px;
   letter-spacing: -0.5px;
   white-space: pre-line;
-  margin-top: 0.3rem;
 `;
 const ButtonContainer = styled.div`
   display: flex;
@@ -132,7 +130,6 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
-  margin-top: 1.3rem;
 `;
 const BubbleContainer = styled.div`
   display: flex;

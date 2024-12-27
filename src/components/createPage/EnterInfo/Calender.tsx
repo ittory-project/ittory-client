@@ -43,10 +43,12 @@ export default function Calender({
     for (let i = 0; i < 7; i++) {
       formattedDate = format(day, "d");
       const cloneDay = day;
-      days.push(
-        !isSameMonth(day, monthStart) ? (
-          <Disabled key={format(day, "yyyy-MM-dd")}></Disabled>
-        ) : deliverDay && isSameDay(day, deliverDay) ? (
+
+      // 현재 달의 날짜만 처리하도록 조건 추가
+      if (!isSameMonth(day, monthStart)) {
+        days.push(<Disabled key={format(day, "yyyy-MM-dd")}></Disabled>);
+      } else if (deliverDay && isSameDay(day, deliverDay)) {
+        days.push(
           <Selected
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
@@ -63,7 +65,9 @@ export default function Calender({
             </svg>
             <Txt style={{ color: "#FFF" }}>{formattedDate}</Txt>
           </Selected>
-        ) : selectedDate && isSameDay(day, selectedDate) ? (
+        );
+      } else if (selectedDate && isSameDay(day, selectedDate)) {
+        days.push(
           <Selected
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
@@ -80,14 +84,18 @@ export default function Calender({
             </svg>
             <Txt style={{ color: "#FFF" }}>{formattedDate}</Txt>
           </Selected>
-        ) : format(day, "yyyy-MM-dd") < format(current, "yyyy-MM-dd") ? (
+        );
+      } else if (format(day, "yyyy-MM-dd") < format(current, "yyyy-MM-dd")) {
+        days.push(
           <Disabled
             key={format(day, "yyyy-MM-dd")}
             style={{ marginRight: i === 6 ? "0" : "6%" }}
           >
             <Txt style={{ color: "#DEE2E6" }}>{formattedDate}</Txt>
           </Disabled>
-        ) : (
+        );
+      } else {
+        days.push(
           <Valid
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
@@ -95,14 +103,24 @@ export default function Calender({
           >
             <Txt style={{ color: "#000000" }}>{formattedDate}</Txt>
           </Valid>
-        )
-      );
+        );
+      }
 
       day = addDays(day, 1);
     }
+
+    /*현재 달의 날짜만 rows에 추가
+    if (isSameMonth(day, monthStart)) {
+      rows.push(<div key={format(day, "yyyy-MM-dd")}>{days}</div>);
+      console.log(rows);
+    }*/
+
+    // 마지막 주도 추가되도록 하기
     rows.push(<div key={format(day, "yyyy-MM-dd")}>{days}</div>);
+    console.log(rows);
     days = [];
   }
+
   return <Container>{rows}</Container>;
 }
 const Container = styled.div`
@@ -117,7 +135,7 @@ const Disabled = styled.div`
   flex-direction: column;
   width: 9.1%;
   margin-right: 6%;
-  height: 2rem;
+  height: 35px;
   box-sizing: border-box;
 `;
 const Selected = styled.div`
@@ -125,7 +143,7 @@ const Selected = styled.div`
   display: inline-flex;
   cursor: pointer;
   width: 9.1%;
-  height: 2rem;
+  height: 35px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -146,7 +164,7 @@ const Valid = styled.div`
   display: inline-flex;
   cursor: pointer;
   width: 9.1%;
-  height: 2rem;
+  height: 35px;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
@@ -155,7 +173,7 @@ const Valid = styled.div`
 const Txt = styled.span`
   position: absolute;
   text-align: center;
-  font-family: "GmarketSans";
+  font-family: GmarketSans;
   font-size: 12px;
   font-weight: 400;
   line-height: normal;

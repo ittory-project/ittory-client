@@ -80,6 +80,12 @@ const FontSelectorContainer = styled.div`
   overflow-x: auto;
   padding: 11px 16px;
   white-space: nowrap;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) -61.61%,
+    #fff 18.75%
+  );
+  box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.04);
   /* 스크롤바 스타일 (브라우저에 따라 다를 수 있음) */
   &::-webkit-scrollbar {
     height: 8px;
@@ -95,7 +101,7 @@ const FontSelectorContainer = styled.div`
 const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   display: inline-flex;
   width: 80px;
-  height: 38px;
+  height: 34px;
   box-sizing: border-box;
   padding: 6px 16px;
   justify-content: center;

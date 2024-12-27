@@ -293,7 +293,7 @@ const Title = styled.span`
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.5px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 `;
 const SubTitle = styled.span`
   color: #495057;
@@ -324,7 +324,7 @@ const Info = styled.div`
   width: 100%;
   position: relative;
   box-sizing: border-box;
-  padding: 0px 12px 20px 12px;
+  padding: 0px 12px 16px 12px;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--Border-Radius-radius_300, 8px);
@@ -333,6 +333,7 @@ const Info = styled.div`
 `;
 const TitleTxt = styled.span`
   display: block;
+  margin-top: 12px;
   color: #212529;
   padding: 6px 0px;
   text-align: left;
@@ -348,6 +349,7 @@ const TitleTxt = styled.span`
 const EditBtn = styled.div`
   position: absolute;
   cursor: pointer;
+  margin-top: 12px;
   right: 12px;
   display: flex;
   width: 24px;
@@ -364,7 +366,7 @@ const InfoBlock = styled.div`
   align-items: center;
   align-self: stretch;
   position: relative;
-  margin-bottom: 0.8rem;
+  margin-bottom: 10px;
   background-color: #fff;
 `;
 const InfoTitle = styled.span`
@@ -454,7 +456,7 @@ const Button = styled.button`
   justify-content: center;
   gap: 8px;
   border-radius: 50px;
-  bottom: 16px;
+  bottom: 12px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;

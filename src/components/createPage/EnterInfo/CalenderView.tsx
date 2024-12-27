@@ -81,29 +81,30 @@ export default function CalenderView({ setValue, deliverDay }: Props) {
 }
 const Wrapper = styled.div`
   width: 100%;
-  height: 100%;
-  padding: 1.75rem 1.5rem 1.125rem 1.5rem; /* Wrapper에 padding 적용 */
-  box-sizing: border-box; /* 패딩을 너비 계산에 포함 */
+  //height: 100%;
+  position: relative;
 `;
 const Container = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 const Header = styled.div`
   width: 100%;
-  height: 1.5rem;
+  padding-top: 4px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
   gap: 12px;
   position: relative;
   justify-content: space-between;
   align-self: stretch;
+  position: relative;
 `;
 const PrevButton = styled.span`
-  position: absolute;
+  position: relative;
   cursor: pointer;
   display: flex;
   width: 24px;
@@ -137,10 +138,9 @@ const NextButton = styled.span`
   right: 0;
 `;
 const Days = styled.div`
+  margin-top: 24px;
   width: 100%;
-  height: 1.875rem;
-  padding-top: 7%;
-  padding-bottom: 1.5%;
+  padding-bottom: 10px;
   display: flex;
   gap: 11px;
   align-self: stretch;
@@ -159,5 +159,5 @@ const Day = styled.span`
 `;
 const Body = styled.div`
   width: 100%;
-  height: 100%;
+  position: relative;
 `;
