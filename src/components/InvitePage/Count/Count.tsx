@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
 import photo from "../../../../public/assets/photo.svg";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, SwiperRef } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { postRepeatCount } from "../../../api/service/LetterService";
 import { postRandom } from "../../../api/service/ParticipantService";
@@ -65,6 +65,62 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
     }
   };
 
+  // Swiper 참조를 위한 useRef
+  const swiperRef = useRef<SwiperRef | null>(null);
+
+  // 디바운스를 위한 타이머 변수
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 스크롤 이벤트를 통해 슬라이드 이동
+  const handleScroll = (event: WheelEvent) => {
+    event.preventDefault();
+
+    // 이미 타이머가 설정되어 있으면 현재 이벤트는 무시
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    // 타이머를 설정해서 디바운스 적용
+    scrollTimeoutRef.current = setTimeout(() => {
+      if (event.deltaY > 0) {
+        // 아래로 스크롤 (다음 슬라이드)
+        if (swiperRef.current) {
+          swiperRef.current.swiper.slideNext();
+        }
+      } else {
+        // 위로 스크롤 (이전 슬라이드)
+        if (swiperRef.current) {
+          swiperRef.current.swiper.slidePrev();
+        }
+      }
+    }, 70);
+  };
+
+  useEffect(() => {
+    // 스크롤 이벤트 리스너 추가
+    window.addEventListener("wheel", handleScroll, { passive: false });
+
+    // 컴포넌트가 unmount될 때 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("wheel", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Swiper 슬라이드 변경 시 호출되는 함수
+  const onSlideChange = (swiper: any) => {
+    setActiveIndex(swiper.realIndex);
+  };
+
+  useEffect(() => {
+    // activeIndex가 변경될 때 Swiper로 이동
+    if (swiperRef.current) {
+      swiperRef.current.swiper.slideTo(activeIndex);
+    }
+  }, [activeIndex]);
+
   return (
     <ModalContainer>
       <Header>
@@ -78,17 +134,20 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           <Select>&nbsp;번씩</Select>
           <Picker>
             <div
-              style={{ width: "240px", height: "200px", overflow: "hidden" }}
+              style={{ width: "240px", height: "200px", overflow: "scroll" }}
             >
               <Swiper
                 direction={"vertical"}
                 slidesPerView={5}
-                loop={true}
+                loop={false}
                 loopAdditionalSlides={5}
                 slideToClickedSlide={true}
                 centeredSlides={true}
-                onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                onSlideChange={onSlideChange}
+                //onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 style={{ height: "100%" }}
+                ref={swiperRef}
+                speed={180}
               >
                 {list.map((no, index) => (
                   <SwiperSlide key={no} style={{ height: "calc(15rem / 4)" }}>

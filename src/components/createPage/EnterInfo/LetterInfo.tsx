@@ -284,7 +284,7 @@ const MainCotainer = styled.div<{ $shiftup?: string; $isopen?: string }>`
 `;
 const InputBox = styled.div`
   display: flex;
-  width: 100%;
+  width: 232px;
   flex-direction: column;
   justify-content: center;
   margin-top: 0;
