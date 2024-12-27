@@ -289,6 +289,7 @@ const InputBox = styled.div`
   justify-content: center;
   margin-top: 0;
   margin-bottom: 4px;
+  height: 60px;
   position: relative;
   border-bottom: 1px dashed #dee2e6;
 `;
@@ -307,7 +308,7 @@ const InputLogo = styled.div`
 `;
 const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
   width: 232px;
-  height: 20px;
+  height: 26px;
   border: 0;
   padding-left: 0;
   margin-top: 28px;
