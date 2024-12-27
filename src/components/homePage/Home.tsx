@@ -155,10 +155,7 @@ export const Home = () => {
               <ButtonTxt>편지 쓰러 가기</ButtonTxt>
             </FinalButton>
           </Section>
-          <LastSection
-            //onTouchStart={() => handleScrollOrTouch(8)}
-            ref={(el) => el && (sectionRefs.current[8] = el)}
-          >
+          <LastSection ref={(el) => el && (sectionRefs.current[8] = el)}>
             <SectionBox>
               <Title>잇토리</Title>
               <SubTitle>문의&nbsp;&nbsp;&nbsp;ittory.team@gmail.com</SubTitle>
@@ -204,7 +201,7 @@ const Container = styled.div`
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
   z-index: 2;
-  //overflow-y: scroll; /* 세로 스크롤 가능 */
+  overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   -ms-overflow-style: none;
