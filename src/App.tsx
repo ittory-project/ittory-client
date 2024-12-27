@@ -15,6 +15,7 @@ import { ConnectionPage } from "./pages/connect/ConnectionPage";
 import { AccountPage } from "./pages/account/AccountPage";
 import { LetterBoxPage } from "./pages/letterbox/LetterBoxPage";
 import { ShareLetterPage } from "./pages/share/SharePage";
+import { LoadingPage } from "./pages/invite/LoadingPage";
 
 function App() {
   useEffect(() => {
@@ -50,6 +51,7 @@ function App() {
           <Route path="/connection" element={<ConnectionPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/letterbox" element={<LetterBoxPage />} />
+          <Route path="/loading" element={<LoadingPage />} />
         </Routes>
       </MainLayout>
     </Router>

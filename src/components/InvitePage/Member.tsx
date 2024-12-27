@@ -23,7 +23,7 @@ import { LetterDetailGetResponse } from "../../api/model/LetterModel";
 import { getLetterDetailInfo } from "../../api/service/LetterService";
 
 interface Props {
-  guideOpen: boolean;
+  guideOpen: string;
   items: Participants[];
   letterId: number;
   viewDelete: boolean;
@@ -33,7 +33,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [sliceName, setSliceName] = useState<string>("");
-  const [guide, setGuide] = useState<boolean>(guideOpen);
+  const [guide, setGuide] = useState<string>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(", ");
@@ -91,7 +91,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
 
   const handleGuide = () => {
-    setGuide(true);
+    setGuide("true");
   };
 
   const handleExit = () => {
@@ -195,7 +195,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   return (
     <BackGround>
-      {guide && <Overlay />}
+      {guide === "true" && <Overlay />}
       {viewExit && <Overlay />}
       {items.length > 0 && (
         <>
@@ -345,7 +345,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     </Box>
                   </BoxContainer>
                 </MainContainer>
-                {guide && <UserGuide setGuide={setGuide} />}
+                {guide === "true" && <UserGuide setGuide={setGuide} />}
                 {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
               </>
             )}
@@ -418,6 +418,7 @@ const ReceiverContainer = styled.div`
   display: flex;
   position: relative;
   align-items: center;
+  height: 48px;
 `;
 const Receiver = styled.span`
   height: 24px;
@@ -430,7 +431,7 @@ const Receiver = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
   &:first-of-type {
-    margin-right: 0;
+    margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
   }
 `;
 const IconContainer = styled.div`
@@ -567,7 +568,7 @@ const NameTxt = styled.div<{ $book: number }>`
   }};
 `;
 const Bar = styled.div`
-  width: 200px;
+  width: 288px;
   height: 14px;
   flex-shrink: 0;
   border-radius: 2px 2px var(--Border-Radius-radius_100, 4px)

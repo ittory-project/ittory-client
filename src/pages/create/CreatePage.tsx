@@ -7,7 +7,17 @@ export const CreatePage = () => {
   const handleGoBack = () => {
     navigate("/");
   };
+
   useEffect(() => {
+    if (localStorage.getItem("load")) {
+      localStorage.removeItem("load");
+    }
+    if (localStorage.getItem("userName")) {
+      localStorage.removeItem("userName");
+      localStorage.removeItem("letterId");
+      localStorage.removeItem("guideOpen");
+    }
+
     history.pushState(null, "", window.location.href);
 
     window.addEventListener("popstate", handleGoBack);
