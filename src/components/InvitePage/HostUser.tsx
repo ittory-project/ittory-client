@@ -276,6 +276,7 @@ export const HostUser = ({
               </NameBar>
             </Book>
             <Bar />
+
             <BoxContainer>
               <PinArea>
                 <Pin />
@@ -389,8 +390,6 @@ const BackGround = styled.div`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  background: #d3edff;
-  background-blend-mode: overlay, normal;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -435,7 +434,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
-  height: 4rem;
+  margin-bottom: 16px;
 `;
 const ReceiverContainer = styled.div`
   display: flex;

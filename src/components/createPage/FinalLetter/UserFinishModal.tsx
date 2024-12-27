@@ -359,8 +359,8 @@ const ButtonContainer = styled.div`
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
+  width: 140px;
   height: 48px;
-  padding: 14px 2rem;
   align-items: center;
   gap: 8px;
   justify-content: center;

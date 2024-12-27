@@ -147,7 +147,7 @@ export default function EditLetter({
                 <img
                   src={calender}
                   alt="calender Icon"
-                  style={{ width: "24px", height: "24px" }}
+                  style={{ width: "18px", height: "19px" }}
                 />
               </Calender>
             </InputBoxRow>
@@ -243,6 +243,7 @@ const Container = styled.div`
   background: #fff;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
   z-index: 0;
+  box-sizing: border-box;
 `;
 const Info = styled.div`
   display: flex;
@@ -374,20 +375,19 @@ const BookTitle = styled.div<{ $font: string }>`
 `;
 const InputBox = styled.div`
   display: flex;
-  width: 16rem;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
-  height: 3.5rem;
-  gap: 6px;
+  gap: 8px;
   margin-top: 0;
   border-bottom: 1px dashed #dee2e6;
-  margin-bottom: 1.8px;
+  margin-bottom: 12px;
   background-color: #fff;
 `;
 const InputLogo = styled.div`
   color: #868e96;
   font-family: var(--Typography-family-caption, SUIT);
-  font-size: 11px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 16px;
@@ -399,10 +399,11 @@ const Input = styled.input`
   border: 0;
   padding-left: 0;
   background-color: #fff;
+  margin-bottom: 4px;
   &::placeholder {
     color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
@@ -411,7 +412,7 @@ const Input = styled.input`
   &:valid {
     color: #212529;
     font-family: var(--Typography-family-title, SUIT);
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 24px;

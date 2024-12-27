@@ -78,7 +78,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           <Select>&nbsp;번씩</Select>
           <Picker>
             <div
-              style={{ width: "250px", height: "14rem", overflow: "hidden" }}
+              style={{ width: "240px", height: "200px", overflow: "hidden" }}
             >
               <Swiper
                 direction={"vertical"}
@@ -172,10 +172,9 @@ const Cancel = styled.span`
 const Contents = styled.div`
   display: flex;
   position: relative;
-  width: 288px;
-
-  overflow:
-  padding: 0px 16px 0px 16px;
+  //width: 288px;
+  padding: 0px 16px 20px 16px;
+  width: 100%;
   box-sizing: border-box;
   flex-direction: column;
   align-items: center;
@@ -185,8 +184,7 @@ const List = styled.div`
   display: flex;
   box-sizing: border-box;
   width: 288px;
-  height: 15rem;
-  padding: var(--Border-Radius-radius_300, 8px) 0px 16px 0px;
+  padding: 8px 0px 16px 0px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -197,11 +195,10 @@ const List = styled.div`
 const Picker = styled.div`
   position: relative;
   z-index: 1;
-  margin-top: 0.8rem;
 `;
 const Select = styled.div`
   display: flex;
-  width: 244px;
+  width: 240px;
   height: 40px;
   box-sizing: border-box;
   padding: var(--Border-Radius-radius_300, 8px) 0px;
@@ -286,7 +283,6 @@ const Notice = styled.div`
   box-sizing: border-box;
   padding: 2px 4px 8px 4px;
   align-items: center;
-  align-self: stretch;
   margin-top: 16px;
 `;
 const IconImg = styled.div`
@@ -315,7 +311,7 @@ const TotalTxt = styled.div`
   gap: 6px;
   color: #495057;
   text-align: center;
-  font-family: SUIT;
+  font-family: GmarketSans;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;

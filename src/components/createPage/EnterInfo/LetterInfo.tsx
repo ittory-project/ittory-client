@@ -142,7 +142,11 @@ export default function LetterInfo({
           </InputBox>
           <InputBox>
             <InputLogo>전달 날짜</InputLogo>
-            <InputBoxRow>
+            <InputBoxRow
+              onClick={() => {
+                openModal();
+              }}
+            >
               {deliverDay === null ? (
                 <SelectDate style={{ color: "#adb5bd" }}>
                   날짜를 선택해 주세요
@@ -155,15 +159,11 @@ export default function LetterInfo({
                   {` (${format(deliverDay, "E", { locale: ko })})`}
                 </SelectDate>
               )}
-              <Calender
-                onClick={() => {
-                  openModal();
-                }}
-              >
+              <Calender>
                 <img
                   src={calender}
                   alt="calender Icon"
-                  style={{ width: "24px", height: "24px" }}
+                  style={{ width: "18px", height: "19px" }}
                 />
               </Calender>
             </InputBoxRow>
@@ -232,19 +232,21 @@ const BackGround = styled.div`
   );
   background-blend-mode: overlay, normal;
 `;
-const Container = styled.div`
-  margin-top: 48px;
-  display: flex;
-  width: 19rem;
-  align-items: center;
-  flex-direction: column;
-  flex: 1 0 0;
-`;
 const Cancel = styled.span`
   position: absolute;
   cursor: pointer;
   top: 10px;
   right: 16px;
+`;
+const Container = styled.div`
+  margin-top: 48px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex: 1 0 0;
+  padding-right: 24px;
+  padding-left: 24px;
+  gap: 24px;
 `;
 const Title = styled.div<{ $keyboardVisible: boolean }>`
   display: flex;
@@ -252,10 +254,8 @@ const Title = styled.div<{ $keyboardVisible: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
   display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
 `;
-
 const Text = styled.span`
   display: block;
   color: #243348;
@@ -269,13 +269,12 @@ const Text = styled.span`
 `;
 const MainCotainer = styled.div<{ $shiftup?: string; $isopen?: string }>`
   display: flex;
-  width: 16.5rem;
-  height: 14.7rem;
-  padding: 0.4rem 0.6rem 0.5rem 0.6rem;
+  width: 100%;
+  padding: 20px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  gap: 22px;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
@@ -285,18 +284,19 @@ const MainCotainer = styled.div<{ $shiftup?: string; $isopen?: string }>`
 `;
 const InputBox = styled.div`
   display: flex;
-  width: 16rem;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   margin-top: 0;
-  border-bottom: 1px dashed #dee2e6;
-  height: 60px;
+  margin-bottom: 4px;
   position: relative;
+  border-bottom: 1px dashed #dee2e6;
 `;
 const InputLogo = styled.div`
   color: #495057;
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 11px;
+  width: 100%;
   font-style: normal;
   font-weight: 500;
   line-height: 16px;
@@ -307,10 +307,11 @@ const InputLogo = styled.div`
 `;
 const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
   width: 232px;
-  height: 26px;
+  height: 20px;
   border: 0;
   padding-left: 0;
-  margin-top: 10px;
+  margin-top: 28px;
+  margin-bottom: 6px;
   background-color: #ffffff;
   &::placeholder {
     color: #adb5bd;
@@ -338,21 +339,25 @@ const InputBoxRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
+  margin-bottom: 6px;
 `;
 const SelectDate = styled.span`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
+  width: 100%;
+  border: 0;
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
   letter-spacing: -0.5px;
-  margin-top: 10px;
+  margin-top: 28px;
 `;
 const Calender = styled.span`
   position: absolute;
   cursor: pointer;
-  right: 1rem;
-  margin-top: 10px;
+  right: 0;
+  margin-top: 28px;
 `;
 const Button = styled.button<{ $keyboardVisible: boolean }>`
   width: 288px;
