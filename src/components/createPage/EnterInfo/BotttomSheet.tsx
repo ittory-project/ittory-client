@@ -60,18 +60,19 @@ const ModalContainer = styled.div`
   bottom: 0;
   display: flex;
   width: 100%;
-  height: 420px;
   border-radius: 24px 24px 0px 0px;
   background: #fff;
   z-index: 100;
   flex-direction: column;
   align-items: center;
+  padding: 28px 24px 18px 24px;
+  box-sizing: border-box;
 `;
 const Button = styled.button`
-  width: 88%;
+  position: relative;
+  width: 100%;
   cursor: pointer;
   display: flex;
-  height: 48px;
   padding: 14px 20px;
   align-items: center;
   justify-content: center;
@@ -79,10 +80,6 @@ const Button = styled.button`
   align-self: stretch;
   border-radius: 50px;
   background: #343a40;
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
