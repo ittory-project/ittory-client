@@ -41,10 +41,10 @@ export interface ApiLetterResponse<T> {
 }
 //편지 작성 POST
 export interface LetterRequestBody {
+  deliveryDate: string;
   coverTypeId: number;
   fontId: number;
   receiverName: string;
-  deliveryDate: string;
   title: string;
   coverPhotoUrl: string;
 }
