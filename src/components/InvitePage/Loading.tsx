@@ -34,7 +34,7 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
           navigate("/Invite", {
             state: { letterId, userName, guideOpen },
           });
-        } else if (attempts >= 5) {
+        } else if (attempts >= 10) {
           clearInterval(interval); // 5번 시도 후 반복 종료
           navigate("/Invite", {
             state: { letterId, userName, guideOpen },
@@ -43,7 +43,7 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
       } catch (err) {
         console.error("데이터를 로딩하는 중 오류 발생:", err);
       }
-    }, 1000); // 1초 간격으로 호출
+    }, 1200); // 1초 간격으로 호출
   };
 
   useEffect(() => {
@@ -59,6 +59,7 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
         if (loadstatus === true) {
           setLoad(true);
           console.log(loadstatus);
+          fetchData();
         } else {
           localStorage.removeItem("load");
           setLoad(false);
