@@ -93,7 +93,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           swiperRef.current.swiper.slidePrev();
         }
       }
-    }, 70);
+    }, 13.75);
   };
 
   useEffect(() => {
@@ -134,7 +134,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           <Select>&nbsp;번씩</Select>
           <Picker>
             <div
-              style={{ width: "240px", height: "200px", overflow: "scroll" }}
+              style={{ width: "240px", height: "200px", overflow: "hidden" }}
             >
               <Swiper
                 direction={"vertical"}
@@ -147,7 +147,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
                 //onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 style={{ height: "100%" }}
                 ref={swiperRef}
-                speed={180}
+                speed={199.5}
               >
                 {list.map((no, index) => (
                   <SwiperSlide key={no} style={{ height: "calc(15rem / 4)" }}>
@@ -330,10 +330,10 @@ const SlideContent = styled.div<SlideContentProps>`
     return "20px";
   }};
   transition:
-    color 0.3s ease,
-    opacity 0.3s ease,
-    letter-spacing 0.3s ease,
-    font-size 0.3s ease; /* 부드러운 전환 효과 */
+    color 0.11s ease,
+    opacity 0.11s ease,
+    letter-spacing 0.11s ease,
+    font-size 0.11s ease; /* 부드러운 전환 효과 */
 `;
 const Notice = styled.div`
   display: flex;
