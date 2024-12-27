@@ -45,6 +45,7 @@ export default function UserFinishModal({
   const [, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
+  const [adjustDay, setAdjustDay] = useState<string>("");
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
@@ -57,6 +58,23 @@ export default function UserFinishModal({
     };
     fetchCoverTypes();
   }, []);
+
+  useEffect(() => {
+    const changeType = () => {
+      if (deliverDay) {
+        // 로컬 타임존에서 날짜를 조정하여 UTC로 변환
+        const adjustedDeliverDay = new Date(deliverDay);
+        adjustedDeliverDay.setMinutes(
+          deliverDay.getMinutes() - deliverDay.getTimezoneOffset()
+        );
+
+        // UTC로 변환된 날짜를 출력 (하루 전 문제 해결)
+        setAdjustDay(adjustedDeliverDay.toISOString());
+        console.log(adjustDay);
+      }
+    };
+    changeType();
+  }, [deliverDay]);
 
   const handleNickname = async (letterId: Number) => {
     if (myName) {
@@ -85,7 +103,7 @@ export default function UserFinishModal({
       coverTypeId: selectedImageIndex + 1,
       fontId: selectFid,
       receiverName: receiverName,
-      deliveryDate: deliverDay?.toISOString() || "",
+      deliveryDate: adjustDay,
       title: title,
       coverPhotoUrl: croppedImage,
     };
@@ -96,11 +114,6 @@ export default function UserFinishModal({
       console.log("Response:", response);
       const letterId = response.letterId;
       console.log("letterId", letterId);
-
-      /*
-      localStorage.setItem("letterId", String(letterId));
-      localStorage.setItem("guideOpen", String(false));
-      localStorage.setItem("userName", myName);*/
 
       fetchEnter(letterId);
 
@@ -124,8 +137,8 @@ export default function UserFinishModal({
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
       fontId: selectFid,
+      deliveryDate: adjustDay,
       receiverName: receiverName,
-      deliveryDate: deliverDay?.toISOString() || "",
       title: title,
       coverPhotoUrl: croppedImage,
     };
@@ -143,15 +156,13 @@ export default function UserFinishModal({
 
       fetchEnter(letterId);
 
-      navigate(
-        "/Invite" /*{
+      navigate("/Invite", {
         state: {
           letterId: letterId,
           guideOpen: true,
           userName: myName,
         },
-      }*/
-      );
+      });
     } catch (error) {
       console.error("Error posting letter:", error);
     }

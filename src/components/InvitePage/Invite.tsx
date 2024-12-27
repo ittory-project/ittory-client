@@ -38,11 +38,11 @@ export const Invite = () => {
   const [refresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
-  const [hasRefreshed, setHasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
+  //const [hasRefreshed, setHasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
 
   const fetchParticipants = async () => {
     try {
-      setLoad(true);
+      //setLoad(true);
       const data = await getParticipants(letterId);
 
       if (data.length > 0 || participants.length > 0) {
@@ -54,9 +54,8 @@ export const Invite = () => {
           setLoadstatus(false);
         }
       } else {
-        //const data = await getParticipants(letterId);
+        const data = await getParticipants(letterId);
         console.log("데이터없음-fetch함수");
-        /*
 
         if (data.length < 1) {
           //console.log("새로고침");
@@ -68,8 +67,8 @@ export const Invite = () => {
               window.location.reload();
             }, 1200);
           }
-        }*/
-        // 데이터가 없으면 새로고침 대신 데이터를 다시 로드
+        }
+        /*
         if (!hasRefreshed) {
           setHasRefreshed(true);
           setTimeout(async () => {
@@ -86,7 +85,7 @@ export const Invite = () => {
               setParticipants(refreshedData);
             }
           }, 300); // 0.3초 후에 데이터 다시 요청
-        }
+        }*/
       }
 
       setParticipants(data);
@@ -97,7 +96,7 @@ export const Invite = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoad(true);
+      //setLoad(true);
       try {
         const mydata = await getMyPage();
         const userNameFromApi = mydata.name;

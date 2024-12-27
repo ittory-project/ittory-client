@@ -64,8 +64,6 @@ export default function FinalInfo({
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [visit, setVisit] = useState<boolean>(false);
 
-  console.log(selectFid);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
