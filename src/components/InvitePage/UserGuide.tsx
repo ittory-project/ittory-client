@@ -10,12 +10,12 @@ import gray from "../../../public/assets/graycircle.svg";
 import blue from "../../../public/assets/bluecircle.svg";
 
 interface Props {
-  setGuide: React.Dispatch<React.SetStateAction<boolean>>;
+  setGuide: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const UserGuide = ({ setGuide }: Props) => {
   const guides = [guide1, guide2, guide3, guide4, guide5, guide6];
-
+  console.log("가이드 열림");
   const descriptions = [
     "방장이 편지를\n몇 번 이어 쓸 지 정해요",
     "편지 작성 순서는\n랜덤으로 정해져요",
@@ -40,7 +40,7 @@ export const UserGuide = ({ setGuide }: Props) => {
   };
 
   const handleComplete = () => {
-    setGuide(false);
+    setGuide("false");
   };
 
   return (

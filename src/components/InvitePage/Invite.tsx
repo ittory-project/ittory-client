@@ -30,7 +30,6 @@ export const Invite = () => {
   const userName = location.state.userName;
   const guideOpen = location.state.guideOpen;
 
-  console.log(guideOpen);
   const [letterId] = useState<number>(getletterId);
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
@@ -38,65 +37,53 @@ export const Invite = () => {
   const [refresh] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
-  //const [hasRefreshed, setHasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
+  const [hasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
 
   const fetchParticipants = async () => {
     try {
-      //setLoad(true);
+      setLoad(true);
       const data = await getParticipants(letterId);
 
       if (data.length > 0 || participants.length > 0) {
         if (data[0].nickname === name || data[0].nickname === userName) {
           setMemberIndex(0);
           setLoadstatus(false);
+          setLoad(false);
+          localStorage.removeItem("load");
         } else {
           setMemberIndex(1);
           setLoadstatus(false);
+          setLoad(false);
+          localStorage.removeItem("load");
         }
       } else {
-        const data = await getParticipants(letterId);
-        console.log("데이터없음-fetch함수");
-
-        if (data.length < 1) {
-          //console.log("새로고침");
-          const data = await getParticipants(letterId);
-          //window.location.reload();
-          if (data.length < 1) {
-            console.log("새로고침");
-            setTimeout(() => {
-              window.location.reload();
-            }, 1200);
+        if (!hasRefreshed) {
+          console.log(localStorage.getItem("load"));
+          if (localStorage.getItem("load") === "done") {
+            setLoad(true);
+            console.log("로딩이미했음");
+          } else {
+            console.log("로딩 페이지로");
+            localStorage.setItem("load", "done");
+            navigate("/loading", {
+              state: {
+                letterId: getletterId,
+                userName: userName,
+                guideOpen: guideOpen,
+              },
+            });
           }
         }
-        /*
-        if (!hasRefreshed) {
-          setHasRefreshed(true);
-          setTimeout(async () => {
-            console.log("데이터 다시 요청");
-
-            // 데이터를 다시 요청
-            const refreshedData = await getParticipants(letterId);
-
-            if (refreshedData.length < 1) {
-              // 데이터가 없으면 다시 한 번 요청
-              console.log("데이터가 여전히 없음");
-            } else {
-              // 새로 받은 데이터를 상태에 반영
-              setParticipants(refreshedData);
-            }
-          }, 300); // 0.3초 후에 데이터 다시 요청
-        }*/
       }
-
-      setParticipants(data);
     } catch (err) {
       console.error("Error fetching participants:", err);
+      setLoadstatus(false);
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      //setLoad(true);
+      setLoad(true);
       try {
         const mydata = await getMyPage();
         const userNameFromApi = mydata.name;
@@ -113,10 +100,15 @@ export const Invite = () => {
             participants[0].nickname === userName
           ) {
             setMemberIndex(0);
+            localStorage.removeItem("load");
+
             setLoadstatus(false);
+            setLoad(false);
           } else {
             setMemberIndex(1);
+            localStorage.removeItem("load");
             setLoadstatus(false);
+            setLoad(false);
           }
         }
       } catch (err) {
@@ -141,15 +133,22 @@ export const Invite = () => {
         if (participants.length < 1) {
           fetchParticipants();
         } else {
+          console.log(participants.length);
           if (
             participants[0].nickname === userName ||
             participants[0].nickname === name
           ) {
             setMemberIndex(0);
+            localStorage.removeItem("load");
+
             setLoadstatus(false);
+            setLoad(false);
           } else {
             setMemberIndex(1);
+            localStorage.removeItem("load");
+
             setLoadstatus(false);
+            setLoad(false);
           }
         }
       } catch (err) {
@@ -162,7 +161,9 @@ export const Invite = () => {
 
   useEffect(() => {
     if (memberIndex > -1) {
+      localStorage.removeItem("load");
       setLoadstatus(false);
+      setLoad(false);
     }
   }, [memberIndex]);
 
@@ -259,13 +260,13 @@ export const Invite = () => {
 
   return (
     <BackGround>
-      {load ? (
+      {load || memberIndex < 0 ? (
         <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-          {memberIndex === 0 && (
+          {memberIndex === 1 && (
             <>
               <HostUser
                 guideOpen={guideOpen}
@@ -277,7 +278,7 @@ export const Invite = () => {
               />
             </>
           )}
-          {memberIndex === 1 && (
+          {memberIndex === 0 && (
             <Member
               letterId={letterId}
               guideOpen={guideOpen}
