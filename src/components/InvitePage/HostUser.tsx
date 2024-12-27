@@ -5,8 +5,6 @@ import { ko } from "date-fns/locale";
 import out from "../../../public/assets/out.svg";
 import deletebtn from "../../../public/assets/delete.svg";
 import info from "../../../public/assets/info.svg";
-// import crown from "../../../public/assets/crown.svg";
-// import plus from "../../../public/assets/plus.svg";
 import crown from "/assets/crown.svg";
 import plus from "/assets/plus.svg";
 import tip from "../../../public/assets/tooltip.svg";
@@ -24,6 +22,8 @@ import { CoverType } from "../../api/model/CoverType";
 import { getLetterInfo } from "../../api/service/LetterService";
 import defaultImg from "../../../public/assets/menu/logindefault.png";
 import { getFontById } from "../../api/service/FontService";
+import { LetterDetailGetResponse } from "../../api/model/LetterModel";
+import { getLetterDetailInfo } from "../../api/service/LetterService";
 
 interface Props {
   guideOpen: boolean;
@@ -41,6 +41,8 @@ export const HostUser = ({
   viewDelete,
   setViewDelete,
 }: Props) => {
+  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [sliceName, setSliceName] = useState<string>("");
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
@@ -135,28 +137,28 @@ export const HostUser = ({
     setPopup(true);
   };
 
-  const handle = async () => {
-    const url = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
-
-    if (
-      navigator.clipboard &&
-      typeof navigator.clipboard.writeText === "function"
-    ) {
-      try {
-        await navigator.clipboard.writeText(url);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } catch (error) {
-        console.error("Clipboard API failed:", error);
-        fallbackCopyTextToClipboard(url);
+  useEffect(() => {
+    const getSharedLetter = async () => {
+      if (letterId) {
+        const response = await getLetterDetailInfo(letterId);
+        setLetterInfo(response);
       }
-    } else {
-      // Safari 호환용 대체 복사 방식
-      fallbackCopyTextToClipboard(url);
-    }
-  };
+    };
+    getSharedLetter();
+  }, [letterId]);
 
-  // 대체 복사 함수
+  // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
+  const handleResize = () => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false);
+  };
+  useEffect(() => {
+    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
@@ -179,6 +181,43 @@ export const HostUser = ({
       alert("텍스트 복사에 실패했습니다.");
     } finally {
       document.body.removeChild(textArea);
+    }
+  };
+
+  // 모바일, 데스크톱 화면 구분해서 공유하게 함
+  const handleShare = async () => {
+    if (letterInfo) {
+      if (!isMobile) {
+        const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
+        if (
+          navigator.clipboard &&
+          typeof navigator.clipboard.writeText === "function"
+        ) {
+          try {
+            await navigator.clipboard.writeText(shareTextPc);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 3000);
+          } catch (error) {
+            console.error("공유 실패: ", error);
+            fallbackCopyTextToClipboard(shareTextPc);
+          }
+        } else {
+          // Safari 호환용 대체 복사 방식
+          fallbackCopyTextToClipboard(shareTextPc);
+        }
+      } else {
+        // 모바일이면
+        try {
+          await navigator.share({
+            url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
+          });
+          console.log("공유 성공");
+        } catch (e) {
+          console.log("공유 실패");
+        }
+      }
+    } else {
+      console.log("공유 실패");
     }
   };
 
@@ -300,7 +339,7 @@ export const HostUser = ({
                         <ProfileImg
                           $img={plus}
                           onClick={() => {
-                            handle();
+                            handleShare();
                           }}
                           style={{ cursor: "pointer" }}
                         />
