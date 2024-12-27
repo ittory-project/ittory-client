@@ -26,7 +26,7 @@ import { LetterDetailGetResponse } from "../../api/model/LetterModel";
 import { getLetterDetailInfo } from "../../api/service/LetterService";
 
 interface Props {
-  guideOpen: boolean;
+  guideOpen: string;
   hostname: string;
   items: Participants[];
   letterId: number;
@@ -44,7 +44,7 @@ export const HostUser = ({
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [sliceName, setSliceName] = useState<string>("");
-  const [guide, setGuide] = useState<boolean>(guideOpen);
+  const [guide, setGuide] = useState<string>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
@@ -61,6 +61,7 @@ export const HostUser = ({
   const [selectfont, setSelectfont] = useState<string>("");
   const [receiverName, setReceiverName] = useState<string>("");
 
+  console.log(guideOpen);
   useEffect(() => {
     const fetchCoverTypes = async () => {
       try {
@@ -70,6 +71,7 @@ export const HostUser = ({
         console.error(err);
       }
     };
+
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
@@ -123,7 +125,7 @@ export const HostUser = ({
   };
 
   const handleGuide = () => {
-    setGuide(true);
+    setGuide("true");
   };
 
   const handleDeleteview = () => {
@@ -223,7 +225,7 @@ export const HostUser = ({
 
   return (
     <BackGround>
-      {guide && <Overlay />}
+      {guide === "true" && <Overlay />}
       {viewCount && <Overlay />}
       {viewDelete && <Overlay />}
       {viewExit && <Overlay />}
@@ -358,7 +360,7 @@ export const HostUser = ({
             </Button>
           </MainContainer>
 
-          {guide && <UserGuide setGuide={setGuide} />}
+          {guide === "true" && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
             <Count
