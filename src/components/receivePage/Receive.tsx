@@ -95,20 +95,16 @@ const Container = styled.div`
 
 const DoorImg = styled.div<{ expanded: boolean }>`
   position: absolute;
-  bottom: -35px;
+  bottom: 0px;
   left: 0px;
   z-index: 1;
-  width: calc(100% - 60px);
+  width: 100%
   height: 70%;
-  margin: 0 30px;
   background-image: url(/assets/door.svg);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
-  object-fit: cover;
   transition: all 2s ease;
 
   ${({ expanded }) =>
