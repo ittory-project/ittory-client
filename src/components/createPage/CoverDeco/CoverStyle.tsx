@@ -551,7 +551,7 @@ const Input = styled.input<{ $selectfont: string }>`
   text-align: center;
   border: 0;
   background: rgba(255, 255, 255, 0);
-
+  cursor: pointer;
   &::placeholder {
     line-height: 24px;
     color: #f1f3f5;

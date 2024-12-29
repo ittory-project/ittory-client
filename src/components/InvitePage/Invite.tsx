@@ -61,6 +61,7 @@ export const Invite = () => {
           console.log(localStorage.getItem("load"));
           if (localStorage.getItem("load") === "done") {
             setLoad(true);
+            setLoadstatus(true);
             console.log("로딩이미했음");
           } else {
             console.log("로딩 페이지로");
@@ -236,6 +237,8 @@ export const Invite = () => {
       })();
     };
   }, []);
+
+  console.log(memberIndex);
 
   //퇴장 알림
   useEffect(() => {
