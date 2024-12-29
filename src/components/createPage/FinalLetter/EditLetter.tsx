@@ -400,6 +400,7 @@ const Input = styled.input`
   padding-left: 0;
   background-color: #fff;
   margin-bottom: 4px;
+  cursor: pointer;
   &::placeholder {
     color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
@@ -434,6 +435,7 @@ const SelectDate = styled.span`
   font-weight: 400;
   line-height: 24px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const Calender = styled.span`
   position: absolute;
