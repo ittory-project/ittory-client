@@ -93,7 +93,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           swiperRef.current.swiper.slidePrev();
         }
       }
-    }, 13.75);
+    }, 14);
   };
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
                 //onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 style={{ height: "100%" }}
                 ref={swiperRef}
-                speed={199.5}
+                speed={210}
               >
                 {list.map((no, index) => (
                   <SwiperSlide key={no} style={{ height: "calc(15rem / 4)" }}>
@@ -254,6 +254,7 @@ const List = styled.div`
 const Picker = styled.div`
   position: relative;
   z-index: 1;
+  margin-right: 22px;
 `;
 const Select = styled.div`
   display: flex;
@@ -267,7 +268,7 @@ const Select = styled.div`
   border-radius: 50px;
   background: #fff;
   color: #ffa256;
-  padding-left: 4.5rem;
+  padding-left: 56px;
   font-family: SUIT;
   font-size: 20px;
   font-style: normal;
@@ -275,7 +276,7 @@ const Select = styled.div`
   line-height: 32px;
   letter-spacing: -0.5px;
   position: absolute;
-  bottom: 6.02rem;
+  bottom: 96.15px;
   z-index: 1;
 `;
 const SlideContent = styled.div<SlideContentProps>`
