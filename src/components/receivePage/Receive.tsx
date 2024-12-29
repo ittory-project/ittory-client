@@ -88,22 +88,27 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: calc(var(--vh, 1vh) * 100);
+  padding: 0 32px;
   background: #000;
   overflow: hidden;
 `;
 
 const DoorImg = styled.div<{ expanded: boolean }>`
   position: absolute;
-  bottom: 0px;
+  bottom: -35px;
   left: 0px;
   z-index: 1;
-  width: 100%;
+  width: calc(100% - 60px);
   height: 70%;
+  margin: 0 30px;
   background-image: url(/assets/door.svg);
-  background-size: cover;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  object-fit: cover;
   transition: all 2s ease;
 
   ${({ expanded }) =>
@@ -123,7 +128,7 @@ const AnimatedDiv = styled.div<{ expanded: boolean }>`
   height: 30px;
   border-radius: 50%;
   position: absolute;
-  top: 47%;
+  top: 50%;
   transition: all 2s ease;
   filter: ${({ expanded }) => (expanded ? 'none' : 'blur(2px)')};
 
@@ -178,7 +183,7 @@ const MainText = styled.div`
 
 const MainTitleContainer = styled.div`
   position: absolute;
-  top: 10%;
+  top: 7%;
 `
 
 const MainInfo = styled.div`
@@ -187,7 +192,7 @@ const MainInfo = styled.div`
   border-radius: 5px;
   color: white;
   position: absolute;
-  bottom: 50px;
+  bottom: 40px;
   z-index: 2;
 
   color: #FCFFAF;
@@ -213,7 +218,7 @@ const TextBalloon = styled.div`
 
 const ExpandTitle = styled.div`
   min-width: 20%;
-  max-width: 90%;
+  max-width: 256px;
   font-size: clamp(14px, 2vw, 20px);
   color: white;
   margin-bottom: 0px;
@@ -224,7 +229,7 @@ const ExpandTitle = styled.div`
   border-radius: 12px;
   background: #243348;
   backdrop-filter: blur(2px);
-  white-space: nowrap;
+  white-space: wrap;
 `;
 
 const BalloonUnder = styled.img`
@@ -238,7 +243,7 @@ const ExpandButton = styled.div`
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  width: 288px;
+  width: calc(100% - 100px);
   height: 48px;
   padding: 3px 20px;
   justify-content: center;

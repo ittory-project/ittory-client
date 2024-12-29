@@ -218,16 +218,17 @@ const ModalOverlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 3;
-  background-color: rgba(0, 0, 0, 0.80);
+  background-color: rgba(0, 0, 0, 0.3);
 `;
 
 const PopupContainer = styled.div`
   display: flex;
   width: 272px;
-  padding: 24px;
+  margin: auto 24px;
+  padding: 20px;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   border-radius: var(--Border-Radius-radius_500, 16px);
   border: 3px solid var(--Color-secondary-soft_blue, #D3EDFF);
   background: linear-gradient(144deg, #FFF -0.87%, #FFF 109.18%);
@@ -251,7 +252,7 @@ const PopupSub = styled.div`
   text-align: center;
   color: var(--Color-grayscale-gray600, #868E96);
   text-align: center;
-  margin: 0 0 1rem 0;
+  margin: 0 0 12px 0;
   /* caption/xsmall */
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-xs, 12px);
@@ -263,10 +264,12 @@ const PopupSub = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 8px;
 `;
 
 const CancelButton = styled.div`
+  width: 58px;
   color: var(--Color-grayscale-gray700, #495057);
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
@@ -287,6 +290,7 @@ const CancelButton = styled.div`
 `
 
 const MoveButton = styled.div`
+  width: 58px;
   color: var(--color-black-white-white, #FFF);
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
@@ -316,7 +320,7 @@ const IsStoredButton = styled.div`
   display: flex;
   height: 40px;
   width: 200px;
-  margin: 1rem 0 0 0;
+  margin: 12px 0 0 0;
   padding: 2px 25px;
   justify-content: center;
   align-items: center;

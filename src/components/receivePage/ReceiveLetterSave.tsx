@@ -9,9 +9,9 @@ export const ReceiveLetterSave = ({ handleSaveLetter }: LetterContentProps) => {
   return (
     <>
       <ProductLeftSide src='/img/cover/left.png' />
-      <ProductRightSide src='/img/cover/product.svg' />
+      <ProductRightSide src='/img/cover/product_no_background.svg' />
       <Content>받은 편지를<br/>간직하고 싶다면?</Content>
-      <ContentImg src='/img/letter_save_contents.png'/>
+      <ContentImg src='/img/letter_save_contents.svg'/>
       <ContentSaveBtn onClick={handleSaveLetter}>편지함에 보관하기</ContentSaveBtn>
     </>
   );
