@@ -77,7 +77,7 @@ export const WritePage = () => {
     }, 1000);
 
     const showTimer = setTimeout(() => {
-      setShowPopup(false);
+      setShowPopup(true);
       setShowCountdown(true);
 
       const hideTimer = setTimeout(() => {

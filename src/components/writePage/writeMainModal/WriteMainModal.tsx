@@ -195,7 +195,7 @@ const List = styled.ul`
 const ListItem = styled.li`
   display: flex;
   align-items: center;
-  padding: 10px 20px 10px 0px;
+  padding: 0px 20px 12px 0px;
   z-index: 2;
 `;
 
@@ -232,7 +232,7 @@ const Name = styled.span`
 
 const Line = styled.div<{ $itemnum: number }>`
   border-left: 1.5px dashed rgba(111, 176, 255, 0.5);
-  height: ${({ $itemnum }) => `calc(${$itemnum} * 60px - 34px)`};
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 48px - 35px)`};
   top: 18px;
   left: 12px;
   position: absolute;
@@ -249,7 +249,7 @@ const ClockIcon = styled.img`
 `;
 
 const ClockText = styled.div`
-  margin: 2px 0px 0px 0px;
+  margin: 16px 0px 0px 0px;
   display: flex;
   color: var(--Color-secondary-soft_navy_blue, #99ADC9);
 
