@@ -35,7 +35,7 @@ const ProductRightSide = styled.img`
 `;
 
 const ProductLeftSide = styled.img`
-  width: 94px;
+  width: 95px;
   height: 369px;
   object-fit: fill;
   position: absolute;
