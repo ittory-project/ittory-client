@@ -314,6 +314,7 @@ const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
   margin-top: 28px;
   margin-bottom: 6px;
   background-color: #ffffff;
+  cursor: pointer;
   &::placeholder {
     color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
