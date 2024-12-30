@@ -71,7 +71,6 @@ export default function CoverModal({
   const [font, setFont] = useState<string>(selectfont);
   const [selectf, setSelectf] = useState<string>("");
   const [selectfid, setSelectfid] = useState<number>(0);
-  const [heightDiff, setHeightDiff] = useState<number>(0);
 
   useEffect(() => {
     const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
@@ -143,19 +142,19 @@ export default function CoverModal({
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
+      let currentHeightDiff = 0;
       if (window.visualViewport) {
-        setHeightDiff(window.innerHeight - window.visualViewport.height);
+        currentHeightDiff = window.innerHeight - window.visualViewport.height;
       } else {
-        setHeightDiff(
-          window.innerHeight - document.documentElement.clientHeight
-        );
+        currentHeightDiff =
+          window.innerHeight - document.documentElement.clientHeight;
       }
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
-        if (heightDiff > 0) {
+        if (currentHeightDiff > 0) {
           if (window.innerWidth < 431) {
             setIsKeyboardOpen(true);
             setIsKeyboardOpen(true);
-            setKeyboardHeight(heightDiff);
+            setKeyboardHeight(currentHeightDiff);
             inputRef.current.focus();
           } else {
             setIsKeyboardOpen(false);
