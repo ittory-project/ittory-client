@@ -71,6 +71,7 @@ export default function CoverModal({
   const [font, setFont] = useState<string>(selectfont);
   const [selectf, setSelectf] = useState<string>("");
   const [selectfid, setSelectfid] = useState<number>(0);
+  const [heightDiff, setHeightDiff] = useState<number>(0);
 
   useEffect(() => {
     const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
@@ -142,11 +143,15 @@ export default function CoverModal({
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
-      const heightDiff =
-        window.innerHeight - document.documentElement.clientHeight;
-
+      if (window.visualViewport) {
+        setHeightDiff(window.innerHeight - window.visualViewport.height);
+      } else {
+        setHeightDiff(
+          window.innerHeight - document.documentElement.clientHeight
+        );
+      }
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
-        if (keyboardHeight > 0) {
+        if (heightDiff > 0) {
           if (window.innerWidth < 431) {
             setIsKeyboardOpen(true);
             setIsKeyboardOpen(true);
@@ -158,14 +163,9 @@ export default function CoverModal({
             handlePopup();
           }
         } else {
-          if (window.innerWidth < 431) {
-            console.log("모바일인데 키보드 닫힘");
-            setFontPopup(false);
-          } else {
-            setIsKeyboardOpen(false);
-            setKeyboardHeight(0);
-            handlePopup();
-          }
+          setIsKeyboardOpen(false);
+          setKeyboardHeight(0);
+          handlePopup();
         }
       }
       if (
