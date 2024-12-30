@@ -60,7 +60,8 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
         if (window.visualViewport) {
           const keyboardHeight =
             window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
-          if (keyboardHeight > 0) {
+          console.log("키보드 높이: ", keyboardHeight);
+          if (keyboardHeight !== 0) {
             if (window.innerWidth < 431) {
               setIsKeyboardVisible(true);
               setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
@@ -70,8 +71,11 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
             }
           } else {
             if (window.innerWidth < 431) {
+              console.log("모바일인데 키보드 닫힘");
+              setIsKeyboardVisible(false);
               setFontPopup(false);
             } else {
+              console.log("모바일아니고 키보드 닫힘");
               setIsKeyboardVisible(false);
               setBottomOffset(0);
             }
