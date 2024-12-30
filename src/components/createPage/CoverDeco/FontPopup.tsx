@@ -72,15 +72,8 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
             }
           } else {
             console.log("키보드 안열림");
-            if (window.innerWidth < 431) {
-              console.log("모바일인데 키보드 닫힘");
-              setIsKeyboardVisible(false);
-              setFontPopup(false);
-            } else {
-              console.log("모바일아니고 키보드 닫힘");
-              setIsKeyboardVisible(false);
-              setBottomOffset(0);
-            }
+            setIsKeyboardVisible(false);
+            setBottomOffset(0);
           }
         }
       };
