@@ -14,6 +14,7 @@ interface Props {
   select: string;
   setSelectfid: React.Dispatch<React.SetStateAction<number>>;
   selectfid: number;
+  handlePopupClick: (e: React.MouseEvent) => void;
 }
 
 const FontPopup = forwardRef<HTMLDivElement, Props>(
@@ -27,6 +28,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
       select,
       setSelectfid,
       selectfid,
+      handlePopupClick,
     },
     ref
   ) => {
@@ -101,6 +103,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
               selectfid={selectfid}
               setSelectFid={setSelectfid}
               setSelectId={setSelectId}
+              handlePopupClick={handlePopupClick}
             />
           </FontContainer>
           <Line src={_Line} />
