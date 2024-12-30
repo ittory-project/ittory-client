@@ -262,6 +262,14 @@ export default function CoverModal({
     setIsModalOpen(false);
   };
 
+  const handlePopupClick = (e: React.MouseEvent) => {
+    // FontPopup을 클릭하면 input에 포커스를 유지
+    if (inputRef.current) {
+      inputRef.current.focus(); // input에 포커스를 유지시켜 키보드를 올려둠
+    }
+    e.stopPropagation(); // 이벤트 전파를 막아 다른 요소가 클릭되지 않도록 함
+  };
+
   return (
     <ModalContainer
       ref={modalBackground}
@@ -378,6 +386,7 @@ export default function CoverModal({
           setSelectfid={setSelectfid}
           selectfid={selectfid}
           ref={popupRef}
+          handlePopupClick={handlePopupClick}
         />
       )}
     </ModalContainer>
