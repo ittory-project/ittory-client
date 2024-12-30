@@ -263,10 +263,15 @@ export default function CoverModal({
   };
 
   const handlePopupClick = (e: React.MouseEvent) => {
+    console.log("팝업 클릭 함수 실행");
     // FontPopup을 클릭하면 input에 포커스를 유지
-    if (inputRef.current) {
-      console.log("포커스 유지 함수 실행");
-      inputRef.current.focus(); // input에 포커스를 유지시켜 키보드를 올려둠
+    if (popupRef.current) {
+      console.log("팝업 클릭함");
+      if (inputRef.current) {
+        console.log("인풋에 포커스");
+        inputRef.current.focus();
+      }
+      // input에 포커스를 유지시켜 키보드를 올려둠
     }
     e.stopPropagation(); // 이벤트 전파를 막아 다른 요소가 클릭되지 않도록 함
   };
