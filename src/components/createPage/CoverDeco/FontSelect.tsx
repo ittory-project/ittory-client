@@ -11,6 +11,7 @@ interface Props {
   setSelectFid: React.Dispatch<React.SetStateAction<number>>;
   setSelectId: React.Dispatch<React.SetStateAction<number>>;
   selectfid: number;
+  handlePopupClick: (e: React.MouseEvent) => void;
 }
 
 export default function FontSelect({
@@ -21,6 +22,7 @@ export default function FontSelect({
   setSelect,
   select,
   setSelectId,
+  handlePopupClick,
 }: Props) {
   const handleFontChange = (fontFamily: string, fontId: number) => {
     console.log(fontFamily);
@@ -43,14 +45,18 @@ export default function FontSelect({
   }, []);
 
   return (
-    <Container>
+    <Container className="fontselect" onClick={handlePopupClick}>
       <FontSelectorContainer>
         {fonts.map((fontlist) => (
           <FontItem
             key={fontlist.id}
             $fontFamily={fontlist.value}
             $selected={fontlist.value === font}
-            onClick={() => handleFontChange(fontlist.value, fontlist.id)}
+            //onClick={() => handleFontChange(fontlist.value, fontlist.id)}
+            onClick={(e) => {
+              handleFontChange(fontlist.value, fontlist.id);
+              e.stopPropagation(); // FontItem 클릭 시 부모 컨테이너의 클릭 이벤트가 실행되지 않도록
+            }} // 폰트 변경 시 포커스를 유지하고 키보드도 내려가지 않게 함
           >
             <Fonttxt
               $fontFamily={fontlist.value}
