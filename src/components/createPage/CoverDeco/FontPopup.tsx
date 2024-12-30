@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, useRef } from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
@@ -35,6 +35,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
     const [bottomOffset, setBottomOffset] = useState<number>(0);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
     const [, setIsCompleted] = useState<boolean>(false);
+    const inputRef = useRef<HTMLInputElement | null>(null); // input 요소를 ref로 설정
 
     useEffect(() => {
       setSelected(font);
@@ -84,11 +85,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
       };
     }, []);
 
-    const handleInputBlur = () => {
-      // 입력 필드에서 blur 발생 시 서체 선택 영역을 내려가도록 처리
-      setIsCompleted(true); // 완료 상태로 설정
-    };
-
     return (
       <div ref={ref} className={ParentDiv}>
         <BackGround
@@ -112,12 +108,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
             완료
           </Button>
         </BackGround>
-        {/* 키보드가 올라오면 이 필드가 focus되며 완료버튼을 눌렀을 때 키보드가 내려가게 처리 */}
-        <input
-          type="text"
-          style={{ opacity: 0 }}
-          onBlur={handleInputBlur} // blur 발생 시 서체 선택 영역을 내려가도록 설정
-        />
       </div>
     );
   }
@@ -145,7 +135,6 @@ const BackGround = styled.div<{
   overflow-x: hidden;
   overflow-y: hidden;
   height: ${(props) => (props.$isKeyboardVisible ? "64px" : "149px")};
-
   transition:
     bottom 0.3s ease,
     height 0.3s ease;

@@ -179,6 +179,7 @@ export default function CoverStyle({
           handlePopup();
         }
       }
+
       if (
         inputRef.current &&
         !inputRef.current.contains(e.target as Node) &&
