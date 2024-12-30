@@ -83,7 +83,7 @@ export default function CoverStyle({
   setSelectFid,
 }: Props) {
   const [, setIsKeyboardOpen] = useState<boolean>(false);
-  const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
+  const [, setKeyboardHeight] = useState<number>(0);
 
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -100,6 +100,7 @@ export default function CoverStyle({
   const [selectfid, setSelectfid] = useState<number>(1);
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   const popupRef = useRef<HTMLDivElement | null>(null);
+  const [heightDiff, setHeightDiff] = useState<number>(0);
 
   useEffect(() => {
     const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
@@ -173,11 +174,15 @@ export default function CoverStyle({
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
-      const heightDiff =
-        window.innerHeight - document.documentElement.clientHeight;
-
+      if (window.visualViewport) {
+        setHeightDiff(window.innerHeight - window.visualViewport.height);
+      } else {
+        setHeightDiff(
+          window.innerHeight - document.documentElement.clientHeight
+        );
+      }
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
-        if (keyboardHeight > 0) {
+        if (heightDiff > 0) {
           if (window.innerWidth < 431) {
             setIsKeyboardOpen(true);
             setIsKeyboardOpen(true);
