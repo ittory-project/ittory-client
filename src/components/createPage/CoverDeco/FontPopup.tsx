@@ -37,7 +37,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
     const [bottomOffset, setBottomOffset] = useState<number>(0);
     const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
     const [, setIsCompleted] = useState<boolean>(false);
-    const inputRef = useRef<HTMLInputElement | null>(null); // input 요소를 ref로 설정
 
     useEffect(() => {
       setSelected(font);
@@ -70,8 +69,12 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
               setBottomOffset(0);
             }
           } else {
-            setIsKeyboardVisible(false);
-            setBottomOffset(0);
+            if (window.innerWidth < 431) {
+              setFontPopup(false);
+            } else {
+              setIsKeyboardVisible(false);
+              setBottomOffset(0);
+            }
           }
         }
       };
