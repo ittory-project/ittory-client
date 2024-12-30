@@ -55,6 +55,7 @@ export default function FontSelect({
             //onClick={() => handleFontChange(fontlist.value, fontlist.id)}
             onClick={(e) => {
               handleFontChange(fontlist.value, fontlist.id);
+              handlePopupClick(e);
               e.stopPropagation(); // FontItem 클릭 시 부모 컨테이너의 클릭 이벤트가 실행되지 않도록
             }} // 폰트 변경 시 포커스를 유지하고 키보드도 내려가지 않게 함
           >
