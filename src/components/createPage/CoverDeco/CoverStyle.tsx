@@ -185,7 +185,6 @@ export default function CoverStyle({
         if (currentHeightDiff > 0) {
           if (window.innerWidth < 431) {
             setIsKeyboardOpen(true);
-            setIsKeyboardOpen(true);
             setKeyboardHeight(currentHeightDiff);
             inputRef.current.focus();
           } else {
@@ -194,14 +193,14 @@ export default function CoverStyle({
             handlePopup();
           }
         } else {
-          /*
           if (window.innerWidth < 431) {
             console.log("모바일인데 키보드 닫힘");
             setFontPopup(false);
-          } 너무 오류나서 일단 보류*/
-          setIsKeyboardOpen(false);
-          setKeyboardHeight(0);
-          handlePopup();
+          } else {
+            setIsKeyboardOpen(false);
+            setKeyboardHeight(0);
+            handlePopup();
+          }
         }
       }
 
