@@ -58,9 +58,13 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
     useEffect(() => {
       const handleResize = () => {
         if (window.visualViewport) {
-          const keyboardHeight =
+          let keyboardHeight =
             window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
           console.log("키보드 높이: ", keyboardHeight);
+
+          if (keyboardHeight < 0) {
+            keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
+          }
 
           if (keyboardHeight > 0) {
             console.log("키보드 열림");
