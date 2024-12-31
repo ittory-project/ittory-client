@@ -57,14 +57,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
 
     useEffect(() => {
       const handleResize = () => {
-        let currentHeightDiff = 0;
-        if (window.visualViewport) {
-          currentHeightDiff = window.innerHeight - window.visualViewport.height;
-        } else {
-          currentHeightDiff =
-            window.innerHeight - document.documentElement.clientHeight;
-        }
-
         if (window.visualViewport) {
           const keyboardHeight =
             window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
@@ -81,11 +73,12 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
             }
           } else {
             console.log("키보드 안열림");
+            // 키보드가 닫힐 때의 처리
             if (window.innerWidth < 431) {
-              setFontPopup(false);
+              setFontPopup(false); // 모바일에서 키보드가 닫히면 폰트 팝업 숨김
             } else {
-              setIsKeyboardVisible(false);
-              setBottomOffset(0);
+              setIsKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
+              setBottomOffset(0); // 키보드 높이를 0으로 설정
             }
           }
         }
