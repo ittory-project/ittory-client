@@ -88,7 +88,7 @@ export default function CoverStyle({
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>("");
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isModalOpen] = useState<boolean>(false);
   const [, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
@@ -147,10 +147,6 @@ export default function CoverStyle({
     setImageIndex(index);
   };
 
-  const handlePopup = () => {
-    setFontPopup(true);
-  };
-
   useEffect(() => {
     console.log("Updated selectedImageIndex:", selectedImageIndex);
     setSelectedImageIndex(ImageIndex);
@@ -169,6 +165,10 @@ export default function CoverStyle({
       // input에 포커스를 유지시켜 키보드를 올려둠
     }
     e.stopPropagation(); // 이벤트 전파를 막아 다른 요소가 클릭되지 않도록 함
+  };
+
+  const handlePopup = () => {
+    setFontPopup(true);
   };
 
   useEffect(() => {
@@ -223,8 +223,6 @@ export default function CoverStyle({
   useEffect(() => {
     const handleSaveClick = async () => {
       {
-        if (croppedAreaPixels) {
-        }
         if (originalImage !== "") {
           //Blob으로 변경
           const responseBlob = await fetch(originalImage).then((res) =>

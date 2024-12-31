@@ -15,7 +15,6 @@ export default function Started() {
         <Title>이미 편지가 진행되어</Title>
         <Title>입장할 수 없어요</Title>
       </Container>
-
       <Button onClick={handleButton}>
         <ButtonTxt>홈으로</ButtonTxt>
       </Button>

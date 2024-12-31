@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useRef } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import styled from "styled-components";
 import FontSelect from "./FontSelect";
 import _Line from "../../../../public/assets/_line.svg";
@@ -57,10 +57,19 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
 
     useEffect(() => {
       const handleResize = () => {
+        let currentHeightDiff = 0;
+        if (window.visualViewport) {
+          currentHeightDiff = window.innerHeight - window.visualViewport.height;
+        } else {
+          currentHeightDiff =
+            window.innerHeight - document.documentElement.clientHeight;
+        }
+
         if (window.visualViewport) {
           const keyboardHeight =
             window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
           console.log("키보드 높이: ", keyboardHeight);
+
           if (keyboardHeight > 0) {
             console.log("키보드 열림");
             if (window.innerWidth < 431) {
@@ -72,8 +81,12 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
             }
           } else {
             console.log("키보드 안열림");
-            setIsKeyboardVisible(false);
-            setBottomOffset(0);
+            if (window.innerWidth < 431) {
+              setFontPopup(false);
+            } else {
+              setIsKeyboardVisible(false);
+              setBottomOffset(0);
+            }
           }
         }
       };
