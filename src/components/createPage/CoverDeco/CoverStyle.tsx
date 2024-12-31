@@ -180,6 +180,9 @@ export default function CoverStyle({
         currentHeightDiff =
           window.innerHeight - document.documentElement.clientHeight;
       }
+      if (currentHeightDiff < 0) {
+        currentHeightDiff = Math.max(0, currentHeightDiff); // 음수는 0으로 처리
+      }
 
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
         if (currentHeightDiff > 0) {
