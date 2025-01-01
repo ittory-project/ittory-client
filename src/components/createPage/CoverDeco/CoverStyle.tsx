@@ -196,14 +196,9 @@ export default function CoverStyle({
             handlePopup();
           }
         } else {
-          if (window.innerWidth < 431) {
-            console.log("모바일인데 키보드 닫힘");
-            setFontPopup(false);
-          } else {
-            setIsKeyboardOpen(false);
-            setKeyboardHeight(0);
-            handlePopup();
-          }
+          setIsKeyboardOpen(false);
+          setKeyboardHeight(0);
+          handlePopup();
         }
       }
 

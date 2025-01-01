@@ -80,8 +80,8 @@ export const DeleteReason = ({ setViewReason }: Props) => {
 
   return (
     <>
+      {popup && <Overlay />}
       <BackGround>
-        {popup && <Overlay />}
         <Header>
           <Prev src={prev} onClick={handleReason} />
           <HeaderTxt>탈퇴하기</HeaderTxt>
@@ -143,7 +143,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
                   value={otherReason}
                   onChange={handleOtherReasonChange}
                   spellCheck="false"
-                  max-length="100"
+                  maxLength={100}
                 />
                 <Count>
                   <CntTxt style={{ color: "#495057" }}>{length}</CntTxt>
@@ -173,15 +173,15 @@ export const DeleteReason = ({ setViewReason }: Props) => {
             </Button>
           )}
         </ButtonContainer>
-        {popup && <WithdrawPopup />}
       </BackGround>
+      {popup && <WithdrawPopup />}
     </>
   );
 };
 const Overlay = styled.div`
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 0px;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
@@ -311,11 +311,11 @@ const CheckBox = styled.input`
 `;
 const InputArea = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  //flex-direction: column;
+  //align-items: flex-start;
   gap: 10px;
-  height: 6.87rem;
-  width: 99%;
+  width: 100%;
+  height: 130px;
 `;
 
 const Input = styled.textarea`
@@ -347,7 +347,7 @@ const Input = styled.textarea`
 const Count = styled.span`
   position: absolute;
   margin-left: 16px;
-  margin-top: 73px;
+  margin-top: 94px;
 `;
 const CntTxt = styled.span`
   font-weight: 400;
