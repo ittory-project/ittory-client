@@ -28,9 +28,10 @@ export const HomePage = () => {
       localStorage.removeItem("guideOpen");
     }
   }, []);
+
   return (
-    <div>
+    <>
       <Home />
-    </div>
+    </>
   );
 };
