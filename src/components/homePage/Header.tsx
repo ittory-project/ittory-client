@@ -1,23 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import logo from "../../../public/assets/home/smalllogo.svg";
 import menu from "../../../public/assets/home/menulogo.svg";
-import { Menu } from "../../layout/Menu";
 
 interface Props {
   backgroundColor: boolean;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isMenuOpen: boolean;
 }
 
-export default function Header({ backgroundColor }: Props) {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+export default function Header({ backgroundColor, setIsMenuOpen }: Props) {
   const [bgColor, setBgColor] = useState<boolean>(backgroundColor);
-
-  const closeMenu = useCallback(() => {
-    setIsMenuOpen(false);
-  }, []);
-  const handleOverlayClick = useCallback(() => {
-    closeMenu();
-  }, [closeMenu]);
 
   const handleMenu = () => {
     setIsMenuOpen(true);
@@ -31,14 +24,6 @@ export default function Header({ backgroundColor }: Props) {
     <Container $color={bgColor}>
       {bgColor && <Logo src={logo} />}{" "}
       <MenuLogo src={menu} onClick={handleMenu} />
-      {isMenuOpen && (
-        <>
-          <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
-          <MenuContainer $isOpen={isMenuOpen}>
-            <Menu onClose={closeMenu} />
-          </MenuContainer>
-        </>
-      )}
     </Container>
   );
 }
@@ -71,35 +56,6 @@ const Logo = styled.img`
   align-items: center;
   gap: 16px;
   flex-shrink: 0;
-`;
-
-const MenuOverlay = styled.div<{ $isOpen: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  //max-width: 115px;
-  height: auto;
-  min-height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
-  z-index: 10;
-`;
-const MenuContainer = styled.div<{ $isOpen: boolean }>`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 260px;
-  height: auto;
-  min-height: 100vh;
-  background: #fff;
-  transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
-  transition: transform 0.3s ease;
-  z-index: 20;
 `;
 
 const MenuLogo = styled.img`

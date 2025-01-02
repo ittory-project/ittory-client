@@ -77,13 +77,8 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
             }
           } else {
             console.log("키보드 안열림");
-            // 키보드가 닫힐 때의 처리
-            if (window.innerWidth < 431) {
-              setFontPopup(false); // 모바일에서 키보드가 닫히면 폰트 팝업 숨김
-            } else {
-              setIsKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
-              setBottomOffset(0); // 키보드 높이를 0으로 설정
-            }
+            setIsKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
+            setBottomOffset(0); // 키보드 높이를 0으로 설정
           }
         }
       };
