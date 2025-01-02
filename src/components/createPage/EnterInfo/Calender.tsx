@@ -173,7 +173,7 @@ const Valid = styled.div`
 const Txt = styled.span`
   position: absolute;
   text-align: center;
-  font-family: GmarketSans;
+  font-family: "GmarketSans";
   font-size: 12px;
   font-weight: 400;
   line-height: normal;
