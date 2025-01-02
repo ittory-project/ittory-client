@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import styled, { keyframes } from "styled-components";
 import logo from "../../../public/assets/home/logo.png";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,8 @@ import twitter from "../../../public/assets/home/twitter.svg";
 import insta from "../../../public/assets/home/insta.svg";
 import animation from "../../../public/assets/home/animation.json";
 import Player, { LottieRefCurrentProps } from "lottie-react";
+import { Menu } from "../../layout/Menu";
+import { useSwipeable } from "react-swipeable";
 
 const bg1 = "/assets/home/main.jpg";
 const bg2 = "/assets/home/01.jpg";
@@ -28,6 +30,24 @@ export const Home = () => {
   const sectionRefs = useRef<HTMLDivElement[]>([]);
   const [headerBgColor, setHeaderBgColor] = useState<boolean>(false);
   const lottieRef = useRef<LottieRefCurrentProps | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+  const handleOverlayClick = useCallback(() => {
+    closeMenu();
+  }, [closeMenu]);
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (!isMenuOpen) {
+        console.log("스와이프로 메뉴 열음");
+        setIsMenuOpen(true);
+      }
+    },
+    //onSwipedLeft: () => setIsMenuOpen(true),
+  });
 
   const handleButton = () => {
     if (localStorage.jwt) {
@@ -100,103 +120,142 @@ export const Home = () => {
 
   return (
     <>
-      <Container ref={containerRef}>
-        <Header backgroundColor={headerBgColor} />
+      <div {...swipeHandlers}>
         <>
-          <FirstSection
-            $img={bg1}
-            ref={(el) => el && (sectionRefs.current[0] = el)}
-          >
-            <Logo $img={logo} />
-            <ButtonContainer onClick={handleButton}>
-              <ButtonTxt>편지 쓰러 가기</ButtonTxt>
-            </ButtonContainer>
-            <Player
-              animationData={animation}
-              lottieRef={lottieRef}
-              loop
-              autoplay
-              onClick={handleLottieClick}
-              style={{
-                height: "70px",
-                width: "70px",
-                margin: "0 auto",
-                top: "65.5%",
-                position: "relative",
-              }}
-            />
-          </FirstSection>
-          <Section
-            $img={bg2}
-            ref={(el) => el && (sectionRefs.current[1] = el)}
-          />
-          <Section
-            $img={bg3}
-            ref={(el) => el && (sectionRefs.current[2] = el)}
-          />
-          <WhiteSection
-            $img={bg4}
-            ref={(el) => el && (sectionRefs.current[3] = el)}
-          />
-          <WhiteSection
-            $img={bg5}
-            ref={(el) => el && (sectionRefs.current[4] = el)}
-          />
-          <Section
-            $img={bg6}
-            ref={(el) => el && (sectionRefs.current[5] = el)}
-          />
-          <WhiteSection
-            $img={bg7}
-            ref={(el) => el && (sectionRefs.current[6] = el)}
-          />
-          <Section $img={bg8} ref={(el) => el && (sectionRefs.current[7] = el)}>
-            <FinalButton onClick={handleButton}>
-              <ButtonTxt>편지 쓰러 가기</ButtonTxt>
-            </FinalButton>
-          </Section>
-          <LastSection ref={(el) => el && (sectionRefs.current[8] = el)}>
-            <SectionBox>
-              <Title>잇토리</Title>
-              <SubTitle>문의&nbsp;&nbsp;&nbsp;ittory.team@gmail.com</SubTitle>
-              <SubTitle>
-                <span
-                  style={{ marginRight: "8px", cursor: "pointer" }}
-                  onClick={handleTermsClick}
-                >
-                  이용약관
-                </span>
-                <img src={divider} alt="divider" style={{ height: "9px" }} />
-                <span
-                  style={{ marginLeft: "8px", cursor: "pointer" }}
-                  onClick={handlePrivacyPolicyClick}
-                >
-                  개인정보&nbsp;&nbsp;처리방침
-                </span>
-              </SubTitle>
-              <SubTitle>© ITTORY. All rights reserved.</SubTitle>
-              <SnsContainer>
-                <SnsIcon
-                  src={insta}
-                  alt="insta"
-                  style={{ cursor: "pointer" }}
-                  onClick={handleInstaClick}
-                />
-                <SnsIcon
-                  src={twitter}
-                  alt="twitter"
-                  style={{ cursor: "pointer" }}
-                  onClick={handleTwtClick}
-                />
-              </SnsContainer>
-            </SectionBox>
-          </LastSection>
+          <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
+          <MenuContainer $isOpen={isMenuOpen}>
+            <Menu onClose={closeMenu} />
+          </MenuContainer>
         </>
-      </Container>
+        <Container ref={containerRef}>
+          <Header
+            backgroundColor={headerBgColor}
+            isMenuOpen={isMenuOpen}
+            setIsMenuOpen={setIsMenuOpen}
+          />
+          <>
+            <FirstSection
+              $img={bg1}
+              ref={(el) => el && (sectionRefs.current[0] = el)}
+            >
+              <Logo $img={logo} />
+              <ButtonContainer onClick={handleButton}>
+                <ButtonTxt>편지 쓰러 가기</ButtonTxt>
+              </ButtonContainer>
+              <Player
+                animationData={animation}
+                lottieRef={lottieRef}
+                loop
+                autoplay
+                onClick={handleLottieClick}
+                style={{
+                  height: "70px",
+                  width: "70px",
+                  margin: "0 auto",
+                  top: "65.5%",
+                  position: "relative",
+                }}
+              />
+            </FirstSection>
+            <Section
+              $img={bg2}
+              ref={(el) => el && (sectionRefs.current[1] = el)}
+            />
+            <Section
+              $img={bg3}
+              ref={(el) => el && (sectionRefs.current[2] = el)}
+            />
+            <WhiteSection
+              $img={bg4}
+              ref={(el) => el && (sectionRefs.current[3] = el)}
+            />
+            <WhiteSection
+              $img={bg5}
+              ref={(el) => el && (sectionRefs.current[4] = el)}
+            />
+            <Section
+              $img={bg6}
+              ref={(el) => el && (sectionRefs.current[5] = el)}
+            />
+            <WhiteSection
+              $img={bg7}
+              ref={(el) => el && (sectionRefs.current[6] = el)}
+            />
+            <Section
+              $img={bg8}
+              ref={(el) => el && (sectionRefs.current[7] = el)}
+            >
+              <FinalButton onClick={handleButton}>
+                <ButtonTxt>편지 쓰러 가기</ButtonTxt>
+              </FinalButton>
+            </Section>
+            <LastSection ref={(el) => el && (sectionRefs.current[8] = el)}>
+              <SectionBox>
+                <Title>잇토리</Title>
+                <SubTitle>문의&nbsp;&nbsp;&nbsp;ittory.team@gmail.com</SubTitle>
+                <SubTitle>
+                  <span
+                    style={{ marginRight: "8px", cursor: "pointer" }}
+                    onClick={handleTermsClick}
+                  >
+                    이용약관
+                  </span>
+                  <img src={divider} alt="divider" style={{ height: "9px" }} />
+                  <span
+                    style={{ marginLeft: "8px", cursor: "pointer" }}
+                    onClick={handlePrivacyPolicyClick}
+                  >
+                    개인정보&nbsp;&nbsp;처리방침
+                  </span>
+                </SubTitle>
+                <SubTitle>© ITTORY. All rights reserved.</SubTitle>
+                <SnsContainer>
+                  <SnsIcon
+                    src={insta}
+                    alt="insta"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleInstaClick}
+                  />
+                  <SnsIcon
+                    src={twitter}
+                    alt="twitter"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleTwtClick}
+                  />
+                </SnsContainer>
+              </SectionBox>
+            </LastSection>
+          </>
+        </Container>
+      </div>
     </>
   );
 };
-
+const MenuOverlay = styled.div<{ $isOpen: boolean }>`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+  background: rgba(0, 0, 0, 0.8);
+  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
+  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  z-index: 10;
+`;
+const MenuContainer = styled.div<{ $isOpen: boolean }>`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: calc(var(--vh, 1vh) * 100);
+  background: #fff;
+  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+  transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
+  transition: transform 0.3s ease;
+  z-index: 20;
+`;
 const Container = styled.div`
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
