@@ -45,24 +45,26 @@ export const Invite = () => {
       const data = await getParticipants(letterId);
 
       if (data.length > 0 || participants.length > 0) {
-        console.log(data[0].nickname);
-        console.log(name);
-        console.log(userName);
-        console.log(data.length);
-        console.log(participants.length);
-        console.log(data);
-        if (data[0].nickname === name || data[0].nickname === userName) {
-          console.log("방장지정");
-          setMemberIndex(0);
-          setLoadstatus(false);
-          setLoad(false);
-          localStorage.removeItem("load");
-        } else {
-          console.log("방장지정");
-          setMemberIndex(1);
-          setLoadstatus(false);
-          setLoad(false);
-          localStorage.removeItem("load");
+        if (data[0].nickname) {
+          console.log(data[0].nickname);
+          console.log(name);
+          console.log(userName);
+          console.log(data.length);
+          console.log(participants.length);
+          console.log(data);
+          if (data[0].nickname === name || data[0].nickname === userName) {
+            console.log("방장지정");
+            setMemberIndex(0);
+            setLoadstatus(false);
+            setLoad(false);
+            localStorage.removeItem("load");
+          } else {
+            console.log("방장지정");
+            setMemberIndex(1);
+            setLoadstatus(false);
+            setLoad(false);
+            localStorage.removeItem("load");
+          }
         }
       } else {
         if (!hasRefreshed) {
@@ -184,27 +186,6 @@ export const Invite = () => {
         const userIdFromApi = mydata.memberId;
         setName(userNameFromApi);
         setUserId(userIdFromApi);
-
-        /*
-        if (participants.length < 1) {
-          fetchParticipants();
-        } else {
-          console.log(participants.length);
-          if (
-            participants[0].nickname === userName ||
-            participants[0].nickname === name
-          ) {
-            setMemberIndex(0);
-            localStorage.removeItem("load");
-            setLoadstatus(false);
-            setLoad(false);
-          } else {
-            setMemberIndex(1);
-            localStorage.removeItem("load");
-            setLoadstatus(false);
-            setLoad(false);
-          }
-        }*/
       } catch (err) {
         console.error("Error during data fetching:", err);
       }
@@ -215,6 +196,7 @@ export const Invite = () => {
 
   useEffect(() => {
     if (memberIndex > -1) {
+      console.log(memberIndex);
       localStorage.removeItem("load");
       setLoadstatus(false);
       setLoad(false);
