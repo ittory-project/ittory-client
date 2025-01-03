@@ -5,6 +5,7 @@ import delete2 from "../../../public/assets/delete2.svg";
 import share from "../../../public/assets/share.svg";
 import { LetterDetailGetResponse } from "../../api/model/LetterModel";
 import { getLetterDetailInfo } from "../../api/service/LetterService";
+import { encodeLetterId } from "../../api/config/base64";
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,12 +22,11 @@ export const Created_Modal = ({
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const [encodeId, setEncodeId] = useState<string>("");
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-  console.log(letterId);
 
   const handlePopup = () => {
     setIsModalOpen(false);
@@ -35,8 +35,10 @@ export const Created_Modal = ({
 
   useEffect(() => {
     const getSharedLetter = async () => {
-      const response = await getLetterDetailInfo(letterId);
+      console.log(letterId);
+      const response = await getLetterDetailInfo(Number(letterId));
       setLetterInfo(response);
+      setEncodeId(encodeLetterId(letterId));
     };
     getSharedLetter();
   }, [letterId]);
@@ -80,6 +82,7 @@ export const Created_Modal = ({
 
   // 모바일, 데스크톱 화면 구분해서 공유하게 함
   const handleShare = async () => {
+    const letterId = encodeId;
     if (letterInfo) {
       const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
         .map((element) => element)

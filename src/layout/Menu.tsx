@@ -36,6 +36,8 @@ export const Menu = ({ onClose }: Props) => {
   const [profileImage, setProfileImage] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
 
+  console.log("메뉴 열림");
+
   useEffect(() => {
     if (localStorage.jwt) {
       setUser(true);

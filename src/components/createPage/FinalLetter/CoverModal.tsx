@@ -142,15 +142,19 @@ export default function CoverModal({
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
-      const heightDiff =
-        window.innerHeight - document.documentElement.clientHeight;
-
+      let currentHeightDiff = 0;
+      if (window.visualViewport) {
+        currentHeightDiff = window.innerHeight - window.visualViewport.height;
+      } else {
+        currentHeightDiff =
+          window.innerHeight - document.documentElement.clientHeight;
+      }
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
-        if (keyboardHeight > 0) {
+        if (currentHeightDiff > 0) {
           if (window.innerWidth < 850) {
             setIsKeyboardOpen(true);
             setIsKeyboardOpen(true);
-            setKeyboardHeight(heightDiff);
+            setKeyboardHeight(currentHeightDiff);
             inputRef.current.focus();
           } else {
             setIsKeyboardOpen(false);
@@ -260,6 +264,20 @@ export default function CoverModal({
 
   const closeCoverModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handlePopupClick = (e: React.MouseEvent) => {
+    console.log("팝업 클릭 함수 실행");
+    // FontPopup을 클릭하면 input에 포커스를 유지
+    if (popupRef.current) {
+      console.log("팝업 클릭함");
+      if (inputRef.current) {
+        console.log("인풋에 포커스");
+        inputRef.current.focus();
+      }
+      // input에 포커스를 유지시켜 키보드를 올려둠
+    }
+    e.stopPropagation(); // 이벤트 전파를 막아 다른 요소가 클릭되지 않도록 함
   };
 
   return (
@@ -378,6 +396,7 @@ export default function CoverModal({
           setSelectfid={setSelectfid}
           selectfid={selectfid}
           ref={popupRef}
+          handlePopupClick={handlePopupClick}
         />
       )}
     </ModalContainer>
