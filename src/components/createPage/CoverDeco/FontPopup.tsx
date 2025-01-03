@@ -14,6 +14,7 @@ interface Props {
   select: string;
   setSelectfid: React.Dispatch<React.SetStateAction<number>>;
   selectfid: number;
+  handlePopupClick: (e: React.MouseEvent) => void;
 }
 
 const FontPopup = forwardRef<HTMLDivElement, Props>(
@@ -27,6 +28,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
       select,
       setSelectfid,
       selectfid,
+      handlePopupClick,
     },
     ref
   ) => {
@@ -56,9 +58,16 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
     useEffect(() => {
       const handleResize = () => {
         if (window.visualViewport) {
-          const keyboardHeight =
+          let keyboardHeight =
             window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+          console.log("키보드 높이: ", keyboardHeight);
+
+          if (keyboardHeight < 0) {
+            keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
+          }
+
           if (keyboardHeight > 0) {
+            console.log("키보드 열림");
             if (window.innerWidth < 850) {
               setIsKeyboardVisible(true);
               setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
@@ -67,8 +76,9 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
               setBottomOffset(0);
             }
           } else {
-            setIsKeyboardVisible(false);
-            setBottomOffset(0);
+            console.log("키보드 안열림");
+            setIsKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
+            setBottomOffset(0); // 키보드 높이를 0으로 설정
           }
         }
       };
@@ -83,11 +93,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
         window.visualViewport?.removeEventListener("scroll", handleResize);
       };
     }, []);
-
-    const handleInputBlur = () => {
-      // 입력 필드에서 blur 발생 시 서체 선택 영역을 내려가도록 처리
-      setIsCompleted(true); // 완료 상태로 설정
-    };
 
     return (
       <div ref={ref} className={ParentDiv}>
@@ -105,6 +110,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
               selectfid={selectfid}
               setSelectFid={setSelectfid}
               setSelectId={setSelectId}
+              handlePopupClick={handlePopupClick}
             />
           </FontContainer>
           <Line src={_Line} />
@@ -112,12 +118,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
             완료
           </Button>
         </BackGround>
-        {/* 키보드가 올라오면 이 필드가 focus되며 완료버튼을 눌렀을 때 키보드가 내려가게 처리 */}
-        <input
-          type="text"
-          style={{ opacity: 0 }}
-          onBlur={handleInputBlur} // blur 발생 시 서체 선택 영역을 내려가도록 설정
-        />
       </div>
     );
   }
@@ -145,7 +145,6 @@ const BackGround = styled.div<{
   overflow-x: hidden;
   overflow-y: hidden;
   height: ${(props) => (props.$isKeyboardVisible ? "64px" : "149px")};
-
   transition:
     bottom 0.3s ease,
     height 0.3s ease;

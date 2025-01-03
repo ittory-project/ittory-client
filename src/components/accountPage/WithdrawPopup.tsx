@@ -44,7 +44,7 @@ const Modal = styled.div`
   border-radius: 16px;
   border: 3px solid #d3edff;
   background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
-  z-index: 120;
+  z-index: 200;
 `;
 const Title = styled.div`
   display: flex;
