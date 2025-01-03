@@ -22,7 +22,6 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
     const userName = localStorage.getItem("userName");
     const guideOpen = localStorage.getItem("guideOpen");
 
-    // 1초 간격으로 최대 5번 호출
     const interval = setInterval(async () => {
       try {
         data = await getParticipants(letterId);
@@ -34,8 +33,8 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
           navigate("/Invite", {
             state: { letterId, userName, guideOpen },
           });
-        } else if (attempts >= 10) {
-          clearInterval(interval); // 5번 시도 후 반복 종료
+        } else if (attempts >= 5) {
+          clearInterval(interval);
           navigate("/Invite", {
             state: { letterId, userName, guideOpen },
           });
@@ -43,7 +42,7 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
       } catch (err) {
         console.error("데이터를 로딩하는 중 오류 발생:", err);
       }
-    }, 1200); // 1초 간격으로 호출
+    }, 1500); //호출 간격
   };
 
   useEffect(() => {
