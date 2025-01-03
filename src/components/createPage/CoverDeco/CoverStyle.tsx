@@ -186,7 +186,7 @@ export default function CoverStyle({
 
       if (inputRef.current && inputRef.current.contains(e.target as Node)) {
         if (currentHeightDiff > 0) {
-          if (window.innerWidth < 431) {
+          if (window.innerWidth < 850) {
             setIsKeyboardOpen(true);
             setKeyboardHeight(currentHeightDiff);
             inputRef.current.focus();
