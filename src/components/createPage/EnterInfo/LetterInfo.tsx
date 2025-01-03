@@ -61,7 +61,7 @@ export default function LetterInfo({
         const keyboardHeight =
           window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
         if (keyboardHeight > 0) {
-          if (window.innerWidth < 431) {
+          if (window.innerWidth < 850) {
             setKeyboardVisible(true);
           } else {
             setKeyboardVisible(false);
