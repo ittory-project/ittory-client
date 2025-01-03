@@ -45,12 +45,20 @@ export const Invite = () => {
       const data = await getParticipants(letterId);
 
       if (data.length > 0 || participants.length > 0) {
+        console.log(data[0].nickname);
+        console.log(name);
+        console.log(userName);
+        console.log(data.length);
+        console.log(participants.length);
+        console.log(data);
         if (data[0].nickname === name || data[0].nickname === userName) {
+          console.log("방장지정");
           setMemberIndex(0);
           setLoadstatus(false);
           setLoad(false);
           localStorage.removeItem("load");
         } else {
+          console.log("방장지정");
           setMemberIndex(1);
           setLoadstatus(false);
           setLoad(false);
@@ -84,7 +92,6 @@ export const Invite = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoad(true);
       try {
         const mydata = await getMyPage();
         const userNameFromApi = mydata.name;
@@ -92,20 +99,25 @@ export const Invite = () => {
 
         setName(userNameFromApi);
         setUserId(userIdFromApi);
+        console.log(participants);
         if (participants.length < 1) {
           fetchParticipants();
           console.log("데이터없음-useEffect");
         } else {
+          console.log("데이터들어옴");
           if (
             participants[0].nickname === name ||
             participants[0].nickname === userName
           ) {
+            console.log("방장지정");
+
             setMemberIndex(0);
             localStorage.removeItem("load");
-
             setLoadstatus(false);
             setLoad(false);
           } else {
+            console.log("방장지정");
+
             setMemberIndex(1);
             localStorage.removeItem("load");
             setLoadstatus(false);
@@ -124,6 +136,48 @@ export const Invite = () => {
     const fetchData = async () => {
       try {
         const mydata = await getMyPage();
+        const userNameFromApi = mydata.name;
+        const userIdFromApi = mydata.memberId;
+
+        setName(userNameFromApi);
+        setUserId(userIdFromApi);
+        console.log(participants);
+        if (participants.length < 1) {
+          fetchParticipants();
+          console.log("데이터없음-useEffect");
+        } else {
+          console.log("데이터들어옴");
+          if (
+            participants[0].nickname === name ||
+            participants[0].nickname === userName
+          ) {
+            console.log("방장지정");
+
+            setMemberIndex(0);
+            localStorage.removeItem("load");
+            setLoadstatus(false);
+            setLoad(false);
+          } else {
+            console.log("방장지정");
+
+            setMemberIndex(1);
+            localStorage.removeItem("load");
+            setLoadstatus(false);
+            setLoad(false);
+          }
+        }
+      } catch (err) {
+        console.error("Error during data fetching:", err);
+      }
+    };
+
+    fetchData();
+  }, [participants]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const mydata = await getMyPage();
         const data = await getParticipants(letterId);
         setParticipants(data);
         const userNameFromApi = mydata.name;
@@ -131,6 +185,7 @@ export const Invite = () => {
         setName(userNameFromApi);
         setUserId(userIdFromApi);
 
+        /*
         if (participants.length < 1) {
           fetchParticipants();
         } else {
@@ -141,17 +196,15 @@ export const Invite = () => {
           ) {
             setMemberIndex(0);
             localStorage.removeItem("load");
-
             setLoadstatus(false);
             setLoad(false);
           } else {
             setMemberIndex(1);
             localStorage.removeItem("load");
-
             setLoadstatus(false);
             setLoad(false);
           }
-        }
+        }*/
       } catch (err) {
         console.error("Error during data fetching:", err);
       }
@@ -238,6 +291,8 @@ export const Invite = () => {
     };
   }, []);
 
+  console.log(load);
+  console.log(participants);
   console.log(memberIndex);
 
   //퇴장 알림
