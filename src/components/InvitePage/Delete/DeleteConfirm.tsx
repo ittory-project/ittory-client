@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import deleteIcon from "../../../../public/assets/invite/delete.svg";
+import { useEffect } from "react";
 
 export const DeleteConfirm = () => {
   const navigate = useNavigate();
@@ -8,6 +9,41 @@ export const DeleteConfirm = () => {
   const handleButton = () => {
     navigate("/", { replace: true });
   };
+  const handleGoBack = () => {
+    navigate("/", { replace: true });
+  };
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [navigate]);
+
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [location]);
   return (
     <BackGround>
       <Container>

@@ -9,7 +9,8 @@ export const HomePage = () => {
     navigate("/", { replace: true });
   };
   useEffect(() => {
-    history.pushState(null, "", window.location.href);
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
 
     window.addEventListener("popstate", handleGoBack);
 
@@ -17,6 +18,29 @@ export const HomePage = () => {
       window.removeEventListener("popstate", handleGoBack);
     };
   }, []);
+
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [navigate]);
+
+  useEffect(() => {
+    // 현재 페이지를 히스토리에 추가하여 뒤로가기 할 수 없게 함
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [location]);
 
   useEffect(() => {
     if (localStorage.getItem("load")) {

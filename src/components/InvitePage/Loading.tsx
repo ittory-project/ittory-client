@@ -33,7 +33,7 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
           navigate("/Invite", {
             state: { letterId, userName, guideOpen },
           });
-        } else if (attempts >= 5) {
+        } else if (attempts >= 2) {
           clearInterval(interval);
           navigate("/Invite", {
             state: { letterId, userName, guideOpen },
