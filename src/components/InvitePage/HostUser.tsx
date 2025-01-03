@@ -151,10 +151,10 @@ export const HostUser = ({
 
   // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
   const handleResize = () => {
-    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
   };
   useEffect(() => {
-    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false);
+    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);

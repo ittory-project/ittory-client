@@ -59,7 +59,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
           const keyboardHeight =
             window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
           if (keyboardHeight > 0) {
-            if (window.innerWidth < 431) {
+            if (window.innerWidth < 850) {
               setIsKeyboardVisible(true);
               setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
             } else {
