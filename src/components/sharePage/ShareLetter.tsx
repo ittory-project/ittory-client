@@ -39,10 +39,10 @@ export const ShareLetter = () => {
   }, [query]);
 
   const handleResize = () => {
-    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false)
+    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false)
   }
   useEffect(() => {
-    window.innerWidth < 431 ? setIsMobile(true) : setIsMobile(false)
+    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false)
     window.addEventListener('resize', handleResize)
     return () => {
       window.removeEventListener('resize', handleResize)
