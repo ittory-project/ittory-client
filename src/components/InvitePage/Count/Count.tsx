@@ -126,7 +126,14 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
       <Header>
         <Title>{member}명이서 몇 번씩 이어 쓸까요?</Title>
         <Cancel onClick={handleCancel}>
-          <img src={X} alt="X Icon" style={{ width: "12px", height: "12px" }} />
+          <img
+            src={X}
+            alt="X Icon"
+            style={{
+              width: "15px",
+              height: "15px",
+            }}
+          />
         </Cancel>
       </Header>
       <Contents>
@@ -174,7 +181,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
             />
           </IconImg>
           <TitleTxt>만들어질 그림 개수</TitleTxt>
-          <TotalTxt>{selectNumber * member}개</TotalTxt>
+          <TotalTxt>{selectNumber * member}&nbsp;개</TotalTxt>
         </Notice>
       </Contents>
       <Button onClick={handleSubmit}>
@@ -189,7 +196,6 @@ const ModalContainer = styled.div`
   bottom: 0;
   display: flex;
   width: 100%;
-  height: 27rem;
   border-radius: 20px 20px 0px 0px;
   background: #fff;
   z-index: 100;
@@ -202,7 +208,7 @@ const Header = styled.div`
   box-sizing: border-box;
   display: flex;
   width: 100%;
-  padding: 16px 8px 16px 8px;
+  padding: 16px 0px 16px 0px;
   align-items: center;
   align-self: stretch;
   gap: 24px;
@@ -232,6 +238,7 @@ const Contents = styled.div`
   display: flex;
   position: relative;
   //width: 288px;
+
   padding: 0px 16px 20px 16px;
   width: 100%;
   box-sizing: border-box;
@@ -243,6 +250,7 @@ const List = styled.div`
   display: flex;
   box-sizing: border-box;
   width: 288px;
+  height: 200px;
   padding: 8px 0px 16px 0px;
   flex-direction: column;
   justify-content: center;
@@ -254,7 +262,7 @@ const List = styled.div`
 const Picker = styled.div`
   position: relative;
   z-index: 1;
-  margin-right: 22px;
+  margin-right: 35px;
 `;
 const Select = styled.div`
   display: flex;
@@ -268,7 +276,7 @@ const Select = styled.div`
   border-radius: 50px;
   background: #fff;
   color: #ffa256;
-  padding-left: 55px;
+  padding-left: 36px;
   font-family: SUIT;
   font-size: 20px;
   font-style: normal;
@@ -276,7 +284,7 @@ const Select = styled.div`
   line-height: 32px;
   letter-spacing: -0.5px;
   position: absolute;
-  bottom: 97.2px;
+  bottom: 84.3px;
   z-index: 1;
 `;
 const SlideContent = styled.div<SlideContentProps>`
@@ -390,8 +398,7 @@ const Button = styled.button`
   padding: 14px 0px;
   align-items: center;
   gap: 8px;
-  position: absolute;
-  bottom: 20px;
+  position: relative;
   justify-content: center;
   border-radius: 50px;
   background: #ffa256;

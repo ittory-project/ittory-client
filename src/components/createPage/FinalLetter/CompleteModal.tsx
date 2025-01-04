@@ -12,6 +12,8 @@ import { postLetter } from "../../../api/service/LetterService";
 import { postNickname } from "../../../api/service/ParticipantService";
 import { NicknamePostRequest } from "../../../api/model/ParticipantModel";
 import { postEnter } from "../../../api/service/LetterService";
+import animation from "../../../../public/assets/confetti.json";
+import Player from "lottie-react";
 
 interface Props {
   myName: string;
@@ -153,37 +155,52 @@ export default function CompleteModal({
   };
 
   return (
-    <ModalContainer ref={modalBackground}>
-      <Header>
-        <Title>{myName}님,</Title>
-        <Title>편지가 만들어졌어요!</Title>
-      </Header>
-      <MainContainer>
-        <Receiver>
-          To.{receiverName} <LetterImg $img={letter} />
-        </Receiver>
-        <Book $backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
-          <TitleContainer $font={selectfont}>{title}</TitleContainer>
-          {deliverDay === null ? (
-            <></>
-          ) : (
-            <DeliverDay>
-              {`${format(deliverDay, "yyyy")}. `}
-              {`${format(deliverDay, "MM")}. `}
-              {format(deliverDay, "dd")}
-              {` (${format(deliverDay, "E", { locale: ko })})`}
-            </DeliverDay>
-          )}
-          <>
-            <Shadow src={shadow} />
-            <BtnImgContainer $bgimg={croppedImage} />
-          </>
-        </Book>
-      </MainContainer>
-      <Button onClick={navigateToInvite}>
-        <ButtonTxt>맘에 들어요!</ButtonTxt>
-      </Button>
-    </ModalContainer>
+    <>
+      <Player
+        animationData={animation}
+        loop={false}
+        autoplay
+        style={{
+          height: "320px",
+          width: "100%",
+          margin: "0 auto",
+          top: "-13%",
+          position: "relative",
+          zIndex: "400",
+        }}
+      />
+      <ModalContainer ref={modalBackground}>
+        <Header>
+          <Title>{myName}님,</Title>
+          <Title>편지가 만들어졌어요!</Title>
+        </Header>
+        <MainContainer>
+          <Receiver>
+            To.{receiverName} <LetterImg $img={letter} />
+          </Receiver>
+          <Book $backgroundImage={coverTypes[backgroundImage]?.confirmImageUrl}>
+            <TitleContainer $font={selectfont}>{title}</TitleContainer>
+            {deliverDay === null ? (
+              <></>
+            ) : (
+              <DeliverDay>
+                {`${format(deliverDay, "yyyy")}. `}
+                {`${format(deliverDay, "MM")}. `}
+                {format(deliverDay, "dd")}
+                {` (${format(deliverDay, "E", { locale: ko })})`}
+              </DeliverDay>
+            )}
+            <>
+              <Shadow src={shadow} />
+              <BtnImgContainer $bgimg={croppedImage} />
+            </>
+          </Book>
+        </MainContainer>
+        <Button onClick={navigateToInvite}>
+          <ButtonTxt>맘에 들어요!</ButtonTxt>
+        </Button>
+      </ModalContainer>
+    </>
   );
 }
 const ModalContainer = styled.div`

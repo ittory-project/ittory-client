@@ -21,6 +21,7 @@ import { getFontById } from "../../api/service/FontService";
 import { Exit } from "./ExitMember";
 import { LetterDetailGetResponse } from "../../api/model/LetterModel";
 import { getLetterDetailInfo } from "../../api/service/LetterService";
+import barShadow from "../../../public/assets/invite/shadow.svg";
 
 interface Props {
   guideOpen: string;
@@ -249,6 +250,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     </NameBar>
                   </Book>
                   <Bar />
+                  <BarShadow $img={barShadow} />
                   <Notice>
                     <img
                       src={notice}
@@ -361,13 +363,13 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: calc(var(--vh, 1vh) * 100);
   overflow: hidden;
   width: 100%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  justify-content: flex-start; /* 상단 정렬 */
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -445,17 +447,16 @@ const Icon = styled.img`
   height: 24px;
   margin-right: 0;
 `;
-
 const MainContainer = styled.div`
   display: flex;
   width: 288px;
   flex-direction: column;
   align-items: center;
+  margin-top: 76px;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
   width: 200px;
   height: 261px;
-  margin-top: 2rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
   background-image: url(${(props) => props.$backgroundImage});
   display: flex;
@@ -579,12 +580,21 @@ const Bar = styled.div`
     0px -1px 0.5px 0px rgba(203, 186, 145, 0.8) inset,
     0px 1px 0.5px 0px rgba(255, 247, 226, 0.7) inset;
 `;
+const BarShadow = styled.div<{ $img: string }>`
+  width: 288px;
+  height: 18px;
+  flex-shrink: 0;
+  background-image: url(${(props) => props.$img});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
 const Notice = styled.div`
   display: flex;
   padding: 12px 20px;
   align-items: center;
   gap: 8px;
-  margin-top: 2.5rem;
+  margin-top: 8px;
   align-self: stretch;
   border-radius: 12px;
   border: 2px solid #1c2231;
@@ -601,10 +611,10 @@ const Notice = styled.div`
 const BoxContainer = styled.div`
   display: flex;
   height: 116px;
-  margin-top: 2.5rem;
   flex-direction: column;
   align-items: center; //수직
   justify-content: center; //수평
+  margin-top: 20px;
 `;
 const PinArea = styled.div`
   display: flex;
@@ -617,6 +627,8 @@ const Pin = styled.div`
   display: inline-block;
   height: 8px;
   transform: rotate(-90deg);
+  top: 4px;
+  position: relative;
   flex-shrink: 0;
   border-radius: var(--Border-Radius-radius_300, 8px);
   background: var(--Color-grayscale-gray400, #ced4da);
