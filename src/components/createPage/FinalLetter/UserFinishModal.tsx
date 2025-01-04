@@ -203,7 +203,7 @@ export default function UserFinishModal({
           margin: "0 auto",
           top: "-13%",
           position: "relative",
-          zIndex: "400",
+          zIndex: "101",
         }}
       />
       <ModalContainer ref={modalBackground}>
@@ -237,6 +237,7 @@ export default function UserFinishModal({
           <Button
             style={{
               background: "#CED4DA",
+              zIndex: "200",
             }}
             onClick={handleguide}
           >
@@ -245,6 +246,7 @@ export default function UserFinishModal({
           <Button
             style={{
               background: "#FFA256",
+              zIndex: "200",
             }}
             onClick={navigateToInvite}
           >
