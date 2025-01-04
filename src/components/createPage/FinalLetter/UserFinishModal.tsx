@@ -193,19 +193,6 @@ export default function UserFinishModal({
 
   return (
     <>
-      <Player
-        animationData={animation}
-        loop={false}
-        autoplay
-        style={{
-          height: "320px",
-          width: "100%",
-          margin: "0 auto",
-          top: "-13%",
-          position: "relative",
-          zIndex: "101",
-        }}
-      />
       <ModalContainer ref={modalBackground}>
         <Header>
           <Title>{myName}님,</Title>
