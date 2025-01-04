@@ -217,8 +217,8 @@ const BackGround = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  //left: 50%;
+  //transform: translateX(-50%);
   overflow: hidden;
 `;
 const Overlay = styled.div`
@@ -253,15 +253,15 @@ const Info = styled.div`
   padding: 0px 12px 20px 12px;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--Border-Radius-radius_300, 8px);
+  gap: 12px;
   background-color: #fff;
 `;
-const TitleTxt = styled.span`
+const TitleTxt = styled.div`
   display: block;
   color: #212529;
   padding: 6px 0px;
   text-align: left;
-  font-family: var(--Typography-family-title, SUIT);
+  font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -375,13 +375,13 @@ const BookTitle = styled.div<{ $font: string }>`
 `;
 const InputBox = styled.div`
   display: flex;
-  width: 100%;
+  width: 224px;
   flex-direction: column;
   justify-content: center;
-  gap: 8px;
+  gap: 3px;
   margin-top: 0;
   border-bottom: 1px dashed #dee2e6;
-  margin-bottom: 12px;
+  //margin-bottom: 12px;
   background-color: #fff;
 `;
 const InputLogo = styled.div`
@@ -399,7 +399,7 @@ const Input = styled.input`
   border: 0;
   padding-left: 0;
   background-color: #fff;
-  margin-bottom: 4px;
+  //margin-bottom: 4px;
   cursor: pointer;
   &::placeholder {
     color: #adb5bd;
