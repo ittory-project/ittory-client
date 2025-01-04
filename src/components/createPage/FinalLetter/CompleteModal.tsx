@@ -154,9 +154,8 @@ export default function CompleteModal({
     }
   };
 
-  return (
-    <>
-      <Player
+  /*
+        <Player
         animationData={animation}
         loop={false}
         autoplay
@@ -169,6 +168,10 @@ export default function CompleteModal({
           zIndex: "101",
         }}
       />
+  */
+
+  return (
+    <>
       <ModalContainer ref={modalBackground}>
         <Header>
           <Title>{myName}님,</Title>
