@@ -141,6 +141,11 @@ export const Connection = () => {
               backgroundImage: `url(${bookImage})`,
             }}
           />
+          <Shadow
+            style={{
+              backgroundImage: `url(${shadow})`,
+            }}
+          />
           <Ground $groundColor={String(groundColor)} />
         </BackGround>
       ) : (
@@ -162,7 +167,7 @@ const BackGround = styled.div`
   overflow: hidden;
 `;
 
-const Shadow = styled.img`
+const Shadow = styled.div`
   width: 350px;
   height: 124px;
   flex-shrink: 0;
@@ -171,6 +176,7 @@ const Shadow = styled.img`
   z-index: 2;
   animation: ${hideDuringAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
+  left: 7%;
 `;
 const TopImg = styled.div`
   z-index: 1;
