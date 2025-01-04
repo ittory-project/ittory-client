@@ -166,7 +166,7 @@ export default function CompleteModal({
           margin: "0 auto",
           top: "-13%",
           position: "relative",
-          zIndex: "400",
+          zIndex: "101",
         }}
       />
       <ModalContainer ref={modalBackground}>
@@ -334,6 +334,7 @@ const Button = styled.button`
   display: flex;
   width: 288px;
   height: 48px;
+  z-index: 200;
   padding: var(--Typography-size-s, 14px) 20px;
   align-items: center;
   gap: 8px;
