@@ -46,7 +46,12 @@ export default function Calender({
 
       // 현재 달의 날짜만 처리하도록 조건 추가
       if (!isSameMonth(day, monthStart)) {
-        days.push(<Disabled key={format(day, "yyyy-MM-dd")}></Disabled>);
+        days.push(
+          <Disabled
+            key={format(day, "yyyy-MM-dd")}
+            style={{ marginRight: i === 6 ? "0" : "6%" }}
+          ></Disabled>
+        );
       } else if (deliverDay && isSameDay(day, deliverDay)) {
         days.push(
           <Selected
@@ -109,13 +114,6 @@ export default function Calender({
       day = addDays(day, 1);
     }
 
-    /*현재 달의 날짜만 rows에 추가
-    if (isSameMonth(day, monthStart)) {
-      rows.push(<div key={format(day, "yyyy-MM-dd")}>{days}</div>);
-      console.log(rows);
-    }*/
-
-    // 마지막 주도 추가되도록 하기
     rows.push(<div key={format(day, "yyyy-MM-dd")}>{days}</div>);
     console.log(rows);
     days = [];
@@ -134,7 +132,6 @@ const Disabled = styled.div`
   align-items: center;
   flex-direction: column;
   width: 9.1%;
-  margin-right: 6%;
   height: 35px;
   box-sizing: border-box;
 `;

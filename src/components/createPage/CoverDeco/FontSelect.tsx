@@ -110,7 +110,7 @@ const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   width: 80px;
   height: 34px;
   box-sizing: border-box;
-  padding: 6px 16px;
+  //padding: 6px 16px;
   justify-content: center;
   align-items: center;
   gap: 4px;

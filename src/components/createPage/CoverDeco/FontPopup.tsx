@@ -113,7 +113,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
               handlePopupClick={handlePopupClick}
             />
           </FontContainer>
-          <Line src={_Line} />
+          {/*<Line src={_Line} />*/}
           <Button onClick={handleButton} $isKeyboardVisible={isKeyboardVisible}>
             완료
           </Button>
@@ -139,9 +139,6 @@ const BackGround = styled.div<{
   z-index: 100;
   position: absolute;
   bottom: ${(props) => props.$bottomOffset - 2}px;
-  border-radius: 20px 20px 0px 0px;
-  background: #fff;
-  box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.1);
   overflow-x: hidden;
   overflow-y: hidden;
   height: ${(props) => (props.$isKeyboardVisible ? "64px" : "149px")};
@@ -153,19 +150,26 @@ const BackGround = styled.div<{
 const FontContainer = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 5px;
+  //margin-top: 5px;
   flex-direction: column;
   align-items: center;
   overflow-x: auto;
   z-index: 10;
   overflow-y: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) -61.61%,
+    #fff 18.75%
+  );
+  box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.04);
 `;
+/*
 const Line = styled.img`
   width: 100%;
   position: absolute;
   left: 0;
   margin-top: 65px;
-`;
+`;*/
 const Button = styled.button<{ $isKeyboardVisible: boolean }>`
   overflow: hidden;
   z-index: 10;

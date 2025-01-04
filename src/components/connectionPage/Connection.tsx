@@ -36,8 +36,6 @@ const hideDuringAnimation = keyframes`
   }
 `;
 
-//shaodow 사라짐 수정하기
-
 export const Connection = () => {
   const [isAnimationComplete] = useState<boolean>(false);
   const location = useLocation();
@@ -75,14 +73,13 @@ export const Connection = () => {
     postRandomParti();
   }, []);
 
-  /*
   useEffect(() => {
     const routingTimer = setTimeout(() => {
       navigate(`/write/${encodeLetterId(letterId)}`);
     }, 2500);
 
     return () => clearTimeout(routingTimer);
-  }, [navigate, letterId]);*/
+  }, [navigate, letterId]);
 
   useEffect(() => {
     switch (coverId) {
