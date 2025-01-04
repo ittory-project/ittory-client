@@ -8,11 +8,11 @@ import book2 from "../../../public/assets/connect/book2.svg";
 import book3 from "../../../public/assets/connect/book3.svg";
 import book4 from "../../../public/assets/connect/book4.svg";
 import book5 from "../../../public/assets/connect/book5.svg";
-import bg1 from "../../../public/assets/connect/bg1.svg";
-import bg2 from "../../../public/assets/connect/bg2.svg";
-import bg3 from "../../../public/assets/connect/bg3.svg";
-import bg4 from "../../../public/assets/connect/bg4.svg";
-import bg5 from "../../../public/assets/connect/bg5.svg";
+import bg1 from "../../../public/assets/connect/bg1.png";
+import bg2 from "../../../public/assets/connect/bg2.png";
+import bg3 from "../../../public/assets/connect/bg3.png";
+import bg4 from "../../../public/assets/connect/bg4.png";
+import bg5 from "../../../public/assets/connect/bg5.png";
 import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from "../../api/config/state";
 import { encodeLetterId } from "../../api/config/base64";
@@ -127,10 +127,22 @@ export const Connection = () => {
     <>
       {!isAnimationComplete ? (
         <BackGround>
-          <TopImg src={topBackground} />
+          <TopImg
+            style={{
+              backgroundImage: `url(${topBackground})`,
+            }}
+          />
           <Contents>편지 쓰러 가는 중 . . .</Contents>
-          <Book src={bookImage} alt="book" />
-          <Shadow src={shadow} alt="shadow" />
+          <Book
+            style={{
+              backgroundImage: `url(${bookImage})`,
+            }}
+          />
+          <Shadow
+            style={{
+              backgroundImage: `url(${shadow})`,
+            }}
+          />
           <Ground $groundColor={String(groundColor)} />
         </BackGround>
       ) : (
@@ -152,7 +164,7 @@ const BackGround = styled.div`
   overflow: hidden;
 `;
 
-const Shadow = styled.img`
+const Shadow = styled.div`
   width: 350px;
   height: 124px;
   flex-shrink: 0;
@@ -161,16 +173,19 @@ const Shadow = styled.img`
   z-index: 2;
   animation: ${hideDuringAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
+  left: 7%;
 `;
-const TopImg = styled.img`
+const TopImg = styled.div`
   z-index: 1;
   position: absolute;
   top: 0;
-  width: 101%;
-  height: 60vh;
+  width: 100%;
+  height: 59.96vh;
   flex-shrink: 0;
   overflow: hidden;
-  object-fit: cover;
+  background-size: cover; /* 이미지를 요소 크기에 맞게 덮음 */
+  background-position: center; /* 이미지를 중앙에 배치 */
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
 `;
 const Ground = styled.div<{ $groundColor: string }>`
   z-index: 1;
@@ -182,13 +197,16 @@ const Ground = styled.div<{ $groundColor: string }>`
   background: ${(props) => props.$groundColor};
   object-fit: cover;
 `;
-const Book = styled.img`
+const Book = styled.div`
   width: 154px;
   height: 83px;
   flex-shrink: 0;
   position: absolute;
-  bottom: 39.7%;
+  bottom: 39.6%;
   z-index: 2;
+  background-size: contain; /* 이미지를 비율에 맞춰 크기 조정 */
+  background-position: center; /* 중앙 정렬 */
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
   animation: ${scaleAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
 `;

@@ -8,6 +8,7 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { Loading } from "./Loading";
+import texture from "../../../public/assets/invite/texture.png";
 
 export interface Participants {
   sequence: number;
@@ -45,16 +46,26 @@ export const Invite = () => {
       const data = await getParticipants(letterId);
 
       if (data.length > 0 || participants.length > 0) {
-        if (data[0].nickname === name || data[0].nickname === userName) {
-          setMemberIndex(0);
-          setLoadstatus(false);
-          setLoad(false);
-          localStorage.removeItem("load");
-        } else {
-          setMemberIndex(1);
-          setLoadstatus(false);
-          setLoad(false);
-          localStorage.removeItem("load");
+        if (data[0].nickname) {
+          console.log(data[0].nickname);
+          console.log(name);
+          console.log(userName);
+          console.log(data.length);
+          console.log(participants.length);
+          console.log(data);
+          if (data[0].nickname === name || data[0].nickname === userName) {
+            console.log("방장지정");
+            setMemberIndex(0);
+            setLoadstatus(false);
+            setLoad(false);
+            localStorage.removeItem("load");
+          } else {
+            console.log("방장지정");
+            setMemberIndex(1);
+            setLoadstatus(false);
+            setLoad(false);
+            localStorage.removeItem("load");
+          }
         }
       } else {
         if (!hasRefreshed) {
@@ -84,7 +95,6 @@ export const Invite = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoad(true);
       try {
         const mydata = await getMyPage();
         const userNameFromApi = mydata.name;
@@ -92,20 +102,25 @@ export const Invite = () => {
 
         setName(userNameFromApi);
         setUserId(userIdFromApi);
+        console.log(participants);
         if (participants.length < 1) {
           fetchParticipants();
           console.log("데이터없음-useEffect");
         } else {
+          console.log("데이터들어옴");
           if (
             participants[0].nickname === name ||
             participants[0].nickname === userName
           ) {
+            console.log("방장지정");
+
             setMemberIndex(0);
             localStorage.removeItem("load");
-
             setLoadstatus(false);
             setLoad(false);
           } else {
+            console.log("방장지정");
+
             setMemberIndex(1);
             localStorage.removeItem("load");
             setLoadstatus(false);
@@ -124,30 +139,32 @@ export const Invite = () => {
     const fetchData = async () => {
       try {
         const mydata = await getMyPage();
-        const data = await getParticipants(letterId);
-        setParticipants(data);
         const userNameFromApi = mydata.name;
         const userIdFromApi = mydata.memberId;
+
         setName(userNameFromApi);
         setUserId(userIdFromApi);
-
+        console.log(participants);
         if (participants.length < 1) {
           fetchParticipants();
+          console.log("데이터없음-useEffect");
         } else {
-          console.log(participants.length);
+          console.log("데이터들어옴");
           if (
-            participants[0].nickname === userName ||
-            participants[0].nickname === name
+            participants[0].nickname === name ||
+            participants[0].nickname === userName
           ) {
+            console.log("방장지정");
+
             setMemberIndex(0);
             localStorage.removeItem("load");
-
             setLoadstatus(false);
             setLoad(false);
           } else {
+            console.log("방장지정");
+
             setMemberIndex(1);
             localStorage.removeItem("load");
-
             setLoadstatus(false);
             setLoad(false);
           }
@@ -158,10 +175,29 @@ export const Invite = () => {
     };
 
     fetchData();
+  }, [participants]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const mydata = await getMyPage();
+        const data = await getParticipants(letterId);
+        setParticipants(data);
+        const userNameFromApi = mydata.name;
+        const userIdFromApi = mydata.memberId;
+        setName(userNameFromApi);
+        setUserId(userIdFromApi);
+      } catch (err) {
+        console.error("Error during data fetching:", err);
+      }
+    };
+
+    fetchData();
   }, [refresh]);
 
   useEffect(() => {
     if (memberIndex > -1) {
+      console.log(memberIndex);
       localStorage.removeItem("load");
       setLoadstatus(false);
       setLoad(false);
@@ -238,6 +274,8 @@ export const Invite = () => {
     };
   }, []);
 
+  console.log(load);
+  console.log(participants);
   console.log(memberIndex);
 
   //퇴장 알림
@@ -302,13 +340,14 @@ const BackGround = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  //left: 50%;
+  //transform: translateX(-50%);
   background:
-    100px 100px repeat,
-    #d3edff;
-  background-blend-mode: overlay, normal;
+    url(${texture}) 0 0 / auto auto repeat,
+    /* 질감 이미지 크기 자동 조정 */ #d3edff; /* 기본 배경색 */
+  background-blend-mode: overlay;
 `;
+
 const HostAlert = styled.div`
   display: flex;
   padding: var(--Border-Radius-radius_300, 8px) 20px;

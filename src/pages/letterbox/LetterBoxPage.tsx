@@ -6,13 +6,7 @@ export const LetterBoxPage = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    // 페이지 URL에 "page" 파라미터가 있을 경우, "/letterbox"로 리디렉션
-    if (new URLSearchParams(location.search).has("page")) {
-      navigate("/letterbox", { replace: true });
-    } else {
-      // "/letterbox" 페이지에서 뒤로가기를 눌렀을 경우 홈 페이지로 리디렉션
-      navigate("/", { replace: true });
-    }
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {

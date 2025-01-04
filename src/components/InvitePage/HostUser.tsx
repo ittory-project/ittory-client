@@ -24,6 +24,7 @@ import defaultImg from "../../../public/assets/menu/logindefault.png";
 import { getFontById } from "../../api/service/FontService";
 import { LetterDetailGetResponse } from "../../api/model/LetterModel";
 import { getLetterDetailInfo } from "../../api/service/LetterService";
+import barShadow from "../../../public/assets/invite/shadow.svg";
 
 interface Props {
   guideOpen: string;
@@ -61,7 +62,8 @@ export const HostUser = ({
   const [selectfont, setSelectfont] = useState<string>("");
   const [receiverName, setReceiverName] = useState<string>("");
 
-  console.log(guideOpen);
+  console.log("방장 랜더링");
+
   useEffect(() => {
     const fetchCoverTypes = async () => {
       try {
@@ -278,6 +280,7 @@ export const HostUser = ({
               </NameBar>
             </Book>
             <Bar />
+            <BarShadow $img={barShadow} />
 
             <BoxContainer>
               <PinArea>
@@ -504,13 +507,14 @@ const TitleContainer = styled.div<{ $font: string }>`
   line-height: 21.429px;
 `;
 const DeliverDay = styled.div`
-  color: #fff;
+  color: #ffffff;
+  opacity: 80%;
   margin-top: -14px;
   text-align: center;
   font-family: var(--Typography-family-caption, SUIT);
-  font-size: 9.821px;
+  font-size: 8px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: Bold;
   line-height: 14.286px;
   letter-spacing: -0.446px;
 `;
@@ -603,10 +607,18 @@ const Bar = styled.div`
     0px -1px 0.5px 0px rgba(203, 186, 145, 0.8) inset,
     0px 1px 0.5px 0px rgba(255, 247, 226, 0.7) inset;
 `;
+
+const BarShadow = styled.div<{ $img: string }>`
+  width: 288px;
+  height: 18px;
+  flex-shrink: 0;
+  background-image: url(${(props) => props.$img});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
 const BoxContainer = styled.div`
   display: flex;
-  height: 116px;
-  margin-top: 21px;
   flex-direction: column;
   align-items: center; //수직
   justify-content: center; //수평
@@ -614,6 +626,7 @@ const BoxContainer = styled.div`
 const PinArea = styled.div`
   display: flex;
   width: 232px;
+  margin-top: 10px;
   align-items: center;
   justify-content: space-between;
 `;
@@ -622,6 +635,8 @@ const Pin = styled.div`
   display: inline-block;
   height: 8px;
   transform: rotate(-90deg);
+  top: 4px;
+  position: relative;
   flex-shrink: 0;
   border-radius: var(--Border-Radius-radius_300, 8px);
   background: var(--Color-grayscale-gray400, #ced4da);

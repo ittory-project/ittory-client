@@ -324,10 +324,10 @@ const Info = styled.div`
   width: 100%;
   position: relative;
   box-sizing: border-box;
-  padding: 0px 12px 16px 12px;
+  padding: 0px 12px 6px 12px;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--Border-Radius-radius_300, 8px);
+  //gap: var(--Border-Radius-radius_300, 8px);
   background-color: #fff;
   //align-self: stretch;
 `;
@@ -398,7 +398,7 @@ const Cover = styled.div`
   width: 100%;
   position: relative;
   box-sizing: border-box;
-  padding: 0px 12px 20px 12px;
+  padding: 0px 12px 12px 12px;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
