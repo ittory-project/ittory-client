@@ -141,7 +141,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           <Select>&nbsp;번씩</Select>
           <Picker>
             <div
-              style={{ width: "240px", height: "200px", overflow: "hidden" }}
+              style={{ width: "240px", height: "186px", overflow: "hidden" }}
             >
               <Swiper
                 direction={"vertical"}
@@ -237,8 +237,6 @@ const Cancel = styled.span`
 const Contents = styled.div`
   display: flex;
   position: relative;
-  //width: 288px;
-
   padding: 0px 16px 20px 16px;
   width: 100%;
   box-sizing: border-box;
@@ -269,7 +267,7 @@ const Select = styled.div`
   width: 240px;
   height: 40px;
   box-sizing: border-box;
-  padding: var(--Border-Radius-radius_300, 8px) 0px;
+  padding: 8px 0px;
   justify-content: center;
   align-items: center;
   gap: 2px;
@@ -284,7 +282,7 @@ const Select = styled.div`
   line-height: 32px;
   letter-spacing: -0.5px;
   position: absolute;
-  bottom: 84.3px;
+  bottom: 83.5px;
   z-index: 1;
 `;
 const SlideContent = styled.div<SlideContentProps>`
