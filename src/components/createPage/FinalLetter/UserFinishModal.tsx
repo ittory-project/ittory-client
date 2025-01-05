@@ -100,6 +100,7 @@ export default function UserFinishModal({
 
   const navigateToInvite = async () => {
     setGuideOpen(false);
+    console.log("버튼 클릭됨");
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
@@ -139,6 +140,7 @@ export default function UserFinishModal({
 
   const handleguide = async () => {
     setGuideOpen(true);
+    console.log("버튼 클릭됨");
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
@@ -193,6 +195,19 @@ export default function UserFinishModal({
 
   return (
     <>
+      <Player
+        animationData={animation}
+        loop={false}
+        autoplay
+        style={{
+          height: "320px",
+          width: "100%",
+          margin: "0 auto",
+          top: "-450px",
+          position: "relative",
+          zIndex: "101",
+        }}
+      />
       <ModalContainer ref={modalBackground}>
         <Header>
           <Title>{myName}님,</Title>
@@ -224,7 +239,6 @@ export default function UserFinishModal({
           <Button
             style={{
               background: "#CED4DA",
-              zIndex: "200",
             }}
             onClick={handleguide}
           >
@@ -233,7 +247,6 @@ export default function UserFinishModal({
           <Button
             style={{
               background: "#FFA256",
-              zIndex: "200",
             }}
             onClick={navigateToInvite}
           >
@@ -365,8 +378,10 @@ const ButtonContainer = styled.div`
   margin-top: 24px;
   width: 100%; /* 컨테이너의 너비를 조정 */
   justify-content: center; /* 버튼들을 중앙에 배치 */
+  z-index: 200;
 `;
 const Button = styled.button`
+  z-index: 200;
   box-sizing: border-box;
   display: flex;
   width: 140px;

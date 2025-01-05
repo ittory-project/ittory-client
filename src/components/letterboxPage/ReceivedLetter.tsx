@@ -221,6 +221,7 @@ const Container = styled.div`
   align-items: center;
   align-self: stretch;
   overflow-y: auto;
+
   &::-webkit-scrollbar {
     display: none;
   }

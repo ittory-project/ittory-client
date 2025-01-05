@@ -45,14 +45,19 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   align-self: stretch;
+  height: 100%;
+  position: relative;
+  background: var(--Color-grayscale-gray100, #f1f3f5);
 `;
 const Icon = styled.img`
+  position: relative;
   width: 100px;
   height: 100px;
   flex-shrink: 0;
   margin-bottom: 20px;
 `;
 const TextArea = styled.div`
+  position: relative;
   display: flex;
   color: #495057;
   text-align: center;
@@ -64,6 +69,7 @@ const TextArea = styled.div`
   letter-spacing: -0.5px;
 `;
 const Button = styled.button`
+  position: relative;
   box-sizing: border-box;
   margin-top: 20px;
   display: flex;
@@ -72,13 +78,9 @@ const Button = styled.button`
   padding: 14px 20px;
   align-items: center;
   gap: 8px;
-  flex: 1 0 0;
   background: #343a40;
   justify-content: center;
   border-radius: 50px;
-  box-shadow:
-    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
-    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 `;
 const ButtonTxt = styled.div`
   font-family: SUIT;

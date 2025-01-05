@@ -96,7 +96,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
             </SubTitle>
           </TitleContainer>
           <CheckList>
-            <CheckContainer>
+            <CheckContainer onClick={() => handleCheckboxChange(0)}>
               <CheckBox
                 type="checkbox"
                 onChange={() => handleCheckboxChange(0)}
@@ -104,7 +104,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
               />
               자주 이용하지 않아요
             </CheckContainer>
-            <CheckContainer>
+            <CheckContainer onClick={() => handleCheckboxChange(1)}>
               <CheckBox
                 type="checkbox"
                 onChange={() => handleCheckboxChange(1)}
@@ -112,7 +112,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
               />
               서비스 이용에 애로 사항이 있어요
             </CheckContainer>
-            <CheckContainer>
+            <CheckContainer onClick={() => handleCheckboxChange(2)}>
               <CheckBox
                 type="checkbox"
                 onChange={() => handleCheckboxChange(2)}
@@ -120,7 +120,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
               />
               편지 작성이 불편해요
             </CheckContainer>
-            <CheckContainer>
+            <CheckContainer onClick={() => handleCheckboxChange(3)}>
               <CheckBox
                 type="checkbox"
                 onChange={() => handleCheckboxChange(3)}
@@ -128,7 +128,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
               />
               서비스가 재미없어요
             </CheckContainer>
-            <CheckContainer>
+            <CheckContainer onClick={() => handleCheckboxChange(4)}>
               <CheckBox
                 type="checkbox"
                 onChange={() => handleCheckboxChange(4)}
@@ -145,10 +145,12 @@ export const DeleteReason = ({ setViewReason }: Props) => {
                   spellCheck="false"
                   maxLength={100}
                 />
-                <Count>
-                  <CntTxt style={{ color: "#495057" }}>{length}</CntTxt>
-                  <CntTxt style={{ color: "#868E96" }}>/100자</CntTxt>
-                </Count>
+                {length > 0 && (
+                  <Count>
+                    <CntTxt style={{ color: "#495057" }}>{length}</CntTxt>
+                    <CntTxt style={{ color: "#868E96" }}>/100자</CntTxt>
+                  </Count>
+                )}
               </InputArea>
             )}
           </CheckList>
@@ -190,6 +192,7 @@ const Overlay = styled.div`
 `;
 const BackGround = styled.div`
   display: flex;
+  //position: fixed;
   flex-direction: column;
   height: calc(var(--vh, 1vh) * 100);
   width: 101%;
@@ -197,7 +200,7 @@ const BackGround = styled.div`
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
-  overflow-y: auto;
+  overflow-y: scroll;
 `;
 const Header = styled.div`
   display: flex;
@@ -237,6 +240,7 @@ const Container = styled.div`
   align-items: center;
   align-self: stretch;
   box-sizing: border-box;
+  overflow-y: scroll;
 `;
 const TitleContainer = styled.div`
   margin-top: 16px;
@@ -283,6 +287,8 @@ const CheckList = styled.div`
 `;
 const CheckContainer = styled.div`
   display: flex;
+  height: 52px;
+  box-sizing: border-box;
   padding: 16px;
   align-items: center;
   gap: 8px;
@@ -296,6 +302,7 @@ const CheckContainer = styled.div`
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const CheckBox = styled.input`
   appearance: none;
@@ -310,17 +317,21 @@ const CheckBox = styled.input`
   }
 `;
 const InputArea = styled.div`
+  position: relative;
   display: flex;
   //flex-direction: column;
-  //align-items: flex-start;
-  gap: 10px;
   width: 100%;
   height: 130px;
+  //height: auto;
+  //padding-bottom: 80px;
 `;
 
 const Input = styled.textarea`
-  width: 100%;
+  position: relative;
   padding: 16px;
+  width: 100%;
+  //height: 92px;
+  resize: none;
   box-sizing: border-box;
   border-radius: 12px;
   font-family: SUIT;
@@ -333,6 +344,7 @@ const Input = styled.textarea`
   border: 1px solid #adb5bd;
   gap: 2px;
   flex: 1 0 0;
+  overflow: hidden;
   &::placeholder {
     color: #adb5bd;
   }
@@ -342,10 +354,14 @@ const Input = styled.textarea`
   &:focus {
     outline: none;
     border: 1px solid #212529;
+    width: 100%;
   }
 `;
 const Count = styled.span`
-  position: absolute;
+  z-index: 1;
+  //align-self: flex-start;
+  right: 83%;
+  position: relative;
   margin-left: 16px;
   margin-top: 94px;
 `;
@@ -356,8 +372,10 @@ const CntTxt = styled.span`
   letter-spacing: -0.5px;
 `;
 const ButtonContainer = styled.div`
-  box-sizing: border-box;
   position: relative;
+  box-sizing: border-box;
+  z-index: 3;
+  bottom: 0;
   width: 100%;
   padding: 20px 16px 16px 16px;
   display: flex;
@@ -365,6 +383,7 @@ const ButtonContainer = styled.div`
 `;
 const Button = styled.button<{ $selectedReason: number }>`
   box-sizing: border-box;
+  z-index: 3;
   display: flex;
   height: 48px;
   padding: 14px 0px;
