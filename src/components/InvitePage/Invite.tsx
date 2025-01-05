@@ -8,7 +8,7 @@ import { getMyPage } from "../../api/service/MemberService";
 import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { Loading } from "./Loading";
-import texture from "../../../public/assets/invite/texture.png";
+import texture from "../../../public/assets/invite/texture1.png";
 
 export interface Participants {
   sequence: number;

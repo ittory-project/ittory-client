@@ -186,9 +186,10 @@ const Header = styled.div`
   align-self: stretch;
   box-sizing: border-box;
 `;
+//12px에서 20px로 변경
 const Cancel = styled.img`
-  width: 12px;
-  height: 12px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   margin-right: 7.3px;
   cursor: pointer;
