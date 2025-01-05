@@ -178,6 +178,7 @@ const Contents = styled.div`
   align-items: flex-start;
   gap: 12px;
   align-self: stretch;
+  background: #f8f9fa;
 `;
 const TxtList = styled.div`
   display: flex;
