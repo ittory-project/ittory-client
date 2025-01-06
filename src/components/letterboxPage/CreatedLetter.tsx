@@ -10,6 +10,7 @@ import {
   getLetterCounts,
 } from "../../api/service/MemberService";
 import { ParticipateLetterModel } from "../../api/model/MemberModel";
+import { Loading } from "./Loading";
 
 interface DeliverDayProps {
   deliverDate: string;
@@ -43,6 +44,7 @@ export const CreatedLetter = ({
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<ParticipateLetterModel[]>([]);
+  const [load, setLoad] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -51,6 +53,7 @@ export const CreatedLetter = ({
         const counts = await getLetterCounts();
         setLetterCounts(counts.participationLetterCount);
         setLetters(letterdata.data.letters);
+        setLoad(false);
         console.log(letters);
       } catch (err) {
         console.error("Error fetching letter counts:", err);
@@ -109,9 +112,9 @@ export const CreatedLetter = ({
 
   return (
     <>
-      {letters.length === 0 ? (
-        <EmptyLetter context="created" />
-      ) : (
+      {load === true ? (
+        <Loading />
+      ) : letters.length !== 0 ? (
         <>
           {!openLetter && letters && (
             <Container>
@@ -187,6 +190,9 @@ export const CreatedLetter = ({
             />
           )}
         </>
+      ) : (
+        // letters 배열이 비어 있으면 EmptyLetter 컴포넌트 출력
+        <EmptyLetter context="created" />
       )}
     </>
   );
