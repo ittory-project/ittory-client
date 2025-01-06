@@ -318,10 +318,10 @@ const CheckBox = styled.input`
 `;
 const InputArea = styled.div`
   position: relative;
-  display: flex;
+  //display: flex;
   //flex-direction: column;
   width: 100%;
-  height: 130px;
+  //height: 130px;
   //height: auto;
   //padding-bottom: 80px;
 `;
@@ -330,7 +330,7 @@ const Input = styled.textarea`
   position: relative;
   padding: 16px;
   width: 100%;
-  //height: 92px;
+  height: 140px;
   resize: none;
   box-sizing: border-box;
   border-radius: 12px;
@@ -354,18 +354,16 @@ const Input = styled.textarea`
   &:focus {
     outline: none;
     border: 1px solid #212529;
-    width: 100%;
   }
 `;
 const Count = styled.span`
   z-index: 1;
-  //align-self: flex-start;
-  right: 83%;
-  position: relative;
-  margin-left: 16px;
-  margin-top: 94px;
+  position: absolute;
+  left: 16px;
+  top: 110px;
 `;
 const CntTxt = styled.span`
+  width: 0;
   font-weight: 400;
   font-size: 11px;
   line-height: 16px;
