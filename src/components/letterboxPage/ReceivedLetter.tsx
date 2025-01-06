@@ -10,6 +10,7 @@ import {
   getLetterCounts,
 } from "../../api/service/MemberService";
 import { ReceiveLetterModel } from "../../api/model/MemberModel";
+import { Loading } from "./Loading";
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,6 +44,7 @@ export const ReceivedLetter = ({
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<ReceiveLetterModel[]>([]);
+  const [load, setLoad] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -51,6 +53,7 @@ export const ReceivedLetter = ({
         const counts = await getLetterCounts();
         setLetterCounts(counts.receiveLetterCount);
         setLetters(letterdata.data.letters);
+        setLoad(false);
         console.log(letterCounts);
         console.log(letterdata);
       } catch (err) {
@@ -109,9 +112,9 @@ export const ReceivedLetter = ({
 
   return (
     <>
-      {letters.length === 0 ? (
-        <EmptyLetter context="received" />
-      ) : (
+      {load === true ? (
+        <Loading />
+      ) : letters.length !== 0 ? (
         <>
           {!openLetter && letters && (
             <Container>
@@ -186,6 +189,9 @@ export const ReceivedLetter = ({
             />
           )}
         </>
+      ) : (
+        // letters 배열이 비어 있으면 EmptyLetter 출력
+        <EmptyLetter context="received" />
       )}
     </>
   );
