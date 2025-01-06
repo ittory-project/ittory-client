@@ -289,7 +289,7 @@ export default function CoverModal({
       <Header>
         <Title>표지 수정하기</Title>
         <Cancel onClick={closeCoverModal}>
-          <img src={X} alt="X Icon" style={{ width: "12px", height: "12px" }} />
+          <img src={X} alt="X Icon" style={{ width: "14px", height: "14px" }} />
         </Cancel>
       </Header>
       <Book $backgroundImage={backgroundImage}>

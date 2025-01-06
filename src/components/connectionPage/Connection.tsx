@@ -109,7 +109,7 @@ export const Connection = () => {
         setBookImage(undefined);
         setTopBackground(undefined);
     }
-  }, [coverId]);
+  }, []);
 
   console.log(coverId);
 

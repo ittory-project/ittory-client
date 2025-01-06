@@ -54,8 +54,8 @@ const Header = styled.div`
   box-sizing: border-box;
 `;
 const Cancel = styled.img`
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
   margin-right: 7.3px;
 `;
