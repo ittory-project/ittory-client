@@ -8,11 +8,11 @@ import book2 from "../../../public/assets/connect/book2.svg";
 import book3 from "../../../public/assets/connect/book3.svg";
 import book4 from "../../../public/assets/connect/book4.svg";
 import book5 from "../../../public/assets/connect/book5.svg";
-import bg1 from "../../../public/assets/connect/bg1.png";
-import bg2 from "../../../public/assets/connect/bg2.png";
-import bg3 from "../../../public/assets/connect/bg3.png";
-import bg4 from "../../../public/assets/connect/bg4.png";
-import bg5 from "../../../public/assets/connect/bg5.png";
+import bg1 from "../../../public/assets/connect/bg1.svg";
+import bg2 from "../../../public/assets/connect/bg2.svg";
+import bg3 from "../../../public/assets/connect/bg3.svg";
+import bg4 from "../../../public/assets/connect/bg4.svg";
+import bg5 from "../../../public/assets/connect/bg5.svg";
 import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from "../../api/config/state";
 import { encodeLetterId } from "../../api/config/base64";
@@ -45,7 +45,6 @@ export const Connection = () => {
   const coverId = location.state.coverId;
   const [bookImage, setBookImage] = useState<string | undefined>();
   const [topBackground, setTopBackground] = useState<string | undefined>();
-  const [groundColor, setGroundColor] = useState<string | undefined>();
 
   console.log(coverId);
 
@@ -72,52 +71,43 @@ export const Connection = () => {
 
     postRandomParti();
   }, []);
-
+  /*
   useEffect(() => {
     const routingTimer = setTimeout(() => {
       navigate(`/write/${encodeLetterId(letterId)}`);
     }, 2500);
 
     return () => clearTimeout(routingTimer);
-  }, [navigate, letterId]);
+  }, [navigate, letterId]);*/
 
   useEffect(() => {
     switch (coverId) {
       case 1:
         setBookImage(book1);
         setTopBackground(bg1);
-        setGroundColor("linear-gradient(0deg, #D9F0FF 9.55%, #CEECFF 100%)");
         break;
       case 2:
         setBookImage(book2);
         setTopBackground(bg2);
-        setGroundColor("linear-gradient(0deg, #EAFFF1 9.55%, #ECFFCC 100%)");
         break;
       case 3:
         setBookImage(book3);
         setTopBackground(bg3);
-        setGroundColor(
-          "linear-gradient(0deg, rgba(241, 244, 167, 0.80) 9.55%, rgba(253, 255, 199, 0.80) 100%);"
-        );
+
         break;
       case 4:
         setBookImage(book4);
         setTopBackground(bg4);
-        setGroundColor(
-          "linear-gradient(0deg, rgba(242, 245, 163, 0.80) 9.55%, rgba(253, 255, 199, 0.80) 100%)"
-        );
+
         break;
       case 5:
         setBookImage(book5);
         setTopBackground(bg5);
-        setGroundColor(
-          "linear-gradient(0deg, rgba(211, 246, 255, 0.80) 9.55%, rgba(228, 249, 255, 0.80) 100%)"
-        );
+
         break;
       default:
         setBookImage(undefined);
         setTopBackground(undefined);
-        setGroundColor(undefined);
     }
   }, [coverId]);
 
@@ -126,12 +116,11 @@ export const Connection = () => {
   return (
     <>
       {!isAnimationComplete ? (
-        <BackGround>
-          <TopImg
-            style={{
-              backgroundImage: `url(${topBackground})`,
-            }}
-          />
+        <BackGround
+          style={{
+            backgroundImage: `url(${topBackground})`,
+          }}
+        >
           <Contents>편지 쓰러 가는 중 . . .</Contents>
           <Book
             style={{
@@ -143,7 +132,6 @@ export const Connection = () => {
               backgroundImage: `url(${shadow})`,
             }}
           />
-          <Ground $groundColor={String(groundColor)} />
         </BackGround>
       ) : (
         <WriteOrder letterId={letterId} />
@@ -158,10 +146,13 @@ const BackGround = styled.div`
   align-items: center;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  position: absolute;
   overflow: hidden;
+  background-size: cover;
+  background-position: center; /* 중앙 정렬 */
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
+  animation: ${scaleAnimation} 1.5s ease-in-out;
+  animation-delay: 1.6s;
 `;
 
 const Shadow = styled.div`
@@ -169,45 +160,25 @@ const Shadow = styled.div`
   height: 124px;
   flex-shrink: 0;
   position: absolute;
-  top: 59.3%;
+  top: 58%;
   z-index: 2;
   animation: ${hideDuringAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
-  left: 7%;
-`;
-const TopImg = styled.div`
-  z-index: 1;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 59.96vh;
-  flex-shrink: 0;
-  overflow: hidden;
-  background-size: cover; /* 이미지를 요소 크기에 맞게 덮음 */
-  background-position: center; /* 이미지를 중앙에 배치 */
+  background-size: contain; /* 이미지를 비율에 맞춰 크기 조정 */
+  background-position: center; /* 중앙 정렬 */
   background-repeat: no-repeat; /* 이미지 반복 방지 */
-`;
-const Ground = styled.div<{ $groundColor: string }>`
-  z-index: 1;
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-  height: 40vh;
-  flex-shrink: 0;
-  background: ${(props) => props.$groundColor};
-  object-fit: cover;
 `;
 const Book = styled.div`
   width: 154px;
   height: 83px;
   flex-shrink: 0;
   position: absolute;
-  bottom: 39.6%;
+  bottom: 40.9%;
   z-index: 2;
   background-size: contain; /* 이미지를 비율에 맞춰 크기 조정 */
   background-position: center; /* 중앙 정렬 */
   background-repeat: no-repeat; /* 이미지 반복 방지 */
-  animation: ${scaleAnimation} 1.2s ease-in-out;
+  animation: ${scaleAnimation} 1.5s ease-in-out;
   animation-delay: 1.6s;
 `;
 
