@@ -31,7 +31,12 @@ export default function LetterInfo({
 }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
-  const keyboardRef = useRef<HTMLInputElement | null>(null);
+  //const keyboardRef = useRef<HTMLInputElement | null>(null);
+  const receiverInputRef = useRef<HTMLInputElement | null>(null);
+  const myNameInputRef = useRef<HTMLInputElement | null>(null);
+  const [focusedField, setFocusedField] = useState<
+    "receiver" | "myName" | null
+  >(null);
   const [name, setName] = useState<string>("");
   const navigate = useNavigate();
 
@@ -87,6 +92,20 @@ export default function LetterInfo({
     };
   }, []);
 
+  const handleFocus = (field: "receiver" | "myName") => {
+    setFocusedField(field); // 포커스된 필드를 추적
+  };
+
+  useEffect(() => {
+    if (keyboardVisible) {
+      if (focusedField === "receiver") {
+        receiverInputRef.current?.focus();
+      } else if (focusedField === "myName") {
+        myNameInputRef.current?.focus();
+      }
+    }
+  }, [keyboardVisible, focusedField]);
+
   return (
     <BackGround>
       {isModalOpen && <Overlay />}
@@ -105,7 +124,9 @@ export default function LetterInfo({
           <InputBox>
             <InputLogo>받는 사람</InputLogo>
             <Input
-              ref={keyboardRef}
+              //ref={keyboardRef}
+              ref={receiverInputRef}
+              onFocus={() => handleFocus("receiver")}
               required
               placeholder="12자까지 입력할 수 있어요"
               type="text"
@@ -124,7 +145,9 @@ export default function LetterInfo({
           <InputBox>
             <InputLogo>내 이름</InputLogo>
             <Input
-              ref={keyboardRef}
+              //ref={keyboardRef}
+              ref={myNameInputRef}
+              onFocus={() => handleFocus("myName")}
               required
               placeholder="5자까지 입력할 수 있어요"
               type="text"
