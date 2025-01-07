@@ -63,6 +63,23 @@ export const CreatedLetter = ({
     fetchLetter();
   }, []);
 
+  useEffect(() => {
+    const fetchLetter = async () => {
+      try {
+        const letterdata = await getParticipatedLetter();
+        const counts = await getLetterCounts();
+        setLetterCounts(counts.participationLetterCount);
+        setLetters(letterdata.data.letters);
+        setLoad(false);
+        console.log(letters);
+      } catch (err) {
+        console.error("Error fetching letter counts:", err);
+      }
+    };
+
+    fetchLetter();
+  }, [setDeletedAlert]);
+
   const openModal = (itemId: number) => {
     setSelectId(itemId);
     setIsModalOpen(true);
@@ -81,6 +98,8 @@ export const CreatedLetter = ({
           const counts = await getLetterCounts();
           setLetterCounts(counts.participationLetterCount);
           setLetters(letterdata.data.letters);
+
+          console.log("새로운데이터 가져옴");
 
           const deletedMessage = localStorage.getItem("deletedLetter");
           setDeletedAlert(deletedMessage);
