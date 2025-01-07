@@ -19,6 +19,8 @@ interface Props {
   setViewStartpage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+//포커스가 두번째부터 이루어짐
+
 export default function LetterInfo({
   myName,
   setMyName,
