@@ -29,6 +29,21 @@ export const LetterBox = () => {
   }, [letterId, setOpenLetter]);
 
   useEffect(() => {
+    const fetchLetter = async () => {
+      if (deleteAlert !== null) {
+        try {
+          const deletedMessage = localStorage.getItem("deletedLetter");
+          setDeletedAlert(deletedMessage);
+        } catch (err) {
+          console.error("Error fetching letter counts:", err);
+        }
+      }
+    };
+
+    fetchLetter();
+  }, [deleteAlert]);
+
+  useEffect(() => {
     const focusCreate = location.state?.focusCreate;
     const focusReceive = location.state?.focusReceive;
 
@@ -41,6 +56,28 @@ export const LetterBox = () => {
     } else {
       setCreate(true);
       setReceive(false);
+    }
+
+    if (deletedAlert) {
+      console.log(deletedAlert);
+      // deletedAlert 값이 있을 때만 타이머 설정
+      const timer = setTimeout(() => {
+        console.log("변수 알림으로 실행");
+        setDeletedAlert(null);
+        localStorage.removeItem("deletedLetter");
+      }, 2500);
+      return () => clearTimeout(timer);
+    } else if (localStorage.getItem("deletedLetter")) {
+      console.log("로컬스토리지에 있음");
+      const timer = setTimeout(() => {
+        setDeletedAlert(null);
+        localStorage.removeItem("deletedLetter");
+      }, 2500);
+      return () => clearTimeout(timer);
+    } else {
+      const deletedMessage = localStorage.getItem("deletedLetter");
+      console.log("삭제된 메시지:", deletedMessage);
+      setDeletedAlert(deletedMessage);
     }
   }, []);
 
@@ -68,12 +105,21 @@ export const LetterBox = () => {
 
   useEffect(() => {
     if (deletedAlert) {
+      console.log("이거 실행");
       console.log(deletedAlert);
       // deletedAlert 값이 있을 때만 타이머 설정
       const timer = setTimeout(() => {
-        setDeletedAlert(null); // 3초 후 알림 숨기기
+        console.log("변수 알림으로 실행");
+        setDeletedAlert(null);
         localStorage.removeItem("deletedLetter");
-      }, 3000);
+      }, 2500);
+      return () => clearTimeout(timer);
+    } else if (localStorage.getItem("deletedLetter")) {
+      console.log("로컬스토리지에 있음");
+      const timer = setTimeout(() => {
+        setDeletedAlert(null);
+        localStorage.removeItem("deletedLetter");
+      }, 2500);
       return () => clearTimeout(timer);
     } else {
       const deletedMessage = localStorage.getItem("deletedLetter");
@@ -81,6 +127,31 @@ export const LetterBox = () => {
       setDeletedAlert(deletedMessage);
     }
   }, [deletedAlert]);
+
+  useEffect(() => {
+    if (deleteAlert) {
+      console.log("이거 실행2");
+      console.log(deleteAlert);
+      // deletedAlert 값이 있을 때만 타이머 설정
+      const timer = setTimeout(() => {
+        console.log("변수 알림으로 실행");
+        setDeletedAlert(null);
+        localStorage.removeItem("deletedLetter");
+      }, 2500);
+      return () => clearTimeout(timer);
+    } else if (localStorage.getItem("deletedLetter")) {
+      console.log("로컬스토리지에 있음");
+      const timer = setTimeout(() => {
+        setDeletedAlert(null);
+        localStorage.removeItem("deletedLetter");
+      }, 2500);
+      return () => clearTimeout(timer);
+    } else {
+      const deletedMessage = localStorage.getItem("deletedLetter");
+      console.log("삭제된 메시지:", deletedMessage);
+      setDeletedAlert(deletedMessage);
+    }
+  }, [deleteAlert]);
 
   return (
     <BackGround>
