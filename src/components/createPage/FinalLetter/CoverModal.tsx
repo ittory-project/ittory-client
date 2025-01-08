@@ -62,10 +62,12 @@ export default function CoverModal({
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [, setCropperKey] = useState<number>(0);
   const [, setBookimage] = useState<number>(backgroundimage - 1);
-  const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
-  const [backgroundImage, setBackgroundImage] = useState<string>("");
+  const [backgroundImage, setBackgroundImage] = useState<string>(
+    String(backgroundimage)
+  );
+  const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
   const popupRef = useRef<HTMLDivElement | null>(null);
   const [fonts, setFonts] = useState<fontProps[]>([]);
   const [font, setFont] = useState<string>(selectfont);
@@ -113,6 +115,10 @@ export default function CoverModal({
   }, [selectedImageIndex, croppedImage]);
 
   const handleFinalCover = () => {
+    localStorage.setItem("title", title);
+    localStorage.setItem("image", croppedImage);
+    localStorage.setItem("bgImg", String(ImageIndex));
+    localStorage.setItem("font", font);
     setSelectedImageIndex(ImageIndex);
     setBackgroundimage(ImageIndex);
     setSelectfont(font);

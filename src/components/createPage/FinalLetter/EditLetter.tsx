@@ -16,8 +16,8 @@ interface Props {
   setMyName: React.Dispatch<React.SetStateAction<string>>;
   receiverName: string;
   setReceiverName: React.Dispatch<React.SetStateAction<string>>;
-  deliverDay: Date | null;
-  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null>>;
+  deliverDay: Date | null | string;
+  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null | string>>;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   selectfont: string;
@@ -77,6 +77,9 @@ export default function EditLetter({
     setCalenderOpen(true);
   };
   const closeEditview = () => {
+    localStorage.setItem("receiver", receiverName);
+    localStorage.setItem("myName", myName);
+    localStorage.setItem("Date", String(deliverDay));
     setViewEdit(false);
   };
   const openCoveredit = () => {

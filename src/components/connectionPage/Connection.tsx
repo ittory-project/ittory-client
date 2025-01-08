@@ -71,14 +71,14 @@ export const Connection = () => {
 
     postRandomParti();
   }, []);
-
+  /*
   useEffect(() => {
     const routingTimer = setTimeout(() => {
       navigate(`/write/${encodeLetterId(letterId)}`);
     }, 2500);
 
     return () => clearTimeout(routingTimer);
-  }, [navigate, letterId]);
+  }, [navigate, letterId]);*/
 
   useEffect(() => {
     switch (coverId) {
@@ -151,8 +151,8 @@ const BackGround = styled.div`
   background-size: cover;
   background-position: center; /* 중앙 정렬 */
   background-repeat: no-repeat; /* 이미지 반복 방지 */
-  animation: ${scaleAnimation} 1.5s ease-in-out;
-  animation-delay: 1.6s;
+  //animation: ${scaleAnimation} 1.5s ease-in-out;
+  //animation-delay: 1.6s;
 `;
 
 const Shadow = styled.div`
@@ -172,14 +172,16 @@ const Book = styled.div`
   width: 154px;
   height: 83px;
   flex-shrink: 0;
-  position: absolute;
-  bottom: 40.9%;
+  position: relative;
+  //top: 46.8%;
+  top: calc(var(--vh) * 45.4);
+  //bottom: calc(var(--vh) * 41);
   z-index: 2;
   background-size: contain; /* 이미지를 비율에 맞춰 크기 조정 */
   background-position: center; /* 중앙 정렬 */
   background-repeat: no-repeat; /* 이미지 반복 방지 */
-  animation: ${scaleAnimation} 1.5s ease-in-out;
-  animation-delay: 1.6s;
+  //animation: ${scaleAnimation} 1.5s ease-in-out;
+  //animation-delay: 1.6s;
 `;
 
 const Contents = styled.div`
