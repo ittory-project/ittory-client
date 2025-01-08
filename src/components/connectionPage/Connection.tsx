@@ -2,12 +2,6 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
-import shadow from "../../../public/assets/bookshadow.svg";
-import book1 from "../../../public/assets/connect/book1.svg";
-import book2 from "../../../public/assets/connect/book2.svg";
-import book3 from "../../../public/assets/connect/book3.svg";
-import book4 from "../../../public/assets/connect/book4.svg";
-import book5 from "../../../public/assets/connect/book5.svg";
 import bg1 from "../../../public/assets/connect/bg1.svg";
 import bg2 from "../../../public/assets/connect/bg2.svg";
 import bg3 from "../../../public/assets/connect/bg3.svg";
@@ -23,7 +17,7 @@ const scaleAnimation = keyframes`
     transform: scale(1);
   }
   100% {
-    transform: scale(19.8);
+    transform: scale(25);
   }
 `;
 
@@ -43,7 +37,7 @@ export const Connection = () => {
   const dispatch = useDispatch();
   const letterId = location.state.letterId;
   const coverId = location.state.coverId;
-  const [bookImage, setBookImage] = useState<string | undefined>();
+  //const [bookImage, setBookImage] = useState<string | undefined>();
   const [topBackground, setTopBackground] = useState<string | undefined>();
 
   console.log(coverId);
@@ -83,36 +77,48 @@ export const Connection = () => {
   useEffect(() => {
     switch (coverId) {
       case 1:
-        setBookImage(book1);
+        //setBookImage(book1);
         setTopBackground(bg1);
         break;
       case 2:
-        setBookImage(book2);
+        //setBookImage(book2);
         setTopBackground(bg2);
         break;
       case 3:
-        setBookImage(book3);
+        //setBookImage(book3);
         setTopBackground(bg3);
 
         break;
       case 4:
-        setBookImage(book4);
+        //setBookImage(book4);
         setTopBackground(bg4);
 
         break;
       case 5:
-        setBookImage(book5);
+        //setBookImage(book5);
         setTopBackground(bg5);
 
         break;
       default:
-        setBookImage(undefined);
+        //setBookImage(undefined);
         setTopBackground(undefined);
     }
   }, []);
 
   console.log(coverId);
+  /*
+          <Book
+            style={{
+              backgroundImage: `url(${bookImage})`,
+            }}
+          />
+                    <Shadow
+            style={{
+              backgroundImage: `url(${shadow})`,
+            }}
+          />
 
+*/
   return (
     <>
       {!isAnimationComplete ? (
@@ -122,16 +128,6 @@ export const Connection = () => {
           }}
         >
           <Contents>편지 쓰러 가는 중 . . .</Contents>
-          <Book
-            style={{
-              backgroundImage: `url(${bookImage})`,
-            }}
-          />
-          <Shadow
-            style={{
-              backgroundImage: `url(${shadow})`,
-            }}
-          />
         </BackGround>
       ) : (
         <WriteOrder letterId={letterId} />
@@ -151,10 +147,10 @@ const BackGround = styled.div`
   background-size: cover;
   background-position: center; /* 중앙 정렬 */
   background-repeat: no-repeat; /* 이미지 반복 방지 */
-  animation: ${scaleAnimation} 1.5s ease-in-out;
+  animation: ${scaleAnimation} 1s ease-in-out;
   animation-delay: 1.6s;
 `;
-
+/*
 const Shadow = styled.div`
   width: 350px;
   height: 124px;
@@ -164,23 +160,25 @@ const Shadow = styled.div`
   z-index: 2;
   animation: ${hideDuringAnimation} 1.2s ease-in-out;
   animation-delay: 1.6s;
-  background-size: contain; /* 이미지를 비율에 맞춰 크기 조정 */
-  background-position: center; /* 중앙 정렬 */
-  background-repeat: no-repeat; /* 이미지 반복 방지 */
+  background-size: contain;
+  background-position: center; 
+  background-repeat: no-repeat; 
 `;
 const Book = styled.div`
   width: 154px;
   height: 83px;
   flex-shrink: 0;
-  position: absolute;
-  bottom: 40.9%;
+  position: relative;
+  top: 46.8%;
+  top: calc(var(--vh) * 45.4);
+  //bottom: calc(var(--vh) * 41);
   z-index: 2;
-  background-size: contain; /* 이미지를 비율에 맞춰 크기 조정 */
-  background-position: center; /* 중앙 정렬 */
-  background-repeat: no-repeat; /* 이미지 반복 방지 */
-  animation: ${scaleAnimation} 1.5s ease-in-out;
-  animation-delay: 1.6s;
-`;
+  background-size: contain;
+  background-position: center; 
+  background-repeat: no-repeat; 
+  //animation: ${scaleAnimation} 1.5s ease-in-out;
+  //animation-delay: 1.6s;
+`;*/
 
 const Contents = styled.div`
   position: absolute;

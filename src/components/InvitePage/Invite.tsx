@@ -108,6 +108,7 @@ export const Invite = () => {
           console.log("데이터없음-useEffect");
         } else {
           console.log("데이터들어옴");
+          /*
           if (
             participants[0].nickname === name ||
             participants[0].nickname === userName
@@ -125,6 +126,43 @@ export const Invite = () => {
             localStorage.removeItem("load");
             setLoadstatus(false);
             setLoad(false);
+          }*/
+          if (participants[0].nickname) {
+            if (
+              participants[0].nickname === name ||
+              participants[0].nickname === userName
+            ) {
+              console.log("방장지정");
+              setMemberIndex(0);
+              setLoadstatus(false);
+              setLoad(false);
+              localStorage.removeItem("load");
+            } else {
+              console.log("방장지정");
+              setMemberIndex(1);
+              setLoadstatus(false);
+              setLoad(false);
+              localStorage.removeItem("load");
+            }
+          } else {
+            if (!hasRefreshed) {
+              console.log(localStorage.getItem("load"));
+              if (localStorage.getItem("load") === "done") {
+                setLoad(true);
+                setLoadstatus(true);
+                console.log("로딩이미했음");
+              } else {
+                console.log("로딩 페이지로");
+                localStorage.setItem("load", "done");
+                navigate("/loading", {
+                  state: {
+                    letterId: getletterId,
+                    userName: userName,
+                    guideOpen: guideOpen,
+                  },
+                });
+              }
+            }
           }
         }
       } catch (err) {
@@ -149,24 +187,42 @@ export const Invite = () => {
           fetchParticipants();
           console.log("데이터없음-useEffect");
         } else {
-          console.log("데이터들어옴");
-          if (
-            participants[0].nickname === name ||
-            participants[0].nickname === userName
-          ) {
-            console.log("방장지정");
-
-            setMemberIndex(0);
-            localStorage.removeItem("load");
-            setLoadstatus(false);
-            setLoad(false);
+          if (participants[0].nickname) {
+            if (
+              participants[0].nickname === name ||
+              participants[0].nickname === userName
+            ) {
+              console.log("방장지정");
+              setMemberIndex(0);
+              setLoadstatus(false);
+              setLoad(false);
+              localStorage.removeItem("load");
+            } else {
+              console.log("방장지정");
+              setMemberIndex(1);
+              setLoadstatus(false);
+              setLoad(false);
+              localStorage.removeItem("load");
+            }
           } else {
-            console.log("방장지정");
-
-            setMemberIndex(1);
-            localStorage.removeItem("load");
-            setLoadstatus(false);
-            setLoad(false);
+            if (!hasRefreshed) {
+              console.log(localStorage.getItem("load"));
+              if (localStorage.getItem("load") === "done") {
+                setLoad(true);
+                setLoadstatus(true);
+                console.log("로딩이미했음");
+              } else {
+                console.log("로딩 페이지로");
+                localStorage.setItem("load", "done");
+                navigate("/loading", {
+                  state: {
+                    letterId: getletterId,
+                    userName: userName,
+                    guideOpen: guideOpen,
+                  },
+                });
+              }
+            }
           }
         }
       } catch (err) {

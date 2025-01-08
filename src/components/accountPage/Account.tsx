@@ -28,14 +28,14 @@ export const Account = () => {
         <>
           <Prev src={prev} onClick={navigateBack} />
           <List>
-            <Container>
-              <Area onClick={handlePopup}>
+            <Container onClick={handlePopup}>
+              <Area>
                 <img src={logout} style={{ width: "14px", height: "14px" }} />
                 <span>로그아웃</span>
               </Area>
             </Container>
-            <Container>
-              <Area onClick={handleDelete}>
+            <Container onClick={handleDelete}>
+              <Area>
                 <img src={out} style={{ width: "18px", height: "18px" }} />
                 <span>탈퇴하기</span>
               </Area>
@@ -100,6 +100,7 @@ const Container = styled.div`
   font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.5px;
+  cursor: pointer;
 `;
 const Area = styled.div`
   display: flex;

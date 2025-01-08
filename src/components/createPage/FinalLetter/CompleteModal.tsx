@@ -20,7 +20,7 @@ interface Props {
   title: string;
   selectedImageIndex: number;
   receiverName: string;
-  deliverDay: Date | null;
+  deliverDay: Date | null | string;
   croppedImage: string;
   backgroundImage: number;
   selectfont: string;
@@ -68,7 +68,8 @@ export default function CompleteModal({
         // 로컬 타임존에서 날짜를 조정하여 UTC로 변환
         const adjustedDeliverDay = new Date(deliverDay);
         adjustedDeliverDay.setMinutes(
-          deliverDay.getMinutes() - deliverDay.getTimezoneOffset()
+          adjustedDeliverDay.getMinutes() -
+            adjustedDeliverDay.getTimezoneOffset()
         );
 
         // UTC로 변환된 날짜를 출력 (하루 전 문제 해결)

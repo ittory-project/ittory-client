@@ -51,6 +51,13 @@ export const HomePage = () => {
       localStorage.removeItem("letterId");
       localStorage.removeItem("guideOpen");
     }
+    localStorage.removeItem("receiver");
+    localStorage.removeItem("myName");
+    localStorage.removeItem("Date");
+    localStorage.removeItem("title");
+    localStorage.removeItem("image");
+    localStorage.removeItem("bgImg");
+    localStorage.removeItem("font");
   }, []);
 
   return (
