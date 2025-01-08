@@ -100,11 +100,12 @@ const MainContainer = styled.div`
   align-self: stretch;
 `;
 const GuideImage = styled.img`
-  display: flex;
+  display: block;
   width: 232px;
   height: 210px;
   flex-direction: column;
-  align-items: center;
+  object-fit: cover;
+  //align-items: center;
   gap: 16px;
   border-radius: 16px;
 `;
