@@ -76,7 +76,6 @@ export default function CoverModal({
 
   useEffect(() => {
     const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
-
     if (imageUrl) {
       setBackgroundImage(imageUrl);
     }
@@ -91,7 +90,6 @@ export default function CoverModal({
         console.error(err);
       }
     };
-
     fetchFonts();
     setSelectfid(selectFid);
   }, []);
