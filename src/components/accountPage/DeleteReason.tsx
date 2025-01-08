@@ -201,6 +201,11 @@ const BackGround = styled.div`
   transform: translateX(-50%);
   background: #fff;
   overflow-y: scroll;
+
+  /* 스크롤바 숨기기 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const Header = styled.div`
   display: flex;
@@ -241,6 +246,11 @@ const Container = styled.div`
   align-self: stretch;
   box-sizing: border-box;
   overflow-y: scroll;
+
+  /* 스크롤바 숨기기 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const TitleContainer = styled.div`
   margin-top: 16px;
@@ -331,7 +341,6 @@ const Input = styled.textarea`
   padding: 16px;
   width: 100%;
   height: 140px;
-  resize: none;
   box-sizing: border-box;
   border-radius: 12px;
   font-family: SUIT;
@@ -345,6 +354,8 @@ const Input = styled.textarea`
   gap: 2px;
   flex: 1 0 0;
   overflow: hidden;
+  resize: none;
+  background-color: #fff;
   &::placeholder {
     color: #adb5bd;
   }
