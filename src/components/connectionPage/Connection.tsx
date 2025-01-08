@@ -65,14 +65,14 @@ export const Connection = () => {
 
     postRandomParti();
   }, []);
-  /*
+
   useEffect(() => {
     const routingTimer = setTimeout(() => {
       navigate(`/write/${encodeLetterId(letterId)}`);
     }, 2500);
 
     return () => clearTimeout(routingTimer);
-  }, [navigate, letterId]);*/
+  }, [navigate, letterId]);
 
   useEffect(() => {
     switch (coverId) {
