@@ -417,6 +417,10 @@ export default function CoverStyle({
               "-1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
           }}
           onClick={() => {
+            localStorage.setItem("title", title);
+            localStorage.setItem("image", croppedImage);
+            localStorage.setItem("bgImg", String(ImageIndex));
+            localStorage.setItem("font", font);
             setSelectfont(font);
             setBackgroundimage(ImageIndex);
             setSelectFid(selectfid);

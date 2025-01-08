@@ -212,6 +212,9 @@ export default function LetterInfo({
               "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
           }}
           onClick={() => {
+            localStorage.setItem("receiver", receiverName);
+            localStorage.setItem("myName", myName);
+            localStorage.setItem("Date", String(deliverDay));
             setViewCoverDeco(true);
             setViewStartpage(false);
           }}
