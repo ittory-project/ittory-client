@@ -9,6 +9,7 @@ import { stompClient } from "../../api/config/stompInterceptor";
 import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
 import { Loading } from "./Loading";
 import texture from "../../../public/assets/invite/texture1.png";
+import { quitLetterWs } from "../../api/service/WsService";
 
 export interface Participants {
   sequence: number;
@@ -354,6 +355,21 @@ export const Invite = () => {
 
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
+
+  //브라우저 종료시 소켓 탈퇴 처리
+  useEffect(() => {
+    // 페이지 종료 이벤트 핸들러
+    const handleBeforeUnload = () => {
+      quitLetterWs(letterId); // 웹소켓 퇴장 처리
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      quitLetterWs(letterId);
+    };
+  }, []);
 
   return (
     <BackGround>
