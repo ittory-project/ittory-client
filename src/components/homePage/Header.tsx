@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import logo from "../../../public/assets/home/smalllogo.svg";
+import logo from "../../../public/assets/home/smalllogo.png";
 import menu from "../../../public/assets/home/menulogo.svg";
 
 interface Props {
