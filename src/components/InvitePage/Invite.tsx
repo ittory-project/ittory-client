@@ -356,18 +356,21 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  //브라우저 종료시 소켓 탈퇴 처리
   useEffect(() => {
-    // 페이지 종료 이벤트 핸들러
-    const handleBeforeUnload = () => {
-      quitLetterWs(letterId); // 웹소켓 퇴장 처리
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      // 브라우저 종료 시 소켓 퇴장 처리
+      quitLetterWs(letterId);
+      // 이벤트 기본 동작 막기
+      event.preventDefault();
+      event.returnValue = ""; // Chrome requires returnValue to be set
     };
 
+    // 브라우저 종료 이벤트 리스너 등록
     window.addEventListener("beforeunload", handleBeforeUnload);
 
+    // Cleanup: 이벤트 리스너 제거
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      quitLetterWs(letterId);
     };
   }, []);
 
