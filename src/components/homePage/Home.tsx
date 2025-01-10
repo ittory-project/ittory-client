@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import styled, { keyframes } from "styled-components";
-import logo from "../../../public/assets/home/logo.svg";
+import logo from "../../../public/assets/home/logo.png";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import divider from "../../../public/assets/home/bar.svg";
