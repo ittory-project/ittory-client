@@ -13,6 +13,8 @@ interface Props {
   deleteAlert: string | null;
 }
 
+//두개째에서 문제 발생
+
 export const Delete_letterbox = ({
   setPopup,
   setIsModalOpen,
