@@ -169,7 +169,7 @@ export const Home = () => {
               $img={bg4}
               ref={(el) => el && (sectionRefs.current[3] = el)}
             />
-            <WhiteSection
+            <WhiteSection2
               $img={bg5}
               ref={(el) => el && (sectionRefs.current[4] = el)}
             />
@@ -177,7 +177,7 @@ export const Home = () => {
               $img={bg6}
               ref={(el) => el && (sectionRefs.current[5] = el)}
             />
-            <WhiteSection
+            <WhiteSection2
               $img={bg7}
               ref={(el) => el && (sectionRefs.current[6] = el)}
             />
@@ -261,8 +261,8 @@ const Container = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   z-index: 2;
   overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
+  //scroll-snap-type: y mandatory;
+  //scroll-behavior: smooth;
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-x: hidden;
@@ -309,7 +309,7 @@ const FirstSection = styled.div<$Props>`
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
-  scroll-snap-align: start;
+  //scroll-snap-align: start;
   background-position: center;
 `;
 
@@ -318,15 +318,26 @@ const Section = styled.div<$Props>`
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
-  scroll-snap-align: start;
+  //scroll-snap-align: start;
   overflow-x: hidden;
 `;
 const WhiteSection = styled.div<$Props>`
   height: calc(var(--vh, 1vh) * 100);
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
+  //background-size: contain; /* 이미지가 전체 화면을 덮도록 */
+  //scroll-snap-align: start;
+  background-size: 100% 100%;
+  overflow-x: hidden;
+  background-position: center 3.3rem;
+`;
+const WhiteSection2 = styled.div<$Props>`
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100%; /* 화면 크기만큼 차지 */
+  background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: contain; /* 이미지가 전체 화면을 덮도록 */
-  scroll-snap-align: start;
+  //scroll-snap-align: start;
+  //background-size: 100% 100%;
   overflow-x: hidden;
   background-position: center 3.3rem;
 `;
