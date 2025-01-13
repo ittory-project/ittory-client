@@ -356,10 +356,11 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       // 브라우저 종료 시 소켓 퇴장 처리
       quitLetterWs(letterId);
+      console.log("소켓 퇴장");
       // 이벤트 기본 동작 막기
       event.preventDefault();
       event.returnValue = ""; // Chrome requires returnValue to be set
@@ -372,7 +373,7 @@ export const Invite = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, []);
+  }, []);*/
 
   return (
     <BackGround>
