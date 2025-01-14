@@ -12,13 +12,8 @@ import { Menu } from "../../layout/Menu";
 import { useSwipeable } from "react-swipeable";
 
 const bg1 = "/assets/home/main.jpg";
-const bg2 = "/assets/home/01.jpg";
-const bg3 = "/assets/home/02.jpg";
-const bg4 = "/assets/home/03.jpg";
-const bg5 = "/assets/home/04.jpg";
-const bg6 = "/assets/home/05.jpg";
-const bg7 = "/assets/home/06.jpg";
 const bg8 = "/assets/home/07.jpg";
+const body = "/assets/home/body.jpg";
 
 interface $Props {
   $img: string;
@@ -75,7 +70,7 @@ export const Home = () => {
           }
         });
       },
-      { threshold: 0.5 } // 요소가 50% 이상 보일 때 감지
+      { threshold: 0.1 } // 요소가 50% 이상 보일 때 감지
     );
 
     sectionRefs.current.forEach((section) => {
@@ -117,6 +112,33 @@ export const Home = () => {
   const handleTwtClick = () => {
     window.location.href = "https://x.com/ittoryofficial";
   };
+  /*
+   <Section
+              $img={bg2}
+              ref={(el) => el && (sectionRefs.current[1] = el)}
+            />
+            <Section
+              $img={bg3}
+              ref={(el) => el && (sectionRefs.current[2] = el)}
+            />
+            <WhiteSection
+              $img={bg4}
+              ref={(el) => el && (sectionRefs.current[3] = el)}
+            />
+            <WhiteSection2
+              $img={bg5}
+              ref={(el) => el && (sectionRefs.current[4] = el)}
+            />
+            <Section
+              $img={bg6}
+              ref={(el) => el && (sectionRefs.current[5] = el)}
+            />
+            <WhiteSection2
+              $img={bg7}
+              ref={(el) => el && (sectionRefs.current[6] = el)}
+            />
+  */
+  console.log(sectionRefs);
 
   return (
     <>
@@ -157,39 +179,18 @@ export const Home = () => {
                 }}
               />
             </FirstSection>
-            <Section
-              $img={bg2}
-              ref={(el) => el && (sectionRefs.current[1] = el)}
-            />
-            <Section
-              $img={bg3}
-              ref={(el) => el && (sectionRefs.current[2] = el)}
-            />
-            <WhiteSection
-              $img={bg4}
-              ref={(el) => el && (sectionRefs.current[3] = el)}
-            />
-            <WhiteSection2
-              $img={bg5}
-              ref={(el) => el && (sectionRefs.current[4] = el)}
-            />
-            <Section
-              $img={bg6}
-              ref={(el) => el && (sectionRefs.current[5] = el)}
-            />
-            <WhiteSection2
-              $img={bg7}
-              ref={(el) => el && (sectionRefs.current[6] = el)}
-            />
+            <BodySection ref={(el) => el && (sectionRefs.current[1] = el)}>
+              <Image src={body} alt="Long Image" />
+            </BodySection>
             <Section
               $img={bg8}
-              ref={(el) => el && (sectionRefs.current[7] = el)}
+              ref={(el) => el && (sectionRefs.current[2] = el)}
             >
               <FinalButton onClick={handleButton}>
                 <ButtonTxt>편지 쓰러 가기</ButtonTxt>
               </FinalButton>
             </Section>
-            <LastSection ref={(el) => el && (sectionRefs.current[8] = el)}>
+            <LastSection ref={(el) => el && (sectionRefs.current[3] = el)}>
               <SectionBox>
                 <Title>잇토리</Title>
                 <SubTitle>문의&nbsp;&nbsp;&nbsp;ittory.team@gmail.com</SubTitle>
@@ -273,6 +274,19 @@ const Container = styled.div`
     display: none;
   }
 `;
+const BodySection = styled.div`
+  width: 100%; /* 화면 크기만큼 차지 */
+  min-height: 100vh; /* 최소한 화면 크기만큼 차지 */
+  display: flex;
+  justify-content: center; /* 이미지를 가운데 정렬 */
+  align-items: flex-start; /* 이미지를 위쪽에 정렬 */
+`;
+
+const Image = styled.img`
+  width: 100%; /* 이미지를 화면 너비에 맞게 */
+  height: auto; /* 비율을 유지하여 높이를 자동으로 조정 */
+  display: block; /* 불필요한 여백 제거 */
+`;
 const fadeIn = keyframes`
   from {
     opacity: 0; /* 처음에 투명 */
@@ -312,7 +326,6 @@ const FirstSection = styled.div<$Props>`
   //scroll-snap-align: start;
   background-position: center;
 `;
-
 const Section = styled.div<$Props>`
   height: calc(var(--vh, 1vh) * 100);
   width: 100%; /* 화면 크기만큼 차지 */
@@ -320,26 +333,6 @@ const Section = styled.div<$Props>`
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
   //scroll-snap-align: start;
   overflow-x: hidden;
-`;
-const WhiteSection = styled.div<$Props>`
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%; /* 화면 크기만큼 차지 */
-  background: ${(props) => `url(${props.$img}) no-repeat center center`};
-  //background-size: contain; /* 이미지가 전체 화면을 덮도록 */
-  //scroll-snap-align: start;
-  background-size: 100% 100%;
-  overflow-x: hidden;
-  background-position: center 3.3rem;
-`;
-const WhiteSection2 = styled.div<$Props>`
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%; /* 화면 크기만큼 차지 */
-  background: ${(props) => `url(${props.$img}) no-repeat center center`};
-  background-size: contain; /* 이미지가 전체 화면을 덮도록 */
-  //scroll-snap-align: start;
-  //background-size: 100% 100%;
-  overflow-x: hidden;
-  background-position: center 3.3rem;
 `;
 const FinalButton = styled.button`
   display: flex;
