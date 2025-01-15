@@ -11,12 +11,17 @@ interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface InputAreaProps {
+  $otherReason: string;
+}
+
 export const DeleteReason = ({ setViewReason }: Props) => {
   const [selectedReason, setSelectedReason] = useState<number | null>(null);
   const [otherReason, setOtherReason] = useState<string>("");
   const [buttonEnable, setButtonEnable] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
   const [length, setLength] = useState<number>(0);
+  const [checked, setChecked] = useState<boolean>(false);
 
   const withdrawReason: string[] = [
     "NOT_USE",
@@ -27,6 +32,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   ];
 
   const handleCheckboxChange = (reason: number) => {
+    setChecked(!checked);
     setSelectedReason(reason);
   };
 
@@ -57,9 +63,13 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   const handleOtherReasonChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    setOtherReason(e.target.value);
-    setLength(e.target.value.length);
+    const value = e.target.value;
+    if (value.length <= 100) {
+      setOtherReason(value);
+      setLength(value.length);
+    }
   };
+
   const handleWithdraw = async () => {
     if (selectedReason !== null) {
       const data: WithdrawPostRequest = {
@@ -137,7 +147,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
               기타
             </CheckContainer>
             {selectedReason === 4 && (
-              <InputArea>
+              <InputArea $otherReason={otherReason}>
                 <Input
                   placeholder="내용을 입력해 주세요"
                   value={otherReason}
@@ -147,8 +157,16 @@ export const DeleteReason = ({ setViewReason }: Props) => {
                 />
                 {length > 0 && (
                   <Count>
-                    <CntTxt style={{ color: "#495057" }}>{length}</CntTxt>
-                    <CntTxt style={{ color: "#868E96" }}>/100자</CntTxt>
+                    <CntTxt
+                      style={{ color: length > 100 ? "#15191C" : "#495057" }}
+                    >
+                      {length}
+                    </CntTxt>
+                    <CntTxt
+                      style={{ color: length > 100 ? "#15191C" : "#868E96" }}
+                    >
+                      /100자
+                    </CntTxt>
                   </Count>
                 )}
               </InputArea>
@@ -314,6 +332,7 @@ const CheckContainer = styled.div`
   letter-spacing: -0.5px;
   cursor: pointer;
 `;
+/*
 const CheckBox = styled.input`
   appearance: none;
   width: 20px;
@@ -325,22 +344,45 @@ const CheckBox = styled.input`
   &:checked {
     background-image: url(${checked});
   }
+`;*/
+const CheckBox = styled.input`
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  background: none;
+
+  &:checked {
+    background: none;
+  }
+
+  &::before {
+    content: url(${check});
+    width: 100%;
+    height: 100%;
+  }
+
+  &:checked::before {
+    content: url(${checked});
+  }
 `;
-const InputArea = styled.div`
+
+const InputArea = styled.div<InputAreaProps>`
   position: relative;
-  //display: flex;
-  //flex-direction: column;
-  width: 100%;
-  //height: 130px;
-  //height: auto;
-  //padding-bottom: 80px;
+  width: 98%;
+  border-radius: 12px;
+  height: 140px;
+  border: 1px solid
+    ${({ $otherReason }) =>
+      $otherReason && $otherReason.length > 0 ? "#212529" : "#adb5bd"};
+  margin-bottom: 80px;
 `;
 
 const Input = styled.textarea`
   position: relative;
-  padding: 16px;
+  padding: 16px 16px 0px 16px;
   width: 100%;
-  height: 140px;
+  height: 108px;
   box-sizing: border-box;
   border-radius: 12px;
   font-family: SUIT;
@@ -348,14 +390,16 @@ const Input = styled.textarea`
   line-height: 20px;
   letter-spacing: -0.5px;
   font-weight: 400;
-  resize: vertical;
   align-items: flex-start;
-  border: 1px solid #adb5bd;
+  border: none;
   gap: 2px;
   flex: 1 0 0;
-  overflow: hidden;
+  overflow: auto;
   resize: none;
   background-color: #fff;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   &::placeholder {
     color: #adb5bd;
   }
@@ -364,14 +408,14 @@ const Input = styled.textarea`
   }
   &:focus {
     outline: none;
-    border: 1px solid #212529;
+    border: none;
   }
 `;
 const Count = styled.span`
   z-index: 1;
   position: absolute;
   left: 16px;
-  top: 110px;
+  top: 104px;
 `;
 const CntTxt = styled.span`
   width: 0;
@@ -381,14 +425,25 @@ const CntTxt = styled.span`
   letter-spacing: -0.5px;
 `;
 const ButtonContainer = styled.div`
-  position: relative;
+  position: fixed;
   box-sizing: border-box;
   z-index: 3;
   bottom: 0;
   width: 100%;
-  padding: 20px 16px 16px 16px;
+  padding: 4px 16px 16px 16px;
   display: flex;
   gap: 10px;
+  background: #fff;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -19px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 100%);
+    z-index: 4;
+  }
 `;
 const Button = styled.button<{ $selectedReason: number }>`
   box-sizing: border-box;

@@ -65,6 +65,7 @@ export const CreatedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
+      console.log("setDeletedAlert 실행");
       try {
         const letterdata = await getParticipatedLetter();
         const counts = await getLetterCounts();
@@ -92,6 +93,7 @@ export const CreatedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
+      console.log("setDeleteAlert 실행");
       if (deleteAlert !== null) {
         try {
           const letterdata = await getParticipatedLetter();
