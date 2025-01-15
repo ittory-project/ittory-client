@@ -64,6 +64,7 @@ export const LetterBox = () => {
       const timer = setTimeout(() => {
         console.log("변수 알림으로 실행");
         setDeletedAlert(null);
+        setDeleteAlert(null);
         localStorage.removeItem("deletedLetter");
       }, 2500);
       return () => clearTimeout(timer);
@@ -71,6 +72,7 @@ export const LetterBox = () => {
       console.log("로컬스토리지에 있음");
       const timer = setTimeout(() => {
         setDeletedAlert(null);
+        setDeleteAlert(null);
         localStorage.removeItem("deletedLetter");
       }, 2500);
       return () => clearTimeout(timer);
@@ -111,6 +113,7 @@ export const LetterBox = () => {
       const timer = setTimeout(() => {
         console.log("변수 알림으로 실행");
         setDeletedAlert(null);
+        setDeleteAlert(null);
         localStorage.removeItem("deletedLetter");
       }, 2500);
       return () => clearTimeout(timer);
@@ -118,6 +121,7 @@ export const LetterBox = () => {
       console.log("로컬스토리지에 있음");
       const timer = setTimeout(() => {
         setDeletedAlert(null);
+        setDeleteAlert(null);
         localStorage.removeItem("deletedLetter");
       }, 2500);
       return () => clearTimeout(timer);
@@ -136,6 +140,7 @@ export const LetterBox = () => {
       const timer = setTimeout(() => {
         console.log("변수 알림으로 실행");
         setDeletedAlert(null);
+        setDeleteAlert(null);
         localStorage.removeItem("deletedLetter");
       }, 2500);
       return () => clearTimeout(timer);
@@ -143,6 +148,7 @@ export const LetterBox = () => {
       console.log("로컬스토리지에 있음");
       const timer = setTimeout(() => {
         setDeletedAlert(null);
+        setDeleteAlert(null);
         localStorage.removeItem("deletedLetter");
       }, 2500);
       return () => clearTimeout(timer);

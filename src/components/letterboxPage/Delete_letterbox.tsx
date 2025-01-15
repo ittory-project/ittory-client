@@ -13,8 +13,6 @@ interface Props {
   deleteAlert: string | null;
 }
 
-//두개째에서 문제 발생
-
 export const Delete_letterbox = ({
   setPopup,
   setIsModalOpen,
@@ -35,15 +33,14 @@ export const Delete_letterbox = ({
   };
   const handleDelete = async () => {
     try {
-      const deleteData = await deleteLetterboxLetter(letterId);
+      //const deleteData = await deleteLetterboxLetter(letterId);
       localStorage.setItem("deletedLetter", "편지가 삭제되었어요");
       setPopup(false);
       setIsModalOpen(false);
       setOpenLetter(false);
-
       setDeleteAlert("편지가 삭제되었어요");
 
-      console.log(deleteData);
+      console.log("삭제 코드 실행");
     } catch (error) {
       console.error("Failed to delete letter:", error);
     }
