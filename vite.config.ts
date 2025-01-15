@@ -9,11 +9,10 @@ export default defineConfig({
     global: "window",
   },
   // build: {
-    // outDir: 'build',
-    // emptyOutDir: true,
-    // rollupOptions: {
-    //   input: './src/main.tsx',
-    // },
+  // outDir: 'build',
+  // emptyOutDir: true,
+  // rollupOptions: {
+  //   input: './src/main.tsx',
   // },
-
+  // },
 });
