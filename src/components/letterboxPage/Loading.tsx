@@ -29,5 +29,5 @@ const BackGround = styled.div`
   left: 50%;
   transform: translateX(-50%);
   justify-content: center;
-  background: #f1f3f5;
+  background: #fff;
 `;
