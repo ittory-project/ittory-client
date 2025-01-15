@@ -70,7 +70,7 @@ export const Home = () => {
           }
         });
       },
-      { threshold: 0.1 } // 요소가 50% 이상 보일 때 감지
+      { threshold: 0.15 } // 요소가 50% 이상 보일 때 감지
     );
 
     sectionRefs.current.forEach((section) => {
