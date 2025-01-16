@@ -102,14 +102,6 @@ export default function CoverStyle({
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const imageUrl = coverTypes[ImageIndex]?.editImageUrl;
-
-    if (imageUrl) {
-      setBackgroundImage(imageUrl);
-    }
-  }, [ImageIndex, coverTypes]);
-
-  useEffect(() => {
     const fetchCoverTypesAndFonts = async () => {
       try {
         const types = await getCoverTypes();
@@ -147,10 +139,11 @@ export default function CoverStyle({
     setImageIndex(index);
   };
 
+  //Cover 변경
   useEffect(() => {
-    console.log("Updated selectedImageIndex:", selectedImageIndex);
     setSelectedImageIndex(ImageIndex);
-  }, [ImageIndex]);
+    setBackgroundImage(coverTypes[ImageIndex]?.editImageUrl);
+  }, [ImageIndex, coverTypes]);
 
   // 폰트 바를 클릭할 때 input에 포커스를 유지시켜 키보드가 내려가지 않도록 하기
   const handlePopupClick = (e: React.MouseEvent) => {

@@ -112,33 +112,6 @@ export const Home = () => {
   const handleTwtClick = () => {
     window.location.href = "https://x.com/ittoryofficial";
   };
-  /*
-   <Section
-              $img={bg2}
-              ref={(el) => el && (sectionRefs.current[1] = el)}
-            />
-            <Section
-              $img={bg3}
-              ref={(el) => el && (sectionRefs.current[2] = el)}
-            />
-            <WhiteSection
-              $img={bg4}
-              ref={(el) => el && (sectionRefs.current[3] = el)}
-            />
-            <WhiteSection2
-              $img={bg5}
-              ref={(el) => el && (sectionRefs.current[4] = el)}
-            />
-            <Section
-              $img={bg6}
-              ref={(el) => el && (sectionRefs.current[5] = el)}
-            />
-            <WhiteSection2
-              $img={bg7}
-              ref={(el) => el && (sectionRefs.current[6] = el)}
-            />
-  */
-  console.log(sectionRefs);
 
   return (
     <>
