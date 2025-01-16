@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import { HostUser } from "./HostUser";
@@ -355,6 +355,24 @@ export const Invite = () => {
 
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
+
+  const handleTabClosed = useCallback(
+    async (event: BeforeUnloadEvent) => {
+      // BeforeUnloadEvent 타입 사용
+      event.preventDefault();
+      quitLetterWs(letterId);
+      console.log("소켓 퇴장");
+      console.log("탭이 닫힘");
+    },
+    [] // 의존성 배열
+  );
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleTabClosed);
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClosed);
+    };
+  }, [handleTabClosed]);
 
   /*useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
