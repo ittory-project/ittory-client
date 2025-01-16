@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
-import bg1 from "../../../public/assets/connect/bg1.svg";
-import bg2 from "../../../public/assets/connect/bg2.svg";
-import bg3 from "../../../public/assets/connect/bg3.svg";
-import bg4 from "../../../public/assets/connect/bg4.svg";
-import bg5 from "../../../public/assets/connect/bg5.svg";
+//import bg1 from "../../../public/assets/connect/bg1.png";
+//import bg2 from "../../../public/assets/connect/bg2.png";
+//import bg3 from "../../../public/assets/connect/bg3.png";
+//import bg4 from "../../../public/assets/connect/bg4.png";
+//import bg5 from "../../../public/assets/connect/bg5.png";
 import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from "../../api/config/state";
 import { encodeLetterId } from "../../api/config/base64";
 import { postRandom } from "../../api/service/ParticipantService";
+import "../../App.css";
 
 const scaleAnimation = keyframes`
   0% {
@@ -37,8 +38,7 @@ export const Connection = () => {
   const dispatch = useDispatch();
   const letterId = location.state.letterId;
   const coverId = location.state.coverId;
-  //const [bookImage, setBookImage] = useState<string | undefined>();
-  const [topBackground, setTopBackground] = useState<string | undefined>();
+  const [topBackground, setTopBackground] = useState<string | null>();
 
   console.log(coverId);
 
@@ -73,60 +73,67 @@ export const Connection = () => {
 
     return () => clearTimeout(routingTimer);
   }, [navigate, letterId]);
+  /*
+  useEffect(() => {
+    switch (coverId) {
+      case 1:
+        setTopBackground(bg1);
+        break;
+      case 2:
+        setTopBackground(bg2);
+        break;
+      case 3:
+        setTopBackground(bg3);
+        break;
+      case 4:
+        setTopBackground(bg4);
+        break;
+      case 5:
+        setTopBackground(bg5);
+        break;
+      default:
+        setTopBackground(null);
+    }
+  }, []);*/
 
   useEffect(() => {
     switch (coverId) {
       case 1:
-        //setBookImage(book1);
-        setTopBackground(bg1);
+        setTopBackground("bg1");
         break;
       case 2:
-        //setBookImage(book2);
-        setTopBackground(bg2);
+        setTopBackground("bg2");
         break;
       case 3:
-        //setBookImage(book3);
-        setTopBackground(bg3);
-
+        setTopBackground("bg3");
         break;
       case 4:
-        //setBookImage(book4);
-        setTopBackground(bg4);
-
+        setTopBackground("bg4");
         break;
       case 5:
-        //setBookImage(book5);
-        setTopBackground(bg5);
-
+        setTopBackground("bg5");
         break;
       default:
-        //setBookImage(undefined);
-        setTopBackground(undefined);
+        setTopBackground(null);
     }
   }, []);
 
-  console.log(coverId);
-  /*
-          <Book
-            style={{
-              backgroundImage: `url(${bookImage})`,
-            }}
-          />
-                    <Shadow
-            style={{
-              backgroundImage: `url(${shadow})`,
-            }}
-          />
+  useEffect(() => {
+    if (topBackground) {
+      const img = new Image();
+      img.src = topBackground; // 이미지를 미리 로드
+    }
+  }, [topBackground]);
 
-*/
+  /*이미지 로딩 완료 여부를 제어하고 싶다면 이 방식으로
+        <BackGround>
+          <BgImage src={topBackground} alt="Background" />
+   */
+  //<BackGround className={topBackground}>
   return (
     <>
-      {!isAnimationComplete ? (
-        <BackGround
-          style={{
-            backgroundImage: `url(${topBackground})`,
-          }}
-        >
+      {!isAnimationComplete && topBackground ? (
+        <BackGround className={topBackground}>
           <Contents>편지 쓰러 가는 중 . . .</Contents>
         </BackGround>
       ) : (
@@ -151,35 +158,15 @@ const BackGround = styled.div`
   animation-delay: 1.6s;
 `;
 /*
-const Shadow = styled.div`
-  width: 350px;
-  height: 124px;
-  flex-shrink: 0;
+const BgImage = styled.img`
   position: absolute;
-  top: 58%;
-  z-index: 2;
-  animation: ${hideDuringAnimation} 1.2s ease-in-out;
-  animation-delay: 1.6s;
-  background-size: contain;
-  background-position: center; 
-  background-repeat: no-repeat; 
-`;
-const Book = styled.div`
-  width: 154px;
-  height: 83px;
-  flex-shrink: 0;
-  position: relative;
-  top: 46.8%;
-  top: calc(var(--vh) * 45.4);
-  //bottom: calc(var(--vh) * 41);
-  z-index: 2;
-  background-size: contain;
-  background-position: center; 
-  background-repeat: no-repeat; 
-  //animation: ${scaleAnimation} 1.5s ease-in-out;
-  //animation-delay: 1.6s;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease-in-out;
 `;*/
-
 const Contents = styled.div`
   position: absolute;
   margin-top: 55%;
