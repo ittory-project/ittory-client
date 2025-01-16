@@ -141,12 +141,14 @@ export const Menu = ({ onClose }: Props) => {
       </Cancel>
       <Profile>
         <ImageContainer>
-          {!user ? (
-            <ProfileImage src={defaultImage} alt="Profile" />
-          ) : profileImage ? (
-            <ProfileImage src={profileImage} alt="Profile" />
+          {user ? (
+            profileImage ? (
+              <ProfileImage src={profileImage} alt="Profile" />
+            ) : (
+              <ProfileImage src={logindefault} alt="Profile" />
+            )
           ) : (
-            <ProfileImage src={logindefault} alt="Profile" />
+            <ProfileImage src={defaultImage} alt="Profile" />
           )}
         </ImageContainer>
         {user === false ? (
