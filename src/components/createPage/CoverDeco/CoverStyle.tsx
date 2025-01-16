@@ -78,7 +78,7 @@ export default function CoverStyle({
   setBackgroundimage,
   setSelectfont,
   setViewFinalInfo,
-  selectedImageIndex,
+  //selectedImageIndex,
   setSelectedImageIndex,
   setSelectFid,
 }: Props) {
@@ -102,19 +102,17 @@ export default function CoverStyle({
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const fetchCoverTypesAndFonts = async () => {
+    const fetchCoverTypes = async () => {
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
+        setSelectedImageIndex(ImageIndex);
+        setBackgroundImage(coverTypes[ImageIndex]?.editImageUrl);
         console.log(types);
       } catch (err) {
         console.error(err);
       }
     };
-    fetchCoverTypesAndFonts();
-  }, []);
-
-  useEffect(() => {
     const fetchFonts = async () => {
       try {
         const types = await getAllFont();
@@ -124,7 +122,7 @@ export default function CoverStyle({
         console.error(err);
       }
     };
-
+    fetchCoverTypes();
     fetchFonts();
   }, []);
 
@@ -158,10 +156,6 @@ export default function CoverStyle({
       // input에 포커스를 유지시켜 키보드를 올려둠
     }
     e.stopPropagation(); // 이벤트 전파를 막아 다른 요소가 클릭되지 않도록 함
-  };
-
-  const handlePopup = () => {
-    setFontPopup(true);
   };
 
   useEffect(() => {
@@ -282,6 +276,10 @@ export default function CoverStyle({
       imgRef.current.click();
     }
   }, []);
+
+  const handlePopup = () => {
+    setFontPopup(true);
+  };
 
   return (
     <BackGround>
