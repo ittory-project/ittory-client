@@ -41,7 +41,6 @@ export const Home = () => {
         setIsMenuOpen(true);
       }
     },
-    //onSwipedLeft: () => setIsMenuOpen(true),
   });
 
   const handleButton = () => {
@@ -235,8 +234,6 @@ const Container = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   z-index: 2;
   overflow-y: scroll;
-  //scroll-snap-type: y mandatory;
-  //scroll-behavior: smooth;
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-x: hidden;
@@ -296,7 +293,6 @@ const FirstSection = styled.div<$Props>`
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
-  //scroll-snap-align: start;
   background-position: center;
 `;
 const Section = styled.div<$Props>`
@@ -304,7 +300,6 @@ const Section = styled.div<$Props>`
   width: 100%; /* 화면 크기만큼 차지 */
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
-  //scroll-snap-align: start;
   overflow-x: hidden;
 `;
 const FinalButton = styled.button`
