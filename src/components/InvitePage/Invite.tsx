@@ -109,25 +109,6 @@ export const Invite = () => {
           console.log("데이터없음-useEffect");
         } else {
           console.log("데이터들어옴");
-          /*
-          if (
-            participants[0].nickname === name ||
-            participants[0].nickname === userName
-          ) {
-            console.log("방장지정");
-
-            setMemberIndex(0);
-            localStorage.removeItem("load");
-            setLoadstatus(false);
-            setLoad(false);
-          } else {
-            console.log("방장지정");
-
-            setMemberIndex(1);
-            localStorage.removeItem("load");
-            setLoadstatus(false);
-            setLoad(false);
-          }*/
           if (participants[0].nickname) {
             if (
               participants[0].nickname === name ||
@@ -331,13 +312,10 @@ export const Invite = () => {
     };
   }, []);
 
-  console.log(load);
-  console.log(participants);
-  console.log(memberIndex);
-
   //퇴장 알림
   useEffect(() => {
     const exitTimer = setTimeout(() => {
+      fetchParticipants();
       setExitAlert(null);
       if (exitName) {
         setExitName("");
@@ -350,48 +328,38 @@ export const Invite = () => {
   //방장 바뀜 알림
   useEffect(() => {
     const hostTimer = setTimeout(() => {
+      fetchParticipants();
       setHostAlert(null);
     }, 10000);
 
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  const handleTabClosed = useCallback(
-    async (event: BeforeUnloadEvent) => {
-      // BeforeUnloadEvent 타입 사용
-      event.preventDefault();
-      quitLetterWs(letterId);
-      console.log("소켓 퇴장");
-      console.log("탭이 닫힘");
-    },
-    [] // 의존성 배열
-  );
+  const handleTabClosed = useCallback(async (event: BeforeUnloadEvent) => {
+    event.preventDefault(); // 경고 메시지 표시
+    event.returnValue = ""; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
+
+    quitLetterWs(letterId);
+    console.log("소켓 퇴장");
+    console.log("탭이 닫힘");
+  }, []);
 
   useEffect(() => {
-    window.addEventListener("beforeunload", handleTabClosed);
+    // 탭 닫기 전에 호출
+    const beforeUnloadListener = (event: BeforeUnloadEvent) => {
+      handleTabClosed(event);
+    };
+
+    // PC 및 모바일에서 모두 탭 닫힐 때를 감지하도록 이벤트 리스너 등록
+    window.addEventListener("beforeunload", beforeUnloadListener);
+    window.addEventListener("unload", handleTabClosed);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
-      window.removeEventListener("beforeunload", handleTabClosed);
+      window.removeEventListener("beforeunload", beforeUnloadListener);
+      window.removeEventListener("unload", handleTabClosed);
     };
   }, [handleTabClosed]);
-
-  /*useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      // 브라우저 종료 시 소켓 퇴장 처리
-      quitLetterWs(letterId);
-      console.log("소켓 퇴장");
-      // 이벤트 기본 동작 막기
-      event.preventDefault();
-      event.returnValue = ""; // Chrome requires returnValue to be set
-    };
-
-    // 브라우저 종료 이벤트 리스너 등록
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Cleanup: 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);*/
 
   return (
     <BackGround>
