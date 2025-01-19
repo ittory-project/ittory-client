@@ -338,6 +338,28 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
+  //모바일 브라우저 종료 감지
+  const handleVisibilityChange = useCallback(async () => {
+    if (document.hidden) {
+      // 페이지가 비활성화된 경우, 즉 탭을 닫거나 백그라운드로 보낼 때
+      quitLetterWs(letterId);
+      console.log("소켓 퇴장");
+      console.log("탭이 닫힘");
+    } else {
+      // 페이지가 다시 활성화되었을 때
+      console.log("탭이 다시 활성화됨");
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [handleVisibilityChange]);
+
+  //PC 감지
   const handleTabClosed = useCallback(async (event: BeforeUnloadEvent) => {
     event.preventDefault(); // 경고 메시지 표시
     event.returnValue = ""; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
@@ -353,11 +375,9 @@ export const Invite = () => {
       handleTabClosed(event);
     };
 
-    // PC 및 모바일에서 모두 탭 닫힐 때를 감지하도록 이벤트 리스너 등록
     window.addEventListener("beforeunload", beforeUnloadListener);
     window.addEventListener("unload", handleTabClosed);
 
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
       window.removeEventListener("beforeunload", beforeUnloadListener);
       window.removeEventListener("unload", handleTabClosed);
