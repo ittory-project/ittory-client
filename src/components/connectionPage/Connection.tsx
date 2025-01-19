@@ -7,7 +7,7 @@ import styled, { keyframes } from "styled-components";
 //import bg3 from "../../../public/assets/connect/bg3.png";
 //import bg4 from "../../../public/assets/connect/bg4.png";
 //import bg5 from "../../../public/assets/connect/bg5.png";
-import { WriteOrder } from "./WriteOrder";
+//import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from "../../api/config/state";
 import { encodeLetterId } from "../../api/config/base64";
 import { postRandom } from "../../api/service/ParticipantService";
@@ -32,7 +32,7 @@ const hideDuringAnimation = keyframes`
 `;
 
 export const Connection = () => {
-  const [isAnimationComplete] = useState<boolean>(false);
+  //const [isAnimationComplete] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -132,12 +132,10 @@ export const Connection = () => {
   //<BackGround className={topBackground}>
   return (
     <>
-      {!isAnimationComplete && topBackground ? (
+      {topBackground && (
         <BackGround className={topBackground}>
           <Contents>편지 쓰러 가는 중 . . .</Contents>
         </BackGround>
-      ) : (
-        <WriteOrder letterId={letterId} />
       )}
     </>
   );

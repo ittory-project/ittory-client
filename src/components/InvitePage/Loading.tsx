@@ -10,7 +10,7 @@ interface Props {
   setLoad?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Loading = ({ loadstatus, setLoad }: Props) => {
+export const Loading = ({ loadstatus }: Props) => {
   const navigate = useNavigate();
   console.log("로딩창");
   /*
