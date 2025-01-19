@@ -35,7 +35,7 @@ const Container = styled.div<{ $color: boolean }>`
   display: flex;
   width: 100%;
   margin: 0 auto;
-  height: 72px;
+  height: 48px;
   box-sizing: border-box;
   z-index: 1;
   padding: 0px 4px 0px 16px;

@@ -18,6 +18,9 @@ export interface Participants {
   imageUrl: string;
 }
 
+//모바일 브라우저 종료 감지 안됨
+//퇴장 시 참여자 배열 업데이트 즉시 안됨
+
 export const Invite = () => {
   const location = useLocation();
   const navigate = useNavigate();
