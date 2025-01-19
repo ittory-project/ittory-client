@@ -335,7 +335,7 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  //모바일 브라우저 종료 감지
+  /* 초대 링크 보내려 할 시 퇴실 처리되는 에러
   const handleVisibilityChange = useCallback(async () => {
     if (document.hidden) {
       // 페이지가 비활성화된 경우, 즉 탭을 닫거나 백그라운드로 보낼 때
@@ -353,7 +353,7 @@ export const Invite = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [handleVisibilityChange]);
+  }, [handleVisibilityChange]);*/
 
   //PC 감지
   const handleTabClosed = useCallback(async (event: BeforeUnloadEvent) => {
