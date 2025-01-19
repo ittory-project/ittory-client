@@ -45,8 +45,6 @@ export const Invite = () => {
 
   const handleGoBack = () => {
     navigate("/", { replace: true });
-    quitLetterWs(letterId);
-    console.log("소켓 퇴장");
   };
 
   useEffect(() => {
@@ -88,52 +86,8 @@ export const Invite = () => {
       const data = await getParticipants(letterId);
 
       setParticipants(data);
-      /*
-      if (data.length > 0 || participants.length > 0) {
-        if (data[0].nickname) {
-          console.log(data[0].nickname);
-          console.log(name);
-          console.log(userName);
-          console.log(data.length);
-          console.log(participants.length);
-          console.log(data);
-          if (data[0].nickname === name || data[0].nickname === userName) {
-            console.log("방장지정");
-            localStorage.removeItem("load");
-            setMemberIndex(0);
-            setLoadstatus(false);
-            setLoad(false);
-          } else {
-            console.log("방장지정");
-            localStorage.removeItem("load");
-            setMemberIndex(1);
-            setLoadstatus(false);
-            setLoad(false);
-          }
-        }
-      } else {
-        if (!hasRefreshed) {
-          console.log(localStorage.getItem("load"));
-          if (localStorage.getItem("load") === "done") {
-            setLoad(true);
-            setLoadstatus(true);
-            console.log("로딩이미했음");
-          } else {
-            console.log("로딩 페이지로");
-            localStorage.setItem("load", "done");
-            navigate("/loading", {
-              state: {
-                letterId: getletterId,
-                userName: userName,
-                guideOpen: guideOpen,
-              },
-            });
-          }
-        }
-      }*/
     } catch (err) {
       console.error("Error fetching participants:", err);
-      //setLoadstatus(false);
     }
   };
   /*
