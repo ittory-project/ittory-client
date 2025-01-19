@@ -41,6 +41,7 @@ export const UserGuide = ({ setGuide }: Props) => {
 
   const handleComplete = () => {
     setGuide("false");
+    localStorage.removeItem("guideOpen");
   };
 
   return (

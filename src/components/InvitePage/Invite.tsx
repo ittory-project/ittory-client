@@ -49,6 +49,8 @@ export const Invite = () => {
       setLoad(true);
       const data = await getParticipants(letterId);
 
+      setParticipants(data);
+      /*
       if (data.length > 0 || participants.length > 0) {
         if (data[0].nickname) {
           console.log(data[0].nickname);
@@ -59,16 +61,16 @@ export const Invite = () => {
           console.log(data);
           if (data[0].nickname === name || data[0].nickname === userName) {
             console.log("방장지정");
+            localStorage.removeItem("load");
             setMemberIndex(0);
             setLoadstatus(false);
             setLoad(false);
-            localStorage.removeItem("load");
           } else {
             console.log("방장지정");
+            localStorage.removeItem("load");
             setMemberIndex(1);
             setLoadstatus(false);
             setLoad(false);
-            localStorage.removeItem("load");
           }
         }
       } else {
@@ -90,13 +92,13 @@ export const Invite = () => {
             });
           }
         }
-      }
+      }*/
     } catch (err) {
       console.error("Error fetching participants:", err);
-      setLoadstatus(false);
+      //setLoadstatus(false);
     }
   };
-
+  /*
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -156,7 +158,7 @@ export const Invite = () => {
     };
 
     fetchData();
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     const fetchData = async () => {
@@ -168,34 +170,37 @@ export const Invite = () => {
         setName(userNameFromApi);
         setUserId(userIdFromApi);
         console.log(participants);
+
         if (participants.length < 1) {
           fetchParticipants();
           console.log("데이터없음-useEffect");
         } else {
-          if (participants[0].nickname) {
-            if (
-              participants[0].nickname === name ||
-              participants[0].nickname === userName
-            ) {
-              console.log("방장지정");
-              setMemberIndex(0);
-              setLoadstatus(false);
-              setLoad(false);
-              localStorage.removeItem("load");
-            } else {
-              console.log("방장지정");
-              setMemberIndex(1);
-              setLoadstatus(false);
-              setLoad(false);
-              localStorage.removeItem("load");
-            }
+          if (memberIndex > -1) {
+            return;
           } else {
-            if (!hasRefreshed) {
+            if (participants[0].nickname) {
+              if (
+                participants[0].nickname === name ||
+                participants[0].nickname === userName
+              ) {
+                console.log("방장지정");
+                localStorage.removeItem("load");
+                //setLoadstatus(false);
+                setLoad(false);
+                setMemberIndex(0);
+              } else {
+                console.log("방장지정");
+                localStorage.removeItem("load");
+                //setLoadstatus(false);
+                setLoad(false);
+                setMemberIndex(1);
+              }
+            } else {
               console.log(localStorage.getItem("load"));
               if (localStorage.getItem("load") === "done") {
+                console.log("로딩이미했음");
                 setLoad(true);
                 setLoadstatus(true);
-                console.log("로딩이미했음");
               } else {
                 console.log("로딩 페이지로");
                 localStorage.setItem("load", "done");
@@ -214,11 +219,11 @@ export const Invite = () => {
         console.error("Error during data fetching:", err);
       }
     };
-
+    console.log("문젠가");
     fetchData();
   }, [participants]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const fetchData = async () => {
       try {
         const mydata = await getMyPage();
@@ -234,16 +239,16 @@ export const Invite = () => {
     };
 
     fetchData();
-  }, [refresh]);
+  }, [refresh]);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (memberIndex > -1) {
       console.log(memberIndex);
       localStorage.removeItem("load");
-      setLoadstatus(false);
+      //setLoadstatus(false);
       setLoad(false);
     }
-  }, [memberIndex]);
+  }, [memberIndex]);*/
 
   useEffect(() => {
     const client = stompClient();
@@ -307,7 +312,6 @@ export const Invite = () => {
       });
     };
     client.activate();
-
     return () => {
       (async () => {
         client.deactivate();
@@ -317,6 +321,7 @@ export const Invite = () => {
 
   //퇴장 알림
   useEffect(() => {
+    console.log("퇴장 알림");
     const exitTimer = setTimeout(() => {
       fetchParticipants();
       setExitAlert(null);
@@ -330,6 +335,7 @@ export const Invite = () => {
 
   //방장 바뀜 알림
   useEffect(() => {
+    console.log("문젠가");
     const hostTimer = setTimeout(() => {
       fetchParticipants();
       setHostAlert(null);
@@ -352,8 +358,8 @@ export const Invite = () => {
   }, []);
 
   useEffect(() => {
+    console.log("문젠가");
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
@@ -371,10 +377,10 @@ export const Invite = () => {
 
   useEffect(() => {
     // 탭 닫기 전에 호출
+    console.log("문젠가");
     const beforeUnloadListener = (event: BeforeUnloadEvent) => {
       handleTabClosed(event);
     };
-
     window.addEventListener("beforeunload", beforeUnloadListener);
     window.addEventListener("unload", handleTabClosed);
 
@@ -384,9 +390,11 @@ export const Invite = () => {
     };
   }, [handleTabClosed]);
 
+  console.log("invite 랜더링");
+
   return (
     <BackGround>
-      {load || memberIndex < 0 ? (
+      {memberIndex < 0 ? (
         <Loading loadstatus={loadstatus} setLoad={setLoad} />
       ) : (
         <>
