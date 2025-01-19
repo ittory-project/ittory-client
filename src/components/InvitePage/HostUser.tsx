@@ -65,15 +65,14 @@ export const HostUser = ({
   console.log("방장 랜더링");
 
   useEffect(() => {
-    const fetchCoverTypes = async () => {
+    /*const fetchCoverTypes = async () => {
       try {
         const types = await getCoverTypes();
         setCoverTypes(types);
       } catch (err) {
         console.error(err);
       }
-    };
-
+    };*/
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
@@ -83,11 +82,18 @@ export const HostUser = ({
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
         setFontId(letterData.fontId);
+
+        const types = await getCoverTypes();
+        setCoverTypes(types);
+
+        const myData = await getMyPage();
+        setMemberId(myData.memberId);
+        setName(myData.name);
       } catch (err) {
         console.error(err);
       }
     };
-
+    /*
     const fetchMyPageData = async () => {
       try {
         const myData = await getMyPage();
@@ -96,23 +102,21 @@ export const HostUser = ({
       } catch (err) {
         console.error("Error fetching my data:", err);
       }
-    };
-
-    fetchCoverTypes();
-    fetchLetterInfo();
-    fetchMyPageData();
-  }, []);
-
-  useEffect(() => {
+    };*/
     const fetchFont = async () => {
       const fontdata = await getFontById(fontId);
       setSelectfont(fontdata.value);
       console.log(selectfont);
     };
+
+    //fetchCoverTypes();
+    fetchLetterInfo();
+    //fetchMyPageData();
+
     if (fontId > -1) {
       fetchFont();
     }
-  }, [fontId]);
+  }, [letterId]);
 
   useEffect(() => {
     if (receiverName.length > 9) {

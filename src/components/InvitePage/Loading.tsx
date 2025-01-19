@@ -10,9 +10,10 @@ interface Props {
   setLoad?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Loading = ({ loadstatus, setLoad }: Props) => {
+export const Loading = ({ loadstatus }: Props) => {
   const navigate = useNavigate();
-
+  console.log("로딩창");
+  /*
   const fetchData = async () => {
     let attempts = 0; // 시도 횟수
     let data = []; // 데이터를 담을 변수
@@ -26,7 +27,7 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
       try {
         data = await getParticipants(letterId);
         attempts += 1;
-        console.log("반복 호출");
+        console.log("반복 호출", attempts);
 
         if (data.length > 0) {
           clearInterval(interval); // 데이터가 있으면 반복 종료
@@ -43,27 +44,46 @@ export const Loading = ({ loadstatus, setLoad }: Props) => {
         console.error("데이터를 로딩하는 중 오류 발생:", err);
       }
     }, 1500); //호출 간격
-  };
+  };*/
 
   useEffect(() => {
     console.log("로딩창 실행");
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    let attempts = 0; // 시도 횟수
+    let data = []; // 데이터를 담을 변수
+
+    // 로컬스토리지에서 값 가져오기
+    const letterId = Number(localStorage.getItem("letterId"));
+    const userName = localStorage.getItem("userName");
+    const guideOpen = localStorage.getItem("guideOpen");
+    try {
+      data = await getParticipants(letterId);
+      //attempts += 1;
+      console.log("반복 호출", attempts);
+
+      navigate("/Invite", {
+        state: { letterId, userName, guideOpen },
+      });
+    } catch (err) {
+      console.error("데이터를 로딩하는 중 오류 발생:", err);
+    }
+  };
+
   useEffect(() => {
     console.log("로딩중");
     console.log(localStorage.getItem("load"));
     if (localStorage.getItem("load") === "done") {
-      if (setLoad) {
-        if (loadstatus === true) {
-          setLoad(true);
-          console.log(loadstatus);
-          fetchData();
-        } else {
-          localStorage.removeItem("load");
-          setLoad(false);
-          console.log(loadstatus);
-        }
+      if (loadstatus === true) {
+        //setLoad(true);
+        console.log(loadstatus);
+        fetchData();
+      } else {
+        localStorage.removeItem("load");
+        //setLoad(false);
+        console.log(loadstatus);
       }
     } else {
       console.log("fetchData 실행");
