@@ -158,15 +158,11 @@ export const DeleteReason = ({ setViewReason }: Props) => {
                 {length > 0 && (
                   <Count>
                     <CntTxt
-                      style={{ color: length > 100 ? "#15191C" : "#495057" }}
+                      style={{ color: length >= 100 ? "#FF0004" : "#495057" }}
                     >
                       {length}
                     </CntTxt>
-                    <CntTxt
-                      style={{ color: length > 100 ? "#15191C" : "#868E96" }}
-                    >
-                      /100자
-                    </CntTxt>
+                    <CntTxt style={{ color: "#868E96" }}>/100자</CntTxt>
                   </Count>
                 )}
               </InputArea>
