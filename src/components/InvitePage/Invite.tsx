@@ -43,6 +43,45 @@ export const Invite = () => {
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
   //const [hasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
 
+  const handleGoBack = () => {
+    navigate("/", { replace: true });
+    quitLetterWs(letterId);
+    console.log("소켓 퇴장");
+  };
+
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [navigate]);
+
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [location]);
+
   const fetchParticipants = async () => {
     try {
       setLoad(true);
@@ -356,7 +395,6 @@ export const Invite = () => {
   }, []);
 
   useEffect(() => {
-    console.log("문젠가");
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -375,7 +413,6 @@ export const Invite = () => {
 
   useEffect(() => {
     // 탭 닫기 전에 호출
-    console.log("문젠가");
     const beforeUnloadListener = (event: BeforeUnloadEvent) => {
       handleTabClosed(event);
     };
