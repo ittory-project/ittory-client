@@ -32,6 +32,9 @@ export const Join = () => {
     }
   }, [letterId]);
 
+  //닉네임 중복검사 호출 후 enter api 호출 시 창이 두개인 것에 대해
+  // 중복 참여 오류는 안나는데 닉네임 검사 안되는 에러발생
+
   useEffect(() => {
     const fetchVisitUser = async () => {
       try {
