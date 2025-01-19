@@ -19,7 +19,6 @@ export interface Participants {
 }
 
 //모바일 브라우저 종료 감지 안됨
-//퇴장 시 참여자 배열 업데이트 즉시 안됨
 
 export const Invite = () => {
   const location = useLocation();
@@ -39,10 +38,10 @@ export const Invite = () => {
   const [name, setName] = useState<string>("");
   const [exitName, setExitName] = useState<string>("");
   const [viewDelete, setViewDelete] = useState<boolean>(false);
-  const [refresh] = useState<number>(1);
-  const [load, setLoad] = useState<boolean>(true);
+  //const [refresh] = useState<number>(1);
+  const [, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
-  const [hasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
+  //const [hasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
 
   const fetchParticipants = async () => {
     try {
@@ -219,7 +218,6 @@ export const Invite = () => {
         console.error("Error during data fetching:", err);
       }
     };
-    console.log("문젠가");
     fetchData();
   }, [participants]);
 
