@@ -1,6 +1,7 @@
 import { Home } from "../../components/homePage/Home";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { quitLetterWs } from "../../api/service/WsService";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -48,8 +49,13 @@ export const HomePage = () => {
     }
     if (localStorage.getItem("userName")) {
       localStorage.removeItem("userName");
-      localStorage.removeItem("letterId");
       localStorage.removeItem("guideOpen");
+    }
+    if (localStorage.getItem("letterId")) {
+      const letterId = Number(localStorage.getItem("letterId"));
+      quitLetterWs(letterId);
+      console.log("소켓퇴장처리");
+      localStorage.removeItem("letterId");
     }
     localStorage.removeItem("receiver");
     localStorage.removeItem("myName");
