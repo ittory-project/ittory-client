@@ -7,6 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { postRepeatCount } from "../../../api/service/LetterService";
 import { postRandom } from "../../../api/service/ParticipantService";
 import { startLetterWs } from "../../../api/service/WsService";
+import bg1 from "../../../../public/assets/connect/bg1.png";
+import bg2 from "../../../../public/assets/connect/bg2.png";
+import bg3 from "../../../../public/assets/connect/bg3.png";
+import bg4 from "../../../../public/assets/connect/bg4.png";
+import bg5 from "../../../../public/assets/connect/bg5.png";
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,6 +33,16 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [selectNumber, setSelectNumber] = useState<number>(1);
   const navigate = useNavigate();
+  const backgroundImages: { [key: number]: string } = {
+    1: bg1,
+    2: bg2,
+    3: bg3,
+    4: bg4,
+    5: bg5,
+  };
+  const [background, setBackground] = useState<string | null>(
+    backgroundImages[coverId] || null
+  );
 
   useEffect(() => {
     setSelectNumber(activeIndex + 1);
@@ -36,8 +51,31 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const handleCancel = () => {
     setViewCount(false);
   };
+  console.log(background);
 
   console.log(coverId);
+  useEffect(() => {
+    if (!background) {
+      console.log("switch문 실행");
+      switch (coverId) {
+        case 1:
+          setBackground(bg1);
+          break;
+        case 2:
+          setBackground(bg2);
+          break;
+        case 3:
+          setBackground(bg3);
+          break;
+        case 4:
+          setBackground(bg4);
+          break;
+        case 5:
+          setBackground(bg5);
+          break;
+      }
+    }
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -58,6 +96,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
         state: {
           letterId: letterId,
           coverId: coverid,
+          bg: background,
         },
       });
     } catch (err) {

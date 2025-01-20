@@ -17,6 +17,7 @@ export const Logout = ({ setPopup }: Props) => {
     try {
       const logoutResponse = await postLogout();
       localStorage.removeItem("jwt");
+      localStorage.clear();
       console.log("Logout successful:", logoutResponse);
       navigate("/", { replace: true });
     } catch (error) {

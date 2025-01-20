@@ -45,8 +45,6 @@ export const Invite = () => {
 
   const handleGoBack = () => {
     navigate("/", { replace: true });
-    quitLetterWs(letterId);
-    console.log("소켓 퇴장");
   };
 
   useEffect(() => {
@@ -88,55 +86,11 @@ export const Invite = () => {
       const data = await getParticipants(letterId);
 
       setParticipants(data);
-      /*
-      if (data.length > 0 || participants.length > 0) {
-        if (data[0].nickname) {
-          console.log(data[0].nickname);
-          console.log(name);
-          console.log(userName);
-          console.log(data.length);
-          console.log(participants.length);
-          console.log(data);
-          if (data[0].nickname === name || data[0].nickname === userName) {
-            console.log("방장지정");
-            localStorage.removeItem("load");
-            setMemberIndex(0);
-            setLoadstatus(false);
-            setLoad(false);
-          } else {
-            console.log("방장지정");
-            localStorage.removeItem("load");
-            setMemberIndex(1);
-            setLoadstatus(false);
-            setLoad(false);
-          }
-        }
-      } else {
-        if (!hasRefreshed) {
-          console.log(localStorage.getItem("load"));
-          if (localStorage.getItem("load") === "done") {
-            setLoad(true);
-            setLoadstatus(true);
-            console.log("로딩이미했음");
-          } else {
-            console.log("로딩 페이지로");
-            localStorage.setItem("load", "done");
-            navigate("/loading", {
-              state: {
-                letterId: getletterId,
-                userName: userName,
-                guideOpen: guideOpen,
-              },
-            });
-          }
-        }
-      }*/
     } catch (err) {
       console.error("Error fetching participants:", err);
-      //setLoadstatus(false);
     }
   };
-  /*
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -147,35 +101,37 @@ export const Invite = () => {
         setName(userNameFromApi);
         setUserId(userIdFromApi);
         console.log(participants);
+
         if (participants.length < 1) {
           fetchParticipants();
           console.log("데이터없음-useEffect");
         } else {
-          console.log("데이터들어옴");
-          if (participants[0].nickname) {
-            if (
-              participants[0].nickname === name ||
-              participants[0].nickname === userName
-            ) {
-              console.log("방장지정");
-              setMemberIndex(0);
-              setLoadstatus(false);
-              setLoad(false);
-              localStorage.removeItem("load");
-            } else {
-              console.log("방장지정");
-              setMemberIndex(1);
-              setLoadstatus(false);
-              setLoad(false);
-              localStorage.removeItem("load");
-            }
+          if (memberIndex > -1) {
+            return;
           } else {
-            if (!hasRefreshed) {
+            if (participants[0].nickname) {
+              if (
+                participants[0].nickname === name ||
+                participants[0].nickname === userName
+              ) {
+                console.log("방장지정");
+                localStorage.removeItem("load");
+                //setLoadstatus(false);
+                setLoad(false);
+                setMemberIndex(0);
+              } else {
+                console.log("방장지정");
+                localStorage.removeItem("load");
+                //setLoadstatus(false);
+                setLoad(false);
+                setMemberIndex(1);
+              }
+            } else {
               console.log(localStorage.getItem("load"));
               if (localStorage.getItem("load") === "done") {
+                console.log("로딩이미했음");
                 setLoad(true);
                 setLoadstatus(true);
-                console.log("로딩이미했음");
               } else {
                 console.log("로딩 페이지로");
                 localStorage.setItem("load", "done");
@@ -194,9 +150,8 @@ export const Invite = () => {
         console.error("Error during data fetching:", err);
       }
     };
-
     fetchData();
-  }, []);*/
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -326,6 +281,8 @@ export const Invite = () => {
             navigate("/Connection", {
               state: {
                 letterId: letterId,
+                coverId: Number(localStorage.getItem("coverId")),
+                bg: localStorage.getItem("bgImg"),
               },
             });
           } else if (
@@ -381,7 +338,7 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  //모바일 브라우저 종료 감지
+  /* 초대 링크 보내려 할 시 퇴실 처리되는 에러
   const handleVisibilityChange = useCallback(async () => {
     if (document.hidden) {
       // 페이지가 비활성화된 경우, 즉 탭을 닫거나 백그라운드로 보낼 때
@@ -399,7 +356,7 @@ export const Invite = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [handleVisibilityChange]);
+  }, [handleVisibilityChange]);*/
 
   //PC 감지
   const handleTabClosed = useCallback(async (event: BeforeUnloadEvent) => {
