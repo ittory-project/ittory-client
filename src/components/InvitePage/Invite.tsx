@@ -90,7 +90,7 @@ export const Invite = () => {
       console.error("Error fetching participants:", err);
     }
   };
-  /*
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -101,35 +101,37 @@ export const Invite = () => {
         setName(userNameFromApi);
         setUserId(userIdFromApi);
         console.log(participants);
+
         if (participants.length < 1) {
           fetchParticipants();
           console.log("데이터없음-useEffect");
         } else {
-          console.log("데이터들어옴");
-          if (participants[0].nickname) {
-            if (
-              participants[0].nickname === name ||
-              participants[0].nickname === userName
-            ) {
-              console.log("방장지정");
-              setMemberIndex(0);
-              setLoadstatus(false);
-              setLoad(false);
-              localStorage.removeItem("load");
-            } else {
-              console.log("방장지정");
-              setMemberIndex(1);
-              setLoadstatus(false);
-              setLoad(false);
-              localStorage.removeItem("load");
-            }
+          if (memberIndex > -1) {
+            return;
           } else {
-            if (!hasRefreshed) {
+            if (participants[0].nickname) {
+              if (
+                participants[0].nickname === name ||
+                participants[0].nickname === userName
+              ) {
+                console.log("방장지정");
+                localStorage.removeItem("load");
+                //setLoadstatus(false);
+                setLoad(false);
+                setMemberIndex(0);
+              } else {
+                console.log("방장지정");
+                localStorage.removeItem("load");
+                //setLoadstatus(false);
+                setLoad(false);
+                setMemberIndex(1);
+              }
+            } else {
               console.log(localStorage.getItem("load"));
               if (localStorage.getItem("load") === "done") {
+                console.log("로딩이미했음");
                 setLoad(true);
                 setLoadstatus(true);
-                console.log("로딩이미했음");
               } else {
                 console.log("로딩 페이지로");
                 localStorage.setItem("load", "done");
@@ -148,9 +150,8 @@ export const Invite = () => {
         console.error("Error during data fetching:", err);
       }
     };
-
     fetchData();
-  }, []);*/
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
