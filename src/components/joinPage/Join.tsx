@@ -144,8 +144,8 @@ export const Join = () => {
                     value={nickname}
                     onChange={handleInputChange}
                     spellCheck={false}
-                    min-length="1"
-                    max-length="5"
+                    minLength={1}
+                    maxLength={5}
                   />
                 </InputBox>
                 {duplicateError && nickname && (

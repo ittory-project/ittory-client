@@ -84,7 +84,7 @@ body,
 .reactEasyCrop_CropAreaGrid::after {
   border: 0 !important;
 }
-
+/*
 .bg1 {
   background-image: url("/public/assets/connect/bg1.png");
 }
@@ -99,4 +99,4 @@ body,
 }
 .bg5 {
   background-image: url("/public/assets/connect/bg5.png");
-}
+}*/

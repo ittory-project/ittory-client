@@ -22,6 +22,11 @@ import { Exit } from "./ExitMember";
 import { LetterDetailGetResponse } from "../../api/model/LetterModel";
 import { getLetterDetailInfo } from "../../api/service/LetterService";
 import barShadow from "../../../public/assets/invite/shadow.svg";
+import bg1 from "../../../public/assets/connect/bg1.png";
+import bg2 from "../../../public/assets/connect/bg2.png";
+import bg3 from "../../../public/assets/connect/bg3.png";
+import bg4 from "../../../public/assets/connect/bg4.png";
+import bg5 from "../../../public/assets/connect/bg5.png";
 
 interface Props {
   guideOpen: string;
@@ -47,6 +52,14 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [selectfont, setSelectfont] = useState<string>("");
   const [fontId, setFontId] = useState<number>(-1);
   const [receiverName, setReceiverName] = useState<string>("");
+  const backgroundImages: { [key: number]: string } = {
+    1: bg1,
+    2: bg2,
+    3: bg3,
+    4: bg4,
+    5: bg5,
+  };
+  const [background, setBackground] = useState<string | null>(null);
 
   console.log("this is member page");
 
@@ -76,6 +89,8 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         setDeliverDay(parseISO(letterData.deliveryDate));
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
+        localStorage.setItem("coverId", String(letterData.coverTypeId));
+        setBackground(backgroundImages[letterData.coverTypeId]);
         setFontId(letterData.fontId);
         setTitle(letterData.title);
       } catch (err) {
@@ -86,6 +101,12 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     fetchCoverTypes();
     fetchLetterInfo();
   }, []);
+
+  useEffect(() => {
+    if (background) {
+      localStorage.setItem("bgImg", background);
+    }
+  }, [background]);
 
   const handleUserName = (name: string) => {
     return name.slice(0, 3);

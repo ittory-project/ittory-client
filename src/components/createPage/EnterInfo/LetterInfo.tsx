@@ -13,8 +13,8 @@ interface Props {
   setMyName: React.Dispatch<React.SetStateAction<string>>;
   receiverName: string;
   setReceiverName: React.Dispatch<React.SetStateAction<string>>;
-  deliverDay: Date | null;
-  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null>>;
+  deliverDay: Date | null | string;
+  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null | string>>;
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
   setViewStartpage: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -98,7 +98,7 @@ export default function LetterInfo({
     setFocusedField(field); // 포커스된 필드를 추적
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (keyboardVisible) {
       if (focusedField === "receiver") {
         receiverInputRef.current?.focus();
@@ -106,7 +106,26 @@ export default function LetterInfo({
         myNameInputRef.current?.focus();
       }
     }
-  }, [keyboardVisible, focusedField]);
+  }, [keyboardVisible, focusedField]);*/
+
+  // 처음 focus될 때 keyboardVisible을 강제로 true로 설정
+  useEffect(() => {
+    if (focusedField) {
+      if (keyboardVisible) {
+        if (focusedField === "receiver" && receiverInputRef.current) {
+          receiverInputRef.current.focus();
+        } else if (focusedField === "myName" && myNameInputRef.current) {
+          myNameInputRef.current.focus();
+        }
+      } else {
+        if (focusedField === "receiver" && receiverInputRef.current) {
+          receiverInputRef.current.focus();
+        } else if (focusedField === "myName" && myNameInputRef.current) {
+          myNameInputRef.current.focus();
+        }
+      }
+    }
+  }, [focusedField, keyboardVisible]);
 
   return (
     <BackGround>
