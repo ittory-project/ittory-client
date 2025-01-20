@@ -280,6 +280,8 @@ export const Invite = () => {
             navigate("/Connection", {
               state: {
                 letterId: letterId,
+                coverId: Number(localStorage.getItem("coverId")),
+                bg: localStorage.getItem("bgImg"),
               },
             });
           } else if (
