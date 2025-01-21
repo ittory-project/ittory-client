@@ -32,7 +32,7 @@ export const Logout = ({ setPopup }: Props) => {
         <ButtonContainer>
           <Button
             style={{
-              background: "#CED4DA",
+              backgroundColor: "#CED4DA",
             }}
             onClick={handleDelete}
           >
@@ -40,7 +40,7 @@ export const Logout = ({ setPopup }: Props) => {
           </Button>
           <Button
             style={{
-              background: "#FFA256",
+              backgroundColor: "#FFA256",
             }}
             onClick={handleLogout}
           >
@@ -107,6 +107,7 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+  border: none;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);

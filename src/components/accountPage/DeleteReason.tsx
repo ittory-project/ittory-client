@@ -455,6 +455,7 @@ const Button = styled.button<{ $selectedReason: number }>`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+  border: none;
   margin-top: ${(props) => (props.$selectedReason !== 4 ? "2.5rem" : "0")};
 `;
 
