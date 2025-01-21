@@ -113,9 +113,11 @@ export default function LetterInfo({
       // `keyboardVisible`이 `true`일 때 바로 포커스를 주려고 setTimeout을 사용
       setTimeout(() => {
         if (focusedField === "receiver") {
+          console.log("focus");
           receiverInputRef.current?.focus();
         } else if (focusedField === "myName") {
           myNameInputRef.current?.focus();
+          console.log("focus");
         }
       }, 0); // `0`ms 딜레이로 상태 변경 후 바로 포커스를 주기
     }
