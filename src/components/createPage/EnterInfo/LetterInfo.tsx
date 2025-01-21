@@ -108,24 +108,18 @@ export default function LetterInfo({
     }
   }, [keyboardVisible, focusedField]);*/
 
-  // 처음 focus될 때 keyboardVisible을 강제로 true로 설정
   useEffect(() => {
-    if (focusedField) {
-      if (keyboardVisible) {
-        if (focusedField === "receiver" && receiverInputRef.current) {
-          receiverInputRef.current.focus();
-        } else if (focusedField === "myName" && myNameInputRef.current) {
-          myNameInputRef.current.focus();
+    if (keyboardVisible) {
+      // `keyboardVisible`이 `true`일 때 바로 포커스를 주려고 setTimeout을 사용
+      setTimeout(() => {
+        if (focusedField === "receiver") {
+          receiverInputRef.current?.focus();
+        } else if (focusedField === "myName") {
+          myNameInputRef.current?.focus();
         }
-      } else {
-        if (focusedField === "receiver" && receiverInputRef.current) {
-          receiverInputRef.current.focus();
-        } else if (focusedField === "myName" && myNameInputRef.current) {
-          myNameInputRef.current.focus();
-        }
-      }
+      }, 0); // `0`ms 딜레이로 상태 변경 후 바로 포커스를 주기
     }
-  }, [focusedField, keyboardVisible]);
+  }, [keyboardVisible, focusedField]);
 
   return (
     <BackGround>
