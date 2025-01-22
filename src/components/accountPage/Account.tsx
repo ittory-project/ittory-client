@@ -30,7 +30,7 @@ export const Account = () => {
           <List>
             <Container onClick={handlePopup}>
               <Area>
-                <img src={logout} style={{ width: "14px", height: "14px" }} />
+                <img src={logout} style={{ width: "24px", height: "24px" }} />
                 <span>로그아웃</span>
               </Area>
             </Container>
