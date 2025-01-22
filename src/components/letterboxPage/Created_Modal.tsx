@@ -13,7 +13,7 @@ interface Props {
   openLetter: boolean;
   letterId: number;
 }
-//링크 적용 필요
+
 export const Created_Modal = ({
   setIsModalOpen,
   setPopup,
@@ -180,7 +180,7 @@ const ModalContainer = styled.div`
 const Header = styled.div`
   display: flex;
   height: 44px;
-  padding: 16px 12px 0 16px;
+  padding: 24px 20px 0 0;
   flex-direction: column;
   align-items: flex-end;
   align-self: stretch;

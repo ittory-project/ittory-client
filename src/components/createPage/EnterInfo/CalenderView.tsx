@@ -7,13 +7,16 @@ import { format, subMonths, addMonths } from "date-fns";
 import Calender from "./Calender";
 
 interface Props {
-  setValue: React.Dispatch<React.SetStateAction<Date | null>>;
-  deliverDay: Date | null;
+  setValue: React.Dispatch<React.SetStateAction<Date | null | string>>;
+  deliverDay: Date | null | string;
 }
+
+//캘린더 QA 7번~
+//전체 마진이랑 Next/Prev 버튼의 마진 관련해서 의문..
 export default function CalenderView({ setValue, deliverDay }: Props) {
   const [current] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null | string>(null);
 
   useEffect(() => {
     if (deliverDay) {
@@ -92,9 +95,10 @@ const Container = styled.div`
   position: relative;
 `;
 const Header = styled.div`
-  width: 100%;
+  //width: 100%;
   padding-top: 4px;
-  margin-bottom: 4px;
+  margin-right: 20px;
+  margin-left: 20px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -109,7 +113,9 @@ const PrevButton = styled.span`
   display: flex;
   width: 24px;
   height: 24px;
-  padding-left: 0.2rem;
+  //padding-left: 0.2rem;
+  padding: 4px 8px;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   left: 0;
@@ -132,14 +138,18 @@ const NextButton = styled.span`
   display: flex;
   width: 24px;
   height: 24px;
-  padding-right: 0.2rem;
+  //padding-right: 0.2rem;
+  padding: 4px 8px;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   right: 0;
 `;
 const Days = styled.div`
   margin-top: 24px;
-  width: 100%;
+  margin-right: 22px;
+  margin-left: 22px;
+  //width: 100%;
   padding-bottom: 10px;
   display: flex;
   gap: 11px;
@@ -148,17 +158,20 @@ const Days = styled.div`
   align-items: center;
 `;
 const Day = styled.span`
-  height: 1rem;
+  //height: 1rem;
   color: #868e96;
-  font-family: SUIT;
-  font-size: 0.75rem;
+  font-family: var(--Typography-family-title, SUIT);
+  font-size: 12px;
   font-weight: 400;
   display: flex;
-  padding: 0.5rem 0.78rem 0.7rem 0.7rem;
+  //padding: 5px 9.5px 9px 7px;
+  padding: 0.5rem 4.25% 0.7rem 4%;
   text-align: center;
 `;
 const Body = styled.div`
-  width: 100%;
+  width: calc(100% - 44px);
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  margin-right: 22px;
+  margin-left: 22px;
 `;

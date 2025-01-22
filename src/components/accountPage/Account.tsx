@@ -30,13 +30,13 @@ export const Account = () => {
           <List>
             <Container onClick={handlePopup}>
               <Area>
-                <img src={logout} style={{ width: "14px", height: "14px" }} />
+                <img src={logout} style={{ width: "24px", height: "24px" }} />
                 <span>로그아웃</span>
               </Area>
             </Container>
             <Container onClick={handleDelete}>
               <Area>
-                <img src={out} style={{ width: "18px", height: "18px" }} />
+                <img src={out} style={{ width: "24px", height: "24px" }} />
                 <span>탈퇴하기</span>
               </Area>
             </Container>
