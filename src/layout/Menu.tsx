@@ -135,7 +135,7 @@ export const Menu = ({ onClose }: Props) => {
         <img
           src={X}
           alt="X"
-          style={{ width: "18px", height: "18px" }}
+          style={{ width: "16px", height: "16px" }}
           onClick={handleCancel}
         />
       </Cancel>
@@ -155,12 +155,7 @@ export const Menu = ({ onClose }: Props) => {
           <>
             <NavigateLogin onClick={handleLogin}>
               로그인하고 이용하기
-              {
-                <img
-                  src={direction}
-                  style={{ width: "18px", height: "18px" }}
-                />
-              }
+              {<img src={direction} style={{ width: "7px", height: "12px" }} />}
             </NavigateLogin>
           </>
         ) : (
@@ -171,9 +166,8 @@ export const Menu = ({ onClose }: Props) => {
               <img
                 src={graynavi}
                 style={{
-                  width: "3.75px",
-                  height: "7.5px",
-                  marginTop: "1px",
+                  width: "5px",
+                  height: "9px",
                   marginLeft: "5.75px",
                 }}
               />
