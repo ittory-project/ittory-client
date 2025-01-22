@@ -6,12 +6,13 @@ import styled from "styled-components";
 interface Props {
   current: Date;
   currentMonth: Date;
-  selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  setValue: React.Dispatch<React.SetStateAction<Date | null>>;
-  deliverDay: Date | null;
+  selectedDate: Date | null | string;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null | string>>;
+  setValue: React.Dispatch<React.SetStateAction<Date | null | string>>;
+  deliverDay: Date | null | string;
 }
-
+//7번, 8번 QA 반영 어려움
+//반응형 (width) 떄문에 30px고정시키면 간격 안맞아짐
 export default function Calender({
   current,
   currentMonth,
@@ -49,7 +50,7 @@ export default function Calender({
         days.push(
           <Disabled
             key={format(day, "yyyy-MM-dd")}
-            style={{ marginRight: i === 6 ? "0" : "6%" }}
+            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
           ></Disabled>
         );
       } else if (deliverDay && isSameDay(day, deliverDay)) {
@@ -57,7 +58,7 @@ export default function Calender({
           <Selected
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ marginRight: i === 6 ? "0" : "6%" }}
+            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +77,7 @@ export default function Calender({
           <Selected
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ marginRight: i === 6 ? "0" : "6%" }}
+            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +95,7 @@ export default function Calender({
         days.push(
           <Disabled
             key={format(day, "yyyy-MM-dd")}
-            style={{ marginRight: i === 6 ? "0" : "6%" }}
+            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
           >
             <Txt style={{ color: "#DEE2E6" }}>{formattedDate}</Txt>
           </Disabled>
@@ -104,7 +105,7 @@ export default function Calender({
           <Valid
             key={format(day, "yyyy-MM-dd")}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ marginRight: i === 6 ? "0" : "6%" }}
+            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
           >
             <Txt style={{ color: "#000000" }}>{formattedDate}</Txt>
           </Valid>
@@ -114,7 +115,14 @@ export default function Calender({
       day = addDays(day, 1);
     }
 
-    rows.push(<div key={format(day, "yyyy-MM-dd")}>{days}</div>);
+    rows.push(
+      <div
+        key={format(day, "yyyy-MM-dd")}
+        style={{ height: "30px", marginBottom: "10px" }}
+      >
+        {days}
+      </div>
+    );
     console.log(rows);
     days = [];
   }
@@ -132,7 +140,7 @@ const Disabled = styled.div`
   align-items: center;
   flex-direction: column;
   width: 9.1%;
-  height: 35px;
+  height: 30px;
   box-sizing: border-box;
 `;
 const Selected = styled.div`
@@ -140,7 +148,7 @@ const Selected = styled.div`
   display: inline-flex;
   cursor: pointer;
   width: 9.1%;
-  height: 35px;
+  height: 30px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -152,8 +160,8 @@ const Selected = styled.div`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    height: 100%;
+    width: 30px;
+    height: 30px;
   }
 `;
 const Valid = styled.div`
@@ -161,7 +169,7 @@ const Valid = styled.div`
   display: inline-flex;
   cursor: pointer;
   width: 9.1%;
-  height: 35px;
+  height: 30px;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;

@@ -19,7 +19,7 @@ interface Props {
   setViewStartpage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-//포커스가 두번째부터 이루어짐
+//포커스가 두번째부터 이루어짐(Mo)
 
 export default function LetterInfo({
   myName,
@@ -134,10 +134,7 @@ export default function LetterInfo({
           <Text>{name}님,</Text>
           <Text>같이 편지를 만들어봐요!</Text>
         </Title>
-        <MainCotainer
-          $shiftup={String(keyboardVisible)}
-          $isopen={String(isModalOpen)}
-        >
+        <MainCotainer $shiftup={keyboardVisible} $isopen={String(isModalOpen)}>
           <InputBox>
             <InputLogo>받는 사람</InputLogo>
             <Input
@@ -261,12 +258,12 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  //left: 50%;
+  //transform: translateX(-50%);
   background: linear-gradient(
     180deg,
     #d3edff 0%,
@@ -284,23 +281,25 @@ const Cancel = styled.span`
 const Container = styled.div`
   margin-top: 48px;
   display: flex;
-  align-items: center;
   flex-direction: column;
   flex: 1 0 0;
-  padding-right: 24px;
-  padding-left: 24px;
+  width: calc(100% - 48px);
+  margin-right: 24px;
+  margin-left: 24px;
+  position: relative;
   gap: 24px;
 `;
 const Title = styled.div<{ $keyboardVisible: boolean }>`
-  display: flex;
+  position: relative;
   margin-top: 0;
+  margin-bottom: 0;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
 `;
 const Text = styled.span`
-  display: block;
+  display: inline-block;
   color: #243348;
   text-align: center;
   font-family: var(--Typography-family-title, SUIT);
@@ -310,14 +309,16 @@ const Text = styled.span`
   line-height: 24px;
   letter-spacing: -0.5px;
 `;
-const MainCotainer = styled.div<{ $shiftup?: string; $isopen?: string }>`
+const MainCotainer = styled.div<{ $shiftup?: boolean; $isopen?: string }>`
   display: flex;
-  width: 100%;
   padding: 20px;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
+  //justify-content: center;
   gap: 22px;
+  top: 0;
+  position: relative;
+  margin-top: 0;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
@@ -325,13 +326,14 @@ const MainCotainer = styled.div<{ $shiftup?: string; $isopen?: string }>`
   transform: ${(props) =>
     props.$shiftup ? "translateY(0.8rem)" : "translateY(0)"};
 `;
+
 const InputBox = styled.div`
   display: flex;
   width: 232px;
   flex-direction: column;
   justify-content: center;
   margin-top: 0;
-  margin-bottom: 4px;
+  //margin-bottom: 4px;
   height: 60px;
   position: relative;
   border-bottom: 1px dashed #dee2e6;

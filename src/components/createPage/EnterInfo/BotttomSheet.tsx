@@ -3,8 +3,8 @@ import styled from "styled-components";
 import CalenderView from "./CalenderView";
 
 interface Props {
-  deliverDay: Date | null;
-  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null>>;
+  deliverDay: Date | null | string;
+  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null | string>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -65,12 +65,14 @@ const ModalContainer = styled.div`
   z-index: 100;
   flex-direction: column;
   align-items: center;
-  padding: 28px 24px 18px 24px;
+  padding: 28px 0px 18px 0px;
   box-sizing: border-box;
 `;
 const Button = styled.button`
   position: relative;
-  width: 100%;
+  //width: 100%;
+  margin-right: 16px;
+  margin-left: 16px;
   cursor: pointer;
   display: flex;
   padding: 14px 20px;
