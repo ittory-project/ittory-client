@@ -235,13 +235,13 @@ const Overlay = styled.div`
   z-index: 50;
 `;
 const Container = styled.div`
-  margin-top: 3rem;
+  margin-top: 32px;
   display: flex;
   width: 272px;
-  padding: 16px 12px;
+  padding: 22px 12px 16px 12px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 12px;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
@@ -381,7 +381,7 @@ const InputBox = styled.div`
   width: 224px;
   flex-direction: column;
   justify-content: center;
-  gap: 3px;
+  gap: 8px;
   margin-top: 0;
   border-bottom: 1px dashed #dee2e6;
   //margin-bottom: 12px;
@@ -398,11 +398,11 @@ const InputLogo = styled.div`
 `;
 const Input = styled.input`
   width: 232px;
-  height: 24px;
+  height: 20px;
   border: 0;
-  padding-left: 0;
+  padding: 0;
   background-color: #fff;
-  //margin-bottom: 4px;
+  margin-bottom: 4px;
   cursor: pointer;
   &::placeholder {
     color: #adb5bd;
@@ -410,7 +410,7 @@ const Input = styled.input`
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 20px;
     letter-spacing: -0.5px;
   }
   &:valid {
@@ -419,7 +419,7 @@ const Input = styled.input`
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 20px;
     letter-spacing: -0.5px;
   }
   &:focus {
@@ -430,6 +430,7 @@ const InputBoxRow = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 4px;
 `;
 const SelectDate = styled.span`
   font-family: var(--Typography-family-title, SUIT);
