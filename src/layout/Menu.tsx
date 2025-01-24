@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import X from "../../public/assets/x.svg";
 import direction from "../../public/assets/navigate.svg";
-import letter_create from "../../public/assets/letter_create.svg";
-import letter_receive from "../../public/assets/letter_receive.svg";
+import letter_create from "../../public/assets/menu/letter_create.svg";
+import letter_receive from "../../public/assets/menu/letter_receive.svg";
 import ask from "../../public/assets/menu/ask.svg";
 import graynavi from "../../public/assets/menu/graynavi.svg";
 import defaultImage from "../../public/assets/menu/profileImg.png";
@@ -179,7 +179,7 @@ export const Menu = ({ onClose }: Props) => {
         <CreatedLetter onClick={handleCreate}>
           <img
             src={letter_create}
-            style={{ width: "18px", height: "14px", marginBottom: "1.2px" }}
+            style={{ width: "20px", height: "20px", marginBottom: "1.2px" }}
           />
           참여한 편지
           {user === false ? (
@@ -204,7 +204,7 @@ export const Menu = ({ onClose }: Props) => {
         <ReceivedLetter onClick={handleReceive}>
           <img
             src={letter_receive}
-            style={{ width: "18px", height: "18px", marginBottom: "1.2px" }}
+            style={{ width: "20px", height: "20px", marginBottom: "1.2px" }}
           />
           받은 편지
           {user === false ? (
