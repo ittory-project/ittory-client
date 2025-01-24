@@ -17,8 +17,8 @@ interface Props {
   setMyName: React.Dispatch<React.SetStateAction<string>>;
   receiverName: string;
   setReceiverName: React.Dispatch<React.SetStateAction<string>>;
-  deliverDay: Date | null;
-  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null>>;
+  deliverDay: Date | null | string;
+  setDeliverDay: React.Dispatch<React.SetStateAction<Date | null | string>>;
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   selectfont: string;
@@ -100,6 +100,7 @@ export default function FinalInfo({
           width: "120px",
           height: "157px",
           boxSizing: "border-box",
+          marginBottom: "8px",
         }}
       >
         {children}
@@ -333,7 +334,6 @@ const Info = styled.div`
 `;
 const TitleTxt = styled.span`
   display: block;
-  margin-top: 12px;
   color: #212529;
   padding: 6px 0px;
   text-align: left;
@@ -349,7 +349,6 @@ const TitleTxt = styled.span`
 const EditBtn = styled.div`
   position: absolute;
   cursor: pointer;
-  margin-top: 12px;
   right: 12px;
   display: flex;
   width: 24px;
