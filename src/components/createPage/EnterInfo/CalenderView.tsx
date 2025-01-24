@@ -11,8 +11,6 @@ interface Props {
   deliverDay: Date | null | string;
 }
 
-//캘린더 QA 7번~
-//전체 마진이랑 Next/Prev 버튼의 마진 관련해서 의문..
 export default function CalenderView({ setValue, deliverDay }: Props) {
   const [current] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
@@ -152,7 +150,7 @@ const Days = styled.div`
   //width: 100%;
   padding-bottom: 10px;
   display: flex;
-  gap: 11px;
+  //gap: 1%;
   align-self: stretch;
   justify-content: space-between;
   align-items: center;
@@ -164,8 +162,9 @@ const Day = styled.span`
   font-size: 12px;
   font-weight: 400;
   display: flex;
+  //width: 9.1%;
   //padding: 5px 9.5px 9px 7px;
-  padding: 0.5rem 4.25% 0.7rem 4%;
+  padding: 0.5rem 4% 0.7rem 3.9%;
   text-align: center;
 `;
 const Body = styled.div`

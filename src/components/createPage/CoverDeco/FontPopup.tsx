@@ -145,6 +145,12 @@ const BackGround = styled.div<{
   transition:
     bottom 0.3s ease,
     height 0.3s ease;
+  border-radius: ${(props) =>
+    props.$isKeyboardVisible ? "0px" : "20px 20px 0px 0px"};
+  box-shadow: ${(props) =>
+    props.$isKeyboardVisible
+      ? "0px"
+      : "0px -4px 14px 0px rgba(0, 0, 0, 0.10);"};
 `;
 
 const FontContainer = styled.div`
