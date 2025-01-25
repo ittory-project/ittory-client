@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
 import calender from "../../../../public/assets/calendar.svg";
@@ -108,18 +108,13 @@ export default function LetterInfo({
     }
   }, [keyboardVisible, focusedField]);*/
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (keyboardVisible) {
-      // `keyboardVisible`이 `true`일 때 바로 포커스를 주려고 setTimeout을 사용
-      setTimeout(() => {
-        if (focusedField === "receiver") {
-          console.log("focus");
-          receiverInputRef.current?.focus();
-        } else if (focusedField === "myName") {
-          myNameInputRef.current?.focus();
-          console.log("focus");
-        }
-      }, 0); // `0`ms 딜레이로 상태 변경 후 바로 포커스를 주기
+      if (focusedField === "receiver") {
+        receiverInputRef.current?.focus();
+      } else if (focusedField === "myName") {
+        myNameInputRef.current?.focus();
+      }
     }
   }, [keyboardVisible, focusedField]);
 
