@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
 import calender from "../../../../public/assets/calendar.svg";
@@ -98,7 +98,7 @@ export default function LetterInfo({
     setFocusedField(field); // 포커스된 필드를 추적
   };
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (keyboardVisible) {
       if (focusedField === "receiver") {
         receiverInputRef.current?.focus();
@@ -106,17 +106,7 @@ export default function LetterInfo({
         myNameInputRef.current?.focus();
       }
     }
-  }, [keyboardVisible, focusedField]);*/
-
-  useLayoutEffect(() => {
-    if (keyboardVisible) {
-      if (focusedField === "receiver") {
-        receiverInputRef.current?.focus();
-      } else if (focusedField === "myName") {
-        myNameInputRef.current?.focus();
-      }
-    }
-  }, [keyboardVisible, focusedField]);
+  }, [focusedField]);
 
   return (
     <BackGround>
