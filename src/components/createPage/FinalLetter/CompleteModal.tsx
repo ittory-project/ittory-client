@@ -351,6 +351,7 @@ const Button = styled.button`
   margin-top: 24px;
   left: 50%;
   transform: translateX(-50%);
+  border: none;
 `;
 const ButtonTxt = styled.div`
   color: #fff;
