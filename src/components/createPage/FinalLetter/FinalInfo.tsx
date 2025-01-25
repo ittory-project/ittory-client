@@ -309,7 +309,9 @@ const SubTitle = styled.span`
 const Container = styled.div`
   margin-top: 1.5rem;
   display: flex;
-  width: 272px;
+  width: calc(100% - 48px);
+  margin-left: 24px;
+  margin-right: 24px;
   box-sizing: border-box;
   padding: 16px 12px;
   flex-direction: column;
@@ -397,7 +399,7 @@ const Cover = styled.div`
   width: 100%;
   position: relative;
   box-sizing: border-box;
-  padding: 0px 12px 12px 12px;
+  padding: 12px 12px 12px 12px;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
@@ -446,7 +448,9 @@ const Button = styled.button`
   position: absolute;
   overflow: hidden;
   background: #ffa256;
-  width: 288px;
+  width: calc(100% - 32px);
+  margin-left: 16px;
+  margin-right: 16px;
   cursor: pointer;
   display: flex;
   height: 48px;
@@ -460,6 +464,7 @@ const Button = styled.button`
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
   z-index: 1;
+  border: none;
 `;
 const ButtonTxt = styled.div`
   color: #fff;

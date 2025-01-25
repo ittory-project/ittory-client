@@ -216,7 +216,8 @@ export default function LetterInfo({
           style={{
             background: "#FFA256",
             boxShadow:
-              "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
+              "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset",
+            border: "none",
           }}
           onClick={() => {
             localStorage.setItem("receiver", receiverName);
@@ -324,7 +325,7 @@ const MainCotainer = styled.div<{ $shiftup?: boolean; $isopen?: string }>`
 
 const InputBox = styled.div`
   display: flex;
-  width: 232px;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
   margin-top: 0;
@@ -402,9 +403,10 @@ const Calender = styled.span`
   margin-top: 28px;
 `;
 const Button = styled.button<{ $keyboardVisible: boolean }>`
-  width: 288px;
-  cursor: pointer;
   display: flex;
+  margin-left: 16px;
+  margin-right: 16px;
+  cursor: pointer;
   height: 48px;
   padding: 14px 20px;
   align-items: center;
@@ -412,10 +414,8 @@ const Button = styled.button<{ $keyboardVisible: boolean }>`
   gap: 8px;
   align-self: stretch;
   border-radius: 50px;
-  position: absolute;
+  position: relative;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
 
   // 키보드가 보일 때 버튼 숨기기
   display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};

@@ -195,7 +195,7 @@ const Cancel = styled.img`
 `;
 const Contents = styled.div`
   display: flex;
-  padding: 0px 16px 24px 16px;
+  padding: 0px 20px 24px 16px;
   flex-direction: column;
   align-items: flex-end;
   align-self: stretch;
