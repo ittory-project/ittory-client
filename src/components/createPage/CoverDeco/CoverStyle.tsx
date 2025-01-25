@@ -405,7 +405,8 @@ export default function CoverStyle({
           style={{
             background: "#FFA256",
             boxShadow:
-              "-1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
+              "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset",
+            border: "none",
           }}
           onClick={() => {
             localStorage.setItem("title", title);
@@ -499,7 +500,9 @@ const Container = styled.div`
 const Button = styled.button`
   overflow: hidden;
   position: fixed;
-  width: 288px;
+  width: calc(100% - 32px);
+  margin-left: 16px;
+  margin-right: 16px;
   cursor: pointer;
   display: flex;
   height: 48px;
@@ -510,8 +513,6 @@ const Button = styled.button`
   bottom: 20px;
   align-self: stretch;
   border-radius: 50px;
-  left: 50%;
-  transform: translateX(-50%);
 `;
 
 const ButtonTxt = styled.div`

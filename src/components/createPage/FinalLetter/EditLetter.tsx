@@ -237,7 +237,9 @@ const Overlay = styled.div`
 const Container = styled.div`
   margin-top: 32px;
   display: flex;
-  width: 272px;
+  width: calc(100% - 48px);
+  margin-left: 24px;
+  margin-right: 24px;
   padding: 22px 12px 16px 12px;
   flex-direction: column;
   align-items: flex-start;
@@ -311,7 +313,7 @@ const Cover = styled.div`
   width: 100%;
   position: relative;
   box-sizing: border-box;
-  padding: 0px 12px 20px 12px;
+  padding: 12px 12px 20px 12px;
   flex-direction: column;
   align-self: stretch;
   border-radius: 8px;

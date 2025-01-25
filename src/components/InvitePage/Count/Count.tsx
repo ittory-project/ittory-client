@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, act } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
 import photo from "../../../../public/assets/photo.svg";
@@ -51,9 +51,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const handleCancel = () => {
     setViewCount(false);
   };
-  console.log(background);
 
-  console.log(coverId);
   useEffect(() => {
     if (!background) {
       console.log("switch문 실행");
@@ -153,10 +151,38 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
     setActiveIndex(swiper.realIndex);
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     // activeIndex가 변경될 때 Swiper로 이동
     if (swiperRef.current) {
       swiperRef.current.swiper.slideTo(activeIndex);
+    }
+  }, [activeIndex]);*/
+
+  /*useEffect(() => {
+    // activeIndex가 변경될 때만 Swiper로 이동하도록 조건 추가
+    if (
+      swiperRef.current &&
+      swiperRef.current.swiper.realIndex !== activeIndex
+    ) {
+      swiperRef.current.swiper.slideTo(activeIndex);
+    }
+  }, [activeIndex]);*/
+
+  useEffect(() => {
+    // activeIndex가 변경될 때만 Swiper로 이동하도록 조건 추가
+    if (
+      swiperRef.current &&
+      swiperRef.current.swiper.realIndex !== activeIndex
+    ) {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        if (swiperRef.current) {
+          swiperRef.current.swiper.slideTo(activeIndex);
+        }
+      }, -50); // 지연 후 슬라이드 이동
     }
   }, [activeIndex]);
 
@@ -185,7 +211,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
               <Swiper
                 direction={"vertical"}
                 slidesPerView={5}
-                loop={false}
+                loop={true}
                 loopAdditionalSlides={5}
                 slideToClickedSlide={true}
                 centeredSlides={true}
@@ -193,7 +219,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
                 //onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 style={{ height: "100%" }}
                 ref={swiperRef}
-                speed={180}
+                speed={85.5}
               >
                 {list.map((no, index) => (
                   <SwiperSlide key={no} style={{ height: "calc(15rem / 4)" }}>
