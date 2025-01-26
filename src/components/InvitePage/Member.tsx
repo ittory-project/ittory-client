@@ -270,7 +270,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                       </NameContainer>
                     </NameBar>
                   </Book>
-                  <Bar />
+                  <BarWrapper>
+                    <Bar />
+                  </BarWrapper>
                   <BarShadow $img={barShadow} />
                   <Notice>
                     <img
@@ -588,6 +590,13 @@ const NameTxt = styled.div<{ $book: number }>`
     if ($book === 4) return "#232D3D";
     if ($book === 5) return "#232D3D";
   }};
+`;
+const BarWrapper = styled.div`
+  position: relative;
+  width: 288px;
+  height: 14px;
+  flex-shrink: 0;
+  background: #d3edff;
 `;
 const Bar = styled.div`
   width: 288px;
