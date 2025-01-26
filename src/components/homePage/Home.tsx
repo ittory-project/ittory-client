@@ -10,6 +10,7 @@ import animation from "../../../public/assets/home/animation.json";
 import Player, { LottieRefCurrentProps } from "lottie-react";
 import { Menu } from "../../layout/Menu";
 import { useSwipeable } from "react-swipeable";
+import divider2 from "../../../public/assets/home/bar.png";
 
 const bg1 = "/assets/home/main.jpg";
 const bg8 = "/assets/home/07.jpg";
@@ -173,7 +174,7 @@ export const Home = () => {
                   >
                     이용약관
                   </span>
-                  <img src={divider} alt="divider" style={{ height: "9px" }} />
+                  <img src={divider2} alt="divider" style={{ height: "9px" }} />
                   <span
                     style={{ marginLeft: "8px", cursor: "pointer" }}
                     onClick={handlePrivacyPolicyClick}
@@ -304,7 +305,9 @@ const Section = styled.div<$Props>`
 `;
 const FinalButton = styled.button`
   display: flex;
-  width: 288px;
+  width: calc(100% - 32px);
+  margin-left: 16px;
+  margin-right: 16px;
   height: 48px;
   padding: 8px 20px;
   justify-content: center;
@@ -350,11 +353,10 @@ const ButtonTxt = styled.div`
   letter-spacing: -0.5px;
 `;
 const LastSection = styled.div`
-  width: 100vw;
   display: flex;
   width: 100%;
   padding: 40px 24px;
-  justify-content: center;
+  //justify-content: center;
   align-items: center;
   box-sizing: border-box;
   background: #2f3641;
@@ -363,7 +365,7 @@ const LastSection = styled.div`
 `;
 const SectionBox = styled.div`
   display: flex;
-  width: 272px;
+  //width: 272px;
   flex-direction: column;
   align-items: flex-start;
   flex-shrink: 0;
