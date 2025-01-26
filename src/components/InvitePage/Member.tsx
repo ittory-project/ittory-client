@@ -426,22 +426,22 @@ const CopyAlert = styled.div`
   white-space: nowrap;
 `;
 const Header = styled.div`
-  position: absolute;
+  position: relative;
   box-sizing: border-box;
   top: 0;
   display: flex;
   width: 100%;
-  padding: 0px 20px 0px 20px;
+  padding: 12px 20px 0px 20px;
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
-  margin-bottom: 16px;
+  margin-bottom: 28px;
 `;
 const ReceiverContainer = styled.div`
   display: flex;
   position: relative;
   align-items: center;
-  height: 48px;
+  //height: 48px;
 `;
 const Receiver = styled.span`
   height: 24px;
@@ -473,7 +473,7 @@ const MainContainer = styled.div`
   width: 288px;
   flex-direction: column;
   align-items: center;
-  margin-top: 76px;
+  //margin-top: 76px;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
   width: 200px;
@@ -615,7 +615,7 @@ const Notice = styled.div`
   padding: 12px 20px;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 9px;
   align-self: stretch;
   border-radius: 12px;
   border: 2px solid #1c2231;
@@ -628,6 +628,7 @@ const Notice = styled.div`
   font-weight: 500;
   line-height: 16px;
   letter-spacing: -0.5px;
+  border: none;
 `;
 const BoxContainer = styled.div`
   display: flex;
@@ -635,7 +636,7 @@ const BoxContainer = styled.div`
   flex-direction: column;
   align-items: center; //수직
   justify-content: center; //수평
-  margin-top: 20px;
+  margin-top: 16px;
 `;
 const PinArea = styled.div`
   display: flex;
