@@ -206,7 +206,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           <Select>&nbsp;번씩</Select>
           <Picker>
             <div
-              style={{ width: "240px", height: "186px", overflow: "hidden" }}
+              style={{ width: "280px", height: "186px", overflow: "hidden" }}
             >
               <Swiper
                 direction={"vertical"}
