@@ -392,7 +392,7 @@ const BackGround = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
   height: calc(var(--vh, 1vh) * 100);
   overflow: hidden;
   width: 100%;
@@ -434,7 +434,7 @@ const CopyAlert = styled.div`
 `;
 
 const Header = styled.div`
-  position: absolute;
+  //position: absolute;
   box-sizing: border-box;
   top: 0;
   display: flex;
@@ -443,6 +443,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   align-self: stretch;
+  //padding-bottom: 16px;
   margin-bottom: 16px;
 `;
 const ReceiverContainer = styled.div`
@@ -480,11 +481,12 @@ const MainContainer = styled.div`
   width: 288px;
   flex-direction: column;
   align-items: center;
+  //margin-top: 16px;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
+  position: relative;
   width: 200px;
   height: 261px;
-  margin-top: 1.5rem;
   border-radius: 3.833px 11.5px 11.5px 3.833px;
   background-image: url(${(props) => props.$backgroundImage});
   display: flex;
@@ -603,8 +605,7 @@ const Bar = styled.div`
   width: 288px;
   height: 14px;
   flex-shrink: 0;
-  border-radius: 2px 2px var(--Border-Radius-radius_100, 4px)
-    var(--Border-Radius-radius_100, 4px);
+  border-radius: 2px 2px 4px 4px;
   background: linear-gradient(245deg, #f1e2bc 33.53%, #e7d5a6 121.78%);
   mix-blend-mode: luminosity;
   box-shadow:
@@ -634,10 +635,11 @@ const PinArea = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
+//8px로 하면 얇아보여서 일단 9px로..
 const Pin = styled.div`
   width: 20px;
   display: inline-block;
-  height: 8px;
+  height: 9px;
   transform: rotate(-90deg);
   top: 4px;
   position: relative;
@@ -750,24 +752,20 @@ const UserName = styled.div`
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
-  width: 100%;
+  width: calc(100% - 32px);
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;
   align-items: center;
-  gap: 8px;
-  align-self: stretch;
   justify-content: center;
-  align-self: stretch;
   border-radius: 50px;
   background: #ffa256;
+  border: 0;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  position: relative;
-  margin-bottom: 20px;
-  margin-top: 5rem;
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  margin: 0px 16px 20px 16px;
+  bottom: 0;
 `;
 const ButtonTxt = styled.div`
   color: #fff;

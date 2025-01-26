@@ -195,8 +195,8 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
             src={X}
             alt="X Icon"
             style={{
-              width: "15px",
-              height: "15px",
+              width: "14px",
+              height: "14px",
             }}
           />
         </Cancel>
@@ -219,7 +219,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
                 //onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 style={{ height: "100%" }}
                 ref={swiperRef}
-                speed={85.5}
+                speed={129.5}
               >
                 {list.map((no, index) => (
                   <SwiperSlide key={no} style={{ height: "calc(15rem / 4)" }}>
@@ -246,7 +246,10 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
             />
           </IconImg>
           <TitleTxt>만들어질 그림 개수</TitleTxt>
-          <TotalTxt>{selectNumber * member}&nbsp;개</TotalTxt>
+          <TotalTxt>
+            <span>{selectNumber * member}</span>
+            <span>개</span>
+          </TotalTxt>
         </Notice>
       </Contents>
       <Button onClick={handleSubmit}>
@@ -439,7 +442,7 @@ const TitleTxt = styled.div`
 const TotalTxt = styled.div`
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
   color: #495057;
   text-align: center;
   font-family: GmarketSans;

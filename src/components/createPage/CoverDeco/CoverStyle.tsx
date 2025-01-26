@@ -133,14 +133,14 @@ export default function CoverStyle({
     }
   }, [fonts]);
 
-  const handleImageClick = (index: number) => {
+  /*const handleImageClick = (index: number) => {
     setImageIndex(index);
-  };
+  };*/
 
   //Cover 변경
   useEffect(() => {
-    setSelectedImageIndex(ImageIndex);
     setBackgroundImage(coverTypes[ImageIndex]?.editImageUrl);
+    setSelectedImageIndex(ImageIndex);
   }, [ImageIndex, coverTypes]);
 
   // 폰트 바를 클릭할 때 input에 포커스를 유지시켜 키보드가 내려가지 않도록 하기
@@ -383,7 +383,7 @@ export default function CoverStyle({
         <ImageContainer>
           {coverTypes.map((coverType, index) => (
             <Image
-              onClick={() => handleImageClick(index)}
+              onClick={() => setImageIndex(index)}
               $clicked={ImageIndex === index}
               key={index}
               $img={
