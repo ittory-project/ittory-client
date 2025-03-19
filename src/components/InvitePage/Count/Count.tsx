@@ -247,8 +247,10 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           </IconImg>
           <TitleTxt>만들어질 그림 개수</TitleTxt>
           <TotalTxt>
-            <span>{selectNumber * member}</span>
-            <span>개</span>
+            <span style={{ fontFamily: "GmarketSans", marginTop: "2.8px" }}>
+              {selectNumber * member}
+            </span>
+            <span style={{ fontFamily: "SUIT" }}>개</span>
           </TotalTxt>
         </Notice>
       </Contents>
@@ -445,7 +447,6 @@ const TotalTxt = styled.div`
   gap: 2px;
   color: #495057;
   text-align: center;
-  font-family: GmarketSans;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
