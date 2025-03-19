@@ -281,7 +281,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                       style={{
                         width: "14px",
                         height: "12px",
-                        marginBottom: "1px",
                       }}
                     />
                     방장이 이어 쓸 횟수를 정하면 편지가 시작돼요!
@@ -645,7 +644,7 @@ const BoxContainer = styled.div`
   flex-direction: column;
   align-items: center; //수직
   justify-content: center; //수평
-  margin-top: 16px;
+  margin-top: 17px;
 `;
 const PinArea = styled.div`
   display: flex;
