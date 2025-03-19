@@ -30,6 +30,17 @@ export const LoadingPage = () => {
     };
   }, [navigate]);
 
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    window.history.replaceState(null, "", window.location.href);
+
+    window.addEventListener("popstate", handleGoBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, [location]);
+
   return (
     <div>
       <Loading />
