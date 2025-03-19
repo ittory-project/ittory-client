@@ -392,7 +392,7 @@ export const Invite = () => {
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-          {memberIndex === 0 && (
+          {memberIndex === 1 && (
             <>
               <HostUser
                 guideOpen={guideOpen}
@@ -404,7 +404,7 @@ export const Invite = () => {
               />
             </>
           )}
-          {memberIndex === 1 && (
+          {memberIndex === 0 && (
             <Member
               letterId={letterId}
               guideOpen={guideOpen}
