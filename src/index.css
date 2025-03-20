@@ -15,6 +15,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 전역 스타일 주입을 위한 CSS Variable 정의 영역 */
+:root {
+  --Color-grayscale-gray600: #868e96;
+  --Typography-family-title: SUIT;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
