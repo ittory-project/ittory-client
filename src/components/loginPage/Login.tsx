@@ -32,7 +32,7 @@ export const Login = () => {
       </LogoArea>
       <BottomArea>
         <LoginBtn onClick={kakaoLogin}>
-          <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
+          <Icon src="/assets/login/kakao_bubble.svg" alt="" />
           카카오로 시작하기
         </LoginBtn>
         <LoginDesc>
