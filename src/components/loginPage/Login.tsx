@@ -3,6 +3,11 @@ import { getKakaoCode } from "../../api/config/setToken";
 import MainLogo from "../../../public/img/main_logo.svg";
 import { useNavigate } from "react-router-dom";
 
+const 개인정보처리방침URL =
+  "https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5";
+const 서비스이용약관URL =
+  "https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47";
+
 export const Login = () => {
   const navigate = useNavigate();
 
@@ -15,42 +20,28 @@ export const Login = () => {
   };
 
   return (
-    <Container>
-      <LoginContainer>
-        <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close.svg" />
-        <Logo src={MainLogo} alt="Logo" />
-        <Desc>{"마음을 표현하는 새로운 방법!"}</Desc>
-        <LoginBtn onClick={kakaoLogin}>
-          <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
-          {"카카오로 시작하기"}
-        </LoginBtn>
-        <LoginDesc>
-          {"로그인 하시면 "}
-          <a
-            href="https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {"개인정보처리방침"}
-          </a>{" "}
-          {"과 "}
-          <a
-            href="https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {"서비스이용약관"}
-          </a>{" "}
-          {"에 동의하게 됩니다."}
-        </LoginDesc>
-      </LoginContainer>
-    </Container>
+    <LoginContainer>
+      <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close.svg" />
+      <Logo src={MainLogo} alt="Logo" />
+      <Desc>마음을 표현하는 새로운 방법!</Desc>
+      <LoginBtn onClick={kakaoLogin}>
+        <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
+        카카오로 시작하기
+      </LoginBtn>
+      <LoginDesc>
+        로그인 하시면{" "}
+        <a href={개인정보처리방침URL} target="_blank" rel="noopener noreferrer">
+          개인정보처리방침
+        </a>
+        과{" "}
+        <a href={서비스이용약관URL} target="_blank" rel="noopener noreferrer">
+          서비스이용약관
+        </a>{" "}
+        에 동의하게 됩니다.
+      </LoginDesc>
+    </LoginContainer>
   );
 };
-
-const Container = styled.div`
-  height: calc(var(--vh, 1vh) * 100);
-`;
 
 const LoginContainer = styled.div`
   display: flex;
