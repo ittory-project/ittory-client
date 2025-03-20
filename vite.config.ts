@@ -8,6 +8,9 @@ export default defineConfig({
   define: {
     global: "window",
   },
+  server: {
+    allowedHosts: ["dev-client.ittory.co.kr"],
+  },
   // build: {
   // outDir: 'build',
   // emptyOutDir: true,
