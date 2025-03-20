@@ -47,31 +47,38 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           {/* 참여자 수가 제대로 불러와지지 않음 - 임시방편: writeOrderList.length 값 넣음 */}
           {String(writeOrderList?.length)}명의 참여자가
           <br />
-          <span style={{ color: "#FFA256" }}>{String(repeatCount)}번씩</span> 이어 쓸 거예요!
+          <span style={{ color: "#FFA256" }}>
+            {String(repeatCount)}번씩
+          </span>{" "}
+          이어 쓸 거예요!
         </PopupTitle>
         <PopupTitleDetail>
           총 {String(elementCount)}개의 그림이 생성돼요
         </PopupTitleDetail>
         <PopupList>
-          {writeOrderList && writeOrderList.length > 1 ?
+          {writeOrderList && writeOrderList.length > 1 ? (
             <PopupListTitle>작성 순서</PopupListTitle>
-            : <div style={{ padding: '3px' }}></div>
-          }
+          ) : (
+            <div style={{ padding: "3px" }}></div>
+          )}
           {writeOrderList ? (
             <List>
-              {writeOrderList.length > 1 &&
+              {writeOrderList.length > 1 && (
                 <Line $itemnum={Number(writeOrderList.length)} />
-              }
+              )}
               {writeOrderList
                 .slice()
                 .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
                 .map((participant) => (
                   <ListItem key={participant.sequence}>
-                    {writeOrderList.length > 1 &&
+                    {writeOrderList.length > 1 && (
                       <ListNumber>{participant.sequence}</ListNumber>
-                    }
+                    )}
                     <Avatar
-                      src={participant.imageUrl || "/assets/common/profile_bunny.svg"}
+                      src={
+                        participant.imageUrl ||
+                        "/assets/common/profile_bunny.svg"
+                      }
                       alt={participant.nickname}
                     />
                     <Name>{participant.nickname}</Name>
@@ -251,7 +258,7 @@ const ClockIcon = styled.img`
 const ClockText = styled.div`
   margin: 16px 0px 0px 0px;
   display: flex;
-  color: var(--Color-secondary-soft_navy_blue, #99ADC9);
+  color: var(--Color-secondary-soft_navy_blue, #99adc9);
 
   /* caption/xsmall_bold */
   font-family: var(--Typography-family-caption, SUIT);

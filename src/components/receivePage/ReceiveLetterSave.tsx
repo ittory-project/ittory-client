@@ -1,18 +1,23 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 interface LetterContentProps {
-  handleSaveLetter: () => Promise<void>
+  handleSaveLetter: () => Promise<void>;
 }
 
 export const ReceiveLetterSave = ({ handleSaveLetter }: LetterContentProps) => {
-
   return (
     <>
-      <ProductLeftSide src='/img/cover/left.png' />
-      <ProductRightSide src='/img/cover/product_no_background.svg' />
-      <Content>받은 편지를<br/>간직하고 싶다면?</Content>
-      <ContentImg src='/img/letter_save_contents.svg'/>
-      <ContentSaveBtn onClick={handleSaveLetter}>편지함에 보관하기</ContentSaveBtn>
+      <ProductLeftSide src="/img/cover/left.png" />
+      <ProductRightSide src="/img/cover/product_no_background.svg" />
+      <Content>
+        받은 편지를
+        <br />
+        간직하고 싶다면?
+      </Content>
+      <ContentImg src="/img/letter_save_contents.svg" />
+      <ContentSaveBtn onClick={handleSaveLetter}>
+        편지함에 보관하기
+      </ContentSaveBtn>
     </>
   );
 };
@@ -45,7 +50,7 @@ const ContentImg = styled.img`
 `;
 
 const Content = styled.div`
-  color: #343A40;
+  color: #343a40;
   text-align: center;
   width: 150px;
 
@@ -55,7 +60,7 @@ const Content = styled.div`
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.5px;
-  
+
   position: absolute;
   top: 15%;
   left: 50%;
@@ -71,16 +76,18 @@ const ContentSaveBtn = styled.div`
   align-items: center;
   gap: 8px;
 
-  color: #FFF;
+  color: #fff;
   border-radius: 50px;
-  background: #343A40;
-  box-shadow: -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset;
+  background: #343a40;
+  box-shadow:
+    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
+    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 
   font-family: var(--Typography-family-body, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: 20px; 
+  line-height: 20px;
   letter-spacing: -0.5px;
 
   position: absolute;

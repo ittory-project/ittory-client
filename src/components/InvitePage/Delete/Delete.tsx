@@ -41,7 +41,7 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
         },
         (error) => {
           console.error("삭제 실패:", error);
-        }
+        },
       );
       endLetterWs(letterId);
       console.log(response);

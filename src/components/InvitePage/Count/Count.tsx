@@ -41,7 +41,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
     5: bg5,
   };
   const [background, setBackground] = useState<string | null>(
-    backgroundImages[coverId] || null
+    backgroundImages[coverId] || null,
   );
 
   useEffect(() => {
@@ -368,7 +368,7 @@ const SlideContent = styled.div<SlideContentProps>`
   opacity: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
-      ($index - $activeIndex + $totalSlides) % $totalSlides
+      ($index - $activeIndex + $totalSlides) % $totalSlides,
     );
 
     if (distance === 0) {
@@ -381,7 +381,7 @@ const SlideContent = styled.div<SlideContentProps>`
   letter-spacing: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
-      ($index - $activeIndex + $totalSlides) % $totalSlides
+      ($index - $activeIndex + $totalSlides) % $totalSlides,
     );
 
     if (distance === 0) {
@@ -394,7 +394,7 @@ const SlideContent = styled.div<SlideContentProps>`
   font-size: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
-      ($index - $activeIndex + $totalSlides) % $totalSlides
+      ($index - $activeIndex + $totalSlides) % $totalSlides,
     );
 
     if (distance === 0) {

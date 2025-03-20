@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({ text, color, onClick }) => {
 
 export default Button;
 
-const Btn = styled.div<{color: string}>`
+const Btn = styled.div<{ color: string }>`
   background-color: ${(props) => props.color};
   color: #000;
   width: 100%;
@@ -31,8 +31,8 @@ const Btn = styled.div<{color: string}>`
 
   border: solid rgba(100, 100, 100, 0.3);
   border-top-color: rgba(255, 255, 255, 0.3);
-  border-top-width : 2px;
-  border-right-width : 2px;
-  border-bottom-width : 2px;
-  border-left-width : 0px;
+  border-top-width: 2px;
+  border-right-width: 2px;
+  border-bottom-width: 2px;
+  border-left-width: 0px;
 `;

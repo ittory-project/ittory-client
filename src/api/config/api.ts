@@ -60,7 +60,7 @@ const responseHandler = (response: AxiosResponse): Promise<AxiosResponse> => {
 };
 
 const errorHandler = (
-  error: AxiosError<BaseResponse<any>> | Error
+  error: AxiosError<BaseResponse<any>> | Error,
 ): Promise<AxiosError> => {
   if (axios.isAxiosError(error)) {
     console.error(`${error}\n${error.config?.method}: ${error.config?.url}`);

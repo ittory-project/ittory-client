@@ -253,7 +253,7 @@ export const Invite = () => {
         console.log("Received message:", message);
         try {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
-            message.body
+            message.body,
           );
 
           if (
@@ -268,7 +268,7 @@ export const Invite = () => {
               console.log(participants);
               if (participants[0]) {
                 setHostAlert(
-                  `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`
+                  `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
                 );
               }
             } else {

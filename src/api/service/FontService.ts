@@ -8,7 +8,7 @@ import { Font } from "../model/FontModel";
 // response: FontGetResponse
 export async function getFontById(fontId: number): Promise<FontGetResponse> {
   const response: ApiResponse<FontGetResponse> = await api.get(
-    `/api/font/${fontId}`
+    `/api/font/${fontId}`,
   );
   return response.data.data;
 }

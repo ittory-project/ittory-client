@@ -20,17 +20,17 @@ export const WriteOrderPopover: React.FC<PopoverProps> = ({
         </ButtonContainer>
         {writeOrderList ? (
           <PopupList>
-            {writeOrderList.length > 1 &&
+            {writeOrderList.length > 1 && (
               <Line $itemnum={Number(writeOrderList.length)} />
-            }
+            )}
             {writeOrderList
               .slice()
               .sort((a, b) => a.sequence - b.sequence)
               .map((participant) => (
                 <ListItem key={participant.sequence}>
-                  {writeOrderList.length > 1 &&
+                  {writeOrderList.length > 1 && (
                     <ListNumber>{participant.sequence}</ListNumber>
-                  }
+                  )}
                   <Avatar
                     src={participant.imageUrl || defaultImg}
                     alt={participant.nickname}

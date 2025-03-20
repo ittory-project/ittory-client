@@ -91,7 +91,7 @@ export const WriteOrder = ({ letterId }: Props) => {
         console.log("Received message:", message);
         try {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
-            message.body
+            message.body,
           );
           console.log(response);
 

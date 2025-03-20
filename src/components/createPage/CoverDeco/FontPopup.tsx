@@ -30,7 +30,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
       selectfid,
       handlePopupClick,
     },
-    ref
+    ref,
   ) => {
     const [selected, setSelected] = useState<string>("");
     const [selectId, setSelectId] = useState<number>(1);
@@ -120,7 +120,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
         </BackGround>
       </div>
     );
-  }
+  },
 );
 
 export default FontPopup;

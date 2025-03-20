@@ -48,7 +48,7 @@ export const Connection = () => {
     5: bg5,
   };*/
   const [topBackground, setTopBackground] = useState<string | null>(
-    location.state.bg || null
+    location.state.bg || null,
   );
   console.log(topBackground);
 

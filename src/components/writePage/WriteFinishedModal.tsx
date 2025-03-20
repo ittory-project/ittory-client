@@ -5,37 +5,33 @@ import styled from "styled-components";
 import { postPartiLetterBox } from "../../api/service/LetterBoxService";
 
 interface FinishModalProps {
-  isFirstUser: boolean
+  isFirstUser: boolean;
 }
 
 export const WriteFinishedModal = ({ isFirstUser }: FinishModalProps) => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  
+
   const storeNowLetter = async () => {
-    const response: boolean = await postPartiLetterBox(letterNumId)
+    const response: boolean = await postPartiLetterBox(letterNumId);
     if (response) {
-      console.log('저장 성공')
+      console.log("저장 성공");
     } else {
-      console.log('저장 실패')
+      console.log("저장 실패");
     }
-  }
+  };
   useEffect(() => {
-    console.log("저장할 유저인가?: ", isFirstUser)
+    console.log("저장할 유저인가?: ", isFirstUser);
     if (isFirstUser) {
-      storeNowLetter()
+      storeNowLetter();
     }
-  }, [])
+  }, []);
 
   return (
     <Overlay>
       <Popup>
-        <PopupTitle>
-          {`편지 작성이 끝났어요!`}
-        </PopupTitle>
-        <PopupTitleDetail>
-          {`잠시만 기다려 주세요`}
-        </PopupTitleDetail>
+        <PopupTitle>{`편지 작성이 끝났어요!`}</PopupTitle>
+        <PopupTitleDetail>{`잠시만 기다려 주세요`}</PopupTitleDetail>
         <PopupMessage>
           <MessageImg src="/img/write_letter_order.png" />
           {`편지 생성 중 ...`}
@@ -67,9 +63,11 @@ const Popup = styled.div`
   align-items: center;
   gap: 16px;
   border-radius: var(--Border-Radius-radius_500, 16px);
-  border: 3px solid var(--Color-secondary-soft_blue, #D3EDFF);
-  background: linear-gradient(0deg, #FDFDFD 62.65%, #CAF2FE 98.8%);
-  box-shadow: 0px 4px 0px 0px rgba(195, 241, 255, 0.80) inset, 0px -4px 0px 0px rgba(0, 0, 0, 0.10) inset;
+  border: 3px solid var(--Color-secondary-soft_blue, #d3edff);
+  background: linear-gradient(0deg, #fdfdfd 62.65%, #caf2fe 98.8%);
+  box-shadow:
+    0px 4px 0px 0px rgba(195, 241, 255, 0.8) inset,
+    0px -4px 0px 0px rgba(0, 0, 0, 0.1) inset;
 `;
 
 const PopupTitle = styled.div`
@@ -86,7 +84,7 @@ const PopupTitle = styled.div`
 `;
 
 const PopupTitleDetail = styled.div`
-  color: var(--Color-grayscale-gray600, #868E96);
+  color: var(--Color-grayscale-gray600, #868e96);
   text-align: center;
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
@@ -97,7 +95,7 @@ const PopupTitleDetail = styled.div`
 `;
 
 const PopupMessage = styled.div`
-  color: var(--Color-secondary-blue, #4DB4FF);
+  color: var(--Color-secondary-blue, #4db4ff);
   text-align: center;
 
   /* caption/xsmall_medium */
@@ -109,13 +107,13 @@ const PopupMessage = styled.div`
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 
   border-radius: var(--Border-Radius-radius_500, 16px);
-  border: 3px solid var(--Color-secondary-soft_blue, #D3EDFF);
-  background: linear-gradient(0deg, #FDFDFD 62.65%, #CAF2FE 98.8%);
-  color: #4DB4FF;
+  border: 3px solid var(--Color-secondary-soft_blue, #d3edff);
+  background: linear-gradient(0deg, #fdfdfd 62.65%, #caf2fe 98.8%);
+  color: #4db4ff;
 
   border-radius: 100px;
-  border: 1px solid var(--Color-grayscale-gray200, #E9ECEF);
-  background: #FFF;
+  border: 1px solid var(--Color-grayscale-gray200, #e9ecef);
+  background: #fff;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
 
   display: flex;

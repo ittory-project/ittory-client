@@ -68,7 +68,7 @@ export default function UserFinishModal({
         const adjustedDeliverDay = new Date(deliverDay);
         adjustedDeliverDay.setMinutes(
           adjustedDeliverDay.getMinutes() -
-            adjustedDeliverDay.getTimezoneOffset()
+            adjustedDeliverDay.getTimezoneOffset(),
         );
 
         // UTC로 변환된 날짜를 출력 (하루 전 문제 해결)
@@ -79,7 +79,7 @@ export default function UserFinishModal({
     changeType();
   }, [deliverDay]);
 
-  const handleNickname = async (letterId: Number) => {
+  const handleNickname = async (letterId: number) => {
     if (myName) {
       const requestBody: NicknamePostRequest = {
         nickname: myName,
@@ -89,7 +89,7 @@ export default function UserFinishModal({
     }
   };
 
-  const fetchEnter = async (letterId: Number) => {
+  const fetchEnter = async (letterId: number) => {
     try {
       const enterresponse = await postEnter(Number(letterId));
       console.log(enterresponse);

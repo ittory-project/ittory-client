@@ -62,7 +62,7 @@ export const UserGuide = ({ setGuide }: Props) => {
                 <Blue key={index} src={blue} />
               ) : (
                 <Gray key={index} src={gray} />
-              )
+              ),
             )}
           </BubbleContainer>
           {currentIndex < guides.length - 1 ? (

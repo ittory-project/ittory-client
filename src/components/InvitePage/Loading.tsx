@@ -52,7 +52,7 @@ export const Loading = ({ loadstatus }: Props) => {
   }, []);
 
   const fetchData = async () => {
-    let attempts = 0; // 시도 횟수
+    const attempts = 0; // 시도 횟수
     let data = []; // 데이터를 담을 변수
 
     // 로컬스토리지에서 값 가져오기

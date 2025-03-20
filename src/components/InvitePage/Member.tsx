@@ -343,7 +343,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                                 )}
                               </User>
                             </InvitedUser>
-                          )
+                          ),
                         )}
 
                         {items.length < 5 ? (

@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import styled, { css, keyframes } from 'styled-components';
-import { DoorAnimation } from './DoorAnimation';
+import { useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import styled, { css, keyframes } from "styled-components";
+import { DoorAnimation } from "./DoorAnimation";
 
 function Query() {
   return new URLSearchParams(useLocation().search);
@@ -10,16 +10,16 @@ function Query() {
 const Receive = () => {
   const { letterId } = useParams();
   const query = Query();
-  const receiver = String(query.get("to"))
+  const receiver = String(query.get("to"));
   const [expanded, setExpanded] = useState(false);
   const [showDoorAnimation, setShowDoorAnimation] = useState(false);
-  const [hideDoorImg, setHideDoorImg] = useState(false); 
+  const [hideDoorImg, setHideDoorImg] = useState(false);
 
   // 애니메이션 실행 후 1.5초 이후에 2번째 애니메이션 화면 상태(setHideDoorImg)로 넘어감
   const handleClick = () => {
     setExpanded(true);
     setTimeout(() => {
-      setHideDoorImg(true); 
+      setHideDoorImg(true);
     }, 1500);
   };
 
@@ -27,45 +27,50 @@ const Receive = () => {
     setShowDoorAnimation(true);
   };
 
-  return ( letterId ?
+  return letterId ? (
     <>
       {showDoorAnimation ? (
-        <DoorAnimation letterId={letterId}/>
+        <DoorAnimation letterId={letterId} />
       ) : (
         <Container onClick={handleClick}>
-          <DoorImg expanded={expanded}>
-          </DoorImg>
+          <DoorImg expanded={expanded}></DoorImg>
           <AnimatedDiv expanded={expanded}>
             <Img data="/img/letter_christmas_door.png" />
           </AnimatedDiv>
           {expanded ? (
             // 2번째 화면
             <div onClick={(e) => e.stopPropagation()}>
-              {hideDoorImg && 
+              {hideDoorImg && (
                 <TextBalloon>
-                  <ExpandTitle>{`${receiver}님 맞으시죠?`}<br/>편지가 도착했어요!</ExpandTitle>
-                  <BalloonUnder src='/assets/text_balloon_under.svg' />
+                  <ExpandTitle>
+                    {`${receiver}님 맞으시죠?`}
+                    <br />
+                    편지가 도착했어요!
+                  </ExpandTitle>
+                  <BalloonUnder src="/assets/text_balloon_under.svg" />
                 </TextBalloon>
-              }
-              {hideDoorImg && 
-                <ExpandButton onClick={handleButtonClick} >
+              )}
+              {hideDoorImg && (
+                <ExpandButton onClick={handleButtonClick}>
                   네 맞아요!
                 </ExpandButton>
-              }
-            </div> ) : (
-              // 기존 화면
-              <>
-                <MainTitleContainer>
-                  <MainText>띵동~</MainText>
-                  <MainTitle>{`${receiver}님에게 편지가 도착했어요`}</MainTitle>
-                </MainTitleContainer>
-                <MainInfo>문을 터치해 보세요</MainInfo>
-              </>
-            )
-          }
+              )}
+            </div>
+          ) : (
+            // 기존 화면
+            <>
+              <MainTitleContainer>
+                <MainText>띵동~</MainText>
+                <MainTitle>{`${receiver}님에게 편지가 도착했어요`}</MainTitle>
+              </MainTitleContainer>
+              <MainInfo>문을 터치해 보세요</MainInfo>
+            </>
+          )}
         </Container>
       )}
-    </> : <>조회할 수 없는 편지입니다.</>
+    </>
+  ) : (
+    <>조회할 수 없는 편지입니다.</>
   );
 };
 
@@ -126,14 +131,14 @@ const AnimatedDiv = styled.div<{ expanded: boolean }>`
   position: absolute;
   top: 50%;
   transition: all 2s ease;
-  filter: ${({ expanded }) => (expanded ? 'none' : 'blur(2px)')};
+  filter: ${({ expanded }) => (expanded ? "none" : "blur(2px)")};
 
   ${({ expanded }) =>
     expanded &&
     css`
       animation: ${expandAnimation} 2s forwards;
       transform-origin: center;
-  `}
+    `}
 `;
 
 const Img = styled.object`
@@ -142,18 +147,18 @@ const Img = styled.object`
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid transparent;
-  box-shadow: 0 0 0 2px #1C2231;
+  box-shadow: 0 0 0 2px #1c2231;
 `;
 
 const MainTitle = styled.div`
   font-size: 16px;
-  color: #F8F9FA;
+  color: #f8f9fa;
   text-align: center;
   transition: all 2s ease;
   width: 147px;
   margin-top: 10px;
 
-  color: #F8F9FA;
+  color: #f8f9fa;
   text-align: center;
 
   font-family: var(--Typography-family-heading, SUIT);
@@ -165,7 +170,7 @@ const MainTitle = styled.div`
 `;
 
 const MainText = styled.div`
-  color: #ADB5BD;
+  color: #adb5bd;
   text-align: center;
 
   /* body/small */
@@ -175,12 +180,12 @@ const MainText = styled.div`
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.5px;
-`
+`;
 
 const MainTitleContainer = styled.div`
   position: absolute;
   top: 7%;
-`
+`;
 
 const MainInfo = styled.div`
   padding: 5px 10px;
@@ -191,7 +196,7 @@ const MainInfo = styled.div`
   bottom: 40px;
   z-index: 2;
 
-  color: #FCFFAF;
+  color: #fcffaf;
   text-align: center;
   text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.25);
 
@@ -229,8 +234,8 @@ const ExpandTitle = styled.div`
 `;
 
 const BalloonUnder = styled.img`
-  display: block; 
-  margin: 0 auto; 
+  display: block;
+  margin: 0 auto;
 `;
 
 const ExpandButton = styled.div`

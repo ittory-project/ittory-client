@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 interface PaginationProps {
-    totalPages: number;
+  totalPages: number;
 }
 
 function Query() {
-    return new URLSearchParams(useLocation().search);
+  return new URLSearchParams(useLocation().search);
 }
 
 export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
@@ -16,30 +16,38 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
   const query = Query();
 
   useEffect(() => {
-    const getPage = Number(query.get("page"))
+    const getPage = Number(query.get("page"));
     if (getPage) {
-      setCurrentPage(getPage)
+      setCurrentPage(getPage);
     } else {
-      setCurrentPage(1)
+      setCurrentPage(1);
     }
   }, [query]);
 
   const onPageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
-    query.set('page', page.toString());
+    query.set("page", page.toString());
     navigate({
       search: query.toString(),
     });
   };
-  
+
   return (
     <PaginationContainer>
-      <PaginationButton onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
-        <img src='/assets/arrow_back_black.svg' />
+      <PaginationButton
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        <img src="/assets/arrow_back_black.svg" />
       </PaginationButton>
-      <PaginationText>{currentPage}/{totalPages}</PaginationText>
-      <PaginationButton onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-        <img src='/assets/arrow_next_black.svg' />
+      <PaginationText>
+        {currentPage}/{totalPages}
+      </PaginationText>
+      <PaginationButton
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        <img src="/assets/arrow_next_black.svg" />
       </PaginationButton>
     </PaginationContainer>
   );
@@ -57,12 +65,12 @@ const PaginationButton = styled.button`
   border: none;
   style: none;
   cursor: pointer;
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   &:active {
     color: #000;
   }
@@ -78,14 +86,15 @@ const PaginationText = styled.span`
   font-size: 18px;
   color: #333;
   display: flex;
-  padding: var(--Border-Radius-radius_200, 6px) var(--Border-Radius-radius_300, 8px);
+  padding: var(--Border-Radius-radius_200, 6px)
+    var(--Border-Radius-radius_300, 8px);
   justify-content: center;
   align-items: center;
   gap: 10px;
   border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: rgba(248, 249, 250, 0.50);
+  background: rgba(248, 249, 250, 0.5);
   backdrop-filter: blur(2px);
-  color: var(--Color-secondary-navy, #1C2231);
+  color: var(--Color-secondary-navy, #1c2231);
   text-align: center;
 
   /* caption/number_large */

@@ -61,7 +61,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
   };
 
   const handleOtherReasonChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const value = e.target.value;
     if (value.length <= 100) {

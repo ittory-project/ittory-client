@@ -66,7 +66,7 @@ const Book: React.FC<BookProps> = React.memo(
         {children}
       </div>
     );
-  }
+  },
 );
 export default function CoverStyle({
   setViewCoverDeco,
@@ -210,7 +210,7 @@ export default function CoverStyle({
         if (originalImage !== "") {
           //Blob으로 변경
           const responseBlob = await fetch(originalImage).then((res) =>
-            res.blob()
+            res.blob(),
           );
           console.log(responseBlob);
 
@@ -242,7 +242,7 @@ export default function CoverStyle({
             if (axios.isAxiosError(error)) {
               console.error(
                 "Error uploading image: ",
-                error.response?.data || (error as Error).message // 타입 단언 추가
+                error.response?.data || (error as Error).message, // 타입 단언 추가
               );
             } else {
               console.error("Unexpected error: ", error);
@@ -267,7 +267,7 @@ export default function CoverStyle({
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
     },
-    []
+    [],
   );
 
   const onUploadImageButtonClick = useCallback(() => {

@@ -20,7 +20,7 @@ export const ReceiveLetterCover = ({
     .join(", ");
 
   const handleImageError = (
-    event: React.SyntheticEvent<HTMLImageElement, Event>
+    event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
     event.currentTarget.src = "/img/profile.png";
   };
@@ -41,7 +41,10 @@ export const ReceiveLetterCover = ({
             onError={handleImageError}
           />
         </PhotoDiv>
-        <DescriptionDiv $coverId={letterStyle.id} $fonttype={letterFontStyle.name}>
+        <DescriptionDiv
+          $coverId={letterStyle.id}
+          $fonttype={letterFontStyle.name}
+        >
           {partiList}
         </DescriptionDiv>
       </CoverContent>

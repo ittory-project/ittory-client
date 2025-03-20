@@ -65,7 +65,7 @@ export default function CoverModal({
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [backgroundImage, setBackgroundImage] = useState<string>(
-    String(backgroundimage)
+    String(backgroundimage),
   );
   const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -194,7 +194,7 @@ export default function CoverModal({
         if (originalImage !== "") {
           //Blob으로 변경
           const responseBlob = await fetch(originalImage).then((res) =>
-            res.blob()
+            res.blob(),
           );
           console.log(responseBlob);
 
@@ -226,7 +226,7 @@ export default function CoverModal({
             if (axios.isAxiosError(error)) {
               console.error(
                 "Error uploading image: ",
-                error.response?.data || (error as Error).message // 타입 단언 추가
+                error.response?.data || (error as Error).message, // 타입 단언 추가
               );
             } else {
               console.error("Unexpected error: ", error);
@@ -251,7 +251,7 @@ export default function CoverModal({
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
     },
-    []
+    [],
   );
 
   const onUploadImageButtonClick = useCallback(() => {

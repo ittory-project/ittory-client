@@ -51,7 +51,7 @@ export default function Calender({
           <Disabled
             key={format(day, "yyyy-MM-dd")}
             style={{ marginRight: i === 6 ? "0" : "5.8%" }}
-          ></Disabled>
+          ></Disabled>,
         );
       } else if (deliverDay && isSameDay(day, deliverDay)) {
         days.push(
@@ -70,7 +70,7 @@ export default function Calender({
               <circle cx="15" cy="15" r="15" fill="#FFA256" />
             </svg>
             <Txt style={{ color: "#FFF" }}>{formattedDate}</Txt>
-          </Selected>
+          </Selected>,
         );
       } else if (selectedDate && isSameDay(day, selectedDate)) {
         days.push(
@@ -89,7 +89,7 @@ export default function Calender({
               <circle cx="15" cy="15" r="15" fill="#FFA256" />
             </svg>
             <Txt style={{ color: "#FFF" }}>{formattedDate}</Txt>
-          </Selected>
+          </Selected>,
         );
       } else if (format(day, "yyyy-MM-dd") < format(current, "yyyy-MM-dd")) {
         days.push(
@@ -98,7 +98,7 @@ export default function Calender({
             style={{ marginRight: i === 6 ? "0" : "5.8%" }}
           >
             <Txt style={{ color: "#DEE2E6" }}>{formattedDate}</Txt>
-          </Disabled>
+          </Disabled>,
         );
       } else {
         days.push(
@@ -108,7 +108,7 @@ export default function Calender({
             style={{ marginRight: i === 6 ? "0" : "5.8%" }}
           >
             <Txt style={{ color: "#000000" }}>{formattedDate}</Txt>
-          </Valid>
+          </Valid>,
         );
       }
 
@@ -121,7 +121,7 @@ export default function Calender({
         style={{ height: "30px", marginBottom: "10px" }}
       >
         {days}
-      </div>
+      </div>,
     );
     console.log(rows);
     days = [];

@@ -1,12 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-
-
+import React from "react";
+import styled from "styled-components";
 
 export const WriteOrderFinalItem: React.FC = () => {
   return (
     <Wrapper>
-      <Icon src='/assets/write/final_flag.svg' alt='hi' />
+      <Icon src="/assets/write/final_flag.svg" alt="hi" />
       <Content>FINISH!</Content>
     </Wrapper>
   );
@@ -31,7 +29,7 @@ const Icon = styled.img`
 `;
 
 const Content = styled.div`
-  color: var(--Color-primary-orange, #FFA256);
+  color: var(--Color-primary-orange, #ffa256);
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 18px);
   font-style: normal;
