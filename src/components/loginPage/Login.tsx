@@ -21,11 +21,9 @@ export const Login = () => {
 
   return (
     <LoginContainer>
-      <CloseBtn
-        onClick={handleCloseBtn}
-        src="/assets/btn_close.svg"
-        role="button"
-      />
+      <CloseBtn onClick={handleCloseBtn}>
+        <span className="visually-hidden">닫기</span>
+      </CloseBtn>
       <LogoArea>
         <LogoImage src={MainLogo} alt="Logo" />
         <LogoDescription>마음을 표현하는 새로운 방법!</LogoDescription>
@@ -63,15 +61,18 @@ const LoginContainer = styled.div`
   font-family: var(--Typography-family-title);
 `;
 
-// TODO: svg icon 사용
-// TODO: stylelint 사용? (스타일 속성 간 정렬)
-const CloseBtn = styled.img`
+const CloseBtn = styled.button`
   height: 20px;
   width: 20px;
 
   position: absolute;
   top: 12px;
   right: 16px;
+
+  background: url("/assets/btn_close.svg") no-repeat center;
+  padding: 0;
+  border: none;
+  background-size: contain;
 `;
 
 const LogoArea = styled.div`
@@ -114,7 +115,6 @@ const Icon = styled.img`
   margin-right: 8px;
 `;
 
-// TODO: button 컴포넌트 공통화
 const LoginBtn = styled.button`
   height: 48px;
   width: 100%;
@@ -147,7 +147,6 @@ const LoginDesc = styled.div`
     text-decoration: underline;
     cursor: pointer;
 
-    // Q. 로그인 페이지 디자인에 hover 색상이 없던 것 같은데 정의된 위치(Figma URL)?
     &:hover {
       color: #495057;
     }
