@@ -3,86 +3,110 @@ import { getKakaoCode } from "../../api/config/setToken";
 import MainLogo from "../../../public/img/main_logo.svg";
 import { useNavigate } from "react-router-dom";
 
+const 개인정보처리방침URL =
+  "https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5";
+const 서비스이용약관URL =
+  "https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47";
+
 export const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleCloseBtn = () => {
-    navigate('/')
-  }
+    navigate("/");
+  };
 
   const kakaoLogin = () => {
     getKakaoCode();
   };
 
   return (
-    <Container>
-      <LoginContainer>
-        <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close.svg" />
-        <Logo src={MainLogo} alt="Logo" />
-        <Desc>{"마음을 표현하는 새로운 방법!"}</Desc>
+    <LoginContainer>
+      <CloseBtn onClick={handleCloseBtn}>
+        <span className="visually-hidden">닫기</span>
+      </CloseBtn>
+      <LogoArea>
+        <LogoImage src={MainLogo} alt="Logo" />
+        <LogoDescription>마음을 표현하는 새로운 방법!</LogoDescription>
+      </LogoArea>
+      <BottomArea>
         <LoginBtn onClick={kakaoLogin}>
-          <Icon src="/assets/kakao_logo.png" alt="Login Icon" />
-          {"카카오로 시작하기"}
+          <Icon src="/assets/login/kakao_bubble.svg" alt="" />
+          카카오로 시작하기
         </LoginBtn>
         <LoginDesc>
-          {"로그인 하시면 "}
+          로그인 하시면{" "}
           <a
-            href="https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5"
+            href={개인정보처리방침URL}
             target="_blank"
             rel="noopener noreferrer"
           >
-            {"개인정보처리방침"}
-          </a>{" "}
-          {"과 "}
-          <a
-            href="https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {"서비스이용약관"}
-          </a>{" "}
-          {"에 동의하게 됩니다."}
+            개인정보처리방침
+          </a>
+          과{" "}
+          <a href={서비스이용약관URL} target="_blank" rel="noopener noreferrer">
+            서비스이용약관
+          </a>
+          에 동의하게 됩니다.
         </LoginDesc>
-      </LoginContainer>
-    </Container>
+      </BottomArea>
+    </LoginContainer>
   );
 };
 
-const Container = styled.div`
-  height: calc(var(--vh, 1vh) * 100);
-`;
-
 const LoginContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
   height: 100%;
-  padding: 12px 10px;
-  box-sizing: border-box;
   background-color: white;
   position: relative;
+
+  font-family: var(--Typography-family-title);
 `;
 
-const CloseBtn = styled.img`
+const CloseBtn = styled.button`
   height: 20px;
   width: 20px;
+
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 12px;
+  right: 16px;
+
+  background: url("/assets/btn_close.svg") no-repeat center;
+  padding: 0;
+  border: none;
+  background-size: contain;
 `;
 
-const Logo = styled.img`
+const LogoArea = styled.div`
+  position: absolute;
+  top: 128px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+`;
+
+const LogoImage = styled.img`
   width: 236px;
   height: 90px;
-  margin: 50px 0px 16px;
 `;
 
-const Desc = styled.div`
+const LogoDescription = styled.div`
   font-size: 14px;
-  color: #868e96;
-  margin-bottom: 200px;
+  font-weight: 400;
+  color: var(--Color-grayscale-gray600);
+`;
+
+const BottomArea = styled.div`
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 `;
 
 const Icon = styled.img`
@@ -92,34 +116,39 @@ const Icon = styled.img`
 `;
 
 const LoginBtn = styled.button`
-  width: 288px;
-  max-width: 400px;
   height: 48px;
+  width: 100%;
+  max-width: 288px;
+
   background-color: #fee500;
+
+  font-weight: bold;
+  font-size: 16px;
   color: black;
+
   border: none;
   border-radius: 2rem;
   padding: 0 20px;
-  cursor: pointer;
-  font-size: 16px;
-  margin: 0 auto 16px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const LoginDesc = styled.div`
+  width: 100%;
+  max-width: 288px;
+
   font-size: 12px;
-  color: #868E96;
-  max-width: 300px;
-  margin-top: 10px;
+  color: var(--Color-grayscale-gray600);
 
   a {
-    color: #868E96;
+    color: var(--Color-grayscale-gray600);
+
     text-decoration: underline;
     cursor: pointer;
-  
+
     &:hover {
-    color: #495057;
+      color: #495057;
+    }
   }
 `;

@@ -15,6 +15,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 전역 스타일 주입을 위한 CSS Variable 정의 영역 */
+:root {
+  --Color-grayscale-gray600: #868e96;
+  --Typography-family-title: SUIT;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -94,4 +100,18 @@ button:focus-visible {
     format("woff2");
   font-weight: normal;
   font-style: normal;
+}
+
+/* 웹 접근성 전용 스타일 */
+.visually-hidden,
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
