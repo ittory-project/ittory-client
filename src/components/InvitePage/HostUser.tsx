@@ -341,7 +341,7 @@ export const HostUser = ({
                           )}
                         </User>
                       </InvitedUser>
-                    )
+                    ),
                   )}
 
                   {items.length < 5 ? (

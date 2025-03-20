@@ -57,7 +57,7 @@ export const Home = () => {
       (entries) => {
         entries.forEach((entry) => {
           const index = sectionRefs.current.indexOf(
-            entry.target as HTMLDivElement
+            entry.target as HTMLDivElement,
           );
           if (entry.isIntersecting) {
             if (index === 0) {
@@ -70,7 +70,7 @@ export const Home = () => {
           }
         });
       },
-      { threshold: 0.15 } // 요소가 50% 이상 보일 때 감지
+      { threshold: 0.15 }, // 요소가 50% 이상 보일 때 감지
     );
 
     sectionRefs.current.forEach((section) => {

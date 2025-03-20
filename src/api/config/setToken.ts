@@ -22,7 +22,7 @@ interface KakaoTokenResponse {
 
 // 카카오 토큰 받기
 export const getKakaoToken = async (
-  code: string
+  code: string,
 ): Promise<AuthJwtPostResponse | null> => {
   try {
     const response = await axios.post<KakaoTokenResponse>(
@@ -38,7 +38,7 @@ export const getKakaoToken = async (
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-      }
+      },
     );
 
     const token: AuthJwtPostResponse = {

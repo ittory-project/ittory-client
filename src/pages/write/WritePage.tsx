@@ -15,30 +15,32 @@ export const WritePage = () => {
   // 불러온 편지 정보
   const [letterTitle, setLetterTitle] = useState("");
   // const [partiCount, setPartiCount] = useState<Number | null>();
-  const [repeatCount, setRepeatCount] = useState<Number | null>();
-  const [elementCount, setElementCount] = useState<Number | null>();
+  const [repeatCount, setRepeatCount] = useState<number | null>();
+  const [elementCount, setElementCount] = useState<number | null>();
   // 초기 팝업 띄우기
   const [showPopup, setShowPopup] = useState(true);
   const [showCountdown, setShowCountdown] = useState(false);
   // 편지 작성 시간 계산
   const storedResetTime = window.localStorage.getItem("resetTime");
-  const [resetTime, setResetTime] = useState<number | null>(storedResetTime ? Number(storedResetTime) : null);
+  const [resetTime, setResetTime] = useState<number | null>(
+    storedResetTime ? Number(storedResetTime) : null,
+  );
   const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
   // 편지 시작까지 남은 시간 계산
   const [startCountdown, setStartCountdown] = useState<number>(10);
 
-  const handleGoBack = ()=>{
-    window.location.href = window.location.href
-  }
-  useEffect(()=>{
-    history.pushState(null,"",window.location.href);
+  const handleGoBack = () => {
+    window.location.href = window.location.href;
+  };
+  useEffect(() => {
+    history.pushState(null, "", window.location.href);
 
     window.addEventListener("popstate", handleGoBack);
 
-    return ()=>{
-        window.removeEventListener("popstate", handleGoBack);
-    }
-  },[]);
+    return () => {
+      window.removeEventListener("popstate", handleGoBack);
+    };
+  }, []);
 
   const getStartInfo = async () => {
     if (!letterId) {
@@ -61,8 +63,8 @@ export const WritePage = () => {
   // 모달 띄우는 시간 설정
   useEffect(() => {
     if (resetTime) {
-      setShowPopup(false)
-      setShowCountdown(false)
+      setShowPopup(false);
+      setShowCountdown(false);
       return;
     }
     let countdownTimer: number;
@@ -83,17 +85,20 @@ export const WritePage = () => {
       const hideTimer = setTimeout(() => {
         setShowCountdown(false);
         setResetTime(Date.now() + 100 * 1000);
-        window.localStorage.setItem("resetTime", String(Date.now() + 100 * 1000));
+        window.localStorage.setItem(
+          "resetTime",
+          String(Date.now() + 100 * 1000),
+        );
       }, 4000);
 
       return () => {
         clearTimeout(hideTimer);
-      }
+      };
     }, 10000);
 
     return () => {
-      clearTimeout(showTimer)
-      clearTimeout(countdownTimer)
+      clearTimeout(showTimer);
+      clearTimeout(countdownTimer);
     };
   }, []);
 

@@ -5,10 +5,10 @@ import { api, ApiResponse, BaseResponse } from "../config/api";
 // response: string
 export async function postPartiLetterBox(letterId: number): Promise<boolean> {
   const response: ApiResponse<BaseResponse<string>> = await api.post(
-    `/api/letter-box/participation`, 
+    `/api/letter-box/participation`,
     {
       letterId,
-    }
+    },
   );
   return response.data.success;
 }

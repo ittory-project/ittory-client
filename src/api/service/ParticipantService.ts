@@ -8,37 +8,37 @@ import {
 } from "../model/ParticipantModel";
 
 export async function postRandom(
-  data: RandomPostRequest
+  data: RandomPostRequest,
 ): Promise<RandomPostResponse> {
   const response = await api.post<RandomPostResponse>(
     `api/participant/random`,
-    data
+    data,
   );
   return response.data;
 }
 
 export async function postNickname(
   data: NicknamePostRequest,
-  letterId: number
+  letterId: number,
 ): Promise<NicknamePostResponse> {
   try {
     const response = await api.post<BaseResponse<NicknamePostResponse>>(
       `api/participant/nickname/${letterId}`,
-      data
+      data,
     );
-    return response.data.data
+    return response.data.data;
   } catch (e) {
-    console.error(e)
-    throw e
+    console.error(e);
+    throw e;
   }
 }
 
 //닉네임 삭제
 export async function patchNickname(
-  letterId: number
+  letterId: number,
 ): Promise<NicknamePatchResponse> {
   const response = await api.patch<NicknamePatchResponse>(
-    `api/participant/nickname/${letterId}`
+    `api/participant/nickname/${letterId}`,
   );
   return response.data;
 }

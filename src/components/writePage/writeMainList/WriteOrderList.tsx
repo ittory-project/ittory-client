@@ -16,7 +16,7 @@ interface ListComponentProps {
 export const WriteOrderList: React.FC<ListComponentProps> = ({
   letterItems,
   nowItemId,
-  progressTime
+  progressTime,
 }) => {
   // 위치 버튼 누르면 해당 부분으로 이동되는 기능
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -27,7 +27,7 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({
   const movePosition = () => {
     if (nowItemId !== undefined) {
       const targetIndex = letterItems.findIndex(
-        (item) => Number(item.elementId) === nowItemId
+        (item) => Number(item.elementId) === nowItemId,
       );
       if (targetIndex !== -1 && itemRefs.current) {
         itemRefs.current[targetIndex]?.scrollIntoView({

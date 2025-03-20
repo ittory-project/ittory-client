@@ -73,12 +73,12 @@ export const Write = ({
   // 현재 작성해야 하는 편지 아이디
   const storedNowLetterId = window.localStorage.getItem("nowLetterId");
   const [nowLetterId, setNowLetterId] = useState(
-    Number(storedNowLetterId || 1)
+    Number(storedNowLetterId || 1),
   );
   // 현재 유저 순서(sequence)
   const storedNowSequence = window.localStorage.getItem("nowSequence");
   const [nowSequence, setNowSequence] = useState(
-    Number(storedNowSequence || 1)
+    Number(storedNowSequence || 1),
   );
   // 현재 반복 횟수
   const storedNowRepeat = window.localStorage.getItem("nowRepeat");
@@ -89,7 +89,7 @@ export const Write = ({
   // 현재 예정 편지 아이템 횟수
   const storedNowTotalItem = window.localStorage.getItem("nowTotalItem");
   const [nowTotalItem, setNowTotalItem] = useState(
-    Number(storedNowTotalItem || 1)
+    Number(storedNowTotalItem || 1),
   );
   // 총 참여자 수
   const [partiNum, setPartiNum] = useState(-1);
@@ -133,7 +133,7 @@ export const Write = ({
   }, [nowTotalItem]);
   useEffect(() => {
     setWriteOrderList(orderData);
-    console.log(orderData)
+    console.log(orderData);
   }, [orderData]);
 
   // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
@@ -146,7 +146,7 @@ export const Write = ({
     setWriteOrderList(orderData);
     // orderData의 변경 외에, 응답이 왔을 때 응답에 대한 내용을 처리하기 위함
     // response를 받았을 때
-    if (updateResponse && (remainingTime > -5)) {
+    if (updateResponse && remainingTime > -5) {
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
       setUpdateResponse(false);
@@ -161,7 +161,7 @@ export const Write = ({
       updateOrderAndLockedItems();
       setShowSubmitPage(false);
     }
-  }, [remainingTime])
+  }, [remainingTime]);
 
   // useEffect(() => {
   //   if (resetTime !== null) {
@@ -170,7 +170,7 @@ export const Write = ({
   // }, [nowLetterId]);
 
   // 편지 작성 시 이탈 처리
-  useEffect(() => {  
+  useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
         console.log("백그라운드 전환");
@@ -180,15 +180,15 @@ export const Write = ({
         if (storedResetTime && Date.now() > Number(storedResetTime)) {
           console.log("턴이 넘어가서 퇴장됨");
           clientRef.current?.deactivate();
-          setShowExitPage(true)
-          quitLetterWs(letterNumId)
+          setShowExitPage(true);
+          quitLetterWs(letterNumId);
           clientRef.current?.deactivate();
         }
       }
     };
 
     const handlePageHide = (event: PageTransitionEvent) => {
-      window.alert(event)
+      window.alert(event);
       if (!event.persisted) {
         console.log("Page hide");
         quitLetterWs(letterNumId);
@@ -200,7 +200,7 @@ export const Write = ({
     // 리스너
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("pagehide", handlePageHide);
-  
+
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("pagehide", handlePageHide);
@@ -216,7 +216,7 @@ export const Write = ({
     client.onConnect = () => {
       client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
         const response: LetterItemResponse | WsExitResponse = JSON.parse(
-          message.body
+          message.body,
         );
 
         if ("action" in response && response.action === "EXIT") {
@@ -257,7 +257,7 @@ export const Write = ({
   const updateOrderAndLockedItems = async () => {
     if (writeOrderList.length > 0) {
       const currentIndex = writeOrderList.findIndex(
-        (item) => item.sequence === nowSequence
+        (item) => item.sequence === nowSequence,
       );
       const nextIndex = (currentIndex + 1) % writeOrderList.length;
       // 상태 업데이트
@@ -267,12 +267,15 @@ export const Write = ({
         "다음 사람 인덱스: ",
         (nextIndex + 1) % partiNum,
         "다음 사람 누구 (멤버 아이디): ",
-        writeOrderList[(nextIndex + 1) % partiNum].memberId
+        writeOrderList[(nextIndex + 1) % partiNum].memberId,
       );
       setNextMemberId(writeOrderList[(nextIndex + 1) % partiNum].memberId);
       if (remainingTime <= -5) {
         setResetTime(Date.now() + 100 * 1000);
-        window.localStorage.setItem("resetTime", String(Date.now() + 100 * 1000));
+        window.localStorage.setItem(
+          "resetTime",
+          String(Date.now() + 100 * 1000),
+        );
       } else {
         setNowLetterId((prevNowLetterId) => prevNowLetterId + 1);
         if (nowLetterId >= nowTotalItem) {
@@ -283,12 +286,14 @@ export const Write = ({
   };
 
   useEffect(() => {
-    console.log(orderData)
-    console.log(writeOrderList)
+    console.log(orderData);
+    console.log(writeOrderList);
     console.log(
-      `현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`
+      `현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`,
     );
-    console.log(`다음 멤버 아이디: ${nextMemberId}, 현재 멤버 아이디: ${nowMemberId}, 나: ${Number(getUserId())}`);
+    console.log(
+      `다음 멤버 아이디: ${nextMemberId}, 현재 멤버 아이디: ${nowMemberId}, 나: ${Number(getUserId())}`,
+    );
   }, [nowSequence, nowMemberId, nowLetterId]);
 
   // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
@@ -306,10 +311,10 @@ export const Write = ({
     // 계산 로직
     console.log(`현재 작성 숫자: ${nowLetterId}`);
     console.log(
-      `현재 총 아이템 수: ${totalItem - ((totalItem - nowSequence + 1) % partiNum)}`
+      `현재 총 아이템 수: ${totalItem - ((totalItem - nowSequence + 1) % partiNum)}`,
     );
     // setNowTotalItem(totalItem - ((totalItem - nowSequence + 1) % partiNum));
-    setNowTotalItem(totalItem)
+    setNowTotalItem(totalItem);
     // writeOrderList가 업데이트 된 후에 locked items 세팅
     if (writeOrderList.length > 0) {
       setLockedWriteItems();
@@ -338,7 +343,7 @@ export const Write = ({
           "partinum: ",
           partiNum,
           "다음 사람 멤버아이디: ",
-          writeOrderList[1 % partiNum].memberId
+          writeOrderList[1 % partiNum].memberId,
         );
         setNextMemberId(writeOrderList[1 % partiNum].memberId);
       }
@@ -351,7 +356,7 @@ export const Write = ({
   const setLockedWriteItems = () => {
     const tempItemNum = nowTotalItem - nowLetterId;
     const currentIndex = writeOrderList.findIndex(
-      (item) => item.sequence === nowSequence
+      (item) => item.sequence === nowSequence,
     );
     const nowItem: LetterItem = {
       elementId: nowLetterId,
@@ -364,7 +369,7 @@ export const Write = ({
       { length: tempItemNum },
       (_, index) => ({
         elementId: nowLetterId + index + 1,
-      })
+      }),
     );
 
     if (tempItemNum < 0) {
@@ -382,7 +387,14 @@ export const Write = ({
       setLockedWriteItems();
     }
     // [퇴장]: writeOrderList를 추가함
-  }, [nowRepeat, partiNum, nowSequence, nowLetterId, nowMemberId, writeOrderList]);
+  }, [
+    nowRepeat,
+    partiNum,
+    nowSequence,
+    nowLetterId,
+    nowMemberId,
+    writeOrderList,
+  ]);
 
   // 퇴장 감지 후 팝업창 띄우기
   useEffect(() => {
@@ -397,7 +409,7 @@ export const Write = ({
   }, [exitUser]);
 
   // 현재 유저 감지 후 팝업창 띄우기
-  const [nowUserPopup, setNowUserPopup] = useState<number | null>(null)
+  const [nowUserPopup, setNowUserPopup] = useState<number | null>(null);
   useEffect(() => {
     if (Number(getUserId()) === nowMemberId && writeOrderList.length > 1) {
       setNowUserPopup(nowMemberId);
@@ -410,7 +422,7 @@ export const Write = ({
   }, [nowMemberId]);
 
   // 다음 유저 감지 후 팝업창 띄우기
-  const [nextUserPopup, setNextUserPopup] = useState<number | null>(null)
+  const [nextUserPopup, setNextUserPopup] = useState<number | null>(null);
   useEffect(() => {
     if (Number(getUserId()) === nextMemberId && writeOrderList.length > 1) {
       setNextUserPopup(nextMemberId);
@@ -474,7 +486,7 @@ export const Write = ({
             name={
               writeOrderList[
                 writeOrderList.findIndex(
-                  (item) => item.memberId === nextMemberId
+                  (item) => item.memberId === nextMemberId,
                 )
               ].nickname
             }
@@ -486,7 +498,7 @@ export const Write = ({
             name={
               writeOrderList[
                 writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence
+                  (item) => item.sequence === nowSequence,
                 )
               ].nickname
             }
@@ -513,14 +525,14 @@ export const Write = ({
             name={
               writeOrderList[
                 writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence
+                  (item) => item.sequence === nowSequence,
                 )
               ].nickname
             }
             profileImage={
               writeOrderList[
                 writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence
+                  (item) => item.sequence === nowSequence,
                 )
               ].imageUrl
             }
@@ -537,7 +549,11 @@ export const Write = ({
           />
         </ModalOverlay>
       )}
-      {showFinishedModal && <WriteFinishedModal isFirstUser={writeOrderList[0].memberId === Number(getUserId())}/>}
+      {showFinishedModal && (
+        <WriteFinishedModal
+          isFirstUser={writeOrderList[0].memberId === Number(getUserId())}
+        />
+      )}
       {showExitPage && <WriteExit reasonText={"장시간 접속하지 않아서"} />}
     </Container>
   ) : (

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import img from '../../../public/assets/location.svg';
+import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import img from "../../../public/assets/location.svg";
 
 interface LocationProps {
   progressTime: number;
@@ -9,19 +9,23 @@ interface LocationProps {
 }
 
 // 위치 컴포넌트
-export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, profileImage }) => {
-  const [isMobile, setIsMobile] = useState(false)
+export const WriteLocation: React.FC<LocationProps> = ({
+  progressTime,
+  name,
+  profileImage,
+}) => {
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleResize = () => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false)
-  }
+    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
+  };
   useEffect(() => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false)
-    window.addEventListener('resize', handleResize)
+    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const circleRef = useRef<SVGCircleElement>(null);
 
@@ -30,7 +34,9 @@ export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, pro
 
   useEffect(() => {
     if (circleRef.current) {
-      const offset = isMobile ? circumference * progressTime / 100 : - (circumference * (1 - progressTime / 100))
+      const offset = isMobile
+        ? (circumference * progressTime) / 100
+        : -(circumference * (1 - progressTime / 100));
       // const offset = circumference * (1 - progressTime / 100);
       circleRef.current.style.strokeDashoffset = `${offset}`;
     }
@@ -53,14 +59,14 @@ export const WriteLocation: React.FC<LocationProps> = ({ progressTime, name, pro
               cx="28"
               cy="28"
               r={radius}
-              stroke={isWarning ? '#FFA256' : 'white'}
+              stroke={isWarning ? "#FFA256" : "white"}
               strokeWidth="3"
               fill="none"
               strokeDasharray={circumference}
               transform="rotate(-90 28 28)"
             />
           </Svg>
-          <Name color={isWarning ? '#FFA256' : 'white'}>{name}</Name>
+          <Name color={isWarning ? "#FFA256" : "white"}>{name}</Name>
         </Contents>
       </Profile>
     </Background>
@@ -81,7 +87,8 @@ const Profile = styled.div<{ profileImage: string | undefined }>`
   height: 56px;
   border-radius: 50%;
   margin: 4px 0 0 0;
-  background-image: url(${({ profileImage }) => profileImage ? profileImage : '/assets/common/profile_bunny.svg'});
+  background-image: url(${({ profileImage }) =>
+    profileImage ? profileImage : "/assets/common/profile_bunny.svg"});
   background-size: cover;
   background-position: center;
   display: flex;
@@ -95,7 +102,7 @@ const Contents = styled.div`
   align-items: center;
   width: 56px;
   height: 56px;
-  padding: 8px; 
+  padding: 8px;
   box-sizing: border-box;
   flex-shrink: 0;
   border-radius: 28px;
@@ -110,7 +117,9 @@ const Svg = styled.svg`
 `;
 
 const Circle = styled.circle`
-  transition: stroke-dashoffset 0.1s linear, stroke 0.1s linear;
+  transition:
+    stroke-dashoffset 0.1s linear,
+    stroke 0.1s linear;
 `;
 
 const Name = styled.div<{ color: string }>`

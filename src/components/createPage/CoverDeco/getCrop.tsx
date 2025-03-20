@@ -3,7 +3,7 @@ import { Area } from "react-easy-crop";
 export default async function getCroppedImg(
   imageSrc: string,
   crop: Area,
-  size: { width: number; height: number }
+  size: { width: number; height: number },
 ): Promise<string> {
   const image = new Image();
   image.src = imageSrc;
@@ -44,7 +44,7 @@ export default async function getCroppedImg(
     0,
     0,
     size.width,
-    size.height
+    size.height,
   );
 
   // Convert canvas to blob and return as a data URL
@@ -59,7 +59,7 @@ export default async function getCroppedImg(
         }
       },
       "image/jpeg",
-      1.0 // Quality (optional)
+      1.0, // Quality (optional)
     );
   });
 }

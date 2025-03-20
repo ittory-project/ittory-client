@@ -85,7 +85,7 @@ export default function ImageCropper({
         if (axios.isAxiosError(error)) {
           console.error(
             "Error uploading image: ",
-            error.response?.data || (error as Error).message // 타입 단언 추가
+            error.response?.data || (error as Error).message, // 타입 단언 추가
           );
         } else {
           console.error("Unexpected error: ", error);

@@ -18,10 +18,10 @@ import {
 // param: 편지 ID
 // response: LetterStartInfoGetResponse
 export async function getLetterStartInfo(
-  letterId: number
+  letterId: number,
 ): Promise<LetterStartInfoGetResponse> {
   const response: ApiResponse<LetterStartInfoGetResponse> = await api.get(
-    `/api/letter/${letterId}/startInfo`
+    `/api/letter/${letterId}/startInfo`,
   );
   return response.data.data;
 }
@@ -30,7 +30,7 @@ export async function getLetterStartInfo(
 // param: 편지 ID, 순서
 // response: LetterPartiListGetResponse
 export async function getLetterPartiList(
-  letterId: number
+  letterId: number,
 ): Promise<LetterPartiListGetResponse> {
   const response: ApiResponse<LetterPartiListGetResponse> = await api.get(
     `/api/letter/participant/${letterId}`,
@@ -38,18 +38,18 @@ export async function getLetterPartiList(
       params: {
         order: "sequence",
       },
-    }
+    },
   );
   return response.data.data;
 }
 
 //편지 작성 POST API (편지 생성 마지막)
 export async function postLetter(
-  data: LetterRequestBody
+  data: LetterRequestBody,
 ): Promise<LetterPostResponse> {
   const response = await api.post<ApiLetterResponse<LetterPostResponse>>(
     `/api/letter`,
-    data
+    data,
   );
   return response.data.data;
 }
@@ -57,7 +57,7 @@ export async function postLetter(
 //유저 조회 API
 export async function getParticipants(
   letterId: number,
-  order?: string
+  order?: string,
 ): Promise<ParticipantsGetResponse> {
   const params: Record<string, any> = {};
 
@@ -80,7 +80,7 @@ export async function getParticipants(
 export function deleteLetter(
   letterId: number,
   onSuccess: () => void, // 성공 시 호출, 반환 데이터 없음
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ): void {
   api
     .delete(`api/letter/${letterId}`)
@@ -105,18 +105,18 @@ export function deleteLetter(
 
 //반복 횟수 API
 export async function postRepeatCount(
-  data: CountRequestBody
+  data: CountRequestBody,
 ): Promise<CountPostResponse> {
   const response = await api.post<CountPostResponse>(
     `api/letter/repeat-count`,
-    data
+    data,
   );
   return response.data;
 }
 
 //편지 기본 정보 조회 API
 export async function getLetterInfo(
-  letterId: number
+  letterId: number,
 ): Promise<LetterInfoGetResponse> {
   const response = await api.get(`api/letter/info/${letterId}`);
 
@@ -125,7 +125,7 @@ export async function getLetterInfo(
 
 //편지 참여 요청
 export async function postEnter(
-  letterId: number
+  letterId: number,
 ): Promise<LetterEnterResponse> {
   try {
     const response = await api.post(`api/letter/enter/${letterId}`);
@@ -140,10 +140,10 @@ export async function postEnter(
 // param: 편지 ID
 // response: ShareDetailGetResponse
 export async function getLetterDetailInfo(
-  letterId: number
+  letterId: number,
 ): Promise<LetterDetailGetResponse> {
   const response: ApiResponse<LetterDetailGetResponse> = await api.get(
-    `/api/letter/detail/${letterId}`
+    `/api/letter/detail/${letterId}`,
   );
   return response.data.data;
 }
@@ -152,10 +152,10 @@ export async function getLetterDetailInfo(
 // param: 편지 ID
 // response: LetterStorageCheckGetResponse - isStored가 false면 저장 가능
 export async function getLetterStorageCheck(
-  letterId: number
+  letterId: number,
 ): Promise<LetterStorageCheckGetResponse> {
   const response: ApiResponse<LetterStorageCheckGetResponse> = await api.get(
-    `/api/letter/${letterId}/storage-status`
+    `/api/letter/${letterId}/storage-status`,
   );
   return response.data.data;
 }
@@ -164,10 +164,10 @@ export async function getLetterStorageCheck(
 // param: 편지 ID
 // response: string
 export async function postLetterStore(
-  letterId: number
+  letterId: number,
 ): Promise<BaseResponse<string>> {
   const response: ApiResponse<BaseResponse<string>> = await api.post(
-    `/api/letter/${letterId}/store`
+    `/api/letter/${letterId}/store`,
   );
   return response.data.data;
 }

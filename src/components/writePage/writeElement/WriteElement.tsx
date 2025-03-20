@@ -13,51 +13,58 @@ interface WriteElementProps {
   clientRef: React.MutableRefObject<Client | null>;
 }
 
-export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, clientRef }: WriteElementProps ) => {
+export const WriteElement = ({
+  sequence,
+  setShowSubmitPage,
+  progressTime,
+  clientRef,
+}: WriteElementProps) => {
   const [text, setText] = useState("");
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  
+
   const [elementImg, setElementImg] = useState("");
-  
+
   const getLetterImg = async () => {
     if (!letterId) {
-      window.alert("잘못된 접근입니다.")
+      window.alert("잘못된 접근입니다.");
     } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.")
+      window.alert("잘못된 접근입니다.");
     } else {
-      const response: ElementImgGetResponse = await getElementImg(letterNumId, sequence);
-      setElementImg(response.elementImageUrl)
+      const response: ElementImgGetResponse = await getElementImg(
+        letterNumId,
+        sequence,
+      );
+      setElementImg(response.elementImageUrl);
     }
-  }
+  };
   useEffect(() => {
-    getLetterImg()
+    getLetterImg();
   }, []);
 
-  const handleExit= () => {
-    setShowSubmitPage(false)
-  }
+  const handleExit = () => {
+    setShowSubmitPage(false);
+  };
 
   useEffect(() => {
     if (progressTime <= 0.5) {
       if (text.length > 0) {
-        handleWriteComplete()
+        handleWriteComplete();
       } else {
-
       }
     }
-  }, [progressTime])
+  }, [progressTime]);
 
   // 작성 완료 버튼
   const handleWriteComplete = async () => {
     if (!sequence) {
-      return window.alert("오류")
-    } 
+      return window.alert("오류");
+    }
     if (text.length <= 0) {
-      return
+      return;
     }
     try {
-      console.log(sequence, text)
+      console.log(sequence, text);
       // writeLetterWs 완료 여부를 기다림
       // await writeLetterWs(letterNumId, Number(repeat), text);
       // clientRef를 통해 client 객체에 접근
@@ -83,7 +90,9 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
   //   handleWriteComplete();
   // }
 
-  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImageError = (
+    event: React.SyntheticEvent<HTMLImageElement, Event>,
+  ) => {
     event.currentTarget.src = "/assets/write/img_error.svg";
   };
 
@@ -91,33 +100,45 @@ export const WriteElement = ({ sequence, setShowSubmitPage, progressTime, client
     <Container>
       <Content>
         <Header>
-        <ClockText>
-          <ClockIcon src="/assets/write/clock.svg" />
-          {Math.max(0, Math.floor(progressTime))}초
-        </ClockText>
-          <CloseBtn onClick={handleExit} src='/assets/btn_close.svg' />
+          <ClockText>
+            <ClockIcon src="/assets/write/clock.svg" />
+            {Math.max(0, Math.floor(progressTime))}초
+          </ClockText>
+          <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
         </Header>
         <WriteContent>
           <PhotoDiv>
-            <LetterImage src={""+elementImg} onError={handleImageError} />
+            <LetterImage src={"" + elementImg} onError={handleImageError} />
           </PhotoDiv>
-          <WriteTa 
+          <WriteTa
             ref={taRef}
-            placeholder="그림을 보고 편지를 채워 주세요"             
-            value={text} 
-            onChange={e => setText(e.target.value)}
-            />
+            placeholder="그림을 보고 편지를 채워 주세요"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
           <ControlContainer>
             {text.length > 0 ? (
               <>
                 <CharacterCount>
-                  <div style={{ color: text.length > 30 ? '#FF0004' : 'black' }}>{text.length}</div>/30자
+                  <div
+                    style={{ color: text.length > 30 ? "#FF0004" : "black" }}
+                  >
+                    {text.length}
+                  </div>
+                  /30자
                 </CharacterCount>
               </>
-            ) : 
-            <><CharacterCount></CharacterCount></>
-            }
-            <CompleteBtn onClick={handleWriteComplete} $isdisabled={text.length === 0 || text.length > 30}>완료</CompleteBtn>
+            ) : (
+              <>
+                <CharacterCount></CharacterCount>
+              </>
+            )}
+            <CompleteBtn
+              onClick={handleWriteComplete}
+              $isdisabled={text.length === 0 || text.length > 30}
+            >
+              완료
+            </CompleteBtn>
           </ControlContainer>
         </WriteContent>
       </Content>
@@ -144,7 +165,7 @@ const Content = styled.div`
   align-items: flex-start;
   flex-shrink: 0;
   border-radius: 20px;
-  background: var(--color-black-white-white, #FFF);
+  background: var(--color-black-white-white, #fff);
 `;
 
 const Header = styled.div`
@@ -177,7 +198,7 @@ const ClockIcon = styled.img`
 
 const ClockText = styled.div`
   display: flex;
-  color: var(--Color-primary-orange, #FFA256);
+  color: var(--Color-primary-orange, #ffa256);
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
   font-style: normal;
@@ -197,8 +218,8 @@ const WriteContent = styled.div`
   gap: 10px;
   align-self: stretch;
   border-radius: var(--Border-Radius-radius_300, 8px);
-  border: 1px dashed var(--Color-grayscale-gray400, #CED4DA);
-  background: var(--Color-grayscale-gray50, #F8F9FA);
+  border: 1px dashed var(--Color-grayscale-gray400, #ced4da);
+  background: var(--Color-grayscale-gray50, #f8f9fa);
 `;
 
 const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
@@ -208,9 +229,9 @@ const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
   justify-content: center;
   align-items: center;
   border-radius: 4px;
-  background: ${({ $isdisabled }) => ($isdisabled ? '#d3d3d3' : '#000')}; 
-  color: #FFF;
-  cursor: ${({ $isdisabled }) => ($isdisabled ? 'not-allowed' : 'pointer')}; 
+  background: ${({ $isdisabled }) => ($isdisabled ? "#d3d3d3" : "#000")};
+  color: #fff;
+  cursor: ${({ $isdisabled }) => ($isdisabled ? "not-allowed" : "pointer")};
 `;
 
 const PhotoDiv = styled.div`
@@ -237,9 +258,9 @@ const WriteTa = styled.textarea`
   border: none;
   resize: none;
   color: #000;
-  background: var(--Color-grayscale-gray50, #F8F9FA);
+  background: var(--Color-grayscale-gray50, #f8f9fa);
   overflow: hidden;
-  
+
   &:focus {
     outline: none;
   }

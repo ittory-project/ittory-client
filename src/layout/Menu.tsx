@@ -31,8 +31,8 @@ export const Menu = ({ onClose }: Props) => {
     focusCreate: boolean;
     focusReceive: boolean;
   } | null>(null);
-  const [partiLetter, setPartiLetter] = useState<Number>(0);
-  const [receiveLetter, setReceiveLetter] = useState<Number>(0);
+  const [partiLetter, setPartiLetter] = useState<number>(0);
+  const [receiveLetter, setReceiveLetter] = useState<number>(0);
   const [profileImage, setProfileImage] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
 
@@ -118,7 +118,7 @@ export const Menu = ({ onClose }: Props) => {
   const handleAsk = () => {
     window.open(
       "https://docs.google.com/forms/d/e/1FAIpQLSf2kfLU3FoKyvgWiA_mzdTrTiYTNn9otsoQkaIIfNYM5Nze2g/viewform",
-      "_blank"
+      "_blank",
     );
   };
   const handleCreateBtn = () => {

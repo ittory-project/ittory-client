@@ -12,7 +12,7 @@ import {
 
 export async function getLetterCounts(): Promise<LetterCountsGetResponse> {
   const response: ApiResponse<LetterCountsGetResponse> = await api.get(
-    `api/member/letter-counts`
+    `api/member/letter-counts`,
   );
   return response.data.data;
 }
@@ -24,11 +24,11 @@ export async function getMyPage(): Promise<MypageGetResponse> {
 }
 
 export async function postWithdraw(
-  data: WithdrawPostRequest
+  data: WithdrawPostRequest,
 ): Promise<WithdrawPostResponse> {
   const response = await api.post<WithdrawPostResponse>(
     `api/member/withdraw`,
-    data
+    data,
   );
   return response.data;
 }
@@ -40,7 +40,7 @@ export async function getReceivedLetter(): Promise<ReceivedGetResponse> {
 
 export async function getParticipatedLetter(): Promise<ParticipationGetResponse> {
   const response = await api.get<ParticipationGetResponse>(
-    `api/member/participations`
+    `api/member/participations`,
   );
   return response.data;
 }
@@ -53,7 +53,7 @@ export async function getVisitUser(): Promise<VisitGetResponse> {
 }
 
 export async function deleteLetterboxLetter(
-  letterId: number
+  letterId: number,
 ): Promise<LetterboxDeleteResponse> {
   const response = await api.delete(`api/member/${letterId}`);
 

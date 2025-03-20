@@ -33,7 +33,7 @@ export const enterLetterWs = (letterId: number, nickname: string) => {
 export const writeLetterWs = (
   letterId: number,
   sequence: number,
-  content: string
+  content: string,
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     const client = stompClient();
