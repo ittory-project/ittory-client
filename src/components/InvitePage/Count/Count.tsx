@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef, act } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import X from "../../../../public/assets/x.svg";
 import photo from "../../../../public/assets/photo.svg";
-import { Swiper, SwiperSlide, SwiperRef } from "swiper/react";
+import { Swiper, SwiperSlide, SwiperRef, SwiperClass } from "swiper/react";
 import { useNavigate } from "react-router-dom";
 import { postRepeatCount } from "../../../api/service/LetterService";
 import { postRandom } from "../../../api/service/ParticipantService";
@@ -147,7 +147,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   }, []);
 
   // Swiper 슬라이드 변경 시 호출되는 함수
-  const onSlideChange = (swiper: any) => {
+  const onSlideChange = (swiper: SwiperClass) => {
     setActiveIndex(swiper.realIndex);
   };
 
@@ -247,8 +247,10 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           </IconImg>
           <TitleTxt>만들어질 그림 개수</TitleTxt>
           <TotalTxt>
-            <span>{selectNumber * member}</span>
-            <span>개</span>
+            <span style={{ fontFamily: "GmarketSans", marginTop: "2.8px" }}>
+              {selectNumber * member}
+            </span>
+            <span style={{ fontFamily: "SUIT" }}>개</span>
           </TotalTxt>
         </Notice>
       </Contents>
@@ -445,7 +447,6 @@ const TotalTxt = styled.div`
   gap: 2px;
   color: #495057;
   text-align: center;
-  font-family: GmarketSans;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
