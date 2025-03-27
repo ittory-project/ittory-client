@@ -5,6 +5,10 @@ import { getMyPage, getVisitUser } from "../../api/service/MemberService";
 import { useNavigate, useParams } from "react-router-dom";
 //import { NicknamePostRequest } from "../../api/model/ParticipantModel";
 //import { postNickname } from "../../api/service/ParticipantService";
+import NoAccess from "./NoAccess";
+import Started from "./Started";
+import Deleted from "./Deleted";
+import { DeleteConfirm } from "../InvitePage/Delete/DeleteConfirm";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
@@ -15,6 +19,10 @@ export const Join = () => {
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
   const navigate = useNavigate();
   const { letterId } = useParams();
+    const [started, setStarted] = useState<boolean>(false);
+    const [deleted, setDeleted] = useState<boolean>(false);
+    const [deleteConf, setDeleteConf] = useState<boolean>(false);
+    const [noAccess, setNoAccess] = useState<boolean>(false);
 
   useEffect(() => {
     if (letterId) {
@@ -94,8 +102,15 @@ export const Join = () => {
   };
 
   return (
+    
     <>
-        <BackGround>
+            {noAccess && <NoAccess />}
+            {started && <Started />}
+              {deleted && <Deleted />}
+              {deleteConf && <DeleteConfirm />}
+
+        
+              {!noAccess && !started && !deleted && !deleteConf && <BackGround>
           {viewModal && <Overlay />}
           {
             <>
@@ -144,10 +159,14 @@ export const Join = () => {
               visited={visited}
               nickname={nickname}
               setViewModal={setViewModal}
+              setNoAccess={setNoAccess}
+              setDeleted={setDeleted}
+              setStarted={setStarted}
+              setDeleteConf={setDeleteConf}
             />
           )}
         </BackGround>
-
+}
     </>
   );
 };
