@@ -292,8 +292,8 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
 
 const ToDiv = styled.div<{ $fonttype: string }>`
   font-size: 24px;
-  margin-bottom: 45px;
-  padding: 0px 10px;
+  margin-bottom: 30px;
+  padding: 0px 6px 10px;
   color: var(--color-black-white-white, #fff);
   text-align: center;
 
