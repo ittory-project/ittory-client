@@ -179,7 +179,7 @@ export const Letter = ({
 
             <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
             <CoverContainer
-              coverType={coverType.name as keyof typeof backgroundGradientMap}
+              $coverType={coverType.name as keyof typeof backgroundGradientMap}
             >
               {renderPageContent()}
             </CoverContainer>
@@ -287,14 +287,14 @@ const More = styled.img`
 `;
 
 const CoverContainer = styled.div<{
-  coverType: keyof typeof backgroundGradientMap;
+  $coverType: keyof typeof backgroundGradientMap;
 }>`
   position: relative;
   width: 272px;
   height: 355px;
   flex-shrink: 0;
   border-radius: 0 15px 15px 0;
-  background: ${(props) => backgroundGradientMap[props.coverType]};
+  background: ${(props) => backgroundGradientMap[props.$coverType]};
   background-size: cover;
   box-shadow:
     0 2px 1px rgba(28, 21, 21, 0.09),
