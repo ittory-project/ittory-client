@@ -3,26 +3,16 @@ import styled from "styled-components";
 import { JoinModal } from "./JoinModal";
 import { getMyPage, getVisitUser } from "../../api/service/MemberService";
 import { useNavigate, useParams } from "react-router-dom";
-import { postEnter } from "../../api/service/LetterService";
-import NoAccess from "./NoAccess";
-import { NicknamePostRequest } from "../../api/model/ParticipantModel";
-import { postNickname } from "../../api/service/ParticipantService";
-import Started from "./Started";
-import Deleted from "./Deleted";
-import { DeleteConfirm } from "../InvitePage/Delete/DeleteConfirm";
-import axios from "axios";
+//import { NicknamePostRequest } from "../../api/model/ParticipantModel";
+//import { postNickname } from "../../api/service/ParticipantService";
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [viewModal, setViewModal] = useState<boolean>(false);
-  const [noAccess, setNoAccess] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false);
   const [visited, setVisited] = useState<boolean>(false);
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
-  const [started, setStarted] = useState<boolean>(false);
-  const [deleted, setDeleted] = useState<boolean>(false);
-  const [deleteConf, setDeleteConf] = useState<boolean>(false);
   const navigate = useNavigate();
   const { letterId } = useParams();
 
@@ -31,9 +21,6 @@ export const Join = () => {
       localStorage.setItem("letterId", letterId);
     }
   }, [letterId]);
-
-  //닉네임 중복검사 호출 후 enter api 호출 시 창이 두개인 것에 대해
-  // 중복 참여 오류는 안나는데 닉네임 검사 안되는 에러발생
 
   useEffect(() => {
     const fetchVisitUser = async () => {
@@ -48,30 +35,6 @@ export const Join = () => {
             setVisited(true);
           } else {
             setVisited(false);
-          }
-          try {
-            const enterresponse = await postEnter(Number(letterId));
-            if (enterresponse.enterStatus !== true) {
-              if (enterresponse.enterAction === "EXCEEDED") {
-                setNoAccess(true);
-              } else if (enterresponse.enterAction === "STARTED") {
-                setStarted(true);
-              } else if (enterresponse.enterAction === "DELETED") {
-                setDeleteConf(true);
-              }
-            }
-          } catch (error) {
-            console.log(error);
-            if (axios.isAxiosError(error) && error.response?.status === 400) {
-              console.error("400 Error:", error.response.data);
-              navigate("/");
-            } else if (
-              axios.isAxiosError(error) &&
-              error.response?.status === 404
-            ) {
-              console.error("404 Error:", error.response.data);
-              setDeleted(true);
-            }
           }
         }
       } catch (err) {
@@ -97,7 +60,7 @@ export const Join = () => {
 
   const handleModal = async () => {
     if (nickname) {
-      const requestBody: NicknamePostRequest = {
+      /*const requestBody: NicknamePostRequest = {
         nickname: nickname,
       };
       const response = await postNickname(requestBody, Number(letterId));
@@ -106,7 +69,8 @@ export const Join = () => {
         setViewModal(true);
       } else {
         setDuplicateError(true);
-      }
+      }*/
+      setViewModal(true);
     }
   };
 
@@ -131,12 +95,6 @@ export const Join = () => {
 
   return (
     <>
-      {noAccess && <NoAccess />}
-      {started && <Started />}
-      {deleted && <Deleted />}
-      {deleteConf && <DeleteConfirm />}
-
-      {!noAccess && !started && !deleted && !deleteConf && (
         <BackGround>
           {viewModal && <Overlay />}
           {
@@ -189,7 +147,7 @@ export const Join = () => {
             />
           )}
         </BackGround>
-      )}
+
     </>
   );
 };

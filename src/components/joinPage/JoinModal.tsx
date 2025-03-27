@@ -1,7 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { patchNickname } from "../../api/service/ParticipantService";
+import axios from "axios";
+import { postEnter } from "../../api/service/LetterService";
+import NoAccess from "./NoAccess";
+import Started from "./Started";
+import Deleted from "./Deleted";
+import { DeleteConfirm } from "../InvitePage/Delete/DeleteConfirm";
 
 interface Props {
   nickname: string;
@@ -10,6 +16,11 @@ interface Props {
 }
 
 export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
+  const [started, setStarted] = useState<boolean>(false);
+  const [deleted, setDeleted] = useState<boolean>(false);
+  const [deleteConf, setDeleteConf] = useState<boolean>(false);
+  const [noAccess, setNoAccess] = useState<boolean>(false);
+    
   const navigate = useNavigate();
   const letterId = localStorage.letterId;
   console.log(visited);
@@ -23,6 +34,35 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
   };
 
   const handleAccess = async () => {
+    try {
+          const enterresponse = await postEnter(Number(letterId), {nickname});
+          if(enterresponse.enterStatus === true){
+            fianlAccess();
+          } else {
+            if (enterresponse.enterAction === "EXCEEDED") {
+              setNoAccess(true);
+            } else if (enterresponse.enterAction === "STARTED") {
+              setStarted(true);
+            } else if (enterresponse.enterAction === "DELETED") {
+              setDeleteConf(true);
+            }
+          }
+        } catch (error) {
+            console.log(error);
+            if (axios.isAxiosError(error) && error.response?.status === 400) {
+              console.error("400 Error:", error.response.data);
+              navigate("/");
+            } else if (
+              axios.isAxiosError(error) &&
+              error.response?.status === 404
+            ) {
+              console.error("404 Error:", error.response.data);
+              setDeleted(true);
+            }
+        }
+  };
+
+  const fianlAccess = () => {
     try {
       localStorage.removeItem("letterId");
       if (visited) {
@@ -45,33 +85,40 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
     } catch (err) {
       console.error("error:", err);
     }
-  };
+  }
 
   return (
     <>
-      <Modal>
-        <Title>'{nickname}'님</Title>
-        <Title>으로 참여할까요?</Title>
-        <Contents>닉네임은 한번 설정하면 수정할 수 없어요</Contents>
-        <ButtonContainer>
-          <Button
-            style={{
-              background: "#CED4DA",
-            }}
-            onClick={handleCancel}
-          >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
-          </Button>
-          <Button
-            style={{
-              background: "#FFA256",
-            }}
-            onClick={handleAccess}
-          >
-            <ButtonTxt style={{ color: "#fff" }}>네!</ButtonTxt>
-          </Button>
-        </ButtonContainer>
-      </Modal>
+        {noAccess && <NoAccess />}
+        {started && <Started />}
+          {deleted && <Deleted />}
+          {deleteConf && <DeleteConfirm />}
+
+          {!noAccess && !started && !deleted && !deleteConf &&
+           <Modal>
+           <Title>'{nickname}'님</Title>
+           <Title>으로 참여할까요?</Title>
+           <Contents>닉네임은 한번 설정하면 수정할 수 없어요</Contents>
+           <ButtonContainer>
+             <Button
+               style={{
+                 background: "#CED4DA",
+               }}
+               onClick={handleCancel}
+             >
+               <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+             </Button>
+             <Button
+               style={{
+                 background: "#FFA256",
+               }}
+               onClick={handleAccess}
+             >
+               <ButtonTxt style={{ color: "#fff" }}>네!</ButtonTxt>
+             </Button>
+           </ButtonContainer>
+         </Modal>
+           }
     </>
   );
 };
