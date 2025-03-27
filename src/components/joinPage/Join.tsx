@@ -111,11 +111,22 @@ export const Join = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > 5) {
-      e.target.value = e.target.value.slice(0, 5);
+    let value = e.target.value;
+
+    if (value.length > 5) {
+      value = value.slice(0, 5);
     }
-    setNickname(e.target.value);
-    setDuplicateError(false); // 입력이 변경될 때 duplicateError를 초기화
+  
+    // 공백만 입력된 경우 빈 문자열로 처리
+    if (value.trim() === "") {
+      setNickname("");
+      return;
+    }
+  
+    // 문자열 뒤쪽 공백 제거
+    setNickname(value.trimEnd());
+    //setNickname(value);
+    setDuplicateError(false); 
   };
 
   return (
