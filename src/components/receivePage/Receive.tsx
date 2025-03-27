@@ -35,7 +35,9 @@ const Receive = () => {
         <Container onClick={handleClick}>
           <DoorImg expanded={expanded}></DoorImg>
           <AnimatedDiv expanded={expanded}>
-            <Img data="/img/letter_christmas_door.png" />
+            <CharacterWrapper>
+              <CharacterImage src="/img/letter_christmas_door.png" />
+            </CharacterWrapper>
           </AnimatedDiv>
           {expanded ? (
             // 2번째 화면
@@ -43,9 +45,7 @@ const Receive = () => {
               {hideDoorImg && (
                 <TextBalloon>
                   <ExpandTitle>
-                    {`${receiver}님 맞으시죠?`}
-                    <br />
-                    편지가 도착했어요!
+                    {`${receiver}님 맞으시죠?\n편지가 도착했어요!`}
                   </ExpandTitle>
                   <BalloonUnder src="/assets/text_balloon_under.svg" />
                 </TextBalloon>
@@ -82,7 +82,7 @@ const expandAnimation = keyframes`
     transform: scale(1);
   }
   to {
-    transform: scale(7);
+    transform: scale(6.94);
   }
 `;
 
@@ -141,13 +141,31 @@ const AnimatedDiv = styled.div<{ expanded: boolean }>`
     `}
 `;
 
-const Img = styled.object`
+const CharacterWrapper = styled.div`
+  border-radius: 50%;
+  background: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(323.8deg, #1c2231 14.11%, #243348 85.81%);
+
+  // 10px인데 6.94배 확대 상황이라서 반영.
+  padding: 1.42px;
+
+  // 40px인데 6.94배 확대 상황이라서 반영.
+  box-shadow: 0px 0px 5.76px 0px rgba(255, 255, 255, 0.1);
+`;
+
+const CharacterImage = styled.img`
   width: 30px;
   height: 30px;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid transparent;
-  box-shadow: 0 0 0 2px #1c2231;
+
+  // 12px인데 6.94배 확대 상황이라서 반영.
+  border: 1.72px solid var(--Color-secondary-dark_navy_blue);
 `;
 
 const MainTitle = styled.div`
@@ -210,7 +228,8 @@ const MainInfo = styled.div`
 
 const TextBalloon = styled.div`
   position: absolute;
-  top: 100px;
+  // NOTE: 반응형 위해 중점 기준으로 좌표 잡고, 중점으로부터 233px 지점이 원 둘레 지점이어서, 24px 갭을 위해 257px로 지정함
+  top: calc(50% - 257px);
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -218,6 +237,9 @@ const TextBalloon = styled.div`
 `;
 
 const ExpandTitle = styled.div`
+  white-space: pre-wrap;
+  font-family: var(--Typography-family-title);
+
   min-width: 20%;
   max-width: 256px;
   font-size: clamp(14px, 2vw, 20px);
@@ -230,7 +252,6 @@ const ExpandTitle = styled.div`
   border-radius: 12px;
   background: #243348;
   backdrop-filter: blur(2px);
-  white-space: wrap;
 `;
 
 const BalloonUnder = styled.img`
@@ -260,7 +281,7 @@ const ExpandButton = styled.div`
   color: #FFF;
   cursor: pointer;
 
-  font-family: var(--Typography-family-title, SUIT);
+  font-family: var(--Typography-family-title);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
