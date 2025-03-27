@@ -157,8 +157,6 @@ export const Letter = ({
     }
   };
 
-  console.log(coverType);
-
   return (
     coverType && (
       <Background $backgroundimg={'' + coverType.outputBackgroundImageUrl}>
