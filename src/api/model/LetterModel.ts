@@ -136,3 +136,8 @@ export interface LetterStorageCheckGetResponse {
   isStored: boolean;
   receiverName: string;
 }
+
+// 편지 참여
+export interface PostEnterRequestBody {
+  nickname: string;
+}

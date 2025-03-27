@@ -12,6 +12,7 @@ import {
   LetterStartInfoGetResponse,
   LetterDetailGetResponse,
   LetterStorageCheckGetResponse,
+  PostEnterRequestBody,
 } from "../model/LetterModel";
 
 // 편지 시작 시 정보 조회 API
@@ -126,13 +127,14 @@ export async function getLetterInfo(
 //편지 참여 요청
 export async function postEnter(
   letterId: number,
+  nickname: PostEnterRequestBody
 ): Promise<LetterEnterResponse> {
   try {
-    const response = await api.post(`api/letter/enter/${letterId}`);
+    const response = await api.post(`api/letter/enter/${letterId}`, nickname);
     return response.data.data;
   } catch (error) {
-    console.error("Error in postEnter:", error); // 확인용 로그
-    throw error; // 에러를 호출부로 전달
+    console.error("Error in postEnter:", error); 
+    throw error; 
   }
 }
 
