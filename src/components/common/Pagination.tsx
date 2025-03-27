@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import ArrowPrev from "../../../public/assets/pagination/arrow_back.svg?react";
+import ArrowNext from "../../../public/assets/pagination/arrow_next.svg?react";
 
 interface PaginationProps {
   totalPages: number;
@@ -38,7 +40,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        <img src="/assets/arrow_back_black.svg" />
+        <ArrowPrev />
       </PaginationButton>
       <PaginationText>
         {currentPage}/{totalPages}
@@ -47,7 +49,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        <img src="/assets/arrow_next_black.svg" />
+        <ArrowNext />
       </PaginationButton>
     </PaginationContainer>
   );
@@ -68,14 +70,11 @@ const PaginationButton = styled.button`
   border: none;
   style: none;
   cursor: pointer;
+  color: var(--Color-grayscale-gray900);
 
   &:disabled {
-    opacity: 0.5;
+    color: var(--Color-grayscale-gray500);
     cursor: not-allowed;
-  }
-
-  &:active {
-    color: #000;
   }
 
   &:focus {
