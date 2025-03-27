@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import more from "../../../public/assets/more_white.svg";
-import x from "../../../public/assets/x_white.svg";
+import ChevronLeft from "../../../public/assets/letterbox/chevron_left.svg?react";
 import { Created_Modal } from "./Created_Modal";
 import { Received_Modal } from "./Received_Modal";
 import { Delete_letterbox } from "./Delete_letterbox";
@@ -157,7 +157,9 @@ export const Letter = ({
           <>
             <Header>
               <CancelBox>
-                <Cancel src={x} alt="x_icon" onClick={handleCancel} />
+                <StyledChevronLeft // 수정
+                  onClick={handleCancel}
+                />
               </CancelBox>
               <MoreBox>
                 <More src={more} alt="more_icon" onClick={handleMore} />
@@ -226,10 +228,15 @@ const Overlay = styled.div`
 const Header = styled.div`
   display: flex;
   width: 100%;
+  height: 48px;
   position: absolute;
   top: 0;
+  left: 0;
   padding: 0px 4px;
   align-items: center;
+
+  /* NOTE: box-sizing: content-box이면 width 100% + padding 크기가 되어버림 */
+  box-sizing: border-box;
 `;
 const CancelBox = styled.div`
   display: flex;
@@ -239,14 +246,11 @@ const CancelBox = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Cancel = styled.img`
-  display: flex;
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  margin-left: 5px;
-  margin-top: 5px;
+const StyledChevronLeft = styled(ChevronLeft)`
   cursor: pointer;
+  width: 24px;
+  height: 24px;
+  color: white;
 `;
 const MoreBox = styled.div`
   display: flex;
@@ -275,19 +279,21 @@ const CoverContainer = styled.div<{ $boardimg: string }>`
   height: 355px;
   flex-shrink: 0;
   border-radius: 5px 15px 15px 5px;
-  background-image: url(${(props) => props.$boardimg})
+  /* NOTE: ;가 누락되어서 테두리 표현이 미적용되었던 것...! */
+  background-image: url(${(props) => props.$boardimg});
   background-size: cover;
-  box-shadow: 0 2px 1px rgba(0,0,0,0.09), 
-              0 4px 2px rgba(0,0,0,0.09), 
-              0 8px 4px rgba(0,0,0,0.09), 
-              0 16px 8px rgba(0,0,0,0.09),
-              0 32px 16px rgba(0,0,0,0.09);
+  box-shadow:
+    0 2px 1px rgba(28, 21, 21, 0.09),
+    0 4px 2px rgba(0, 0, 0, 0.09),
+    0 8px 4px rgba(0, 0, 0, 0.09),
+    0 16px 8px rgba(0, 0, 0, 0.09),
+    0 32px 16px rgba(0, 0, 0, 0.09);
 `;
 
 const ToDiv = styled.div<{ $fonttype: string }>`
   font-size: 24px;
-  margin-bottom: 40px;
-  padding: 0px 10px;
+  margin-bottom: 30px;
+  padding: 0px 6px 10px;
   color: var(--color-black-white-white, #fff);
   text-align: center;
 

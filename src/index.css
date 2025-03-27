@@ -17,7 +17,9 @@
 
 /* 전역 스타일 주입을 위한 CSS Variable 정의 영역 */
 :root {
+  --Color-grayscale-gray900: #15191C;
   --Color-grayscale-gray600: #868e96;
+  --Color-grayscale-gray500: #ADB5BD;
   --Typography-family-title: SUIT;
 }
 

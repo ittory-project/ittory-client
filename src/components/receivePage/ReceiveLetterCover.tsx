@@ -72,7 +72,6 @@ const TitleDiv = styled.div<{ $fonttype: string }>`
   font-size: 22px;
   display: flex;
   font-weight: bold;
-  margin-bottom: 10px;
   justify-content: center;
   overflow: hidden;
   color: var(--color-black-white-white, #fff);
@@ -107,7 +106,7 @@ const DateDiv = styled.div<{ $fonttype: string }>`
 const PhotoDiv = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 35px;
+  margin-top: 45px;
 `;
 
 const ProfileImage = styled.img`

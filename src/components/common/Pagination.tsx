@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import ArrowPrev from "../../../public/assets/pagination/arrow_back.svg?react";
+import ArrowNext from "../../../public/assets/pagination/arrow_next.svg?react";
 
 interface PaginationProps {
   totalPages: number;
@@ -38,7 +40,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        <img src="/assets/arrow_back_black.svg" />
+        <ArrowPrev />
       </PaginationButton>
       <PaginationText>
         {currentPage}/{totalPages}
@@ -47,7 +49,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        <img src="/assets/arrow_next_black.svg" />
+        <ArrowNext />
       </PaginationButton>
     </PaginationContainer>
   );
@@ -57,7 +59,10 @@ const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+
+  // 공통 컴포넌트여서 영향도 조사가 필요합니다 (3/27 목)
+  // 디자인 QA 상 동일 화면 전체 적용이 필요하다고 하셔서 우선 적용합니다!
+  margin-top: 45px;
 `;
 
 const PaginationButton = styled.button`
@@ -65,14 +70,11 @@ const PaginationButton = styled.button`
   border: none;
   style: none;
   cursor: pointer;
+  color: var(--Color-grayscale-gray900);
 
   &:disabled {
-    opacity: 0.5;
+    color: var(--Color-grayscale-gray500);
     cursor: not-allowed;
-  }
-
-  &:active {
-    color: #000;
   }
 
   &:focus {
