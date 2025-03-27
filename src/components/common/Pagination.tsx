@@ -57,7 +57,10 @@ const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+
+  // 공통 컴포넌트여서 영향도 조사가 필요합니다 (3/27 목)
+  // 디자인 QA 상 동일 화면 전체 적용이 필요하다고 하셔서 우선 적용합니다!
+  margin-top: 45px;
 `;
 
 const PaginationButton = styled.button`
