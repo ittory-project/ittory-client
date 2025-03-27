@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import X from "../../../public/assets/x.svg";
-import delete2 from "../../../public/assets/delete2.svg";
-import share from "../../../public/assets/share.svg";
-import { LetterDetailGetResponse } from "../../api/model/LetterModel";
-import { getLetterDetailInfo } from "../../api/service/LetterService";
-import { encodeLetterId } from "../../api/config/base64";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import X from '../../../public/assets/x.svg';
+import delete2 from '../../../public/assets/delete2.svg';
+import share from '../../../public/assets/share.svg';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
+import { encodeLetterId } from '../../api/config/base64';
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +22,7 @@ export const Created_Modal = ({
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
-  const [encodeId, setEncodeId] = useState<string>("");
+  const [encodeId, setEncodeId] = useState<string>('');
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -49,32 +49,32 @@ export const Created_Modal = ({
   };
   useEffect(() => {
     window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   const fallbackCopyTextToClipboard = (text: string) => {
-    const textArea = document.createElement("textarea");
+    const textArea = document.createElement('textarea');
     textArea.value = text;
-    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
-    textArea.style.top = "-9999px";
+    textArea.style.position = 'fixed'; // 화면에서 보이지 않도록 고정
+    textArea.style.top = '-9999px';
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
 
     try {
-      const successful = document.execCommand("copy");
+      const successful = document.execCommand('copy');
       if (successful) {
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
       } else {
-        alert("텍스트 복사에 실패했습니다.");
+        alert('텍스트 복사에 실패했습니다.');
       }
     } catch (error) {
-      console.error("Fallback copy failed:", error);
-      alert("텍스트 복사에 실패했습니다.");
+      console.error('Fallback copy failed:', error);
+      alert('텍스트 복사에 실패했습니다.');
     } finally {
       document.body.removeChild(textArea);
     }
@@ -86,19 +86,19 @@ export const Created_Modal = ({
     if (letterInfo) {
       const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
         .map((element) => element)
-        .join(", ")}`;
+        .join(', ')}`;
       if (!isMobile) {
         const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`;
         if (
           navigator.clipboard &&
-          typeof navigator.clipboard.writeText === "function"
+          typeof navigator.clipboard.writeText === 'function'
         ) {
           try {
             await navigator.clipboard.writeText(shareTextPc);
             setCopied(true);
             setTimeout(() => setCopied(false), 3000);
           } catch (error) {
-            console.error("공유 실패: ", error);
+            console.error('공유 실패: ', error);
             fallbackCopyTextToClipboard(shareTextPc);
           }
         } else {
@@ -112,13 +112,13 @@ export const Created_Modal = ({
             text: shareText,
             url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
           });
-          console.log("공유 성공");
+          console.log('공유 성공');
         } catch (e) {
-          console.log("공유 실패");
+          console.log('공유 실패');
         }
       }
     } else {
-      console.log("공유 실패");
+      console.log('공유 실패');
     }
   };
   return (
@@ -187,10 +187,9 @@ const Header = styled.div`
   box-sizing: border-box;
 `;
 const Cancel = styled.img`
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   flex-shrink: 0;
-  margin-right: 7.3px;
   cursor: pointer;
 `;
 const Contents = styled.div`
