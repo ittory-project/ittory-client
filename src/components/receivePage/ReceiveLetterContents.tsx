@@ -48,7 +48,7 @@ const ContentImg = styled.img`
   height: 182px;
   border-radius: 12px;
   position: absolute;
-  top: 35px;
+  top: 40px;
   left: 50%;
   transform: translate(-47%, -0%);
 `;
