@@ -82,7 +82,7 @@ const expandAnimation = keyframes`
     transform: scale(1);
   }
   to {
-    transform: scale(6.94);
+    transform: scale(8.53); // 30*30 -> 256*256
   }
 `;
 
@@ -151,21 +151,18 @@ const CharacterWrapper = styled.div`
 
   background: linear-gradient(323.8deg, #1c2231 14.11%, #243348 85.81%);
 
-  // 10px인데 6.94배 확대 상황이라서 반영.
-  padding: 1.42px;
+  padding: 2px;
 
-  // 40px인데 6.94배 확대 상황이라서 반영.
-  box-shadow: 0px 0px 5.76px 0px rgba(255, 255, 255, 0.1);
+  box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.1);
 `;
 
 const CharacterImage = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   object-fit: cover;
   border-radius: 50%;
 
-  // 12px인데 6.94배 확대 상황이라서 반영.
-  border: 1.72px solid var(--Color-secondary-dark_navy_blue);
+  border: 2px solid var(--Color-secondary-dark_navy_blue);
 `;
 
 const MainTitle = styled.div`
@@ -228,8 +225,8 @@ const MainInfo = styled.div`
 
 const TextBalloon = styled.div`
   position: absolute;
-  // NOTE: 반응형 위해 중점 기준으로 좌표 잡고, 중점으로부터 233px 지점이 원 둘레 지점이어서, 24px 갭을 위해 257px로 지정함
-  top: calc(50% - 257px);
+  // NOTE: 반응형 위해 중점 기준으로 좌표 잡고, 중점으로부터 206px 지점이 원 둘레 지점이어서, 24px 갭을 위해 230px로 지정함
+  top: calc(50% - 230px);
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
