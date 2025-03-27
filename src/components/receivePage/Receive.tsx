@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import styled, { css, keyframes } from "styled-components";
-import { DoorAnimation } from "./DoorAnimation";
+import { useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import styled, { css, keyframes } from 'styled-components';
+import { DoorAnimation } from './DoorAnimation';
 
 function Query() {
   return new URLSearchParams(useLocation().search);
@@ -10,7 +10,7 @@ function Query() {
 const Receive = () => {
   const { letterId } = useParams();
   const query = Query();
-  const receiver = String(query.get("to"));
+  const receiver = String(query.get('to'));
   const [expanded, setExpanded] = useState(false);
   const [showDoorAnimation, setShowDoorAnimation] = useState(false);
   const [hideDoorImg, setHideDoorImg] = useState(false);
@@ -103,7 +103,7 @@ const DoorImg = styled.div<{ expanded: boolean }>`
   bottom: 0px;
   left: 0px;
   z-index: 1;
-  width: 100%
+  width: 100%;
   height: 70%;
   background-image: url(/assets/door.svg);
   background-size: cover;
@@ -131,7 +131,7 @@ const AnimatedDiv = styled.div<{ expanded: boolean }>`
   position: absolute;
   top: 50%;
   transition: all 2s ease;
-  filter: ${({ expanded }) => (expanded ? "none" : "blur(2px)")};
+  filter: ${({ expanded }) => (expanded ? 'none' : 'blur(1.5px)')};
 
   ${({ expanded }) =>
     expanded &&
@@ -155,7 +155,7 @@ const MainTitle = styled.div`
   color: #f8f9fa;
   text-align: center;
   transition: all 2s ease;
-  width: 147px;
+  width: 256px;
   margin-top: 10px;
 
   color: #f8f9fa;
@@ -184,7 +184,7 @@ const MainText = styled.div`
 
 const MainTitleContainer = styled.div`
   position: absolute;
-  top: 7%;
+  top: 40px;
 `;
 
 const MainInfo = styled.div`
