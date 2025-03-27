@@ -4,22 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { patchNickname } from "../../api/service/ParticipantService";
 import axios from "axios";
 import { postEnter } from "../../api/service/LetterService";
-import NoAccess from "./NoAccess";
-import Started from "./Started";
-import Deleted from "./Deleted";
-import { DeleteConfirm } from "../InvitePage/Delete/DeleteConfirm";
 
 interface Props {
   nickname: string;
   setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
   visited: boolean;
+  setDeleted: React.Dispatch<React.SetStateAction<boolean>>;
+  setStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  setNoAccess: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteConf: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
-export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
-  const [started, setStarted] = useState<boolean>(false);
-  const [deleted, setDeleted] = useState<boolean>(false);
-  const [deleteConf, setDeleteConf] = useState<boolean>(false);
-  const [noAccess, setNoAccess] = useState<boolean>(false);
+export const JoinModal = ({ nickname, setViewModal, visited, setStarted, setNoAccess, setDeleted, setDeleteConf }: Props) => {
     
   const navigate = useNavigate();
   const letterId = localStorage.letterId;
@@ -35,7 +32,9 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
 
   const handleAccess = async () => {
     try {
+      console.log(nickname);
           const enterresponse = await postEnter(Number(letterId), {nickname});
+          console.log(enterresponse);
           if(enterresponse.enterStatus === true){
             fianlAccess();
           } else {
@@ -89,12 +88,6 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
 
   return (
     <>
-        {noAccess && <NoAccess />}
-        {started && <Started />}
-          {deleted && <Deleted />}
-          {deleteConf && <DeleteConfirm />}
-
-          {!noAccess && !started && !deleted && !deleteConf &&
            <Modal>
            <Title>'{nickname}'님</Title>
            <Title>으로 참여할까요?</Title>
@@ -118,7 +111,7 @@ export const JoinModal = ({ nickname, setViewModal, visited }: Props) => {
              </Button>
            </ButtonContainer>
          </Modal>
-           }
+           
     </>
   );
 };
