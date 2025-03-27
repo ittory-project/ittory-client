@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { fontProps } from "./CoverStyle";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { fontProps } from './CoverStyle';
 
 interface Props {
   font: string;
@@ -34,7 +34,7 @@ export default function FontSelect({
 
   useEffect(() => {
     console.log(select);
-    if (select === "") {
+    if (select === '') {
       setFont(fonts[0].value);
       setSelectId(fonts[0].id);
       setSelectFid(fonts[0].id);
@@ -87,12 +87,7 @@ const FontSelectorContainer = styled.div`
   overflow-x: auto;
   padding: 11px 16px;
   white-space: nowrap;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) -61.61%,
-    #fff 18.75%
-  );
-  box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.04);
+
   /* 스크롤바 스타일 (브라우저에 따라 다를 수 있음) */
   &::-webkit-scrollbar {
     height: 8px;
@@ -105,6 +100,7 @@ const FontSelectorContainer = styled.div`
     background-color: #f1f1f1;
   }
 `;
+
 const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   display: inline-flex;
   width: 80px;
@@ -117,19 +113,19 @@ const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   text-align: center;
   border-radius: 50px;
   border: ${(props) =>
-    props.$selected ? "1px solid #ffa256" : "1px solid #ced4da"};
-  background: ${(props) => (props.$selected ? "#fff2e8" : "#f1f3f5")};
+    props.$selected ? '1px solid #ffa256' : '1px solid #ced4da'};
+  background: ${(props) => (props.$selected ? '#fff2e8' : '#f1f3f5')};
   cursor: pointer;
   transition: background-color 0.3s;
 `;
 const Fonttxt = styled.span<{ $fontFamily: string; $selected: boolean }>`
-  color: ${(props) => (props.$selected ? "#ffa256" : "#858e96")};
+  color: ${(props) => (props.$selected ? '#ffa256' : '#858e96')};
   font-family: ${(props) => props.$fontFamily};
   font-size: ${(props) =>
-    props.$fontFamily === "Ownglyph_UNZ-Rg" ? "20px" : "14px"};
+    props.$fontFamily === 'Ownglyph_UNZ-Rg' ? '20px' : '14px'};
   line-height: 20px;
   letter-spacing: -0.5px;
   margin-top: ${(props) =>
-    props.$fontFamily === "GmarketSans" ? "3px" : "1px"};
-  font-weight: ${(props) => (props.$fontFamily === "GmarketSans" ? 500 : 400)};
+    props.$fontFamily === 'GmarketSans' ? '3px' : '1px'};
+  font-weight: ${(props) => (props.$fontFamily === 'GmarketSans' ? 500 : 400)};
 `;
