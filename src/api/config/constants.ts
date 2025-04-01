@@ -1,0 +1,3 @@
+export const API_ERROR_CODE = {
+  INVALID_ACCESS_TOKEN: '3001',
+};

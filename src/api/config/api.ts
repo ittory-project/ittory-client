@@ -1,7 +1,10 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { getJwt } from "./setToken";
+import axios, { AxiosError, AxiosResponse, HttpStatusCode } from 'axios';
+import { getJwt } from './setToken';
+import { API_ERROR_CODE } from './constants';
+import { refreshAccessToken } from './tokenRefresh';
+import { forceLogout } from './logout';
 
-export interface BaseResponse<T> {
+export interface BaseResponse<T = unknown> {
   success: boolean;
   status: number;
   data: T;
@@ -21,67 +24,46 @@ const apiSetting = {
   baseURL: import.meta.env.VITE_SERVER_URL,
   timeout: 5000,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
   },
 };
 
-// const setAxiosJwtHeader = (config: { headers: any }) => {
-//   const jwt = getJwt()
-//   if (jwt) {
-//     api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
-//   } else {
-//       delete api.defaults.headers.common['Authorization'];
-//   }
-//   return config
-// }
-
-const setAxiosJwtHeader = (config: { headers: any }) => {
-  const jwt = getJwt();
-  if (jwt) {
-    config.headers["Authorization"] = `Bearer ${jwt}`;
-  } else {
-    delete config.headers["Authorization"];
+// TODO: Sentry 등으로 오류 모니터링
+const errorHandler = async (
+  error: AxiosError<BaseResponse<unknown>> | Error,
+) => {
+  if (!axios.isAxiosError(error)) {
+    console.error(`AxiosError가 아닌 네트워크 오류: ${error}`);
+    throw error;
   }
-  return config;
-};
 
-const responseHandler = (response: AxiosResponse): Promise<AxiosResponse> => {
-  if (response.status === 204) {
-    // 204 상태에서는 데이터 없이 성공 처리
-    return Promise.resolve(response);
-  }
-  if (!response.data.success) {
-    console.error(response.data);
-    window.alert(`오류: ${response.data.message}`);
-    return Promise.reject(new AxiosError());
-  }
-  return Promise.resolve(response);
-};
-
-const errorHandler = (
-  error: AxiosError<BaseResponse<any>> | Error,
-): Promise<AxiosError> => {
-  if (axios.isAxiosError(error)) {
-    console.error(`${error}\n${error.config?.method}: ${error.config?.url}`);
-    if (
-      error.response?.status === 400 &&
-      error.response &&
-      error.response.data.message
-    ) {
-      alert(`${error.response.data.message}`);
-      console.error(error.response.data);
-    } else {
-      //alert(`서버 연결에 실패하였습니다.`);
+  console.error('네트워크 오류:', error);
+  if (
+    error.response?.status === HttpStatusCode.Unauthorized &&
+    error.response?.data?.code === API_ERROR_CODE.INVALID_ACCESS_TOKEN &&
+    error.config
+  ) {
+    try {
+      refreshAccessToken(error.config);
+      // NOTE: axios는 axios.post와 같은 요청 함수이다.
+      // originalRequest는 단순한 설정 객체이므로, 반환하면 요청이 발생하지 않고, 그냥 설정 객체가 호출 측에 넘겨진다.
+      return axios(error.config);
+    } catch (refreshError) {
+      console.error('토큰 갱신 시도 실패:', refreshError);
+      forceLogout();
     }
-  } else {
-    console.error(`${error}`);
-    alert(`서버 연결에 실패하였습니다.`);
   }
 
+  // NOTE: error 객체를 반환하면 Promise.resolve()로 감싸져 성공 응답으로 처리되므로,
+  // 명시적으로 Promise.reject()로 반환해야 한다.
   return Promise.reject(error);
 };
 
 export const api = axios.create(apiSetting);
-api.interceptors.request.use(setAxiosJwtHeader);
-api.interceptors.response.use(responseHandler, errorHandler);
+
+// localStorage에서 Access Token 불러옴
+// TODO: localStorage 방식 제거 시 함께 제거
+api.defaults.headers.common['Authorization'] = `Bearer ${getJwt()}`;
+
+api.interceptors.response.use(null, errorHandler);
