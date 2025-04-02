@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import {
-  getJwt,
   getKakaoToken,
   getUserId,
   setJwt,
@@ -19,24 +18,20 @@ export const LoginRedirect = () => {
       const kakaoToken = await getKakaoToken(code);
       if (kakaoToken) {
         const response = await postLogin(kakaoToken.accessToken);
+        const newAuthorization = `Bearer ${response.accessToken}`;
 
-        api.defaults.headers.common['Authorization'] =
-          `Bearer ${response.accessToken}`;
+        api.defaults.headers.common['Authorization'] = newAuthorization;
+        setJwt(newAuthorization);
+        setUserId(response.accessToken);
+        console.log(`유저 아이디: ${getUserId()}`);
 
-        setJwt(response.accessToken);
-        const jwt = getJwt();
-        if (jwt) {
-          setUserId(jwt);
-          console.log(`유저 아이디: ${getUserId()}`);
-
-          // TODO: login 함수에서 로직 분리하기
-          if (localStorage.letterId) {
-            const letterId = localStorage.letterId;
-            console.log(letterId);
-            navigate(`/join/${letterId}`);
-          } else {
-            navigate('/');
-          }
+        // TODO: login 함수에서 로직 분리하기
+        if (localStorage.letterId) {
+          const letterId = localStorage.letterId;
+          console.log(letterId);
+          navigate(`/join/${letterId}`);
+        } else {
+          navigate('/');
         }
       }
     } catch (error) {
