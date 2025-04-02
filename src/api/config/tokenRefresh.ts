@@ -14,13 +14,7 @@ const refreshEndpoint = `${import.meta.env.VITE_SERVER_URL}/api/auth/refresh`;
 export const GetNewAccessToken = async (
   config: AxiosRequestConfig,
 ): Promise<string> => {
-  const response = await api.post(
-    refreshEndpoint,
-    {
-      accessToken: (config.headers?.Authorization ?? '')?.split(' ')[1],
-    },
-    config,
-  );
+  const response = await api.post(refreshEndpoint, {}, config);
 
   // TODO: 오류 모니터링
   if (!response.data.success) {
