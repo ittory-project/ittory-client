@@ -1,6 +1,5 @@
 import axios, {
   AxiosError,
-  AxiosRequestConfig,
   HttpStatusCode,
   InternalAxiosRequestConfig,
 } from 'axios';
@@ -11,27 +10,12 @@ import { forceLogout } from './logout';
 // TODO: /api prefix를 axios 인스턴스에 공통화
 const refreshEndpoint = `${import.meta.env.VITE_SERVER_URL}/api/auth/refresh`;
 
-export const GetNewAccessToken = async (
-  config: AxiosRequestConfig,
-): Promise<string> => {
-  const response = await api.post(refreshEndpoint, {}, config);
-
-  // TODO: 오류 모니터링
-  if (!response.data.success) {
-    console.error('토큰 갱신 실패', response.data);
-  }
-
-  return response.data.data.accessToken;
-};
-
-export const refreshAccessToken = async (
-  originalRequest: AxiosRequestConfig | InternalAxiosRequestConfig,
-) => {
-  const newToken = await GetNewAccessToken(originalRequest);
-  const newAuthorization = `Bearer ${newToken}`;
+export const fetchNewAccessToken = async () => {
+  const response = await api.post(refreshEndpoint, {});
+  const newAuthorization = `Bearer ${response.data.data.accessToken}`;
 
   // TODO: localStorage 방식 제거 시 함께 제거
-  setJwt(newToken);
+  setJwt(newAuthorization);
   api.defaults.headers.common['Authorization'] = newAuthorization;
 
   return newAuthorization;
@@ -73,10 +57,8 @@ export const tryTokenRefrsh = async (
   if (error.response?.status === HttpStatusCode.Unauthorized) {
     if (!refreshRequest) {
       refreshRequest = new Promise<string>((resolve, reject) => {
-        refreshAccessToken(config)
-          .then((token) => {
-            resolve(token);
-          })
+        fetchNewAccessToken()
+          .then(resolve)
           .catch((refreshError) => {
             console.error('토큰 갱신 시도 실패:', refreshError);
             forceLogout();
