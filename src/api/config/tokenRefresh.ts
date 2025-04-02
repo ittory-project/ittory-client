@@ -48,8 +48,12 @@ let refreshRequest: Promise<string> | null = null;
 
 export const awaitTokenRefresh = async (config: InternalAxiosRequestConfig) => {
   if (refreshRequest && config.headers) {
-    const newAuthorization = await refreshRequest;
-    config.headers.Authorization = newAuthorization;
+    try {
+      const newAuthorization = await refreshRequest;
+      config.headers.Authorization = newAuthorization;
+    } catch (refreshError) {
+      return Promise.reject(refreshError);
+    }
   }
   return config;
 };
