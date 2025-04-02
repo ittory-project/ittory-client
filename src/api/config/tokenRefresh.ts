@@ -11,7 +11,16 @@ import { forceLogout } from './logout';
 const refreshEndpoint = `${import.meta.env.VITE_SERVER_URL}/api/auth/refresh`;
 
 export const fetchNewAccessToken = async () => {
-  const response = await api.post(refreshEndpoint, {});
+  const response = await api.post(
+    refreshEndpoint,
+    {},
+    {
+      headers: {
+        Authorization: null,
+      },
+    },
+  );
+
   const newAuthorization = `Bearer ${response.data.data.accessToken}`;
 
   // TODO: localStorage 방식 제거 시 함께 제거
@@ -25,7 +34,7 @@ export const fetchNewAccessToken = async () => {
 let refreshRequest: Promise<string> | null = null;
 
 export const awaitTokenRefresh = async (config: InternalAxiosRequestConfig) => {
-  if (refreshRequest && config.headers) {
+  if (refreshRequest && config.headers && config.url !== refreshEndpoint) {
     try {
       const newAuthorization = await refreshRequest;
       config.headers.Authorization = newAuthorization;
