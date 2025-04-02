@@ -65,15 +65,15 @@ export const tryTokenRefrsh = async (
 
   if (error.response?.status === HttpStatusCode.Unauthorized) {
     if (!refreshRequest) {
-      refreshRequest = new Promise<string>((resolve, reject) => {
-        fetchNewAccessToken()
-          .then(resolve)
-          .catch((refreshError) => {
-            console.error('토큰 갱신 시도 실패:', refreshError);
-            forceLogout();
-            reject(refreshError);
-          });
-      });
+      refreshRequest = (async () => {
+        try {
+          return await fetchNewAccessToken();
+        } catch (refreshError) {
+          console.error('토큰 갱신 시도 실패:', refreshError);
+          forceLogout();
+          throw refreshError;
+        }
+      })();
     }
 
     const newAuthorization = await refreshRequest;
