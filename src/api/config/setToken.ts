@@ -4,10 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 
 // 카카오 인가 코드 받기
 export const getKakaoCode = async () => {
-  try {
-    const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_KAKAO_KEY}&redirect_uri=${import.meta.env.VITE_LOGIN_REDIRECT}&response_type=code`;
-    window.location.href = KAKAO_AUTH_URI;
-  } catch (e) {}
+  const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_KAKAO_KEY}&redirect_uri=${import.meta.env.VITE_LOGIN_REDIRECT}&response_type=code`;
+  window.location.href = KAKAO_AUTH_URI;
 };
 
 // 카카오 토큰 응답
@@ -24,32 +22,27 @@ interface KakaoTokenResponse {
 export const getKakaoToken = async (
   code: string,
 ): Promise<AuthJwtPostResponse | null> => {
-  try {
-    const response = await axios.post<KakaoTokenResponse>(
-      'https://kauth.kakao.com/oauth/token',
-      new URLSearchParams({
-        grant_type: 'authorization_code',
-        client_id: import.meta.env.VITE_KAKAO_KEY,
-        client_secret: import.meta.env.VITE_KAKAO_SECRET,
-        redirect_uri: import.meta.env.VITE_LOGIN_REDIRECT,
-        code,
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+  const response = await axios.post<KakaoTokenResponse>(
+    'https://kauth.kakao.com/oauth/token',
+    new URLSearchParams({
+      grant_type: 'authorization_code',
+      client_id: import.meta.env.VITE_KAKAO_KEY,
+      client_secret: import.meta.env.VITE_KAKAO_SECRET,
+      redirect_uri: import.meta.env.VITE_LOGIN_REDIRECT,
+      code,
+    }),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-    );
+    },
+  );
 
-    const token: AuthJwtPostResponse = {
-      accessToken: response.data.access_token,
-      refreshToken: response.data.refresh_token,
-    };
-    return token;
-  } catch (error) {
-    console.error('카카오 로그인 연결 실패:', error);
-    return null;
-  }
+  const token: AuthJwtPostResponse = {
+    accessToken: response.data.access_token,
+    refreshToken: response.data.refresh_token,
+  };
+  return token;
 };
 
 // 세션에서 JWT(서버) 받아오기
