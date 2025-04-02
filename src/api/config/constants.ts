@@ -1,0 +1,5 @@
+// NOTE: 사용 필요 의문
+export const API_ERROR_CODE = {
+  ACCESS_TOKEN_MALFORMED: '3000',
+  ACCESS_TOKEN_EXPIRED: '3001',
+};
