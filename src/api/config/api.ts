@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getJwt } from './setToken';
 import { awaitTokenRefresh, tryTokenRefrsh } from './tokenRefresh';
 
@@ -18,13 +18,14 @@ export interface BaseError {
 
 export type ApiResponse<T> = AxiosResponse<BaseResponse<T>>;
 
-const apiSetting = {
+const apiSetting: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_SERVER_URL,
   timeout: 5000,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // NOTE: 쿠키를 포함한 크로스 도메인 요청을 위해 필요
 };
 
 export const api = axios.create(apiSetting);
