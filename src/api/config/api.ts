@@ -1,7 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { getJwt } from "./setToken";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { getJwt } from './setToken';
+import { awaitTokenRefresh, tryTokenRefrsh } from './tokenRefresh';
 
-export interface BaseResponse<T> {
+export interface BaseResponse<T = unknown> {
   success: boolean;
   status: number;
   data: T;
@@ -17,71 +18,26 @@ export interface BaseError {
 
 export type ApiResponse<T> = AxiosResponse<BaseResponse<T>>;
 
-const apiSetting = {
+const apiSetting: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_SERVER_URL,
   timeout: 5000,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
   },
-};
-
-// const setAxiosJwtHeader = (config: { headers: any }) => {
-//   const jwt = getJwt()
-//   if (jwt) {
-//     api.defaults.headers.common['Authorization'] = `Bearer ${jwt}`;
-//   } else {
-//       delete api.defaults.headers.common['Authorization'];
-//   }
-//   return config
-// }
-
-const setAxiosJwtHeader = (config: { headers: any }) => {
-  const jwt = getJwt();
-  if (jwt) {
-    config.headers["Authorization"] = `Bearer ${jwt}`;
-  } else {
-    delete config.headers["Authorization"];
-  }
-  return config;
-};
-
-const responseHandler = (response: AxiosResponse): Promise<AxiosResponse> => {
-  if (response.status === 204) {
-    // 204 상태에서는 데이터 없이 성공 처리
-    return Promise.resolve(response);
-  }
-  if (!response.data.success) {
-    console.error(response.data);
-    window.alert(`오류: ${response.data.message}`);
-    return Promise.reject(new AxiosError());
-  }
-  return Promise.resolve(response);
-};
-
-const errorHandler = (
-  error: AxiosError<BaseResponse<any>> | Error,
-): Promise<AxiosError> => {
-  if (axios.isAxiosError(error)) {
-    console.error(`${error}\n${error.config?.method}: ${error.config?.url}`);
-    if (
-      error.response?.status === 400 &&
-      error.response &&
-      error.response.data.message
-    ) {
-      alert(`${error.response.data.message}`);
-      console.error(error.response.data);
-    } else {
-      //alert(`서버 연결에 실패하였습니다.`);
-    }
-  } else {
-    console.error(`${error}`);
-    alert(`서버 연결에 실패하였습니다.`);
-  }
-
-  return Promise.reject(error);
+  withCredentials: true, // NOTE: 쿠키를 포함한 크로스 도메인 요청을 위해 필요
 };
 
 export const api = axios.create(apiSetting);
-api.interceptors.request.use(setAxiosJwtHeader);
-api.interceptors.response.use(responseHandler, errorHandler);
+
+// localStorage에서 Access Token 불러옴
+// TODO: localStorage 방식 제거 시 함께 제거
+// NOTE: Bearer null 상황 방지
+const authorization = getJwt();
+const isValidToken = authorization?.includes('.');
+if (isValidToken) {
+  api.defaults.headers.common['Authorization'] = authorization;
+}
+
+api.interceptors.request.use(awaitTokenRefresh);
+api.interceptors.response.use(null, tryTokenRefrsh);

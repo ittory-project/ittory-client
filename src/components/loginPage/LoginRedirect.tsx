@@ -1,48 +1,37 @@
-import { useEffect } from "react";
-import {
-  getJwt,
-  getKakaoToken,
-  getUserId,
-  setJwt,
-  setUserId,
-} from "../../api/config/setToken";
-import { useNavigate } from "react-router-dom";
-import { postLogin } from "../../api/service/AuthService";
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { login } from '../../api/config/login';
 
 export const LoginRedirect = () => {
-  const code = new URL(window.location.href).searchParams.get("code");
+  const location = useLocation();
+  const kakaoSocialLoginCode = new URLSearchParams(location.search).get('code');
   const navigate = useNavigate();
 
-  const setLocalStorageJwt = async (code: string) => {
-    try {
-      const kakaoToken = await getKakaoToken(code);
-      if (kakaoToken) {
-        const response = await postLogin(kakaoToken.accessToken);
-        setJwt(response.accessToken);
-        const jwt = getJwt();
-        if (jwt) {
-          setUserId(jwt);
-          console.log(`유저 아이디: ${getUserId()}`);
-
-          if (localStorage.letterId) {
-            const letterId = localStorage.letterId;
-            console.log(letterId);
-            navigate(`/join/${letterId}`);
-          } else {
-            navigate("/");
-          }
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    if (code) {
-      setLocalStorageJwt(code);
-    }
-  }, [code]);
+    const handleLogin = async () => {
+      if (!kakaoSocialLoginCode) {
+        console.log('소셜 로그인 코드가 없습니다.');
+        return;
+      }
 
+      try {
+        await login(kakaoSocialLoginCode);
+
+        if (localStorage.letterId) {
+          const letterId = localStorage.letterId;
+          navigate(`/join/${letterId}`);
+        } else {
+          navigate('/');
+        }
+      } catch (error) {
+        // TODO: 오류 설명을 띄우기
+        console.error(error);
+      }
+    };
+
+    handleLogin();
+  }, [kakaoSocialLoginCode, navigate]);
+
+  // TODO: Full Screen Loading 화면으로 대체
   return <div>로그인 중입니다</div>;
 };
