@@ -31,7 +31,10 @@ export const api = axios.create(apiSetting);
 
 // localStorage에서 Access Token 불러옴
 // TODO: localStorage 방식 제거 시 함께 제거
-api.defaults.headers.common['Authorization'] = `Bearer ${getJwt()}`;
+// NOTE: Bearer null 상황 방지
+if (getJwt()) {
+  api.defaults.headers.common['Authorization'] = `Bearer ${getJwt()}`;
+}
 
 api.interceptors.request.use(awaitTokenRefresh);
 api.interceptors.response.use(null, tryTokenRefrsh);
