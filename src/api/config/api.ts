@@ -1,6 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { getJwt } from './setToken';
-import { awaitTokenRefresh, tryTokenRefrsh } from './tokenRefresh';
+import {
+  attachAccessToken,
+  awaitTokenRefresh,
+  tryTokenRefrsh,
+} from './tokenRefresh';
 
 export interface BaseResponse<T = unknown> {
   success: boolean;
@@ -30,14 +33,6 @@ const apiSetting: AxiosRequestConfig = {
 
 export const api = axios.create(apiSetting);
 
-// localStorage에서 Access Token 불러옴
-// TODO: localStorage 방식 제거 시 함께 제거
-// NOTE: Bearer null 상황 방지
-const authorization = getJwt();
-const isValidToken = authorization?.includes('.');
-if (isValidToken) {
-  api.defaults.headers.common['Authorization'] = authorization;
-}
-
+api.interceptors.request.use(attachAccessToken);
 api.interceptors.request.use(awaitTokenRefresh);
 api.interceptors.response.use(null, tryTokenRefrsh);
