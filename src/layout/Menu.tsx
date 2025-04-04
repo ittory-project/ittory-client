@@ -1,15 +1,16 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import X from "../../public/assets/x.svg";
-import direction from "../../public/assets/navigate.svg";
-import letter_create from "../../public/assets/menu/letter_create.svg";
-import letter_receive from "../../public/assets/menu/letter_receive.svg";
-import ask from "../../public/assets/menu/ask.svg";
-import graynavi from "../../public/assets/menu/graynavi.svg";
-import defaultImage from "../../public/assets/menu/profileImg.png";
-import { useNavigate } from "react-router-dom";
-import { getLetterCounts, getMyPage } from "../api/service/MemberService";
-import logindefault from "../../public/assets/menu/logindefault.png";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import X from '../../public/assets/x.svg';
+import direction from '../../public/assets/navigate.svg';
+import letter_create from '../../public/assets/menu/letter_create.svg';
+import letter_receive from '../../public/assets/menu/letter_receive.svg';
+import ask from '../../public/assets/menu/ask.svg';
+import graynavi from '../../public/assets/menu/graynavi.svg';
+import defaultImage from '../../public/assets/menu/profileImg.png';
+import { useNavigate } from 'react-router-dom';
+import { getLetterCounts, getMyPage } from '../api/service/MemberService';
+import logindefault from '../../public/assets/menu/logindefault.png';
+import { accessTokenRepository } from '../api/config/AccessTokenRepository';
 
 interface Props {
   onClose: () => void;
@@ -33,22 +34,22 @@ export const Menu = ({ onClose }: Props) => {
   } | null>(null);
   const [partiLetter, setPartiLetter] = useState<number>(0);
   const [receiveLetter, setReceiveLetter] = useState<number>(0);
-  const [profileImage, setProfileImage] = useState<string>("");
-  const [userName, setUserName] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
 
-  console.log("메뉴 열림");
+  console.log('메뉴 열림');
 
   useEffect(() => {
-    if (localStorage.jwt) {
+    if (accessTokenRepository.isLoggedIn()) {
       setUser(true);
       const fetchLetterCounts = async () => {
         try {
           const counts = await getLetterCounts();
           setPartiLetter(counts.participationLetterCount);
           setReceiveLetter(counts.receiveLetterCount);
-          console.log("Letter Counts:", counts);
+          console.log('Letter Counts:', counts);
         } catch (err) {
-          console.error("Error fetching letter counts:", err);
+          console.error('Error fetching letter counts:', err);
         }
       };
 
@@ -58,9 +59,9 @@ export const Menu = ({ onClose }: Props) => {
           setProfileImage(myPageData.profileImage);
           setUserName(myPageData.name);
 
-          console.log("My Page Data:", myPageData);
+          console.log('My Page Data:', myPageData);
         } catch (err) {
-          console.error("Error fetching my page data:", err);
+          console.error('Error fetching my page data:', err);
         }
       };
       fetchLetterCounts();
@@ -71,7 +72,7 @@ export const Menu = ({ onClose }: Props) => {
   }, []);
 
   const navigateToAccount = () => {
-    navigate("/Account");
+    navigate('/Account');
     onClose();
   };
 
@@ -85,26 +86,26 @@ export const Menu = ({ onClose }: Props) => {
   }, [navigatePath, navigateState]);
 
   const handleCreate = () => {
-    if (!localStorage.jwt) {
-      navigate("/login");
+    if (!accessTokenRepository.isLoggedIn()) {
+      navigate('/login');
       onClose();
     } else {
       setFocusCreate(true);
       setFocusReceive(false);
       setNavigateState({ focusCreate: true, focusReceive: false });
-      setNavigatePath("/LetterBox");
+      setNavigatePath('/LetterBox');
     }
   };
 
   const handleReceive = () => {
-    if (!localStorage.jwt) {
-      navigate("/login");
+    if (!accessTokenRepository.isLoggedIn()) {
+      navigate('/login');
       onClose();
     } else {
       setFocusCreate(false);
       setFocusReceive(true);
       setNavigateState({ focusCreate: false, focusReceive: true });
-      setNavigatePath("/LetterBox");
+      setNavigatePath('/LetterBox');
     }
   };
 
@@ -112,21 +113,21 @@ export const Menu = ({ onClose }: Props) => {
     onClose();
   };
   const handleLogin = () => {
-    navigate("/login");
+    navigate('/login');
     onClose();
   };
   const handleAsk = () => {
     window.open(
-      "https://docs.google.com/forms/d/e/1FAIpQLSf2kfLU3FoKyvgWiA_mzdTrTiYTNn9otsoQkaIIfNYM5Nze2g/viewform",
-      "_blank",
+      'https://docs.google.com/forms/d/e/1FAIpQLSf2kfLU3FoKyvgWiA_mzdTrTiYTNn9otsoQkaIIfNYM5Nze2g/viewform',
+      '_blank',
     );
   };
   const handleCreateBtn = () => {
-    if (!localStorage.jwt) {
-      navigate("/login");
+    if (!accessTokenRepository.isLoggedIn()) {
+      navigate('/login');
       onClose();
     } else {
-      navigate("/create");
+      navigate('/create');
     }
   };
   return (
@@ -135,7 +136,7 @@ export const Menu = ({ onClose }: Props) => {
         <img
           src={X}
           alt="X"
-          style={{ width: "16px", height: "16px" }}
+          style={{ width: '16px', height: '16px' }}
           onClick={handleCancel}
         />
       </Cancel>
@@ -155,7 +156,7 @@ export const Menu = ({ onClose }: Props) => {
           <>
             <NavigateLogin onClick={handleLogin}>
               로그인하고 이용하기
-              {<img src={direction} style={{ width: "7px", height: "12px" }} />}
+              {<img src={direction} style={{ width: '7px', height: '12px' }} />}
             </NavigateLogin>
           </>
         ) : (
@@ -166,9 +167,9 @@ export const Menu = ({ onClose }: Props) => {
               <img
                 src={graynavi}
                 style={{
-                  width: "5px",
-                  height: "9px",
-                  marginLeft: "5.75px",
+                  width: '5px',
+                  height: '9px',
+                  marginLeft: '5.75px',
                 }}
               />
             </UserSetting>
@@ -179,14 +180,14 @@ export const Menu = ({ onClose }: Props) => {
         <CreatedLetter onClick={handleCreate}>
           <img
             src={letter_create}
-            style={{ width: "20px", height: "20px", marginBottom: "1.2px" }}
+            style={{ width: '20px', height: '20px', marginBottom: '1.2px' }}
           />
           참여한 편지
           {user === false ? (
-            <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
+            <LetterNum style={{ color: '#ADB5BD' }}>0개</LetterNum>
           ) : (
             <LetterNum
-              style={{ color: partiLetter == 0 ? "#ADB5BD" : "inherit" }}
+              style={{ color: partiLetter == 0 ? '#ADB5BD' : 'inherit' }}
             >
               <>{String(partiLetter)}개</>
             </LetterNum>
@@ -204,14 +205,14 @@ export const Menu = ({ onClose }: Props) => {
         <ReceivedLetter onClick={handleReceive}>
           <img
             src={letter_receive}
-            style={{ width: "20px", height: "20px", marginBottom: "1.2px" }}
+            style={{ width: '20px', height: '20px', marginBottom: '1.2px' }}
           />
           받은 편지
           {user === false ? (
-            <LetterNum style={{ color: "#ADB5BD" }}>0개</LetterNum>
+            <LetterNum style={{ color: '#ADB5BD' }}>0개</LetterNum>
           ) : (
             <LetterNum
-              style={{ color: receiveLetter == 0 ? "#ADB5BD" : "inherit" }}
+              style={{ color: receiveLetter == 0 ? '#ADB5BD' : 'inherit' }}
             >
               <>{String(receiveLetter)}개</>
             </LetterNum>
@@ -234,11 +235,11 @@ export const Menu = ({ onClose }: Props) => {
         <AskContainer onClick={handleAsk}>
           <img
             src={ask}
-            style={{ width: "16px", height: "16px", marginBottom: "1.2px" }}
+            style={{ width: '16px', height: '16px', marginBottom: '1.2px' }}
           />
           문의하기
           <Navi>
-            <img src={graynavi} style={{ width: "5px", height: "10px" }} />
+            <img src={graynavi} style={{ width: '5px', height: '10px' }} />
           </Navi>
         </AskContainer>
       </List>
