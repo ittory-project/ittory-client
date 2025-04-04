@@ -1,0 +1,4 @@
+commit-msg:
+  jobs:
+    - run: npx --no -- commitlint --edit {1}
+      stage_fixed: true
