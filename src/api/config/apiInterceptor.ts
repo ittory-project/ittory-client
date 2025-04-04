@@ -5,43 +5,27 @@ import axios, {
 } from 'axios';
 import { api, BaseResponse } from './api';
 import { forceLogout } from './logout';
-import { AccessTokenManager } from './accessTokenManager';
-
-// TODO: /api prefix를 axios 인스턴스에 공통화
-const refreshEndpoint = `${import.meta.env.VITE_SERVER_URL}/api/auth/refresh`;
-
-export const fetchNewAccessToken = async () => {
-  const response = await api.post(
-    refreshEndpoint,
-    {},
-    {
-      headers: {
-        Authorization: null,
-      },
-    },
-  );
-
-  AccessTokenManager.getInstance().setAccessToken(
-    `Bearer ${response.data.data.accessToken}`,
-  );
-};
-
-// 동시 실행되는 요청들에 대해 토큰 갱신 요청을 공유하기 위함
-let refreshRequest: Promise<void> | null = null;
+import {
+  accessTokenRepository,
+  refreshEndpoint,
+} from './AccessTokenRepository';
 
 export const attachAccessToken = (config: InternalAxiosRequestConfig) => {
   // NOTE: Refresh 요청 시에도 해당 Interceptor를 통과
-  if (!refreshRequest) {
-    config.headers.Authorization =
-      AccessTokenManager.getInstance().getAccessToken();
+  if (!accessTokenRepository.isRefreshing()) {
+    config.headers.Authorization = accessTokenRepository.get();
   }
   return config;
 };
 
 export const awaitTokenRefresh = async (config: InternalAxiosRequestConfig) => {
-  if (refreshRequest && config.headers && config.url !== refreshEndpoint) {
+  if (
+    accessTokenRepository.isRefreshing() &&
+    config.headers &&
+    config.url !== refreshEndpoint
+  ) {
     try {
-      await refreshRequest;
+      await accessTokenRepository.refresh();
       attachAccessToken(config);
     } catch (refreshError) {
       return Promise.reject(refreshError);
@@ -51,7 +35,7 @@ export const awaitTokenRefresh = async (config: InternalAxiosRequestConfig) => {
 };
 
 // TODO: Sentry 등으로 오류 모니터링
-export const tryTokenRefrsh = async (
+export const tryTokenRefresh = async (
   error: AxiosError<BaseResponse<unknown>> | Error,
 ) => {
   // Q. throw로 처리하면 더 깔끔할 것 같은데 조사 필요
@@ -67,19 +51,13 @@ export const tryTokenRefrsh = async (
   }
 
   if (error.response?.status === HttpStatusCode.Unauthorized) {
-    if (!refreshRequest) {
-      refreshRequest = (async () => {
-        try {
-          await fetchNewAccessToken();
-          attachAccessToken(config);
-        } catch (refreshError) {
-          console.error('토큰 갱신 시도 실패:', refreshError);
-          forceLogout();
-          throw refreshError;
-        } finally {
-          refreshRequest = null;
-        }
-      })();
+    try {
+      await accessTokenRepository.refresh();
+      attachAccessToken(config);
+    } catch (refreshError) {
+      console.error('HTTP 요청 중 토큰 갱신에 실패:', refreshError);
+      forceLogout();
+      throw refreshError;
     }
 
     return api(config);

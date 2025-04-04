@@ -2,8 +2,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import {
   attachAccessToken,
   awaitTokenRefresh,
-  tryTokenRefrsh,
-} from './tokenRefresh';
+  tryTokenRefresh,
+} from './apiInterceptor';
 
 export interface BaseResponse<T = unknown> {
   success: boolean;
@@ -35,4 +35,4 @@ export const api = axios.create(apiSetting);
 
 api.interceptors.request.use(attachAccessToken);
 api.interceptors.request.use(awaitTokenRefresh);
-api.interceptors.response.use(null, tryTokenRefrsh);
+api.interceptors.response.use(null, tryTokenRefresh);
