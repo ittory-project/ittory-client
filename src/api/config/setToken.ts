@@ -1,48 +1,9 @@
-import axios from 'axios';
-import { AuthJwtPostResponse } from '../model/AuthModel';
 import { jwtDecode } from 'jwt-decode';
 
-// 카카오 인가 코드 받기
+const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_KAKAO_KEY}&redirect_uri=${import.meta.env.VITE_LOGIN_REDIRECT}&response_type=code`;
+
 export const getKakaoCode = async () => {
-  const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_KAKAO_KEY}&redirect_uri=${import.meta.env.VITE_LOGIN_REDIRECT}&response_type=code`;
   window.location.href = KAKAO_AUTH_URI;
-};
-
-// 카카오 토큰 응답
-interface KakaoTokenResponse {
-  access_token: string;
-  token_type: string;
-  refresh_token: string;
-  expires_in: number;
-  scope: string;
-  refresh_token_expires_in: number;
-}
-
-// 카카오 토큰 받기
-export const getKakaoToken = async (
-  code: string,
-): Promise<AuthJwtPostResponse | null> => {
-  const response = await axios.post<KakaoTokenResponse>(
-    'https://kauth.kakao.com/oauth/token',
-    new URLSearchParams({
-      grant_type: 'authorization_code',
-      client_id: import.meta.env.VITE_KAKAO_KEY,
-      client_secret: import.meta.env.VITE_KAKAO_SECRET,
-      redirect_uri: import.meta.env.VITE_LOGIN_REDIRECT,
-      code,
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    },
-  );
-
-  const token: AuthJwtPostResponse = {
-    accessToken: response.data.access_token,
-    refreshToken: response.data.refresh_token,
-  };
-  return token;
 };
 
 // 세션에서 유저 아이디 받아오기
