@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   extends: ['@commitlint/config-conventional'],
   /*
     type(scope?): subject // 여기 전체를 header
@@ -12,6 +12,7 @@ module.exports = {
     'header-max-length': [0],
     'subject-case': [0],
     'subject-full-stop': [0],
+    'type-case': [0],
     'subject-empty': [2, 'never'], // subject 생략 불가
     'type-empty': [2, 'never'], // type 생략 불가
     'type-enum': [
