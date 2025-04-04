@@ -1,6 +1,7 @@
 import { Client } from '@stomp/stompjs';
 import { forceLogout } from './logout';
 import { accessTokenRepository } from './AccessTokenRepository';
+import { WEBSOCKET_CONFIG } from './constants';
 
 export const stompClient = (): Client => {
   const authorization = accessTokenRepository.get();
@@ -16,6 +17,8 @@ export const stompClient = (): Client => {
     debug: (str) => {
       console.log(str);
     },
+    // NOTE: 토큰 갱신 시 기본값인 5000ms는 너무 길어서, 500ms 대기 후 재연결
+    reconnectDelay: WEBSOCKET_CONFIG.RECONNECT_DELAY,
   });
 
   client.onStompError = async (frame) => {
