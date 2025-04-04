@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './api/config/state.ts';
 import { HelmetProvider } from 'react-helmet-async';
-import { fetchNewAccessToken } from './api/config/tokenRefresh.ts';
+import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
 
 // const container = document.getElementById('root') as HTMLElement;
 // const root = ReactDOM.createRoot(container);
@@ -34,7 +34,7 @@ import { fetchNewAccessToken } from './api/config/tokenRefresh.ts';
 // }
 
 // TODO: 로그인 로딩에 대한 더 좋은 방식 찾기.
-fetchNewAccessToken().finally(() => {
+accessTokenRepository.refresh().finally(() => {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
