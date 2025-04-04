@@ -1,16 +1,13 @@
-import { api, ApiResponse } from "../config/api";
-import { AuthJwtPostResponse, LogoutResponse } from "../model/AuthModel";
+import { api, ApiResponse } from '../config/api';
+import { AuthJwtPostResponse, LogoutResponse } from '../model/AuthModel';
 
-// 로그인 API
-// param: 카카오 액세스 토큰
-// response: LoginJwtPostResponse - 서버의 토큰
-export async function postLogin(
-  accessToken: string,
+export async function requestKakaoAuthentication(
+  authorizationCode: string,
 ): Promise<AuthJwtPostResponse> {
   const response: ApiResponse<AuthJwtPostResponse> = await api.post(
     `/api/auth/login/kakao`,
     {
-      accessToken,
+      authorizationCode,
     },
   );
   return response.data.data;
