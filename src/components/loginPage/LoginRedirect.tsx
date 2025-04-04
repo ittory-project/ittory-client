@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { login } from '../../api/config/login';
+import { kakaoLogin } from '../../api/config/kakaoLogin';
 
 export const LoginRedirect = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ export const LoginRedirect = () => {
       }
 
       try {
-        await login(kakaoSocialLoginCode);
+        await kakaoLogin(kakaoSocialLoginCode);
 
         if (localStorage.letterId) {
           const letterId = localStorage.letterId;
