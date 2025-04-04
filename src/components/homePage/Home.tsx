@@ -1,20 +1,21 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import styled, { keyframes } from "styled-components";
-import logo from "../../../public/assets/home/logo.png";
-import { useNavigate } from "react-router-dom";
-import Header from "./Header";
-import divider from "../../../public/assets/home/bar.svg";
-import twitter from "../../../public/assets/home/twitter.svg";
-import insta from "../../../public/assets/home/insta.svg";
-import animation from "../../../public/assets/home/animation.json";
-import Player, { LottieRefCurrentProps } from "lottie-react";
-import { Menu } from "../../layout/Menu";
-import { useSwipeable } from "react-swipeable";
-import divider2 from "../../../public/assets/home/bar.png";
+import { useState, useEffect, useRef, useCallback } from 'react';
+import styled, { keyframes } from 'styled-components';
+import logo from '../../../public/assets/home/logo.png';
+import { useNavigate } from 'react-router-dom';
+import Header from './Header';
+import divider from '../../../public/assets/home/bar.svg';
+import twitter from '../../../public/assets/home/twitter.svg';
+import insta from '../../../public/assets/home/insta.svg';
+import animation from '../../../public/assets/home/animation.json';
+import Player, { LottieRefCurrentProps } from 'lottie-react';
+import { Menu } from '../../layout/Menu';
+import { useSwipeable } from 'react-swipeable';
+import divider2 from '../../../public/assets/home/bar.png';
+import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
 
-const bg1 = "/assets/home/main.jpg";
-const bg8 = "/assets/home/07.jpg";
-const body = "/assets/home/body.jpg";
+const bg1 = '/assets/home/main.jpg';
+const bg8 = '/assets/home/07.jpg';
+const body = '/assets/home/body.jpg';
 
 interface $Props {
   $img: string;
@@ -38,17 +39,17 @@ export const Home = () => {
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
       if (!isMenuOpen) {
-        console.log("스와이프로 메뉴 열음");
+        console.log('스와이프로 메뉴 열음');
         setIsMenuOpen(true);
       }
     },
   });
 
   const handleButton = () => {
-    if (localStorage.jwt) {
-      navigate("/create");
+    if (accessTokenRepository.isLoggedIn()) {
+      navigate('/create');
     } else {
-      navigate("/login");
+      navigate('/login');
     }
   };
 
@@ -90,27 +91,27 @@ export const Home = () => {
   const handleLottieClick = () => {
     if (sectionRefs.current[1]) {
       sectionRefs.current[1].scrollIntoView({
-        behavior: "smooth", // 부드럽게 스크롤
-        block: "start", // 섹션의 시작 부분을 맞춤
+        behavior: 'smooth', // 부드럽게 스크롤
+        block: 'start', // 섹션의 시작 부분을 맞춤
       });
     }
   };
 
   const handleTermsClick = () => {
     window.location.href =
-      "https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47";
+      'https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47';
   };
 
   const handlePrivacyPolicyClick = () => {
     window.location.href =
-      "https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5";
+      'https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5';
   };
   const handleInstaClick = () => {
     window.location.href =
-      "https://www.instagram.com/ittory.official/?igsh=dWI4NXo4OTd5d2Mw&utm_source=qr";
+      'https://www.instagram.com/ittory.official/?igsh=dWI4NXo4OTd5d2Mw&utm_source=qr';
   };
   const handleTwtClick = () => {
-    window.location.href = "https://x.com/ittoryofficial";
+    window.location.href = 'https://x.com/ittoryofficial';
   };
 
   return (
@@ -144,11 +145,11 @@ export const Home = () => {
                 autoplay
                 onClick={handleLottieClick}
                 style={{
-                  height: "70px",
-                  width: "70px",
-                  margin: "0 auto",
-                  top: "65.5%",
-                  position: "relative",
+                  height: '70px',
+                  width: '70px',
+                  margin: '0 auto',
+                  top: '65.5%',
+                  position: 'relative',
                 }}
               />
             </FirstSection>
@@ -169,14 +170,14 @@ export const Home = () => {
                 <SubTitle>문의&nbsp;&nbsp;&nbsp;ittory.team@gmail.com</SubTitle>
                 <SubTitle>
                   <span
-                    style={{ marginRight: "8px", cursor: "pointer" }}
+                    style={{ marginRight: '8px', cursor: 'pointer' }}
                     onClick={handleTermsClick}
                   >
                     이용약관
                   </span>
-                  <img src={divider2} alt="divider" style={{ height: "9px" }} />
+                  <img src={divider2} alt="divider" style={{ height: '9px' }} />
                   <span
-                    style={{ marginLeft: "8px", cursor: "pointer" }}
+                    style={{ marginLeft: '8px', cursor: 'pointer' }}
                     onClick={handlePrivacyPolicyClick}
                   >
                     개인정보&nbsp;&nbsp;처리방침
@@ -187,13 +188,13 @@ export const Home = () => {
                   <SnsIcon
                     src={insta}
                     alt="insta"
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     onClick={handleInstaClick}
                   />
                   <SnsIcon
                     src={twitter}
                     alt="twitter"
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                     onClick={handleTwtClick}
                   />
                 </SnsContainer>
@@ -212,7 +213,7 @@ const MenuOverlay = styled.div<{ $isOpen: boolean }>`
   height: calc(var(--vh, 1vh) * 100);
   background: rgba(0, 0, 0, 0.8);
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease;
@@ -225,8 +226,8 @@ const MenuContainer = styled.div<{ $isOpen: boolean }>`
   width: 260px;
   height: calc(var(--vh, 1vh) * 100);
   background: #fff;
-  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
-  transform: translateX(${(props) => (props.$isOpen ? "0" : "100%")});
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+  transform: translateX(${(props) => (props.$isOpen ? '0' : '100%')});
   transition: transform 0.3s ease;
   z-index: 20;
 `;
