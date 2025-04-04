@@ -48,6 +48,10 @@ export class AccessTokenRepository {
     this.#accessToken = accessToken;
   }
 
+  isLoggedIn() {
+    return this.#accessToken !== null;
+  }
+
   // TODO: Sentry 등으로 오류 모니터링
   refresh() {
     if (!this.#refreshRequest) {
