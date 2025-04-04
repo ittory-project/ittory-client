@@ -1,6 +1,6 @@
 import { postLogin } from '../service/AuthService';
-import { api } from './api';
-import { getKakaoToken, getUserId, setJwt, setUserId } from './setToken';
+import { accessTokenRepository } from './AccessTokenRepository';
+import { getKakaoToken, getUserId } from './setToken';
 
 export const login = async (code: string) => {
   const kakaoToken = await getKakaoToken(code);
@@ -8,11 +8,8 @@ export const login = async (code: string) => {
     throw new Error('카카오 토큰 발급 실패');
   }
 
-  const response = await postLogin(kakaoToken.accessToken);
-  const newAuthorization = `Bearer ${response.accessToken}`;
+  const { accessToken } = await postLogin(kakaoToken.accessToken);
+  accessTokenRepository.onLogin(accessToken);
 
-  api.defaults.headers.common['Authorization'] = newAuthorization;
-  setJwt(newAuthorization);
-  setUserId(response.accessToken);
   console.log(`유저 아이디: ${getUserId()}`);
 };

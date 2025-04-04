@@ -45,22 +45,6 @@ export const getKakaoToken = async (
   return token;
 };
 
-// 세션에서 JWT(서버) 받아오기
-export const getJwt = () => {
-  const jwt = window.localStorage.getItem('jwt');
-  if (jwt) {
-    return jwt;
-  } else {
-    console.error('회원 정보가 존재하지 않습니다.');
-    return null;
-  }
-};
-
-// 세션에 JWT(서버) 저장하기
-export const setJwt = (code: string) => {
-  window.localStorage.setItem('jwt', code);
-};
-
 // 세션에서 유저 아이디 받아오기
 export const getUserId = () => {
   const userId = window.localStorage.getItem('userId');
