@@ -43,6 +43,11 @@ export class AccessTokenRepository {
     return this.#refreshRequest !== null;
   }
 
+  // NOTE: 로그인 API로 로그인 시 반환되는 AccessToken 활용
+  onLogin(accessToken: string) {
+    this.#accessToken = accessToken;
+  }
+
   // TODO: Sentry 등으로 오류 모니터링
   refresh() {
     if (!this.#refreshRequest) {
