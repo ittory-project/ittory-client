@@ -1,40 +1,41 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { JoinModal } from "./JoinModal";
-import { getMyPage, getVisitUser } from "../../api/service/MemberService";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { JoinModal } from './JoinModal';
+import { getMyPage, getVisitUser } from '../../api/service/MemberService';
+import { useNavigate, useParams } from 'react-router-dom';
 //import { NicknamePostRequest } from "../../api/model/ParticipantModel";
 //import { postNickname } from "../../api/service/ParticipantService";
-import NoAccess from "./NoAccess";
-import Started from "./Started";
-import Deleted from "./Deleted";
-import { DeleteConfirm } from "../InvitePage/Delete/DeleteConfirm";
+import NoAccess from './NoAccess';
+import Started from './Started';
+import Deleted from './Deleted';
+import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
+import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
 
 export const Join = () => {
-  const [nickname, setNickname] = useState<string>("");
-  const [name, setName] = useState<string>("");
+  const [nickname, setNickname] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false);
   const [visited, setVisited] = useState<boolean>(false);
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
   const navigate = useNavigate();
   const { letterId } = useParams();
-    const [started, setStarted] = useState<boolean>(false);
-    const [deleted, setDeleted] = useState<boolean>(false);
-    const [deleteConf, setDeleteConf] = useState<boolean>(false);
-    const [noAccess, setNoAccess] = useState<boolean>(false);
+  const [started, setStarted] = useState<boolean>(false);
+  const [deleted, setDeleted] = useState<boolean>(false);
+  const [deleteConf, setDeleteConf] = useState<boolean>(false);
+  const [noAccess, setNoAccess] = useState<boolean>(false);
 
   useEffect(() => {
     if (letterId) {
-      localStorage.setItem("letterId", letterId);
+      localStorage.setItem('letterId', letterId);
     }
   }, [letterId]);
 
   useEffect(() => {
     const fetchVisitUser = async () => {
       try {
-        if (!localStorage.jwt) {
-          navigate("/login");
+        if (!accessTokenRepository.isLoggedIn()) {
+          navigate('/login');
         } else {
           setLogin(true);
           const visitdata = await getVisitUser();
@@ -60,7 +61,7 @@ export const Join = () => {
           setName(myPageData.name);
         }
       } catch (err) {
-        console.error("Error fetching my page data:", err);
+        console.error('Error fetching my page data:', err);
       }
     };
     fetchMyPageData();
@@ -88,29 +89,28 @@ export const Join = () => {
     if (value.length > 5) {
       value = value.slice(0, 5);
     }
-  
+
     // 공백만 입력된 경우 빈 문자열로 처리
-    if (value.trim() === "") {
-      setNickname("");
+    if (value.trim() === '') {
+      setNickname('');
       return;
     }
-  
+
     // 문자열 뒤쪽 공백 제거
     setNickname(value.trimEnd());
     //setNickname(value);
-    setDuplicateError(false); 
+    setDuplicateError(false);
   };
 
   return (
-    
     <>
-            {noAccess && <NoAccess />}
-            {started && <Started />}
-              {deleted && <Deleted />}
-              {deleteConf && <DeleteConfirm />}
+      {noAccess && <NoAccess />}
+      {started && <Started />}
+      {deleted && <Deleted />}
+      {deleteConf && <DeleteConfirm />}
 
-        
-              {!noAccess && !started && !deleted && !deleteConf && <BackGround>
+      {!noAccess && !started && !deleted && !deleteConf && (
+        <BackGround>
           {viewModal && <Overlay />}
           {
             <>
@@ -136,16 +136,16 @@ export const Join = () => {
                   <ErrorMessage>이미 사용중인 닉네임입니다.</ErrorMessage>
                 )}
               </Container>
-              {nickname === "" ? (
-                <Button disabled={true} style={{ background: "#ced4da" }}>
+              {nickname === '' ? (
+                <Button disabled={true} style={{ background: '#ced4da' }}>
                   <ButtonTxt>완료</ButtonTxt>
                 </Button>
               ) : (
                 <Button
                   style={{
-                    background: "#FFA256",
+                    background: '#FFA256',
                     boxShadow:
-                      "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)",
+                      '1px -1px 0.4px 0px rgba(0, 0, 0, 0.14), 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30)',
                   }}
                   onClick={handleModal}
                 >
@@ -166,7 +166,7 @@ export const Join = () => {
             />
           )}
         </BackGround>
-}
+      )}
     </>
   );
 };
@@ -253,7 +253,7 @@ const InputBox = styled.div<{ $hasError: boolean }>`
   gap: 6px;
   margin-top: 0;
   border-bottom: 1px dashed
-    ${(props) => (props.$hasError ? "#ff0004" : "#dee2e6")};
+    ${(props) => (props.$hasError ? '#ff0004' : '#dee2e6')};
   margin-bottom: 1.8px;
   cursor: pointer;
 `;
