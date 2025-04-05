@@ -51,6 +51,10 @@ export const tryTokenRefresh = async (
   }
 
   if (error.response?.status === HttpStatusCode.Unauthorized) {
+    if (config.url === refreshEndpoint) {
+      return Promise.reject('Refresh 요청이 실패');
+    }
+
     try {
       await accessTokenRepository.refresh();
       attachAccessToken(config);
