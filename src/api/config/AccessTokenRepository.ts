@@ -33,8 +33,9 @@ export class AccessTokenRepository {
   }
 
   get() {
+    // NOTE: 첫 로그인 시 호출되므로 null 반환 필요
     if (!this.#accessToken) {
-      throw new Error('Access Token이 없습니다.');
+      throw null;
     }
     return this.#accessToken;
   }
@@ -45,7 +46,7 @@ export class AccessTokenRepository {
 
   // NOTE: 로그인 API로 로그인 시 반환되는 AccessToken 활용
   onLogin(accessToken: string) {
-    this.#accessToken = accessToken;
+    this.#accessToken = `Bearer ${accessToken}`;
   }
 
   isLoggedIn() {
