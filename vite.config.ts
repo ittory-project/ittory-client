@@ -28,6 +28,11 @@ export default defineConfig({
   server: {
     allowedHosts: ['dev-client.ittory.co.kr'],
   },
+  build: {
+    // @see https://github.com/vitejs/vite/issues/19402
+    assetsInlineLimit: 0,
+  },
+
   // build: {
   // outDir: 'build',
   // emptyOutDir: true,
