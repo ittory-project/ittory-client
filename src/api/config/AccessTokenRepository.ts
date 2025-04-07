@@ -35,7 +35,7 @@ export class AccessTokenRepository {
   get() {
     // NOTE: 첫 로그인 시 호출되므로 null 반환 필요
     if (!this.#accessToken) {
-      throw null;
+      return null;
     }
     return this.#accessToken;
   }
