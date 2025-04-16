@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import styled from "styled-components";
-import CalenderView from "./CalenderView";
+import React, { useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import CalenderView from './CalenderView';
 
 interface Props {
   deliverDay: Date | null | string;
@@ -26,9 +26,9 @@ export default function BottomSheet({
         closeModal();
       }
     }
-    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener('mousedown', handleOutside);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
     };
   }, [modalBackground]);
 

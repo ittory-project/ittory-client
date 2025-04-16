@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import ArrowPrev from "../../../public/assets/pagination/arrow_back.svg?react";
-import ArrowNext from "../../../public/assets/pagination/arrow_next.svg?react";
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import ArrowPrev from '../../../public/assets/pagination/arrow_back.svg?react';
+import ArrowNext from '../../../public/assets/pagination/arrow_next.svg?react';
 
 interface PaginationProps {
   totalPages: number;
@@ -18,7 +18,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
   const query = Query();
 
   useEffect(() => {
-    const getPage = Number(query.get("page"));
+    const getPage = Number(query.get('page'));
     if (getPage) {
       setCurrentPage(getPage);
     } else {
@@ -28,7 +28,7 @@ export const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
 
   const onPageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
-    query.set("page", page.toString());
+    query.set('page', page.toString());
     navigate({
       search: query.toString(),
     });
@@ -100,7 +100,7 @@ const PaginationText = styled.span`
   text-align: center;
 
   /* caption/number_large */
-  font-family: var(--Typography-family-number, "Gmarket Sans");
+  font-family: var(--Typography-family-number, 'Gmarket Sans');
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import prev from "../../../public/assets/prev.svg";
-import check from "../../../public/assets/checkbox_gray.svg";
-import checked from "../../../public/assets/checkbox_black.svg";
-import { postWithdraw } from "../../api/service/MemberService";
-import { WithdrawPostRequest } from "../../api/model/MemberModel";
-import { WithdrawPopup } from "./WithdrawPopup";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import prev from '../../../public/assets/prev.svg';
+import check from '../../../public/assets/checkbox_gray.svg';
+import checked from '../../../public/assets/checkbox_black.svg';
+import { postWithdraw } from '../../api/service/MemberService';
+import { WithdrawPostRequest } from '../../api/model/MemberModel';
+import { WithdrawPopup } from './WithdrawPopup';
 
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,18 +17,18 @@ interface InputAreaProps {
 
 export const DeleteReason = ({ setViewReason }: Props) => {
   const [selectedReason, setSelectedReason] = useState<number | null>(null);
-  const [otherReason, setOtherReason] = useState<string>("");
+  const [otherReason, setOtherReason] = useState<string>('');
   const [buttonEnable, setButtonEnable] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
   const [length, setLength] = useState<number>(0);
   const [checked, setChecked] = useState<boolean>(false);
 
   const withdrawReason: string[] = [
-    "NOT_USE",
-    "ERROR",
-    "INCONVENIENCE",
-    "NOT_FUN",
-    "ETC",
+    'NOT_USE',
+    'ERROR',
+    'INCONVENIENCE',
+    'NOT_FUN',
+    'ETC',
   ];
 
   const handleCheckboxChange = (reason: number) => {
@@ -38,7 +38,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
 
   useEffect(() => {
     if (selectedReason !== 4 && selectedReason !== null) {
-      setOtherReason("");
+      setOtherReason('');
       setLength(0);
       setButtonEnable(true);
     } else {
@@ -48,7 +48,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
 
   useEffect(() => {
     if (selectedReason === 4) {
-      if (otherReason === "") {
+      if (otherReason === '') {
         setButtonEnable(false);
       } else {
         setButtonEnable(true);
@@ -79,11 +79,11 @@ export const DeleteReason = ({ setViewReason }: Props) => {
 
       try {
         const response = await postWithdraw(data);
-        localStorage.removeItem("jwt");
-        console.log("Withdrawal successful:", response);
+        localStorage.removeItem('jwt');
+        console.log('Withdrawal successful:', response);
         setPopup(true);
       } catch (error) {
-        console.error("Error in withdrawal:", error);
+        console.error('Error in withdrawal:', error);
       }
     }
   };
@@ -158,11 +158,11 @@ export const DeleteReason = ({ setViewReason }: Props) => {
                 {length > 0 && (
                   <Count>
                     <CntTxt
-                      style={{ color: length >= 100 ? "#FF0004" : "#495057" }}
+                      style={{ color: length >= 100 ? '#FF0004' : '#495057' }}
                     >
                       {length}
                     </CntTxt>
-                    <CntTxt style={{ color: "#868E96" }}>/100자</CntTxt>
+                    <CntTxt style={{ color: '#868E96' }}>/100자</CntTxt>
                   </Count>
                 )}
               </InputArea>
@@ -172,7 +172,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
         <ButtonContainer>
           {buttonEnable ? (
             <Button
-              style={{ background: "#FFA256", bottom: "16px" }}
+              style={{ background: '#FFA256', bottom: '16px' }}
               $selectedReason={selectedReason ?? 0}
               onClick={handleWithdraw}
             >
@@ -181,7 +181,7 @@ export const DeleteReason = ({ setViewReason }: Props) => {
           ) : (
             <Button
               disabled={true}
-              style={{ background: "#CED4DA" }}
+              style={{ background: '#CED4DA' }}
               $selectedReason={selectedReason ?? 0}
               onClick={handleWithdraw}
             >
@@ -370,7 +370,7 @@ const InputArea = styled.div<InputAreaProps>`
   height: 140px;
   border: 1px solid
     ${({ $otherReason }) =>
-      $otherReason && $otherReason.length > 0 ? "#212529" : "#adb5bd"};
+      $otherReason && $otherReason.length > 0 ? '#212529' : '#adb5bd'};
   margin-bottom: 80px;
 `;
 
@@ -431,7 +431,7 @@ const ButtonContainer = styled.div`
   gap: 10px;
   background: #fff;
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: -19px;
     left: 0;
@@ -456,7 +456,7 @@ const Button = styled.button<{ $selectedReason: number }>`
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
   border: none;
-  margin-top: ${(props) => (props.$selectedReason !== 4 ? "2.5rem" : "0")};
+  margin-top: ${(props) => (props.$selectedReason !== 4 ? '2.5rem' : '0')};
 `;
 
 const ButtonTxt = styled.div`

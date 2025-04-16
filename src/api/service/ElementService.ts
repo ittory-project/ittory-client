@@ -1,5 +1,5 @@
-import { api, ApiResponse } from "../config/api";
-import { ElementImgGetResponse } from "../model/ElementModel";
+import { api, ApiResponse } from '../config/api';
+import { ElementImgGetResponse } from '../model/ElementModel';
 
 // 편지 아이템 이미지 불러오기 API
 // param: 편지 ID, 편지 순서

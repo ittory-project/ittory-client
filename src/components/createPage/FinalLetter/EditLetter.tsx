@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import EditImg from "../../../../public/assets/edit.svg";
-import calender from "../../../../public/assets/calendar.svg";
-import BottomSheet from "../EnterInfo/BotttomSheet";
-import CoverModal from "../FinalLetter/CoverModal";
-import shadow from "../../../../public/assets/shadow2.svg";
-import bright from "../../../../public/assets/border.svg";
-import { CoverType } from "../../../api/model/CoverType";
-import { getCoverTypes } from "../../../api/service/CoverService";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import EditImg from '../../../../public/assets/edit.svg';
+import calender from '../../../../public/assets/calendar.svg';
+import BottomSheet from '../EnterInfo/BotttomSheet';
+import CoverModal from '../FinalLetter/CoverModal';
+import shadow from '../../../../public/assets/shadow2.svg';
+import bright from '../../../../public/assets/border.svg';
+import { CoverType } from '../../../api/model/CoverType';
+import { getCoverTypes } from '../../../api/service/CoverService';
 
 interface Props {
   myName: string;
@@ -77,9 +77,9 @@ export default function EditLetter({
     setCalenderOpen(true);
   };
   const closeEditview = () => {
-    localStorage.setItem("receiver", receiverName);
-    localStorage.setItem("myName", myName);
-    localStorage.setItem("Date", String(deliverDay));
+    localStorage.setItem('receiver', receiverName);
+    localStorage.setItem('myName', myName);
+    localStorage.setItem('Date', String(deliverDay));
     setViewEdit(false);
   };
   const openCoveredit = () => {
@@ -135,11 +135,11 @@ export default function EditLetter({
               {deliverDay === null ? (
                 <></>
               ) : (
-                <SelectDate style={{ color: "#212529" }}>
-                  {`${format(deliverDay, "yyyy")}.`}
-                  {`${format(deliverDay, "M")}.`}
-                  {format(deliverDay, "d")}
-                  {` (${format(deliverDay, "E", { locale: ko })})`}
+                <SelectDate style={{ color: '#212529' }}>
+                  {`${format(deliverDay, 'yyyy')}.`}
+                  {`${format(deliverDay, 'M')}.`}
+                  {format(deliverDay, 'd')}
+                  {` (${format(deliverDay, 'E', { locale: ko })})`}
                 </SelectDate>
               )}
               <Calender
@@ -150,7 +150,7 @@ export default function EditLetter({
                 <img
                   src={calender}
                   alt="calender Icon"
-                  style={{ width: "18px", height: "19px" }}
+                  style={{ width: '18px', height: '19px' }}
                 />
               </Calender>
             </InputBoxRow>
@@ -161,13 +161,13 @@ export default function EditLetter({
           <EditBtn
             onClick={() => {
               openCoveredit();
-              console.log("커버모달오픈");
+              console.log('커버모달오픈');
             }}
           >
             <img
               src={EditImg}
               alt="Edit Icon"
-              style={{ width: "11px", height: "11px" }}
+              style={{ width: '11px', height: '11px' }}
             />
           </EditBtn>
           {coverTypes && (
@@ -376,7 +376,7 @@ const BookTitle = styled.div<{ $font: string }>`
   text-overflow: ellipsis;
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.$font === "Ownglyph_UNZ-Rg" ? "12px" : "8.571px"};
+    props.$font === 'Ownglyph_UNZ-Rg' ? '12px' : '8.571px'};
 `;
 const InputBox = styled.div`
   display: flex;

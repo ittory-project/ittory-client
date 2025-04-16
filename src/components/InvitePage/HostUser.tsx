@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { format, parseISO } from "date-fns";
-import { ko } from "date-fns/locale";
-import out from "../../../public/assets/out.svg";
-import deletebtn from "../../../public/assets/delete.svg";
-import info from "../../../public/assets/info.svg";
-import crown from "/assets/crown.svg";
-import plus from "/assets/plus.svg";
-import tip from "../../../public/assets/tooltip.svg";
-import { UserGuide } from "./UserGuide";
-import { Delete } from "./Delete/Delete";
-import { CountPopup } from "./Count/CountPopup";
-import { Count } from "./Count/Count";
-import { Exit } from "./Exit";
-import bright from "../../../public/assets/border.svg";
-import shadow from "../../../public/assets/shadow2.svg";
-import { getMyPage } from "../../api/service/MemberService";
-import { Participants } from "./Invite";
-import { getCoverTypes } from "../../api/service/CoverService";
-import { CoverType } from "../../api/model/CoverType";
-import { getLetterInfo } from "../../api/service/LetterService";
-import defaultImg from "../../../public/assets/menu/logindefault.png";
-import { getFontById } from "../../api/service/FontService";
-import { LetterDetailGetResponse } from "../../api/model/LetterModel";
-import { getLetterDetailInfo } from "../../api/service/LetterService";
-import barShadow from "../../../public/assets/invite/shadow.svg";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { format, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import out from '../../../public/assets/out.svg';
+import deletebtn from '../../../public/assets/delete.svg';
+import info from '../../../public/assets/info.svg';
+import crown from '/assets/crown.svg';
+import plus from '/assets/plus.svg';
+import tip from '../../../public/assets/tooltip.svg';
+import { UserGuide } from './UserGuide';
+import { Delete } from './Delete/Delete';
+import { CountPopup } from './Count/CountPopup';
+import { Count } from './Count/Count';
+import { Exit } from './Exit';
+import bright from '../../../public/assets/border.svg';
+import shadow from '../../../public/assets/shadow2.svg';
+import { getMyPage } from '../../api/service/MemberService';
+import { Participants } from './Invite';
+import { getCoverTypes } from '../../api/service/CoverService';
+import { CoverType } from '../../api/model/CoverType';
+import { getLetterInfo } from '../../api/service/LetterService';
+import defaultImg from '../../../public/assets/menu/logindefault.png';
+import { getFontById } from '../../api/service/FontService';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
+import barShadow from '../../../public/assets/invite/shadow.svg';
 
 interface Props {
   guideOpen: string;
@@ -44,25 +44,25 @@ export const HostUser = ({
 }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [sliceName, setSliceName] = useState<string>("");
+  const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<string>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
-  const namesString = items.map((item) => item.nickname).join(", ");
+  const namesString = items.map((item) => item.nickname).join(', ');
   const [, setMemberId] = useState<number>(0);
-  const [, setName] = useState<string>("");
+  const [, setName] = useState<string>('');
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [cropImg, setCropImg] = useState<string>("");
+  const [cropImg, setCropImg] = useState<string>('');
   const [deliverDay, setDeliverDay] = useState<Date | null>();
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [fontId, setFontId] = useState<number>(-1);
-  const [selectfont, setSelectfont] = useState<string>("");
-  const [receiverName, setReceiverName] = useState<string>("");
+  const [selectfont, setSelectfont] = useState<string>('');
+  const [receiverName, setReceiverName] = useState<string>('');
 
-  console.log("방장 랜더링");
+  console.log('방장 랜더링');
 
   useEffect(() => {
     /*const fetchCoverTypes = async () => {
@@ -131,7 +131,7 @@ export const HostUser = ({
   };
 
   const handleGuide = () => {
-    setGuide("true");
+    setGuide('true');
   };
 
   const handleDeleteview = () => {
@@ -161,32 +161,32 @@ export const HostUser = ({
   };
   useEffect(() => {
     window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   const fallbackCopyTextToClipboard = (text: string) => {
-    const textArea = document.createElement("textarea");
+    const textArea = document.createElement('textarea');
     textArea.value = text;
-    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
-    textArea.style.top = "-9999px";
+    textArea.style.position = 'fixed'; // 화면에서 보이지 않도록 고정
+    textArea.style.top = '-9999px';
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
 
     try {
-      const successful = document.execCommand("copy");
+      const successful = document.execCommand('copy');
       if (successful) {
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
       } else {
-        alert("텍스트 복사에 실패했습니다.");
+        alert('텍스트 복사에 실패했습니다.');
       }
     } catch (error) {
-      console.error("Fallback copy failed:", error);
-      alert("텍스트 복사에 실패했습니다.");
+      console.error('Fallback copy failed:', error);
+      alert('텍스트 복사에 실패했습니다.');
     } finally {
       document.body.removeChild(textArea);
     }
@@ -199,14 +199,14 @@ export const HostUser = ({
         const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
         if (
           navigator.clipboard &&
-          typeof navigator.clipboard.writeText === "function"
+          typeof navigator.clipboard.writeText === 'function'
         ) {
           try {
             await navigator.clipboard.writeText(shareTextPc);
             setCopied(true);
             setTimeout(() => setCopied(false), 3000);
           } catch (error) {
-            console.error("공유 실패: ", error);
+            console.error('공유 실패: ', error);
             fallbackCopyTextToClipboard(shareTextPc);
           }
         } else {
@@ -219,19 +219,19 @@ export const HostUser = ({
           await navigator.share({
             url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
           });
-          console.log("공유 성공");
+          console.log('공유 성공');
         } catch (e) {
-          console.log("공유 실패");
+          console.log('공유 실패');
         }
       }
     } else {
-      console.log("공유 실패");
+      console.log('공유 실패');
     }
   };
 
   return (
     <BackGround>
-      {guide === "true" && <Overlay />}
+      {guide === 'true' && <Overlay />}
       {viewCount && <Overlay />}
       {viewDelete && <Overlay />}
       {viewExit && <Overlay />}
@@ -242,7 +242,7 @@ export const HostUser = ({
             <ReceiverContainer>
               <Receiver>To.{sliceName}</Receiver>
               {receiverName.length > 9 && (
-                <Receiver style={{ letterSpacing: "-0.2em" }}>···</Receiver>
+                <Receiver style={{ letterSpacing: '-0.2em' }}>···</Receiver>
               )}
             </ReceiverContainer>
             <IconContainer>
@@ -264,10 +264,10 @@ export const HostUser = ({
               <TitleContainer $font={selectfont}>{title}</TitleContainer>
               {deliverDay ? (
                 <DeliverDay>
-                  {`${format(deliverDay as Date, "yyyy")}. `}
-                  {`${format(deliverDay as Date, "MM")}. `}
-                  {format(deliverDay as Date, "dd")}
-                  {` (${format(deliverDay as Date, "E", { locale: ko })})`}
+                  {`${format(deliverDay as Date, 'yyyy')}. `}
+                  {`${format(deliverDay as Date, 'MM')}. `}
+                  {format(deliverDay as Date, 'dd')}
+                  {` (${format(deliverDay as Date, 'E', { locale: ko })})`}
                 </DeliverDay>
               ) : (
                 <></>
@@ -310,7 +310,7 @@ export const HostUser = ({
                               <UserName>
                                 {handleUserName(user.nickname)}
                               </UserName>
-                              <UserName style={{ letterSpacing: "-0.2em" }}>
+                              <UserName style={{ letterSpacing: '-0.2em' }}>
                                 ···
                               </UserName>
                             </UserNameContainer>
@@ -332,7 +332,7 @@ export const HostUser = ({
                               <UserName>
                                 {handleUserName(user.nickname)}
                               </UserName>
-                              <UserName style={{ letterSpacing: "-0.2em" }}>
+                              <UserName style={{ letterSpacing: '-0.2em' }}>
                                 ···
                               </UserName>
                             </UserNameContainer>
@@ -353,7 +353,7 @@ export const HostUser = ({
                           onClick={() => {
                             handleShare();
                           }}
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: 'pointer' }}
                         />
                         <UserName>친구 초대</UserName>
                       </User>
@@ -369,7 +369,7 @@ export const HostUser = ({
             </Button>
           </MainContainer>
 
-          {guide === "true" && <UserGuide setGuide={setGuide} />}
+          {guide === 'true' && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
             <Count
@@ -508,7 +508,7 @@ const TitleContainer = styled.div<{ $font: string }>`
   align-items: center;
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.$font === "Ownglyph_UNZ-Rg" ? "20.286px" : "14.286px"};
+    props.$font === 'Ownglyph_UNZ-Rg' ? '20.286px' : '14.286px'};
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.446px;
@@ -595,11 +595,11 @@ const NameTxt = styled.div<{ $book: number }>`
   line-height: 12px;
   letter-spacing: -0.4px;
   color: ${({ $book }) => {
-    if ($book === 1) return "#715142";
-    if ($book === 2) return "#335839";
-    if ($book === 3) return "#985566";
-    if ($book === 4) return "#232D3D";
-    if ($book === 5) return "#232D3D";
+    if ($book === 1) return '#715142';
+    if ($book === 2) return '#335839';
+    if ($book === 3) return '#985566';
+    if ($book === 4) return '#232D3D';
+    if ($book === 5) return '#232D3D';
   }};
 `;
 const BarWrapper = styled.div`

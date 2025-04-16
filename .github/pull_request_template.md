@@ -4,7 +4,7 @@
 
 ## Changes
 
-- [x] 
-- [ ] 
+- [x]
+- [ ]
 
 ### Screenshots

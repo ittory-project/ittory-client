@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { decodeLetterId } from "../../../api/config/base64";
-import { Client } from "@stomp/stompjs";
-import { getElementImg } from "../../../api/service/ElementService";
-import { ElementImgGetResponse } from "../../../api/model/ElementModel";
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { decodeLetterId } from '../../../api/config/base64';
+import { Client } from '@stomp/stompjs';
+import { getElementImg } from '../../../api/service/ElementService';
+import { ElementImgGetResponse } from '../../../api/model/ElementModel';
 
 interface WriteElementProps {
   sequence: number;
@@ -19,17 +19,17 @@ export const WriteElement = ({
   progressTime,
   clientRef,
 }: WriteElementProps) => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
-  const [elementImg, setElementImg] = useState("");
+  const [elementImg, setElementImg] = useState('');
 
   const getLetterImg = async () => {
     if (!letterId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else {
       const response: ElementImgGetResponse = await getElementImg(
         letterNumId,
@@ -58,7 +58,7 @@ export const WriteElement = ({
   // 작성 완료 버튼
   const handleWriteComplete = async () => {
     if (!sequence) {
-      return window.alert("오류");
+      return window.alert('오류');
     }
     if (text.length <= 0) {
       return;
@@ -93,7 +93,7 @@ export const WriteElement = ({
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = "/assets/write/img_error.svg";
+    event.currentTarget.src = '/assets/write/img_error.svg';
   };
 
   return (
@@ -108,7 +108,7 @@ export const WriteElement = ({
         </Header>
         <WriteContent>
           <PhotoDiv>
-            <LetterImage src={"" + elementImg} onError={handleImageError} />
+            <LetterImage src={'' + elementImg} onError={handleImageError} />
           </PhotoDiv>
           <WriteTa
             ref={taRef}
@@ -121,7 +121,7 @@ export const WriteElement = ({
               <>
                 <CharacterCount>
                   <div
-                    style={{ color: text.length > 30 ? "#FF0004" : "black" }}
+                    style={{ color: text.length > 30 ? '#FF0004' : 'black' }}
                   >
                     {text.length}
                   </div>
@@ -229,9 +229,9 @@ const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
   justify-content: center;
   align-items: center;
   border-radius: 4px;
-  background: ${({ $isdisabled }) => ($isdisabled ? "#d3d3d3" : "#000")};
+  background: ${({ $isdisabled }) => ($isdisabled ? '#d3d3d3' : '#000')};
   color: #fff;
-  cursor: ${({ $isdisabled }) => ($isdisabled ? "not-allowed" : "pointer")};
+  cursor: ${({ $isdisabled }) => ($isdisabled ? 'not-allowed' : 'pointer')};
 `;
 
 const PhotoDiv = styled.div`

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { WriteOrderPopover } from "./WriteOrderPopover";
-import { LetterPartiItem } from "../../api/model/LetterModel";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { WriteOrderPopover } from './WriteOrderPopover';
+import { LetterPartiItem } from '../../api/model/LetterModel';
 
 interface TitleProps {
   writeOrderList: LetterPartiItem[];
@@ -33,8 +33,8 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({
           <OrderBtn
             src={
               isPopover
-                ? "/assets/write/order_btn_click.svg"
-                : "/assets/write/order_btn.svg"
+                ? '/assets/write/order_btn_click.svg'
+                : '/assets/write/order_btn.svg'
             }
             onClick={handleOrderBtn}
           />

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import more from "../../../public/assets/more.svg";
-import { Created_Modal } from "./Created_Modal";
-import { Delete_letterbox } from "./Delete_letterbox";
-import { EmptyLetter } from "./EmptyLetter";
-import { Letter } from "./Letter";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import more from '../../../public/assets/more.svg';
+import { Created_Modal } from './Created_Modal';
+import { Delete_letterbox } from './Delete_letterbox';
+import { EmptyLetter } from './EmptyLetter';
+import { Letter } from './Letter';
 import {
   getParticipatedLetter,
   getLetterCounts,
-} from "../../api/service/MemberService";
-import { ParticipateLetterModel } from "../../api/model/MemberModel";
-import { Loading } from "./Loading";
+} from '../../api/service/MemberService';
+import { ParticipateLetterModel } from '../../api/model/MemberModel';
+import { Loading } from './Loading';
 
 interface DeliverDayProps {
   deliverDate: string;
@@ -40,7 +40,7 @@ export const CreatedLetter = ({
   setDeleteAlert,
   setDeletedAlert,
 }: Props) => {
-  const [deleteName, setDeleteName] = useState<string>("");
+  const [deleteName, setDeleteName] = useState<string>('');
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<ParticipateLetterModel[]>([]);
@@ -56,7 +56,7 @@ export const CreatedLetter = ({
         setLoad(false);
         console.log(letters);
       } catch (err) {
-        console.error("Error fetching letter counts:", err);
+        console.error('Error fetching letter counts:', err);
       }
     };
 
@@ -65,7 +65,7 @@ export const CreatedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
-      console.log("setDeletedAlert 실행");
+      console.log('setDeletedAlert 실행');
       try {
         const letterdata = await getParticipatedLetter();
         const counts = await getLetterCounts();
@@ -74,7 +74,7 @@ export const CreatedLetter = ({
         setLoad(false);
         console.log(letters);
       } catch (err) {
-        console.error("Error fetching letter counts:", err);
+        console.error('Error fetching letter counts:', err);
       }
     };
 
@@ -93,7 +93,7 @@ export const CreatedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
-      console.log("setDeleteAlert 실행");
+      console.log('setDeleteAlert 실행');
       if (deleteAlert !== null) {
         try {
           const letterdata = await getParticipatedLetter();
@@ -101,12 +101,12 @@ export const CreatedLetter = ({
           setLetterCounts(counts.participationLetterCount);
           setLetters(letterdata.data.letters);
 
-          console.log("새로운데이터 가져옴");
+          console.log('새로운데이터 가져옴');
 
-          const deletedMessage = localStorage.getItem("deletedLetter");
+          const deletedMessage = localStorage.getItem('deletedLetter');
           setDeletedAlert(deletedMessage);
         } catch (err) {
-          console.error("Error fetching letter counts:", err);
+          console.error('Error fetching letter counts:', err);
         }
       }
     };
@@ -118,10 +118,10 @@ export const CreatedLetter = ({
     const date = new Date(deliverDate);
 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
-    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
     const weekday = weekdays[date.getDay()];
 
     return (
@@ -140,13 +140,13 @@ export const CreatedLetter = ({
           {!openLetter && letters && (
             <Container>
               <NumberHeader>
-                <NumberTxt style={{ fontWeight: "400", marginRight: "2.5px" }}>
+                <NumberTxt style={{ fontWeight: '400', marginRight: '2.5px' }}>
                   총
                 </NumberTxt>
-                <NumberTxt style={{ fontWeight: "700" }}>
+                <NumberTxt style={{ fontWeight: '700' }}>
                   {letterCounts}
                 </NumberTxt>
-                <NumberTxt style={{ fontWeight: "400" }}>개</NumberTxt>
+                <NumberTxt style={{ fontWeight: '400' }}>개</NumberTxt>
               </NumberHeader>
               {letters.map((item) => (
                 <LetterContainer

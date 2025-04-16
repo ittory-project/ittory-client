@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { deleteLetterboxLetter } from "../../api/service/MemberService";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { deleteLetterboxLetter } from '../../api/service/MemberService';
 
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +22,7 @@ export const Delete_letterbox = ({
   letterId,
   setDeleteAlert,
 }: Props) => {
-  const [deleteName, setDeleteName] = useState<string>("");
+  const [deleteName, setDeleteName] = useState<string>('');
 
   useEffect(() => {
     setDeleteName(deleteItem);
@@ -34,39 +34,39 @@ export const Delete_letterbox = ({
   const handleDelete = async () => {
     try {
       await deleteLetterboxLetter(letterId);
-      localStorage.setItem("deletedLetter", "편지가 삭제되었어요");
+      localStorage.setItem('deletedLetter', '편지가 삭제되었어요');
       setPopup(false);
       setIsModalOpen(false);
       setOpenLetter(false);
-      setDeleteAlert("편지가 삭제되었어요");
+      setDeleteAlert('편지가 삭제되었어요');
     } catch (error) {
-      console.error("Failed to delete letter:", error);
+      console.error('Failed to delete letter:', error);
     }
   };
 
   return (
     <>
       <Modal>
-        {context === "created" && <Title>'To.{deleteName}'</Title>}
-        {context === "received" && <Title>'{deleteName}'</Title>}
+        {context === 'created' && <Title>'To.{deleteName}'</Title>}
+        {context === 'received' && <Title>'{deleteName}'</Title>}
         <Title>편지를 정말 삭제시겠어요?</Title>
         <Contents>삭제한 편지는 복구할 수 없어요</Contents>
         <ButtonContainer>
           <Button
             style={{
-              background: "#CED4DA",
+              background: '#CED4DA',
             }}
             onClick={cancelDelete}
           >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+            <ButtonTxt style={{ color: '#495057' }}>취소하기</ButtonTxt>
           </Button>
           <Button
             style={{
-              background: "#FFA256",
+              background: '#FFA256',
             }}
             onClick={handleDelete}
           >
-            <ButtonTxt style={{ color: "#fff" }}>삭제하기</ButtonTxt>
+            <ButtonTxt style={{ color: '#fff' }}>삭제하기</ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>

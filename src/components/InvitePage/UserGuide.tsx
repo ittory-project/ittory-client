@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import guide1 from "../../../public/assets/guide1.svg";
-import guide2 from "../../../public/assets/guide2.svg";
-import guide3 from "../../../public/assets/guide3.svg";
-import guide4 from "../../../public/assets/guide4.svg";
-import guide5 from "../../../public/assets/guide5.svg";
-import guide6 from "../../../public/assets/guide6.svg";
-import gray from "../../../public/assets/graycircle.svg";
-import blue from "../../../public/assets/bluecircle.svg";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import guide1 from '../../../public/assets/guide1.svg';
+import guide2 from '../../../public/assets/guide2.svg';
+import guide3 from '../../../public/assets/guide3.svg';
+import guide4 from '../../../public/assets/guide4.svg';
+import guide5 from '../../../public/assets/guide5.svg';
+import guide6 from '../../../public/assets/guide6.svg';
+import gray from '../../../public/assets/graycircle.svg';
+import blue from '../../../public/assets/bluecircle.svg';
 
 interface Props {
   setGuide: React.Dispatch<React.SetStateAction<string>>;
@@ -15,14 +15,14 @@ interface Props {
 
 export const UserGuide = ({ setGuide }: Props) => {
   const guides = [guide1, guide2, guide3, guide4, guide5, guide6];
-  console.log("가이드 열림");
+  console.log('가이드 열림');
   const descriptions = [
-    "방장이 편지를\n몇 번 이어 쓸 지 정해요",
-    "편지 작성 순서는\n랜덤으로 정해져요",
-    "100초 안에 앞 내용과 그림을 보고\n편지를 적어 주세요",
-    "위치 버튼을 누르면,\n현재 작성 중인 곳으로 이동해요",
-    "시간 내에 편지를 적지 못하면\n다음 사람이 이어가게 돼요",
-    "2번 이상 편지를 적지 않으면\n자동 퇴장되어 다시 참여할 수 없어요",
+    '방장이 편지를\n몇 번 이어 쓸 지 정해요',
+    '편지 작성 순서는\n랜덤으로 정해져요',
+    '100초 안에 앞 내용과 그림을 보고\n편지를 적어 주세요',
+    '위치 버튼을 누르면,\n현재 작성 중인 곳으로 이동해요',
+    '시간 내에 편지를 적지 못하면\n다음 사람이 이어가게 돼요',
+    '2번 이상 편지를 적지 않으면\n자동 퇴장되어 다시 참여할 수 없어요',
   ];
   const numbers = [0, 1, 2, 3, 4, 5];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,8 +40,8 @@ export const UserGuide = ({ setGuide }: Props) => {
   };
 
   const handleComplete = () => {
-    setGuide("false");
-    localStorage.removeItem("guideOpen");
+    setGuide('false');
+    localStorage.removeItem('guideOpen');
   };
 
   return (
@@ -153,7 +153,7 @@ const PrevButton = styled.div<{ $disabled: boolean }>`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  color: ${(props) => (props.$disabled ? "#ADB5BD" : "#495057")};
+  color: ${(props) => (props.$disabled ? '#ADB5BD' : '#495057')};
   text-align: center;
   font-family: SUIT;
   font-size: 12px;

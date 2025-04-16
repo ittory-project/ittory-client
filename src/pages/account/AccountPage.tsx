@@ -1,4 +1,4 @@
-import { Account } from "../../components/accountPage/Account";
+import { Account } from '../../components/accountPage/Account';
 
 export const AccountPage = () => {
   return (

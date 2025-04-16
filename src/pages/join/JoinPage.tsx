@@ -1,4 +1,4 @@
-import { Join } from "../../components/joinPage/Join";
+import { Join } from '../../components/joinPage/Join';
 
 export const JoinPage = () => {
   return (

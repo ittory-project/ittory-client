@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,7 +15,7 @@ export const CountPopup = ({ setPopup, setViewCount }: Props) => {
     setViewCount(true);
   };
 
-  console.log("count popup");
+  console.log('count popup');
 
   return (
     <>
@@ -26,19 +26,19 @@ export const CountPopup = ({ setPopup, setViewCount }: Props) => {
         <ButtonContainer>
           <Button
             style={{
-              background: "#CED4DA",
+              background: '#CED4DA',
             }}
             onClick={handleCancel}
           >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+            <ButtonTxt style={{ color: '#495057' }}>취소하기</ButtonTxt>
           </Button>
           <Button
             style={{
-              background: "#FFA256",
+              background: '#FFA256',
             }}
             onClick={openCount}
           >
-            <ButtonTxt style={{ color: "#fff" }}>횟수 정하기</ButtonTxt>
+            <ButtonTxt style={{ color: '#fff' }}>횟수 정하기</ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>

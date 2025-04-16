@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
-import { CreatedLetter } from "./CreatedLetter";
-import { ReceivedLetter } from "./ReceivedLetter";
-import prev from "../../../public/assets/prev.svg";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { CreatedLetter } from './CreatedLetter';
+import { ReceivedLetter } from './ReceivedLetter';
+import prev from '../../../public/assets/prev.svg';
+import { useParams } from 'react-router-dom';
 
 export const LetterBox = () => {
   const navigate = useNavigate();
@@ -32,10 +32,10 @@ export const LetterBox = () => {
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
         try {
-          const deletedMessage = localStorage.getItem("deletedLetter");
+          const deletedMessage = localStorage.getItem('deletedLetter');
           setDeletedAlert(deletedMessage);
         } catch (err) {
-          console.error("Error fetching letter counts:", err);
+          console.error('Error fetching letter counts:', err);
         }
       }
     };
@@ -62,99 +62,99 @@ export const LetterBox = () => {
       console.log(deletedAlert);
       // deletedAlert 값이 있을 때만 타이머 설정
       const timer = setTimeout(() => {
-        console.log("변수 알림으로 실행");
+        console.log('변수 알림으로 실행');
         setDeletedAlert(null);
         setDeleteAlert(null);
-        localStorage.removeItem("deletedLetter");
+        localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
-    } else if (localStorage.getItem("deletedLetter")) {
-      console.log("로컬스토리지에 있음");
+    } else if (localStorage.getItem('deletedLetter')) {
+      console.log('로컬스토리지에 있음');
       const timer = setTimeout(() => {
         setDeletedAlert(null);
         setDeleteAlert(null);
-        localStorage.removeItem("deletedLetter");
+        localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
     } else {
-      const deletedMessage = localStorage.getItem("deletedLetter");
-      console.log("삭제된 메시지:", deletedMessage);
+      const deletedMessage = localStorage.getItem('deletedLetter');
+      console.log('삭제된 메시지:', deletedMessage);
       setDeletedAlert(deletedMessage);
     }
   }, []);
 
   useEffect(() => {
-    if (focusOn === "create") {
+    if (focusOn === 'create') {
       setCreate(true);
       setReceive(false);
-    } else if (focusOn === "receive") {
+    } else if (focusOn === 'receive') {
       setCreate(false);
       setReceive(true);
     }
   }, [focusOn]);
 
   const handleFocusCreate = () => {
-    setFocusOn("create");
+    setFocusOn('create');
   };
 
   const handleFocusReceive = () => {
-    setFocusOn("receive");
+    setFocusOn('receive');
   };
 
   const navigateBack = () => {
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   useEffect(() => {
     if (deletedAlert) {
-      console.log("이거 실행");
+      console.log('이거 실행');
       console.log(deletedAlert);
       // deletedAlert 값이 있을 때만 타이머 설정
       const timer = setTimeout(() => {
-        console.log("변수 알림으로 실행");
+        console.log('변수 알림으로 실행');
         setDeletedAlert(null);
         setDeleteAlert(null);
-        localStorage.removeItem("deletedLetter");
+        localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
-    } else if (localStorage.getItem("deletedLetter")) {
-      console.log("로컬스토리지에 있음");
+    } else if (localStorage.getItem('deletedLetter')) {
+      console.log('로컬스토리지에 있음');
       const timer = setTimeout(() => {
         setDeletedAlert(null);
         setDeleteAlert(null);
-        localStorage.removeItem("deletedLetter");
+        localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
     } else {
-      const deletedMessage = localStorage.getItem("deletedLetter");
-      console.log("삭제된 메시지:", deletedMessage);
+      const deletedMessage = localStorage.getItem('deletedLetter');
+      console.log('삭제된 메시지:', deletedMessage);
       setDeletedAlert(deletedMessage);
     }
   }, [deletedAlert]);
 
   useEffect(() => {
     if (deleteAlert) {
-      console.log("이거 실행2");
+      console.log('이거 실행2');
       console.log(deleteAlert);
       // deletedAlert 값이 있을 때만 타이머 설정
       const timer = setTimeout(() => {
-        console.log("변수 알림으로 실행");
+        console.log('변수 알림으로 실행');
         setDeletedAlert(null);
         setDeleteAlert(null);
-        localStorage.removeItem("deletedLetter");
+        localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
-    } else if (localStorage.getItem("deletedLetter")) {
-      console.log("로컬스토리지에 있음");
+    } else if (localStorage.getItem('deletedLetter')) {
+      console.log('로컬스토리지에 있음');
       const timer = setTimeout(() => {
         setDeletedAlert(null);
         setDeleteAlert(null);
-        localStorage.removeItem("deletedLetter");
+        localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
     } else {
-      const deletedMessage = localStorage.getItem("deletedLetter");
-      console.log("삭제된 메시지:", deletedMessage);
+      const deletedMessage = localStorage.getItem('deletedLetter');
+      console.log('삭제된 메시지:', deletedMessage);
       setDeletedAlert(deletedMessage);
     }
   }, [deleteAlert]);
@@ -304,8 +304,8 @@ const CreatedLetterBox = styled.div<{ $focus: boolean }>`
   font-weight: 500;
   line-height: 20px;
   letter-spacing:;-0.5px;
-  color: ${(props) => (props.$focus ? "#212529" : "#ADB5BD")};
-  border-bottom:${(props) => (props.$focus ? "1px solid #212529" : "1px solid #dee2e6")};
+  color: ${(props) => (props.$focus ? '#212529' : '#ADB5BD')};
+  border-bottom:${(props) => (props.$focus ? '1px solid #212529' : '1px solid #dee2e6')};
 `;
 const ReceivedLetterBox = styled.div<{ $focus: boolean }>`
   display: flex;
@@ -322,6 +322,6 @@ const ReceivedLetterBox = styled.div<{ $focus: boolean }>`
   font-weight: 500;
   line-height: 20px;
   letter-spacing:;-0.5px;
-  color: ${(props) => (props.$focus ? "#212529" : "#ADB5BD")};
-    border-bottom:${(props) => (props.$focus ? "1px solid #212529" : "1px solid #dee2e6")};
+  color: ${(props) => (props.$focus ? '#212529' : '#ADB5BD')};
+    border-bottom:${(props) => (props.$focus ? '1px solid #212529' : '1px solid #dee2e6')};
 `;

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import logo from "../../../public/assets/home/smalllogo.png";
-import menu from "../../../public/assets/home/menulogo.svg";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import logo from '../../../public/assets/home/smalllogo.png';
+import menu from '../../../public/assets/home/menulogo.svg';
 
 interface Props {
   backgroundColor: boolean;
@@ -22,14 +22,14 @@ export default function Header({ backgroundColor, setIsMenuOpen }: Props) {
 
   return (
     <Container $color={bgColor}>
-      {bgColor && <Logo src={logo} />}{" "}
+      {bgColor && <Logo src={logo} />}{' '}
       <MenuLogo src={menu} onClick={handleMenu} />
     </Container>
   );
 }
 
 const Container = styled.div<{ $color: boolean }>`
-  background: ${(props) => (props.$color ? "#fff" : "transparent")};
+  background: ${(props) => (props.$color ? '#fff' : 'transparent')};
   position: absolute;
   top: 0;
   display: flex;
@@ -42,7 +42,7 @@ const Container = styled.div<{ $color: boolean }>`
   justify-content: space-between;
   align-items: center;
   box-shadow: ${(props) =>
-    props.color ? "0px 4px 4px 0px rgba(0, 0, 0, 0.05)" : "none"};
+    props.color ? '0px 4px 4px 0px rgba(0, 0, 0, 0.05)' : 'none'};
   transition:
     background 0.4s ease,
     box-shadow 0.4s ease;

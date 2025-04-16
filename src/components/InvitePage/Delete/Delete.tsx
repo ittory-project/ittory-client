@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { DeleteConfirm } from "./DeleteConfirm";
-import { endLetterWs } from "../../../api/service/WsService";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { DeleteConfirm } from './DeleteConfirm';
+import { endLetterWs } from '../../../api/service/WsService';
 import {
   deleteLetter,
   getLetterInfo,
-} from "../../../api/service/LetterService";
+} from '../../../api/service/LetterService';
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,17 +37,17 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
       const response = deleteLetter(
         letterId,
         () => {
-          console.log("삭제 성공");
+          console.log('삭제 성공');
         },
         (error) => {
-          console.error("삭제 실패:", error);
+          console.error('삭제 실패:', error);
         },
       );
       endLetterWs(letterId);
       console.log(response);
       setViewConfirm(true);
     } catch (err) {
-      console.error("error:", err);
+      console.error('error:', err);
     }
   };
 
@@ -61,19 +61,19 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
           <ButtonContainer>
             <Button
               style={{
-                background: "#CED4DA",
+                background: '#CED4DA',
               }}
               onClick={handleDelete}
             >
-              <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+              <ButtonTxt style={{ color: '#495057' }}>취소하기</ButtonTxt>
             </Button>
             <Button
               style={{
-                background: "#FFA256",
+                background: '#FFA256',
               }}
               onClick={handleConfirm}
             >
-              <ButtonTxt style={{ color: "#fff" }}>삭제하기</ButtonTxt>
+              <ButtonTxt style={{ color: '#fff' }}>삭제하기</ButtonTxt>
             </Button>
           </ButtonContainer>
         </Modal>

@@ -7,9 +7,9 @@ export interface LetterCountsGetResponse {
 //마이페이지 정보 조회
 export interface MypageGetResponse {
   memberId: number;
-  name: "string";
-  profileImage: "string";
-  memberStatus: "string";
+  name: 'string';
+  profileImage: 'string';
+  memberStatus: 'string';
 }
 
 //회원 탈퇴

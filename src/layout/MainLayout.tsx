@@ -1,6 +1,6 @@
-import React from "react";
-import MediaQuery from "react-responsive";
-import "../App.css";
+import React from 'react';
+import MediaQuery from 'react-responsive';
+import '../App.css';
 
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (

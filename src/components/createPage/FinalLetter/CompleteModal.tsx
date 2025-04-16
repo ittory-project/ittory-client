@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import letter from "../../../../public/assets/letter.svg";
-import { useNavigate } from "react-router-dom";
-import shadow from "../../../../public/assets/shadow2.svg";
-import { CoverType } from "../../../api/model/CoverType";
-import { getCoverTypes } from "../../../api/service/CoverService";
-import { LetterRequestBody } from "../../../api/model/LetterModel";
-import { postLetter } from "../../../api/service/LetterService";
-import { postNickname } from "../../../api/service/ParticipantService";
-import { NicknamePostRequest } from "../../../api/model/ParticipantModel";
-import { postEnter } from "../../../api/service/LetterService";
-import animation from "../../../../public/assets/confetti.json";
-import Player from "lottie-react";
+import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import letter from '../../../../public/assets/letter.svg';
+import { useNavigate } from 'react-router-dom';
+import shadow from '../../../../public/assets/shadow2.svg';
+import { CoverType } from '../../../api/model/CoverType';
+import { getCoverTypes } from '../../../api/service/CoverService';
+import { LetterRequestBody } from '../../../api/model/LetterModel';
+import { postLetter } from '../../../api/service/LetterService';
+import { postNickname } from '../../../api/service/ParticipantService';
+import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
+import { postEnter } from '../../../api/service/LetterService';
+import animation from '../../../../public/assets/confetti.json';
+import Player from 'lottie-react';
 
 interface Props {
   myName: string;
@@ -47,7 +47,7 @@ export default function CompleteModal({
   const [, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [adjustDay, setAdjustDay] = useState<string>("");
+  const [adjustDay, setAdjustDay] = useState<string>('');
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
@@ -91,9 +91,9 @@ export default function CompleteModal({
         closeModal();
       } else setKeyboardVisible(true);
     }
-    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener('mousedown', handleOutside);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
     };
   }, [modalBackground]);
 
@@ -113,7 +113,7 @@ export default function CompleteModal({
       console.log(enterresponse);
       handleNickname(letterId);
     } catch (err) {
-      console.error("Error fetching mydata:", err);
+      console.error('Error fetching mydata:', err);
     }
   };
 
@@ -132,18 +132,18 @@ export default function CompleteModal({
 
     try {
       const response = await postLetter(requestBody);
-      console.log("Response:", response);
+      console.log('Response:', response);
       const letterId = response.letterId;
-      console.log("letterId", letterId);
+      console.log('letterId', letterId);
 
-      localStorage.setItem("letterId", String(letterId));
-      localStorage.setItem("guideOpen", String(true));
-      localStorage.setItem("userName", myName);
+      localStorage.setItem('letterId', String(letterId));
+      localStorage.setItem('guideOpen', String(true));
+      localStorage.setItem('userName', myName);
 
       fetchEnter(letterId);
       console.log(myName);
 
-      navigate("/Invite", {
+      navigate('/Invite', {
         state: {
           userName: myName,
           letterId: letterId,
@@ -151,7 +151,7 @@ export default function CompleteModal({
         },
       });
     } catch (error) {
-      console.error("Error posting letter:", error);
+      console.error('Error posting letter:', error);
     }
   };
 
@@ -162,12 +162,12 @@ export default function CompleteModal({
         loop={false}
         autoplay
         style={{
-          height: "320px",
-          width: "100%",
-          margin: "0 auto",
-          top: "-450px",
-          position: "relative",
-          zIndex: "101",
+          height: '320px',
+          width: '100%',
+          margin: '0 auto',
+          top: '-450px',
+          position: 'relative',
+          zIndex: '101',
         }}
       />
       <ModalContainer ref={modalBackground}>
@@ -185,10 +185,10 @@ export default function CompleteModal({
               <></>
             ) : (
               <DeliverDay>
-                {`${format(deliverDay, "yyyy")}. `}
-                {`${format(deliverDay, "MM")}. `}
-                {format(deliverDay, "dd")}
-                {` (${format(deliverDay, "E", { locale: ko })})`}
+                {`${format(deliverDay, 'yyyy')}. `}
+                {`${format(deliverDay, 'MM')}. `}
+                {format(deliverDay, 'dd')}
+                {` (${format(deliverDay, 'E', { locale: ko })})`}
               </DeliverDay>
             )}
             <>
@@ -288,7 +288,7 @@ const TitleContainer = styled.div<{ $font: string }>`
   align-items: center;
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.$font === "Ownglyph_UNZ-Rg" ? "21px" : "16px"};
+    props.$font === 'Ownglyph_UNZ-Rg' ? '21px' : '16px'};
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.5px;

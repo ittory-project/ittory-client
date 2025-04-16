@@ -4,20 +4,20 @@ import React, {
   useRef,
   useCallback,
   ReactNode,
-} from "react";
-import styled from "styled-components";
-import PrevImg from "../../../../public/assets/pageprev.svg";
-import camera from "../../../../public/assets/camera.svg";
-import shadow from "../../../../public/assets/shadow2.svg";
-import bookshadow from "../../../../public/assets/book_shadow.svg";
-import { Area } from "react-easy-crop";
-import FontPopup from "./FontPopup";
-import { getCoverTypes } from "../../../../src/api/service/CoverService";
-import { CoverType } from "../../../../src/api/model/CoverType";
-import { getAllFont } from "../../../api/service/FontService";
-import axios from "axios";
-import { ImageUrlRequest } from "../../../api/model/ImageModel";
-import { postCoverImage } from "../../../api/service/ImageService";
+} from 'react';
+import styled from 'styled-components';
+import PrevImg from '../../../../public/assets/pageprev.svg';
+import camera from '../../../../public/assets/camera.svg';
+import shadow from '../../../../public/assets/shadow2.svg';
+import bookshadow from '../../../../public/assets/book_shadow.svg';
+import { Area } from 'react-easy-crop';
+import FontPopup from './FontPopup';
+import { getCoverTypes } from '../../../../src/api/service/CoverService';
+import { CoverType } from '../../../../src/api/model/CoverType';
+import { getAllFont } from '../../../api/service/FontService';
+import axios from 'axios';
+import { ImageUrlRequest } from '../../../api/model/ImageModel';
+import { postCoverImage } from '../../../api/service/ImageService';
 
 interface Props {
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,9 +43,9 @@ export interface fontProps {
   value: string;
 }
 export enum ImageExtension {
-  JPG = "JPG",
-  JPEG = "JPEG",
-  PNG = "PNG",
+  JPG = 'JPG',
+  JPEG = 'JPEG',
+  PNG = 'PNG',
 }
 
 const Book: React.FC<BookProps> = React.memo(
@@ -54,13 +54,13 @@ const Book: React.FC<BookProps> = React.memo(
       <div
         style={{
           backgroundImage: `url(${backgroundimage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          width: "224px",
-          height: "292px",
-          marginTop: "48px",
-          boxSizing: "border-box",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          width: '224px',
+          height: '292px',
+          marginTop: '48px',
+          boxSizing: 'border-box',
         }}
       >
         {children}
@@ -87,7 +87,7 @@ export default function CoverStyle({
 
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [originalImage, setOriginalImage] = useState<string>("");
+  const [originalImage, setOriginalImage] = useState<string>('');
   const [, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isModalOpen] = useState<boolean>(false);
   const [, setCropperKey] = useState<number>(0);
@@ -95,10 +95,10 @@ export default function CoverStyle({
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fonts, setFonts] = useState<fontProps[]>([]);
-  const [font, setFont] = useState<string>("");
-  const [selectf, setSelectf] = useState<string>("");
+  const [font, setFont] = useState<string>('');
+  const [selectf, setSelectf] = useState<string>('');
   const [selectfid, setSelectfid] = useState<number>(1);
-  const [backgroundImage, setBackgroundImage] = useState<string>("");
+  const [backgroundImage, setBackgroundImage] = useState<string>('');
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -145,12 +145,12 @@ export default function CoverStyle({
 
   // 폰트 바를 클릭할 때 input에 포커스를 유지시켜 키보드가 내려가지 않도록 하기
   const handlePopupClick = (e: React.MouseEvent) => {
-    console.log("팝업 클릭 함수 실행");
+    console.log('팝업 클릭 함수 실행');
     // FontPopup을 클릭하면 input에 포커스를 유지
     if (popupRef.current) {
-      console.log("팝업 클릭함");
+      console.log('팝업 클릭함');
       if (inputRef.current) {
-        console.log("인풋에 포커스");
+        console.log('인풋에 포커스');
         inputRef.current.focus();
       }
       // input에 포커스를 유지시켜 키보드를 올려둠
@@ -198,16 +198,16 @@ export default function CoverStyle({
         setFontPopup(false); // fontPopup 숨기기
       }
     }
-    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener('mousedown', handleOutside);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
     };
   }, [inputRef]);
 
   useEffect(() => {
     const handleSaveClick = async () => {
       {
-        if (originalImage !== "") {
+        if (originalImage !== '') {
           //Blob으로 변경
           const responseBlob = await fetch(originalImage).then((res) =>
             res.blob(),
@@ -221,31 +221,31 @@ export default function CoverStyle({
 
           try {
             const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
-            console.log("PreSigned URL: ", preSignedUrl);
+            console.log('PreSigned URL: ', preSignedUrl);
 
             // Step 2: presigned URL로 이미지 업로드
             await fetch(preSignedUrl, {
-              method: "PUT",
+              method: 'PUT',
               headers: {
-                "Content-Type": "image/jpeg", // MIME type 설정
+                'Content-Type': 'image/jpeg', // MIME type 설정
               },
               body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
             });
 
             // Step 3: 업로드가 완료되면 S3 URL 생성
             const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
-            console.log("Image uploaded successfully to S3!");
-            console.log("Image URL: ", s3ImageUrl);
+            console.log('Image uploaded successfully to S3!');
+            console.log('Image URL: ', s3ImageUrl);
             setCroppedImage(s3ImageUrl);
             setCroppedAreaPixels(null);
           } catch (error) {
             if (axios.isAxiosError(error)) {
               console.error(
-                "Error uploading image: ",
+                'Error uploading image: ',
                 error.response?.data || (error as Error).message, // 타입 단언 추가
               );
             } else {
-              console.error("Unexpected error: ", error);
+              console.error('Unexpected error: ', error);
             }
           }
           setCroppedAreaPixels(null);
@@ -262,7 +262,7 @@ export default function CoverStyle({
         return;
       }
       const newImageUrl = URL.createObjectURL(e.target.files[0]);
-      console.log("New Image URL: ", newImageUrl);
+      console.log('New Image URL: ', newImageUrl);
       setOriginalImage(newImageUrl); // 원본 이미지를 설정
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
@@ -272,7 +272,7 @@ export default function CoverStyle({
 
   const onUploadImageButtonClick = useCallback(() => {
     if (imgRef.current) {
-      imgRef.current.value = ""; // 파일 입력 필드를 초기화
+      imgRef.current.value = ''; // 파일 입력 필드를 초기화
       imgRef.current.click();
     }
   }, []);
@@ -293,7 +293,7 @@ export default function CoverStyle({
         <img
           src={PrevImg}
           alt="Prev Icon"
-          style={{ width: "8px", height: "16px" }}
+          style={{ width: '8px', height: '16px' }}
         />
       </Prev>
       <Container>
@@ -329,14 +329,14 @@ export default function CoverStyle({
             </svg>
           </TitleContainer>
 
-          {croppedImage === "" ? (
+          {croppedImage === '' ? (
             <>
               <ButtonContainer
                 className="img__box"
                 onClick={onUploadImageButtonClick}
               >
                 <input
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   type="file"
                   accept="image/*"
                   ref={imgRef}
@@ -346,9 +346,9 @@ export default function CoverStyle({
                   src={camera}
                   alt="Camera Icon"
                   style={{
-                    width: "24px",
-                    height: "24px",
-                    marginLeft: "1.5px",
+                    width: '24px',
+                    height: '24px',
+                    marginLeft: '1.5px',
                   }}
                 />
                 <BtnTxt>사진 추가</BtnTxt>
@@ -362,7 +362,7 @@ export default function CoverStyle({
                 onClick={onUploadImageButtonClick}
               >
                 <input
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   type="file"
                   accept="image/*"
                   ref={imgRef}
@@ -396,23 +396,23 @@ export default function CoverStyle({
           ))}
         </ImageContainer>
       </Container>
-      {title === "" || croppedImage === "" ? (
-        <Button disabled={true} style={{ background: "#ced4da" }}>
+      {title === '' || croppedImage === '' ? (
+        <Button disabled={true} style={{ background: '#ced4da' }}>
           <ButtonTxt>꾸미기 완료</ButtonTxt>
         </Button>
       ) : (
         <Button
           style={{
-            background: "#FFA256",
+            background: '#FFA256',
             boxShadow:
-              "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset",
-            border: "none",
+              '1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset',
+            border: 'none',
           }}
           onClick={() => {
-            localStorage.setItem("title", title);
-            localStorage.setItem("image", croppedImage);
-            localStorage.setItem("bgImg", String(ImageIndex));
-            localStorage.setItem("font", font);
+            localStorage.setItem('title', title);
+            localStorage.setItem('image', croppedImage);
+            localStorage.setItem('bgImg', String(ImageIndex));
+            localStorage.setItem('font', font);
             setSelectfont(font);
             setBackgroundimage(ImageIndex);
             setSelectFid(selectfid);
@@ -448,7 +448,7 @@ const Overlay = styled.div<{ $isOpen: boolean }>`
   height: calc(var(--vh, 1vh) * 100);
   background: rgba(0, 0, 0, 0.6);
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease;
@@ -577,7 +577,7 @@ const Input = styled.input<{ $selectfont: string }>`
     text-overflow: ellipsis;
     font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
-      props.$selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$selectfont === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -588,7 +588,7 @@ const Input = styled.input<{ $selectfont: string }>`
     text-align: center;
     font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
-      props.$selectfont === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$selectfont === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -671,7 +671,7 @@ const NameContainer = styled.div<{ $book: number }>`
   align-items: center;
   text-align: center;
   margin-top: ${(props) =>
-    props.$book === 0 || props.$book === 1 ? "34px" : "25px"};
+    props.$book === 0 || props.$book === 1 ? '34px' : '25px'};
 `;
 const NameTxt = styled.div<{ $book: number }>`
   padding: 0 12px 0 12px;
@@ -685,11 +685,11 @@ const NameTxt = styled.div<{ $book: number }>`
   line-height: 13px;
   letter-spacing: -0.5px;
   color: ${({ $book }) => {
-    if ($book === 0) return "#715142";
-    if ($book === 1) return "#335839";
-    if ($book === 2) return "#985566";
-    if ($book === 3) return "#232D3D";
-    if ($book === 4) return "#232D3D";
+    if ($book === 0) return '#715142';
+    if ($book === 1) return '#335839';
+    if ($book === 2) return '#985566';
+    if ($book === 3) return '#232D3D';
+    if ($book === 4) return '#232D3D';
   }};
 `;
 const ImageContainer = styled.div`
@@ -707,9 +707,9 @@ const ImageContainer = styled.div`
 const Image = styled.div<{ $clicked: boolean; $img: string }>`
   cursor: pointer;
   transition: all 0.2s ease;
-  width: ${(props) => (props.$clicked ? "56px" : "48px")};
-  height: ${(props) => (props.$clicked ? "56px" : "48px")};
-  opacity: ${(props) => (props.$clicked ? "" : "0.4")};
+  width: ${(props) => (props.$clicked ? '56px' : '48px')};
+  height: ${(props) => (props.$clicked ? '56px' : '48px')};
+  opacity: ${(props) => (props.$clicked ? '' : '0.4')};
   border-radius: 10.2px;
   flex-shrink: 0;
   background-image: url(${(props) => props.$img});

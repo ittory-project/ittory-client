@@ -1,4 +1,4 @@
-import { api, ApiResponse, BaseResponse } from "../config/api";
+import { api, ApiResponse, BaseResponse } from '../config/api';
 import {
   LetterPostResponse,
   LetterRequestBody,
@@ -13,7 +13,7 @@ import {
   LetterDetailGetResponse,
   LetterStorageCheckGetResponse,
   PostEnterRequestBody,
-} from "../model/LetterModel";
+} from '../model/LetterModel';
 
 // 편지 시작 시 정보 조회 API
 // param: 편지 ID
@@ -37,7 +37,7 @@ export async function getLetterPartiList(
     `/api/letter/participant/${letterId}`,
     {
       params: {
-        order: "sequence",
+        order: 'sequence',
       },
     },
   );
@@ -89,16 +89,16 @@ export function deleteLetter(
       if (response.status === 204) {
         onSuccess(); // 204 No Content 성공 시 콜백 호출
       } else {
-        console.error("Unexpected response:", response);
-        onError(new Error("Unexpected response status"));
+        console.error('Unexpected response:', response);
+        onError(new Error('Unexpected response status'));
       }
     })
     .catch((err) => {
       if (err.response && err.response.data) {
-        console.error("API Error Response:", err.response.data);
+        console.error('API Error Response:', err.response.data);
         onError(err.response.data); // 에러 데이터 콜백 호출
       } else {
-        console.error("Unexpected error:", err);
+        console.error('Unexpected error:', err);
         onError(err); // 예기치 않은 에러 콜백 호출
       }
     });
@@ -127,14 +127,14 @@ export async function getLetterInfo(
 //편지 참여 요청
 export async function postEnter(
   letterId: number,
-  nickname: PostEnterRequestBody
+  nickname: PostEnterRequestBody,
 ): Promise<LetterEnterResponse> {
   try {
     const response = await api.post(`api/letter/enter/${letterId}`, nickname);
     return response.data.data;
   } catch (error) {
-    console.error("Error in postEnter:", error); 
-    throw error; 
+    console.error('Error in postEnter:', error);
+    throw error;
   }
 }
 

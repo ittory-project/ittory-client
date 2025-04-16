@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { WriteMainModal } from "../../components/writePage/writeMainModal/WriteMainModal";
-import { Write } from "../../components/writePage/Write";
-import { useNavigate, useParams } from "react-router-dom";
-import { decodeLetterId } from "../../api/config/base64";
-import { LetterStartInfoGetResponse } from "../../api/model/LetterModel";
-import { getLetterStartInfo } from "../../api/service/LetterService";
-import CountdownGif from "../../../public/img/letter_start_count.gif";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
+import { Write } from '../../components/writePage/Write';
+import { useNavigate, useParams } from 'react-router-dom';
+import { decodeLetterId } from '../../api/config/base64';
+import { LetterStartInfoGetResponse } from '../../api/model/LetterModel';
+import { getLetterStartInfo } from '../../api/service/LetterService';
+import CountdownGif from '../../../public/img/letter_start_count.gif';
 
 export const WritePage = () => {
   const { letterId } = useParams();
   const navigate = useNavigate();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   // 불러온 편지 정보
-  const [letterTitle, setLetterTitle] = useState("");
+  const [letterTitle, setLetterTitle] = useState('');
   // const [partiCount, setPartiCount] = useState<Number | null>();
   const [repeatCount, setRepeatCount] = useState<number | null>();
   const [elementCount, setElementCount] = useState<number | null>();
@@ -21,7 +21,7 @@ export const WritePage = () => {
   const [showPopup, setShowPopup] = useState(true);
   const [showCountdown, setShowCountdown] = useState(false);
   // 편지 작성 시간 계산
-  const storedResetTime = window.localStorage.getItem("resetTime");
+  const storedResetTime = window.localStorage.getItem('resetTime');
   const [resetTime, setResetTime] = useState<number | null>(
     storedResetTime ? Number(storedResetTime) : null,
   );
@@ -33,20 +33,20 @@ export const WritePage = () => {
     window.location.href = window.location.href;
   };
   useEffect(() => {
-    history.pushState(null, "", window.location.href);
+    history.pushState(null, '', window.location.href);
 
-    window.addEventListener("popstate", handleGoBack);
+    window.addEventListener('popstate', handleGoBack);
 
     return () => {
-      window.removeEventListener("popstate", handleGoBack);
+      window.removeEventListener('popstate', handleGoBack);
     };
   }, []);
 
   const getStartInfo = async () => {
     if (!letterId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else {
       const response: LetterStartInfoGetResponse =
         await getLetterStartInfo(letterNumId);
@@ -86,7 +86,7 @@ export const WritePage = () => {
         setShowCountdown(false);
         setResetTime(Date.now() + 100 * 1000);
         window.localStorage.setItem(
-          "resetTime",
+          'resetTime',
           String(Date.now() + 100 * 1000),
         );
       }, 4000);

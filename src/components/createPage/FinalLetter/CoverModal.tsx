@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import styled from "styled-components";
-import X from "../../../../public/assets/x.svg";
-import camera from "../../../../public/assets/camera.svg";
-import axios from "axios";
-import { Area } from "react-easy-crop";
-import shadow from "../../../../public/assets/shadow2.svg";
-import camera_mini from "../../../../public/assets/camera_mini.svg";
-import { CoverType } from "../../../api/model/CoverType";
-import { getCoverTypes } from "../../../api/service/CoverService";
-import { getAllFont } from "../../../api/service/FontService";
-import { fontProps } from "../CoverDeco/CoverStyle";
-import FontPopup from "../CoverDeco/FontPopup";
-import { postCoverImage } from "../../../api/service/ImageService";
-import { ImageUrlRequest } from "../../../api/model/ImageModel";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import styled from 'styled-components';
+import X from '../../../../public/assets/x.svg';
+import camera from '../../../../public/assets/camera.svg';
+import axios from 'axios';
+import { Area } from 'react-easy-crop';
+import shadow from '../../../../public/assets/shadow2.svg';
+import camera_mini from '../../../../public/assets/camera_mini.svg';
+import { CoverType } from '../../../api/model/CoverType';
+import { getCoverTypes } from '../../../api/service/CoverService';
+import { getAllFont } from '../../../api/service/FontService';
+import { fontProps } from '../CoverDeco/CoverStyle';
+import FontPopup from '../CoverDeco/FontPopup';
+import { postCoverImage } from '../../../api/service/ImageService';
+import { ImageUrlRequest } from '../../../api/model/ImageModel';
 
 interface Props {
   title: string;
@@ -31,9 +31,9 @@ interface Props {
   selectFid: number;
 }
 export enum ImageExtension {
-  JPG = "JPG",
-  JPEG = "JPEG",
-  PNG = "PNG",
+  JPG = 'JPG',
+  JPEG = 'JPEG',
+  PNG = 'PNG',
 }
 
 export default function CoverModal({
@@ -58,7 +58,7 @@ export default function CoverModal({
   const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [originalImage, setOriginalImage] = useState<string>("");
+  const [originalImage, setOriginalImage] = useState<string>('');
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [, setCropperKey] = useState<number>(0);
   const [, setBookimage] = useState<number>(backgroundimage - 1);
@@ -71,7 +71,7 @@ export default function CoverModal({
   const popupRef = useRef<HTMLDivElement | null>(null);
   const [fonts, setFonts] = useState<fontProps[]>([]);
   const [font, setFont] = useState<string>(selectfont);
-  const [selectf, setSelectf] = useState<string>("");
+  const [selectf, setSelectf] = useState<string>('');
   const [selectfid, setSelectfid] = useState<number>(0);
 
   useEffect(() => {
@@ -113,10 +113,10 @@ export default function CoverModal({
   }, [selectedImageIndex, croppedImage]);
 
   const handleFinalCover = () => {
-    localStorage.setItem("title", title);
-    localStorage.setItem("image", croppedImage);
-    localStorage.setItem("bgImg", String(ImageIndex));
-    localStorage.setItem("font", font);
+    localStorage.setItem('title', title);
+    localStorage.setItem('image', croppedImage);
+    localStorage.setItem('bgImg', String(ImageIndex));
+    localStorage.setItem('font', font);
     setSelectedImageIndex(ImageIndex);
     setBackgroundimage(ImageIndex);
     setSelectfont(font);
@@ -134,9 +134,9 @@ export default function CoverModal({
         closeModal();
       } else setKeyboardVisible(true);
     }
-    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener('mousedown', handleOutside);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
     };
   }, [modalBackground]);
 
@@ -180,9 +180,9 @@ export default function CoverModal({
         setFontPopup(false); // fontPopup 숨기기
       }
     }
-    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener('mousedown', handleOutside);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
     };
   }, [inputRef]);
 
@@ -191,7 +191,7 @@ export default function CoverModal({
       {
         if (croppedAreaPixels) {
         }
-        if (originalImage !== "") {
+        if (originalImage !== '') {
           //Blob으로 변경
           const responseBlob = await fetch(originalImage).then((res) =>
             res.blob(),
@@ -205,31 +205,31 @@ export default function CoverModal({
 
           try {
             const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
-            console.log("PreSigned URL: ", preSignedUrl);
+            console.log('PreSigned URL: ', preSignedUrl);
 
             // Step 2: presigned URL로 이미지 업로드
             await fetch(preSignedUrl, {
-              method: "PUT",
+              method: 'PUT',
               headers: {
-                "Content-Type": "image/jpeg", // MIME type 설정
+                'Content-Type': 'image/jpeg', // MIME type 설정
               },
               body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
             });
 
             // Step 3: 업로드가 완료되면 S3 URL 생성
             const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
-            console.log("Image uploaded successfully to S3!");
-            console.log("Image URL: ", s3ImageUrl);
+            console.log('Image uploaded successfully to S3!');
+            console.log('Image URL: ', s3ImageUrl);
             setCroppedImage(s3ImageUrl);
             setCroppedAreaPixels(null);
           } catch (error) {
             if (axios.isAxiosError(error)) {
               console.error(
-                "Error uploading image: ",
+                'Error uploading image: ',
                 error.response?.data || (error as Error).message, // 타입 단언 추가
               );
             } else {
-              console.error("Unexpected error: ", error);
+              console.error('Unexpected error: ', error);
             }
           }
           setCroppedAreaPixels(null);
@@ -246,7 +246,7 @@ export default function CoverModal({
         return;
       }
       const newImageUrl = URL.createObjectURL(e.target.files[0]);
-      console.log("New Image URL: ", newImageUrl);
+      console.log('New Image URL: ', newImageUrl);
       setOriginalImage(newImageUrl); // 원본 이미지를 설정
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
@@ -256,7 +256,7 @@ export default function CoverModal({
 
   const onUploadImageButtonClick = useCallback(() => {
     if (imgRef.current) {
-      imgRef.current.value = ""; // 파일 입력 필드를 초기화
+      imgRef.current.value = ''; // 파일 입력 필드를 초기화
       imgRef.current.click();
     }
   }, []);
@@ -271,12 +271,12 @@ export default function CoverModal({
   };
 
   const handlePopupClick = (e: React.MouseEvent) => {
-    console.log("팝업 클릭 함수 실행");
+    console.log('팝업 클릭 함수 실행');
     // FontPopup을 클릭하면 input에 포커스를 유지
     if (popupRef.current) {
-      console.log("팝업 클릭함");
+      console.log('팝업 클릭함');
       if (inputRef.current) {
-        console.log("인풋에 포커스");
+        console.log('인풋에 포커스');
         inputRef.current.focus();
       }
       // input에 포커스를 유지시켜 키보드를 올려둠
@@ -293,7 +293,7 @@ export default function CoverModal({
       <Header>
         <Title>표지 수정하기</Title>
         <Cancel onClick={closeCoverModal}>
-          <img src={X} alt="X Icon" style={{ width: "14px", height: "14px" }} />
+          <img src={X} alt="X Icon" style={{ width: '14px', height: '14px' }} />
         </Cancel>
       </Header>
       <Book $backgroundImage={backgroundImage}>
@@ -324,13 +324,13 @@ export default function CoverModal({
             <path d="M0 1H184" stroke="white" strokeDasharray="6 6" />
           </svg>
         </TitleContainer>
-        {croppedImage === "" ? (
+        {croppedImage === '' ? (
           <ButtonContainer
             className="img__box"
             onClick={onUploadImageButtonClick}
           >
             <input
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               type="file"
               accept="image/*"
               ref={imgRef}
@@ -339,7 +339,7 @@ export default function CoverModal({
             <img
               src={camera}
               alt="Camera Icon"
-              style={{ width: "24px", height: "24px" }}
+              style={{ width: '24px', height: '24px' }}
             />
             <BtnTxt>사진 추가</BtnTxt>
           </ButtonContainer>
@@ -354,7 +354,7 @@ export default function CoverModal({
                 <Camera src={camera_mini} alt="camera_icon" />
               </CameraIcon>
               <input
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 type="file"
                 accept="image/*"
                 ref={imgRef}
@@ -437,7 +437,7 @@ const ModalContainer = styled.div<{
   display: flex;
   width: 100%;
   height: ${({ $isKeyboardOpen, $keyboardHeight }) =>
-    $isKeyboardOpen ? `calc(33rem - ${$keyboardHeight}px)` : "33rem"};
+    $isKeyboardOpen ? `calc(33rem - ${$keyboardHeight}px)` : '33rem'};
   padding: 24px 24px 20px 0px;
   bottom: 1px;
   border-radius: 24px 24px 0px 0px;
@@ -573,7 +573,7 @@ const Input = styled.input<{ $font: string }>`
     text-overflow: ellipsis;
     font-family: ${(props) => props.$font};
     font-size: ${(props) =>
-      props.$font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$font === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -585,7 +585,7 @@ const Input = styled.input<{ $font: string }>`
     text-overflow: ellipsis;
     font-family: ${(props) => props.$font};
     font-size: ${(props) =>
-      props.$font === "Ownglyph_UNZ-Rg" ? "24px" : "16px"};
+      props.$font === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
     letter-spacing: -0.5px;
@@ -604,7 +604,7 @@ const NameContainer = styled.div<{ $book: number }>`
   align-items: center;
   text-align: center;
   margin-top: ${(props) =>
-    props.$book === 0 || props.$book === 1 ? "34px" : "25px"};
+    props.$book === 0 || props.$book === 1 ? '34px' : '25px'};
 `;
 const NameTxt = styled.div<{ $book: number }>`
   padding: 0 12px 0 12px;
@@ -618,11 +618,11 @@ const NameTxt = styled.div<{ $book: number }>`
   line-height: 13px;
   letter-spacing: -0.5px;
   color: ${({ $book }) => {
-    if ($book === 0) return "#715142";
-    if ($book === 1) return "#335839";
-    if ($book === 2) return "#985566";
-    if ($book === 3) return "#232D3D";
-    if ($book === 4) return "#232D3D";
+    if ($book === 0) return '#715142';
+    if ($book === 1) return '#335839';
+    if ($book === 2) return '#985566';
+    if ($book === 3) return '#232D3D';
+    if ($book === 4) return '#232D3D';
   }};
 `;
 const ImageContainer = styled.div`
@@ -639,9 +639,9 @@ const ImageContainer = styled.div`
 const Image = styled.div<{ $clicked: boolean; $img: string }>`
   cursor: pointer;
   transition: all 0.2s ease;
-  width: ${(props) => (props.$clicked ? "56px" : "48px")};
-  height: ${(props) => (props.$clicked ? "56px" : "48px")};
-  opacity: ${(props) => (props.$clicked ? "" : "0.4")};
+  width: ${(props) => (props.$clicked ? '56px' : '48px')};
+  height: ${(props) => (props.$clicked ? '56px' : '48px')};
+  opacity: ${(props) => (props.$clicked ? '' : '0.4')};
   border-radius: 10.2px;
   flex-shrink: 0;
   background-image: url(${(props) => props.$img});
@@ -654,8 +654,8 @@ const Button = styled.button<{ $isKeyboardOpen: boolean }>`
   box-sizing: border-box;
   display: ${(props) =>
     props.$isKeyboardOpen
-      ? "none"
-      : "flex"}; /* 키보드가 올라왔을 때 버튼 숨김 */
+      ? 'none'
+      : 'flex'}; /* 키보드가 올라왔을 때 버튼 숨김 */
   width: 288px;
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;

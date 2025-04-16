@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { Pagination } from "../common/Pagination";
-import { decodeLetterId } from "../../api/config/base64";
-import { ReceiveLetterCover } from "./ReceiveLetterCover";
-import { ReceiveLetterSave } from "./ReceiveLetterSave";
-import { ReceiveLetterContents } from "./ReceiveLetterContents";
-import { LetterDetailGetResponse } from "../../api/model/LetterModel";
-import { FontGetResponse } from "../../api/model/FontModel";
-import { CoverTypeGetResponse } from "../../api/model/CoverTypeModel";
+import { Pagination } from '../common/Pagination';
+import { decodeLetterId } from '../../api/config/base64';
+import { ReceiveLetterCover } from './ReceiveLetterCover';
+import { ReceiveLetterSave } from './ReceiveLetterSave';
+import { ReceiveLetterContents } from './ReceiveLetterContents';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
 import {
   getLetterDetailInfo,
   getLetterStorageCheck,
   postLetterStore,
-} from "../../api/service/LetterService";
-import { getFontById } from "../../api/service/FontService";
-import { getCoverTypeById } from "../../api/service/CoverTypeService";
+} from '../../api/service/LetterService';
+import { getFontById } from '../../api/service/FontService';
+import { getCoverTypeById } from '../../api/service/CoverTypeService';
 
 function Query() {
   return new URLSearchParams(useLocation().search);
@@ -35,7 +35,7 @@ export const ReceiveLetter = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const page = Number(query.get("page")) || 1;
+    const page = Number(query.get('page')) || 1;
     setCurrentPage(page);
   }, [query]);
 
@@ -65,15 +65,15 @@ export const ReceiveLetter = () => {
     getSharedLetterStyle();
   }, [letterInfo]);
 
-  type AlertState = "LOADING" | "SAVED" | "ISSTORED";
-  const [saveAlert, setSaveAlert] = useState<AlertState>("LOADING");
+  type AlertState = 'LOADING' | 'SAVED' | 'ISSTORED';
+  const [saveAlert, setSaveAlert] = useState<AlertState>('LOADING');
 
   const handleSaveLetter = async () => {
     const storeAvailableResponse = await getLetterStorageCheck(letterNumId);
     if (!storeAvailableResponse.isStored) {
-      setSaveAlert("SAVED");
+      setSaveAlert('SAVED');
     } else {
-      setSaveAlert("ISSTORED");
+      setSaveAlert('ISSTORED');
     }
   };
 
@@ -82,8 +82,8 @@ export const ReceiveLetter = () => {
     if (storeResponse) {
       window.alert(storeResponse);
     }
-    setSaveAlert("LOADING");
-    navigate("/LetterBox", {
+    setSaveAlert('LOADING');
+    navigate('/LetterBox', {
       state: {
         focusCreate: false,
         focusReceive: true,
@@ -92,7 +92,7 @@ export const ReceiveLetter = () => {
   };
 
   const handleCancelBtn = async () => {
-    setSaveAlert("LOADING");
+    setSaveAlert('LOADING');
   };
 
   const renderPageContent = () => {
@@ -120,15 +120,15 @@ export const ReceiveLetter = () => {
   };
 
   return letterInfo && coverType && font && elementLength > 0 ? (
-    <Background $backgroundimg={"" + coverType.outputBackgroundImageUrl}>
+    <Background $backgroundimg={'' + coverType.outputBackgroundImageUrl}>
       <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
       <CoverShadow>
-        <CoverContainer $boardimg={"" + coverType.outputBoardImageUrl}>
+        <CoverContainer $boardimg={'' + coverType.outputBoardImageUrl}>
           {renderPageContent()}
         </CoverContainer>
       </CoverShadow>
       <Pagination totalPages={elementLength + 2} />
-      {saveAlert === "SAVED" && (
+      {saveAlert === 'SAVED' && (
         <ModalOverlay>
           <PopupContainer>
             <PopupTitle>
@@ -149,7 +149,7 @@ export const ReceiveLetter = () => {
           </PopupContainer>
         </ModalOverlay>
       )}
-      {saveAlert === "ISSTORED" && (
+      {saveAlert === 'ISSTORED' && (
         <ModalOverlay>
           <PopupContainer>
             <PopupTitle>

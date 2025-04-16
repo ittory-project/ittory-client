@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import more from "../../../public/assets/more.svg";
-import { Delete_letterbox } from "./Delete_letterbox";
-import { Received_Modal } from "./Received_Modal";
-import { EmptyLetter } from "./EmptyLetter";
-import { Letter } from "./Letter";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import more from '../../../public/assets/more.svg';
+import { Delete_letterbox } from './Delete_letterbox';
+import { Received_Modal } from './Received_Modal';
+import { EmptyLetter } from './EmptyLetter';
+import { Letter } from './Letter';
 import {
   getReceivedLetter,
   getLetterCounts,
-} from "../../api/service/MemberService";
-import { ReceiveLetterModel } from "../../api/model/MemberModel";
-import { Loading } from "./Loading";
+} from '../../api/service/MemberService';
+import { ReceiveLetterModel } from '../../api/model/MemberModel';
+import { Loading } from './Loading';
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,7 @@ export const ReceivedLetter = ({
   setDeleteAlert,
   setDeletedAlert,
 }: Props) => {
-  const [deleteTitle, setDeleteTitle] = useState<string>("");
+  const [deleteTitle, setDeleteTitle] = useState<string>('');
   const [selectId, setSelectId] = useState<number>(-1);
   const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<ReceiveLetterModel[]>([]);
@@ -57,7 +57,7 @@ export const ReceivedLetter = ({
         console.log(letterCounts);
         console.log(letterdata);
       } catch (err) {
-        console.error("Error fetching letter counts:", err);
+        console.error('Error fetching letter counts:', err);
       }
     };
 
@@ -82,10 +82,10 @@ export const ReceivedLetter = ({
           setLetterCounts(counts.receiveLetterCount);
           setLetters(letterdata.data.letters);
 
-          const deletedMessage = localStorage.getItem("deletedLetter");
+          const deletedMessage = localStorage.getItem('deletedLetter');
           setDeletedAlert(deletedMessage);
         } catch (err) {
-          console.error("Error fetching letter counts:", err);
+          console.error('Error fetching letter counts:', err);
         }
       }
     };
@@ -99,10 +99,10 @@ export const ReceivedLetter = ({
     const date = new Date(deliverDate);
 
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
-    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
     const weekday = weekdays[date.getDay()];
 
     return (
@@ -120,13 +120,13 @@ export const ReceivedLetter = ({
             <Container>
               {deleteAlert && <DeleteAlert>{deleteAlert}</DeleteAlert>}
               <NumberHeader>
-                <NumberTxt style={{ fontWeight: "400", marginRight: "2.5px" }}>
+                <NumberTxt style={{ fontWeight: '400', marginRight: '2.5px' }}>
                   총
                 </NumberTxt>
-                <NumberTxt style={{ fontWeight: "700" }}>
+                <NumberTxt style={{ fontWeight: '700' }}>
                   {letterCounts}
                 </NumberTxt>
-                <NumberTxt style={{ fontWeight: "400" }}>개</NumberTxt>
+                <NumberTxt style={{ fontWeight: '400' }}>개</NumberTxt>
               </NumberHeader>
               {letters.map((item) => (
                 <LetterContainer

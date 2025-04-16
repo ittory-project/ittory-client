@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
-import { WriteOrderInactiveItem } from "./WriteOrderInactiveItem";
-import { WriteOrderActivateItem } from "./WriteOrderActivateItem";
-import styled from "styled-components";
-import { WriteOrderFinalItem } from "./WriteOrderFinalItem";
-import { LetterItem } from "../../../api/model/LetterModel";
-import { WriteOrderNowItem } from "./WriteOrderNowItem";
+import React, { useEffect, useRef } from 'react';
+import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
+import { WriteOrderActivateItem } from './WriteOrderActivateItem';
+import styled from 'styled-components';
+import { WriteOrderFinalItem } from './WriteOrderFinalItem';
+import { LetterItem } from '../../../api/model/LetterModel';
+import { WriteOrderNowItem } from './WriteOrderNowItem';
 
 interface ListComponentProps {
   letterItems: LetterItem[];
@@ -31,8 +31,8 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({
       );
       if (targetIndex !== -1 && itemRefs.current) {
         itemRefs.current[targetIndex]?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
+          behavior: 'smooth',
+          block: 'center',
         });
       }
     }
@@ -53,7 +53,7 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({
                   key={item.elementId}
                   letterImageUrl={item.letterImg}
                   name={item.userNickname}
-                  content={item.content || ""}
+                  content={item.content || ''}
                   itemId={index + 1}
                 />
               )}

@@ -3,14 +3,14 @@ import {
   PayloadAction,
   configureStore,
   createSelector,
-} from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
-import { LetterItem, LetterPartiItem } from "../model/LetterModel";
+} from '@reduxjs/toolkit';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
+import { LetterItem, LetterPartiItem } from '../model/LetterModel';
 
 // 편지 작성한 내용들
 const jsonSlice = createSlice({
-  name: "writeData",
+  name: 'writeData',
   initialState: {
     data: [] as string[],
   },
@@ -25,14 +25,14 @@ const jsonSlice = createSlice({
   },
 });
 const persistConfig = {
-  key: "writeData",
+  key: 'writeData',
   storage,
 };
 const persistedReducer = persistReducer(persistConfig, jsonSlice.reducer);
 
 // 편지 작성 순서
 const orderSlice = createSlice({
-  name: "orderData",
+  name: 'orderData',
   initialState: {
     data: [] as string[],
   },
@@ -49,7 +49,7 @@ const orderSlice = createSlice({
   },
 });
 const orderPersistConfig = {
-  key: "orderData",
+  key: 'orderData',
   storage,
 };
 const orderReducer = persistReducer(orderPersistConfig, orderSlice.reducer);
