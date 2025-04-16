@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 interface WriteOrderProps {
   letterImageUrl: string | undefined;
@@ -17,12 +17,12 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = "/assets/write/img_error.svg";
+    event.currentTarget.src = '/assets/write/img_error.svg';
   };
 
   return (
     <Wrapper>
-      <ProfileImage src={"" + letterImageUrl} onError={handleImageError} />
+      <ProfileImage src={'' + letterImageUrl} onError={handleImageError} />
       <ContentWrapper>
         <MainText>{content}</MainText>
         <SubText>

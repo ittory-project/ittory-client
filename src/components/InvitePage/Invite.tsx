@@ -1,15 +1,15 @@
-import { useEffect, useState, useCallback } from "react";
-import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
-import { HostUser } from "./HostUser";
-import { Member } from "./Member";
-import { getParticipants } from "../../api/service/LetterService";
-import { getMyPage } from "../../api/service/MemberService";
-import { stompClient } from "../../api/config/stompInterceptor";
-import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
-import { Loading } from "./Loading";
-import texture from "../../../public/assets/invite/texture1.png";
-import { quitLetterWs } from "../../api/service/WsService";
+import { useEffect, useState, useCallback } from 'react';
+import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { HostUser } from './HostUser';
+import { Member } from './Member';
+import { getParticipants } from '../../api/service/LetterService';
+import { getMyPage } from '../../api/service/MemberService';
+import { stompClient } from '../../api/config/stompInterceptor';
+import { WsExitResponse, WsEnterResponse } from '../../api/model/WsModel';
+import { Loading } from './Loading';
+import texture from '../../../public/assets/invite/texture1.png';
+import { quitLetterWs } from '../../api/service/WsService';
 
 export interface Participants {
   sequence: number;
@@ -35,8 +35,8 @@ export const Invite = () => {
   const guideOpen = location.state.guideOpen;
 
   const [letterId] = useState<number>(getletterId);
-  const [name, setName] = useState<string>("");
-  const [exitName, setExitName] = useState<string>("");
+  const [name, setName] = useState<string>('');
+  const [exitName, setExitName] = useState<string>('');
   const [viewDelete, setViewDelete] = useState<boolean>(false);
   //const [refresh] = useState<number>(1);
   const [, setLoad] = useState<boolean>(true);
@@ -44,39 +44,39 @@ export const Invite = () => {
   //const [hasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
 
   const handleGoBack = () => {
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   useEffect(() => {
-    window.history.pushState(null, "", window.location.href);
-    window.history.replaceState(null, "", window.location.href);
+    window.history.pushState(null, '', window.location.href);
+    window.history.replaceState(null, '', window.location.href);
 
-    window.addEventListener("popstate", handleGoBack);
+    window.addEventListener('popstate', handleGoBack);
 
     return () => {
-      window.removeEventListener("popstate", handleGoBack);
+      window.removeEventListener('popstate', handleGoBack);
     };
   }, []);
 
   useEffect(() => {
-    window.history.pushState(null, "", window.location.href);
-    window.history.replaceState(null, "", window.location.href);
+    window.history.pushState(null, '', window.location.href);
+    window.history.replaceState(null, '', window.location.href);
 
-    window.addEventListener("popstate", handleGoBack);
+    window.addEventListener('popstate', handleGoBack);
 
     return () => {
-      window.removeEventListener("popstate", handleGoBack);
+      window.removeEventListener('popstate', handleGoBack);
     };
   }, [navigate]);
 
   useEffect(() => {
-    window.history.pushState(null, "", window.location.href);
-    window.history.replaceState(null, "", window.location.href);
+    window.history.pushState(null, '', window.location.href);
+    window.history.replaceState(null, '', window.location.href);
 
-    window.addEventListener("popstate", handleGoBack);
+    window.addEventListener('popstate', handleGoBack);
 
     return () => {
-      window.removeEventListener("popstate", handleGoBack);
+      window.removeEventListener('popstate', handleGoBack);
     };
   }, [location]);
 
@@ -87,7 +87,7 @@ export const Invite = () => {
 
       setParticipants(data);
     } catch (err) {
-      console.error("Error fetching participants:", err);
+      console.error('Error fetching participants:', err);
     }
   };
 
@@ -104,7 +104,7 @@ export const Invite = () => {
 
         if (participants.length < 1) {
           fetchParticipants();
-          console.log("데이터없음-useEffect");
+          console.log('데이터없음-useEffect');
         } else {
           if (memberIndex > -1) {
             return;
@@ -114,28 +114,28 @@ export const Invite = () => {
                 participants[0].nickname === name ||
                 participants[0].nickname === userName
               ) {
-                console.log("방장지정");
-                localStorage.removeItem("load");
+                console.log('방장지정');
+                localStorage.removeItem('load');
                 //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(0);
               } else {
-                console.log("방장지정");
-                localStorage.removeItem("load");
+                console.log('방장지정');
+                localStorage.removeItem('load');
                 //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(1);
               }
             } else {
-              console.log(localStorage.getItem("load"));
-              if (localStorage.getItem("load") === "done") {
-                console.log("로딩이미했음");
+              console.log(localStorage.getItem('load'));
+              if (localStorage.getItem('load') === 'done') {
+                console.log('로딩이미했음');
                 setLoad(true);
                 setLoadstatus(true);
               } else {
-                console.log("로딩 페이지로");
-                localStorage.setItem("load", "done");
-                navigate("/loading", {
+                console.log('로딩 페이지로');
+                localStorage.setItem('load', 'done');
+                navigate('/loading', {
                   state: {
                     letterId: getletterId,
                     userName: userName,
@@ -147,7 +147,7 @@ export const Invite = () => {
           }
         }
       } catch (err) {
-        console.error("Error during data fetching:", err);
+        console.error('Error during data fetching:', err);
       }
     };
     fetchData();
@@ -166,7 +166,7 @@ export const Invite = () => {
 
         if (participants.length < 1) {
           fetchParticipants();
-          console.log("데이터없음-useEffect");
+          console.log('데이터없음-useEffect');
         } else {
           if (memberIndex > -1) {
             return;
@@ -176,28 +176,28 @@ export const Invite = () => {
                 participants[0].nickname === name ||
                 participants[0].nickname === userName
               ) {
-                console.log("방장지정");
-                localStorage.removeItem("load");
+                console.log('방장지정');
+                localStorage.removeItem('load');
                 //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(0);
               } else {
-                console.log("방장지정");
-                localStorage.removeItem("load");
+                console.log('방장지정');
+                localStorage.removeItem('load');
                 //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(1);
               }
             } else {
-              console.log(localStorage.getItem("load"));
-              if (localStorage.getItem("load") === "done") {
-                console.log("로딩이미했음");
+              console.log(localStorage.getItem('load'));
+              if (localStorage.getItem('load') === 'done') {
+                console.log('로딩이미했음');
                 setLoad(true);
                 setLoadstatus(true);
               } else {
-                console.log("로딩 페이지로");
-                localStorage.setItem("load", "done");
-                navigate("/loading", {
+                console.log('로딩 페이지로');
+                localStorage.setItem('load', 'done');
+                navigate('/loading', {
                   state: {
                     letterId: getletterId,
                     userName: userName,
@@ -209,7 +209,7 @@ export const Invite = () => {
           }
         }
       } catch (err) {
-        console.error("Error during data fetching:", err);
+        console.error('Error during data fetching:', err);
       }
     };
     fetchData();
@@ -246,23 +246,23 @@ export const Invite = () => {
     const client = stompClient();
 
     client.onConnect = () => {
-      console.log("WebSocket connected");
+      console.log('WebSocket connected');
 
       // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message) => {
-        console.log("Received message:", message);
+        console.log('Received message:', message);
         try {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
             message.body,
           );
 
           if (
-            response.action === "EXIT" &&
-            "nickname" in response &&
-            "isManager" in response
+            response.action === 'EXIT' &&
+            'nickname' in response &&
+            'isManager' in response
           ) {
             if (response.isManager) {
-              console.log("방장 퇴장 감지");
+              console.log('방장 퇴장 감지');
               setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
               fetchParticipants();
               console.log(participants);
@@ -275,19 +275,19 @@ export const Invite = () => {
               setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
               fetchParticipants();
             }
-          } else if (response.action === "END") {
+          } else if (response.action === 'END') {
             setViewDelete(true);
-          } else if (response.action === "START") {
-            navigate("/Connection", {
+          } else if (response.action === 'START') {
+            navigate('/Connection', {
               state: {
                 letterId: letterId,
-                coverId: Number(localStorage.getItem("coverId")),
-                bg: localStorage.getItem("bgImg"),
+                coverId: Number(localStorage.getItem('coverId')),
+                bg: localStorage.getItem('bgImg'),
               },
             });
           } else if (
-            response.action === "ENTER" &&
-            "participants" in response
+            response.action === 'ENTER' &&
+            'participants' in response
           ) {
             console.log(response.action);
             if (response.participants) {
@@ -296,7 +296,7 @@ export const Invite = () => {
             console.log(participants);
           }
         } catch (err) {
-          console.error("Error parsing WebSocket message:", err);
+          console.error('Error parsing WebSocket message:', err);
         }
       });
 
@@ -315,12 +315,12 @@ export const Invite = () => {
 
   //퇴장 알림
   useEffect(() => {
-    console.log("퇴장 알림");
+    console.log('퇴장 알림');
     const exitTimer = setTimeout(() => {
       fetchParticipants();
       setExitAlert(null);
       if (exitName) {
-        setExitName("");
+        setExitName('');
       }
     }, 5000);
 
@@ -329,7 +329,7 @@ export const Invite = () => {
 
   //방장 바뀜 알림
   useEffect(() => {
-    console.log("문젠가");
+    console.log('문젠가');
     const hostTimer = setTimeout(() => {
       fetchParticipants();
       setHostAlert(null);
@@ -361,11 +361,11 @@ export const Invite = () => {
   //PC 감지
   const handleTabClosed = useCallback(async (event: BeforeUnloadEvent) => {
     event.preventDefault(); // 경고 메시지 표시
-    event.returnValue = ""; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
+    event.returnValue = ''; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
 
     quitLetterWs(letterId);
-    console.log("소켓 퇴장");
-    console.log("탭이 닫힘");
+    console.log('소켓 퇴장');
+    console.log('탭이 닫힘');
   }, []);
 
   useEffect(() => {
@@ -373,16 +373,16 @@ export const Invite = () => {
     const beforeUnloadListener = (event: BeforeUnloadEvent) => {
       handleTabClosed(event);
     };
-    window.addEventListener("beforeunload", beforeUnloadListener);
-    window.addEventListener("unload", handleTabClosed);
+    window.addEventListener('beforeunload', beforeUnloadListener);
+    window.addEventListener('unload', handleTabClosed);
 
     return () => {
-      window.removeEventListener("beforeunload", beforeUnloadListener);
-      window.removeEventListener("unload", handleTabClosed);
+      window.removeEventListener('beforeunload', beforeUnloadListener);
+      window.removeEventListener('unload', handleTabClosed);
     };
   }, [handleTabClosed]);
 
-  console.log("invite 랜더링");
+  console.log('invite 랜더링');
 
   return (
     <BackGround>

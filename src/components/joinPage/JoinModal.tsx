@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { patchNickname } from "../../api/service/ParticipantService";
-import axios from "axios";
-import { postEnter } from "../../api/service/LetterService";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { patchNickname } from '../../api/service/ParticipantService';
+import axios from 'axios';
+import { postEnter } from '../../api/service/LetterService';
 
 interface Props {
   nickname: string;
@@ -13,11 +13,17 @@ interface Props {
   setStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setNoAccess: React.Dispatch<React.SetStateAction<boolean>>;
   setDeleteConf: React.Dispatch<React.SetStateAction<boolean>>;
-
 }
 
-export const JoinModal = ({ nickname, setViewModal, visited, setStarted, setNoAccess, setDeleted, setDeleteConf }: Props) => {
-    
+export const JoinModal = ({
+  nickname,
+  setViewModal,
+  visited,
+  setStarted,
+  setNoAccess,
+  setDeleted,
+  setDeleteConf,
+}: Props) => {
   const navigate = useNavigate();
   const letterId = localStorage.letterId;
   console.log(visited);
@@ -33,39 +39,36 @@ export const JoinModal = ({ nickname, setViewModal, visited, setStarted, setNoAc
   const handleAccess = async () => {
     try {
       console.log(nickname);
-          const enterresponse = await postEnter(Number(letterId), {nickname});
-          console.log(enterresponse);
-          if(enterresponse.enterStatus === true){
-            fianlAccess();
-          } else {
-            if (enterresponse.enterAction === "EXCEEDED") {
-              setNoAccess(true);
-            } else if (enterresponse.enterAction === "STARTED") {
-              setStarted(true);
-            } else if (enterresponse.enterAction === "DELETED") {
-              setDeleteConf(true);
-            }
-          }
-        } catch (error) {
-            console.log(error);
-            if (axios.isAxiosError(error) && error.response?.status === 400) {
-              console.error("400 Error:", error.response.data);
-              navigate("/");
-            } else if (
-              axios.isAxiosError(error) &&
-              error.response?.status === 404
-            ) {
-              console.error("404 Error:", error.response.data);
-              setDeleted(true);
-            }
+      const enterresponse = await postEnter(Number(letterId), { nickname });
+      console.log(enterresponse);
+      if (enterresponse.enterStatus === true) {
+        fianlAccess();
+      } else {
+        if (enterresponse.enterAction === 'EXCEEDED') {
+          setNoAccess(true);
+        } else if (enterresponse.enterAction === 'STARTED') {
+          setStarted(true);
+        } else if (enterresponse.enterAction === 'DELETED') {
+          setDeleteConf(true);
         }
+      }
+    } catch (error) {
+      console.log(error);
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        console.error('400 Error:', error.response.data);
+        navigate('/');
+      } else if (axios.isAxiosError(error) && error.response?.status === 404) {
+        console.error('404 Error:', error.response.data);
+        setDeleted(true);
+      }
+    }
   };
 
   const fianlAccess = () => {
     try {
-      localStorage.removeItem("letterId");
+      localStorage.removeItem('letterId');
       if (visited) {
-        navigate("/Invite", {
+        navigate('/Invite', {
           state: {
             letterId: letterId,
             guideOpen: false,
@@ -73,7 +76,7 @@ export const JoinModal = ({ nickname, setViewModal, visited, setStarted, setNoAc
           },
         });
       } else {
-        navigate("/Invite", {
+        navigate('/Invite', {
           state: {
             letterId: letterId,
             guideOpen: true,
@@ -82,36 +85,35 @@ export const JoinModal = ({ nickname, setViewModal, visited, setStarted, setNoAc
         });
       }
     } catch (err) {
-      console.error("error:", err);
+      console.error('error:', err);
     }
-  }
+  };
 
   return (
     <>
-           <Modal>
-           <Title>'{nickname}'님</Title>
-           <Title>으로 참여할까요?</Title>
-           <Contents>닉네임은 한번 설정하면 수정할 수 없어요</Contents>
-           <ButtonContainer>
-             <Button
-               style={{
-                 background: "#CED4DA",
-               }}
-               onClick={handleCancel}
-             >
-               <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
-             </Button>
-             <Button
-               style={{
-                 background: "#FFA256",
-               }}
-               onClick={handleAccess}
-             >
-               <ButtonTxt style={{ color: "#fff" }}>네!</ButtonTxt>
-             </Button>
-           </ButtonContainer>
-         </Modal>
-           
+      <Modal>
+        <Title>'{nickname}'님</Title>
+        <Title>으로 참여할까요?</Title>
+        <Contents>닉네임은 한번 설정하면 수정할 수 없어요</Contents>
+        <ButtonContainer>
+          <Button
+            style={{
+              background: '#CED4DA',
+            }}
+            onClick={handleCancel}
+          >
+            <ButtonTxt style={{ color: '#495057' }}>취소하기</ButtonTxt>
+          </Button>
+          <Button
+            style={{
+              background: '#FFA256',
+            }}
+            onClick={handleAccess}
+          >
+            <ButtonTxt style={{ color: '#fff' }}>네!</ButtonTxt>
+          </Button>
+        </ButtonContainer>
+      </Modal>
     </>
   );
 };

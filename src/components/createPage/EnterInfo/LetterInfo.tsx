@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import X from "../../../../public/assets/x.svg";
-import calender from "../../../../public/assets/calendar.svg";
-import BottomSheet from "./BotttomSheet";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import { getMyPage } from "../../../api/service/MemberService";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import X from '../../../../public/assets/x.svg';
+import calender from '../../../../public/assets/calendar.svg';
+import BottomSheet from './BotttomSheet';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { getMyPage } from '../../../api/service/MemberService';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   myName: string;
@@ -37,9 +37,9 @@ export default function LetterInfo({
   const receiverInputRef = useRef<HTMLInputElement | null>(null);
   const myNameInputRef = useRef<HTMLInputElement | null>(null);
   const [focusedField, setFocusedField] = useState<
-    "receiver" | "myName" | null
+    'receiver' | 'myName' | null
   >(null);
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,14 +48,14 @@ export default function LetterInfo({
         const myPageData = await getMyPage();
         setName(myPageData.name);
       } catch (err) {
-        console.error("Error fetching my page data:", err);
+        console.error('Error fetching my page data:', err);
       }
     };
     fetchMyPageData();
   }, []);
 
   const handleCancel = () => {
-    navigate("/");
+    navigate('/');
   };
 
   const openModal = () => {
@@ -83,26 +83,26 @@ export default function LetterInfo({
       }
     };
 
-    window.visualViewport?.addEventListener("resize", handleResize);
-    window.visualViewport?.addEventListener("scroll", handleResize);
+    window.visualViewport?.addEventListener('resize', handleResize);
+    window.visualViewport?.addEventListener('scroll', handleResize);
 
     handleResize();
 
     return () => {
-      window.visualViewport?.removeEventListener("resize", handleResize);
-      window.visualViewport?.removeEventListener("scroll", handleResize);
+      window.visualViewport?.removeEventListener('resize', handleResize);
+      window.visualViewport?.removeEventListener('scroll', handleResize);
     };
   }, []);
 
-  const handleFocus = (field: "receiver" | "myName") => {
+  const handleFocus = (field: 'receiver' | 'myName') => {
     setFocusedField(field); // 포커스된 필드를 추적
   };
 
   useEffect(() => {
     if (keyboardVisible) {
-      if (focusedField === "receiver") {
+      if (focusedField === 'receiver') {
         receiverInputRef.current?.focus();
-      } else if (focusedField === "myName") {
+      } else if (focusedField === 'myName') {
         myNameInputRef.current?.focus();
       }
     }
@@ -112,7 +112,7 @@ export default function LetterInfo({
     <BackGround>
       {isModalOpen && <Overlay />}
       <Cancel onClick={handleCancel}>
-        <img src={X} alt="X Icon" style={{ width: "14px", height: "14px" }} />
+        <img src={X} alt="X Icon" style={{ width: '14px', height: '14px' }} />
       </Cancel>
       <Container>
         <Title $keyboardVisible={keyboardVisible}>
@@ -125,7 +125,7 @@ export default function LetterInfo({
             <Input
               //ref={keyboardRef}
               ref={receiverInputRef}
-              onFocus={() => handleFocus("receiver")}
+              onFocus={() => handleFocus('receiver')}
               required
               placeholder="12자까지 입력할 수 있어요"
               type="text"
@@ -146,7 +146,7 @@ export default function LetterInfo({
             <Input
               //ref={keyboardRef}
               ref={myNameInputRef}
-              onFocus={() => handleFocus("myName")}
+              onFocus={() => handleFocus('myName')}
               required
               placeholder="5자까지 입력할 수 있어요"
               type="text"
@@ -170,32 +170,32 @@ export default function LetterInfo({
               }}
             >
               {deliverDay === null ? (
-                <SelectDate style={{ color: "#adb5bd" }}>
+                <SelectDate style={{ color: '#adb5bd' }}>
                   날짜를 선택해 주세요
                 </SelectDate>
               ) : (
-                <SelectDate style={{ color: "#212529" }}>
-                  {`${format(deliverDay, "yyyy")}.`}
-                  {`${format(deliverDay, "M")}.`}
-                  {format(deliverDay, "d")}
-                  {` (${format(deliverDay, "E", { locale: ko })})`}
+                <SelectDate style={{ color: '#212529' }}>
+                  {`${format(deliverDay, 'yyyy')}.`}
+                  {`${format(deliverDay, 'M')}.`}
+                  {format(deliverDay, 'd')}
+                  {` (${format(deliverDay, 'E', { locale: ko })})`}
                 </SelectDate>
               )}
               <Calender>
                 <img
                   src={calender}
                   alt="calender Icon"
-                  style={{ width: "18px", height: "19px" }}
+                  style={{ width: '18px', height: '19px' }}
                 />
               </Calender>
             </InputBoxRow>
           </InputBox>
         </MainCotainer>
       </Container>
-      {myName === "" || receiverName === "" || deliverDay === null ? (
+      {myName === '' || receiverName === '' || deliverDay === null ? (
         <Button
           disabled={true}
-          style={{ background: "#ced4da" }}
+          style={{ background: '#ced4da' }}
           $keyboardVisible={keyboardVisible}
         >
           <ButtonTxt>다음</ButtonTxt>
@@ -204,15 +204,15 @@ export default function LetterInfo({
         <Button
           $keyboardVisible={keyboardVisible}
           style={{
-            background: "#FFA256",
+            background: '#FFA256',
             boxShadow:
-              "1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset",
-            border: "none",
+              '1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset',
+            border: 'none',
           }}
           onClick={() => {
-            localStorage.setItem("receiver", receiverName);
-            localStorage.setItem("myName", myName);
-            localStorage.setItem("Date", String(deliverDay));
+            localStorage.setItem('receiver', receiverName);
+            localStorage.setItem('myName', myName);
+            localStorage.setItem('Date', String(deliverDay));
             setViewCoverDeco(true);
             setViewStartpage(false);
           }}
@@ -282,7 +282,7 @@ const Title = styled.div<{ $keyboardVisible: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
+  display: ${(props) => (props.$keyboardVisible ? 'none' : 'flex')};
 `;
 const Text = styled.span`
   display: inline-block;
@@ -310,7 +310,7 @@ const MainCotainer = styled.div<{ $shiftup?: boolean; $isopen?: string }>`
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
   transition: transform 0.3s ease;
   transform: ${(props) =>
-    props.$shiftup ? "translateY(0.8rem)" : "translateY(0)"};
+    props.$shiftup ? 'translateY(0.8rem)' : 'translateY(0)'};
 `;
 
 const InputBox = styled.div`
@@ -408,7 +408,7 @@ const Button = styled.button<{ $keyboardVisible: boolean }>`
   bottom: 20px;
 
   // 키보드가 보일 때 버튼 숨기기
-  display: ${(props) => (props.$keyboardVisible ? "none" : "flex")};
+  display: ${(props) => (props.$keyboardVisible ? 'none' : 'flex')};
 `;
 const ButtonTxt = styled.div`
   color: #fff;

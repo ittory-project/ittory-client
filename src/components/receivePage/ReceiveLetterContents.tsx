@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { LetterDetail } from "../../api/model/LetterModel";
-import { FontGetResponse } from "../../api/model/FontModel";
+import styled from 'styled-components';
+import { LetterDetail } from '../../api/model/LetterModel';
+import { FontGetResponse } from '../../api/model/FontModel';
 
 interface LetterContentProps {
   letterFontStyle: FontGetResponse;

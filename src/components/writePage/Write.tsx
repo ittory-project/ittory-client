@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { Client } from "@stomp/stompjs";
-import styled from "styled-components";
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Client } from '@stomp/stompjs';
+import styled from 'styled-components';
 
 import {
   addData,
@@ -10,32 +10,32 @@ import {
   selectParsedData,
   selectParsedOrderData,
   setOrderData,
-} from "../../api/config/state";
+} from '../../api/config/state';
 import {
   LetterItem,
   LetterPartiItem,
   LetterPartiListGetResponse,
   LetterStartInfoGetResponse,
-} from "../../api/model/LetterModel";
+} from '../../api/model/LetterModel';
 import {
   getLetterPartiList,
   getLetterStartInfo,
-} from "../../api/service/LetterService";
-import { stompClient } from "../../api/config/stompInterceptor";
-import { LetterItemResponse, WsExitResponse } from "../../api/model/WsModel";
-import { decodeLetterId } from "../../api/config/base64";
-import { getUserId } from "../../api/config/setToken";
-import Button from "../common/Button";
+} from '../../api/service/LetterService';
+import { stompClient } from '../../api/config/stompInterceptor';
+import { LetterItemResponse, WsExitResponse } from '../../api/model/WsModel';
+import { decodeLetterId } from '../../api/config/base64';
+import { getUserId } from '../../api/config/setToken';
+import Button from '../common/Button';
 
-import { WriteOrderList } from "./writeMainList/WriteOrderList";
-import { WriteOrderTitle } from "./WriteOrderTitle";
-import { WriteLocation } from "./WriteLocation";
-import { WriteElement } from "./writeElement/WriteElement";
-import { WriteOrderAlert } from "./WriteOrderAlert";
-import { WriteQuitAlert } from "./WriteQuitAlert";
-import { WriteFinishedModal } from "./WriteFinishedModal";
-import { quitLetterWs } from "../../api/service/WsService";
-import { WriteExit } from "./WriteExit";
+import { WriteOrderList } from './writeMainList/WriteOrderList';
+import { WriteOrderTitle } from './WriteOrderTitle';
+import { WriteLocation } from './WriteLocation';
+import { WriteElement } from './writeElement/WriteElement';
+import { WriteOrderAlert } from './WriteOrderAlert';
+import { WriteQuitAlert } from './WriteQuitAlert';
+import { WriteFinishedModal } from './WriteFinishedModal';
+import { quitLetterWs } from '../../api/service/WsService';
+import { WriteExit } from './WriteExit';
 
 interface WriteElementProps {
   remainingTime: number;
@@ -71,23 +71,23 @@ export const Write = ({
   // 다음 유저의 멤버 아이디 (상단바 설정용)
   const [nextMemberId, setNextMemberId] = useState(0);
   // 현재 작성해야 하는 편지 아이디
-  const storedNowLetterId = window.localStorage.getItem("nowLetterId");
+  const storedNowLetterId = window.localStorage.getItem('nowLetterId');
   const [nowLetterId, setNowLetterId] = useState(
     Number(storedNowLetterId || 1),
   );
   // 현재 유저 순서(sequence)
-  const storedNowSequence = window.localStorage.getItem("nowSequence");
+  const storedNowSequence = window.localStorage.getItem('nowSequence');
   const [nowSequence, setNowSequence] = useState(
     Number(storedNowSequence || 1),
   );
   // 현재 반복 횟수
-  const storedNowRepeat = window.localStorage.getItem("nowRepeat");
+  const storedNowRepeat = window.localStorage.getItem('nowRepeat');
   const [nowRepeat] = useState(Number(storedNowRepeat || 1));
   // 전체 편지 아이템 횟수
-  const storedTotalItem = window.localStorage.getItem("totalItem");
+  const storedTotalItem = window.localStorage.getItem('totalItem');
   const [totalItem, setTotalItem] = useState(Number(storedTotalItem || 1));
   // 현재 예정 편지 아이템 횟수
-  const storedNowTotalItem = window.localStorage.getItem("nowTotalItem");
+  const storedNowTotalItem = window.localStorage.getItem('nowTotalItem');
   const [nowTotalItem, setNowTotalItem] = useState(
     Number(storedNowTotalItem || 1),
   );
@@ -98,7 +98,7 @@ export const Write = ({
   // 잠금된 아이템
   const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
   // 퇴장 정보
-  const [exitUser, setExitUser] = useState("");
+  const [exitUser, setExitUser] = useState('');
   // 퇴장 팝업 띄우기
   const [hasExitUser, setHasExitUser] = useState(false);
   // 작성 페이지 보여주기
@@ -117,19 +117,19 @@ export const Write = ({
 
   // 각각의 아이템들을 세션에서 가져올 수 있도록 하기
   useEffect(() => {
-    window.localStorage.setItem("nowLetterId", String(nowLetterId));
+    window.localStorage.setItem('nowLetterId', String(nowLetterId));
   }, [nowLetterId]);
   useEffect(() => {
-    window.localStorage.setItem("nowSequence", String(nowSequence));
+    window.localStorage.setItem('nowSequence', String(nowSequence));
   }, [nowSequence]);
   useEffect(() => {
-    window.localStorage.setItem("nowRepeat", String(nowRepeat));
+    window.localStorage.setItem('nowRepeat', String(nowRepeat));
   }, [nowRepeat]);
   useEffect(() => {
-    window.localStorage.setItem("totalItem", String(totalItem));
+    window.localStorage.setItem('totalItem', String(totalItem));
   }, [totalItem]);
   useEffect(() => {
-    window.localStorage.setItem("nowTotalItem", String(nowTotalItem));
+    window.localStorage.setItem('nowTotalItem', String(nowTotalItem));
   }, [nowTotalItem]);
   useEffect(() => {
     setWriteOrderList(orderData);
@@ -151,7 +151,7 @@ export const Write = ({
       setShowSubmitPage(false);
       setUpdateResponse(false);
       setResetTime(Date.now() + 100 * 1000);
-      window.localStorage.setItem("resetTime", String(Date.now() + 100 * 1000));
+      window.localStorage.setItem('resetTime', String(Date.now() + 100 * 1000));
     }
   }, [orderData, updateResponse]);
 
@@ -172,13 +172,13 @@ export const Write = ({
   // 편지 작성 시 이탈 처리
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        console.log("백그라운드 전환");
-      } else if (document.visibilityState === "visible") {
-        console.log("다시돌아옴");
-        const storedResetTime = window.localStorage.getItem("resetTime");
+      if (document.visibilityState === 'hidden') {
+        console.log('백그라운드 전환');
+      } else if (document.visibilityState === 'visible') {
+        console.log('다시돌아옴');
+        const storedResetTime = window.localStorage.getItem('resetTime');
         if (storedResetTime && Date.now() > Number(storedResetTime)) {
-          console.log("턴이 넘어가서 퇴장됨");
+          console.log('턴이 넘어가서 퇴장됨');
           clientRef.current?.deactivate();
           setShowExitPage(true);
           quitLetterWs(letterNumId);
@@ -190,7 +190,7 @@ export const Write = ({
     const handlePageHide = (event: PageTransitionEvent) => {
       window.alert(event);
       if (!event.persisted) {
-        console.log("Page hide");
+        console.log('Page hide');
         quitLetterWs(letterNumId);
         clientRef.current?.deactivate();
         event.preventDefault();
@@ -198,12 +198,12 @@ export const Write = ({
       }
     };
     // 리스너
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("pagehide", handlePageHide);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', handlePageHide);
 
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("pagehide", handlePageHide);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', handlePageHide);
     };
   }, [letterNumId, quitLetterWs]);
 
@@ -219,14 +219,14 @@ export const Write = ({
           message.body,
         );
 
-        if ("action" in response && response.action === "EXIT") {
+        if ('action' in response && response.action === 'EXIT') {
           const exitResponse = response as WsExitResponse;
-          console.log("퇴장 정보: ", exitResponse);
+          console.log('퇴장 정보: ', exitResponse);
           fetchParticipantsAndUpdateLockedItems();
           setExitUser(exitResponse.nickname);
-        } else if ("elementId" in response) {
+        } else if ('elementId' in response) {
           const letterResponse = response as LetterItemResponse;
-          console.log("작성 내용: ", letterResponse);
+          console.log('작성 내용: ', letterResponse);
           const responseToLetterItem: LetterItem = {
             elementId: Number(response.elementId),
             content: response.content,
@@ -264,16 +264,16 @@ export const Write = ({
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
       console.log(
-        "다음 사람 인덱스: ",
+        '다음 사람 인덱스: ',
         (nextIndex + 1) % partiNum,
-        "다음 사람 누구 (멤버 아이디): ",
+        '다음 사람 누구 (멤버 아이디): ',
         writeOrderList[(nextIndex + 1) % partiNum].memberId,
       );
       setNextMemberId(writeOrderList[(nextIndex + 1) % partiNum].memberId);
       if (remainingTime <= -5) {
         setResetTime(Date.now() + 100 * 1000);
         window.localStorage.setItem(
-          "resetTime",
+          'resetTime',
           String(Date.now() + 100 * 1000),
         );
       } else {
@@ -338,11 +338,11 @@ export const Write = ({
       if (writeOrderList.length > 0) {
         setNowMemberId(writeOrderList[nowSequence - 1].memberId);
         console.log(
-          "다음 사람 인덱스: ",
+          '다음 사람 인덱스: ',
           1 % partiNum,
-          "partinum: ",
+          'partinum: ',
           partiNum,
-          "다음 사람 멤버아이디: ",
+          '다음 사람 멤버아이디: ',
           writeOrderList[1 % partiNum].memberId,
         );
         setNextMemberId(writeOrderList[1 % partiNum].memberId);
@@ -402,7 +402,7 @@ export const Write = ({
       setHasExitUser(true);
       const timer = setTimeout(() => {
         setHasExitUser(false);
-        setExitUser("");
+        setExitUser('');
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -415,7 +415,7 @@ export const Write = ({
       setNowUserPopup(nowMemberId);
       const timer = setTimeout(() => {
         setNowUserPopup(null);
-        setExitUser("");
+        setExitUser('');
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -428,7 +428,7 @@ export const Write = ({
       setNextUserPopup(nextMemberId);
       const timer = setTimeout(() => {
         setNextUserPopup(null);
-        setExitUser("");
+        setExitUser('');
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -554,7 +554,7 @@ export const Write = ({
           isFirstUser={writeOrderList[0].memberId === Number(getUserId())}
         />
       )}
-      {showExitPage && <WriteExit reasonText={"장시간 접속하지 않아서"} />}
+      {showExitPage && <WriteExit reasonText={'장시간 접속하지 않아서'} />}
     </Container>
   ) : (
     <>접속 오류</>

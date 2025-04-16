@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import deleteblock from "../../../public/assets/join/deleteblock.svg";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import deleteblock from '../../../public/assets/join/deleteblock.svg';
 
 export default function Deleted() {
   const navigate = useNavigate();
 
   const handleButton = () => {
-    navigate("/");
+    navigate('/');
   };
   return (
     <BackGround>

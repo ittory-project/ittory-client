@@ -1,11 +1,11 @@
-import { useState } from "react";
-import styled from "styled-components";
-import prev from "../../../public/assets/prev.svg";
-import { useNavigate } from "react-router-dom";
-import out from "../../../public/assets/out_X.svg";
-import logout from "../../../public/assets/logout.svg";
-import { Logout } from "./Logout";
-import { AccountDelete } from "./AccountDelete";
+import { useState } from 'react';
+import styled from 'styled-components';
+import prev from '../../../public/assets/prev.svg';
+import { useNavigate } from 'react-router-dom';
+import out from '../../../public/assets/out_X.svg';
+import logout from '../../../public/assets/logout.svg';
+import { Logout } from './Logout';
+import { AccountDelete } from './AccountDelete';
 
 export const Account = () => {
   const navigate = useNavigate();
@@ -30,13 +30,13 @@ export const Account = () => {
           <List>
             <Container onClick={handlePopup}>
               <Area>
-                <img src={logout} style={{ width: "24px", height: "24px" }} />
+                <img src={logout} style={{ width: '24px', height: '24px' }} />
                 <span>로그아웃</span>
               </Area>
             </Container>
             <Container onClick={handleDelete}>
               <Area>
-                <img src={out} style={{ width: "24px", height: "24px" }} />
+                <img src={out} style={{ width: '24px', height: '24px' }} />
                 <span>탈퇴하기</span>
               </Area>
             </Container>

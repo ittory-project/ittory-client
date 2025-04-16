@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
   LetterPartiItem,
   LetterPartiListGetResponse,
-} from "../../../api/model/LetterModel";
-import { getLetterPartiList } from "../../../api/service/LetterService";
-import { useParams } from "react-router-dom";
-import { decodeLetterId } from "../../../api/config/base64";
+} from '../../../api/model/LetterModel';
+import { getLetterPartiList } from '../../../api/service/LetterService';
+import { useParams } from 'react-router-dom';
+import { decodeLetterId } from '../../../api/config/base64';
 
 interface WriteModalProps {
   // partiCount: number;
@@ -27,9 +27,9 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
 
   const getPartiList = async () => {
     if (!letterId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else {
       const response: LetterPartiListGetResponse =
         await getLetterPartiList(letterNumId);
@@ -47,9 +47,9 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           {/* 참여자 수가 제대로 불러와지지 않음 - 임시방편: writeOrderList.length 값 넣음 */}
           {String(writeOrderList?.length)}명의 참여자가
           <br />
-          <span style={{ color: "#FFA256" }}>
+          <span style={{ color: '#FFA256' }}>
             {String(repeatCount)}번씩
-          </span>{" "}
+          </span>{' '}
           이어 쓸 거예요!
         </PopupTitle>
         <PopupTitleDetail>
@@ -59,7 +59,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           {writeOrderList && writeOrderList.length > 1 ? (
             <PopupListTitle>작성 순서</PopupListTitle>
           ) : (
-            <div style={{ padding: "3px" }}></div>
+            <div style={{ padding: '3px' }}></div>
           )}
           {writeOrderList ? (
             <List>
@@ -77,7 +77,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
                     <Avatar
                       src={
                         participant.imageUrl ||
-                        "/assets/common/profile_bunny.svg"
+                        '/assets/common/profile_bunny.svg'
                       }
                       alt={participant.nickname}
                     />
@@ -215,7 +215,7 @@ const ListNumber = styled.div`
   gap: 10px;
   color: var(--color-black-white-white, #fff);
   text-align: center;
-  font-family: var(--Typography-family-number, "Gmarket Sans");
+  font-family: var(--Typography-family-number, 'Gmarket Sans');
   font-size: 12px;
   font-style: bold;
   line-height: var(--Typography-line_height-2xs, 16px); /* 160% */

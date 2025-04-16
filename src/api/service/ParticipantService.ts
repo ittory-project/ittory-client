@@ -1,11 +1,11 @@
-import { api, BaseResponse } from "../config/api";
+import { api, BaseResponse } from '../config/api';
 import {
   RandomPostRequest,
   RandomPostResponse,
   NicknamePostRequest,
   NicknamePostResponse,
   NicknamePatchResponse,
-} from "../model/ParticipantModel";
+} from '../model/ParticipantModel';
 
 export async function postRandom(
   data: RandomPostRequest,

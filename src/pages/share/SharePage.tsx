@@ -1,20 +1,20 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ShareLetter } from "../../components/sharePage/ShareLetter";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ShareLetter } from '../../components/sharePage/ShareLetter';
 
 export const ShareLetterPage = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate("/");
+    navigate('/');
   };
   useEffect(() => {
-    history.pushState(null, "", window.location.href);
+    history.pushState(null, '', window.location.href);
 
-    window.addEventListener("popstate", handleGoBack);
+    window.addEventListener('popstate', handleGoBack);
 
     return () => {
-      window.removeEventListener("popstate", handleGoBack);
+      window.removeEventListener('popstate', handleGoBack);
     };
   }, []);
 

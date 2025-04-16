@@ -1,32 +1,32 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { format, parseISO } from "date-fns";
-import { ko } from "date-fns/locale";
-import out from "../../../public/assets/out.svg";
-import info from "../../../public/assets/info.svg";
-import crown from "/assets/crown.svg";
-import plus from "/assets/plus.svg";
-import tip from "../../../public/assets/tooltip.svg";
-import { UserGuide } from "./UserGuide";
-import notice from "../../../public/assets/notice.svg";
-import bright from "../../../public/assets/border.svg";
-import shadow from "../../../public/assets/shadow2.svg";
-import { getCoverTypes } from "../../api/service/CoverService";
-import { getLetterInfo } from "../../api/service/LetterService";
-import { CoverType } from "../../api/model/CoverType";
-import { Participants } from "./Invite";
-import { DeleteConfirm } from "./Delete/DeleteConfirm";
-import defaultImg from "../../../public/assets/menu/logindefault.png";
-import { getFontById } from "../../api/service/FontService";
-import { Exit } from "./ExitMember";
-import { LetterDetailGetResponse } from "../../api/model/LetterModel";
-import { getLetterDetailInfo } from "../../api/service/LetterService";
-import barShadow from "../../../public/assets/invite/shadow.svg";
-import bg1 from "../../../public/assets/connect/bg1.png";
-import bg2 from "../../../public/assets/connect/bg2.png";
-import bg3 from "../../../public/assets/connect/bg3.png";
-import bg4 from "../../../public/assets/connect/bg4.png";
-import bg5 from "../../../public/assets/connect/bg5.png";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { format, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import out from '../../../public/assets/out.svg';
+import info from '../../../public/assets/info.svg';
+import crown from '/assets/crown.svg';
+import plus from '/assets/plus.svg';
+import tip from '../../../public/assets/tooltip.svg';
+import { UserGuide } from './UserGuide';
+import notice from '../../../public/assets/notice.svg';
+import bright from '../../../public/assets/border.svg';
+import shadow from '../../../public/assets/shadow2.svg';
+import { getCoverTypes } from '../../api/service/CoverService';
+import { getLetterInfo } from '../../api/service/LetterService';
+import { CoverType } from '../../api/model/CoverType';
+import { Participants } from './Invite';
+import { DeleteConfirm } from './Delete/DeleteConfirm';
+import defaultImg from '../../../public/assets/menu/logindefault.png';
+import { getFontById } from '../../api/service/FontService';
+import { Exit } from './ExitMember';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
+import barShadow from '../../../public/assets/invite/shadow.svg';
+import bg1 from '../../../public/assets/connect/bg1.png';
+import bg2 from '../../../public/assets/connect/bg2.png';
+import bg3 from '../../../public/assets/connect/bg3.png';
+import bg4 from '../../../public/assets/connect/bg4.png';
+import bg5 from '../../../public/assets/connect/bg5.png';
 
 interface Props {
   guideOpen: string;
@@ -38,20 +38,20 @@ interface Props {
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [sliceName, setSliceName] = useState<string>("");
+  const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<string>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
-  const namesString = items.map((item) => item.nickname).join(", ");
+  const namesString = items.map((item) => item.nickname).join(', ');
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 
-  const [cropImg, setCropImg] = useState<string>("");
+  const [cropImg, setCropImg] = useState<string>('');
   const [deliverDay, setDeliverDay] = useState<Date | null>(null);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-  const [selectfont, setSelectfont] = useState<string>("");
+  const [selectfont, setSelectfont] = useState<string>('');
   const [fontId, setFontId] = useState<number>(-1);
-  const [receiverName, setReceiverName] = useState<string>("");
+  const [receiverName, setReceiverName] = useState<string>('');
   const backgroundImages: { [key: number]: string } = {
     1: bg1,
     2: bg2,
@@ -61,7 +61,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
   const [background, setBackground] = useState<string | null>(null);
 
-  console.log("this is member page");
+  console.log('this is member page');
 
   useEffect(() => {
     console.log(receiverName);
@@ -84,12 +84,12 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     const fetchLetterInfo = async () => {
       try {
         const letterData = await getLetterInfo(letterId);
-        console.log("letterData:", letterData);
+        console.log('letterData:', letterData);
         setCropImg(letterData.coverPhotoUrl);
         setDeliverDay(parseISO(letterData.deliveryDate));
         setReceiverName(letterData.receiverName);
         setSelectedImageIndex(letterData.coverTypeId);
-        localStorage.setItem("coverId", String(letterData.coverTypeId));
+        localStorage.setItem('coverId', String(letterData.coverTypeId));
         setBackground(backgroundImages[letterData.coverTypeId]);
         setFontId(letterData.fontId);
         setTitle(letterData.title);
@@ -104,7 +104,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   useEffect(() => {
     if (background) {
-      localStorage.setItem("bgImg", background);
+      localStorage.setItem('bgImg', background);
     }
   }, [background]);
 
@@ -113,7 +113,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
 
   const handleGuide = () => {
-    setGuide("true");
+    setGuide('true');
   };
 
   const handleExit = () => {
@@ -147,32 +147,32 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
   useEffect(() => {
     window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   const fallbackCopyTextToClipboard = (text: string) => {
-    const textArea = document.createElement("textarea");
+    const textArea = document.createElement('textarea');
     textArea.value = text;
-    textArea.style.position = "fixed"; // 화면에서 보이지 않도록 고정
-    textArea.style.top = "-9999px";
+    textArea.style.position = 'fixed'; // 화면에서 보이지 않도록 고정
+    textArea.style.top = '-9999px';
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
 
     try {
-      const successful = document.execCommand("copy");
+      const successful = document.execCommand('copy');
       if (successful) {
         setCopied(true);
         setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
       } else {
-        alert("텍스트 복사에 실패했습니다.");
+        alert('텍스트 복사에 실패했습니다.');
       }
     } catch (error) {
-      console.error("Fallback copy failed:", error);
-      alert("텍스트 복사에 실패했습니다.");
+      console.error('Fallback copy failed:', error);
+      alert('텍스트 복사에 실패했습니다.');
     } finally {
       document.body.removeChild(textArea);
     }
@@ -185,14 +185,14 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
         if (
           navigator.clipboard &&
-          typeof navigator.clipboard.writeText === "function"
+          typeof navigator.clipboard.writeText === 'function'
         ) {
           try {
             await navigator.clipboard.writeText(shareTextPc);
             setCopied(true);
             setTimeout(() => setCopied(false), 3000);
           } catch (error) {
-            console.error("공유 실패: ", error);
+            console.error('공유 실패: ', error);
             fallbackCopyTextToClipboard(shareTextPc);
           }
         } else {
@@ -205,39 +205,39 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
           await navigator.share({
             url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
           });
-          console.log("공유 성공");
+          console.log('공유 성공');
         } catch (e) {
-          console.log("공유 실패");
+          console.log('공유 실패');
         }
       }
     } else {
-      console.log("공유 실패");
+      console.log('공유 실패');
     }
   };
 
   return (
     <BackGround>
-      {guide === "true" && <Overlay />}
+      {guide === 'true' && <Overlay />}
       {viewExit && <Overlay />}
       {items.length > 0 && (
         <>
           {!viewDelete &&
-            title != "" &&
+            title != '' &&
             items[0].nickname &&
-            receiverName != "" && (
+            receiverName != '' && (
               <>
                 <Header>
                   <ReceiverContainer>
                     <Receiver>To.{sliceName}</Receiver>
                     {receiverName.length > 9 && (
-                      <Receiver style={{ letterSpacing: "-0.2em" }}>
+                      <Receiver style={{ letterSpacing: '-0.2em' }}>
                         ···
                       </Receiver>
                     )}
                   </ReceiverContainer>
                   <IconContainer>
                     <Icon src={info} alt="infobtn" onClick={handleGuide} />
-                    <Icon src={out} alt="outbtn" onClick={handleExit} />{" "}
+                    <Icon src={out} alt="outbtn" onClick={handleExit} />{' '}
                   </IconContainer>
                 </Header>
                 <MainContainer>
@@ -249,10 +249,10 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     <TitleContainer $font={selectfont}>{title}</TitleContainer>
                     {deliverDay ? (
                       <DeliverDay>
-                        {`${format(deliverDay as Date, "yyyy")}. `}
-                        {`${format(deliverDay as Date, "MM")}. `}
-                        {format(deliverDay as Date, "dd")}
-                        {` (${format(deliverDay as Date, "E", { locale: ko })})`}
+                        {`${format(deliverDay as Date, 'yyyy')}. `}
+                        {`${format(deliverDay as Date, 'MM')}. `}
+                        {format(deliverDay as Date, 'dd')}
+                        {` (${format(deliverDay as Date, 'E', { locale: ko })})`}
                       </DeliverDay>
                     ) : (
                       <></>
@@ -279,8 +279,8 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                       src={notice}
                       alt="notice Icon"
                       style={{
-                        width: "14px",
-                        height: "12px",
+                        width: '14px',
+                        height: '12px',
                       }}
                     />
                     방장이 이어 쓸 횟수를 정하면 편지가 시작돼요!
@@ -308,7 +308,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                                       {handleUserName(user.nickname)}
                                     </UserName>
                                     <UserName
-                                      style={{ letterSpacing: "-0.2em" }}
+                                      style={{ letterSpacing: '-0.2em' }}
                                     >
                                       ···
                                     </UserName>
@@ -332,7 +332,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                                       {handleUserName(user.nickname)}
                                     </UserName>
                                     <UserName
-                                      style={{ letterSpacing: "-0.2em" }}
+                                      style={{ letterSpacing: '-0.2em' }}
                                     >
                                       ···
                                     </UserName>
@@ -369,7 +369,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     </Box>
                   </BoxContainer>
                 </MainContainer>
-                {guide === "true" && <UserGuide setGuide={setGuide} />}
+                {guide === 'true' && <UserGuide setGuide={setGuide} />}
                 {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
               </>
             )}
@@ -498,7 +498,7 @@ const TitleContainer = styled.div<{ $font: string }>`
   align-items: center;
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.$font === "Ownglyph_UNZ-Rg" ? "20.286px" : "14.286px"};
+    props.$font === 'Ownglyph_UNZ-Rg' ? '20.286px' : '14.286px'};
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.446px;
@@ -583,11 +583,11 @@ const NameTxt = styled.div<{ $book: number }>`
   line-height: 12px;
   letter-spacing: -0.4px;
   color: ${({ $book }) => {
-    if ($book === 1) return "#715142";
-    if ($book === 2) return "#335839";
-    if ($book === 3) return "#985566";
-    if ($book === 4) return "#232D3D";
-    if ($book === 5) return "#232D3D";
+    if ($book === 1) return '#715142';
+    if ($book === 2) return '#335839';
+    if ($book === 3) return '#985566';
+    if ($book === 4) return '#232D3D';
+    if ($book === 5) return '#232D3D';
   }};
 `;
 const BarWrapper = styled.div`

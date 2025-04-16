@@ -1,20 +1,20 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Receive from "../../components/receivePage/Receive";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Receive from '../../components/receivePage/Receive';
 
 export const ReceivePage = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate("/");
+    navigate('/');
   };
   useEffect(() => {
-    history.pushState(null, "", window.location.href);
+    history.pushState(null, '', window.location.href);
 
-    window.addEventListener("popstate", handleGoBack);
+    window.addEventListener('popstate', handleGoBack);
 
     return () => {
-      window.removeEventListener("popstate", handleGoBack);
+      window.removeEventListener('popstate', handleGoBack);
     };
   }, []);
 

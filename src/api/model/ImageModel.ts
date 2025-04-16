@@ -1,4 +1,4 @@
-import { ImageExtension } from "../../components/createPage/CoverDeco/ImageCropper";
+import { ImageExtension } from '../../components/createPage/CoverDeco/ImageCropper';
 
 export interface CoverImagePostResponse {
   preSignedUrl: string;

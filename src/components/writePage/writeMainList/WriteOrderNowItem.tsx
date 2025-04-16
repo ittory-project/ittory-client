@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { getUserId } from "../../../api/config/setToken";
-import { useParams } from "react-router-dom";
-import { decodeLetterId } from "../../../api/config/base64";
-import { ElementImgGetResponse } from "../../../api/model/ElementModel";
-import { getElementImg } from "../../../api/service/ElementService";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { getUserId } from '../../../api/config/setToken';
+import { useParams } from 'react-router-dom';
+import { decodeLetterId } from '../../../api/config/base64';
+import { ElementImgGetResponse } from '../../../api/model/ElementModel';
+import { getElementImg } from '../../../api/service/ElementService';
 
 interface WriteOrderProps {
   elementId: number;
@@ -21,17 +21,17 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
-  const [letterStatus, setLetterStatus] = useState<"myTurn" | "othersTurn">(
-    "othersTurn",
+  const [letterStatus, setLetterStatus] = useState<'myTurn' | 'othersTurn'>(
+    'othersTurn',
   );
   const userId = getUserId() || 0;
-  const [elementImg, setElementImg] = useState("");
+  const [elementImg, setElementImg] = useState('');
 
   const getPartiList = async () => {
     if (!letterId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else if (!letterNumId) {
-      window.alert("잘못된 접근입니다.");
+      window.alert('잘못된 접근입니다.');
     } else {
       const response: ElementImgGetResponse = await getElementImg(
         letterNumId,
@@ -46,24 +46,24 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
 
   useEffect(() => {
     if (Number(userId) == nowUserId) {
-      setLetterStatus("myTurn");
+      setLetterStatus('myTurn');
     } else {
-      setLetterStatus("othersTurn");
+      setLetterStatus('othersTurn');
     }
   }, [userId, nowUserId]);
 
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = "/assets/write/img_error.svg";
+    event.currentTarget.src = '/assets/write/img_error.svg';
   };
 
   return (
     userId && (
       <Wrapper status={letterStatus}>
-        <LetterImage src={"" + elementImg} onError={handleImageError} />
+        <LetterImage src={'' + elementImg} onError={handleImageError} />
         <ContentWrapper>
-          {letterStatus === "myTurn" && (
+          {letterStatus === 'myTurn' && (
             <MyTurn>
               <MainText>내 차례예요</MainText>
               <ClockText>
@@ -72,7 +72,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
               </ClockText>
             </MyTurn>
           )}
-          {letterStatus === "othersTurn" && (
+          {letterStatus === 'othersTurn' && (
             <>
               <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
               <ClockText>
@@ -87,15 +87,15 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
   );
 };
 
-const Wrapper = styled.div<{ status: "myTurn" | "othersTurn" }>`
+const Wrapper = styled.div<{ status: 'myTurn' | 'othersTurn' }>`
   display: flex;
   align-items: center;
   margin: 20px 0;
   padding: 10px;
   border: ${(props) =>
-    props.status === "myTurn"
-      ? "1px solid #FCFFAF; border-radius: 5px; background: linear-gradient(160deg, #425166, #1C2231 95%); padding: 20px 10px;"
-      : ""};
+    props.status === 'myTurn'
+      ? '1px solid #FCFFAF; border-radius: 5px; background: linear-gradient(160deg, #425166, #1C2231 95%); padding: 20px 10px;'
+      : ''};
 `;
 
 const LetterImage = styled.img`

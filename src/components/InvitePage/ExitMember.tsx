@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { quitLetterWs } from "../../api/service/WsService";
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { quitLetterWs } from '../../api/service/WsService';
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +16,7 @@ export const Exit = ({ setViewExit, letterId }: Props) => {
 
   const handleExit = () => {
     quitLetterWs(letterId);
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (
@@ -27,19 +27,19 @@ export const Exit = ({ setViewExit, letterId }: Props) => {
         <ButtonContainer>
           <Button
             style={{
-              background: "#CED4DA",
+              background: '#CED4DA',
             }}
             onClick={handleExitCancel}
           >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+            <ButtonTxt style={{ color: '#495057' }}>취소하기</ButtonTxt>
           </Button>
           <Button
             style={{
-              background: "#FFA256",
+              background: '#FFA256',
             }}
             onClick={handleExit}
           >
-            <ButtonTxt style={{ color: "#fff" }}>나가기</ButtonTxt>
+            <ButtonTxt style={{ color: '#fff' }}>나가기</ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>

@@ -1,18 +1,18 @@
-import styled from "styled-components";
-import { getKakaoCode } from "../../api/config/setToken";
-import MainLogo from "../../../public/img/main_logo.svg";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
+import { getKakaoCode } from '../../api/config/setToken';
+import MainLogo from '../../../public/img/main_logo.svg';
+import { useNavigate } from 'react-router-dom';
 
 const 개인정보처리방침URL =
-  "https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5";
+  'https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5';
 const 서비스이용약관URL =
-  "https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47";
+  'https://sequoia-corn-388.notion.site/359541399ee44755883d3d192a07fc47';
 
 export const Login = () => {
   const navigate = useNavigate();
 
   const handleCloseBtn = () => {
-    navigate("/");
+    navigate('/');
   };
 
   const kakaoLogin = () => {
@@ -34,7 +34,7 @@ export const Login = () => {
           카카오로 시작하기
         </LoginBtn>
         <LoginDesc>
-          로그인 하시면{" "}
+          로그인 하시면{' '}
           <a
             href={개인정보처리방침URL}
             target="_blank"
@@ -42,7 +42,7 @@ export const Login = () => {
           >
             개인정보처리방침
           </a>
-          과{" "}
+          과{' '}
           <a href={서비스이용약관URL} target="_blank" rel="noopener noreferrer">
             서비스이용약관
           </a>
@@ -69,7 +69,7 @@ const CloseBtn = styled.button`
   top: 12px;
   right: 16px;
 
-  background: url("/assets/btn_close.svg") no-repeat center;
+  background: url('/assets/btn_close.svg') no-repeat center;
   padding: 0;
   border: none;
   background-size: contain;

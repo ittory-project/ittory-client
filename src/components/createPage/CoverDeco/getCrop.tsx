@@ -1,4 +1,4 @@
-import { Area } from "react-easy-crop";
+import { Area } from 'react-easy-crop';
 
 export default async function getCroppedImg(
   imageSrc: string,
@@ -11,14 +11,14 @@ export default async function getCroppedImg(
   // Ensure the image is loaded before proceeding
   await new Promise<void>((resolve, reject) => {
     image.onload = () => resolve();
-    image.onerror = () => reject(new Error("Failed to load image"));
+    image.onerror = () => reject(new Error('Failed to load image'));
   });
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
   if (!ctx) {
-    throw new Error("Could not get canvas context");
+    throw new Error('Could not get canvas context');
   }
   // 크롭된 영역을 캔버스에 그리기 위한 코드
   canvas.width = size.width;
@@ -55,10 +55,10 @@ export default async function getCroppedImg(
           const fileUrl = URL.createObjectURL(blob);
           resolve(fileUrl);
         } else {
-          reject(new Error("Failed to create blob from canvas"));
+          reject(new Error('Failed to create blob from canvas'));
         }
       },
-      "image/jpeg",
+      'image/jpeg',
       1.0, // Quality (optional)
     );
   });

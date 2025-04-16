@@ -1,16 +1,16 @@
-import React, { useState, useEffect, ReactNode } from "react";
-import styled from "styled-components";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import EditImg from "../../../../public/assets/edit.svg";
-import EditLetter from "../FinalLetter/EditLetter";
-import CoverModal from "./CoverModal";
-import CompleteModal from "./CompleteModal";
-import UserFinishModal from "./UserFinishModal";
-import shadow from "../../../../public/assets/shadow2.svg";
-import { CoverType } from "../../../api/model/CoverType";
-import { getCoverTypes } from "../../../api/service/CoverService";
-import { getVisitUser } from "../../../api/service/MemberService";
+import React, { useState, useEffect, ReactNode } from 'react';
+import styled from 'styled-components';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import EditImg from '../../../../public/assets/edit.svg';
+import EditLetter from '../FinalLetter/EditLetter';
+import CoverModal from './CoverModal';
+import CompleteModal from './CompleteModal';
+import UserFinishModal from './UserFinishModal';
+import shadow from '../../../../public/assets/shadow2.svg';
+import { CoverType } from '../../../api/model/CoverType';
+import { getCoverTypes } from '../../../api/service/CoverService';
+import { getVisitUser } from '../../../api/service/MemberService';
 
 interface Props {
   myName: string;
@@ -94,13 +94,13 @@ export default function FinalInfo({
       <div
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          width: "120px",
-          height: "157px",
-          boxSizing: "border-box",
-          marginBottom: "8px",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          width: '120px',
+          height: '157px',
+          boxSizing: 'border-box',
+          marginBottom: '8px',
         }}
       >
         {children}
@@ -125,7 +125,7 @@ export default function FinalInfo({
                 <img
                   src={EditImg}
                   alt="Edit Icon"
-                  style={{ width: "11px", height: "11px" }}
+                  style={{ width: '11px', height: '11px' }}
                 />
               </EditBtn>
               <InfoBlock>
@@ -140,10 +140,10 @@ export default function FinalInfo({
                 <InfoTitle>전달 날짜</InfoTitle>
                 {deliverDay ? (
                   <InfoTxt>
-                    {`${format(deliverDay, "yyyy")}.`}
-                    {`${format(deliverDay, "M")}.`}
-                    {`${format(deliverDay, "d")}`}
-                    {` (${format(deliverDay, "E", { locale: ko })})`}
+                    {`${format(deliverDay, 'yyyy')}.`}
+                    {`${format(deliverDay, 'M')}.`}
+                    {`${format(deliverDay, 'd')}`}
+                    {` (${format(deliverDay, 'E', { locale: ko })})`}
                   </InfoTxt>
                 ) : (
                   <></>
@@ -155,16 +155,16 @@ export default function FinalInfo({
               <EditBtn
                 onClick={() => {
                   openCoveredit();
-                  console.log("커버모달오픈");
+                  console.log('커버모달오픈');
                 }}
               >
                 <img
                   src={EditImg}
                   alt="Edit Icon"
-                  style={{ width: "11px", height: "11px" }}
+                  style={{ width: '11px', height: '11px' }}
                 />
               </EditBtn>
-              {croppedImage === "" ? (
+              {croppedImage === '' ? (
                 <Book
                   backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
                 >
@@ -442,7 +442,7 @@ const BookTitle = styled.div<{ $font: string }>`
   text-overflow: ellipsis;
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.$font === "Ownglyph_UNZ-Rg" ? "12px" : "8.571px"};
+    props.$font === 'Ownglyph_UNZ-Rg' ? '12px' : '8.571px'};
 `;
 const Button = styled.button`
   position: absolute;

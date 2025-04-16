@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import timeblock from "../../../public/assets/join/timeblock.svg";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import timeblock from '../../../public/assets/join/timeblock.svg';
 
 export default function Started() {
   const navigate = useNavigate();
 
   const handleButton = () => {
-    navigate("/");
+    navigate('/');
   };
   return (
     <BackGround>

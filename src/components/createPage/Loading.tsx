@@ -1,6 +1,6 @@
-import animation from "../../../public/assets/loading.json";
-import Player from "lottie-react";
-import styled from "styled-components";
+import animation from '../../../public/assets/loading.json';
+import Player from 'lottie-react';
+import styled from 'styled-components';
 
 export const Loading = () => {
   return (
@@ -10,9 +10,9 @@ export const Loading = () => {
         loop
         autoplay
         style={{
-          height: "112px",
-          width: "200px",
-          margin: "0 auto",
+          height: '112px',
+          width: '200px',
+          margin: '0 auto',
         }}
       />
     </BackGround>

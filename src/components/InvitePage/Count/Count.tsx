@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
-import X from "../../../../public/assets/x.svg";
-import photo from "../../../../public/assets/photo.svg";
-import { Swiper, SwiperSlide, SwiperRef, SwiperClass } from "swiper/react";
-import { useNavigate } from "react-router-dom";
-import { postRepeatCount } from "../../../api/service/LetterService";
-import { postRandom } from "../../../api/service/ParticipantService";
-import { startLetterWs } from "../../../api/service/WsService";
-import bg1 from "../../../../public/assets/connect/bg1.png";
-import bg2 from "../../../../public/assets/connect/bg2.png";
-import bg3 from "../../../../public/assets/connect/bg3.png";
-import bg4 from "../../../../public/assets/connect/bg4.png";
-import bg5 from "../../../../public/assets/connect/bg5.png";
+import React, { useEffect, useState, useRef } from 'react';
+import styled from 'styled-components';
+import X from '../../../../public/assets/x.svg';
+import photo from '../../../../public/assets/photo.svg';
+import { Swiper, SwiperSlide, SwiperRef, SwiperClass } from 'swiper/react';
+import { useNavigate } from 'react-router-dom';
+import { postRepeatCount } from '../../../api/service/LetterService';
+import { postRandom } from '../../../api/service/ParticipantService';
+import { startLetterWs } from '../../../api/service/WsService';
+import bg1 from '../../../../public/assets/connect/bg1.png';
+import bg2 from '../../../../public/assets/connect/bg2.png';
+import bg3 from '../../../../public/assets/connect/bg3.png';
+import bg4 from '../../../../public/assets/connect/bg4.png';
+import bg5 from '../../../../public/assets/connect/bg5.png';
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,7 +54,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
 
   useEffect(() => {
     if (!background) {
-      console.log("switch문 실행");
+      console.log('switch문 실행');
       switch (coverId) {
         case 1:
           setBackground(bg1);
@@ -80,17 +80,17 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
       const count = Number(selectNumber);
       const id = letterId;
       const coverid = coverId;
-      console.log("Request body:", { letterId: id, repeatCount: count }); // 로그 출력
+      console.log('Request body:', { letterId: id, repeatCount: count }); // 로그 출력
 
       const requestBody = { letterId: id, repeatCount: count };
       const response = await postRepeatCount(requestBody);
       console.log(response);
 
       const sequence = await postRandom({ letterId: id });
-      console.log("sequence: ", sequence);
+      console.log('sequence: ', sequence);
 
       startLetterWs(letterId);
-      navigate("/Connection", {
+      navigate('/Connection', {
         state: {
           letterId: letterId,
           coverId: coverid,
@@ -98,7 +98,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
         },
       });
     } catch (err) {
-      console.error("API error:", err);
+      console.error('API error:', err);
     }
   };
 
@@ -135,11 +135,11 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
 
   useEffect(() => {
     // 스크롤 이벤트 리스너 추가
-    window.addEventListener("wheel", handleScroll, { passive: false });
+    window.addEventListener('wheel', handleScroll, { passive: false });
 
     // 컴포넌트가 unmount될 때 이벤트 리스너 제거
     return () => {
-      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener('wheel', handleScroll);
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
@@ -195,8 +195,8 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
             src={X}
             alt="X Icon"
             style={{
-              width: "14px",
-              height: "14px",
+              width: '14px',
+              height: '14px',
             }}
           />
         </Cancel>
@@ -206,10 +206,10 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           <Select>&nbsp;번씩</Select>
           <Picker>
             <div
-              style={{ width: "280px", height: "186px", overflow: "hidden" }}
+              style={{ width: '280px', height: '186px', overflow: 'hidden' }}
             >
               <Swiper
-                direction={"vertical"}
+                direction={'vertical'}
                 slidesPerView={5}
                 loop={true}
                 loopAdditionalSlides={5}
@@ -217,12 +217,12 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
                 centeredSlides={true}
                 onSlideChange={onSlideChange}
                 //onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                style={{ height: "100%" }}
+                style={{ height: '100%' }}
                 ref={swiperRef}
                 speed={129.5}
               >
                 {list.map((no, index) => (
-                  <SwiperSlide key={no} style={{ height: "calc(15rem / 4)" }}>
+                  <SwiperSlide key={no} style={{ height: 'calc(15rem / 4)' }}>
                     <SlideContent
                       $isActive={index === activeIndex}
                       $index={index}
@@ -242,15 +242,15 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
             <img
               src={photo}
               alt="photo Icon"
-              style={{ width: "14px", height: "14px" }}
+              style={{ width: '14px', height: '14px' }}
             />
           </IconImg>
           <TitleTxt>만들어질 그림 개수</TitleTxt>
           <TotalTxt>
-            <span style={{ fontFamily: "GmarketSans", marginTop: "2.8px" }}>
+            <span style={{ fontFamily: 'GmarketSans', marginTop: '2.8px' }}>
               {selectNumber * member}
             </span>
-            <span style={{ fontFamily: "SUIT" }}>개</span>
+            <span style={{ fontFamily: 'SUIT' }}>개</span>
           </TotalTxt>
         </Notice>
       </Contents>
@@ -359,14 +359,14 @@ const SlideContent = styled.div<SlideContentProps>`
   height: calc(14rem / 5);
   display: flex;
   text-align: center;
-  font-family: "GmarketSans";
+  font-family: 'GmarketSans';
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.096px;
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.$isActive ? "#ffa256" : "#CED4DA")};
+  color: ${(props) => (props.$isActive ? '#ffa256' : '#CED4DA')};
   opacity: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
@@ -374,11 +374,11 @@ const SlideContent = styled.div<SlideContentProps>`
     );
 
     if (distance === 0) {
-      return "1";
+      return '1';
     } else if (distance === 1 || distance === $totalSlides - 1) {
-      return "1";
+      return '1';
     }
-    return "0.5";
+    return '0.5';
   }};
   letter-spacing: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
@@ -387,11 +387,11 @@ const SlideContent = styled.div<SlideContentProps>`
     );
 
     if (distance === 0) {
-      return "-0.096px";
+      return '-0.096px';
     } else if (distance === 1 || distance === $totalSlides - 1) {
-      return "-0.088px";
+      return '-0.088px';
     }
-    return "-0.08px";
+    return '-0.08px';
   }};
   font-size: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
@@ -400,11 +400,11 @@ const SlideContent = styled.div<SlideContentProps>`
     );
 
     if (distance === 0) {
-      return "24px";
+      return '24px';
     } else if (distance === 1 || distance === $totalSlides - 1) {
-      return "22px";
+      return '22px';
     }
-    return "20px";
+    return '20px';
   }};
   transition:
     color 0.11s ease,

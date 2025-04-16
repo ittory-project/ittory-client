@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { postLogout } from "../../api/service/AuthService";
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { postLogout } from '../../api/service/AuthService';
 
 interface Props {
   setPopup: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,12 +16,12 @@ export const Logout = ({ setPopup }: Props) => {
   const handleLogout = async () => {
     try {
       const logoutResponse = await postLogout();
-      localStorage.removeItem("jwt");
+      localStorage.removeItem('jwt');
       localStorage.clear();
-      console.log("Logout successful:", logoutResponse);
-      navigate("/", { replace: true });
+      console.log('Logout successful:', logoutResponse);
+      navigate('/', { replace: true });
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     }
   };
 
@@ -32,19 +32,19 @@ export const Logout = ({ setPopup }: Props) => {
         <ButtonContainer>
           <Button
             style={{
-              backgroundColor: "#CED4DA",
+              backgroundColor: '#CED4DA',
             }}
             onClick={handleDelete}
           >
-            <ButtonTxt style={{ color: "#495057" }}>취소하기</ButtonTxt>
+            <ButtonTxt style={{ color: '#495057' }}>취소하기</ButtonTxt>
           </Button>
           <Button
             style={{
-              backgroundColor: "#FFA256",
+              backgroundColor: '#FFA256',
             }}
             onClick={handleLogout}
           >
-            <ButtonTxt style={{ color: "#fff" }}>로그아웃</ButtonTxt>
+            <ButtonTxt style={{ color: '#fff' }}>로그아웃</ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>

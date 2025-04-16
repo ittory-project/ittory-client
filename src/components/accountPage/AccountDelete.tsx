@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import prev from "../../../public/assets/prev.svg";
-import bell from "../../../public/assets/bell.svg";
-import check from "../../../public/assets/check.svg";
-import { DeleteReason } from "./DeleteReason";
-import { getMyPage } from "../../api/service/MemberService";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import prev from '../../../public/assets/prev.svg';
+import bell from '../../../public/assets/bell.svg';
+import check from '../../../public/assets/check.svg';
+import { DeleteReason } from './DeleteReason';
+import { getMyPage } from '../../api/service/MemberService';
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,7 +12,7 @@ interface Props {
 
 export const AccountDelete = ({ setViewDelete }: Props) => {
   const [viewReason, setViewReason] = useState<boolean>(false);
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>('');
 
   useEffect(() => {
     const fetchMyPageData = async () => {
@@ -20,7 +20,7 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
         const myPageData = await getMyPage();
         setName(myPageData.name);
       } catch (err) {
-        console.error("Error fetching my page data:", err);
+        console.error('Error fetching my page data:', err);
       }
     };
     fetchMyPageData();
@@ -49,27 +49,27 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
             <Contents>
               <TxtList>
                 <Check>
-                  <img src={check} style={{ width: "16px", height: "16px" }} />
+                  <img src={check} style={{ width: '16px', height: '16px' }} />
                 </Check>
                 탈퇴 시 해당 계정은 즉시 삭제되며, 복구할 수 없습니다.
               </TxtList>
               <TxtList>
                 <Check>
-                  <img src={check} style={{ width: "16px", height: "16px" }} />
+                  <img src={check} style={{ width: '16px', height: '16px' }} />
                 </Check>
                 참여한 편지는 내 편지함에서 삭제되지만, 다른 참여자의
                 편지함에서는 내 기록이 유지됩니다.
               </TxtList>
               <TxtList>
                 <Check>
-                  <img src={check} style={{ width: "16px", height: "16px" }} />
+                  <img src={check} style={{ width: '16px', height: '16px' }} />
                 </Check>
                 받은 편지는 내 편지함에서 삭제되며, 누구도 다시 보관할 수
                 없습니다.
               </TxtList>
               <TxtList>
                 <Check>
-                  <img src={check} style={{ width: "16px", height: "16px" }} />
+                  <img src={check} style={{ width: '16px', height: '16px' }} />
                 </Check>
                 탈퇴 후에도 동일한 이메일로 재가입할 수 있습니다.
               </TxtList>
@@ -78,19 +78,19 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
           <ButtonContainer>
             <Button
               style={{
-                background: "#CED4DA",
+                background: '#CED4DA',
               }}
               onClick={handleDelete}
             >
-              <ButtonTxt style={{ color: "#495057" }}>더 써볼게요</ButtonTxt>
+              <ButtonTxt style={{ color: '#495057' }}>더 써볼게요</ButtonTxt>
             </Button>
             <Button
               style={{
-                background: "#FFA256",
+                background: '#FFA256',
               }}
               onClick={handleReason}
             >
-              <ButtonTxt style={{ color: "#fff" }}>확인했어요!</ButtonTxt>
+              <ButtonTxt style={{ color: '#fff' }}>확인했어요!</ButtonTxt>
             </Button>
           </ButtonContainer>
         </>

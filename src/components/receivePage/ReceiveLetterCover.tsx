@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { CoverTypeGetResponse } from "../../api/model/CoverTypeModel";
-import { FontGetResponse } from "../../api/model/FontModel";
-import { LetterDetailGetResponse } from "../../api/model/LetterModel";
-import { formatDate } from "../../api/config/formatData";
+import styled from 'styled-components';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { formatDate } from '../../api/config/formatData';
 
 interface LetterContentProps {
   letterStyle: CoverTypeGetResponse;
@@ -17,12 +17,12 @@ export const ReceiveLetterCover = ({
 }: LetterContentProps) => {
   const partiList = letterContent.participantNames
     .map((element) => element)
-    .join(", ");
+    .join(', ');
 
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = "/img/profile.png";
+    event.currentTarget.src = '/img/profile.png';
   };
 
   return (
@@ -37,7 +37,7 @@ export const ReceiveLetterCover = ({
         </DateDiv>
         <PhotoDiv>
           <ProfileImage
-            src={"" + letterContent.coverPhotoUrl}
+            src={'' + letterContent.coverPhotoUrl}
             onError={handleImageError}
           />
         </PhotoDiv>
@@ -126,14 +126,14 @@ const DescriptionDiv = styled.div<{ $coverId: number; $fonttype: string }>`
   text-overflow: ellipsis;
   font-family: ${(props) => props.$fonttype};
   color: ${({ $coverId }) => {
-    if ($coverId === 1) return "#715142";
-    if ($coverId === 2) return "#335839";
-    if ($coverId === 3) return "#985566";
-    if ($coverId === 4) return "#232D3D";
-    if ($coverId === 5) return "#232D3D";
+    if ($coverId === 1) return '#715142';
+    if ($coverId === 2) return '#335839';
+    if ($coverId === 3) return '#985566';
+    if ($coverId === 4) return '#232D3D';
+    if ($coverId === 5) return '#232D3D';
   }};
   margin-top: ${(props) =>
-    props.$coverId === 1 || props.$coverId === 2 ? "45px" : "35px"};
+    props.$coverId === 1 || props.$coverId === 2 ? '45px' : '35px'};
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;

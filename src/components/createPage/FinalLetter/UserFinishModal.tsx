@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import letter from "../../../../public/assets/letter.svg";
-import { useNavigate } from "react-router-dom";
-import shadow from "../../../../public/assets/shadow2.svg";
-import { getCoverTypes } from "../../../api/service/CoverService";
-import { CoverType } from "../../../api/model/CoverType";
-import { LetterRequestBody } from "../../../api/model/LetterModel";
-import { postLetter } from "../../../api/service/LetterService";
-import { postNickname } from "../../../api/service/ParticipantService";
-import { NicknamePostRequest } from "../../../api/model/ParticipantModel";
-import { postEnter } from "../../../api/service/LetterService";
-import animation from "../../../../public/assets/confetti.json";
-import Player from "lottie-react";
+import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import letter from '../../../../public/assets/letter.svg';
+import { useNavigate } from 'react-router-dom';
+import shadow from '../../../../public/assets/shadow2.svg';
+import { getCoverTypes } from '../../../api/service/CoverService';
+import { CoverType } from '../../../api/model/CoverType';
+import { LetterRequestBody } from '../../../api/model/LetterModel';
+import { postLetter } from '../../../api/service/LetterService';
+import { postNickname } from '../../../api/service/ParticipantService';
+import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
+import { postEnter } from '../../../api/service/LetterService';
+import animation from '../../../../public/assets/confetti.json';
+import Player from 'lottie-react';
 
 interface Props {
   myName: string;
@@ -47,7 +47,7 @@ export default function UserFinishModal({
   const [, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [adjustDay, setAdjustDay] = useState<string>("");
+  const [adjustDay, setAdjustDay] = useState<string>('');
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
@@ -95,13 +95,13 @@ export default function UserFinishModal({
       console.log(enterresponse);
       handleNickname(letterId);
     } catch (err) {
-      console.error("Error fetching mydata:", err);
+      console.error('Error fetching mydata:', err);
     }
   };
 
   const navigateToInvite = async () => {
     setGuideOpen(false);
-    console.log("버튼 클릭됨");
+    console.log('버튼 클릭됨');
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
@@ -115,19 +115,19 @@ export default function UserFinishModal({
 
     try {
       const response = await postLetter(requestBody);
-      console.log("Response:", response);
+      console.log('Response:', response);
       const letterId = response.letterId;
-      console.log("letterId", letterId);
+      console.log('letterId', letterId);
 
-      localStorage.setItem("letterId", String(letterId));
-      localStorage.setItem("guideOpen", String(false));
-      localStorage.setItem("userName", myName);
+      localStorage.setItem('letterId', String(letterId));
+      localStorage.setItem('guideOpen', String(false));
+      localStorage.setItem('userName', myName);
 
       fetchEnter(letterId);
 
       console.log(letterId, myName);
 
-      navigate("/Invite", {
+      navigate('/Invite', {
         state: {
           letterId: letterId,
           guideOpen: false,
@@ -135,13 +135,13 @@ export default function UserFinishModal({
         },
       });
     } catch (error) {
-      console.error("Error posting letter:", error);
+      console.error('Error posting letter:', error);
     }
   };
 
   const handleguide = async () => {
     setGuideOpen(true);
-    console.log("버튼 클릭됨");
+    console.log('버튼 클릭됨');
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
@@ -155,17 +155,17 @@ export default function UserFinishModal({
 
     try {
       const response = await postLetter(requestBody);
-      console.log("Response:", response);
+      console.log('Response:', response);
       const letterId = response.letterId;
-      console.log("letterId", letterId);
+      console.log('letterId', letterId);
 
-      localStorage.setItem("letterId", String(letterId));
-      localStorage.setItem("guideOpen", String(true));
-      localStorage.setItem("userName", myName);
+      localStorage.setItem('letterId', String(letterId));
+      localStorage.setItem('guideOpen', String(true));
+      localStorage.setItem('userName', myName);
 
       fetchEnter(letterId);
 
-      navigate("/Invite", {
+      navigate('/Invite', {
         state: {
           letterId: letterId,
           guideOpen: true,
@@ -173,7 +173,7 @@ export default function UserFinishModal({
         },
       });
     } catch (error) {
-      console.error("Error posting letter:", error);
+      console.error('Error posting letter:', error);
     }
   };
 
@@ -188,9 +188,9 @@ export default function UserFinishModal({
         closeModal();
       } else setKeyboardVisible(true);
     }
-    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener('mousedown', handleOutside);
     return () => {
-      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener('mousedown', handleOutside);
     };
   }, [modalBackground]);
 
@@ -201,12 +201,12 @@ export default function UserFinishModal({
         loop={false}
         autoplay
         style={{
-          height: "320px",
-          width: "100%",
-          margin: "0 auto",
-          top: "-450px",
-          position: "relative",
-          zIndex: "101",
+          height: '320px',
+          width: '100%',
+          margin: '0 auto',
+          top: '-450px',
+          position: 'relative',
+          zIndex: '101',
         }}
       />
       <ModalContainer ref={modalBackground}>
@@ -228,10 +228,10 @@ export default function UserFinishModal({
               <></>
             ) : (
               <DeliverDay>
-                {`${format(deliverDay, "yyyy")}.`}
-                {`${format(deliverDay, "MM")}.`}
-                {format(deliverDay, "dds")}
-                {` (${format(deliverDay, "E", { locale: ko })})`}
+                {`${format(deliverDay, 'yyyy')}.`}
+                {`${format(deliverDay, 'MM')}.`}
+                {format(deliverDay, 'dds')}
+                {` (${format(deliverDay, 'E', { locale: ko })})`}
               </DeliverDay>
             )}
           </Book>
@@ -239,19 +239,19 @@ export default function UserFinishModal({
         <ButtonContainer>
           <Button
             style={{
-              background: "#CED4DA",
+              background: '#CED4DA',
             }}
             onClick={handleguide}
           >
-            <ButtonTxt style={{ color: "#495057" }}>사용법 보기</ButtonTxt>
+            <ButtonTxt style={{ color: '#495057' }}>사용법 보기</ButtonTxt>
           </Button>
           <Button
             style={{
-              background: "#FFA256",
+              background: '#FFA256',
             }}
             onClick={navigateToInvite}
           >
-            <ButtonTxt style={{ color: "#fff" }}>맘에 들어요!</ButtonTxt>
+            <ButtonTxt style={{ color: '#fff' }}>맘에 들어요!</ButtonTxt>
           </Button>
         </ButtonContainer>
       </ModalContainer>
@@ -341,7 +341,7 @@ const TitleContainer = styled.div<{ $font: string }>`
   align-items: center;
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
-    props.$font === "Ownglyph_UNZ-Rg" ? "21px" : "16px"};
+    props.$font === 'Ownglyph_UNZ-Rg' ? '21px' : '16px'};
   font-style: normal;
   font-weight: 500;
   letter-spacing: -0.5px;

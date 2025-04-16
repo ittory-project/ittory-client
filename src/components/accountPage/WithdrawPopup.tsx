@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 export const WithdrawPopup = () => {
   const navigate = useNavigate();
 
   const handleHome = () => {
-    navigate("/", { replace: true });
+    navigate('/', { replace: true });
   };
 
   return (
@@ -17,11 +17,11 @@ export const WithdrawPopup = () => {
         <ButtonContainer>
           <Button
             style={{
-              background: "#FFA256",
+              background: '#FFA256',
             }}
             onClick={handleHome}
           >
-            <ButtonTxt style={{ color: "#fff" }}>확인</ButtonTxt>
+            <ButtonTxt style={{ color: '#fff' }}>확인</ButtonTxt>
           </Button>
         </ButtonContainer>
       </Modal>

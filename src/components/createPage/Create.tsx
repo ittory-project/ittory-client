@@ -1,21 +1,21 @@
-import LetterInfo from "./EnterInfo/LetterInfo";
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import CoverDeco from "./CoverDeco/CoverStyle";
-import FinalInfo from "./FinalLetter/FinalInfo";
-import { Loading } from "./Loading";
+import LetterInfo from './EnterInfo/LetterInfo';
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import CoverDeco from './CoverDeco/CoverStyle';
+import FinalInfo from './FinalLetter/FinalInfo';
+import { Loading } from './Loading';
 
 export const Create = () => {
   const [viewStartpage, setViewStartpage] = useState<boolean>(true);
   const [viewCoverDeco, setViewCoverDeco] = useState<boolean>(false);
   const [viewFinalInfo, setViewFinalInfo] = useState<boolean>(false);
-  const [receiverName, setReceiverName] = useState<string>("");
-  const [myName, setMyName] = useState<string>("");
+  const [receiverName, setReceiverName] = useState<string>('');
+  const [myName, setMyName] = useState<string>('');
   const [deliverDay, setDeliverDay] = useState<Date | null | string>(null);
-  const [title, setTitle] = useState<string>("");
-  const [croppedImage, setCroppedImage] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
+  const [croppedImage, setCroppedImage] = useState<string>('');
   const [backgroundimage, setBackgroundimage] = useState<number>(0);
-  const [selectfont, setSelectfont] = useState<string>("");
+  const [selectfont, setSelectfont] = useState<string>('');
   const [selectFid, setSelectFid] = useState<number>(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [load, setLoad] = useState<boolean>(true);
@@ -23,25 +23,25 @@ export const Create = () => {
   console.log(selectFid);
 
   useEffect(() => {
-    if (localStorage.getItem("title")) {
+    if (localStorage.getItem('title')) {
       setViewStartpage(false);
       setViewCoverDeco(false);
       setViewFinalInfo(true);
       setLoad(false);
-      setTitle(String(localStorage.getItem("title")));
-      setSelectfont(String(localStorage.getItem("font")));
-      setBackgroundimage(Number(localStorage.getItem("bgImg")));
-      setSelectedImageIndex(Number(localStorage.getItem("bgImg")));
-      setCroppedImage(String(localStorage.getItem("image")));
-      setMyName(String(localStorage.getItem("myName")));
-      setReceiverName(String(localStorage.getItem("receiver")));
-      setDeliverDay(localStorage.getItem("Date"));
-    } else if (localStorage.getItem("receiver")) {
+      setTitle(String(localStorage.getItem('title')));
+      setSelectfont(String(localStorage.getItem('font')));
+      setBackgroundimage(Number(localStorage.getItem('bgImg')));
+      setSelectedImageIndex(Number(localStorage.getItem('bgImg')));
+      setCroppedImage(String(localStorage.getItem('image')));
+      setMyName(String(localStorage.getItem('myName')));
+      setReceiverName(String(localStorage.getItem('receiver')));
+      setDeliverDay(localStorage.getItem('Date'));
+    } else if (localStorage.getItem('receiver')) {
       setViewStartpage(false);
       setViewCoverDeco(true);
-      setMyName(String(localStorage.getItem("myName")));
-      setReceiverName(String(localStorage.getItem("receiver")));
-      setDeliverDay(localStorage.getItem("Date"));
+      setMyName(String(localStorage.getItem('myName')));
+      setReceiverName(String(localStorage.getItem('receiver')));
+      setDeliverDay(localStorage.getItem('Date'));
       setLoad(false);
     } else {
       setViewStartpage(true);

@@ -1,7 +1,7 @@
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from "date-fns";
-import { format, isSameMonth, isSameDay, addDays } from "date-fns";
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
+import { format, isSameMonth, isSameDay, addDays } from 'date-fns';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 
 interface Props {
   current: Date;
@@ -32,7 +32,7 @@ export default function Calender({
   const rows: React.ReactNode[] = [];
   let days: React.ReactNode[] = [];
   let day = startDate;
-  let formattedDate = "";
+  let formattedDate = '';
 
   useEffect(() => {
     if (!selectedDate) {
@@ -42,23 +42,23 @@ export default function Calender({
 
   while (day <= endDate) {
     for (let i = 0; i < 7; i++) {
-      formattedDate = format(day, "d");
+      formattedDate = format(day, 'd');
       const cloneDay = day;
 
       // 현재 달의 날짜만 처리하도록 조건 추가
       if (!isSameMonth(day, monthStart)) {
         days.push(
           <Disabled
-            key={format(day, "yyyy-MM-dd")}
-            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
+            key={format(day, 'yyyy-MM-dd')}
+            style={{ marginRight: i === 6 ? '0' : '5.8%' }}
           ></Disabled>,
         );
       } else if (deliverDay && isSameDay(day, deliverDay)) {
         days.push(
           <Selected
-            key={format(day, "yyyy-MM-dd")}
+            key={format(day, 'yyyy-MM-dd')}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
+            style={{ marginRight: i === 6 ? '0' : '5.8%' }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -69,15 +69,15 @@ export default function Calender({
             >
               <circle cx="15" cy="15" r="15" fill="#FFA256" />
             </svg>
-            <Txt style={{ color: "#FFF" }}>{formattedDate}</Txt>
+            <Txt style={{ color: '#FFF' }}>{formattedDate}</Txt>
           </Selected>,
         );
       } else if (selectedDate && isSameDay(day, selectedDate)) {
         days.push(
           <Selected
-            key={format(day, "yyyy-MM-dd")}
+            key={format(day, 'yyyy-MM-dd')}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
+            style={{ marginRight: i === 6 ? '0' : '5.8%' }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -88,26 +88,26 @@ export default function Calender({
             >
               <circle cx="15" cy="15" r="15" fill="#FFA256" />
             </svg>
-            <Txt style={{ color: "#FFF" }}>{formattedDate}</Txt>
+            <Txt style={{ color: '#FFF' }}>{formattedDate}</Txt>
           </Selected>,
         );
-      } else if (format(day, "yyyy-MM-dd") < format(current, "yyyy-MM-dd")) {
+      } else if (format(day, 'yyyy-MM-dd') < format(current, 'yyyy-MM-dd')) {
         days.push(
           <Disabled
-            key={format(day, "yyyy-MM-dd")}
-            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
+            key={format(day, 'yyyy-MM-dd')}
+            style={{ marginRight: i === 6 ? '0' : '5.8%' }}
           >
-            <Txt style={{ color: "#DEE2E6" }}>{formattedDate}</Txt>
+            <Txt style={{ color: '#DEE2E6' }}>{formattedDate}</Txt>
           </Disabled>,
         );
       } else {
         days.push(
           <Valid
-            key={format(day, "yyyy-MM-dd")}
+            key={format(day, 'yyyy-MM-dd')}
             onClick={() => setSelectedDate(cloneDay)}
-            style={{ marginRight: i === 6 ? "0" : "5.8%" }}
+            style={{ marginRight: i === 6 ? '0' : '5.8%' }}
           >
-            <Txt style={{ color: "#000000" }}>{formattedDate}</Txt>
+            <Txt style={{ color: '#000000' }}>{formattedDate}</Txt>
           </Valid>,
         );
       }
@@ -117,8 +117,8 @@ export default function Calender({
 
     rows.push(
       <div
-        key={format(day, "yyyy-MM-dd")}
-        style={{ height: "30px", marginBottom: "10px" }}
+        key={format(day, 'yyyy-MM-dd')}
+        style={{ height: '30px', marginBottom: '10px' }}
       >
         {days}
       </div>,
@@ -178,7 +178,7 @@ const Valid = styled.div`
 const Txt = styled.span`
   position: absolute;
   text-align: center;
-  font-family: "GmarketSans";
+  font-family: 'GmarketSans';
   font-size: 12px;
   font-weight: 400;
   line-height: normal;

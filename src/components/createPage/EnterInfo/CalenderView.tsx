@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import NonPrev from "../../../../public/assets/prev_non.svg";
-import Prev from "../../../../public/assets/pageprev.svg";
-import Next from "../../../../public/assets/next.svg";
-import { format, subMonths, addMonths } from "date-fns";
-import Calender from "./Calender";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import NonPrev from '../../../../public/assets/prev_non.svg';
+import Prev from '../../../../public/assets/pageprev.svg';
+import Next from '../../../../public/assets/next.svg';
+import { format, subMonths, addMonths } from 'date-fns';
+import Calender from './Calender';
 
 interface Props {
   setValue: React.Dispatch<React.SetStateAction<Date | null | string>>;
@@ -27,14 +27,14 @@ export default function CalenderView({ setValue, deliverDay }: Props) {
     setValue(selectedDate);
   }, [selectedDate, setValue]);
 
-  const date = ["일", "월", "화", "수", "목", "금", "토"];
+  const date = ['일', '월', '화', '수', '목', '금', '토'];
 
   return (
     <Wrapper>
       <Container>
         <Header>
-          {format(currentMonth, "MM") === format(current, "MM") &&
-          format(currentMonth, "yyyy") === format(current, "yyyy") ? (
+          {format(currentMonth, 'MM') === format(current, 'MM') &&
+          format(currentMonth, 'yyyy') === format(current, 'yyyy') ? (
             <>
               <PrevButton>
                 <img src={NonPrev} alt="nonprev" />
@@ -50,8 +50,8 @@ export default function CalenderView({ setValue, deliverDay }: Props) {
             </PrevButton>
           )}
           <Current>
-            {format(currentMonth, "yyyy")}년{` `}
-            {format(currentMonth, "MM")}월
+            {format(currentMonth, 'yyyy')}년{` `}
+            {format(currentMonth, 'MM')}월
           </Current>
           <NextButton
             onClick={() => {

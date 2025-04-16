@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { LetterPartiItem } from "../../api/model/LetterModel";
-import defaultImg from "../../../public/assets/menu/logindefault.png";
+import styled from 'styled-components';
+import { LetterPartiItem } from '../../api/model/LetterModel';
+import defaultImg from '../../../public/assets/menu/logindefault.png';
 
 interface PopoverProps {
   writeOrderList: LetterPartiItem[];
@@ -110,7 +110,7 @@ const ListNumber = styled.div`
   gap: 10px;
   color: var(--color-black-white-white, #fff);
   text-align: center;
-  font-family: var(--Typography-family-number, "Gmarket Sans");
+  font-family: var(--Typography-family-number, 'Gmarket Sans');
   font-size: 12px;
   font-style: bold;
   line-height: var(--Typography-line_height-2xs, 16px); /* 160% */

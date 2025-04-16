@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import joinblock from "../../../public/assets/join/joinblock.svg";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import joinblock from '../../../public/assets/join/joinblock.svg';
 
 export default function NoAccess() {
   const navigate = useNavigate();
 
   const handleButton = () => {
-    navigate("/");
+    navigate('/');
   };
   return (
     <BackGround>

@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import styled, { keyframes } from "styled-components";
-import bg1 from "../../../public/assets/connect/bg1.png";
-import bg2 from "../../../public/assets/connect/bg2.png";
-import bg3 from "../../../public/assets/connect/bg3.png";
-import bg4 from "../../../public/assets/connect/bg4.png";
-import bg5 from "../../../public/assets/connect/bg5.png";
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import styled, { keyframes } from 'styled-components';
+import bg1 from '../../../public/assets/connect/bg1.png';
+import bg2 from '../../../public/assets/connect/bg2.png';
+import bg3 from '../../../public/assets/connect/bg3.png';
+import bg4 from '../../../public/assets/connect/bg4.png';
+import bg5 from '../../../public/assets/connect/bg5.png';
 //import { WriteOrder } from "./WriteOrder";
-import { clearData, clearOrderData } from "../../api/config/state";
-import { encodeLetterId } from "../../api/config/base64";
-import { postRandom } from "../../api/service/ParticipantService";
-import "../../App.css";
+import { clearData, clearOrderData } from '../../api/config/state';
+import { encodeLetterId } from '../../api/config/base64';
+import { postRandom } from '../../api/service/ParticipantService';
+import '../../App.css';
 
 const scaleAnimation = keyframes`
   0% {
@@ -53,23 +53,23 @@ export const Connection = () => {
   console.log(topBackground);
 
   useEffect(() => {
-    localStorage.removeItem("letterId");
+    localStorage.removeItem('letterId');
     dispatch(clearOrderData());
     dispatch(clearData());
-    window.localStorage.setItem("nowLetterId", "1");
-    window.localStorage.setItem("nowSequence", "1");
-    window.localStorage.setItem("nowRepeat", "1");
-    window.localStorage.setItem("totalItem", "1");
-    window.localStorage.setItem("resetTime", "");
+    window.localStorage.setItem('nowLetterId', '1');
+    window.localStorage.setItem('nowSequence', '1');
+    window.localStorage.setItem('nowRepeat', '1');
+    window.localStorage.setItem('totalItem', '1');
+    window.localStorage.setItem('resetTime', '');
 
     const postRandomParti = async () => {
       try {
         const data = await postRandom({
           letterId: letterId,
         });
-        console.log("순서설정:", data);
+        console.log('순서설정:', data);
       } catch (err) {
-        console.error("Error fetching mydata:", err);
+        console.error('Error fetching mydata:', err);
       }
     };
 
@@ -88,7 +88,7 @@ export const Connection = () => {
 
   useEffect(() => {
     if (!topBackground) {
-      console.log("switch문 실행");
+      console.log('switch문 실행');
       switch (coverId) {
         case 1:
           setTopBackground(bg1);

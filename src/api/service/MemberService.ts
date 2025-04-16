@@ -1,4 +1,4 @@
-import { api, ApiResponse } from "../config/api";
+import { api, ApiResponse } from '../config/api';
 import {
   LetterCountsGetResponse,
   MypageGetResponse,
@@ -8,7 +8,7 @@ import {
   ParticipationGetResponse,
   VisitGetResponse,
   LetterboxDeleteResponse,
-} from "../model/MemberModel";
+} from '../model/MemberModel';
 
 export async function getLetterCounts(): Promise<LetterCountsGetResponse> {
   const response: ApiResponse<LetterCountsGetResponse> = await api.get(

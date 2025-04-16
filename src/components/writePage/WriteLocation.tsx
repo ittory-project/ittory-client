@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import img from "../../../public/assets/location.svg";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import img from '../../../public/assets/location.svg';
 
 interface LocationProps {
   progressTime: number;
@@ -21,9 +21,9 @@ export const WriteLocation: React.FC<LocationProps> = ({
   };
   useEffect(() => {
     window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -59,14 +59,14 @@ export const WriteLocation: React.FC<LocationProps> = ({
               cx="28"
               cy="28"
               r={radius}
-              stroke={isWarning ? "#FFA256" : "white"}
+              stroke={isWarning ? '#FFA256' : 'white'}
               strokeWidth="3"
               fill="none"
               strokeDasharray={circumference}
               transform="rotate(-90 28 28)"
             />
           </Svg>
-          <Name color={isWarning ? "#FFA256" : "white"}>{name}</Name>
+          <Name color={isWarning ? '#FFA256' : 'white'}>{name}</Name>
         </Contents>
       </Profile>
     </Background>
@@ -88,7 +88,7 @@ const Profile = styled.div<{ profileImage: string | undefined }>`
   border-radius: 50%;
   margin: 4px 0 0 0;
   background-image: url(${({ profileImage }) =>
-    profileImage ? profileImage : "/assets/common/profile_bunny.svg"});
+    profileImage ? profileImage : '/assets/common/profile_bunny.svg'});
   background-size: cover;
   background-position: center;
   display: flex;

@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled from "styled-components";
-import letter from "../../../public/assets/letter.svg";
-import runner from "../../../public/assets/runner.svg";
-import { getParticipants } from "../../api/service/LetterService";
-import { getLetterInfo } from "../../api/service/LetterService";
-import { stompClient } from "../../api/config/stompInterceptor";
-import { WsExitResponse, WsEnterResponse } from "../../api/model/WsModel";
-import { getLetterStartInfo } from "../../api/service/LetterService";
+import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import letter from '../../../public/assets/letter.svg';
+import runner from '../../../public/assets/runner.svg';
+import { getParticipants } from '../../api/service/LetterService';
+import { getLetterInfo } from '../../api/service/LetterService';
+import { stompClient } from '../../api/config/stompInterceptor';
+import { WsExitResponse, WsEnterResponse } from '../../api/model/WsModel';
+import { getLetterStartInfo } from '../../api/service/LetterService';
 
 export interface Participants {
   sequence: number;
@@ -29,7 +29,7 @@ export const WriteOrder = ({ letterId }: Props) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const userNumsRef = useRef<(UserNumElement | null)[]>([]);
   const [items, setItems] = useState<Participants[]>([]);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
   const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const WriteOrder = ({ letterId }: Props) => {
       const data = await getParticipants(letterId);
       setItems(data);
     } catch (err) {
-      console.error("Error fetching participants:", err);
+      console.error('Error fetching participants:', err);
     }
   };
 
@@ -84,11 +84,11 @@ export const WriteOrder = ({ letterId }: Props) => {
     const client = stompClient();
 
     client.onConnect = () => {
-      console.log("WebSocket connected");
+      console.log('WebSocket connected');
 
       // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message) => {
-        console.log("Received message:", message);
+        console.log('Received message:', message);
         try {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
             message.body,
@@ -96,11 +96,11 @@ export const WriteOrder = ({ letterId }: Props) => {
           console.log(response);
 
           // 퇴장 메시지 처리
-          if (response.action === "EXIT") {
+          if (response.action === 'EXIT') {
             fetchParticipants();
           }
         } catch (err) {
-          console.error("Error parsing WebSocket message:", err);
+          console.error('Error parsing WebSocket message:', err);
         }
       });
     };
@@ -147,10 +147,10 @@ export const WriteOrder = ({ letterId }: Props) => {
     <BackGround>
       <Overlay />
       <TitleBar>
-        <img src={letter} style={{ width: "18px", height: "14px" }} />
+        <img src={letter} style={{ width: '18px', height: '14px' }} />
         <LetterTitle>{title}</LetterTitle>
         <Button>
-          <img src={runner} style={{ width: "12.5px", height: "14px" }} />
+          <img src={runner} style={{ width: '12.5px', height: '14px' }} />
           순서
         </Button>
       </TitleBar>
@@ -159,7 +159,7 @@ export const WriteOrder = ({ letterId }: Props) => {
           <Txt>
             {items.length}명의 참여자가
             <br />
-            <span style={{ color: "#FFA256" }}>{count}번씩</span> 이어 쓸
+            <span style={{ color: '#FFA256' }}>{count}번씩</span> 이어 쓸
             거예요!
           </Txt>
         </Title>
@@ -210,7 +210,7 @@ const SvgLine: React.FC<SvgLineProps> = ({ length }) => (
     height={length}
     viewBox={`0 0 2 ${length}`}
     fill="none"
-    style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}
+    style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
   >
     <path
       d={`M1 0L1 ${length}`}
@@ -384,7 +384,7 @@ const UserNum = styled.div`
 const NumTxt = styled.div`
   color: #fff;
   text-align: center;
-  font-family: "Gmarket Sans";
+  font-family: 'Gmarket Sans';
   font-size: 10px;
   font-style: normal;
   font-weight: 400;

@@ -17,10 +17,10 @@
 
 /* 전역 스타일 주입을 위한 CSS Variable 정의 영역 */
 :root {
-  --Color-grayscale-gray900: #15191C;
+  --Color-grayscale-gray900: #15191c;
   --Color-grayscale-gray600: #868e96;
-  --Color-grayscale-gray500: #ADB5BD;
-  --Color-secondary-dark_navy_blue: #060D24;
+  --Color-grayscale-gray500: #adb5bd;
+  --Color-secondary-dark_navy_blue: #060d24;
   --Typography-family-title: SUIT;
 }
 
@@ -77,30 +77,30 @@ button:focus-visible {
 }
 
 @font-face {
-  font-family: "CookieRun-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff")
-    format("woff");
+  font-family: 'CookieRun-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: "GmarketSans";
-  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
-    format("woff");
+  font-family: 'GmarketSans';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+    format('woff');
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
-  font-family: "Ownglyph_UNZ-Rg";
-  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2406-1@1.0/Ownglyph_UNZ-Rg.woff2")
-    format("woff2");
+  font-family: 'Ownglyph_UNZ-Rg';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2406-1@1.0/Ownglyph_UNZ-Rg.woff2')
+    format('woff2');
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
-  font-family: "Cafe24ClassicType-Regular";
-  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Cafe24ClassicType-Regular.woff2")
-    format("woff2");
+  font-family: 'Cafe24ClassicType-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Cafe24ClassicType-Regular.woff2')
+    format('woff2');
   font-weight: normal;
   font-style: normal;
 }
