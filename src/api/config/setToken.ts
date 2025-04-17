@@ -7,7 +7,7 @@ export const getKakaoCode = async () => {
 };
 
 // 세션에서 유저 아이디 받아오기
-export const getUserId = () => {
+export const getUserIdFromLocalStorage = () => {
   const userId = window.localStorage.getItem('userId');
   return userId;
 };
@@ -21,7 +21,7 @@ interface jwtType {
 }
 
 // 세션에 유저 아이디 저장하기
-export const setUserId = (jwt: string) => {
+export const setUserIdOnLocalStorage = (jwt: string) => {
   const userId: jwtType = jwtDecode(jwt);
   console.log(userId);
   window.localStorage.setItem('userId', userId.sub);

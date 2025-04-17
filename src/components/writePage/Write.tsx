@@ -24,7 +24,7 @@ import {
 import { stompClient } from '../../api/config/stompInterceptor';
 import { LetterItemResponse, WsExitResponse } from '../../api/model/WsModel';
 import { decodeLetterId } from '../../api/config/base64';
-import { getUserId } from '../../api/config/setToken';
+import { getUserIdFromLocalStorage } from '../../api/config/setToken';
 import Button from '../common/Button';
 
 import { WriteOrderList } from './writeMainList/WriteOrderList';
@@ -292,7 +292,7 @@ export const Write = ({
       `현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`,
     );
     console.log(
-      `다음 멤버 아이디: ${nextMemberId}, 현재 멤버 아이디: ${nowMemberId}, 나: ${Number(getUserId())}`,
+      `다음 멤버 아이디: ${nextMemberId}, 현재 멤버 아이디: ${nowMemberId}, 나: ${Number(getUserIdFromLocalStorage())}`,
     );
   }, [nowSequence, nowMemberId, nowLetterId]);
 
@@ -411,7 +411,7 @@ export const Write = ({
   // 현재 유저 감지 후 팝업창 띄우기
   const [nowUserPopup, setNowUserPopup] = useState<number | null>(null);
   useEffect(() => {
-    if (Number(getUserId()) === nowMemberId && writeOrderList.length > 1) {
+    if (Number(getUserIdFromLocalStorage()) === nowMemberId && writeOrderList.length > 1) {
       setNowUserPopup(nowMemberId);
       const timer = setTimeout(() => {
         setNowUserPopup(null);
@@ -424,7 +424,7 @@ export const Write = ({
   // 다음 유저 감지 후 팝업창 띄우기
   const [nextUserPopup, setNextUserPopup] = useState<number | null>(null);
   useEffect(() => {
-    if (Number(getUserId()) === nextMemberId && writeOrderList.length > 1) {
+    if (Number(getUserIdFromLocalStorage()) === nextMemberId && writeOrderList.length > 1) {
       setNextUserPopup(nextMemberId);
       const timer = setTimeout(() => {
         setNextUserPopup(null);
@@ -514,7 +514,7 @@ export const Write = ({
           progressTime={remainingTime}
         />
       </ScrollableOrderList>
-      {nowMemberId === Number(getUserId()) ? (
+      {nowMemberId === Number(getUserIdFromLocalStorage()) ? (
         <ButtonContainer>
           <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
         </ButtonContainer>
@@ -551,7 +551,7 @@ export const Write = ({
       )}
       {showFinishedModal && (
         <WriteFinishedModal
-          isFirstUser={writeOrderList[0].memberId === Number(getUserId())}
+          isFirstUser={writeOrderList[0].memberId === Number(getUserIdFromLocalStorage())}
         />
       )}
       {showExitPage && <WriteExit reasonText={'장시간 접속하지 않아서'} />}
