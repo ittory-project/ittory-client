@@ -56,7 +56,7 @@ export const JoinModal = ({
       console.log(error);
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         console.error('400 Error:', error.response.data);
-        navigate('/');
+        alert("이미 참여중인 사용자입니다.");
       } else if (axios.isAxiosError(error) && error.response?.status === 404) {
         console.error('404 Error:', error.response.data);
         setDeleted(true);
