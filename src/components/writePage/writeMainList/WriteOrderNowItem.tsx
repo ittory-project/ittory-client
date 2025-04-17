@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { getUserId } from '../../../api/config/setToken';
+import { getUserIdFromLocalStorage } from '../../../api/config/setToken';
 import { useParams } from 'react-router-dom';
 import { decodeLetterId } from '../../../api/config/base64';
 import { ElementImgGetResponse } from '../../../api/model/ElementModel';
@@ -24,7 +24,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
   const [letterStatus, setLetterStatus] = useState<'myTurn' | 'othersTurn'>(
     'othersTurn',
   );
-  const userId = getUserId() || 0;
+  const userId = getUserIdFromLocalStorage() || 0;
   const [elementImg, setElementImg] = useState('');
 
   const getPartiList = async () => {
