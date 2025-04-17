@@ -18,7 +18,8 @@ export interface Participants {
   imageUrl: string;
 }
 
-//모바일 브라우저 종료 감지 안됨
+//서버에서 소켓 연결 상태를 감시해서
+//일정 시간 동안 메시지 안 오면 퇴장으로 간주하는 방식
 
 export const Invite = () => {
   const location = useLocation();
@@ -363,13 +364,14 @@ export const Invite = () => {
     event.preventDefault(); // 경고 메시지 표시
     event.returnValue = ''; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
 
-    quitLetterWs(letterId);
-    console.log('소켓 퇴장');
+    //quitLetterWs(letterId);
     console.log('탭이 닫힘');
   }, []);
+  
 
   useEffect(() => {
     // 탭 닫기 전에 호출
+    console.log('탭이 닫힘');
     const beforeUnloadListener = (event: BeforeUnloadEvent) => {
       handleTabClosed(event);
     };
@@ -379,6 +381,8 @@ export const Invite = () => {
     return () => {
       window.removeEventListener('beforeunload', beforeUnloadListener);
       window.removeEventListener('unload', handleTabClosed);
+      quitLetterWs(letterId);
+      navigate("/");
     };
   }, [handleTabClosed]);
 
