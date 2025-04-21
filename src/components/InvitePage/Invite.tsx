@@ -18,8 +18,6 @@ export interface Participants {
   imageUrl: string;
 }
 
-//서버에서 소켓 연결 상태를 감시해서
-//일정 시간 동안 메시지 안 오면 퇴장으로 간주하는 방식
 
 export const Invite = () => {
   const location = useLocation();
@@ -39,10 +37,8 @@ export const Invite = () => {
   const [name, setName] = useState<string>('');
   const [exitName, setExitName] = useState<string>('');
   const [viewDelete, setViewDelete] = useState<boolean>(false);
-  //const [refresh] = useState<number>(1);
   const [, setLoad] = useState<boolean>(true);
   const [loadstatus, setLoadstatus] = useState<boolean>(true);
-  //const [hasRefreshed] = useState<boolean>(false); // 새로고침 여부 체크
 
   const handleGoBack = () => {
     navigate('/', { replace: true });
@@ -117,13 +113,11 @@ export const Invite = () => {
               ) {
                 console.log('방장지정');
                 localStorage.removeItem('load');
-                //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(0);
               } else {
                 console.log('방장지정');
                 localStorage.removeItem('load');
-                //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(1);
               }
@@ -179,13 +173,11 @@ export const Invite = () => {
               ) {
                 console.log('방장지정');
                 localStorage.removeItem('load');
-                //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(0);
               } else {
                 console.log('방장지정');
                 localStorage.removeItem('load');
-                //setLoadstatus(false);
                 setLoad(false);
                 setMemberIndex(1);
               }
@@ -215,33 +207,6 @@ export const Invite = () => {
     };
     fetchData();
   }, [participants]);
-
-  /*useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const mydata = await getMyPage();
-        const data = await getParticipants(letterId);
-        setParticipants(data);
-        const userNameFromApi = mydata.name;
-        const userIdFromApi = mydata.memberId;
-        setName(userNameFromApi);
-        setUserId(userIdFromApi);
-      } catch (err) {
-        console.error("Error during data fetching:", err);
-      }
-    };
-
-    fetchData();
-  }, [refresh]);*/
-
-  /*useEffect(() => {
-    if (memberIndex > -1) {
-      console.log(memberIndex);
-      localStorage.removeItem("load");
-      //setLoadstatus(false);
-      setLoad(false);
-    }
-  }, [memberIndex]);*/
 
   useEffect(() => {
     const client = stompClient();
