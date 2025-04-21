@@ -9,8 +9,8 @@ import { getCoverTypes } from '../../../api/service/CoverService';
 import { CoverType } from '../../../api/model/CoverType';
 import { LetterRequestBody } from '../../../api/model/LetterModel';
 import { postLetter } from '../../../api/service/LetterService';
-import { postNickname } from '../../../api/service/ParticipantService';
-import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
+//import { postNickname } from '../../../api/service/ParticipantService';
+//import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
 import { postEnter } from '../../../api/service/LetterService';
 import animation from '../../../../public/assets/confetti.json';
 import Player from 'lottie-react';
@@ -79,7 +79,7 @@ export default function UserFinishModal({
     changeType();
   }, [deliverDay]);
 
-  const handleNickname = async (letterId: number) => {
+  /*const handleNickname = async (letterId: number) => {
     if (myName) {
       const requestBody: NicknamePostRequest = {
         nickname: myName,
@@ -87,13 +87,23 @@ export default function UserFinishModal({
       const response = await postNickname(requestBody, Number(letterId));
       console.log(response);
     }
-  };
+  };*/
 
   const fetchEnter = async (letterId: number) => {
     try {
-      const enterresponse = await postEnter(Number(letterId));
+      const nickname=myName;
+      const enterresponse = await postEnter(Number(letterId),{nickname});
       console.log(enterresponse);
-      handleNickname(letterId);
+      if(enterresponse.enterStatus==true){
+        navigate('/Invite', {
+          state: {
+            letterId: letterId,
+            guideOpen: false,
+            userName: myName,
+          },
+        });
+      }
+      //handleNickname(letterId);
     } catch (err) {
       console.error('Error fetching mydata:', err);
     }
@@ -101,7 +111,6 @@ export default function UserFinishModal({
 
   const navigateToInvite = async () => {
     setGuideOpen(false);
-    console.log('버튼 클릭됨');
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
@@ -115,25 +124,14 @@ export default function UserFinishModal({
 
     try {
       const response = await postLetter(requestBody);
-      console.log('Response:', response);
       const letterId = response.letterId;
-      console.log('letterId', letterId);
 
       localStorage.setItem('letterId', String(letterId));
       localStorage.setItem('guideOpen', String(false));
       localStorage.setItem('userName', myName);
 
       fetchEnter(letterId);
-
-      console.log(letterId, myName);
-
-      navigate('/Invite', {
-        state: {
-          letterId: letterId,
-          guideOpen: false,
-          userName: myName,
-        },
-      });
+    
     } catch (error) {
       console.error('Error posting letter:', error);
     }
@@ -141,7 +139,6 @@ export default function UserFinishModal({
 
   const handleguide = async () => {
     setGuideOpen(true);
-    console.log('버튼 클릭됨');
 
     const requestBody: LetterRequestBody = {
       coverTypeId: selectedImageIndex + 1,
@@ -155,23 +152,13 @@ export default function UserFinishModal({
 
     try {
       const response = await postLetter(requestBody);
-      console.log('Response:', response);
       const letterId = response.letterId;
-      console.log('letterId', letterId);
 
       localStorage.setItem('letterId', String(letterId));
       localStorage.setItem('guideOpen', String(true));
       localStorage.setItem('userName', myName);
 
       fetchEnter(letterId);
-
-      navigate('/Invite', {
-        state: {
-          letterId: letterId,
-          guideOpen: true,
-          userName: myName,
-        },
-      });
     } catch (error) {
       console.error('Error posting letter:', error);
     }

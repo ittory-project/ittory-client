@@ -9,8 +9,8 @@ import { CoverType } from '../../../api/model/CoverType';
 import { getCoverTypes } from '../../../api/service/CoverService';
 import { LetterRequestBody } from '../../../api/model/LetterModel';
 import { postLetter } from '../../../api/service/LetterService';
-import { postNickname } from '../../../api/service/ParticipantService';
-import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
+//import { postNickname } from '../../../api/service/ParticipantService';
+//import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
 import { postEnter } from '../../../api/service/LetterService';
 import animation from '../../../../public/assets/confetti.json';
 import Player from 'lottie-react';
@@ -97,7 +97,7 @@ export default function CompleteModal({
     };
   }, [modalBackground]);
 
-  const handleNickname = async (letterId: number) => {
+  /*const handleNickname = async (letterId: number) => {
     if (myName) {
       const requestBody: NicknamePostRequest = {
         nickname: myName,
@@ -105,13 +105,23 @@ export default function CompleteModal({
       const response = await postNickname(requestBody, Number(letterId));
       console.log(response);
     }
-  };
+  };*/
 
   const fetchEnter = async (letterId: number) => {
     try {
-      const enterresponse = await postEnter(Number(letterId));
+      const nickname = myName;
+      const enterresponse = await postEnter(Number(letterId),{ nickname });
       console.log(enterresponse);
-      handleNickname(letterId);
+      if(enterresponse.enterStatus==true){
+        navigate('/Invite', {
+          state: {
+            userName: myName,
+            letterId: letterId,
+            guideOpen: true,
+          },
+        });
+      }
+      //handleNickname(letterId);
     } catch (err) {
       console.error('Error fetching mydata:', err);
     }
@@ -132,24 +142,13 @@ export default function CompleteModal({
 
     try {
       const response = await postLetter(requestBody);
-      console.log('Response:', response);
       const letterId = response.letterId;
-      console.log('letterId', letterId);
 
       localStorage.setItem('letterId', String(letterId));
       localStorage.setItem('guideOpen', String(true));
       localStorage.setItem('userName', myName);
 
       fetchEnter(letterId);
-      console.log(myName);
-
-      navigate('/Invite', {
-        state: {
-          userName: myName,
-          letterId: letterId,
-          guideOpen: true,
-        },
-      });
     } catch (error) {
       console.error('Error posting letter:', error);
     }
