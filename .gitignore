@@ -4,3 +4,5 @@
 .env
 /dist
 /.idea
+# Sentry Config File
+.env.sentry-build-plugin
