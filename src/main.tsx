@@ -7,31 +7,11 @@ import { persistor, store } from './api/config/state.ts';
 import { HelmetProvider } from 'react-helmet-async';
 import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
 
-// const container = document.getElementById('root') as HTMLElement;
-// const root = ReactDOM.createRoot(container);
+import * as Sentry from '@sentry/react';
 
-// if (container.hasChildNodes()) {
-//   ReactDOM.hydrateRoot(
-//     container,
-//     <Provider store={store}>
-//       <PersistGate loading={null} persistor={persistor}>
-//         <HelmetProvider>
-//           <App />
-//         </HelmetProvider>
-//       </PersistGate>
-//     </Provider>
-//   );
-// } else {
-//   root.render(
-//     <Provider store={store}>
-//     <PersistGate loading={null} persistor={persistor}>
-//       <HelmetProvider>
-//         <App />
-//       </HelmetProvider>
-//     </PersistGate>
-//   </Provider>
-//   )
-// }
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+});
 
 // TODO: 로그인 로딩에 대한 더 좋은 방식 찾기.
 accessTokenRepository.refresh().finally(() => {
