@@ -11,6 +11,7 @@ import * as Sentry from '@sentry/react';
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
+  integrations: [Sentry.captureConsoleIntegration({ levels: ['error'] })],
 });
 
 // TODO: 로그인 로딩에 대한 더 좋은 방식 찾기.
