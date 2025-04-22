@@ -27,7 +27,6 @@ export default async function getCroppedImg(
   // 이미지 크기와 크롭 영역을 맞추기 위한 비율 계산
   const scaleX = image.width / size.width;
   const scaleY = image.height / size.height;
-  console.log(scaleX, scaleY);
 
   // 크롭 영역의 위치와 크기 계산
   const cropX = crop.x * scaleX;

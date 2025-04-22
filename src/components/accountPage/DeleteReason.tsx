@@ -6,6 +6,10 @@ import checked from '../../../public/assets/checkbox_black.svg';
 import { postWithdraw } from '../../api/service/MemberService';
 import { WithdrawPostRequest } from '../../api/model/MemberModel';
 import { WithdrawPopup } from './WithdrawPopup';
+import { SessionLogger } from '../../utils/SessionLogger';
+import { forceLogout } from '../../api/config/logout';
+
+const logger = new SessionLogger('account');
 
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,14 +81,9 @@ export const DeleteReason = ({ setViewReason }: Props) => {
         content: otherReason,
       };
 
-      try {
-        const response = await postWithdraw(data);
-        localStorage.removeItem('jwt');
-        console.log('Withdrawal successful:', response);
-        setPopup(true);
-      } catch (error) {
-        console.error('Error in withdrawal:', error);
-      }
+      await postWithdraw(data);
+      setPopup(true);
+      forceLogout();
     }
   };
 

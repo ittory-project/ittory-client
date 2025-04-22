@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { kakaoLogin } from '../../api/config/kakaoLogin';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('login');
 
 export const LoginRedirect = () => {
   const location = useLocation();
@@ -10,22 +13,17 @@ export const LoginRedirect = () => {
   useEffect(() => {
     const handleLogin = async () => {
       if (!kakaoSocialLoginCode) {
-        console.log('소셜 로그인 코드가 없습니다.');
+        logger.debug('소셜 로그인 코드가 없습니다.');
         return;
       }
 
-      try {
-        await kakaoLogin(kakaoSocialLoginCode);
+      await kakaoLogin(kakaoSocialLoginCode);
 
-        if (localStorage.letterId) {
-          const letterId = localStorage.letterId;
-          navigate(`/join/${letterId}`);
-        } else {
-          navigate('/');
-        }
-      } catch (error) {
-        // TODO: 오류 설명을 띄우기
-        console.error(error);
+      if (localStorage.letterId) {
+        const letterId = localStorage.letterId;
+        navigate(`/join/${letterId}`);
+      } else {
+        navigate('/');
       }
     };
 

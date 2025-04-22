@@ -51,12 +51,8 @@ export default function CompleteModal({
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
-      try {
-        const types = await getCoverTypes();
-        setCoverTypes(types);
-      } catch (err) {
-        console.error(err);
-      }
+      const types = await getCoverTypes();
+      setCoverTypes(types);
     };
 
     fetchCoverTypes();
@@ -97,33 +93,17 @@ export default function CompleteModal({
     };
   }, [modalBackground]);
 
-  /*const handleNickname = async (letterId: number) => {
-    if (myName) {
-      const requestBody: NicknamePostRequest = {
-        nickname: myName,
-      };
-      const response = await postNickname(requestBody, Number(letterId));
-      console.log(response);
-    }
-  };*/
-
   const fetchEnter = async (letterId: number) => {
-    try {
-      const nickname = myName;
-      const enterresponse = await postEnter(Number(letterId),{ nickname });
-      console.log(enterresponse);
-      if(enterresponse.enterStatus==true){
-        navigate('/Invite', {
-          state: {
-            userName: myName,
-            letterId: letterId,
-            guideOpen: true,
-          },
-        });
-      }
-      //handleNickname(letterId);
-    } catch (err) {
-      console.error('Error fetching mydata:', err);
+    const nickname = myName;
+    const enterresponse = await postEnter(Number(letterId), { nickname });
+    if (enterresponse.enterStatus == true) {
+      navigate('/Invite', {
+        state: {
+          userName: myName,
+          letterId: letterId,
+          guideOpen: true,
+        },
+      });
     }
   };
 
@@ -138,20 +118,15 @@ export default function CompleteModal({
       title: title,
       coverPhotoUrl: croppedImage,
     };
-    console.log(requestBody);
 
-    try {
-      const response = await postLetter(requestBody);
-      const letterId = response.letterId;
+    const response = await postLetter(requestBody);
+    const letterId = response.letterId;
 
-      localStorage.setItem('letterId', String(letterId));
-      localStorage.setItem('guideOpen', String(true));
-      localStorage.setItem('userName', myName);
+    localStorage.setItem('letterId', String(letterId));
+    localStorage.setItem('guideOpen', String(true));
+    localStorage.setItem('userName', myName);
 
-      fetchEnter(letterId);
-    } catch (error) {
-      console.error('Error posting letter:', error);
-    }
+    fetchEnter(letterId);
   };
 
   return (

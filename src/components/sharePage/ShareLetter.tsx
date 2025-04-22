@@ -13,6 +13,9 @@ import { getFontById } from '../../api/service/FontService';
 import { getCoverTypeById } from '../../api/service/CoverTypeService';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { useDispatch } from 'react-redux';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('share');
 
 function Query() {
   return new URLSearchParams(useLocation().search);
@@ -63,7 +66,6 @@ export const ShareLetter = () => {
       }
       const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId);
       if (coverTypeResponse) {
-        console.log(coverTypeResponse);
         setCoverType(coverTypeResponse);
       }
     }
@@ -133,7 +135,7 @@ export const ShareLetter = () => {
         alert('텍스트 복사에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Fallback copy failed:', error);
+      logger.error('텍스트 복사 실패', error);
       alert('텍스트 복사에 실패했습니다.');
     } finally {
       document.body.removeChild(textArea);
@@ -157,7 +159,7 @@ export const ShareLetter = () => {
             setCopied(true);
             setTimeout(() => setCopied(false), 3000);
           } catch (error) {
-            console.error('공유 실패: ', error);
+            logger.error('공유 실패: ', error);
             fallbackCopyTextToClipboard(shareTextPc);
           }
         } else {
@@ -170,13 +172,13 @@ export const ShareLetter = () => {
             text: shareText,
             url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
           });
-          console.log('공유 성공');
+          logger.debug('공유 성공');
         } catch (e) {
-          console.log('공유 실패');
+          logger.debug('공유 실패', e);
         }
       }
     } else {
-      console.log('공유 실패');
+      logger.debug('공유 실패');
     }
   };
 

@@ -33,21 +33,16 @@ export const Join = () => {
 
   useEffect(() => {
     const fetchVisitUser = async () => {
-      try {
-        if (!accessTokenRepository.isLoggedIn()) {
-          navigate('/login');
+      if (!accessTokenRepository.isLoggedIn()) {
+        navigate('/login');
+      } else {
+        setLogin(true);
+        const visitdata = await getVisitUser();
+        if (visitdata.isVisited === true) {
+          setVisited(true);
         } else {
-          setLogin(true);
-          const visitdata = await getVisitUser();
-          console.log(visitdata);
-          if (visitdata.isVisited === true) {
-            setVisited(true);
-          } else {
-            setVisited(false);
-          }
+          setVisited(false);
         }
-      } catch (err) {
-        console.error(err);
       }
     };
     fetchVisitUser();
@@ -55,13 +50,9 @@ export const Join = () => {
 
   useEffect(() => {
     const fetchMyPageData = async () => {
-      try {
-        if (login) {
-          const myPageData = await getMyPage();
-          setName(myPageData.name);
-        }
-      } catch (err) {
-        console.error('Error fetching my page data:', err);
+      if (login) {
+        const myPageData = await getMyPage();
+        setName(myPageData.name);
       }
     };
     fetchMyPageData();

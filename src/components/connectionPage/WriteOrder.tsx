@@ -7,6 +7,9 @@ import { getLetterInfo } from '../../api/service/LetterService';
 import { stompClient } from '../../api/config/stompInterceptor';
 import { WsExitResponse, WsEnterResponse } from '../../api/model/WsModel';
 import { getLetterStartInfo } from '../../api/service/LetterService';
+import { SessionLogger } from '../../utils/SessionLogger';
+
+const logger = new SessionLogger('write');
 
 export interface Participants {
   sequence: number;
@@ -34,20 +37,12 @@ export const WriteOrder = ({ letterId }: Props) => {
 
   useEffect(() => {
     const fetchTitle = async () => {
-      try {
-        const data = await getLetterInfo(letterId);
-        setTitle(data.title);
-      } catch (err) {
-        console.error(err);
-      }
+      const data = await getLetterInfo(letterId);
+      setTitle(data.title);
     };
     const fetchCount = async () => {
-      try {
-        const data = await getLetterStartInfo(letterId);
-        setCount(data.repeatCount);
-      } catch (err) {
-        console.error(err);
-      }
+      const data = await getLetterStartInfo(letterId);
+      setCount(data.repeatCount);
     };
 
     fetchParticipants();
@@ -63,12 +58,8 @@ export const WriteOrder = ({ letterId }: Props) => {
   }, []);
 
   const fetchParticipants = async () => {
-    try {
-      const data = await getParticipants(letterId);
-      setItems(data);
-    } catch (err) {
-      console.error('Error fetching participants:', err);
-    }
+    const data = await getParticipants(letterId);
+    setItems(data);
   };
 
   //주기적으로 참가자 갱신
@@ -84,61 +75,21 @@ export const WriteOrder = ({ letterId }: Props) => {
     const client = stompClient();
 
     client.onConnect = () => {
-            // WebSocket 구독
+      // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message) => {
-                try {
-          const response: WsEnterResponse | WsExitResponse = JSON.parse(
-            message.body,
-          );
-          console.log(response);
+        const response: WsEnterResponse | WsExitResponse = JSON.parse(
+          message.body,
+        );
 
-          // 퇴장 메시지 처리
-          if (response.action === 'EXIT') {
-            fetchParticipants();
-          }
-        } catch (err) {
-          console.error('Error parsing WebSocket message:', err);
+        // 퇴장 메시지 처리
+        if (response.action === 'EXIT') {
+          fetchParticipants();
         }
       });
     };
 
     client.activate();
   }, []);
-
-  /*
-  useEffect(() => {
-    const client = stompClient();
-
-    client.onConnect = () => {
-      console.log("WebSocket connected");
-      // WebSocket 구독
-      client.subscribe(`/topic/letter/${letterId}`, (message: any) => {
-        console.log("Received message:", message);
-        try {
-          const response: WsEnterResponse | WsExitResponse = JSON.parse(
-            message.body
-          );
-          console.log(response);
-
-          // 퇴장 메시지 처리
-          if (response.action == "EXIT") {
-            fetchParticipants();
-          }
-          // 참여 메시지 처리
-          else if (response.action == "ENTER") {
-            // 참여 시 서버에 입장 정보 전송
-            client.publish({
-              destination: `/ws/letter/enter/${letterId}`,
-              body: JSON.stringify({ nickname: name }),
-            });
-          }
-        } catch (err) {
-          console.error("Error parsing WebSocket message:", err);
-        }
-      });
-    };
-    client.activate();
-  }, []);*/
 
   return (
     <BackGround>

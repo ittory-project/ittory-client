@@ -26,11 +26,9 @@ export const JoinModal = ({
 }: Props) => {
   const navigate = useNavigate();
   const letterId = localStorage.letterId;
-  console.log(visited);
 
   const handleCancel = async () => {
     const response = await patchNickname(letterId);
-    console.log(response);
     if (response.success) {
       setViewModal(false);
     }
@@ -38,9 +36,7 @@ export const JoinModal = ({
 
   const handleAccess = async () => {
     try {
-      console.log(nickname);
       const enterresponse = await postEnter(Number(letterId), { nickname });
-      console.log(enterresponse);
       if (enterresponse.enterStatus === true) {
         fianlAccess();
       } else {
@@ -53,39 +49,32 @@ export const JoinModal = ({
         }
       }
     } catch (error) {
-      console.log(error);
       if (axios.isAxiosError(error) && error.response?.status === 400) {
-        console.error('400 Error:', error.response.data);
-        alert("이미 참여중인 사용자입니다.");
+        alert('이미 참여중인 사용자입니다.');
       } else if (axios.isAxiosError(error) && error.response?.status === 404) {
-        console.error('404 Error:', error.response.data);
         setDeleted(true);
       }
     }
   };
 
   const fianlAccess = () => {
-    try {
-      localStorage.removeItem('letterId');
-      if (visited) {
-        navigate('/Invite', {
-          state: {
-            letterId: letterId,
-            guideOpen: false,
-            userName: nickname,
-          },
-        });
-      } else {
-        navigate('/Invite', {
-          state: {
-            letterId: letterId,
-            guideOpen: true,
-            userName: nickname,
-          },
-        });
-      }
-    } catch (err) {
-      console.error('error:', err);
+    localStorage.removeItem('letterId');
+    if (visited) {
+      navigate('/Invite', {
+        state: {
+          letterId: letterId,
+          guideOpen: false,
+          userName: nickname,
+        },
+      });
+    } else {
+      navigate('/Invite', {
+        state: {
+          letterId: letterId,
+          guideOpen: true,
+          userName: nickname,
+        },
+      });
     }
   };
 

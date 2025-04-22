@@ -12,6 +12,9 @@ import bg2 from '../../../../public/assets/connect/bg2.png';
 import bg3 from '../../../../public/assets/connect/bg3.png';
 import bg4 from '../../../../public/assets/connect/bg4.png';
 import bg5 from '../../../../public/assets/connect/bg5.png';
+import { SessionLogger } from '../../../utils';
+
+const logger = new SessionLogger('invite');
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,7 +57,6 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
 
   useEffect(() => {
     if (!background) {
-      console.log('switch문 실행');
       switch (coverId) {
         case 1:
           setBackground(bg1);
@@ -76,30 +78,22 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   }, []);
 
   const handleSubmit = async () => {
-    try {
-      const count = Number(selectNumber);
-      const id = letterId;
-      const coverid = coverId;
-      console.log('Request body:', { letterId: id, repeatCount: count }); // 로그 출력
+    const count = Number(selectNumber);
+    const id = letterId;
+    const coverid = coverId;
 
-      const requestBody = { letterId: id, repeatCount: count };
-      const response = await postRepeatCount(requestBody);
-      console.log(response);
+    const requestBody = { letterId: id, repeatCount: count };
+    await postRepeatCount(requestBody);
+    await postRandom({ letterId: id });
 
-      const sequence = await postRandom({ letterId: id });
-      console.log('sequence: ', sequence);
-
-      startLetterWs(letterId);
-      navigate('/Connection', {
-        state: {
-          letterId: letterId,
-          coverId: coverid,
-          bg: background,
-        },
-      });
-    } catch (err) {
-      console.error('API error:', err);
-    }
+    startLetterWs(letterId);
+    navigate('/Connection', {
+      state: {
+        letterId: letterId,
+        coverId: coverid,
+        bg: background,
+      },
+    });
   };
 
   // Swiper 참조를 위한 useRef

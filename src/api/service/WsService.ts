@@ -49,8 +49,7 @@ export const writeLetterWs = (
       });
     };
 
-    client.onStompError = (frame) => {
-      console.error('Broker reported error: ', frame.headers['message']);
+    client.onStompError = () => {
       reject(new Error('연결 오류'));
     };
 

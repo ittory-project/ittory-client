@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import FontSelect from './FontSelect';
 import _Line from '../../../../public/assets/_line.svg';
 import { fontProps } from './CoverStyle';
+import { SessionLogger } from '../../../utils/SessionLogger';
+
+const logger = new SessionLogger('create');
 
 interface Props {
   font: string;
@@ -46,8 +49,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
     }, []);
 
     const handleButton = () => {
-      console.log(selected);
-      console.log(selectId);
       setSelected(selected);
       setSelect(selected);
       setSelectfid(selectId);
@@ -60,14 +61,14 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
         if (window.visualViewport) {
           let keyboardHeight =
             window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
-          console.log('키보드 높이: ', keyboardHeight);
+          logger.debug('키보드 높이: ', keyboardHeight);
 
           if (keyboardHeight < 0) {
             keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
           }
 
           if (keyboardHeight > 0) {
-            console.log('키보드 열림');
+            logger.debug('키보드 열림');
             if (window.innerWidth < 850) {
               setIsKeyboardVisible(true);
               setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
@@ -76,7 +77,7 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
               setBottomOffset(0);
             }
           } else {
-            console.log('키보드 안열림');
+            logger.debug('키보드 안열림');
             setIsKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
             setBottomOffset(0); // 키보드 높이를 0으로 설정
           }

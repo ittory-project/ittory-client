@@ -12,6 +12,9 @@ import { Menu } from '../../layout/Menu';
 import { useSwipeable } from 'react-swipeable';
 import divider2 from '../../../public/assets/home/bar.png';
 import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
+import { SessionLogger } from '../../utils/SessionLogger';
+
+const logger = new SessionLogger('home');
 
 const bg1 = '/assets/home/main.jpg';
 const bg8 = '/assets/home/07.jpg';
@@ -39,7 +42,7 @@ export const Home = () => {
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
       if (!isMenuOpen) {
-        console.log('스와이프로 메뉴 열음');
+        logger.debug('스와이프로 메뉴 열음');
         setIsMenuOpen(true);
       }
     },

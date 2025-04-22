@@ -36,6 +36,9 @@ import { WriteQuitAlert } from './WriteQuitAlert';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { quitLetterWs } from '../../api/service/WsService';
 import { WriteExit } from './WriteExit';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('write');
 
 interface WriteElementProps {
   remainingTime: number;
@@ -112,7 +115,7 @@ export const Write = ({
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
-    return <div>Error: 잘못된 접근입니다.</div>;
+    throw 'Error: 잘못된 접근입니다.';
   }
 
   // 각각의 아이템들을 세션에서 가져올 수 있도록 하기
@@ -133,7 +136,7 @@ export const Write = ({
   }, [nowTotalItem]);
   useEffect(() => {
     setWriteOrderList(orderData);
-    console.log(orderData);
+    logger.debug(orderData);
   }, [orderData]);
 
   // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
@@ -173,12 +176,12 @@ export const Write = ({
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-        console.log('백그라운드 전환');
+        logger.debug('백그라운드 전환');
       } else if (document.visibilityState === 'visible') {
-        console.log('다시돌아옴');
+        logger.debug('다시돌아옴');
         const storedResetTime = window.localStorage.getItem('resetTime');
         if (storedResetTime && Date.now() > Number(storedResetTime)) {
-          console.log('턴이 넘어가서 퇴장됨');
+          logger.debug('턴이 넘어가서 퇴장됨');
           clientRef.current?.deactivate();
           setShowExitPage(true);
           quitLetterWs(letterNumId);
@@ -190,7 +193,7 @@ export const Write = ({
     const handlePageHide = (event: PageTransitionEvent) => {
       window.alert(event);
       if (!event.persisted) {
-        console.log('Page hide');
+        logger.debug('Page hide');
         quitLetterWs(letterNumId);
         clientRef.current?.deactivate();
         event.preventDefault();
@@ -221,12 +224,12 @@ export const Write = ({
 
         if ('action' in response && response.action === 'EXIT') {
           const exitResponse = response as WsExitResponse;
-          console.log('퇴장 정보: ', exitResponse);
+          logger.debug('퇴장 정보: ', exitResponse);
           fetchParticipantsAndUpdateLockedItems();
           setExitUser(exitResponse.nickname);
         } else if ('elementId' in response) {
           const letterResponse = response as LetterItemResponse;
-          console.log('작성 내용: ', letterResponse);
+          logger.debug('작성 내용: ', letterResponse);
           const responseToLetterItem: LetterItem = {
             elementId: Number(response.elementId),
             content: response.content,
@@ -263,7 +266,7 @@ export const Write = ({
       // 상태 업데이트
       setNowSequence(writeOrderList[nextIndex].sequence);
       setNowMemberId(writeOrderList[nextIndex].memberId);
-      console.log(
+      logger.debug(
         '다음 사람 인덱스: ',
         (nextIndex + 1) % partiNum,
         '다음 사람 누구 (멤버 아이디): ',
@@ -286,12 +289,10 @@ export const Write = ({
   };
 
   useEffect(() => {
-    console.log(orderData);
-    console.log(writeOrderList);
-    console.log(
+    logger.debug(
       `현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`,
     );
-    console.log(
+    logger.debug(
       `다음 멤버 아이디: ${nextMemberId}, 현재 멤버 아이디: ${nowMemberId}, 나: ${Number(getUserIdFromLocalStorage())}`,
     );
   }, [nowSequence, nowMemberId, nowLetterId]);
@@ -309,8 +310,8 @@ export const Write = ({
     dispatch(setOrderData(response.participants));
 
     // 계산 로직
-    console.log(`현재 작성 숫자: ${nowLetterId}`);
-    console.log(
+    logger.debug(`현재 작성 숫자: ${nowLetterId}`);
+    logger.debug(
       `현재 총 아이템 수: ${totalItem - ((totalItem - nowSequence + 1) % partiNum)}`,
     );
     // setNowTotalItem(totalItem - ((totalItem - nowSequence + 1) % partiNum));
@@ -337,7 +338,7 @@ export const Write = ({
 
       if (writeOrderList.length > 0) {
         setNowMemberId(writeOrderList[nowSequence - 1].memberId);
-        console.log(
+        logger.debug(
           '다음 사람 인덱스: ',
           1 % partiNum,
           'partinum: ',
@@ -411,7 +412,10 @@ export const Write = ({
   // 현재 유저 감지 후 팝업창 띄우기
   const [nowUserPopup, setNowUserPopup] = useState<number | null>(null);
   useEffect(() => {
-    if (Number(getUserIdFromLocalStorage()) === nowMemberId && writeOrderList.length > 1) {
+    if (
+      Number(getUserIdFromLocalStorage()) === nowMemberId &&
+      writeOrderList.length > 1
+    ) {
       setNowUserPopup(nowMemberId);
       const timer = setTimeout(() => {
         setNowUserPopup(null);
@@ -424,7 +428,10 @@ export const Write = ({
   // 다음 유저 감지 후 팝업창 띄우기
   const [nextUserPopup, setNextUserPopup] = useState<number | null>(null);
   useEffect(() => {
-    if (Number(getUserIdFromLocalStorage()) === nextMemberId && writeOrderList.length > 1) {
+    if (
+      Number(getUserIdFromLocalStorage()) === nextMemberId &&
+      writeOrderList.length > 1
+    ) {
       setNextUserPopup(nextMemberId);
       const timer = setTimeout(() => {
         setNextUserPopup(null);
@@ -551,7 +558,9 @@ export const Write = ({
       )}
       {showFinishedModal && (
         <WriteFinishedModal
-          isFirstUser={writeOrderList[0].memberId === Number(getUserIdFromLocalStorage())}
+          isFirstUser={
+            writeOrderList[0].memberId === Number(getUserIdFromLocalStorage())
+          }
         />
       )}
       {showExitPage && <WriteExit reasonText={'장시간 접속하지 않아서'} />}

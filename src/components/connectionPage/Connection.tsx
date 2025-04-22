@@ -50,7 +50,6 @@ export const Connection = () => {
   const [topBackground, setTopBackground] = useState<string | null>(
     location.state.bg || null,
   );
-  console.log(topBackground);
 
   useEffect(() => {
     localStorage.removeItem('letterId');
@@ -63,14 +62,9 @@ export const Connection = () => {
     window.localStorage.setItem('resetTime', '');
 
     const postRandomParti = async () => {
-      try {
-        const data = await postRandom({
-          letterId: letterId,
-        });
-        console.log('순서설정:', data);
-      } catch (err) {
-        console.error('Error fetching mydata:', err);
-      }
+      await postRandom({
+        letterId: letterId,
+      });
     };
 
     postRandomParti();
@@ -84,11 +78,8 @@ export const Connection = () => {
     return () => clearTimeout(routingTimer);
   }, [navigate, letterId]);
 
-  console.log(coverId);
-
   useEffect(() => {
     if (!topBackground) {
-      console.log('switch문 실행');
       switch (coverId) {
         case 1:
           setTopBackground(bg1);
@@ -144,7 +135,6 @@ export const Connection = () => {
    */
   //<BackGround className={topBackground}>
 
-  console.log(letterId);
   return (
     <>
       {topBackground && (
