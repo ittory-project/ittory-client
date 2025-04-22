@@ -2,6 +2,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import {
   attachAccessToken,
   awaitTokenRefresh,
+  logRequest,
+  logResponse,
   tryTokenRefresh,
 } from './apiInterceptor';
 
@@ -33,6 +35,7 @@ const apiSetting: AxiosRequestConfig = {
 
 export const api = axios.create(apiSetting);
 
+api.interceptors.request.use(logRequest);
 api.interceptors.request.use(attachAccessToken);
 api.interceptors.request.use(awaitTokenRefresh);
-api.interceptors.response.use(null, tryTokenRefresh);
+api.interceptors.response.use(logResponse, tryTokenRefresh);

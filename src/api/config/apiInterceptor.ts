@@ -1,5 +1,6 @@
 import axios, {
   AxiosError,
+  AxiosResponse,
   HttpStatusCode,
   InternalAxiosRequestConfig,
 } from 'axios';
@@ -9,6 +10,32 @@ import {
   accessTokenRepository,
   refreshEndpoint,
 } from './AccessTokenRepository';
+import { SessionLogger } from '../../utils/SessionLogger';
+
+const logger = new SessionLogger('http');
+
+export const logRequest = (config: InternalAxiosRequestConfig) => {
+  logger.info(
+    `[Request] [${config.method?.toUpperCase()} ${config.url}] ${JSON.stringify(
+      {
+        params: config.params,
+        data: config.data,
+      },
+    )}`,
+  );
+  return config;
+};
+export const logResponse = (response: AxiosResponse) => {
+  logger.info(
+    `[Response] [${response.config.method?.toUpperCase()} ${response.config.url}] ${JSON.stringify(
+      {
+        status: response.status,
+        data: response.data,
+      },
+    )}`,
+  );
+  return response;
+};
 
 export const attachAccessToken = (config: InternalAxiosRequestConfig) => {
   // NOTE: Refresh 요청 시에도 해당 Interceptor를 통과
