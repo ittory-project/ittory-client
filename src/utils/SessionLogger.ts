@@ -1,4 +1,18 @@
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+type Feature =
+  | 'nav'
+  | 'http'
+  | 'websocket'
+  | 'account'
+  | 'create'
+  | 'home'
+  | 'invite'
+  | 'letterbox'
+  | 'login'
+  | 'share'
+  | 'write'
+  | 'menu';
+
 const logLevelConsoleMap: Record<LogLevel, 'log' | 'warn' | 'error'> = {
   info: 'log',
   warn: 'warn',
