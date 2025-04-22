@@ -20,6 +20,12 @@ const logLevelConsoleMap: Record<LogLevel, 'log' | 'warn' | 'error'> = {
   debug: 'log', // console.debug는 함수는 있으나, 동작이 없음
 };
 
+declare global {
+  interface Window {
+    exportSessionLogs: () => void;
+  }
+}
+
 /**
  * Session(Tab) 단위로 로그를 출력하고 보관하는 Logger
  * - 새로 고침 시에도 로그 유지
@@ -37,8 +43,6 @@ export class SessionLogger {
   }
 
   static {
-    // eslint-disable-next-line
-    // @ts-ignore
     window.exportSessionLogs = SessionLogger.exportAsTxt;
   }
 
