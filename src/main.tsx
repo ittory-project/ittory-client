@@ -8,6 +8,29 @@ import { HelmetProvider } from 'react-helmet-async';
 import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
 
 import * as Sentry from '@sentry/react';
+import { attachLoggerOnNavigate } from './utils/attachLoggerOnNavigate.ts';
+import { SessionLogger } from './utils/SessionLogger.ts';
+
+SessionLogger.enableLogLevels(['info', 'warn', 'error', 'debug']);
+SessionLogger.enableFeatures([
+  'nav',
+  'http',
+  'websocket',
+  'account',
+  'create',
+  'home',
+  'invite',
+  'letterbox',
+  'login',
+  'share',
+  'write',
+  'menu',
+]);
+
+const logger = new SessionLogger('http');
+logger.debug('test');
+
+attachLoggerOnNavigate();
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
