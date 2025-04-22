@@ -9,27 +9,9 @@ import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
 
 import * as Sentry from '@sentry/react';
 import { attachLoggerOnNavigate } from './utils/attachLoggerOnNavigate.ts';
-import { SessionLogger } from './utils/SessionLogger.ts';
+import { activateDefaultLog } from './utils/activateDefaultLog.ts';
 
-SessionLogger.enableLogLevels(['info', 'warn', 'error', 'debug']);
-SessionLogger.enableFeatures([
-  'nav',
-  'http',
-  'websocket',
-  'account',
-  'create',
-  'home',
-  'invite',
-  'letterbox',
-  'login',
-  'share',
-  'write',
-  'menu',
-]);
-
-const logger = new SessionLogger('http');
-logger.debug('test');
-
+activateDefaultLog();
 attachLoggerOnNavigate();
 
 Sentry.init({
