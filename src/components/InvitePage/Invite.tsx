@@ -10,6 +10,9 @@ import { WsExitResponse, WsEnterResponse } from '../../api/model/WsModel';
 import { Loading } from './Loading';
 import texture from '../../../public/assets/invite/texture1.png';
 import { quitLetterWs } from '../../api/service/WsService';
+import { SessionLogger } from '../../utils/SessionLogger';
+
+const logger = new SessionLogger('invite');
 
 export interface Participants {
   sequence: number;
@@ -17,7 +20,6 @@ export interface Participants {
   nickname: string;
   imageUrl: string;
 }
-
 
 export const Invite = () => {
   const location = useLocation();
@@ -78,71 +80,57 @@ export const Invite = () => {
   }, [location]);
 
   const fetchParticipants = async () => {
-    try {
-      setLoad(true);
-      const data = await getParticipants(letterId);
+    setLoad(true);
+    const data = await getParticipants(letterId);
 
-      setParticipants(data);
-    } catch (err) {
-      console.error('Error fetching participants:', err);
-    }
+    setParticipants(data);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const mydata = await getMyPage();
-        const userNameFromApi = mydata.name;
-        const userIdFromApi = mydata.memberId;
+      const mydata = await getMyPage();
+      const userNameFromApi = mydata.name;
+      const userIdFromApi = mydata.memberId;
 
-        setName(userNameFromApi);
-        setUserId(userIdFromApi);
-        console.log(participants);
+      setName(userNameFromApi);
+      setUserId(userIdFromApi);
 
-        if (participants.length < 1) {
-          fetchParticipants();
-          console.log('데이터없음-useEffect');
+      if (participants.length < 1) {
+        fetchParticipants();
+      } else {
+        if (memberIndex > -1) {
+          return;
         } else {
-          if (memberIndex > -1) {
-            return;
-          } else {
-            if (participants[0].nickname) {
-              if (
-                participants[0].nickname === name ||
-                participants[0].nickname === userName
-              ) {
-                console.log('방장지정');
-                localStorage.removeItem('load');
-                setLoad(false);
-                setMemberIndex(0);
-              } else {
-                console.log('방장지정');
-                localStorage.removeItem('load');
-                setLoad(false);
-                setMemberIndex(1);
-              }
+          if (participants[0].nickname) {
+            logger.debug('방장지정');
+            if (
+              participants[0].nickname === name ||
+              participants[0].nickname === userName
+            ) {
+              localStorage.removeItem('load');
+              setLoad(false);
+              setMemberIndex(0);
             } else {
-              console.log(localStorage.getItem('load'));
-              if (localStorage.getItem('load') === 'done') {
-                console.log('로딩이미했음');
-                setLoad(true);
-                setLoadstatus(true);
-              } else {
-                console.log('로딩 페이지로');
-                localStorage.setItem('load', 'done');
-                navigate('/loading', {
-                  state: {
-                    letterId: getletterId,
-                    userName: userName,
-                    guideOpen: guideOpen,
-                  },
-                });
-              }
+              localStorage.removeItem('load');
+              setLoad(false);
+              setMemberIndex(1);
+            }
+          } else {
+            if (localStorage.getItem('load') === 'done') {
+              setLoad(true);
+              setLoadstatus(true);
+            } else {
+              localStorage.setItem('load', 'done');
+              navigate('/loading', {
+                state: {
+                  letterId: getletterId,
+                  userName: userName,
+                  guideOpen: guideOpen,
+                },
+              });
             }
           }
         }
-      } catch (err) {
-        console.error('Error during data fetching:', err);
       }
     };
     fetchData();
@@ -150,59 +138,49 @@ export const Invite = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const mydata = await getMyPage();
-        const userNameFromApi = mydata.name;
-        const userIdFromApi = mydata.memberId;
+      const mydata = await getMyPage();
+      const userNameFromApi = mydata.name;
+      const userIdFromApi = mydata.memberId;
 
-        setName(userNameFromApi);
-        setUserId(userIdFromApi);
-        console.log(participants);
+      setName(userNameFromApi);
+      setUserId(userIdFromApi);
 
-        if (participants.length < 1) {
-          fetchParticipants();
-          console.log('데이터없음-useEffect');
+      if (participants.length < 1) {
+        fetchParticipants();
+      } else {
+        if (memberIndex > -1) {
+          return;
         } else {
-          if (memberIndex > -1) {
-            return;
-          } else {
-            if (participants[0].nickname) {
-              if (
-                participants[0].nickname === name ||
-                participants[0].nickname === userName
-              ) {
-                console.log('방장지정');
-                localStorage.removeItem('load');
-                setLoad(false);
-                setMemberIndex(0);
-              } else {
-                console.log('방장지정');
-                localStorage.removeItem('load');
-                setLoad(false);
-                setMemberIndex(1);
-              }
+          if (participants[0].nickname) {
+            logger.debug('방장지정');
+            if (
+              participants[0].nickname === name ||
+              participants[0].nickname === userName
+            ) {
+              localStorage.removeItem('load');
+              setLoad(false);
+              setMemberIndex(0);
             } else {
-              console.log(localStorage.getItem('load'));
-              if (localStorage.getItem('load') === 'done') {
-                console.log('로딩이미했음');
-                setLoad(true);
-                setLoadstatus(true);
-              } else {
-                console.log('로딩 페이지로');
-                localStorage.setItem('load', 'done');
-                navigate('/loading', {
-                  state: {
-                    letterId: getletterId,
-                    userName: userName,
-                    guideOpen: guideOpen,
-                  },
-                });
-              }
+              localStorage.removeItem('load');
+              setLoad(false);
+              setMemberIndex(1);
+            }
+          } else {
+            if (localStorage.getItem('load') === 'done') {
+              setLoad(true);
+              setLoadstatus(true);
+            } else {
+              localStorage.setItem('load', 'done');
+              navigate('/loading', {
+                state: {
+                  letterId: getletterId,
+                  userName: userName,
+                  guideOpen: guideOpen,
+                },
+              });
             }
           }
         }
-      } catch (err) {
-        console.error('Error during data fetching:', err);
       }
     };
     fetchData();
@@ -212,54 +190,44 @@ export const Invite = () => {
     const client = stompClient();
 
     client.onConnect = () => {
-            // WebSocket 구독
+      // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message) => {
-                try {
-          const response: WsEnterResponse | WsExitResponse = JSON.parse(
-            message.body,
-          );
+        const response: WsEnterResponse | WsExitResponse = JSON.parse(
+          message.body,
+        );
 
-          if (
-            response.action === 'EXIT' &&
-            'nickname' in response &&
-            'isManager' in response
-          ) {
-            if (response.isManager) {
-              console.log('방장 퇴장 감지');
-              setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
-              fetchParticipants();
-              console.log(participants);
-              if (participants[0]) {
-                setHostAlert(
-                  `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
-                );
-              }
-            } else {
-              setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
-              fetchParticipants();
+        if (
+          response.action === 'EXIT' &&
+          'nickname' in response &&
+          'isManager' in response
+        ) {
+          if (response.isManager) {
+            logger.debug('방장 퇴장 감지');
+            setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
+            fetchParticipants();
+            if (participants[0]) {
+              setHostAlert(
+                `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
+              );
             }
-          } else if (response.action === 'END') {
-            setViewDelete(true);
-          } else if (response.action === 'START') {
-            navigate('/Connection', {
-              state: {
-                letterId: letterId,
-                coverId: Number(localStorage.getItem('coverId')),
-                bg: localStorage.getItem('bgImg'),
-              },
-            });
-          } else if (
-            response.action === 'ENTER' &&
-            'participants' in response
-          ) {
-            console.log(response.action);
-            if (response.participants) {
-              setParticipants(response.participants);
-            }
-            console.log(participants);
+          } else {
+            setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
+            fetchParticipants();
           }
-        } catch (err) {
-          console.error('Error parsing WebSocket message:', err);
+        } else if (response.action === 'END') {
+          setViewDelete(true);
+        } else if (response.action === 'START') {
+          navigate('/Connection', {
+            state: {
+              letterId: letterId,
+              coverId: Number(localStorage.getItem('coverId')),
+              bg: localStorage.getItem('bgImg'),
+            },
+          });
+        } else if (response.action === 'ENTER' && 'participants' in response) {
+          if (response.participants) {
+            setParticipants(response.participants);
+          }
         }
       });
 
@@ -278,7 +246,7 @@ export const Invite = () => {
 
   //퇴장 알림
   useEffect(() => {
-    console.log('퇴장 알림');
+    logger.debug('퇴장 알림');
     const exitTimer = setTimeout(() => {
       fetchParticipants();
       setExitAlert(null);
@@ -292,7 +260,6 @@ export const Invite = () => {
 
   //방장 바뀜 알림
   useEffect(() => {
-    console.log('문젠가');
     const hostTimer = setTimeout(() => {
       fetchParticipants();
       setHostAlert(null);
@@ -301,39 +268,18 @@ export const Invite = () => {
     return () => clearTimeout(hostTimer);
   }, [hostAlert]);
 
-  /* 초대 링크 보내려 할 시 퇴실 처리되는 에러
-  const handleVisibilityChange = useCallback(async () => {
-    if (document.hidden) {
-      // 페이지가 비활성화된 경우, 즉 탭을 닫거나 백그라운드로 보낼 때
-      quitLetterWs(letterId);
-      console.log("소켓 퇴장");
-      console.log("탭이 닫힘");
-    } else {
-      // 페이지가 다시 활성화되었을 때
-      console.log("탭이 다시 활성화됨");
-    }
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [handleVisibilityChange]);*/
-
   //PC 감지
   const handleTabClosed = useCallback(async (event: BeforeUnloadEvent) => {
     event.preventDefault(); // 경고 메시지 표시
     event.returnValue = ''; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
 
     //quitLetterWs(letterId);
-    console.log('탭이 닫힘');
+    logger.debug('탭이 닫힘');
   }, []);
-  
 
   useEffect(() => {
     // 탭 닫기 전에 호출
-    console.log('탭이 닫힘');
+    logger.debug('탭이 닫힘');
     const beforeUnloadListener = (event: BeforeUnloadEvent) => {
       handleTabClosed(event);
     };
@@ -343,12 +289,10 @@ export const Invite = () => {
     return () => {
       window.removeEventListener('beforeunload', beforeUnloadListener);
       window.removeEventListener('unload', handleTabClosed);
-      quitLetterWs(letterId);
-      navigate("/");
+      // quitLetterWs(letterId);
+      // navigate('/');
     };
   }, [handleTabClosed]);
-
-  console.log('invite 랜더링');
 
   return (
     <BackGround>

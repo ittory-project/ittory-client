@@ -11,6 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import { getLetterCounts, getMyPage } from '../api/service/MemberService';
 import logindefault from '../../public/assets/menu/logindefault.png';
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
+import { SessionLogger } from '../utils';
+
+const logger = new SessionLogger('menu');
 
 interface Props {
   onClose: () => void;
@@ -37,32 +40,19 @@ export const Menu = ({ onClose }: Props) => {
   const [profileImage, setProfileImage] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
 
-  console.log('메뉴 열림');
-
   useEffect(() => {
     if (accessTokenRepository.isLoggedIn()) {
       setUser(true);
       const fetchLetterCounts = async () => {
-        try {
-          const counts = await getLetterCounts();
-          setPartiLetter(counts.participationLetterCount);
-          setReceiveLetter(counts.receiveLetterCount);
-          console.log('Letter Counts:', counts);
-        } catch (err) {
-          console.error('Error fetching letter counts:', err);
-        }
+        const counts = await getLetterCounts();
+        setPartiLetter(counts.participationLetterCount);
+        setReceiveLetter(counts.receiveLetterCount);
       };
 
       const fetchMyPageData = async () => {
-        try {
-          const myPageData = await getMyPage();
-          setProfileImage(myPageData.profileImage);
-          setUserName(myPageData.name);
-
-          console.log('My Page Data:', myPageData);
-        } catch (err) {
-          console.error('Error fetching my page data:', err);
-        }
+        const myPageData = await getMyPage();
+        setProfileImage(myPageData.profileImage);
+        setUserName(myPageData.name);
       };
       fetchLetterCounts();
       fetchMyPageData();

@@ -123,7 +123,6 @@ export default function Calender({
         {days}
       </div>,
     );
-    console.log(rows);
     days = [];
   }
 

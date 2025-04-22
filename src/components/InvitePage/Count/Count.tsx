@@ -12,6 +12,9 @@ import bg2 from '../../../../public/assets/connect/bg2.png';
 import bg3 from '../../../../public/assets/connect/bg3.png';
 import bg4 from '../../../../public/assets/connect/bg4.png';
 import bg5 from '../../../../public/assets/connect/bg5.png';
+import { SessionLogger } from '../../../utils';
+
+const logger = new SessionLogger('invite');
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,7 +57,6 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
 
   useEffect(() => {
     if (!background) {
-      console.log('switch문 실행');
       switch (coverId) {
         case 1:
           setBackground(bg1);
@@ -80,14 +82,10 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
       const count = Number(selectNumber);
       const id = letterId;
       const coverid = coverId;
-      console.log('Request body:', { letterId: id, repeatCount: count }); // 로그 출력
 
       const requestBody = { letterId: id, repeatCount: count };
-      const response = await postRepeatCount(requestBody);
-      console.log(response);
-
-      const sequence = await postRandom({ letterId: id });
-      console.log('sequence: ', sequence);
+      await postRepeatCount(requestBody);
+      await postRandom({ letterId: id });
 
       startLetterWs(letterId);
       navigate('/Connection', {
@@ -98,7 +96,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
         },
       });
     } catch (err) {
-      console.error('API error:', err);
+      logger.error('편지 반복 횟수, 참여자 작성 순서 설정 API 실패', err);
     }
   };
 

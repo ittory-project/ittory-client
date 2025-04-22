@@ -6,6 +6,9 @@ import share from '../../../public/assets/share.svg';
 import { LetterDetailGetResponse } from '../../api/model/LetterModel';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
 import { encodeLetterId } from '../../api/config/base64';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('letterbox');
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,7 +38,6 @@ export const Created_Modal = ({
 
   useEffect(() => {
     const getSharedLetter = async () => {
-      console.log(letterId);
       const response = await getLetterDetailInfo(Number(letterId));
       setLetterInfo(response);
       setEncodeId(encodeLetterId(letterId));
@@ -73,8 +75,8 @@ export const Created_Modal = ({
         alert('텍스트 복사에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Fallback copy failed:', error);
       alert('텍스트 복사에 실패했습니다.');
+      throw error;
     } finally {
       document.body.removeChild(textArea);
     }
@@ -112,13 +114,13 @@ export const Created_Modal = ({
             text: shareText,
             url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
           });
-          console.log('공유 성공');
+          logger.debug('공유 성공');
         } catch (e) {
-          console.log('공유 실패');
+          logger.debug('공유 실패', e);
         }
       }
     } else {
-      console.log('공유 실패');
+      logger.debug('공유 실패');
     }
   };
   return (

@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { fontProps } from './CoverStyle';
+import { SessionLogger } from '../../../utils/SessionLogger';
+
+const logger = new SessionLogger('create');
 
 interface Props {
   font: string;
@@ -25,7 +28,7 @@ export default function FontSelect({
   handlePopupClick,
 }: Props) {
   const handleFontChange = (fontFamily: string, fontId: number) => {
-    console.log(fontFamily);
+    logger.debug('폰트 변경: ', fontFamily);
     setFont(fontFamily);
     setSelect(fontFamily);
     setSelectFid(fontId);
@@ -33,7 +36,7 @@ export default function FontSelect({
   };
 
   useEffect(() => {
-    console.log(select);
+    logger.debug('폰트 선택: ', select);
     if (select === '') {
       setFont(fonts[0].value);
       setSelectId(fonts[0].id);

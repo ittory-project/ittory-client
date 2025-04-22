@@ -61,13 +61,8 @@ export default function EditLetter({
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
-      try {
-        const types = await getCoverTypes();
-        setCoverTypes(types);
-        console.log(types);
-      } catch (err) {
-        console.error(err);
-      }
+      const types = await getCoverTypes();
+      setCoverTypes(types);
     };
 
     fetchCoverTypes();
@@ -161,7 +156,6 @@ export default function EditLetter({
           <EditBtn
             onClick={() => {
               openCoveredit();
-              console.log('커버모달오픈');
             }}
           >
             <img

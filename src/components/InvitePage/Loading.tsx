@@ -12,10 +12,8 @@ interface Props {
 
 export const Loading = ({ loadstatus }: Props) => {
   const navigate = useNavigate();
-  console.log('로딩창');
- 
+
   useEffect(() => {
-    console.log('로딩창 실행');
     fetchData();
   }, []);
 
@@ -34,18 +32,13 @@ export const Loading = ({ loadstatus }: Props) => {
   };
 
   useEffect(() => {
-    console.log('로딩중');
-    console.log(localStorage.getItem('load'));
     if (localStorage.getItem('load') === 'done') {
       if (loadstatus === true) {
-        console.log(loadstatus);
         fetchData();
       } else {
         localStorage.removeItem('load');
-        console.log(loadstatus);
       }
     } else {
-      console.log('fetchData 실행');
       fetchData();
     }
   }, [loadstatus]);

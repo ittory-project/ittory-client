@@ -15,8 +15,6 @@ export const CountPopup = ({ setPopup, setViewCount }: Props) => {
     setViewCount(true);
   };
 
-  console.log('count popup');
-
   return (
     <>
       <Modal>

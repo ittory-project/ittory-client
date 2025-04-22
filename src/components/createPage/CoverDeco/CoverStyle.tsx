@@ -10,7 +10,6 @@ import PrevImg from '../../../../public/assets/pageprev.svg';
 import camera from '../../../../public/assets/camera.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
 import bookshadow from '../../../../public/assets/book_shadow.svg';
-import { Area } from 'react-easy-crop';
 import FontPopup from './FontPopup';
 import { getCoverTypes } from '../../../../src/api/service/CoverService';
 import { CoverType } from '../../../../src/api/model/CoverType';
@@ -18,6 +17,10 @@ import { getAllFont } from '../../../api/service/FontService';
 import axios from 'axios';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
 import { postCoverImage } from '../../../api/service/ImageService';
+import { SessionLogger } from '../../../utils';
+import { api } from '../../../api/config/api';
+
+const logger = new SessionLogger('create');
 
 interface Props {
   setViewCoverDeco: React.Dispatch<React.SetStateAction<boolean>>;
@@ -103,24 +106,14 @@ export default function CoverStyle({
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
-      try {
-        const types = await getCoverTypes();
-        setCoverTypes(types);
-        setSelectedImageIndex(ImageIndex);
-        setBackgroundImage(coverTypes[ImageIndex]?.editImageUrl);
-        console.log(types);
-      } catch (err) {
-        console.error(err);
-      }
+      const types = await getCoverTypes();
+      setCoverTypes(types);
+      setSelectedImageIndex(ImageIndex);
+      setBackgroundImage(coverTypes[ImageIndex]?.editImageUrl);
     };
     const fetchFonts = async () => {
-      try {
-        const types = await getAllFont();
-        setFonts(types);
-        console.log(types);
-      } catch (err) {
-        console.error(err);
-      }
+      const types = await getAllFont();
+      setFonts(types);
     };
     fetchCoverTypes();
     fetchFonts();
@@ -145,12 +138,13 @@ export default function CoverStyle({
 
   // 폰트 바를 클릭할 때 input에 포커스를 유지시켜 키보드가 내려가지 않도록 하기
   const handlePopupClick = (e: React.MouseEvent) => {
-    console.log('팝업 클릭 함수 실행');
+    logger.debug('팝업 클릭 함수 실행');
     // FontPopup을 클릭하면 input에 포커스를 유지
     if (popupRef.current) {
-      console.log('팝업 클릭함');
+      logger.info('팝업 클릭함');
+
       if (inputRef.current) {
-        console.log('인풋에 포커스');
+        logger.debug('인풋에 포커스');
         inputRef.current.focus();
       }
       // input에 포커스를 유지시켜 키보드를 올려둠
@@ -212,42 +206,26 @@ export default function CoverStyle({
           const responseBlob = await fetch(originalImage).then((res) =>
             res.blob(),
           );
-          console.log(responseBlob);
 
           // Step 1: URL 발급 요청
           const imageUrlRequest: ImageUrlRequest = {
             imgExtension: ImageExtension.JPG,
           };
 
-          try {
-            const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
-            console.log('PreSigned URL: ', preSignedUrl);
+          const { preSignedUrl, key } = await postCoverImage(imageUrlRequest);
 
-            // Step 2: presigned URL로 이미지 업로드
-            await fetch(preSignedUrl, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'image/jpeg', // MIME type 설정
-              },
-              body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
-            });
+          // Step 2: presigned URL로 이미지 업로드
+          await fetch(preSignedUrl, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'image/jpeg', // MIME type 설정
+            },
+            body: responseBlob, // Blob으로 변환된 이미지 본문에 추가
+          });
 
-            // Step 3: 업로드가 완료되면 S3 URL 생성
-            const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
-            console.log('Image uploaded successfully to S3!');
-            console.log('Image URL: ', s3ImageUrl);
-            setCroppedImage(s3ImageUrl);
-            setCroppedAreaPixels(null);
-          } catch (error) {
-            if (axios.isAxiosError(error)) {
-              console.error(
-                'Error uploading image: ',
-                error.response?.data || (error as Error).message, // 타입 단언 추가
-              );
-            } else {
-              console.error('Unexpected error: ', error);
-            }
-          }
+          // Step 3: 업로드가 완료되면 S3 URL 생성
+          const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
+          setCroppedImage(s3ImageUrl);
           setCroppedAreaPixels(null);
         }
       }
@@ -262,7 +240,6 @@ export default function CoverStyle({
         return;
       }
       const newImageUrl = URL.createObjectURL(e.target.files[0]);
-      console.log('New Image URL: ', newImageUrl);
       setOriginalImage(newImageUrl); // 원본 이미지를 설정
       setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
