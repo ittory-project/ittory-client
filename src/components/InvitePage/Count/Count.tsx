@@ -78,26 +78,22 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   }, []);
 
   const handleSubmit = async () => {
-    try {
-      const count = Number(selectNumber);
-      const id = letterId;
-      const coverid = coverId;
+    const count = Number(selectNumber);
+    const id = letterId;
+    const coverid = coverId;
 
-      const requestBody = { letterId: id, repeatCount: count };
-      await postRepeatCount(requestBody);
-      await postRandom({ letterId: id });
+    const requestBody = { letterId: id, repeatCount: count };
+    await postRepeatCount(requestBody);
+    await postRandom({ letterId: id });
 
-      startLetterWs(letterId);
-      navigate('/Connection', {
-        state: {
-          letterId: letterId,
-          coverId: coverid,
-          bg: background,
-        },
-      });
-    } catch (err) {
-      logger.error('편지 반복 횟수, 참여자 작성 순서 설정 API 실패', err);
-    }
+    startLetterWs(letterId);
+    navigate('/Connection', {
+      state: {
+        letterId: letterId,
+        coverId: coverid,
+        bg: background,
+      },
+    });
   };
 
   // Swiper 참조를 위한 useRef

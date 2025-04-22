@@ -129,13 +129,8 @@ export async function postEnter(
   letterId: number,
   nickname: PostEnterRequestBody,
 ): Promise<LetterEnterResponse> {
-  try {
-    const response = await api.post(`api/letter/enter/${letterId}`, nickname);
-    return response.data.data;
-  } catch (error) {
-    console.error('Error in postEnter:', error);
-    throw error;
-  }
+  const response = await api.post(`api/letter/enter/${letterId}`, nickname);
+  return response.data.data;
 }
 
 // 편지 내용 상세 조회 API

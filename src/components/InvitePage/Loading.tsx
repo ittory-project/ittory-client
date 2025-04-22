@@ -22,13 +22,9 @@ export const Loading = ({ loadstatus }: Props) => {
     const letterId = Number(localStorage.getItem('letterId'));
     const userName = localStorage.getItem('userName');
     const guideOpen = localStorage.getItem('guideOpen');
-    try {
-      navigate('/Invite', {
-        state: { letterId, userName, guideOpen },
-      });
-    } catch (err) {
-      console.error('데이터를 로딩하는 중 오류 발생:', err);
-    }
+    navigate('/Invite', {
+      state: { letterId, userName, guideOpen },
+    });
   };
 
   useEffect(() => {

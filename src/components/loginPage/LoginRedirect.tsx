@@ -17,18 +17,13 @@ export const LoginRedirect = () => {
         return;
       }
 
-      try {
-        await kakaoLogin(kakaoSocialLoginCode);
+      await kakaoLogin(kakaoSocialLoginCode);
 
-        if (localStorage.letterId) {
-          const letterId = localStorage.letterId;
-          navigate(`/join/${letterId}`);
-        } else {
-          navigate('/');
-        }
-      } catch (error) {
-        // TODO: 오류 설명을 띄우기
-        logger.error('소셜 로그인 도중 오류 발생', error);
+      if (localStorage.letterId) {
+        const letterId = localStorage.letterId;
+        navigate(`/join/${letterId}`);
+      } else {
+        navigate('/');
       }
     };
 

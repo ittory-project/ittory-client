@@ -63,17 +63,13 @@ export const WriteElement = ({
     if (text.length <= 0) {
       return;
     }
-    try {
-      // writeLetterWs 완료 여부를 기다림
-      // await writeLetterWs(letterNumId, Number(repeat), text);
-      // clientRef를 통해 client 객체에 접근
-      clientRef.current?.publish({
-        destination: `/ws/letter/${letterNumId}/elements`,
-        body: JSON.stringify({ sequence: sequence, content: text }),
-      });
-    } catch (e) {
-      logger.debug('작성 완료 실패', e);
-    }
+    // writeLetterWs 완료 여부를 기다림
+    // await writeLetterWs(letterNumId, Number(repeat), text);
+    // clientRef를 통해 client 객체에 접근
+    clientRef.current?.publish({
+      destination: `/ws/letter/${letterNumId}/elements`,
+      body: JSON.stringify({ sequence: sequence, content: text }),
+    });
   };
 
   // 접속 시 무조건 focusing 되도록 해야 키보드가 올라온다.
