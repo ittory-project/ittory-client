@@ -1,4 +1,4 @@
-import { api, BaseResponse } from '../config/api';
+import { api } from '../config/api';
 import {
   RandomPostRequest,
   RandomPostResponse,
@@ -16,22 +16,6 @@ export async function postRandom(
   );
   return response.data;
 }
-/*
-export async function postNickname(
-  data: NicknamePostRequest,
-  letterId: number,
-): Promise<NicknamePostResponse> {
-  try {
-    const response = await api.post<BaseResponse<NicknamePostResponse>>(
-      `api/participant/nickname/${letterId}`,
-      data,
-    );
-    return response.data.data;
-  } catch (e) {
-    console.error(e);
-    throw e;
-  }
-}*/
 
 //닉네임 삭제
 export async function patchNickname(

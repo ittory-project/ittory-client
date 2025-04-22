@@ -2,6 +2,9 @@ import { Home } from '../../components/homePage/Home';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { quitLetterWs } from '../../api/service/WsService';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('home');
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -54,7 +57,7 @@ export const HomePage = () => {
     if (localStorage.getItem('letterId')) {
       const letterId = Number(localStorage.getItem('letterId'));
       quitLetterWs(letterId);
-      console.log('소켓퇴장처리');
+      logger.debug('소켓퇴장처리');
       localStorage.removeItem('letterId');
     }
     localStorage.removeItem('receiver');

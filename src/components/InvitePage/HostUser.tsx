@@ -25,6 +25,9 @@ import { getFontById } from '../../api/service/FontService';
 import { LetterDetailGetResponse } from '../../api/model/LetterModel';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
 import barShadow from '../../../public/assets/invite/shadow.svg';
+import { SessionLogger } from '../../utils/SessionLogger';
+
+const logger = new SessionLogger('invite');
 
 interface Props {
   guideOpen: string;
@@ -62,51 +65,27 @@ export const HostUser = ({
   const [selectfont, setSelectfont] = useState<string>('');
   const [receiverName, setReceiverName] = useState<string>('');
 
-  console.log('방장 랜더링');
-
   useEffect(() => {
-    /*const fetchCoverTypes = async () => {
-      try {
-        const types = await getCoverTypes();
-        setCoverTypes(types);
-      } catch (err) {
-        console.error(err);
-      }
-    };*/
     const fetchLetterInfo = async () => {
-      try {
-        const letterData = await getLetterInfo(letterId);
-        setCropImg(letterData.coverPhotoUrl);
-        setTitle(letterData.title);
-        setDeliverDay(parseISO(letterData.deliveryDate));
-        setReceiverName(letterData.receiverName);
-        setSelectedImageIndex(letterData.coverTypeId);
-        setFontId(letterData.fontId);
+      const letterData = await getLetterInfo(letterId);
+      setCropImg(letterData.coverPhotoUrl);
+      setTitle(letterData.title);
+      setDeliverDay(parseISO(letterData.deliveryDate));
+      setReceiverName(letterData.receiverName);
+      setSelectedImageIndex(letterData.coverTypeId);
+      setFontId(letterData.fontId);
 
-        const types = await getCoverTypes();
-        setCoverTypes(types);
+      const types = await getCoverTypes();
+      setCoverTypes(types);
 
-        const myData = await getMyPage();
-        setMemberId(myData.memberId);
-        setName(myData.name);
-      } catch (err) {
-        console.error(err);
-      }
+      const myData = await getMyPage();
+      setMemberId(myData.memberId);
+      setName(myData.name);
     };
-    /*
-    const fetchMyPageData = async () => {
-      try {
-        const myData = await getMyPage();
-        setMemberId(myData.memberId);
-        setName(myData.name);
-      } catch (err) {
-        console.error("Error fetching my data:", err);
-      }
-    };*/
+
     const fetchFont = async () => {
       const fontdata = await getFontById(fontId);
       setSelectfont(fontdata.value);
-      console.log(selectfont);
     };
 
     //fetchCoverTypes();
@@ -185,8 +164,8 @@ export const HostUser = ({
         alert('텍스트 복사에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Fallback copy failed:', error);
       alert('텍스트 복사에 실패했습니다.');
+      throw error;
     } finally {
       document.body.removeChild(textArea);
     }
@@ -219,13 +198,13 @@ export const HostUser = ({
           await navigator.share({
             url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
           });
-          console.log('공유 성공');
+          logger.debug('공유 성공');
         } catch (e) {
-          console.log('공유 실패');
+          logger.error('공유 실패', e);
         }
       }
     } else {
-      console.log('공유 실패');
+      logger.debug('공유 실패');
     }
   };
 

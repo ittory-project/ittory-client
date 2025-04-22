@@ -16,12 +16,8 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
 
   useEffect(() => {
     const fetchMyPageData = async () => {
-      try {
-        const myPageData = await getMyPage();
-        setName(myPageData.name);
-      } catch (err) {
-        console.error('Error fetching my page data:', err);
-      }
+      const myPageData = await getMyPage();
+      setName(myPageData.name);
     };
     fetchMyPageData();
   }, []);

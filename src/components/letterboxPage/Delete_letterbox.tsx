@@ -32,16 +32,12 @@ export const Delete_letterbox = ({
     setPopup(false);
   };
   const handleDelete = async () => {
-    try {
-      await deleteLetterboxLetter(letterId);
-      localStorage.setItem('deletedLetter', '편지가 삭제되었어요');
-      setPopup(false);
-      setIsModalOpen(false);
-      setOpenLetter(false);
-      setDeleteAlert('편지가 삭제되었어요');
-    } catch (error) {
-      console.error('Failed to delete letter:', error);
-    }
+    await deleteLetterboxLetter(letterId);
+    localStorage.setItem('deletedLetter', '편지가 삭제되었어요');
+    setPopup(false);
+    setIsModalOpen(false);
+    setOpenLetter(false);
+    setDeleteAlert('편지가 삭제되었어요');
   };
 
   return (

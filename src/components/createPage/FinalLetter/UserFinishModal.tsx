@@ -51,12 +51,8 @@ export default function UserFinishModal({
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
-      try {
-        const types = await getCoverTypes();
-        setCoverTypes(types);
-      } catch (err) {
-        console.error(err);
-      }
+      const types = await getCoverTypes();
+      setCoverTypes(types);
     };
     fetchCoverTypes();
   }, []);
@@ -73,39 +69,22 @@ export default function UserFinishModal({
 
         // UTC로 변환된 날짜를 출력 (하루 전 문제 해결)
         setAdjustDay(adjustedDeliverDay.toISOString());
-        console.log(adjustDay);
       }
     };
     changeType();
   }, [deliverDay]);
 
-  /*const handleNickname = async (letterId: number) => {
-    if (myName) {
-      const requestBody: NicknamePostRequest = {
-        nickname: myName,
-      };
-      const response = await postNickname(requestBody, Number(letterId));
-      console.log(response);
-    }
-  };*/
-
   const fetchEnter = async (letterId: number) => {
-    try {
-      const nickname=myName;
-      const enterresponse = await postEnter(Number(letterId),{nickname});
-      console.log(enterresponse);
-      if(enterresponse.enterStatus==true){
-        navigate('/Invite', {
-          state: {
-            letterId: letterId,
-            guideOpen: false,
-            userName: myName,
-          },
-        });
-      }
-      //handleNickname(letterId);
-    } catch (err) {
-      console.error('Error fetching mydata:', err);
+    const nickname = myName;
+    const enterresponse = await postEnter(Number(letterId), { nickname });
+    if (enterresponse.enterStatus == true) {
+      navigate('/Invite', {
+        state: {
+          letterId: letterId,
+          guideOpen: false,
+          userName: myName,
+        },
+      });
     }
   };
 
@@ -120,21 +99,15 @@ export default function UserFinishModal({
       title: title,
       coverPhotoUrl: croppedImage,
     };
-    console.log(requestBody);
 
-    try {
-      const response = await postLetter(requestBody);
-      const letterId = response.letterId;
+    const response = await postLetter(requestBody);
+    const letterId = response.letterId;
 
-      localStorage.setItem('letterId', String(letterId));
-      localStorage.setItem('guideOpen', String(false));
-      localStorage.setItem('userName', myName);
+    localStorage.setItem('letterId', String(letterId));
+    localStorage.setItem('guideOpen', String(false));
+    localStorage.setItem('userName', myName);
 
-      fetchEnter(letterId);
-    
-    } catch (error) {
-      console.error('Error posting letter:', error);
-    }
+    fetchEnter(letterId);
   };
 
   const handleguide = async () => {
@@ -148,20 +121,15 @@ export default function UserFinishModal({
       title: title,
       coverPhotoUrl: croppedImage,
     };
-    console.log(requestBody);
 
-    try {
-      const response = await postLetter(requestBody);
-      const letterId = response.letterId;
+    const response = await postLetter(requestBody);
+    const letterId = response.letterId;
 
-      localStorage.setItem('letterId', String(letterId));
-      localStorage.setItem('guideOpen', String(true));
-      localStorage.setItem('userName', myName);
+    localStorage.setItem('letterId', String(letterId));
+    localStorage.setItem('guideOpen', String(true));
+    localStorage.setItem('userName', myName);
 
-      fetchEnter(letterId);
-    } catch (error) {
-      console.error('Error posting letter:', error);
-    }
+    fetchEnter(letterId);
   };
 
   useEffect(() => {

@@ -27,6 +27,9 @@ import bg2 from '../../../public/assets/connect/bg2.png';
 import bg3 from '../../../public/assets/connect/bg3.png';
 import bg4 from '../../../public/assets/connect/bg4.png';
 import bg5 from '../../../public/assets/connect/bg5.png';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('invite');
 
 interface Props {
   guideOpen: string;
@@ -61,10 +64,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
   const [background, setBackground] = useState<string | null>(null);
 
-  console.log('this is member page');
-
   useEffect(() => {
-    console.log(receiverName);
     if (receiverName.length > 9) {
       setSliceName(receiverName.slice(0, 9));
     } else {
@@ -74,28 +74,19 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   useEffect(() => {
     const fetchCoverTypes = async () => {
-      try {
-        const types = await getCoverTypes();
-        setCoverTypes(types);
-      } catch (err) {
-        console.error(err);
-      }
+      const types = await getCoverTypes();
+      setCoverTypes(types);
     };
     const fetchLetterInfo = async () => {
-      try {
-        const letterData = await getLetterInfo(letterId);
-        console.log('letterData:', letterData);
-        setCropImg(letterData.coverPhotoUrl);
-        setDeliverDay(parseISO(letterData.deliveryDate));
-        setReceiverName(letterData.receiverName);
-        setSelectedImageIndex(letterData.coverTypeId);
-        localStorage.setItem('coverId', String(letterData.coverTypeId));
-        setBackground(backgroundImages[letterData.coverTypeId]);
-        setFontId(letterData.fontId);
-        setTitle(letterData.title);
-      } catch (err) {
-        console.error(err);
-      }
+      const letterData = await getLetterInfo(letterId);
+      setCropImg(letterData.coverPhotoUrl);
+      setDeliverDay(parseISO(letterData.deliveryDate));
+      setReceiverName(letterData.receiverName);
+      setSelectedImageIndex(letterData.coverTypeId);
+      localStorage.setItem('coverId', String(letterData.coverTypeId));
+      setBackground(backgroundImages[letterData.coverTypeId]);
+      setFontId(letterData.fontId);
+      setTitle(letterData.title);
     };
 
     fetchCoverTypes();
@@ -124,7 +115,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     const fetchFont = async () => {
       const fontdata = await getFontById(fontId);
       setSelectfont(fontdata.value);
-      console.log(selectfont);
     };
     if (fontId > -1) {
       fetchFont();
@@ -171,8 +161,8 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
         alert('텍스트 복사에 실패했습니다.');
       }
     } catch (error) {
-      console.error('Fallback copy failed:', error);
       alert('텍스트 복사에 실패했습니다.');
+      throw error;
     } finally {
       document.body.removeChild(textArea);
     }
@@ -205,13 +195,13 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
           await navigator.share({
             url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
           });
-          console.log('공유 성공');
+          logger.debug('공유 성공');
         } catch (e) {
-          console.log('공유 실패');
+          logger.error('공유 실패', e);
         }
       }
     } else {
-      console.log('공유 실패');
+      logger.error('공유 실패');
     }
   };
 

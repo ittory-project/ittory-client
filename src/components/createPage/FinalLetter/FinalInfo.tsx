@@ -66,14 +66,10 @@ export default function FinalInfo({
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const types = await getCoverTypes();
-        setCoverTypes(types);
-        const user = await getVisitUser();
-        setVisit(user.isVisited);
-      } catch (err) {
-        console.error(err);
-      }
+      const types = await getCoverTypes();
+      setCoverTypes(types);
+      const user = await getVisitUser();
+      setVisit(user.isVisited);
     };
 
     fetchData();
@@ -155,7 +151,6 @@ export default function FinalInfo({
               <EditBtn
                 onClick={() => {
                   openCoveredit();
-                  console.log('커버모달오픈');
                 }}
               >
                 <img

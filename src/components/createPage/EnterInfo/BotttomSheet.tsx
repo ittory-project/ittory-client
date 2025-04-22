@@ -34,7 +34,6 @@ export default function BottomSheet({
 
   const handleButton = () => {
     if (deliverDay !== null) {
-      console.log(deliverDay);
       closeModal();
     }
   };

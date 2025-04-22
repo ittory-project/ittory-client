@@ -6,6 +6,9 @@ import {
   deleteLetter,
   getLetterInfo,
 } from '../../../api/service/LetterService';
+import { SessionLogger } from '../../../utils';
+
+const logger = new SessionLogger('invite');
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,35 +23,24 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
 
   useEffect(() => {
     const fetchLetterInfo = async () => {
-      try {
-        const letterData = await getLetterInfo(letterId);
-        console.log(letterData);
-      } catch (err) {
-        console.error(err);
-      }
+      await getLetterInfo(letterId);
     };
 
     fetchLetterInfo();
   }, []);
 
   const handleConfirm = async () => {
-    try {
-      console.log(letterId);
-      const response = deleteLetter(
-        letterId,
-        () => {
-          console.log('삭제 성공');
-        },
-        (error) => {
-          console.error('삭제 실패:', error);
-        },
-      );
-      endLetterWs(letterId);
-      console.log(response);
-      setViewConfirm(true);
-    } catch (err) {
-      console.error('error:', err);
-    }
+    deleteLetter(
+      letterId,
+      () => {
+        logger.debug('삭제 성공');
+      },
+      (error) => {
+        logger.error('삭제 실패:', error);
+      },
+    );
+    endLetterWs(letterId);
+    setViewConfirm(true);
   };
 
   return (

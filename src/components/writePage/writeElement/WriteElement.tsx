@@ -64,7 +64,6 @@ export const WriteElement = ({
       return;
     }
     try {
-      console.log(sequence, text);
       // writeLetterWs 완료 여부를 기다림
       // await writeLetterWs(letterNumId, Number(repeat), text);
       // clientRef를 통해 client 객체에 접근
@@ -73,7 +72,7 @@ export const WriteElement = ({
         body: JSON.stringify({ sequence: sequence, content: text }),
       });
     } catch (e) {
-      console.log(e);
+      logger.debug('작성 완료 실패', e);
     }
   };
 

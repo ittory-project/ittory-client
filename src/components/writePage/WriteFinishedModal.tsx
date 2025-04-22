@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { decodeLetterId } from '../../api/config/base64';
 import styled from 'styled-components';
 import { postPartiLetterBox } from '../../api/service/LetterBoxService';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('write');
 
 interface FinishModalProps {
   isFirstUser: boolean;
@@ -15,13 +18,13 @@ export const WriteFinishedModal = ({ isFirstUser }: FinishModalProps) => {
   const storeNowLetter = async () => {
     const response: boolean = await postPartiLetterBox(letterNumId);
     if (response) {
-      console.log('저장 성공');
+      logger.debug('저장 성공');
     } else {
-      console.log('저장 실패');
+      logger.debug('저장 실패');
     }
   };
   useEffect(() => {
-    console.log('저장할 유저인가?: ', isFirstUser);
+    logger.debug('첫 번째 유저 여부', isFirstUser);
     if (isFirstUser) {
       storeNowLetter();
     }

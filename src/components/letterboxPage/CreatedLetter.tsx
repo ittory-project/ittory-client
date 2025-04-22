@@ -48,16 +48,11 @@ export const CreatedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
-      try {
-        const letterdata = await getParticipatedLetter();
-        const counts = await getLetterCounts();
-        setLetterCounts(counts.participationLetterCount);
-        setLetters(letterdata.data.letters);
-        setLoad(false);
-        console.log(letters);
-      } catch (err) {
-        console.error('Error fetching letter counts:', err);
-      }
+      const letterdata = await getParticipatedLetter();
+      const counts = await getLetterCounts();
+      setLetterCounts(counts.participationLetterCount);
+      setLetters(letterdata.data.letters);
+      setLoad(false);
     };
 
     fetchLetter();
@@ -65,17 +60,11 @@ export const CreatedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
-      console.log('setDeletedAlert 실행');
-      try {
-        const letterdata = await getParticipatedLetter();
-        const counts = await getLetterCounts();
-        setLetterCounts(counts.participationLetterCount);
-        setLetters(letterdata.data.letters);
-        setLoad(false);
-        console.log(letters);
-      } catch (err) {
-        console.error('Error fetching letter counts:', err);
-      }
+      const letterdata = await getParticipatedLetter();
+      const counts = await getLetterCounts();
+      setLetterCounts(counts.participationLetterCount);
+      setLetters(letterdata.data.letters);
+      setLoad(false);
     };
 
     fetchLetter();
@@ -93,21 +82,14 @@ export const CreatedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
-      console.log('setDeleteAlert 실행');
       if (deleteAlert !== null) {
-        try {
-          const letterdata = await getParticipatedLetter();
-          const counts = await getLetterCounts();
-          setLetterCounts(counts.participationLetterCount);
-          setLetters(letterdata.data.letters);
+        const letterdata = await getParticipatedLetter();
+        const counts = await getLetterCounts();
+        setLetterCounts(counts.participationLetterCount);
+        setLetters(letterdata.data.letters);
 
-          console.log('새로운데이터 가져옴');
-
-          const deletedMessage = localStorage.getItem('deletedLetter');
-          setDeletedAlert(deletedMessage);
-        } catch (err) {
-          console.error('Error fetching letter counts:', err);
-        }
+        const deletedMessage = localStorage.getItem('deletedLetter');
+        setDeletedAlert(deletedMessage);
       }
     };
 
@@ -128,8 +110,6 @@ export const CreatedLetter = ({
       <StyledDeliverDay>{`${year}. ${month}. ${day} (${weekday}) 전달`}</StyledDeliverDay>
     );
   };
-
-  console.log(selectId);
 
   return (
     <>

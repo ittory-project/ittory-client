@@ -19,6 +19,9 @@ import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
 import { getFontById } from '../../api/service/FontService';
 import { getCoverTypeById } from '../../api/service/CoverTypeService';
 import { Pagination } from '../common/Pagination';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('letterbox');
 
 interface Props {
   setOpenLetter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -106,28 +109,23 @@ export const Letter = ({
     window.localStorage.setItem('resetTime', '');
 
     const fetchData = async () => {
-      try {
-        // Letter 상세 정보 가져오기
-        const response = await getLetterDetailInfo(Number(letterId));
-        setLetterInfo(response);
+      // Letter 상세 정보 가져오기
+      const response = await getLetterDetailInfo(Number(letterId));
+      setLetterInfo(response);
 
-        // 참여자 목록 문자열화
-        const nicknameString = response.elements
-          .map((element) => element.nickname)
-          .join(', ');
-        setPartiList(nicknameString);
-        setElementLength(response.elements.length);
+      // 참여자 목록 문자열화
+      const nicknameString = response.elements
+        .map((element) => element.nickname)
+        .join(', ');
+      setPartiList(nicknameString);
+      setElementLength(response.elements.length);
 
-        // 스타일 정보 가져오기
-        const fontResponse = await getFontById(response.fontId);
-        if (fontResponse) setFont(fontResponse);
+      // 스타일 정보 가져오기
+      const fontResponse = await getFontById(response.fontId);
+      if (fontResponse) setFont(fontResponse);
 
-        const coverTypeResponse = await getCoverTypeById(response.coverTypeId);
-        if (coverTypeResponse) setCoverType(coverTypeResponse);
-        console.log(coverTypeResponse);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+      const coverTypeResponse = await getCoverTypeById(response.coverTypeId);
+      if (coverTypeResponse) setCoverType(coverTypeResponse);
     };
 
     fetchData();
@@ -135,7 +133,9 @@ export const Letter = ({
 
   const renderPageContent = () => {
     if (!coverType || !font || !letterInfo || !letterId) {
-      console.log(coverType, font, letterInfo);
+      logger.debug(
+        `편지를 찾을 수 없습니다. ${coverType}, ${font}, ${letterInfo}, ${letterId}`,
+      );
       return <div>편지를 찾을 수 없습니다.</div>;
     } else {
       if (currentPage === 1)
