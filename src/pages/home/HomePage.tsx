@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { quitLetterWs } from '../../api/service/WsService';
 import { SessionLogger } from '../../utils';
+import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
 
 const logger = new SessionLogger('home');
 
@@ -56,8 +57,10 @@ export const HomePage = () => {
     }
     if (localStorage.getItem('letterId')) {
       const letterId = Number(localStorage.getItem('letterId'));
-      quitLetterWs(letterId);
-      logger.debug('소켓퇴장처리');
+      if (accessTokenRepository.isLoggedIn()) {
+        quitLetterWs(letterId);
+        logger.debug('소켓퇴장처리');
+      }
       localStorage.removeItem('letterId');
     }
     localStorage.removeItem('receiver');
