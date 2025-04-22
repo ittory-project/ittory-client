@@ -33,16 +33,21 @@ declare global {
  */
 export class SessionLogger {
   private feature: Feature;
-  private logs: string[] = [];
+
+  private static logs: string[] = [];
   private static enabledFeatures: Feature[] = [];
   private static enabledLogLevels: LogLevel[] = [];
 
   constructor(feature: Feature) {
     this.feature = feature;
-    this.loadLogs();
   }
 
   static {
+    const storedLogs = sessionStorage.getItem('logs');
+    if (storedLogs) {
+      SessionLogger.logs = JSON.parse(storedLogs);
+    }
+
     window.exportSessionLogs = SessionLogger.exportAsTxt;
   }
 
@@ -58,7 +63,7 @@ export class SessionLogger {
     const rawData = JSON.parse(
       sessionStorage.getItem('logs') ?? '[]',
     ) as string[];
-    const content = rawData.join('\r\n');
+    const content = rawData.join('\r\n\n');
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -87,16 +92,9 @@ export class SessionLogger {
     this.log('debug', ...args);
   }
 
-  private loadLogs() {
-    const storedLogs = sessionStorage.getItem('logs');
-    if (storedLogs) {
-      this.logs = JSON.parse(storedLogs);
-    }
-  }
-
   private appendLog(log: string) {
-    this.logs.push(log);
-    sessionStorage.setItem('logs', JSON.stringify(this.logs));
+    SessionLogger.logs.push(log);
+    sessionStorage.setItem('logs', JSON.stringify(SessionLogger.logs));
   }
 
   private formatContent(args: unknown[]): string {
