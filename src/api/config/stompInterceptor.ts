@@ -2,11 +2,14 @@ import { Client } from '@stomp/stompjs';
 import { forceLogout } from './logout';
 import { accessTokenRepository } from './AccessTokenRepository';
 import { WEBSOCKET_CONFIG } from './constants';
+import { SessionLogger } from '../../utils/SessionLogger';
+
+const logger = new SessionLogger('websocket');
 
 export const stompClient = (): Client => {
   const authorization = accessTokenRepository.get();
   if (!authorization) {
-    throw new Error('WebSocket 인증에 필요한 엑세스 토큰이 없습니다.');
+    throw new Error(`WebSocket 인증에 필요한 엑세스 토큰이 없습니다.`);
   }
 
   const client = new Client({
@@ -15,11 +18,28 @@ export const stompClient = (): Client => {
       Authorization: authorization,
     },
     debug: (str) => {
-      console.log(str);
+      logger.debug(``, str);
     },
     // NOTE: 토큰 갱신 시 기본값인 5000ms는 너무 길어서, 500ms 대기 후 재연결
     reconnectDelay: WEBSOCKET_CONFIG.RECONNECT_DELAY,
+    logRawCommunication: true,
   });
+
+  client.onUnhandledFrame = (frame) => {
+    logger.error('[onUnhandledFrame] ', frame);
+  };
+
+  client.onUnhandledMessage = (message) => {
+    logger.error('[onUnhandledMessage] ', message);
+  };
+
+  client.onUnhandledReceipt = (receipt) => {
+    logger.error('[onUnhandledReceipt] ', receipt);
+  };
+
+  client.onWebSocketError = (error) => {
+    logger.error('[onWebSocketError] ', error);
+  };
 
   client.onStompError = async (frame) => {
     if (frame.headers.message?.toLowerCase().includes('unauthorized')) {
@@ -32,16 +52,12 @@ export const stompClient = (): Client => {
         }
         client.activate();
       } catch (error) {
-        console.error('WebSocket 요청 중 토큰 갱신에 실패:', error);
+        logger.error('WebSocket 요청 중 토큰 갱신에 실패:', error);
         forceLogout();
       }
     } else {
-      console.error('STOMP error:', frame.headers.message);
+      logger.error('STOMP error:', frame.headers.message);
     }
-  };
-
-  client.onDisconnect = () => {
-    console.log('Disconnected from WebSocket');
   };
 
   return client;

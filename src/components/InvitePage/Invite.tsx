@@ -212,12 +212,9 @@ export const Invite = () => {
     const client = stompClient();
 
     client.onConnect = () => {
-      console.log('WebSocket connected');
-
-      // WebSocket 구독
+            // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message) => {
-        console.log('Received message:', message);
-        try {
+                try {
           const response: WsEnterResponse | WsExitResponse = JSON.parse(
             message.body,
           );
