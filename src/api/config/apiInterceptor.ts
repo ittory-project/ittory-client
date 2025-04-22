@@ -94,7 +94,12 @@ export const tryTokenRefresh = async (
     return api(config);
   }
 
-  logger.error('처리하지 못한 네트워크 오류:', error);
+  // NOTE: 전체 객체를 보내면 시인성이 부족
+  // @ts-expect-error code, message 타입이 추론되지 않음 (실제로 존재)
+  const { method, url, data, headers, code, message } = config;
+  logger.error(
+    `네트워크 오류: code: [${code}], message: [${message}], name: [${name}], url: [${method} ${url}], requestData: [${data}], headers: [${headers}]`,
+  );
 
   // NOTE: error 객체를 반환하면 Promise.resolve()로 감싸져 성공 응답으로 처리되므로,
   // 명시적으로 Promise.reject()로 반환해야 한다.
