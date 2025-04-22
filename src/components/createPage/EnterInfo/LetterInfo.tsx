@@ -44,12 +44,8 @@ export default function LetterInfo({
 
   useEffect(() => {
     const fetchMyPageData = async () => {
-      try {
-        const myPageData = await getMyPage();
-        setName(myPageData.name);
-      } catch (err) {
-        console.error('Error fetching my page data:', err);
-      }
+      const myPageData = await getMyPage();
+      setName(myPageData.name);
     };
     fetchMyPageData();
   }, []);
@@ -76,10 +72,6 @@ export default function LetterInfo({
         } else {
           setKeyboardVisible(false);
         }
-
-        console.log(window.innerHeight);
-        console.log(window.visualViewport.height);
-        console.log(keyboardHeight);
       }
     };
 

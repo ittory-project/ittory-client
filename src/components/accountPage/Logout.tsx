@@ -14,15 +14,10 @@ export const Logout = ({ setPopup }: Props) => {
   };
 
   const handleLogout = async () => {
-    try {
-      const logoutResponse = await postLogout();
-      localStorage.removeItem('jwt');
-      localStorage.clear();
-      console.log('Logout successful:', logoutResponse);
-      navigate('/', { replace: true });
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    await postLogout();
+    localStorage.removeItem('jwt');
+    localStorage.clear();
+    navigate('/', { replace: true });
   };
 
   return (

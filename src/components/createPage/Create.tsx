@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import CoverDeco from './CoverDeco/CoverStyle';
 import FinalInfo from './FinalLetter/FinalInfo';
 import { Loading } from './Loading';
+import { SessionLogger } from '../../utils/SessionLogger';
+
+const logger = new SessionLogger('create');
 
 export const Create = () => {
   const [viewStartpage, setViewStartpage] = useState<boolean>(true);
@@ -20,7 +23,7 @@ export const Create = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const [load, setLoad] = useState<boolean>(true);
 
-  console.log(selectFid);
+  logger.debug('선택된 폰트:', selectFid, selectfont);
 
   useEffect(() => {
     if (localStorage.getItem('title')) {

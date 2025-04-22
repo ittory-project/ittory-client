@@ -5,6 +5,9 @@ import { CreatedLetter } from './CreatedLetter';
 import { ReceivedLetter } from './ReceivedLetter';
 import prev from '../../../public/assets/prev.svg';
 import { useParams } from 'react-router-dom';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('letterbox');
 
 export const LetterBox = () => {
   const navigate = useNavigate();
@@ -31,12 +34,8 @@ export const LetterBox = () => {
   useEffect(() => {
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
-        try {
-          const deletedMessage = localStorage.getItem('deletedLetter');
-          setDeletedAlert(deletedMessage);
-        } catch (err) {
-          console.error('Error fetching letter counts:', err);
-        }
+        const deletedMessage = localStorage.getItem('deletedLetter');
+        setDeletedAlert(deletedMessage);
       }
     };
 
@@ -47,7 +46,7 @@ export const LetterBox = () => {
     const focusCreate = location.state?.focusCreate;
     const focusReceive = location.state?.focusReceive;
 
-    console.log(focusCreate, focusReceive);
+    logger.debug(focusCreate, focusReceive);
 
     if (focusCreate) {
       setCreate(focusCreate);
@@ -59,17 +58,17 @@ export const LetterBox = () => {
     }
 
     if (deletedAlert) {
-      console.log(deletedAlert);
+      logger.debug(deletedAlert);
       // deletedAlert 값이 있을 때만 타이머 설정
       const timer = setTimeout(() => {
-        console.log('변수 알림으로 실행');
+        logger.debug('변수 알림으로 실행');
         setDeletedAlert(null);
         setDeleteAlert(null);
         localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
     } else if (localStorage.getItem('deletedLetter')) {
-      console.log('로컬스토리지에 있음');
+      logger.debug('로컬스토리지에 있음');
       const timer = setTimeout(() => {
         setDeletedAlert(null);
         setDeleteAlert(null);
@@ -78,7 +77,7 @@ export const LetterBox = () => {
       return () => clearTimeout(timer);
     } else {
       const deletedMessage = localStorage.getItem('deletedLetter');
-      console.log('삭제된 메시지:', deletedMessage);
+      logger.debug('삭제된 메시지:', deletedMessage);
       setDeletedAlert(deletedMessage);
     }
   }, []);
@@ -107,18 +106,17 @@ export const LetterBox = () => {
 
   useEffect(() => {
     if (deletedAlert) {
-      console.log('이거 실행');
-      console.log(deletedAlert);
+      logger.debug(deletedAlert);
       // deletedAlert 값이 있을 때만 타이머 설정
       const timer = setTimeout(() => {
-        console.log('변수 알림으로 실행');
+        logger.debug('변수 알림으로 실행');
         setDeletedAlert(null);
         setDeleteAlert(null);
         localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
     } else if (localStorage.getItem('deletedLetter')) {
-      console.log('로컬스토리지에 있음');
+      logger.debug('로컬스토리지에 있음');
       const timer = setTimeout(() => {
         setDeletedAlert(null);
         setDeleteAlert(null);
@@ -127,25 +125,23 @@ export const LetterBox = () => {
       return () => clearTimeout(timer);
     } else {
       const deletedMessage = localStorage.getItem('deletedLetter');
-      console.log('삭제된 메시지:', deletedMessage);
+      logger.debug('삭제된 메시지:', deletedMessage);
       setDeletedAlert(deletedMessage);
     }
   }, [deletedAlert]);
 
   useEffect(() => {
     if (deleteAlert) {
-      console.log('이거 실행2');
-      console.log(deleteAlert);
       // deletedAlert 값이 있을 때만 타이머 설정
       const timer = setTimeout(() => {
-        console.log('변수 알림으로 실행');
+        logger.debug('변수 알림으로 실행');
         setDeletedAlert(null);
         setDeleteAlert(null);
         localStorage.removeItem('deletedLetter');
       }, 2500);
       return () => clearTimeout(timer);
     } else if (localStorage.getItem('deletedLetter')) {
-      console.log('로컬스토리지에 있음');
+      logger.debug('로컬스토리지에 있음');
       const timer = setTimeout(() => {
         setDeletedAlert(null);
         setDeleteAlert(null);
@@ -154,7 +150,7 @@ export const LetterBox = () => {
       return () => clearTimeout(timer);
     } else {
       const deletedMessage = localStorage.getItem('deletedLetter');
-      console.log('삭제된 메시지:', deletedMessage);
+      logger.debug('삭제된 메시지:', deletedMessage);
       setDeletedAlert(deletedMessage);
     }
   }, [deleteAlert]);

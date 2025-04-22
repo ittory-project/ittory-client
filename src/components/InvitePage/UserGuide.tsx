@@ -15,7 +15,6 @@ interface Props {
 
 export const UserGuide = ({ setGuide }: Props) => {
   const guides = [guide1, guide2, guide3, guide4, guide5, guide6];
-  console.log('가이드 열림');
   const descriptions = [
     '방장이 편지를\n몇 번 이어 쓸 지 정해요',
     '편지 작성 순서는\n랜덤으로 정해져요',

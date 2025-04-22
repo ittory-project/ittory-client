@@ -48,17 +48,11 @@ export const ReceivedLetter = ({
 
   useEffect(() => {
     const fetchLetter = async () => {
-      try {
-        const letterdata = await getReceivedLetter();
-        const counts = await getLetterCounts();
-        setLetterCounts(counts.receiveLetterCount);
-        setLetters(letterdata.data.letters);
-        setLoad(false);
-        console.log(letterCounts);
-        console.log(letterdata);
-      } catch (err) {
-        console.error('Error fetching letter counts:', err);
-      }
+      const letterdata = await getReceivedLetter();
+      const counts = await getLetterCounts();
+      setLetterCounts(counts.receiveLetterCount);
+      setLetters(letterdata.data.letters);
+      setLoad(false);
     };
 
     fetchLetter();
@@ -76,24 +70,18 @@ export const ReceivedLetter = ({
   useEffect(() => {
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
-        try {
-          const letterdata = await getReceivedLetter();
-          const counts = await getLetterCounts();
-          setLetterCounts(counts.receiveLetterCount);
-          setLetters(letterdata.data.letters);
+        const letterdata = await getReceivedLetter();
+        const counts = await getLetterCounts();
+        setLetterCounts(counts.receiveLetterCount);
+        setLetters(letterdata.data.letters);
 
-          const deletedMessage = localStorage.getItem('deletedLetter');
-          setDeletedAlert(deletedMessage);
-        } catch (err) {
-          console.error('Error fetching letter counts:', err);
-        }
+        const deletedMessage = localStorage.getItem('deletedLetter');
+        setDeletedAlert(deletedMessage);
       }
     };
 
     fetchLetter();
   }, [deleteAlert]);
-
-  console.log(selectId);
 
   const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
     const date = new Date(deliverDate);

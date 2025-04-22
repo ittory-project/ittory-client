@@ -89,16 +89,13 @@ export function deleteLetter(
       if (response.status === 204) {
         onSuccess(); // 204 No Content 성공 시 콜백 호출
       } else {
-        console.error('Unexpected response:', response);
         onError(new Error('Unexpected response status'));
       }
     })
     .catch((err) => {
       if (err.response && err.response.data) {
-        console.error('API Error Response:', err.response.data);
         onError(err.response.data); // 에러 데이터 콜백 호출
       } else {
-        console.error('Unexpected error:', err);
         onError(err); // 예기치 않은 에러 콜백 호출
       }
     });
@@ -129,13 +126,8 @@ export async function postEnter(
   letterId: number,
   nickname: PostEnterRequestBody,
 ): Promise<LetterEnterResponse> {
-  try {
-    const response = await api.post(`api/letter/enter/${letterId}`, nickname);
-    return response.data.data;
-  } catch (error) {
-    console.error('Error in postEnter:', error);
-    throw error;
-  }
+  const response = await api.post(`api/letter/enter/${letterId}`, nickname);
+  return response.data.data;
 }
 
 // 편지 내용 상세 조회 API
