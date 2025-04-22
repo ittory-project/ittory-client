@@ -182,7 +182,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
             setCopied(true);
             setTimeout(() => setCopied(false), 3000);
           } catch (error) {
-            console.error('공유 실패: ', error);
+            logger.error('공유 실패: ', error);
             fallbackCopyTextToClipboard(shareTextPc);
           }
         } else {
