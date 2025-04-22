@@ -89,16 +89,13 @@ export function deleteLetter(
       if (response.status === 204) {
         onSuccess(); // 204 No Content 성공 시 콜백 호출
       } else {
-        console.error('Unexpected response:', response);
         onError(new Error('Unexpected response status'));
       }
     })
     .catch((err) => {
       if (err.response && err.response.data) {
-        console.error('API Error Response:', err.response.data);
         onError(err.response.data); // 에러 데이터 콜백 호출
       } else {
-        console.error('Unexpected error:', err);
         onError(err); // 예기치 않은 에러 콜백 호출
       }
     });
