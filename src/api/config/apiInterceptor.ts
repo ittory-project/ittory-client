@@ -15,7 +15,7 @@ import { SessionLogger } from '../../utils/SessionLogger';
 const logger = new SessionLogger('http');
 
 export const logRequest = (config: InternalAxiosRequestConfig) => {
-  logger.info(
+  logger.debug(
     `[Request] [${config.method?.toUpperCase()} ${config.url}] ${JSON.stringify(
       {
         params: config.params,
@@ -26,7 +26,7 @@ export const logRequest = (config: InternalAxiosRequestConfig) => {
   return config;
 };
 export const logResponse = (response: AxiosResponse) => {
-  logger.info(
+  logger.debug(
     `[Response] [${response.config.method?.toUpperCase()} ${response.config.url}] ${JSON.stringify(
       {
         status: response.status,
@@ -67,13 +67,13 @@ export const tryTokenRefresh = async (
 ) => {
   // Q. throw로 처리하면 더 깔끔할 것 같은데 조사 필요
   if (!axios.isAxiosError(error)) {
-    console.error(`AxiosError가 아닌 네트워크 오류: ${error}`);
+    logger.error(`AxiosError가 아닌 네트워크 오류: ${error}`);
     return Promise.reject(error);
   }
 
   const config = error?.config;
   if (!config) {
-    console.error(`Axios Config 객체가 없는 네트워크 오류: ${error}`);
+    logger.error(`Axios Config 객체가 없는 네트워크 오류: ${error}`);
     return Promise.reject(error);
   }
 
@@ -86,7 +86,7 @@ export const tryTokenRefresh = async (
       await accessTokenRepository.refresh();
       attachAccessToken(config);
     } catch (refreshError) {
-      console.error('HTTP 요청 중 토큰 갱신에 실패:', refreshError);
+      logger.error('HTTP 요청 중 토큰 갱신에 실패:', refreshError);
       forceLogout();
       throw refreshError;
     }
@@ -94,7 +94,7 @@ export const tryTokenRefresh = async (
     return api(config);
   }
 
-  console.error('처리하지 못한 네트워크 오류:', error);
+  logger.error('처리하지 못한 네트워크 오류:', error);
 
   // NOTE: error 객체를 반환하면 Promise.resolve()로 감싸져 성공 응답으로 처리되므로,
   // 명시적으로 Promise.reject()로 반환해야 한다.
