@@ -1,5 +1,10 @@
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
-type Feature = 'nav' | 'api' | 'error';
+const logLevelConsoleMap: Record<LogLevel, 'log' | 'warn' | 'error'> = {
+  info: 'log',
+  warn: 'warn',
+  error: 'error',
+  debug: 'log', // console.debug는 함수는 있으나, 동작이 없음
+};
 
 /**
  * Session(Tab) 단위로 로그를 출력하고 보관하는 Logger
@@ -111,6 +116,6 @@ export class SessionLogger {
     this.appendLog(logEntry);
 
     // 콘솔에 출력
-    console[type](`[${type}][${this.feature}]`, ...args);
+    console[logLevelConsoleMap[type]](`[${type}][${this.feature}]`, ...args);
   }
 }
