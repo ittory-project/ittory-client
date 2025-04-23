@@ -10,7 +10,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint --config ./eslint.config.js ./src && stylelint --config ./stylelint.config.js ./src",
-    "lint:fix": "eslint --config ./eslint.config.js --fix ./src && stylelint --config ./stylelint.config.js --fix ./src"
+    "lint:fix": "eslint --config ./eslint.config.js --fix ./src && stylelint --config ./stylelint.config.js --fix ./src",
+    "typecheck": "tsc --project ./tsconfig.app.json --noEmit",
+    "typecheck:verbose": "tsc --project ./tsconfig.app.json --noEmit"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.3.0",
