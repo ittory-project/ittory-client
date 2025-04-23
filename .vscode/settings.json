@@ -1,7 +1,17 @@
 {
+  // "css.validate": false,
   "eslint.enable": true,
+  "stylelint.enable": true,
+  "stylelint.validate": [
+    "css",
+    "postcss",
+    "javascript",
+    "typescript",
+    "typescriptreact"
+  ],
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
   },
   "editor.defaultFormatter": "dbaeumer.vscode-eslint"
 }

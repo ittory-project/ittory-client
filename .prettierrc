@@ -1,5 +1,14 @@
 {
   "tabWidth": 2,
   "tsxBracketSameLine": true,
-  "singleQuote": true
+  "singleQuote": true,
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "importOrder": [
+    "^(react/(.*)$)|^(react$)",
+    "<THIRD_PARTY_MODULES>",
+    "^(@/(.*)$)",
+    "^[./]"
+  ],
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }
