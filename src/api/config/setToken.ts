@@ -21,7 +21,11 @@ interface jwtType {
 }
 
 // 세션에 유저 아이디 저장하기
-export const setUserIdOnLocalStorage = (jwt: string) => {
+export const setUserIdFromAccessToken = (jwt: string) => {
   const userId: jwtType = jwtDecode(jwt);
   window.localStorage.setItem('userId', userId.sub);
+};
+
+export const setUserId = (userId: number | string) => {
+  window.localStorage.setItem('userId', userId.toString());
 };
