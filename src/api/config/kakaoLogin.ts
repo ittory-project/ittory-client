@@ -1,6 +1,6 @@
 import { requestKakaoAuthentication } from '../service/AuthService';
 import { accessTokenRepository } from './AccessTokenRepository';
-import { setUserIdOnLocalStorage } from './setToken';
+import { setUserIdFromAccessToken } from './setToken';
 
 export const kakaoLogin = async (kakaoSocialLoginCode: string) => {
   const { accessToken } =
@@ -8,5 +8,5 @@ export const kakaoLogin = async (kakaoSocialLoginCode: string) => {
   accessTokenRepository.onLogin(accessToken);
 
   // NOTE: 현재 로컬스토리지로 유저id 공유 중이어서 아직 필요...
-  setUserIdOnLocalStorage(accessToken);
+  setUserIdFromAccessToken(accessToken);
 };
