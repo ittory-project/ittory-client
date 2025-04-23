@@ -13,7 +13,7 @@ export default tseslint.config({
     ...tseslint.configs.recommended,
     prettierRecommended,
   ],
-  files: ['**/*.{ts,tsx}'],
+  files: ['**/*.{js,jsx,ts,tsx}'],
   ignores: ['dist', 'node_modules', 'public'],
   languageOptions: {
     ecmaVersion: 2020,
