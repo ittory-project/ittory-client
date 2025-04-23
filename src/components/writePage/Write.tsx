@@ -1,42 +1,42 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { Client } from '@stomp/stompjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { decodeLetterId } from '../../api/config/base64';
+import { getUserIdFromLocalStorage } from '../../api/config/setToken';
 import {
-  addData,
   AppDispatch,
+  addData,
   selectParsedData,
   selectParsedOrderData,
   setOrderData,
 } from '../../api/config/state';
+import { stompClient } from '../../api/config/stompInterceptor';
 import {
   LetterItem,
   LetterPartiItem,
   LetterPartiListGetResponse,
   LetterStartInfoGetResponse,
 } from '../../api/model/LetterModel';
+import { LetterItemResponse, WsExitResponse } from '../../api/model/WsModel';
 import {
   getLetterPartiList,
   getLetterStartInfo,
 } from '../../api/service/LetterService';
-import { stompClient } from '../../api/config/stompInterceptor';
-import { LetterItemResponse, WsExitResponse } from '../../api/model/WsModel';
-import { decodeLetterId } from '../../api/config/base64';
-import { getUserIdFromLocalStorage } from '../../api/config/setToken';
-import Button from '../common/Button';
-
-import { WriteOrderList } from './writeMainList/WriteOrderList';
-import { WriteOrderTitle } from './WriteOrderTitle';
-import { WriteLocation } from './WriteLocation';
-import { WriteElement } from './writeElement/WriteElement';
-import { WriteOrderAlert } from './WriteOrderAlert';
-import { WriteQuitAlert } from './WriteQuitAlert';
-import { WriteFinishedModal } from './WriteFinishedModal';
 import { quitLetterWs } from '../../api/service/WsService';
-import { WriteExit } from './WriteExit';
 import { SessionLogger } from '../../utils';
+import Button from '../common/Button';
+import { WriteExit } from './WriteExit';
+import { WriteFinishedModal } from './WriteFinishedModal';
+import { WriteLocation } from './WriteLocation';
+import { WriteOrderAlert } from './WriteOrderAlert';
+import { WriteOrderTitle } from './WriteOrderTitle';
+import { WriteQuitAlert } from './WriteQuitAlert';
+import { WriteElement } from './writeElement/WriteElement';
+import { WriteOrderList } from './writeMainList/WriteOrderList';
 
 const logger = new SessionLogger('write');
 
@@ -97,7 +97,7 @@ export const Write = ({
   // 총 참여자 수
   const [partiNum, setPartiNum] = useState(-1);
   // 총 반복 횟수
-  const [_, setRepeatNum] = useState(-1);
+  const [, setRepeatNum] = useState(-1);
   // 잠금된 아이템
   const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
   // 퇴장 정보
@@ -217,34 +217,37 @@ export const Write = ({
     const client = stompClient();
     clientRef.current = client;
     client.onConnect = () => {
-      client.subscribe(`/topic/letter/${letterNumId}`, (message: any) => {
-        const response: LetterItemResponse | WsExitResponse = JSON.parse(
-          message.body,
-        );
+      client.subscribe(
+        `/topic/letter/${letterNumId}`,
+        (message: { body: string }) => {
+          const response: LetterItemResponse | WsExitResponse = JSON.parse(
+            message.body,
+          );
 
-        if ('action' in response && response.action === 'EXIT') {
-          const exitResponse = response as WsExitResponse;
-          logger.debug('퇴장 정보: ', exitResponse);
-          fetchParticipantsAndUpdateLockedItems();
-          setExitUser(exitResponse.nickname);
-        } else if ('elementId' in response) {
-          const letterResponse = response as LetterItemResponse;
-          logger.debug('작성 내용: ', letterResponse);
-          const responseToLetterItem: LetterItem = {
-            elementId: Number(response.elementId),
-            content: response.content,
-            userNickname: response.nickname,
-            letterImg: response.imageUrl,
-          };
-          dispatch(addData(responseToLetterItem));
-          setLetterItems((prevItems) => [...prevItems, responseToLetterItem]);
-          // 아래의 두 동작을 useState로 분리함: redux로 불러오는 것에 약간의 딜레이가 발생, useState로 저장하는 데에도 약간의 딜레이가 발생함
-          // 해결방법: updateResponse라는 flag를 만들어 현재 업데이트를 해야 하는 상황인지 아닌지 판단 후 useEffect에서 실행
-          // updateOrderAndLockedItems();
-          // setShowSubmitPage(false)
-          setUpdateResponse(true);
-        }
-      });
+          if ('action' in response && response.action === 'EXIT') {
+            const exitResponse = response as WsExitResponse;
+            logger.debug('퇴장 정보: ', exitResponse);
+            fetchParticipantsAndUpdateLockedItems();
+            setExitUser(exitResponse.nickname);
+          } else if ('elementId' in response) {
+            const letterResponse = response as LetterItemResponse;
+            logger.debug('작성 내용: ', letterResponse);
+            const responseToLetterItem: LetterItem = {
+              elementId: Number(response.elementId),
+              content: response.content,
+              userNickname: response.nickname,
+              letterImg: response.imageUrl,
+            };
+            dispatch(addData(responseToLetterItem));
+            setLetterItems((prevItems) => [...prevItems, responseToLetterItem]);
+            // 아래의 두 동작을 useState로 분리함: redux로 불러오는 것에 약간의 딜레이가 발생, useState로 저장하는 데에도 약간의 딜레이가 발생함
+            // 해결방법: updateResponse라는 flag를 만들어 현재 업데이트를 해야 하는 상황인지 아닌지 판단 후 useEffect에서 실행
+            // updateOrderAndLockedItems();
+            // setShowSubmitPage(false)
+            setUpdateResponse(true);
+          }
+        },
+      );
     };
     client.activate();
 
@@ -571,12 +574,16 @@ export const Write = ({
 };
 
 const Container = styled.div`
-  height: 100%;
-  width: 100%;
-  padding: 10px 20px;
-  background-color: #212529;
   display: flex;
+
   flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 10px 20px;
+
+  background-color: #212529;
 `;
 
 const StickyHeader = styled.div`
@@ -588,18 +595,25 @@ const StickyHeader = styled.div`
 const AlertContainer = styled.div`
   position: absolute;
   top: 60px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
   z-index: 3;
+
+  display: flex;
+
+  flex-direction: column;
+
+  width: 100%;
+
   padding: 0px;
+
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const ScrollableOrderList = styled.div`
   flex-grow: 1;
-  overflow-y: auto;
+
   margin: 10px 5px;
+
+  overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -609,14 +623,16 @@ const ButtonContainer = styled.div`
   position: sticky;
   bottom: 10px;
   z-index: 3;
+
   background-color: transparent;
 `;
 
 const LocationContainer = styled.div`
   position: absolute;
-  bottom: 10px;
   right: 10px;
+  bottom: 10px;
   z-index: 3;
+
   background-color: transparent;
 `;
 
@@ -624,10 +640,13 @@ const ModalOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 3;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3;
 `;

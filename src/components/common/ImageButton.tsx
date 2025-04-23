@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const ImageButton = styled.button`
   box-sizing: content-box;
-
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 

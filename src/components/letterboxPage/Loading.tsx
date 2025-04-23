@@ -1,6 +1,7 @@
-import animation from '../../../public/assets/loading.json';
 import Player from 'lottie-react';
 import styled from 'styled-components';
+
+import animation from '../../../public/assets/loading.json';
 
 export const Loading = () => {
   return (
@@ -20,14 +21,20 @@ export const Loading = () => {
 };
 
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
   justify-content: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   background: #fff;
+
+  transform: translateX(-50%);
 `;

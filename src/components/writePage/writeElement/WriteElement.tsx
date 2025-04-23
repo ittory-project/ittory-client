@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+
+import { Client } from '@stomp/stompjs';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { decodeLetterId } from '../../../api/config/base64';
-import { Client } from '@stomp/stompjs';
-import { getElementImg } from '../../../api/service/ElementService';
 import { ElementImgGetResponse } from '../../../api/model/ElementModel';
+import { getElementImg } from '../../../api/service/ElementService';
 
 interface WriteElementProps {
   sequence: number;
@@ -50,7 +52,6 @@ export const WriteElement = ({
     if (progressTime <= 0.5) {
       if (text.length > 0) {
         handleWriteComplete();
-      } else {
       }
     }
   }, [progressTime]);
@@ -142,119 +143,163 @@ export const WriteElement = ({
 };
 
 const Container = styled.div`
-  height: calc(var(--vh, 1vh) * 100);
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
   width: 100vw;
   min-width: 300px;
+  height: calc(var(--vh, 1vh) * 100);
+
   padding: 10px 0;
+
   background-color: #212529;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Content = styled.div`
   display: flex;
-  width: 95%;
-  flex-direction: column;
-  align-items: flex-start;
+
   flex-shrink: 0;
-  border-radius: 20px;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  width: 95%;
+
   background: var(--color-black-white-white, #fff);
+  border-radius: 20px;
 `;
 
 const Header = styled.div`
   display: flex;
-  height: 44px;
-  align-items: center;
+
   gap: 16px;
+  align-items: center;
   align-self: stretch;
-  margin: 10px 20px 5px 20px;
   justify-content: space-between;
+
+  height: 44px;
+
+  margin: 10px 20px 5px 20px;
 `;
 
 const CloseBtn = styled.img`
   display: flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+  justify-content: center;
+
   width: 20px;
   height: 20px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
 `;
 
 const ClockIcon = styled.img`
   display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 20px;
   height: 20px;
+
   margin: 0px 5px;
-  justify-content: center;
-  align-items: center;
 `;
 
 const ClockText = styled.div`
   display: flex;
-  color: var(--Color-primary-orange, #ffa256);
+
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+
+  color: var(--Color-primary-orange, #ffa256);
+
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
 const WriteContent = styled.div`
   display: flex;
-  height: 270px;
-  margin: 5px 20px 20px 20px;
-  padding: 16px;
+
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
   gap: 10px;
+  align-items: center;
   align-self: stretch;
-  border-radius: var(--Border-Radius-radius_300, 8px);
-  border: 1px dashed var(--Color-grayscale-gray400, #ced4da);
+  justify-content: center;
+
+  height: 270px;
+
+  padding: 16px;
+  margin: 5px 20px 20px 20px;
+
   background: var(--Color-grayscale-gray50, #f8f9fa);
+  border: 1px dashed var(--Color-grayscale-gray400, #ced4da);
+  border-radius: var(--Border-Radius-radius_300, 8px);
 `;
 
 const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
   display: flex;
-  padding: 4px 12px;
+
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
-  border-radius: 4px;
-  background: ${({ $isdisabled }) => ($isdisabled ? '#d3d3d3' : '#000')};
+  justify-content: center;
+
+  padding: 4px 12px;
+
   color: #fff;
+
   cursor: ${({ $isdisabled }) => ($isdisabled ? 'not-allowed' : 'pointer')};
+
+  background: ${({ $isdisabled }) => ($isdisabled ? '#d3d3d3' : '#000')};
+  border-radius: 4px;
 `;
 
 const PhotoDiv = styled.div`
   display: flex;
+
   justify-content: center;
 `;
 
 const LetterImage = styled.img`
   width: 164px;
   height: 164px;
-  border-radius: 10px;
+
   object-fit: cover;
+
+  border-radius: 10px;
 `;
 
 const WriteTa = styled.textarea`
   display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+  align-items: flex-start;
+  align-self: stretch;
+
   width: 80%;
+
   padding: 16px;
   margin: 0 auto;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  align-self: stretch;
-  border: none;
-  resize: none;
-  color: #000;
-  background: var(--Color-grayscale-gray50, #f8f9fa);
+
   overflow: hidden;
+
+  color: #000;
+
+  resize: none;
+
+  background: var(--Color-grayscale-gray50, #f8f9fa);
+  border: none;
 
   &:focus {
     outline: none;
@@ -267,13 +312,18 @@ const WriteTa = styled.textarea`
 
 const ControlContainer = styled.div`
   display: flex;
-  width: 100%;
+
   justify-content: space-between;
+
+  width: 100%;
+
   margin-top: 10px;
 `;
 
 const CharacterCount = styled.div`
-  color: #000;
   display: flex;
+
   font-size: 14px;
+
+  color: #000;
 `;

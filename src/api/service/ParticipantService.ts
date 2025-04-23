@@ -1,10 +1,10 @@
 import { api } from '../config/api';
 import {
-  RandomPostRequest,
-  RandomPostResponse,
   //NicknamePostRequest,
   //NicknamePostResponse,
   NicknamePatchResponse,
+  RandomPostRequest,
+  RandomPostResponse,
 } from '../model/ParticipantModel';
 
 export async function postRandom(

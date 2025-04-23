@@ -1,4 +1,4 @@
-import { api, ApiResponse } from '../config/api';
+import { ApiResponse, api } from '../config/api';
 import { ElementImgGetResponse } from '../model/ElementModel';
 
 // 편지 아이템 이미지 불러오기 API

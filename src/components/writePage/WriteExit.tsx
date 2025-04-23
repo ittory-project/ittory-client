@@ -1,5 +1,6 @@
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
 import exitImg from '../../../public/assets/write/img_exit.svg';
 
 interface WriteExitProps {
@@ -28,58 +29,78 @@ export const WriteExit = ({ reasonText }: WriteExitProps) => {
 };
 
 const BackGround = styled.div`
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: column;
-  align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
-  justify-content: space-between;
-  align-self: stretch;
   z-index: 30;
+
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
+  background: #fff;
+
+  transform: translateX(-50%);
 `;
 const Container = styled.div`
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   margin: auto;
 `;
 const Icon = styled.img`
   width: 140px;
   height: 140px;
+
   margin-bottom: 16px;
 `;
 const Title = styled.div`
   display: flex;
+
   flex-direction: column;
-  align-items: center;
+
   gap: 8px;
+  align-items: center;
   align-self: stretch;
-  color: #000;
-  text-align: center;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #000;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
-  height: 48px;
-  width: 90%;
-  margin: 14px 20px;
-  align-items: center;
+
   gap: 8px;
+  align-items: center;
   justify-content: center;
-  border-radius: 50px;
+
+  width: 90%;
+  height: 48px;
+
+  margin: 14px 20px;
+
   background: #ffa256;
+  border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
@@ -89,7 +110,10 @@ const ButtonTxt = styled.div`
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
-  letter-spacing: -0.5px;
+
   color: #fff;
+
+  letter-spacing: -0.5px;
 `;

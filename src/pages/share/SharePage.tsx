@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
+
 import { ShareLetter } from '../../components/sharePage/ShareLetter';
 
 export const ShareLetterPage = () => {

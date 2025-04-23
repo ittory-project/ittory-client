@@ -1,5 +1,6 @@
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
 import partiIcon from '../../../public/assets/letterbox/parIcon.svg';
 import recvIcon from '../../../public/assets/letterbox/recIcon.svg';
 
@@ -39,55 +40,77 @@ export const EmptyLetter = ({ context }: Props) => {
 };
 
 const Container = styled.div`
-  display: flex;
+  position: relative;
+
   box-sizing: border-box;
-  padding: 100px 36px 0px 36px;
+  display: flex;
+
   flex-direction: column;
+
   align-items: center;
   align-self: stretch;
+
   height: 100%;
-  position: relative;
+
+  padding: 100px 36px 0px 36px;
+
   background: var(--Color-grayscale-gray100, #f1f3f5);
 `;
 const Icon = styled.img`
   position: relative;
+
+  flex-shrink: 0;
+
   width: 100px;
   height: 100px;
-  flex-shrink: 0;
+
   margin-bottom: 20px;
 `;
 const TextArea = styled.div`
   position: relative;
+
   display: flex;
-  color: #495057;
-  text-align: center;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
+
+  color: #495057;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const Button = styled.button`
   position: relative;
+
   box-sizing: border-box;
-  margin-top: 20px;
   display: flex;
+
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
   width: 138px;
   height: 42px;
+
   padding: 14px 20px;
-  align-items: center;
-  gap: 8px;
+  margin-top: 20px;
+
   background: #343a40;
-  justify-content: center;
   border-radius: 50px;
 `;
 const ButtonTxt = styled.div`
   font-family: SUIT;
-  color: #fff;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 `;

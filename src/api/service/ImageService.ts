@@ -1,4 +1,4 @@
-import { api, ApiResponse } from '../config/api';
+import { ApiResponse, api } from '../config/api';
 import { CoverImagePostResponse, ImageUrlRequest } from '../model/ImageModel';
 
 export async function postCoverImage(

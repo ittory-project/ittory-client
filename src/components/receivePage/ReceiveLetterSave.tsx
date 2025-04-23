@@ -23,75 +23,94 @@ export const ReceiveLetterSave = ({ handleSaveLetter }: LetterContentProps) => {
 };
 
 const ProductRightSide = styled.img`
-  display: flex;
-  margin: 3.5px 4px 3.5px auto;
-  justify-content: center;
-  align-items: center;
   position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin: 3.5px 4px 3.5px auto;
 `;
 
 const ProductLeftSide = styled.img`
+  position: absolute;
+  top: -7px;
+  left: -79px;
+
   width: 94px;
   height: 369px;
+
   object-fit: fill;
-  position: absolute;
-  left: -79px;
-  top: -7px;
 `;
 
 const ContentImg = styled.img`
-  width: 122px;
-  height: 122px;
-  border-radius: 100px;
   position: absolute;
   top: 35%;
   left: 50%;
+
+  width: 122px;
+  height: 122px;
+
+  border-radius: 100px;
+
   transform: translate(-47%, -0%);
 `;
 
 const Content = styled.div`
-  color: #343a40;
-  text-align: center;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+
   width: 150px;
 
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #343a40;
+
+  text-align: center;
   letter-spacing: -0.5px;
 
-  position: absolute;
-  top: 15%;
-  left: 50%;
   transform: translate(-47%, -0%);
 `;
 
 const ContentSaveBtn = styled.div`
+  position: absolute;
+  top: 75%;
+  left: 50%;
+
   display: flex;
+
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
   width: 130px;
   height: 20px;
-  padding: 12px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
 
-  color: #fff;
-  border-radius: 50px;
-  background: #343a40;
-  box-shadow:
-    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
-    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+  padding: 12px;
 
   font-family: var(--Typography-family-body, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 
-  position: absolute;
-  top: 75%;
-  left: 50%;
+  background: #343a40;
+  border-radius: 50px;
+  box-shadow:
+    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
+    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+
   transform: translateX(-50%);
 `;

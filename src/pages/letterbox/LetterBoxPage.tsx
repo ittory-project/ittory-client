@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
-import { LetterBox } from '../../components/letterboxPage/LetterBox';
+
 import { useNavigate } from 'react-router-dom';
+
+import { LetterBox } from '../../components/letterboxPage/LetterBox';
 
 export const LetterBoxPage = () => {
   const navigate = useNavigate();

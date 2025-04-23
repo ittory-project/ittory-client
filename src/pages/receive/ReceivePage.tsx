@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
+
 import Receive from '../../components/receivePage/Receive';
 
 export const ReceivePage = () => {
