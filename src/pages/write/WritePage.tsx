@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
+
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
-import { Write } from '../../components/writePage/Write';
-import { useNavigate, useParams } from 'react-router-dom';
+
+import CountdownGif from '../../../public/img/letter_start_count.gif';
 import { decodeLetterId } from '../../api/config/base64';
 import { LetterStartInfoGetResponse } from '../../api/model/LetterModel';
 import { getLetterStartInfo } from '../../api/service/LetterService';
-import CountdownGif from '../../../public/img/letter_start_count.gif';
+import { Write } from '../../components/writePage/Write';
+import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
 
 export const WritePage = () => {
   const { letterId } = useParams();
-  const navigate = useNavigate();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   // 불러온 편지 정보
   const [letterTitle, setLetterTitle] = useState('');
@@ -28,19 +29,6 @@ export const WritePage = () => {
   const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
   // 편지 시작까지 남은 시간 계산
   const [startCountdown, setStartCountdown] = useState<number>(10);
-
-  const handleGoBack = () => {
-    window.location.href = window.location.href;
-  };
-  useEffect(() => {
-    history.pushState(null, '', window.location.href);
-
-    window.addEventListener('popstate', handleGoBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleGoBack);
-    };
-  }, []);
 
   const getStartInfo = async () => {
     if (!letterId) {
@@ -67,8 +55,7 @@ export const WritePage = () => {
       setShowCountdown(false);
       return;
     }
-    let countdownTimer: number;
-    countdownTimer = window.setInterval(() => {
+    const countdownTimer = window.setInterval(() => {
       setStartCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(countdownTimer);
@@ -136,21 +123,26 @@ export const WritePage = () => {
 
 const Container = styled.div`
   position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Countdown = styled.img`
   position: absolute;
   top: 0;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
+  z-index: 6;
+
   width: 100%;
   height: 100%;
+
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: 6;
 `;

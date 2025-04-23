@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import X from '../../public/assets/x.svg';
-import direction from '../../public/assets/navigate.svg';
-import letter_create from '../../public/assets/menu/letter_create.svg';
-import letter_receive from '../../public/assets/menu/letter_receive.svg';
+
 import ask from '../../public/assets/menu/ask.svg';
 import graynavi from '../../public/assets/menu/graynavi.svg';
-import defaultImage from '../../public/assets/menu/profileImg.png';
-import { useNavigate } from 'react-router-dom';
-import { getLetterCounts, getMyPage } from '../api/service/MemberService';
+import letter_create from '../../public/assets/menu/letter_create.svg';
+import letter_receive from '../../public/assets/menu/letter_receive.svg';
 import logindefault from '../../public/assets/menu/logindefault.png';
+import defaultImage from '../../public/assets/menu/profileImg.png';
+import direction from '../../public/assets/navigate.svg';
+import X from '../../public/assets/x.svg';
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
-import { SessionLogger } from '../utils';
-
-const logger = new SessionLogger('menu');
+import { getLetterCounts, getMyPage } from '../api/service/MemberService';
 
 interface Props {
   onClose: () => void;
@@ -177,7 +176,7 @@ export const Menu = ({ onClose }: Props) => {
             <LetterNum style={{ color: '#ADB5BD' }}>0개</LetterNum>
           ) : (
             <LetterNum
-              style={{ color: partiLetter == 0 ? '#ADB5BD' : 'inherit' }}
+              style={{ color: partiLetter === 0 ? '#ADB5BD' : 'inherit' }}
             >
               <>{String(partiLetter)}개</>
             </LetterNum>
@@ -202,7 +201,7 @@ export const Menu = ({ onClose }: Props) => {
             <LetterNum style={{ color: '#ADB5BD' }}>0개</LetterNum>
           ) : (
             <LetterNum
-              style={{ color: receiveLetter == 0 ? '#ADB5BD' : 'inherit' }}
+              style={{ color: receiveLetter === 0 ? '#ADB5BD' : 'inherit' }}
             >
               <>{String(receiveLetter)}개</>
             </LetterNum>
@@ -238,210 +237,293 @@ export const Menu = ({ onClose }: Props) => {
 };
 
 const BackGround = styled.div`
+  position: relative;
+
+  display: flex;
+
+  flex-shrink: 0;
+  flex-direction: column;
+
+  align-items: center;
+
   width: 260px;
   height: calc(var(--vh, 1vh) * 100);
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  align-items: center;
 `;
 const Cancel = styled.div`
   position: absolute;
+  top: 12px;
+  right: 12px;
+
+  box-sizing: border-box;
   display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 24px;
   height: 24px;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  right: 12px;
-  top: 12px;
+
   cursor: pointer;
 `;
 const Profile = styled.div`
-  display: flex;
-  height: 52px;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  flex-shrink: 0;
-  margin-top: 72px;
   position: relative;
+
+  display: flex;
+
+  flex-shrink: 0;
+
+  gap: 8px;
+  align-items: center;
+
+  width: 100%;
+  height: 52px;
+
+  margin-top: 72px;
 `;
 const ImageContainer = styled.div`
+  box-sizing: border-box;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 52px;
   height: 52px;
-  display: flex;
-  box-sizing: border-box;
-  justify-content: center;
-  align-items: center;
+
   margin-left: 16px;
 `;
 const ProfileImage = styled.img`
   width: 44px;
   height: 44px;
+
   border-radius: 120.93px;
 `;
 
 const UserSet = styled.div`
   display: flex;
+
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+
   gap: 2px;
+  align-items: flex-start;
+  justify-content: center;
 `;
 const UserName = styled.div`
   width: 168px;
-  color: #000;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
+  color: #000;
+
   letter-spacing: -0.5px;
 `;
 const UserSetting = styled.div`
   display: flex;
-  align-items: center;
+
   gap: 2px;
-  color: #868e96;
+  align-items: center;
+
   font-family: SUIT;
   font-size: 11px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px;
+
+  color: #868e96;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const NavigateLogin = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+
   gap: 9px;
-  color: #000;
+  align-items: center;
+  justify-content: center;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
+  color: #000;
+
   letter-spacing: -0.5px;
+
+  cursor: pointer;
 `;
 const LetterContainer = styled.div`
   display: flex;
-  width: 228px;
+
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
+
+  width: 228px;
+
   margin-top: 1rem;
-  border-radius: 8px;
-  background: #f8f9fa;
   margin-bottom: 0.75rem;
+
+  background: #f8f9fa;
+  border-radius: 8px;
 `;
 const CreatedLetter = styled.div`
+  box-sizing: border-box;
   display: flex;
-  height: 60px;
+
   gap: 6px;
-  padding: 19px 12px 21px 12px;
-  justify-content: flex-start;
   align-items: center;
   align-self: stretch;
-  box-sizing: border-box;
-  color: #343a40;
+  justify-content: flex-start;
+
+  height: 60px;
+
+  padding: 19px 12px 21px 12px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #343a40;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const ReceivedLetter = styled.div`
+  box-sizing: border-box;
   display: flex;
-  height: 60px;
+
   gap: 6px;
-  padding: 19px 12px 21px 12px;
-  justify-content: flex-start;
   align-items: center;
   align-self: stretch;
-  box-sizing: border-box;
-  color: #343a40;
+  justify-content: flex-start;
+
+  height: 60px;
+
+  padding: 19px 12px 21px 12px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #343a40;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const LetterNum = styled.div`
-  color: #343a40;
+  position: absolute;
+  right: 32px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 16px;
+
+  color: #343a40;
+
   letter-spacing: -0.5px;
-  position: absolute;
-  right: 32px;
 `;
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
+
+  gap: 8px;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+
   width: 228px;
   height: 36px;
+
   padding: var(--Typography-size-s, 14px) 20px;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-  align-self: stretch;
-  border-radius: 50px;
-  background: #ffa256;
   margin-left: 16px;
+
+  background: #ffa256;
+  border-radius: 50px;
 `;
 const ButtonTxt = styled.div`
-  color: #fff;
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 `;
 const List = styled.div`
-  display: flex;
-  width: 228px;
-  flex-direction: column;
-  align-items: center;
   position: absolute;
   bottom: 1.5rem;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 228px;
 `;
 const AskContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
   box-sizing: border-box;
-  width: 100%;
-  padding: 16px 0px;
-  align-items: center;
+  display: flex;
+
   gap: 8px;
+  align-items: center;
   align-self: stretch;
-  color: #212529;
+  justify-content: flex-start;
+
+  width: 100%;
+
+  padding: 16px 0px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const Navi = styled.div`
-  display: flex;
-  width: 16px;
-  height: 16px;
-  padding: 3px 6px 3px 5px;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
   position: absolute;
   right: 0;
+
+  box-sizing: border-box;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 16px;
+  height: 16px;
+
+  padding: 3px 6px 3px 5px;
 `;

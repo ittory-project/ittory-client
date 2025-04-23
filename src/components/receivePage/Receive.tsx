@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 import { useLocation, useParams } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
+
 import { DoorAnimation } from './DoorAnimation';
 
 function Query() {
@@ -87,15 +89,22 @@ const expandAnimation = keyframes`
 `;
 
 const Container = styled.div`
-  display: flex;
   position: relative;
+
+  display: flex;
+
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
+
   height: calc(var(--vh, 1vh) * 100);
+
   padding: 0 32px;
-  background: #000;
+
   overflow: hidden;
+
+  background: #000;
 `;
 
 const DoorImg = styled.div<{ expanded: boolean }>`
@@ -103,97 +112,116 @@ const DoorImg = styled.div<{ expanded: boolean }>`
   bottom: 0px;
   left: 0px;
   z-index: 1;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 70%;
+
   background-image: url(/assets/door.svg);
   background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
   transition: all 2s ease;
 
   ${({ expanded }) =>
     expanded &&
     css`
-      animation: ${expandAnimation} 2s forwards;
       transform-origin: center 21%;
+
+      animation: ${expandAnimation} 2s forwards;
     `}
 `;
 
 const AnimatedDiv = styled.div<{ expanded: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
   position: absolute;
   top: 50%;
-  transition: all 2s ease;
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
   filter: ${({ expanded }) => (expanded ? 'none' : 'blur(1.5px)')};
+
+  transition: all 2s ease;
 
   ${({ expanded }) =>
     expanded &&
     css`
-      animation: ${expandAnimation} 2s forwards;
       transform-origin: center;
+
+      animation: ${expandAnimation} 2s forwards;
     `}
 `;
 
 const CharacterWrapper = styled.div`
-  border-radius: 50%;
-  background: transparent;
-
   display: flex;
-  justify-content: center;
-  align-items: center;
 
-  background: linear-gradient(323.8deg, #1c2231 14.11%, #243348 85.81%);
+  align-items: center;
+  justify-content: center;
 
   padding: 2px;
 
+  background: transparent;
+  background: linear-gradient(323.8deg, #1c2231 14.11%, #243348 85.81%);
+  border-radius: 50%;
   box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.1);
 `;
 
 const CharacterImage = styled.img`
   width: 22px;
   height: 22px;
+
   object-fit: cover;
-  border-radius: 50%;
 
   border: 2px solid var(--Color-secondary-dark_navy_blue);
+  border-radius: 50%;
 `;
 
 const MainTitle = styled.div`
-  font-size: 16px;
-  color: #f8f9fa;
-  text-align: center;
-  transition: all 2s ease;
   width: 256px;
+
   margin-top: 10px;
 
-  color: #f8f9fa;
-  text-align: center;
-
   font-family: var(--Typography-family-heading, SUIT);
+  font-size: 16px;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 28px;
+
+  color: #f8f9fa;
+  color: #f8f9fa;
+
+  text-align: center;
+  text-align: center;
   letter-spacing: -0.5px;
+
+  transition: all 2s ease;
 `;
 
 const MainText = styled.div`
-  color: #adb5bd;
-  text-align: center;
-
   /* body/small */
   font-family: var(--Typography-family-body, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 20px;
+
+  color: #adb5bd;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 
@@ -203,56 +231,69 @@ const MainTitleContainer = styled.div`
 `;
 
 const MainInfo = styled.div`
-  padding: 5px 10px;
-  font-size: 14px;
-  border-radius: 5px;
-  color: white;
   position: absolute;
   bottom: 40px;
   z-index: 2;
 
-  color: #fcffaf;
-  text-align: center;
-  text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.25);
+  padding: 5px 10px;
 
   font-family: var(--Typography-family-title, SUIT);
+  font-size: 14px;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
+  color: white;
+  color: #fcffaf;
+
+  text-align: center;
   letter-spacing: -0.5px;
+
+  text-shadow: 0px 4px 20px rgba(255, 255, 255, 0.25);
+
+  border-radius: 5px;
 `;
 
 const TextBalloon = styled.div`
   position: absolute;
-  // NOTE: 반응형 위해 중점 기준으로 좌표 잡고, 중점으로부터 206px 지점이 원 둘레 지점이어서, 24px 갭을 위해 230px로 지정함
+  /* NOTE: 반응형 위해 중점 기준으로 좌표 잡고, 중점으로부터 206px 지점이 원 둘레 지점이어서, 24px 갭을 위해 230px로 지정함 */
   top: calc(50% - 230px);
   left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
   z-index: 3;
+
+  text-align: center;
+
+  transform: translateX(-50%);
 `;
 
 const ExpandTitle = styled.div`
-  white-space: pre-wrap;
-  font-family: var(--Typography-family-title);
-
   min-width: 20%;
   max-width: 256px;
-  font-size: clamp(14px, 2vw, 20px);
-  color: white;
-  margin-bottom: 0px;
-  transition: 2s ease;
-  text-align: center;
-  padding: 12px 18px;
 
-  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 0px;
+
+  font-family: var(--Typography-family-title);
+  font-size: clamp(14px, 2vw, 20px);
+
+  color: white;
+
+  text-align: center;
+  white-space: pre-wrap;
+
   background: #243348;
+  border-radius: 12px;
+
   backdrop-filter: blur(2px);
+
+  transition: 2s ease;
 `;
 
 const BalloonUnder = styled.img`
   display: block;
+
   margin: 0 auto;
 `;
 
@@ -260,28 +301,37 @@ const ExpandButton = styled.div`
   position: absolute;
   bottom: 50px;
   left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  width: calc(100% - 100px);
-  height: 48px;
-  padding: 3px 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-  border: none;
   z-index: 3;
 
-  border-radius: 50px;
-  background: #FFA256;
-  box-shadow: -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset;
-  color: #FFF;
-  cursor: pointer;
+  display: flex;
+
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
+  width: calc(100% - 100px);
+  height: 48px;
+
+  padding: 3px 20px;
 
   font-family: var(--Typography-family-title);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #FFF;
+
+  text-align: center;
   letter-spacing: -0.5px);
+
+  cursor: pointer;
+
+  background: #FFA256;
+  border: none;
+  border-radius: 50px;
+  box-shadow: -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset, 1px 1px 0.4px 0px rgba(255, 255, 255, 0.30) inset;
+
+  transform: translateX(-50%);
 `;

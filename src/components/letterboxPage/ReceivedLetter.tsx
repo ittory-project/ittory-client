@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
+
 import more from '../../../public/assets/more.svg';
+import { ReceiveLetterModel } from '../../api/model/MemberModel';
+import {
+  getLetterCounts,
+  getReceivedLetter,
+} from '../../api/service/MemberService';
 import { Delete_letterbox } from './Delete_letterbox';
-import { Received_Modal } from './Received_Modal';
 import { EmptyLetter } from './EmptyLetter';
 import { Letter } from './Letter';
-import {
-  getReceivedLetter,
-  getLetterCounts,
-} from '../../api/service/MemberService';
-import { ReceiveLetterModel } from '../../api/model/MemberModel';
 import { Loading } from './Loading';
+import { Received_Modal } from './Received_Modal';
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -186,34 +188,47 @@ export const ReceivedLetter = ({
 };
 
 const DeleteAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
   z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
+
+  display: flex;
+
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+
   font-family: SUIT;
-  font-weight: 500;
   font-size: 12px;
   font-style: normal;
+  font-weight: 500;
+
   line-height: 16px;
+
+  color: #fff;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
+
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+
   transform: translateX(-50%);
 `;
 const Container = styled.div`
-  display: flex;
   box-sizing: border-box;
-  padding: 0px 16px;
+  display: flex;
+
   flex-direction: column;
+
   align-items: center;
   align-self: stretch;
+
+  padding: 0px 16px;
+
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -221,65 +236,87 @@ const Container = styled.div`
   }
 `;
 const NumberHeader = styled.div`
-  display: flex;
   box-sizing: border-box;
-  padding: 16px 0px;
+  display: flex;
+
   align-items: flex-start;
   align-self: stretch;
+
+  padding: 16px 0px;
 `;
 const NumberTxt = styled.span`
-  color: #212529;
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
+
   line-height: 16px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const LetterContainer = styled.div<{ $bgColor: string }>`
-  display: flex;
-  width: 100%;
-  margin-bottom: 16px;
   box-sizing: border-box;
-  padding: 20px 16px;
-  align-items: flex-start;
+  display: flex;
+
   gap: 12px;
-  border-radius: 12px;
+  align-items: flex-start;
+
+  width: 100%;
+
+  padding: 20px 16px;
+  margin-bottom: 16px;
+
   background-color: ${(props) => props.$bgColor};
+  border-radius: 12px;
 `;
 
 const BookCover = styled.img`
   width: 36px;
+
   object-fit: cover;
 `;
 const Content = styled.div`
   display: flex;
-  flex-direction: column;
+
   flex: 1;
+  flex-direction: column;
+
   cursor: pointer;
 `;
 const BookName = styled.div`
   flex: 1 0 0;
-  color: #212529;
+
+  margin-bottom: 4px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
-  margin-bottom: 4px;
 `;
 const StyledDeliverDay = styled.div`
-  color: #868e96;
   font-family: SUIT;
   font-size: 11px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #868e96;
+
   letter-spacing: -0.5px;
 `;
 const MoreButton = styled.img`
+  flex-shrink: 0;
+
   width: 20px;
   height: 20px;
-  flex-shrink: 0;
+
   cursor: pointer;
 `;

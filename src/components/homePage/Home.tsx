@@ -1,18 +1,18 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import styled, { keyframes } from 'styled-components';
-import logo from '../../../public/assets/home/logo.png';
-import { useNavigate } from 'react-router-dom';
-import Header from './Header';
-import divider from '../../../public/assets/home/bar.svg';
-import twitter from '../../../public/assets/home/twitter.svg';
-import insta from '../../../public/assets/home/insta.svg';
-import animation from '../../../public/assets/home/animation.json';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import Player, { LottieRefCurrentProps } from 'lottie-react';
-import { Menu } from '../../layout/Menu';
+import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
+import styled, { keyframes } from 'styled-components';
+
 import divider2 from '../../../public/assets/home/bar.png';
+import insta from '../../../public/assets/home/insta.svg';
+import logo from '../../../public/assets/home/logo.png';
+import twitter from '../../../public/assets/home/twitter.svg';
 import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
+import { Menu } from '../../layout/Menu';
 import { SessionLogger } from '../../utils/SessionLogger';
+import Header from './Header';
 
 const logger = new SessionLogger('home');
 
@@ -212,37 +212,50 @@ export const Home = () => {
 const MenuOverlay = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 0;
+  z-index: 10;
+
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
-  background: rgba(0, 0, 0, 0.8);
+
+  background: rgb(0 0 0 / 80%);
+
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease;
-  z-index: 10;
 `;
 const MenuContainer = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 20;
+
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   width: 260px;
   height: calc(var(--vh, 1vh) * 100);
+
   background: #fff;
-  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   transform: translateX(${(props) => (props.$isOpen ? '0' : '100%')});
+
   transition: transform 0.3s ease;
-  z-index: 20;
 `;
 const Container = styled.div`
+  z-index: 2;
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
-  z-index: 2;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
+
+  overflow: hidden scroll;
+
   scrollbar-width: none;
-  overflow-x: hidden;
+
   background: #fff;
+  -ms-overflow-style: none;
 
   /* 스크롤바 숨기기 */
   &::-webkit-scrollbar {
@@ -250,17 +263,20 @@ const Container = styled.div`
   }
 `;
 const BodySection = styled.div`
+  display: flex;
+
+  align-items: flex-start; /* 이미지를 위쪽에 정렬 */
+  justify-content: center; /* 이미지를 가운데 정렬 */
+
   width: 100%; /* 화면 크기만큼 차지 */
   min-height: 100vh; /* 최소한 화면 크기만큼 차지 */
-  display: flex;
-  justify-content: center; /* 이미지를 가운데 정렬 */
-  align-items: flex-start; /* 이미지를 위쪽에 정렬 */
 `;
 
 const Image = styled.img`
+  display: block; /* 불필요한 여백 제거 */
+
   width: 100%; /* 이미지를 화면 너비에 맞게 */
   height: auto; /* 비율을 유지하여 높이를 자동으로 조정 */
-  display: block; /* 불필요한 여백 제거 */
 `;
 const fadeIn = keyframes`
   from {
@@ -282,117 +298,156 @@ const fadeInDown = keyframes`
   }
 `;
 const Logo = styled.div<$Props>`
+  position: relative;
+  top: 10%;
+
   width: 170px;
   height: 94px;
+
+  margin: 0 auto;
+
+  pointer-events: none;
+
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: contain;
-  position: relative;
-  margin: 0 auto;
-  top: 10%;
+
   animation: ${fadeInDown} 1.7s ease-out;
-  pointer-events: none;
 `;
 
 const FirstSection = styled.div<$Props>`
-  height: calc(var(--vh, 1vh) * 100);
   width: 100%; /* 화면 크기만큼 차지 */
+  height: calc(var(--vh, 1vh) * 100);
+
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
-  background-size: cover; /* 이미지가 전체 화면을 덮도록 */
   background-position: center;
+  background-size: cover; /* 이미지가 전체 화면을 덮도록 */
 `;
 const Section = styled.div<$Props>`
-  height: calc(var(--vh, 1vh) * 100);
   width: 100%; /* 화면 크기만큼 차지 */
+  height: calc(var(--vh, 1vh) * 100);
+
+  overflow-x: hidden;
+
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
-  overflow-x: hidden;
 `;
 const FinalButton = styled.button`
-  display: flex;
-  width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
-  height: 48px;
-  padding: 8px 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 50px;
-  background: #243348;
-  box-sizing: border-box;
-  box-shadow:
-    -1.5px -1.5px 1.5px 0px var(--Color-secondary-navy, #1c2231) inset,
-    -3.5px -1.5px 12px 0px var(--Color-secondary-navy, #1c2231) inset;
-  margin: 0 auto;
   position: relative;
   top: 89.6%;
+
+  box-sizing: border-box;
+  display: flex;
+
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
+  width: calc(100% - 32px);
+  height: 48px;
+
+  padding: 8px 20px;
+  margin: 0 auto;
+  margin-right: 16px;
+  margin-left: 16px;
+
+  background: #243348;
+  border-radius: 50px;
+  box-shadow:
+    -1.5px -1.5px 1.5px 0 var(--Color-secondary-navy, #1c2231) inset,
+    -3.5px -1.5px 12px 0 var(--Color-secondary-navy, #1c2231) inset;
 `;
 const ButtonContainer = styled.button`
-  display: flex;
-  width: 138px;
-  padding: 8px 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  border-radius: 50px;
-  background: #243348;
-  box-sizing: border-box;
-  box-shadow:
-    -1.5px -1.5px 1.5px 0px var(--Color-secondary-navy, #1c2231) inset,
-    -3.5px -1.5px 12px 0px var(--Color-secondary-navy, #1c2231) inset;
-  margin: 0 auto;
   position: relative;
   top: 12%;
-  animation: ${fadeIn} 1.8s ease-out;
+
+  box-sizing: border-box;
+  display: flex;
+
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
+  width: 138px;
+
+  padding: 8px 20px;
+  margin: 0 auto;
+
+  background: #243348;
+  border-radius: 50px;
+  box-shadow:
+    -1.5px -1.5px 1.5px 0 var(--Color-secondary-navy, #1c2231) inset,
+    -3.5px -1.5px 12px 0 var(--Color-secondary-navy, #1c2231) inset;
+
   opacity: 0; /* 초기에는 숨김 */
+
+  animation: ${fadeIn} 1.8s ease-out;
   animation-fill-mode: forwards; /* 애니메이션이 끝난 후 상태 유지 */
 `;
 const ButtonTxt = styled.div`
-  color: var(--color-black-white-white, #fff);
   font-family: var(--Typography-family-body, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px; /* 142.857% */
+
+  color: var(--color-black-white-white, #fff);
+
   letter-spacing: -0.5px;
 `;
 const LastSection = styled.div`
-  display: flex;
-  width: 100%;
-  padding: 40px 24px;
-  //justify-content: center;
-  align-items: center;
   box-sizing: border-box;
-  background: #2f3641;
-  scroll-snap-align: start;
+  display: flex;
+
+  align-items: center;
+
+  width: 100%;
+
+  padding: 40px 24px;
+
   overflow-x: hidden;
+
+  scroll-snap-align: start;
+
+  background: #2f3641;
+  //justify-content: center;
 `;
 const SectionBox = styled.div`
   display: flex;
-  //width: 272px;
-  flex-direction: column;
-  align-items: flex-start;
+
   flex-shrink: 0;
+  flex-direction: column;
+
+  align-items: flex-start;
+  //width: 272px;
 `;
 const Title = styled.div`
-  color: #adb5bd;
+  margin-bottom: 20px;
+
   font-family: var(--Typography-family-body, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 16px; /* 142.857% */
+
+  color: #adb5bd;
+
   letter-spacing: -0.5px;
-  margin-bottom: 20px;
 `;
 const SubTitle = styled.div`
-  color: #adb5bd;
+  margin-bottom: 8px;
+
   font-family: var(--Typography-family-body, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px; /* 142.857% */
+
+  color: #adb5bd;
+
   letter-spacing: -0.5px;
-  margin-bottom: 8px;
 `;
 const SnsContainer = styled.div`
   margin-top: 16px;
@@ -401,5 +456,6 @@ const SnsContainer = styled.div`
 const SnsIcon = styled.img`
   width: 24px;
   height: 24px;
+
   margin-right: 16px;
 `;

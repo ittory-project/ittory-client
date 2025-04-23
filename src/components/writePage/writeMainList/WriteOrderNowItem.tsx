@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { getUserIdFromLocalStorage } from '../../../api/config/setToken';
+
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
 import { decodeLetterId } from '../../../api/config/base64';
+import { getUserIdFromLocalStorage } from '../../../api/config/setToken';
 import { ElementImgGetResponse } from '../../../api/model/ElementModel';
 import { getElementImg } from '../../../api/service/ElementService';
 
@@ -45,7 +47,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
   }, []);
 
   useEffect(() => {
-    if (Number(userId) == nowUserId) {
+    if (Number(userId) === nowUserId) {
       setLetterStatus('myTurn');
     } else {
       setLetterStatus('othersTurn');
@@ -89,9 +91,12 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
 
 const Wrapper = styled.div<{ status: 'myTurn' | 'othersTurn' }>`
   display: flex;
+
   align-items: center;
-  margin: 20px 0;
+
   padding: 10px;
+  margin: 20px 0;
+
   border: ${(props) =>
     props.status === 'myTurn'
       ? '1px solid #FCFFAF; border-radius: 5px; background: linear-gradient(160deg, #425166, #1C2231 95%); padding: 20px 10px;'
@@ -101,13 +106,16 @@ const Wrapper = styled.div<{ status: 'myTurn' | 'othersTurn' }>`
 const LetterImage = styled.img`
   width: 40px;
   height: 40px;
-  border-radius: 5px;
-  border: 1px solid white;
+
   margin-right: 10px;
+
+  border: 1px solid white;
+  border-radius: 5px;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
+
   flex-direction: column;
 `;
 
@@ -117,6 +125,7 @@ const MyTurn = styled.div`
 
 const MainText = styled.div`
   font-size: 18px;
+
   color: #ffffff;
 `;
 
@@ -126,18 +135,25 @@ const MainTextWriting = styled(MainText)`
 
 const ClockIcon = styled.img`
   display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 12px;
   height: 13px;
+
   margin: 1px 5px 0px 0px;
-  justify-content: center;
-  align-items: center;
 `;
 
 const ClockText = styled.div`
-  margin: 2px 0px 0px 0px;
   display: flex;
-  color: var(--Color-primary-orange, #ffa256);
+
+  margin: 2px 0px 0px 0px;
+
   font-size: var(--Typography-size-s, 11px);
   font-style: normal;
+
+  color: var(--Color-primary-orange, #ffa256);
+
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;

@@ -1,20 +1,19 @@
-import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
-import X from '../../../../public/assets/x.svg';
-import photo from '../../../../public/assets/photo.svg';
-import { Swiper, SwiperSlide, SwiperRef, SwiperClass } from 'swiper/react';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import { postRepeatCount } from '../../../api/service/LetterService';
-import { postRandom } from '../../../api/service/ParticipantService';
-import { startLetterWs } from '../../../api/service/WsService';
+import styled from 'styled-components';
+import { Swiper, SwiperClass, SwiperRef, SwiperSlide } from 'swiper/react';
+
 import bg1 from '../../../../public/assets/connect/bg1.png';
 import bg2 from '../../../../public/assets/connect/bg2.png';
 import bg3 from '../../../../public/assets/connect/bg3.png';
 import bg4 from '../../../../public/assets/connect/bg4.png';
 import bg5 from '../../../../public/assets/connect/bg5.png';
-import { SessionLogger } from '../../../utils';
-
-const logger = new SessionLogger('invite');
+import photo from '../../../../public/assets/photo.svg';
+import X from '../../../../public/assets/x.svg';
+import { postRepeatCount } from '../../../api/service/LetterService';
+import { postRandom } from '../../../api/service/ParticipantService';
+import { startLetterWs } from '../../../api/service/WsService';
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -258,135 +257,145 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
 const ModalContainer = styled.div`
   position: absolute;
   bottom: 0;
-  display: flex;
-  width: 100%;
-  border-radius: 20px 20px 0px 0px;
-  background: #fff;
   z-index: 100;
-  flex-direction: column;
-  align-items: center;
+
   box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+
   padding: 0px 16px 20px 16px;
+
+  background: #fff;
+  border-radius: 20px 20px 0px 0px;
 `;
 const Header = styled.div`
   box-sizing: border-box;
   display: flex;
-  width: 100%;
-  padding: 16px 0px 16px 0px;
+
+  gap: 24px;
   align-items: center;
   align-self: stretch;
-  gap: 24px;
+
+  width: 100%;
+
+  padding: 16px 0px 16px 0px;
 `;
 const Title = styled.div`
   flex: 1 0 0;
-  color: #212529;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const Cancel = styled.span`
+  box-sizing: border-box;
   display: flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+  justify-content: center;
+
   width: 20px;
   height: 20px;
-  box-sizing: border-box;
+
   padding: 4.175px 4.167px 3.825px 3.833px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
+
   cursor: pointer;
 `;
 const Contents = styled.div`
-  display: flex;
   position: relative;
-  padding: 0px 16px 20px 16px;
-  width: 100%;
+
   box-sizing: border-box;
+  display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
+  width: 100%;
+
+  padding: 0px 16px 20px 16px;
 `;
 const List = styled.div`
-  display: flex;
+  position: relative;
+
   box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
   width: 288px;
   height: 200px;
+
   padding: 8px 0px 16px 0px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 16px;
+
   background: #f1f3f5;
-  position: relative;
+  border-radius: 16px;
 `;
 const Picker = styled.div`
   position: relative;
   z-index: 1;
+
   margin-right: 35px;
 `;
 const Select = styled.div`
+  position: absolute;
+  bottom: 83.5px;
+  z-index: 1;
+
+  box-sizing: border-box;
   display: flex;
+
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+
   width: 240px;
   height: 40px;
-  box-sizing: border-box;
+
   padding: 8px 0px;
-  justify-content: center;
-  align-items: center;
-  gap: 2px;
-  border-radius: 50px;
-  background: #fff;
-  color: #ffa256;
   padding-left: 36px;
+
   font-family: SUIT;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 32px;
+
+  color: #ffa256;
+
   letter-spacing: -0.5px;
-  position: absolute;
-  bottom: 83.5px;
-  z-index: 1;
+
+  background: #fff;
+  border-radius: 50px;
 `;
 const SlideContent = styled.div<SlideContentProps>`
-  height: calc(14rem / 5);
   display: flex;
-  text-align: center;
-  font-family: 'GmarketSans';
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: -0.096px;
+
   align-items: center;
   justify-content: center;
-  color: ${(props) => (props.$isActive ? '#ffa256' : '#CED4DA')};
-  opacity: ${(props) => {
-    const { $index, $activeIndex, $totalSlides } = props;
-    const distance = Math.abs(
-      ($index - $activeIndex + $totalSlides) % $totalSlides,
-    );
 
-    if (distance === 0) {
-      return '1';
-    } else if (distance === 1 || distance === $totalSlides - 1) {
-      return '1';
-    }
-    return '0.5';
-  }};
-  letter-spacing: ${(props) => {
-    const { $index, $activeIndex, $totalSlides } = props;
-    const distance = Math.abs(
-      ($index - $activeIndex + $totalSlides) % $totalSlides,
-    );
+  height: calc(14rem / 5);
 
-    if (distance === 0) {
-      return '-0.096px';
-    } else if (distance === 1 || distance === $totalSlides - 1) {
-      return '-0.088px';
-    }
-    return '-0.08px';
-  }};
+  font-family: 'GmarketSans';
   font-size: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
@@ -400,6 +409,43 @@ const SlideContent = styled.div<SlideContentProps>`
     }
     return '20px';
   }};
+  font-style: normal;
+  font-weight: 400;
+
+  line-height: normal;
+
+  color: ${(props) => (props.$isActive ? '#ffa256' : '#CED4DA')};
+
+  text-align: center;
+  letter-spacing: -0.096px;
+  letter-spacing: ${(props) => {
+    const { $index, $activeIndex, $totalSlides } = props;
+    const distance = Math.abs(
+      ($index - $activeIndex + $totalSlides) % $totalSlides,
+    );
+
+    if (distance === 0) {
+      return '-0.096px';
+    } else if (distance === 1 || distance === $totalSlides - 1) {
+      return '-0.088px';
+    }
+    return '-0.08px';
+  }};
+
+  opacity: ${(props) => {
+    const { $index, $activeIndex, $totalSlides } = props;
+    const distance = Math.abs(
+      ($index - $activeIndex + $totalSlides) % $totalSlides,
+    );
+
+    if (distance === 0) {
+      return '1';
+    } else if (distance === 1 || distance === $totalSlides - 1) {
+      return '1';
+    }
+    return '0.5';
+  }};
+
   transition:
     color 0.11s ease,
     opacity 0.11s ease,
@@ -407,62 +453,85 @@ const SlideContent = styled.div<SlideContentProps>`
     font-size 0.11s ease; /* 부드러운 전환 효과 */
 `;
 const Notice = styled.div`
-  display: flex;
-  width: 288px;
   position: relative;
+
   box-sizing: border-box;
-  padding: 2px 4px 8px 4px;
+  display: flex;
+
   align-items: center;
+
+  width: 288px;
+
+  padding: 2px 4px 8px 4px;
   margin-top: 16px;
 `;
 const IconImg = styled.div`
-  display: flex;
   position: relative;
   left: 0;
+
+  display: flex;
 `;
 const TitleTxt = styled.div`
   display: flex;
-  align-items: center;
+
   gap: 6px;
-  color: #868e96;
-  text-align: center;
+  align-items: center;
+
+  margin-top: 2px;
+  margin-left: 5px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
+
+  color: #868e96;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  margin-top: 2px;
-  margin-left: 5px;
 `;
 const TotalTxt = styled.div`
+  position: absolute;
+  right: 0;
+
   display: flex;
-  align-items: center;
+
   gap: 2px;
-  color: #495057;
-  text-align: center;
+  align-items: center;
+
+  margin-bottom: 2px;
+
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
+  color: #495057;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  right: 0;
-  margin-bottom: 2px;
 `;
 
 const Button = styled.button`
-  box-sizing: border-box;
-  width: 288px;
-  display: flex;
-  height: 48px;
-  padding: 14px 0px;
-  align-items: center;
-  gap: 8px;
   position: relative;
+
+  box-sizing: border-box;
+  display: flex;
+
+  gap: 8px;
+  align-items: center;
   justify-content: center;
-  border-radius: 50px;
+
+  width: 288px;
+  height: 48px;
+
+  padding: 14px 0px;
+
   background: #ffa256;
+  border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
@@ -472,7 +541,10 @@ const ButtonTxt = styled.div`
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
-  letter-spacing: -0.5px;
+
   color: #fff;
+
+  letter-spacing: -0.5px;
 `;

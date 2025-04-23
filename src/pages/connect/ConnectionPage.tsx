@@ -1,6 +1,8 @@
-import { Connection } from '../../components/connectionPage/Connection';
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+
+import { Connection } from '../../components/connectionPage/Connection';
 
 export const ConnectionPage = () => {
   const navigate = useNavigate();

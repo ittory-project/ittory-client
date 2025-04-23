@@ -1,16 +1,18 @@
-import React, { useState, useEffect, ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { ReactNode, useEffect, useState } from 'react';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import styled from 'styled-components';
+
 import EditImg from '../../../../public/assets/edit.svg';
-import EditLetter from '../FinalLetter/EditLetter';
-import CoverModal from './CoverModal';
-import CompleteModal from './CompleteModal';
-import UserFinishModal from './UserFinishModal';
 import shadow from '../../../../public/assets/shadow2.svg';
 import { CoverType } from '../../../api/model/CoverType';
 import { getCoverTypes } from '../../../api/service/CoverService';
 import { getVisitUser } from '../../../api/service/MemberService';
+import EditLetter from '../FinalLetter/EditLetter';
+import CompleteModal from './CompleteModal';
+import CoverModal from './CoverModal';
+import UserFinishModal from './UserFinishModal';
 
 interface Props {
   myName: string;
@@ -256,113 +258,157 @@ export default function FinalInfo({
 }
 
 const BackGround = styled.div`
-  display: flex;
   position: relative;
+
+  display: flex;
+
   flex-direction: column;
+
   align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
+
   width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
 `;
 const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 50;
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 50;
 `;
 const Header = styled.div`
   display: flex;
-  margin-top: 2rem;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
+  margin-top: 2rem;
 `;
 const Title = styled.span`
-  color: #243348;
-  text-align: center;
+  margin-bottom: 8px;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #243348;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  margin-bottom: 8px;
 `;
 const SubTitle = styled.span`
-  color: #495057;
-  text-align: center;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px;
+
+  color: #495057;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const Container = styled.div`
-  margin-top: 1.5rem;
-  display: flex;
-  width: calc(100% - 48px);
-  margin-left: 24px;
-  margin-right: 24px;
-  box-sizing: border-box;
-  padding: 16px 12px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
   z-index: 0;
+
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+  justify-content: center;
+
+  width: calc(100% - 48px);
+
+  padding: 16px 12px;
+  margin-top: 1.5rem;
+  margin-right: 24px;
+  margin-left: 24px;
+
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
 `;
 const Info = styled.div`
-  display: flex;
-  width: 100%;
   position: relative;
+
   box-sizing: border-box;
-  padding: 0px 12px 6px 12px;
+  display: flex;
+
   flex-direction: column;
+
   align-items: flex-start;
-  //gap: var(--Border-Radius-radius_300, 8px);
+
+  width: 100%;
+
+  padding: 0px 12px 6px 12px;
+
   background-color: #fff;
+  //gap: var(--Border-Radius-radius_300, 8px);
   //align-self: stretch;
 `;
 const TitleTxt = styled.span`
   display: block;
-  color: #212529;
+
+  align-self: flex-start;
+
   padding: 6px 0px;
-  text-align: left;
+  margin-bottom: 0.5rem;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #212529;
+
+  text-align: left;
   letter-spacing: -0.5px;
-  margin-bottom: 0.5rem;
-  align-self: flex-start;
 `;
 const EditBtn = styled.div`
   position: absolute;
-  cursor: pointer;
   right: 12px;
+
   display: flex;
+
+  gap: var(--Border-Radius-radius_300, 8px);
+  align-items: center;
+  justify-content: center;
+
   width: 24px;
   height: 24px;
-  justify-content: center;
-  align-items: center;
-  gap: var(--Border-Radius-radius_300, 8px);
-  border-radius: 50px;
+
+  cursor: pointer;
+
   background: #fff2e8;
+  border-radius: 50px;
 `;
 const InfoBlock = styled.div`
+  position: relative;
+
   display: flex;
-  justify-content: flex-start;
+
   align-items: center;
   align-self: stretch;
-  position: relative;
+  justify-content: flex-start;
+
   margin-bottom: 10px;
+
   background-color: #fff;
 `;
 const InfoTitle = styled.span`
@@ -370,103 +416,144 @@ const InfoTitle = styled.span`
   font-size: 11px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
-  letter-spacing: -0.5px;
-  background-color: #fff;
+
   color: #868e96;
+
+  letter-spacing: -0.5px;
+
+  background-color: #fff;
 `;
 const InfoTxt = styled.span`
   position: absolute;
   right: 0;
+
   padding: 6px 0px;
-  text-align: center;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 20px;
-  letter-spacing: -0.5px;
-  background-color: #fff;
+
   color: #212529;
+
+  text-align: center;
+  letter-spacing: -0.5px;
+
+  background-color: #fff;
 `;
 const Cover = styled.div`
-  display: flex;
-  width: 100%;
   position: relative;
+
   box-sizing: border-box;
-  padding: 12px 12px 12px 12px;
+  display: flex;
+
   flex-direction: column;
+
   align-items: flex-start;
-  width: 100%;
-  align-self: stretch;
-  border-radius: 8px;
-  background: #f8f9fa;
   align-items: center;
+  align-self: stretch;
+
+  width: 100%;
+  width: 100%;
+
+  padding: 12px 12px 12px 12px;
+
+  background: #f8f9fa;
+  border-radius: 8px;
 `;
 const Shadow = styled.img`
-  width: 90px;
-  margin-left: 16px;
-  margin-top: 12.5px;
   position: absolute;
   z-index: 1;
+
   flex-shrink: 0;
+
+  width: 90px;
+
+  margin-top: 12.5px;
+  margin-left: 16px;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
   z-index: 0;
+
+  flex-shrink: 0;
+
+  gap: 4px;
+
   width: 74px;
   height: 74px;
-  gap: 4px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  background-image: url(${(props) => props.$bgimg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
   margin-top: 20.8px;
   margin-left: 23.78px;
+
+  background-image: url(${(props) => props.$bgimg});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   border: 1px rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
 `;
 const BookTitle = styled.div<{ $font: string }>`
   display: flex;
-  justify-content: center;
-  align-items: center;
+
   flex-shrink: 0;
+
+  align-items: center;
+  justify-content: center;
+
   margin-top: 13.5px;
-  color: #fff;
-  text-align: center;
+
   text-overflow: ellipsis;
+
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
     props.$font === 'Ownglyph_UNZ-Rg' ? '12px' : '8.571px'};
+
+  color: #fff;
+
+  text-align: center;
 `;
 const Button = styled.button`
   position: absolute;
-  overflow: hidden;
-  background: #ffa256;
-  width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
-  cursor: pointer;
+  bottom: 12px;
+  z-index: 1;
+
   display: flex;
-  height: 48px;
-  padding: 14px 20px;
+
+  gap: 8px;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+
+  width: calc(100% - 32px);
+  height: 48px;
+
+  padding: 14px 20px;
+  margin-right: 16px;
+  margin-left: 16px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  background: #ffa256;
+  border: none;
   border-radius: 50px;
-  bottom: 12px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  z-index: 1;
-  border: none;
 `;
 const ButtonTxt = styled.div`
-  color: #fff;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 `;

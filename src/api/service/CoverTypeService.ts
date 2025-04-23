@@ -1,4 +1,4 @@
-import { api, ApiResponse } from '../config/api';
+import { ApiResponse, api } from '../config/api';
 import { CoverTypeGetResponse } from '../model/CoverTypeModel';
 
 // 특정 커버타입 이름 조회 API

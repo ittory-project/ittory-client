@@ -1,4 +1,4 @@
-import { api, ApiResponse } from '../config/api';
+import { ApiResponse, api } from '../config/api';
 import { AuthJwtPostResponse, LogoutResponse } from '../model/AuthModel';
 
 export async function requestKakaoAuthentication(

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { addMonths, format, subMonths } from 'date-fns';
 import styled from 'styled-components';
-import NonPrev from '../../../../public/assets/prev_non.svg';
-import Prev from '../../../../public/assets/pageprev.svg';
+
 import Next from '../../../../public/assets/next.svg';
-import { format, subMonths, addMonths } from 'date-fns';
+import Prev from '../../../../public/assets/pageprev.svg';
+import NonPrev from '../../../../public/assets/prev_non.svg';
 import Calender from './Calender';
 
 interface Props {
@@ -81,96 +83,127 @@ export default function CalenderView({ setValue, deliverDay }: Props) {
   );
 }
 const Wrapper = styled.div`
+  position: relative;
+
   width: 100%;
   //height: 100%;
-  position: relative;
 `;
 const Container = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
 `;
 const Header = styled.div`
-  //width: 100%;
+  position: relative;
+  position: relative;
+
+  display: flex;
+
+  gap: 12px;
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+
   padding-top: 4px;
   margin-right: 20px;
   margin-left: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: relative;
-  justify-content: space-between;
-  align-self: stretch;
-  position: relative;
+  //width: 100%;
 `;
 const PrevButton = styled.span`
   position: relative;
-  cursor: pointer;
+  left: 0;
+
+  box-sizing: border-box;
   display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 24px;
   height: 24px;
-  //padding-left: 0.2rem;
+
   padding: 4px 8px;
-  box-sizing: border-box;
-  justify-content: center;
-  align-items: center;
-  left: 0;
+
+  cursor: pointer;
+  //padding-left: 0.2rem;
 `;
 const Current = styled.span`
   position: absolute;
   left: 50%;
-  color: #212529;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 1.125rem;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
+
   transform: translateX(-50%);
 `;
 const NextButton = styled.span`
   position: absolute;
-  cursor: pointer;
+  right: 0;
+
+  box-sizing: border-box;
   display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 24px;
   height: 24px;
-  //padding-right: 0.2rem;
+
   padding: 4px 8px;
-  box-sizing: border-box;
-  justify-content: center;
-  align-items: center;
-  right: 0;
+
+  cursor: pointer;
+  //padding-right: 0.2rem;
 `;
 const Days = styled.div`
+  display: flex;
+
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+
+  padding-bottom: 10px;
   margin-top: 24px;
   margin-right: 22px;
   margin-left: 22px;
   //width: 100%;
-  padding-bottom: 10px;
-  display: flex;
   //gap: 1%;
-  align-self: stretch;
-  justify-content: space-between;
-  align-items: center;
 `;
 const Day = styled.span`
-  //height: 1rem;
-  color: #868e96;
+  display: flex;
+
+  padding: 0.5rem 4% 0.7rem 3.9%;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 12px;
   font-weight: 400;
-  display: flex;
+
+  color: #868e96;
+
+  text-align: center;
+  //height: 1rem;
   //width: 9.1%;
   //padding: 5px 9.5px 9px 7px;
-  padding: 0.5rem 4% 0.7rem 3.9%;
-  text-align: center;
 `;
 const Body = styled.div`
-  width: calc(100% - 44px);
   position: relative;
-  margin-bottom: 14px;
+
+  width: calc(100% - 44px);
+
   margin-right: 22px;
+  margin-bottom: 14px;
   margin-left: 22px;
 `;

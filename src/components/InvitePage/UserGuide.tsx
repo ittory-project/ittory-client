@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+
 import styled from 'styled-components';
+
+import blue from '../../../public/assets/bluecircle.svg';
+import gray from '../../../public/assets/graycircle.svg';
 import guide1 from '../../../public/assets/guide1.svg';
 import guide2 from '../../../public/assets/guide2.svg';
 import guide3 from '../../../public/assets/guide3.svg';
 import guide4 from '../../../public/assets/guide4.svg';
 import guide5 from '../../../public/assets/guide5.svg';
 import guide6 from '../../../public/assets/guide6.svg';
-import gray from '../../../public/assets/graycircle.svg';
-import blue from '../../../public/assets/bluecircle.svg';
 
 interface Props {
   setGuide: React.Dispatch<React.SetStateAction<string>>;
@@ -76,66 +78,89 @@ export const UserGuide = ({ setGuide }: Props) => {
 };
 
 const ModalContainer = styled.div`
-  display: flex;
-  width: 272px;
-  box-sizing: border-box;
-  padding: 24px 0px 16px 0px;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 20px;
-  border: 3px solid #d3edff;
-  background: #fff;
   z-index: 100;
+
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+  align-items: center;
+
+  width: 272px;
+
+  padding: 24px 0px 16px 0px;
+
+  background: #fff;
+  border: 3px solid #d3edff;
+  border-radius: 20px;
+
+  transform: translate(-50%, -50%);
 `;
 const MainContainer = styled.div`
   display: flex;
+
   flex-direction: column;
-  align-items: center;
+
   gap: 24px;
+  align-items: center;
   align-self: stretch;
 `;
 const GuideImage = styled.img`
   display: block;
+
+  flex-direction: column;
+
+  gap: 16px;
+
   width: 232px;
   height: 210px;
-  flex-direction: column;
+
   object-fit: cover;
-  //align-items: center;
-  gap: 16px;
+
   border-radius: 16px;
+  //align-items: center;
 `;
 const Description = styled.div`
   display: flex;
+
   flex-direction: column;
-  align-items: center;
+
   gap: 8px;
+  align-items: center;
   align-self: stretch;
-  color: #212529;
-  text-align: center;
+
   font-family: SUIT;
   font-size: 16px;
   font-weight: 700;
+
   line-height: 22px;
+
+  color: #212529;
+
+  text-align: center;
   letter-spacing: -0.5px;
   white-space: pre-line;
 `;
 const ButtonContainer = styled.div`
-  display: flex;
   box-sizing: border-box;
-  padding: 0px 16px;
-  justify-content: space-between;
+  display: flex;
+
   align-items: center;
   align-self: stretch;
+  justify-content: space-between;
+
+  padding: 0px 16px;
 `;
 const BubbleContainer = styled.div`
   display: flex;
-  align-items: center;
+
   gap: 4px;
+  align-items: center;
 `;
 const Blue = styled.img`
   width: 18px;
@@ -146,51 +171,72 @@ const Gray = styled.img`
   height: 6px;
 `;
 const PrevButton = styled.div<{ $disabled: boolean }>`
-  display: flex;
   box-sizing: border-box;
-  padding: 8px;
-  justify-content: center;
-  align-items: center;
+  display: flex;
+
   gap: 10px;
-  color: ${(props) => (props.$disabled ? '#ADB5BD' : '#495057')};
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+
   font-family: SUIT;
   font-size: 12px;
   font-weight: 700;
+
   line-height: 16px;
+
+  color: ${(props) => (props.$disabled ? '#ADB5BD' : '#495057')};
+
+  text-align: center;
   letter-spacing: -0.5px;
+
   cursor: pointer;
   cursor: pointer;
 `;
 const NextButton = styled.div`
-  display: flex;
   box-sizing: border-box;
-  padding: 8px;
-  justify-content: center;
-  align-items: center;
+  display: flex;
+
   gap: 10px;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+
   font-family: SUIT;
   font-size: 12px;
   font-weight: 700;
+
   line-height: 16px;
-  letter-spacing: -0.5px;
+
   color: #495057;
+
+  text-align: center;
+  letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const CompleteButton = styled.div`
-  display: flex;
   box-sizing: border-box;
-  padding: 8px;
-  justify-content: center;
-  align-items: center;
+  display: flex;
+
   gap: 10px;
-  color: #4db4ff;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+
   font-family: SUIT;
   font-size: 12px;
   font-weight: 700;
+
   line-height: 16px;
+
+  color: #4db4ff;
+
+  text-align: center;
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;

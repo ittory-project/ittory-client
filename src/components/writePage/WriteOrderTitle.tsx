@@ -1,7 +1,9 @@
 import { useState } from 'react';
+
 import styled from 'styled-components';
-import { WriteOrderPopover } from './WriteOrderPopover';
+
 import { LetterPartiItem } from '../../api/model/LetterModel';
+import { WriteOrderPopover } from './WriteOrderPopover';
 
 interface TitleProps {
   writeOrderList: LetterPartiItem[];
@@ -54,41 +56,55 @@ export default WriteOrderTitle;
 
 const OuterContainer = styled.div`
   display: flex;
-  height: 46px;
-  padding: 2px;
-  align-items: center;
+
   gap: 12px;
+  align-items: center;
   align-self: stretch;
-  border-radius: 8px;
+
+  height: 46px;
+
+  padding: 2px;
+
   background: linear-gradient(to right, #fff, #4db4ff);
+  border-radius: 8px;
 `;
 
 const InnerContainer = styled.div`
   display: flex;
-  height: 100%;
-  width: 100%;
+
   align-items: center;
   justify-content: space-between;
-  border-radius: 8px;
-  background: #d3edff;
-  color: var(--Color-secondary-dark_navy_blue, #060d24);
+
+  width: 100%;
+  height: 100%;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-xs, 15px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-2xs, 16px); /* 133.333% */
+
+  color: var(--Color-secondary-dark_navy_blue, #060d24);
+
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+
+  background: #d3edff;
+  border-radius: 8px;
 `;
 
 const LeftContent = styled.div`
   display: flex;
+
   align-items: center;
 `;
 
 const Img = styled.img`
+  flex-shrink: 0;
+
   width: 22px;
   height: var(--Typography-size-s, 16px);
-  flex-shrink: 0;
+
   margin: 0px 10px 0px 20px;
 `;
 

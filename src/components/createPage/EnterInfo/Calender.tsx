@@ -1,6 +1,7 @@
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek } from 'date-fns';
-import { format, isSameMonth, isSameDay, addDays } from 'date-fns';
 import React, { useEffect } from 'react';
+
+import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns';
+import { addDays, format, isSameDay, isSameMonth } from 'date-fns';
 import styled from 'styled-components';
 
 interface Props {
@@ -134,54 +135,75 @@ const Container = styled.div`
 `;
 const Disabled = styled.div`
   position: relative;
+
+  box-sizing: border-box;
   display: inline-flex;
-  justify-content: center;
-  align-items: center;
+
   flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
   width: 9.1%;
   height: 30px;
-  box-sizing: border-box;
 `;
 const Selected = styled.div`
   position: relative;
+
+  box-sizing: border-box;
   display: inline-flex;
-  cursor: pointer;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
   width: 9.1%;
   height: 30px;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  box-sizing: border-box;
+
   overflow: visible;
+
+  cursor: pointer;
   svg {
-    overflow: visible;
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+
     width: 30px;
     height: 30px;
+
+    overflow: visible;
+
+    transform: translateX(-50%);
   }
 `;
 const Valid = styled.div`
   position: relative;
+
+  box-sizing: border-box;
   display: inline-flex;
-  cursor: pointer;
+
+  align-items: center;
+  justify-content: center;
+
   width: 9.1%;
   height: 30px;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
+
+  cursor: pointer;
 `;
 
 const Txt = styled.span`
   position: absolute;
-  text-align: center;
+  top: 50%;
+  left: 50%;
+
   font-family: 'GmarketSans';
   font-size: 12px;
   font-weight: 400;
+
   line-height: normal;
-  left: 50%;
-  top: 50%;
+
+  text-align: center;
+
   transform: translate(-50%, -50%);
 `;

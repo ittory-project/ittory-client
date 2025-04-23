@@ -4,13 +4,14 @@ import axios, {
   HttpStatusCode,
   InternalAxiosRequestConfig,
 } from 'axios';
-import { api, BaseResponse } from './api';
-import { forceLogout } from './logout';
+
+import { SessionLogger } from '../../utils/SessionLogger';
 import {
   accessTokenRepository,
   refreshEndpoint,
 } from './AccessTokenRepository';
-import { SessionLogger } from '../../utils/SessionLogger';
+import { BaseResponse, api } from './api';
+import { forceLogout } from './logout';
 
 const logger = new SessionLogger('http');
 

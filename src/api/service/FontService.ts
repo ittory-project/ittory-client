@@ -1,4 +1,4 @@
-import { api, ApiResponse } from '../config/api';
+import { ApiResponse, api } from '../config/api';
 import { FontGetResponse } from '../model/FontModel';
 import { FontAllResponse } from '../model/FontModel';
 import { Font } from '../model/FontModel';

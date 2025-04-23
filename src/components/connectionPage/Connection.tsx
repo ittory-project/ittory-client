@@ -1,17 +1,19 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+
 import bg1 from '../../../public/assets/connect/bg1.png';
 import bg2 from '../../../public/assets/connect/bg2.png';
 import bg3 from '../../../public/assets/connect/bg3.png';
 import bg4 from '../../../public/assets/connect/bg4.png';
 import bg5 from '../../../public/assets/connect/bg5.png';
+import '../../App.css';
+import { encodeLetterId } from '../../api/config/base64';
 //import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from '../../api/config/state';
-import { encodeLetterId } from '../../api/config/base64';
 import { postRandom } from '../../api/service/ParticipantService';
-import '../../App.css';
 
 const scaleAnimation = keyframes`
   0% {
@@ -147,17 +149,24 @@ export const Connection = () => {
 };
 
 const BackGround = styled.div<{ topBackground: string | null }>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: absolute;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   overflow: hidden;
-  background-size: cover;
-  background-position: center; /* 중앙 정렬 */
-  background-repeat: no-repeat; /* 이미지 반복 방지 */
+
   background-image: url(${(props) => props.topBackground});
+  background-repeat: no-repeat; /* 이미지 반복 방지 */
+  background-position: center; /* 중앙 정렬 */
+  background-size: cover;
+
   animation: ${scaleAnimation} 1s ease-in-out;
   animation-delay: 1.6s;
 `;
@@ -172,23 +181,32 @@ const BackGround = styled.div<{ topBackground: string | null }>`
 `;*/
 const Contents = styled.div`
   position: absolute;
-  margin-top: 55%;
   z-index: 2;
+
   display: inline-flex;
-  padding: var(--Border-Radius-radius_300, 8px) 16px;
-  justify-content: center;
-  align-items: center;
+
   gap: 10px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.2);
-  color: #fff;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--Border-Radius-radius_300, 8px) 16px;
+  margin-top: 55%;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px;
+
+  color: #fff;
+
+  text-align: center;
   letter-spacing: -0.5px;
+
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+
   animation: ${hideDuringAnimation} 2s ease-in-out;
   animation-delay: 1s;
 `;

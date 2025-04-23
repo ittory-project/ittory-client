@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
-import { WriteOrderActivateItem } from './WriteOrderActivateItem';
+
 import styled from 'styled-components';
-import { WriteOrderFinalItem } from './WriteOrderFinalItem';
+
 import { LetterItem } from '../../../api/model/LetterModel';
+import { WriteOrderActivateItem } from './WriteOrderActivateItem';
+import { WriteOrderFinalItem } from './WriteOrderFinalItem';
+import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderNowItem } from './WriteOrderNowItem';
 
 interface ListComponentProps {
@@ -88,15 +90,17 @@ const Wrapper = styled.div`
 `;
 
 const Line = styled.div`
-  border-left: 1px dashed #868e96;
-  height: 100%;
+  position: absolute;
   top: 0px;
   left: 30px;
-  position: absolute;
   z-index: 1;
+
+  height: 100%;
+
+  border-left: 1px dashed #868e96;
 `;
 
 const ListItem = styled.div`
-  z-index: 2;
   position: relative;
+  z-index: 2;
 `;

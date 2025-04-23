@@ -1,6 +1,8 @@
-import { Loading } from '../../components/InvitePage/Loading';
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+
+import { Loading } from '../../components/InvitePage/Loading';
 
 export const LoadingPage = () => {
   const navigate = useNavigate();
