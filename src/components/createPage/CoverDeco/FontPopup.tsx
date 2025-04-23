@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import { SessionLogger } from '../../../utils';
 import { fontProps } from './CoverStyle';
 import FontSelect from './FontSelect';
 
