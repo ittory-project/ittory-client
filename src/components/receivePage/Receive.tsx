@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 import { useLocation, useParams } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
+
 import { DoorAnimation } from './DoorAnimation';
 
 function Query() {

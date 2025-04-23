@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { kakaoLogin } from '../../api/config/kakaoLogin';
 import { SessionLogger } from '../../utils';
 

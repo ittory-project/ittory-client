@@ -1,7 +1,9 @@
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import deleteIcon from '../../../../public/assets/invite/delete.svg';
 import { useEffect } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+import deleteIcon from '../../../../public/assets/invite/delete.svg';
 
 export const DeleteConfirm = () => {
   const navigate = useNavigate();

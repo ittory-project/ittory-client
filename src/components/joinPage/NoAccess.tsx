@@ -1,5 +1,6 @@
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
 import joinblock from '../../../public/assets/join/joinblock.svg';
 
 export default function NoAccess() {

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import EditImg from '../../../../public/assets/edit.svg';
-import calender from '../../../../public/assets/calendar.svg';
-import BottomSheet from '../EnterInfo/BotttomSheet';
-import CoverModal from '../FinalLetter/CoverModal';
-import shadow from '../../../../public/assets/shadow2.svg';
+import styled from 'styled-components';
+
 import bright from '../../../../public/assets/border.svg';
+import calender from '../../../../public/assets/calendar.svg';
+import EditImg from '../../../../public/assets/edit.svg';
+import shadow from '../../../../public/assets/shadow2.svg';
 import { CoverType } from '../../../api/model/CoverType';
 import { getCoverTypes } from '../../../api/service/CoverService';
+import BottomSheet from '../EnterInfo/BotttomSheet';
+import CoverModal from '../FinalLetter/CoverModal';
 
 interface Props {
   myName: string;

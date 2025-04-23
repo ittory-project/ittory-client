@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+
 import styled from 'styled-components';
+
+import blue from '../../../public/assets/bluecircle.svg';
+import gray from '../../../public/assets/graycircle.svg';
 import guide1 from '../../../public/assets/guide1.svg';
 import guide2 from '../../../public/assets/guide2.svg';
 import guide3 from '../../../public/assets/guide3.svg';
 import guide4 from '../../../public/assets/guide4.svg';
 import guide5 from '../../../public/assets/guide5.svg';
 import guide6 from '../../../public/assets/guide6.svg';
-import gray from '../../../public/assets/graycircle.svg';
-import blue from '../../../public/assets/bluecircle.svg';
 
 interface Props {
   setGuide: React.Dispatch<React.SetStateAction<string>>;

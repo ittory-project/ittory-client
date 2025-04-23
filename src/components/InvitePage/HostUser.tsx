@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+
 import { format, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import out from '../../../public/assets/out.svg';
+import styled from 'styled-components';
+
+import bright from '../../../public/assets/border.svg';
 import deletebtn from '../../../public/assets/delete.svg';
 import info from '../../../public/assets/info.svg';
+import barShadow from '../../../public/assets/invite/shadow.svg';
+import defaultImg from '../../../public/assets/menu/logindefault.png';
+import out from '../../../public/assets/out.svg';
+import shadow from '../../../public/assets/shadow2.svg';
+import tip from '../../../public/assets/tooltip.svg';
+import { CoverType } from '../../api/model/CoverType';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getCoverTypes } from '../../api/service/CoverService';
+import { getFontById } from '../../api/service/FontService';
+import { getLetterInfo } from '../../api/service/LetterService';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
+import { getMyPage } from '../../api/service/MemberService';
+import { SessionLogger } from '../../utils/SessionLogger';
+import { Count } from './Count/Count';
+import { CountPopup } from './Count/CountPopup';
+import { Delete } from './Delete/Delete';
+import { Exit } from './Exit';
+import { Participants } from './Invite';
+import { UserGuide } from './UserGuide';
 import crown from '/assets/crown.svg';
 import plus from '/assets/plus.svg';
-import tip from '../../../public/assets/tooltip.svg';
-import { UserGuide } from './UserGuide';
-import { Delete } from './Delete/Delete';
-import { CountPopup } from './Count/CountPopup';
-import { Count } from './Count/Count';
-import { Exit } from './Exit';
-import bright from '../../../public/assets/border.svg';
-import shadow from '../../../public/assets/shadow2.svg';
-import { getMyPage } from '../../api/service/MemberService';
-import { Participants } from './Invite';
-import { getCoverTypes } from '../../api/service/CoverService';
-import { CoverType } from '../../api/model/CoverType';
-import { getLetterInfo } from '../../api/service/LetterService';
-import defaultImg from '../../../public/assets/menu/logindefault.png';
-import { getFontById } from '../../api/service/FontService';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
-import barShadow from '../../../public/assets/invite/shadow.svg';
-import { SessionLogger } from '../../utils/SessionLogger';
 
 const logger = new SessionLogger('invite');
 
@@ -136,10 +138,9 @@ export const HostUser = ({
 
   // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
   const handleResize = () => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
+    setIsMobile(window.innerWidth < 850);
   };
   useEffect(() => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);

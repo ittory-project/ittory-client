@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Pagination } from '../common/Pagination';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
-import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
-import { decodeLetterId } from '../../api/config/base64';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
-import { FontGetResponse } from '../../api/model/FontModel';
-import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
-import { getFontById } from '../../api/service/FontService';
-import { getCoverTypeById } from '../../api/service/CoverTypeService';
-import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
+
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { decodeLetterId } from '../../api/config/base64';
+import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getCoverTypeById } from '../../api/service/CoverTypeService';
+import { getFontById } from '../../api/service/FontService';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
 import { SessionLogger } from '../../utils';
+import { Pagination } from '../common/Pagination';
+import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
+import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
 
 const logger = new SessionLogger('share');
 
@@ -42,10 +44,9 @@ export const ShareLetter = () => {
   }, [query]);
 
   const handleResize = () => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
+    setIsMobile(window.innerWidth < 850);
   };
   useEffect(() => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -203,39 +204,39 @@ export const ShareLetter = () => {
 };
 
 const Background = styled.div<{ $backgroundimg: string }>`
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
-  background-image: url(${(props) => props.$backgroundimg});
-  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+  background-image: url(${(props) => props.$backgroundimg});
+  background-size: cover;
 `;
 
 const CloseBtn = styled.img`
-  height: 24px;
-  width: 24px;
   position: absolute;
   top: 20px;
   right: 20px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
 `;
 
 const CoverContainer = styled.div<{ $boardimg: string }>`
   position: relative;
+  flex-shrink: 0;
   width: 272px;
   height: 355px;
-  flex-shrink: 0;
-  border-radius: 5px 15px 15px 5px;
   background-image: url(${(props) => props.$boardimg});
+  border-radius: 5px 15px 15px 5px;
 `;
 
 const CoverShadow = styled.div`
   display: flex;
   align-items: center;
-  border-radius: 5px 15px 15px 5px;
   background-size: cover;
+  border-radius: 5px 15px 15px 5px;
   box-shadow:
     0 2px 1px rgba(0, 0, 0, 0.09),
     0 4px 2px rgba(0, 0, 0, 0.09),
@@ -246,27 +247,21 @@ const CoverShadow = styled.div`
 
 const BtnContainer = styled.div`
   display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
   width: 320px;
   padding: 10px 16px 5px 16px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
 `;
 
 const StoreBtn = styled.button`
   display: flex;
+  gap: var(--Border-Radius-radius_300, 8px);
+  align-items: center;
+  justify-content: center;
   width: 140px;
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: var(--Border-Radius-radius_300, 8px);
-  border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: var(--color-black-white-white, #fff);
-  box-shadow:
-    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
-    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  color: var(--Color-grayscale-gray700, #495057);
 
   /* body/small_bold */
   font-family: var(--Typography-family-body, SUIT);
@@ -274,7 +269,13 @@ const StoreBtn = styled.button`
   font-style: normal;
   font-weight: 700;
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+  color: var(--Color-grayscale-gray700, #495057);
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  background: var(--color-black-white-white, #fff);
+  border-radius: var(--Border-Radius-radius_circle, 50px);
+  box-shadow:
+    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
+    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 
   &:focus {
     outline: none;
@@ -283,18 +284,12 @@ const StoreBtn = styled.button`
 
 const ShareBtn = styled.button`
   display: flex;
+  gap: var(--Border-Radius-radius_300, 8px);
+  align-items: center;
+  justify-content: center;
   width: 140px;
   height: 48px;
   padding: var(--Typography-size-s, 14px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: var(--Border-Radius-radius_300, 8px);
-  border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: var(--Color-primary-orange, #ffa256);
-  box-shadow:
-    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
-    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  color: var(--color-black-white-white, #fff);
 
   /* body/small_bold */
   font-family: var(--Typography-family-body, SUIT);
@@ -302,7 +297,13 @@ const ShareBtn = styled.button`
   font-style: normal;
   font-weight: 700;
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+  color: var(--color-black-white-white, #fff);
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  background: var(--Color-primary-orange, #ffa256);
+  border-radius: var(--Border-Radius-radius_circle, 50px);
+  box-shadow:
+    -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
+    1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
 
   &:focus {
     outline: none;
@@ -310,24 +311,24 @@ const ShareBtn = styled.button`
 `;
 
 const CopyAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
   z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
   font-family: SUIT;
-  font-weight: 500;
   font-size: 12px;
   font-style: normal;
+  font-weight: 500;
   line-height: 16px;
+  color: #fff;
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
   transform: translateX(-50%);
 `;

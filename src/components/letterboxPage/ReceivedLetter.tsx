@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
+
 import more from '../../../public/assets/more.svg';
+import { ReceiveLetterModel } from '../../api/model/MemberModel';
+import {
+  getLetterCounts,
+  getReceivedLetter,
+} from '../../api/service/MemberService';
 import { Delete_letterbox } from './Delete_letterbox';
-import { Received_Modal } from './Received_Modal';
 import { EmptyLetter } from './EmptyLetter';
 import { Letter } from './Letter';
-import {
-  getReceivedLetter,
-  getLetterCounts,
-} from '../../api/service/MemberService';
-import { ReceiveLetterModel } from '../../api/model/MemberModel';
 import { Loading } from './Loading';
+import { Received_Modal } from './Received_Modal';
 
 interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;

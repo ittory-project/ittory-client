@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
+
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Pagination } from '../common/Pagination';
 import { decodeLetterId } from '../../api/config/base64';
-import { ReceiveLetterCover } from './ReceiveLetterCover';
-import { ReceiveLetterSave } from './ReceiveLetterSave';
-import { ReceiveLetterContents } from './ReceiveLetterContents';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { FontGetResponse } from '../../api/model/FontModel';
 import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getCoverTypeById } from '../../api/service/CoverTypeService';
+import { getFontById } from '../../api/service/FontService';
 import {
   getLetterDetailInfo,
   getLetterStorageCheck,
   postLetterStore,
 } from '../../api/service/LetterService';
-import { getFontById } from '../../api/service/FontService';
-import { getCoverTypeById } from '../../api/service/CoverTypeService';
+import { Pagination } from '../common/Pagination';
+import { ReceiveLetterContents } from './ReceiveLetterContents';
+import { ReceiveLetterCover } from './ReceiveLetterCover';
+import { ReceiveLetterSave } from './ReceiveLetterSave';
 
 function Query() {
   return new URLSearchParams(useLocation().search);

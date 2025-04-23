@@ -1,7 +1,8 @@
-import styled from 'styled-components';
-import { getKakaoCode } from '../../api/config/setToken';
-import MainLogo from '../../../public/img/main_logo.svg';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+import MainLogo from '../../../public/img/main_logo.svg';
+import { getKakaoCode } from '../../api/config/setToken';
 
 const 개인정보처리방침URL =
   'https://sequoia-corn-388.notion.site/6ca28b84d08e4b8d8a6bd0ddd6e94ce5';

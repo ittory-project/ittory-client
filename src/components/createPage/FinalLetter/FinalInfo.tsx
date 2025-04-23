@@ -1,16 +1,18 @@
-import React, { useState, useEffect, ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { ReactNode, useEffect, useState } from 'react';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import styled from 'styled-components';
+
 import EditImg from '../../../../public/assets/edit.svg';
-import EditLetter from '../FinalLetter/EditLetter';
-import CoverModal from './CoverModal';
-import CompleteModal from './CompleteModal';
-import UserFinishModal from './UserFinishModal';
 import shadow from '../../../../public/assets/shadow2.svg';
 import { CoverType } from '../../../api/model/CoverType';
 import { getCoverTypes } from '../../../api/service/CoverService';
 import { getVisitUser } from '../../../api/service/MemberService';
+import EditLetter from '../FinalLetter/EditLetter';
+import CompleteModal from './CompleteModal';
+import CoverModal from './CoverModal';
+import UserFinishModal from './UserFinishModal';
 
 interface Props {
   myName: string;

@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import more from '../../../public/assets/more_white.svg';
-import ChevronLeft from '../../../public/assets/letterbox/chevron_left.svg?react';
-import { Created_Modal } from './Created_Modal';
-import { Received_Modal } from './Received_Modal';
-import { Delete_letterbox } from './Delete_letterbox';
+import React, { useEffect, useState } from 'react';
 
-import { useNavigate, useLocation } from 'react-router-dom';
-import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+import ChevronLeft from '../../../public/assets/letterbox/chevron_left.svg?react';
+import more from '../../../public/assets/more_white.svg';
+import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
+import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
+import { FontGetResponse } from '../../api/model/FontModel';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getCoverTypeById } from '../../api/service/CoverTypeService';
+import { getFontById } from '../../api/service/FontService';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
+import { SessionLogger } from '../../utils';
+import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
 import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
-
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
-import { FontGetResponse } from '../../api/model/FontModel';
-import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
-import { getFontById } from '../../api/service/FontService';
-import { getCoverTypeById } from '../../api/service/CoverTypeService';
-import { Pagination } from '../common/Pagination';
-import { SessionLogger } from '../../utils';
+import { Created_Modal } from './Created_Modal';
+import { Delete_letterbox } from './Delete_letterbox';
+import { Received_Modal } from './Received_Modal';
 
 const logger = new SessionLogger('letterbox');
 

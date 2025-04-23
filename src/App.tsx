@@ -1,21 +1,23 @@
-import './App.css';
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+
+import './App.css';
 import { MainLayout } from './layout/MainLayout';
-import { ReceiveLetterPage } from './pages/receive/ReceiveLetterPage';
-import { LoginRedirectPage } from './pages/home/LoginRedirectPage';
-import { ReceivePage } from './pages/receive/ReceivePage';
+import { AccountPage } from './pages/account/AccountPage';
+import { ConnectionPage } from './pages/connect/ConnectionPage';
+import { CreatePage } from './pages/create/CreatePage';
 import { HomePage } from './pages/home/HomePage';
 import { LoginPage } from './pages/home/LoginPage';
-import { WritePage } from './pages/write/WritePage';
-import { CreatePage } from './pages/create/CreatePage';
+import { LoginRedirectPage } from './pages/home/LoginRedirectPage';
 import { InvitePage } from './pages/invite/InvitePage';
-import { JoinPage } from './pages/join/JoinPage';
-import { ConnectionPage } from './pages/connect/ConnectionPage';
-import { AccountPage } from './pages/account/AccountPage';
-import { LetterBoxPage } from './pages/letterbox/LetterBoxPage';
-import { ShareLetterPage } from './pages/share/SharePage';
 import { LoadingPage } from './pages/invite/LoadingPage';
+import { JoinPage } from './pages/join/JoinPage';
+import { LetterBoxPage } from './pages/letterbox/LetterBoxPage';
+import { ReceiveLetterPage } from './pages/receive/ReceiveLetterPage';
+import { ReceivePage } from './pages/receive/ReceivePage';
+import { ShareLetterPage } from './pages/share/SharePage';
+import { WritePage } from './pages/write/WritePage';
 
 function App() {
   useEffect(() => {

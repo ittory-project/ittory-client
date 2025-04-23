@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import letter from '../../../../public/assets/letter.svg';
+import Player from 'lottie-react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+import animation from '../../../../public/assets/confetti.json';
+import letter from '../../../../public/assets/letter.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
 import { CoverType } from '../../../api/model/CoverType';
-import { getCoverTypes } from '../../../api/service/CoverService';
 import { LetterRequestBody } from '../../../api/model/LetterModel';
+import { getCoverTypes } from '../../../api/service/CoverService';
 import { postLetter } from '../../../api/service/LetterService';
 //import { postNickname } from '../../../api/service/ParticipantService';
 //import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
 import { postEnter } from '../../../api/service/LetterService';
-import animation from '../../../../public/assets/confetti.json';
-import Player from 'lottie-react';
 
 interface Props {
   myName: string;
@@ -96,7 +98,7 @@ export default function CompleteModal({
   const fetchEnter = async (letterId: number) => {
     const nickname = myName;
     const enterresponse = await postEnter(Number(letterId), { nickname });
-    if (enterresponse.enterStatus == true) {
+    if (enterresponse.enterStatus === true) {
       navigate('/Invite', {
         state: {
           userName: myName,

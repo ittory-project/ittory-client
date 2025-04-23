@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
-import prev from '../../../public/assets/prev.svg';
+
 import bell from '../../../public/assets/bell.svg';
 import check from '../../../public/assets/check.svg';
-import { DeleteReason } from './DeleteReason';
+import prev from '../../../public/assets/prev.svg';
 import { getMyPage } from '../../api/service/MemberService';
+import { DeleteReason } from './DeleteReason';
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;

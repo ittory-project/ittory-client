@@ -1,6 +1,8 @@
-import { Create } from '../../components/createPage/Create';
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+
+import { Create } from '../../components/createPage/Create';
 
 export const CreatePage = () => {
   const navigate = useNavigate();

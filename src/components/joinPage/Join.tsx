@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { JoinModal } from './JoinModal';
-import { getMyPage, getVisitUser } from '../../api/service/MemberService';
+import React, { useEffect, useState } from 'react';
+
 import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
+import { getMyPage, getVisitUser } from '../../api/service/MemberService';
+import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
+import Deleted from './Deleted';
+import { JoinModal } from './JoinModal';
 //import { NicknamePostRequest } from "../../api/model/ParticipantModel";
 //import { postNickname } from "../../api/service/ParticipantService";
 import NoAccess from './NoAccess';
 import Started from './Started';
-import Deleted from './Deleted';
-import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
-import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
 
 export const Join = () => {
   const [nickname, setNickname] = useState<string>('');

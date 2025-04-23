@@ -1,7 +1,10 @@
 import React from 'react';
+
 import MediaQuery from 'react-responsive';
+
 import '../App.css';
 import { ExportLogButton } from './ExportLogButton';
+
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="App">

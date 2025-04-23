@@ -1,10 +1,12 @@
-import LetterInfo from './EnterInfo/LetterInfo';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
+
+import { SessionLogger } from '../../utils/SessionLogger';
 import CoverDeco from './CoverDeco/CoverStyle';
+import LetterInfo from './EnterInfo/LetterInfo';
 import FinalInfo from './FinalLetter/FinalInfo';
 import { Loading } from './Loading';
-import { SessionLogger } from '../../utils/SessionLogger';
 
 const logger = new SessionLogger('create');
 

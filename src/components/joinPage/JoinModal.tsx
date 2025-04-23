@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { patchNickname } from '../../api/service/ParticipantService';
+import React from 'react';
+
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
 import { postEnter } from '../../api/service/LetterService';
+import { patchNickname } from '../../api/service/ParticipantService';
 
 interface Props {
   nickname: string;
