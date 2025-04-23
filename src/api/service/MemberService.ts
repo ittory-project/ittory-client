@@ -1,4 +1,5 @@
 import { ApiResponse, api } from '../config/api';
+import { setUserId } from '../config/setToken';
 import {
   LetterCountsGetResponse,
   LetterboxDeleteResponse,
@@ -20,6 +21,10 @@ export async function getLetterCounts(): Promise<LetterCountsGetResponse> {
 export async function getMyPage(): Promise<MypageGetResponse> {
   const response: ApiResponse<MypageGetResponse> =
     await api.get(`api/member/mypage`);
+
+  // FIXME: 무슨 이유에서인지, localStorage에 없는 경우가 발생..!
+  setUserId(response.data.data.memberId);
+
   return response.data.data;
 }
 
