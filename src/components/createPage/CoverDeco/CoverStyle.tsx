@@ -17,7 +17,9 @@ import { getCoverTypes } from '../../../../src/api/service/CoverService';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
 import { getAllFont } from '../../../api/service/FontService';
 import { postCoverImage } from '../../../api/service/ImageService';
+import { ImageExtension } from '../../../constants';
 import { SessionLogger } from '../../../utils';
+import FontPopup from './FontPopup';
 
 const logger = new SessionLogger('create');
 
@@ -85,7 +87,6 @@ export default function CoverStyle({
   const imgRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [originalImage, setOriginalImage] = useState<string>('');
-  const [, setCroppedAreaPixels] = useState<Area | null>(null);
   const [isModalOpen] = useState<boolean>(false);
   const [, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
@@ -220,7 +221,6 @@ export default function CoverStyle({
           // Step 3: 업로드가 완료되면 S3 URL 생성
           const s3ImageUrl = `https://ittory.s3.ap-northeast-2.amazonaws.com/${key}`;
           setCroppedImage(s3ImageUrl);
-          setCroppedAreaPixels(null);
         }
       }
     };
@@ -235,7 +235,6 @@ export default function CoverStyle({
       }
       const newImageUrl = URL.createObjectURL(e.target.files[0]);
       setOriginalImage(newImageUrl); // 원본 이미지를 설정
-      setCroppedAreaPixels(null);
       setCropperKey((prevKey) => prevKey + 1); // Cropper의 key를 변경하여 강제로 리렌더링
     },
     [],

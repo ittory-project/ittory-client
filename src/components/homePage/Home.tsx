@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import styled, { keyframes } from 'styled-components';
 
+import animation from '../../../public/assets/home/animation.json';
 import divider2 from '../../../public/assets/home/bar.png';
 import insta from '../../../public/assets/home/insta.svg';
 import logo from '../../../public/assets/home/logo.png';
