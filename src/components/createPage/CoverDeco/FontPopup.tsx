@@ -1,9 +1,9 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
+
 import styled from 'styled-components';
-import FontSelect from './FontSelect';
-import _Line from '../../../../public/assets/_line.svg';
+
 import { fontProps } from './CoverStyle';
-import { SessionLogger } from '../../../utils/SessionLogger';
+import FontSelect from './FontSelect';
 
 const logger = new SessionLogger('create');
 
@@ -17,7 +17,7 @@ interface Props {
   select: string;
   setSelectfid: React.Dispatch<React.SetStateAction<number>>;
   selectfid: number;
-  handlePopupClick: (e: React.MouseEvent) => void;
+  handlePopupClick: (_e: React.MouseEvent) => void;
 }
 
 const FontPopup = forwardRef<HTMLDivElement, Props>(
@@ -135,31 +135,30 @@ const BackGround = styled.div<{
   $bottomOffset: number;
   $isKeyboardVisible: boolean;
 }>`
-  display: flex;
-  width: 100%;
-  z-index: 100;
   position: absolute;
   bottom: ${(props) => props.$bottomOffset - 2}px;
+  z-index: 100;
+  display: flex;
+  width: 100%;
+  height: ${(props) => (props.$isKeyboardVisible ? '64px' : '149px')};
   overflow-x: hidden;
   overflow-y: hidden;
-  height: ${(props) => (props.$isKeyboardVisible ? '64px' : '149px')};
-  transition:
-    bottom 0.3s ease,
-    height 0.3s ease;
   box-shadow: ${(props) =>
     props.$isKeyboardVisible
       ? '0px'
       : '0px -4px 14px 0px rgba(0, 0, 0, 0.10);'};
+  transition:
+    bottom 0.3s ease,
+    height 0.3s ease;
 `;
 
 const FontContainer = styled.div`
+  z-index: 10;
   display: flex;
-  width: 100%;
-  //margin-top: 5px;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   overflow-x: auto;
-  z-index: 10;
   overflow-y: hidden;
   background: linear-gradient(
     180deg,
@@ -167,6 +166,7 @@ const FontContainer = styled.div`
     #fff 18.75%
   );
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.04);
+  //margin-top: 5px;
 `;
 /*
 const Line = styled.img`
@@ -176,29 +176,29 @@ const Line = styled.img`
   margin-top: 65px;
 `;*/
 const Button = styled.button<{ $isKeyboardVisible: boolean }>`
-  overflow: hidden;
-  z-index: 10;
   position: fixed;
+  bottom: 20px;
+  z-index: 10;
+  display: ${(props) => (props.$isKeyboardVisible ? 'none' : 'flex')};
+  gap: 8px;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
   width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
-  cursor: pointer;
   height: 48px;
   padding: 14px 20px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  bottom: 20px;
-  align-self: stretch;
-  border-radius: 50px;
-  color: #fff;
+  margin-right: 16px;
+  margin-left: 16px;
+  overflow: hidden;
   font-size: var(--Typography-size-base, 16px);
   font-style: normal;
   font-weight: 700;
+  color: #fff;
+  cursor: pointer;
   background: #343a40;
   border: none;
+  border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  display: ${(props) => (props.$isKeyboardVisible ? 'none' : 'flex')};
 `;

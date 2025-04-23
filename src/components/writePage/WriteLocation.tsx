@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import styled from 'styled-components';
+
 import img from '../../../public/assets/location.svg';
 
 interface LocationProps {
@@ -17,10 +19,9 @@ export const WriteLocation: React.FC<LocationProps> = ({
   const [isMobile, setIsMobile] = useState(false);
 
   const handleResize = () => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
+    setIsMobile(window.innerWidth < 850);
   };
   useEffect(() => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -74,40 +75,40 @@ export const WriteLocation: React.FC<LocationProps> = ({
 };
 
 const Background = styled.div`
-  width: 66px;
-  height: 82px;
   display: flex;
   justify-content: center;
+  width: 66px;
+  height: 82px;
   background-image: url(${img});
   background-size: cover;
 `;
 
 const Profile = styled.div<{ profileImage: string | undefined }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 56px;
   height: 56px;
-  border-radius: 50%;
   margin: 4px 0 0 0;
   background-image: url(${({ profileImage }) =>
     profileImage ? profileImage : '/assets/common/profile_bunny.svg'});
-  background-size: cover;
   background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-size: cover;
+  border-radius: 50%;
 `;
 
 const Contents = styled.div`
+  position: relative;
+  box-sizing: border-box;
   display: flex;
-  justify-content: center;
+  flex-shrink: 0;
   align-items: center;
+  justify-content: center;
   width: 56px;
   height: 56px;
   padding: 8px;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  border-radius: 28px;
   background: rgba(6, 13, 36, 0.8);
-  position: relative;
+  border-radius: 28px;
 `;
 
 const Svg = styled.svg`
@@ -123,21 +124,21 @@ const Circle = styled.circle`
 `;
 
 const Name = styled.div<{ color: string }>`
+  position: relative;
+  z-index: 1;
   display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 36px;
   height: 34px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  color: ${({ color }) => color};
-  text-align: center;
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-2xs, 11px);
   font-style: bold;
   font-weight: 400;
   line-height: var(--Typography-line_height-2xs, 16px); /* 145.455% */
+  color: ${({ color }) => color};
+  text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
-  position: relative;
-  z-index: 1;
 `;

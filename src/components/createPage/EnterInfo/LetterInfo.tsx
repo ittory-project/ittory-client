@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import X from '../../../../public/assets/x.svg';
-import calender from '../../../../public/assets/calendar.svg';
-import BottomSheet from './BotttomSheet';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { getMyPage } from '../../../api/service/MemberService';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+import calender from '../../../../public/assets/calendar.svg';
+import X from '../../../../public/assets/x.svg';
+import { getMyPage } from '../../../api/service/MemberService';
+import BottomSheet from './BotttomSheet';
 
 interface Props {
   myName: string;

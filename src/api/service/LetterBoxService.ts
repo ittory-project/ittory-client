@@ -1,4 +1,4 @@
-import { api, ApiResponse, BaseResponse } from '../config/api';
+import { ApiResponse, BaseResponse, api } from '../config/api';
 
 // 참여자들의 편지함에 편지 저장 API
 // param: 편지 ID

@@ -1,17 +1,19 @@
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+
 import bg1 from '../../../public/assets/connect/bg1.png';
 import bg2 from '../../../public/assets/connect/bg2.png';
 import bg3 from '../../../public/assets/connect/bg3.png';
 import bg4 from '../../../public/assets/connect/bg4.png';
 import bg5 from '../../../public/assets/connect/bg5.png';
+import '../../App.css';
+import { encodeLetterId } from '../../api/config/base64';
 //import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from '../../api/config/state';
-import { encodeLetterId } from '../../api/config/base64';
 import { postRandom } from '../../api/service/ParticipantService';
-import '../../App.css';
 
 const scaleAnimation = keyframes`
   0% {

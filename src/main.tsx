@@ -1,15 +1,15 @@
+import * as Sentry from '@sentry/react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
+import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { persistor, store } from './api/config/state.ts';
-import { HelmetProvider } from 'react-helmet-async';
-import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
 
-import * as Sentry from '@sentry/react';
-import { attachLoggerOnNavigate } from './utils/attachLoggerOnNavigate.ts';
+import App from './App.tsx';
+import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
+import { persistor, store } from './api/config/state.ts';
+import './index.css';
 import { activateDefaultLog } from './utils/activateDefaultLog.ts';
+import { attachLoggerOnNavigate } from './utils/attachLoggerOnNavigate.ts';
 
 activateDefaultLog();
 attachLoggerOnNavigate();

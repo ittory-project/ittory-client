@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
+
 import { ReceiveLetter } from '../../components/receivePage/ReceiveLetter';
 
 export const ReceiveLetterPage = () => {

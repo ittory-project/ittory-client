@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import styled from 'styled-components';
-import prev from '../../../public/assets/prev.svg';
+
 import { useNavigate } from 'react-router-dom';
-import out from '../../../public/assets/out_X.svg';
+import styled from 'styled-components';
+
 import logout from '../../../public/assets/logout.svg';
-import { Logout } from './Logout';
+import out from '../../../public/assets/out_X.svg';
+import prev from '../../../public/assets/prev.svg';
 import { AccountDelete } from './AccountDelete';
+import { Logout } from './Logout';
 
 export const Account = () => {
   const navigate = useNavigate();

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
-import X from '../../../public/assets/x.svg';
+
 import delete2 from '../../../public/assets/delete2.svg';
 import share from '../../../public/assets/share.svg';
+import X from '../../../public/assets/x.svg';
+import { encodeLetterId } from '../../api/config/base64';
 import { LetterDetailGetResponse } from '../../api/model/LetterModel';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
-import { encodeLetterId } from '../../api/config/base64';
 import { SessionLogger } from '../../utils';
 
 const logger = new SessionLogger('letterbox');
@@ -47,10 +49,9 @@ export const Created_Modal = ({
 
   // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
   const handleResize = () => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
+    setIsMobile(window.innerWidth < 850);
   };
   useEffect(() => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -146,88 +147,88 @@ export const Created_Modal = ({
 };
 
 const CopyAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
   z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
   font-family: SUIT;
-  font-weight: 500;
   font-size: 12px;
   font-style: normal;
+  font-weight: 500;
   line-height: 16px;
+  color: #fff;
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
   transform: translateX(-50%);
 `;
 
 const ModalContainer = styled.div`
   position: absolute;
   bottom: 0;
-  display: flex;
-  width: 100%;
-  border-radius: 20px 20px 0px 0px;
-  background: #fff;
   z-index: 100;
+  display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  background: #fff;
+  border-radius: 20px 20px 0px 0px;
 `;
 const Header = styled.div`
+  box-sizing: border-box;
   display: flex;
-  height: 44px;
-  padding: 24px 20px 0 0;
   flex-direction: column;
   align-items: flex-end;
   align-self: stretch;
-  box-sizing: border-box;
+  height: 44px;
+  padding: 24px 20px 0 0;
 `;
 const Cancel = styled.img`
+  flex-shrink: 0;
   width: 12px;
   height: 12px;
-  flex-shrink: 0;
   cursor: pointer;
 `;
 const Contents = styled.div`
   display: flex;
-  padding: 0px 20px 24px 16px;
   flex-direction: column;
   align-items: flex-end;
   align-self: stretch;
+  padding: 0px 20px 24px 16px;
 `;
 const List = styled.div`
   display: flex;
-  padding: 12px 0px;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   align-self: stretch;
+  padding: 12px 0px;
 `;
 const ShareIcon = styled.img`
+  flex-shrink: 0;
   width: 16px;
   height: 16px;
-  flex-shrink: 0;
-  margin-left: 4px;
   margin-right: 4px;
+  margin-left: 4px;
   cursor: pointer;
 `;
 const DeleteIcon = styled.img`
+  flex-shrink: 0;
   width: 24px;
   height: 24px;
-  flex-shrink: 0;
   cursor: pointer;
 `;
 const Txt = styled.div`
-  color: #212529;
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   line-height: 24px;
+  color: #212529;
   letter-spacing: -0.5px;
   cursor: pointer;
 `;

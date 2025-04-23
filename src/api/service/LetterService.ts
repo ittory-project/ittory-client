@@ -1,17 +1,17 @@
-import { api, ApiResponse, BaseResponse } from '../config/api';
+import { ApiResponse, BaseResponse, api } from '../config/api';
 import {
+  ApiLetterResponse,
+  CountPostResponse,
+  CountRequestBody,
+  LetterDetailGetResponse,
+  LetterEnterResponse,
+  LetterInfoGetResponse,
+  LetterPartiListGetResponse,
   LetterPostResponse,
   LetterRequestBody,
-  ParticipantsGetResponse,
-  ApiLetterResponse,
-  CountRequestBody,
-  CountPostResponse,
-  LetterInfoGetResponse,
-  LetterEnterResponse,
-  LetterPartiListGetResponse,
   LetterStartInfoGetResponse,
-  LetterDetailGetResponse,
   LetterStorageCheckGetResponse,
+  ParticipantsGetResponse,
   PostEnterRequestBody,
 } from '../model/LetterModel';
 
@@ -60,7 +60,7 @@ export async function getParticipants(
   letterId: number,
   order?: string,
 ): Promise<ParticipantsGetResponse> {
-  const params: Record<string, any> = {};
+  const params: Record<string, unknown> = {};
 
   if (order) {
     params.order = order; // `order`가 있으면 추가
@@ -81,7 +81,7 @@ export async function getParticipants(
 export function deleteLetter(
   letterId: number,
   onSuccess: () => void, // 성공 시 호출, 반환 데이터 없음
-  onError: (error: any) => void,
+  onError: (_error: unknown) => void,
 ): void {
   api
     .delete(`api/letter/${letterId}`)

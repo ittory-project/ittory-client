@@ -1,8 +1,9 @@
 import { Client } from '@stomp/stompjs';
-import { forceLogout } from './logout';
+
+import { SessionLogger } from '../../utils/SessionLogger';
 import { accessTokenRepository } from './AccessTokenRepository';
 import { WEBSOCKET_CONFIG } from './constants';
-import { SessionLogger } from '../../utils/SessionLogger';
+import { forceLogout } from './logout';
 
 const logger = new SessionLogger('websocket');
 

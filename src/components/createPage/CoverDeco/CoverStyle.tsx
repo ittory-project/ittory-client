@@ -1,24 +1,23 @@
 import React, {
-  useState,
+  ReactNode,
+  useCallback,
   useEffect,
   useRef,
-  useCallback,
-  ReactNode,
+  useState,
 } from 'react';
+
 import styled from 'styled-components';
-import PrevImg from '../../../../public/assets/pageprev.svg';
-import camera from '../../../../public/assets/camera.svg';
-import shadow from '../../../../public/assets/shadow2.svg';
+
 import bookshadow from '../../../../public/assets/book_shadow.svg';
-import FontPopup from './FontPopup';
-import { getCoverTypes } from '../../../../src/api/service/CoverService';
+import camera from '../../../../public/assets/camera.svg';
+import PrevImg from '../../../../public/assets/pageprev.svg';
+import shadow from '../../../../public/assets/shadow2.svg';
 import { CoverType } from '../../../../src/api/model/CoverType';
-import { getAllFont } from '../../../api/service/FontService';
-import axios from 'axios';
+import { getCoverTypes } from '../../../../src/api/service/CoverService';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
+import { getAllFont } from '../../../api/service/FontService';
 import { postCoverImage } from '../../../api/service/ImageService';
 import { SessionLogger } from '../../../utils';
-import { api } from '../../../api/config/api';
 
 const logger = new SessionLogger('create');
 
@@ -44,11 +43,6 @@ export interface fontProps {
   id: number;
   name: string;
   value: string;
-}
-export enum ImageExtension {
-  JPG = 'JPG',
-  JPEG = 'JPEG',
-  PNG = 'PNG',
 }
 
 const Book: React.FC<BookProps> = React.memo(

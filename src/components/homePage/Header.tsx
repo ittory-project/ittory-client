@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
-import logo from '../../../public/assets/home/smalllogo.png';
+
 import menu from '../../../public/assets/home/menulogo.svg';
+import logo from '../../../public/assets/home/smalllogo.png';
 
 interface Props {
   backgroundColor: boolean;

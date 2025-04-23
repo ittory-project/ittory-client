@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
 import ArrowPrev from '../../../public/assets/pagination/arrow_back.svg?react';
 import ArrowNext from '../../../public/assets/pagination/arrow_next.svg?react';
 

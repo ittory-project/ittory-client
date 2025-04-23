@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
+
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { decodeLetterId } from '../../../api/config/base64';
 import {
   LetterPartiItem,
   LetterPartiListGetResponse,
 } from '../../../api/model/LetterModel';
 import { getLetterPartiList } from '../../../api/service/LetterService';
-import { useParams } from 'react-router-dom';
-import { decodeLetterId } from '../../../api/config/base64';
 
 interface WriteModalProps {
   // partiCount: number;

@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useNavigate, useLocation } from 'react-router-dom';
+
+import prev from '../../../public/assets/prev.svg';
+import { SessionLogger } from '../../utils';
 import { CreatedLetter } from './CreatedLetter';
 import { ReceivedLetter } from './ReceivedLetter';
-import prev from '../../../public/assets/prev.svg';
-import { useParams } from 'react-router-dom';
-import { SessionLogger } from '../../utils';
 
 const logger = new SessionLogger('letterbox');
 

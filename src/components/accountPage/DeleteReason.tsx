@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import prev from '../../../public/assets/prev.svg';
-import check from '../../../public/assets/checkbox_gray.svg';
-import checked from '../../../public/assets/checkbox_black.svg';
-import { postWithdraw } from '../../api/service/MemberService';
-import { WithdrawPostRequest } from '../../api/model/MemberModel';
-import { WithdrawPopup } from './WithdrawPopup';
-import { SessionLogger } from '../../utils/SessionLogger';
-import { forceLogout } from '../../api/config/logout';
 
-const logger = new SessionLogger('account');
+import styled from 'styled-components';
+
+import checked from '../../../public/assets/checkbox_black.svg';
+import check from '../../../public/assets/checkbox_gray.svg';
+import prev from '../../../public/assets/prev.svg';
+import { forceLogout } from '../../api/config/logout';
+import { WithdrawPostRequest } from '../../api/model/MemberModel';
+import { postWithdraw } from '../../api/service/MemberService';
+import { WithdrawPopup } from './WithdrawPopup';
 
 interface Props {
   setViewReason: React.Dispatch<React.SetStateAction<boolean>>;
@@ -197,23 +196,23 @@ const Overlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 80;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   transition: background 0.3s ease;
-  z-index: 80;
 `;
 const BackGround = styled.div`
-  display: flex;
-  //position: fixed;
-  flex-direction: column;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 101%;
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
-  background: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 101%;
+  height: calc(var(--vh, 1vh) * 100);
   overflow-y: scroll;
+  background: #fff;
+  transform: translateX(-50%);
+  //position: fixed;
 
   /* 스크롤바 숨기기 */
   &::-webkit-scrollbar {
@@ -221,43 +220,43 @@ const BackGround = styled.div`
   }
 `;
 const Header = styled.div`
-  display: flex;
-  width: 100%;
   box-sizing: border-box;
-  padding: 0px var(--Border-Radius-radius_100, 4px);
-  justify-content: space-between;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px var(--Border-Radius-radius_100, 4px);
 `;
 const Prev = styled.img`
+  flex-shrink: 0;
   width: 8px;
   height: 16px;
-  margin-left: 16px;
   margin-right: 12px;
-  flex-shrink: 0;
+  margin-left: 16px;
   cursor: pointer;
 `;
 const HeaderTxt = styled.div`
   display: flex;
+  flex: 1 0 0;
+  gap: 16px;
+  align-items: center;
   height: 24px;
   padding: 12px;
-  align-items: center;
-  gap: 16px;
-  flex: 1 0 0;
-  color: #212529;
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
+  color: #212529;
   letter-spacing: -0.5px;
 `;
 const Container = styled.div`
+  box-sizing: border-box;
   display: flex;
-  padding: 0px 16px 20px 16px;
   flex-direction: column;
   align-items: center;
   align-self: stretch;
-  box-sizing: border-box;
+  padding: 0px 16px 20px 16px;
   overflow-y: scroll;
 
   /* 스크롤바 숨기기 */
@@ -266,66 +265,66 @@ const Container = styled.div`
   }
 `;
 const TitleContainer = styled.div`
-  margin-top: 16px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 12px;
+  align-items: flex-start;
   align-self: stretch;
+  margin-top: 16px;
   margin-bottom: 28px;
 `;
 const Title = styled.div`
   align-self: stretch;
-  color: #212529;
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 24px;
+  color: #212529;
   letter-spacing: -0.5px;
 `;
 const SubTitle = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 2px;
+  align-items: flex-start;
   align-self: stretch;
 `;
 const Txt = styled.div`
   align-self: stretch;
-  color: #868e96;
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 16px;
+  color: #868e96;
   letter-spacing: -0.5px;
 `;
 const CheckList = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 12px;
+  align-items: center;
   align-self: stretch;
 `;
 const CheckContainer = styled.div`
-  display: flex;
-  height: 52px;
   box-sizing: border-box;
-  padding: 16px;
-  align-items: center;
+  display: flex;
   gap: 8px;
+  align-items: center;
   align-self: stretch;
-  border-radius: 12px;
-  background: #f8f9fa;
-  color: #000;
+  height: 52px;
+  padding: 16px;
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+  color: #000;
   letter-spacing: -0.5px;
   cursor: pointer;
+  background: #f8f9fa;
+  border-radius: 12px;
 `;
 /*
 const CheckBox = styled.input`
@@ -341,9 +340,9 @@ const CheckBox = styled.input`
   }
 `;*/
 const CheckBox = styled.input`
-  appearance: none;
   width: 20px;
   height: 20px;
+  appearance: none;
   cursor: pointer;
   background: none;
 
@@ -352,9 +351,9 @@ const CheckBox = styled.input`
   }
 
   &::before {
-    content: url(${check});
     width: 100%;
     height: 100%;
+    content: url(${check});
   }
 
   &:checked::before {
@@ -365,33 +364,33 @@ const CheckBox = styled.input`
 const InputArea = styled.div<InputAreaProps>`
   position: relative;
   width: 98%;
-  border-radius: 12px;
   height: 140px;
+  margin-bottom: 80px;
   border: 1px solid
     ${({ $otherReason }) =>
       $otherReason && $otherReason.length > 0 ? '#212529' : '#adb5bd'};
-  margin-bottom: 80px;
+  border-radius: 12px;
 `;
 
 const Input = styled.textarea`
   position: relative;
-  padding: 16px 16px 0px 16px;
+  box-sizing: border-box;
+  flex: 1 0 0;
+  gap: 2px;
+  align-items: flex-start;
   width: 100%;
   height: 108px;
-  box-sizing: border-box;
-  border-radius: 12px;
+  padding: 16px 16px 0px 16px;
+  overflow: auto;
   font-family: SUIT;
   font-size: 14px;
+  font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.5px;
-  font-weight: 400;
-  align-items: flex-start;
-  border: none;
-  gap: 2px;
-  flex: 1 0 0;
-  overflow: auto;
   resize: none;
   background-color: #fff;
+  border: none;
+  border-radius: 12px;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -407,55 +406,55 @@ const Input = styled.textarea`
   }
 `;
 const Count = styled.span`
-  z-index: 1;
   position: absolute;
-  left: 16px;
   top: 104px;
+  left: 16px;
+  z-index: 1;
 `;
 const CntTxt = styled.span`
   width: 0;
-  font-weight: 400;
   font-size: 11px;
+  font-weight: 400;
   line-height: 16px;
   letter-spacing: -0.5px;
 `;
 const ButtonContainer = styled.div`
   position: fixed;
-  box-sizing: border-box;
-  z-index: 3;
   bottom: 0;
-  width: 100%;
-  padding: 4px 16px 16px 16px;
+  z-index: 3;
+  box-sizing: border-box;
   display: flex;
   gap: 10px;
+  width: 100%;
+  padding: 4px 16px 16px 16px;
   background: #fff;
   &::before {
-    content: '';
     position: absolute;
     top: -19px;
     left: 0;
+    z-index: 4;
     width: 100%;
     height: 20px;
+    content: '';
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 100%);
-    z-index: 4;
   }
 `;
 const Button = styled.button<{ $selectedReason: number }>`
-  box-sizing: border-box;
   z-index: 3;
+  box-sizing: border-box;
   display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 48px;
   padding: 14px 0px;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  justify-content: center;
+  margin-top: ${(props) => (props.$selectedReason !== 4 ? '2.5rem' : '0')};
+  border: none;
   border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  border: none;
-  margin-top: ${(props) => (props.$selectedReason !== 4 ? '2.5rem' : '0')};
 `;
 
 const ButtonTxt = styled.div`
@@ -464,6 +463,6 @@ const ButtonTxt = styled.div`
   font-style: normal;
   font-weight: 700;
   line-height: 24px;
-  letter-spacing: -0.5px;
   color: #fff;
+  letter-spacing: -0.5px;
 `;

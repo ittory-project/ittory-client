@@ -1,33 +1,35 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+
 import { format, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import out from '../../../public/assets/out.svg';
-import info from '../../../public/assets/info.svg';
-import crown from '/assets/crown.svg';
-import plus from '/assets/plus.svg';
-import tip from '../../../public/assets/tooltip.svg';
-import { UserGuide } from './UserGuide';
-import notice from '../../../public/assets/notice.svg';
+import styled from 'styled-components';
+
 import bright from '../../../public/assets/border.svg';
-import shadow from '../../../public/assets/shadow2.svg';
-import { getCoverTypes } from '../../api/service/CoverService';
-import { getLetterInfo } from '../../api/service/LetterService';
-import { CoverType } from '../../api/model/CoverType';
-import { Participants } from './Invite';
-import { DeleteConfirm } from './Delete/DeleteConfirm';
-import defaultImg from '../../../public/assets/menu/logindefault.png';
-import { getFontById } from '../../api/service/FontService';
-import { Exit } from './ExitMember';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
-import barShadow from '../../../public/assets/invite/shadow.svg';
 import bg1 from '../../../public/assets/connect/bg1.png';
 import bg2 from '../../../public/assets/connect/bg2.png';
 import bg3 from '../../../public/assets/connect/bg3.png';
 import bg4 from '../../../public/assets/connect/bg4.png';
 import bg5 from '../../../public/assets/connect/bg5.png';
+import info from '../../../public/assets/info.svg';
+import barShadow from '../../../public/assets/invite/shadow.svg';
+import defaultImg from '../../../public/assets/menu/logindefault.png';
+import notice from '../../../public/assets/notice.svg';
+import out from '../../../public/assets/out.svg';
+import shadow from '../../../public/assets/shadow2.svg';
+import tip from '../../../public/assets/tooltip.svg';
+import { CoverType } from '../../api/model/CoverType';
+import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import { getCoverTypes } from '../../api/service/CoverService';
+import { getFontById } from '../../api/service/FontService';
+import { getLetterInfo } from '../../api/service/LetterService';
+import { getLetterDetailInfo } from '../../api/service/LetterService';
 import { SessionLogger } from '../../utils';
+import { DeleteConfirm } from './Delete/DeleteConfirm';
+import { Exit } from './ExitMember';
+import { Participants } from './Invite';
+import { UserGuide } from './UserGuide';
+import crown from '/assets/crown.svg';
+import plus from '/assets/plus.svg';
 
 const logger = new SessionLogger('invite');
 
@@ -133,10 +135,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
   const handleResize = () => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
+    setIsMobile(window.innerWidth < 850);
   };
   useEffect(() => {
-    window.innerWidth < 850 ? setIsMobile(true) : setIsMobile(false);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -212,9 +213,9 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
       {items.length > 0 && (
         <>
           {!viewDelete &&
-            title != '' &&
+            title !== '' &&
             items[0].nickname &&
-            receiverName != '' && (
+            receiverName !== '' && (
               <>
                 <Header>
                   <ReceiverContainer>

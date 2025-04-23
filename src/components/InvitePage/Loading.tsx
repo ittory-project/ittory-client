@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import animation from '../../../public/assets/loading.json';
+
 import Player from 'lottie-react';
 import { useNavigate } from 'react-router-dom';
-import { getParticipants } from '../../api/service/LetterService';
 import styled from 'styled-components';
 
 interface Props {

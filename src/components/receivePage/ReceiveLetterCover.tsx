@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+
+import { formatDate } from '../../api/config/formatData';
 import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
 import { FontGetResponse } from '../../api/model/FontModel';
 import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { formatDate } from '../../api/config/formatData';
 
 interface LetterContentProps {
   letterStyle: CoverTypeGetResponse;

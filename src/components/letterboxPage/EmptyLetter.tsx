@@ -1,5 +1,6 @@
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
 import partiIcon from '../../../public/assets/letterbox/parIcon.svg';
 import recvIcon from '../../../public/assets/letterbox/recIcon.svg';
 

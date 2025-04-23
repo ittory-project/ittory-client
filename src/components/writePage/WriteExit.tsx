@@ -1,5 +1,6 @@
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
 import exitImg from '../../../public/assets/write/img_exit.svg';
 
 interface WriteExitProps {

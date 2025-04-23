@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+
 import { useParams } from 'react-router-dom';
-import { decodeLetterId } from '../../api/config/base64';
 import styled from 'styled-components';
+
+import { decodeLetterId } from '../../api/config/base64';
 import { postPartiLetterBox } from '../../api/service/LetterBoxService';
 import { SessionLogger } from '../../utils';
 
