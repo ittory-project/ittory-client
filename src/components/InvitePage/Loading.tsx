@@ -4,6 +4,8 @@ import Player from 'lottie-react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import animation from '../../../public/assets/loading.json';
+
 interface Props {
   loadstatus?: boolean;
   setLoad?: React.Dispatch<React.SetStateAction<boolean>>;
