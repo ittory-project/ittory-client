@@ -168,119 +168,165 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 99;
 `;
 const ErrorMessage = styled.div`
-  height: 16px;
   left: 0;
-  color: #ff0004;
-  text-align: center;
+
+  height: 16px;
+
+  margin-top: 2px;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 11px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #ff0004;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  margin-top: 2px;
 `;
 
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
+  overflow: hidden;
+
   background: linear-gradient(
     180deg,
     #d3edff 0%,
     #e7f6f7 46.2%,
     #feffee 97.27%
   );
+
   background-blend-mode: overlay, normal;
-  overflow: hidden;
+
+  transform: translateX(-50%);
 `;
 const Title = styled.div`
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   margin-top: 3rem;
   margin-bottom: 1.5rem;
 `;
 const Text = styled.span`
   display: block;
-  color: #243348;
-  text-align: center;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #243348;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const Container = styled.div`
-  display: flex;
-  padding: 20px;
-  width: 288px;
   box-sizing: border-box;
+  display: flex;
+
   flex-direction: column;
-  justify-content: center;
+
   align-items: flex-start;
-  border-radius: 12px;
+  justify-content: center;
+
+  width: 288px;
+
+  padding: 20px;
+
   background: #fff;
+  border-radius: 12px;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
 `;
 const InputBox = styled.div<{ $hasError: boolean }>`
   display: flex;
-  width: 16rem;
+
   flex-direction: column;
-  justify-content: center;
-  height: 3.5rem;
+
   gap: 6px;
+  justify-content: center;
+
+  width: 16rem;
+  height: 3.5rem;
+
   margin-top: 0;
+  margin-bottom: 1.8px;
+
+  cursor: pointer;
+
   border-bottom: 1px dashed
     ${(props) => (props.$hasError ? '#ff0004' : '#dee2e6')};
-  margin-bottom: 1.8px;
-  cursor: pointer;
 `;
 const InputLogo = styled.div`
-  color: #495057;
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 11px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #495057;
+
   letter-spacing: -0.5px;
 `;
 const Input = styled.input`
   width: 232px;
   height: 24px;
-  border: 0;
+
   padding-left: 0;
+
   background: #fff;
+  border: 0;
   &::placeholder {
-    color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
+
     line-height: 24px;
+
+    color: #adb5bd;
+
     letter-spacing: -0.5px;
   }
   &:valid {
-    color: #212529;
     font-family: var(--Typography-family-title, SUIT);
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
+
     line-height: 24px;
+
+    color: #212529;
+
     letter-spacing: -0.5px;
   }
   &:focus {
@@ -288,27 +334,37 @@ const Input = styled.input`
   }
 `;
 const Button = styled.button`
-  width: 288px;
-  cursor: pointer;
-  display: flex;
-  height: 48px;
-  padding: 14px 20px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  align-self: stretch;
-  border-radius: 50px;
   position: absolute;
   bottom: 20px;
   left: 50%;
+
+  display: flex;
+
+  gap: 8px;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+
+  width: 288px;
+  height: 48px;
+
+  padding: 14px 20px;
+
+  cursor: pointer;
+
+  border-radius: 50px;
+
   transform: translateX(-50%);
 `;
 const ButtonTxt = styled.div`
-  color: #fff;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 `;

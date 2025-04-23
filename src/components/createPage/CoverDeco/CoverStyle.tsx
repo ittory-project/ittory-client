@@ -415,155 +415,210 @@ export default function CoverStyle({
 const Overlay = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 0;
+  z-index: 10;
+
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   width: 100vw;
   height: calc(var(--vh, 1vh) * 100);
+
   background: rgba(0, 0, 0, 0.6);
+
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease;
-  z-index: 10;
 `;
 const BookShadow = styled.div`
-  flex-shrink: 0;
   position: relative;
+
+  flex-shrink: 0;
+
   margin-top: -7.67px;
 `;
 const BackGround = styled.div`
   display: flex;
+
   flex-direction: column;
-  //align-items: center;
+
   justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
+
   width: 100%;
-  //position: relative;
-  //left: 50%;
-  //transform: translateX(-50%);
+  height: calc(var(--vh, 1vh) * 100);
+
+  overflow: hidden;
+
   background: linear-gradient(
     180deg,
     #d3edff 0%,
     #e7f6f7 46.2%,
     #feffee 97.27%
   );
+
   background-blend-mode: overlay, normal;
-  overflow: hidden;
+  //align-items: center;
+  //position: relative;
+  //left: 50%;
+  //transform: translateX(-50%);
 `;
 const Prev = styled.span`
   position: absolute;
-  cursor: pointer;
   top: 16px;
   left: 24px;
+
+  cursor: pointer;
 `;
 const Container = styled.div`
   display: flex;
-  //position: relative;
-  flex-direction: column;
-  align-items: center;
+
   flex: 1 0 0;
-  //align-self: stretch;
+  flex-direction: column;
+
+  align-items: center;
+
   width: 100%;
   height: 100%;
+
   margin-top: 48px;
   margin-bottom: 6rem;
+
   overflow: hidden;
+  //position: relative;
+  //align-self: stretch;
 `;
 const Button = styled.button`
-  overflow: hidden;
   position: fixed;
-  width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
-  cursor: pointer;
-  display: flex;
-  height: 48px;
-  padding: 14px 20px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   bottom: 20px;
+
+  display: flex;
+
+  gap: 8px;
+  align-items: center;
   align-self: stretch;
+  justify-content: center;
+
+  width: calc(100% - 32px);
+  height: 48px;
+
+  padding: 14px 20px;
+  margin-right: 16px;
+  margin-left: 16px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
   border-radius: 50px;
 `;
 
 const ButtonTxt = styled.div`
-  color: #fff;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 `;
 const Title = styled.div`
   position: fixed;
   top: 3rem;
   left: 50%; /* 수평 중앙 정렬 */
-  transform: translateX(-50%); /* 중앙 정렬 보정 */
+
   display: flex;
-  margin-top: 0;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
+  margin-top: 0;
   margin-bottom: 24px;
+
+  transform: translateX(-50%); /* 중앙 정렬 보정 */
 `;
 const Text = styled.span`
-  //position: fixed;
   display: block;
-  color: #243348;
-  text-align: center;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #243348;
+
+  text-align: center;
   letter-spacing: -0.5px;
+  //position: fixed;
 `;
 const TitleContainer = styled.div`
   display: flex;
-  width: 190px;
-  padding: 16px 16px;
-  justify-content: center;
-  align-items: center;
-  justify-content: center;
-  align-items: center;
+
   flex-direction: column;
+
+  align-items: center;
+  align-items: center;
+  justify-content: center;
+  justify-content: center;
+
+  width: 190px;
+
+  padding: 16px 16px;
 `;
 
 const Input = styled.input<{ $selectfont: string }>`
   box-sizing: border-box;
   display: flex;
-  width: 100%;
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
+
+  width: 100%;
   height: 40px;
+
   text-align: center;
-  border: 0;
-  background: rgba(255, 255, 255, 0);
+
   cursor: pointer;
+
+  background: rgba(255, 255, 255, 0);
+  border: 0;
   &::placeholder {
-    line-height: 24px;
-    color: #f1f3f5;
-    text-align: center;
     text-overflow: ellipsis;
+
     font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
       props.$selectfont === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
+
+    line-height: 24px;
+
+    color: #f1f3f5;
+
+    text-align: center;
     letter-spacing: -0.5px;
+
     opacity: 0.5;
   }
   &:valid {
-    color: #fff;
-    text-align: center;
     font-family: ${(props) => props.$selectfont};
     font-size: ${(props) =>
       props.$selectfont === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
-    letter-spacing: -0.5px;
+
     line-height: 24px;
+
+    color: #fff;
+
+    text-align: center;
+    letter-spacing: -0.5px;
   }
   &:focus {
     outline: none;
@@ -571,90 +626,122 @@ const Input = styled.input<{ $selectfont: string }>`
 `;
 
 const ButtonContainer = styled.button`
-  z-index: 0;
   position: relative;
-  cursor:pointer;
+  z-index: 0;
+
   display: flex;
+
+  flex-shrink: 0;
+  flex-direction: column;
+
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+
   width: 134px;
   height: 134px;
+
+  margin-top: 13px;
   margin-left: 45px;
-  margin-top:13px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px
-  flex-shrink: 0;
-  border-radius: 20px;
+
+  cursor: pointer;
+
   background: #fff;
-  border: 1px solid var(--Color-grayscale-gray200, #E9ECEF);
+  border: 1px solid var(--Color-grayscale-gray200, #e9ecef);
+  border-radius: 20px;
   &:focus {
-  border: none;
     outline: none;
+
+    border: none;
   }
 `;
 const Shadow = styled.img`
-  width: 160px;
-  height: 160px;
-  margin-left: 31.5px;
-  margin-top: 0px;
   position: absolute;
   z-index: 3;
-  pointer-events: none;
+
   flex-shrink: 0;
+
+  width: 160px;
+  height: 160px;
+
+  margin-top: 0px;
+  margin-left: 31.5px;
+
+  pointer-events: none;
+
   object-fit: cover;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
+  position: relative;
+
   display: flex;
-  cursor:pointer;
-  position: relative; 
+
+  flex-shrink: 0;
+  flex-direction: column;
+
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+
   width: 135px;
   height: 135px;
+
+  margin-top: 12.4px;
   margin-left: 44.5px;
-  margin-top:12.4px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px
-  flex-shrink: 0;
-  border-radius: 20px;
+
+  cursor: pointer;
+
   background-image: url(${(props) => props.$bgimg});
-  background-size: cover; /* 이미지 크기를 컨테이너에 맞게 조정 */
-  background-position: center; /* 이미지가 중앙에 위치하도록 */
   background-repeat: no-repeat; /* 이미지가 반복되지 않도록 */
+  background-position: center; /* 이미지가 중앙에 위치하도록 */
+  background-size: cover; /* 이미지 크기를 컨테이너에 맞게 조정 */
+  border-radius: 20px;
 `;
 
 const BtnTxt = styled.div`
-  color: #495057;
+  padding-top: 4spx;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px;
+
+  color: #495057;
+
   letter-spacing: -0.5px;
-  padding-top: 4spx;
 `;
 const NameContainer = styled.div<{ $book: number }>`
+  display: flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+  justify-content: center;
+
   width: 224px;
   height: 21px;
-  flex-shrink: 0;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  text-align: center;
+
   margin-top: ${(props) =>
     props.$book === 0 || props.$book === 1 ? '34px' : '25px'};
+
+  text-align: center;
 `;
 const NameTxt = styled.div<{ $book: number }>`
-  padding: 0 12px 0 12px;
   width: 200px;
-  text-align: center;
+
+  padding: 0 12px 0 12px;
+
   text-overflow: ellipsis;
+
   font-family: SUIT;
   font-size: 9px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 13px;
-  letter-spacing: -0.5px;
+
   color: ${({ $book }) => {
     if ($book === 0) return '#715142';
     if ($book === 1) return '#335839';
@@ -662,29 +749,42 @@ const NameTxt = styled.div<{ $book: number }>`
     if ($book === 3) return '#232D3D';
     if ($book === 4) return '#232D3D';
   }};
+
+  text-align: center;
+  letter-spacing: -0.5px;
 `;
 const ImageContainer = styled.div`
   position: fixed;
-  margin-top: 23.5rem;
-  height: 56px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--Border-Radius-radius_300, 8px);
-  align-self: stretch;
   left: 50%;
+
+  display: flex;
+
+  gap: var(--Border-Radius-radius_300, 8px);
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+
+  height: 56px;
+
+  margin-top: 23.5rem;
+
   transform: translateX(-50%);
 `;
 const Image = styled.div<{ $clicked: boolean; $img: string }>`
-  cursor: pointer;
-  transition: all 0.2s ease;
+  flex-shrink: 0;
+
   width: ${(props) => (props.$clicked ? '56px' : '48px')};
   height: ${(props) => (props.$clicked ? '56px' : '48px')};
-  opacity: ${(props) => (props.$clicked ? '' : '0.4')};
-  border-radius: 10.2px;
-  flex-shrink: 0;
+
+  cursor: pointer;
+
   background-image: url(${(props) => props.$img});
-  background-size: cover; /* 이미지 크기를 컨테이너에 맞게 조정 */
-  background-position: center; /* 이미지가 중앙에 위치하도록 */
   background-repeat: no-repeat; /* 이미지가 반복되지 않도록 */
+  background-position: center; /* 이미지가 중앙에 위치하도록 */
+  background-size: cover; /* 이미지 크기를 컨테이너에 맞게 조정 */
+  border-radius: 10.2px;
+
+  opacity: ${(props) => (props.$clicked ? '' : '0.4')};
+
+  transition: all 0.2s ease;
 `;

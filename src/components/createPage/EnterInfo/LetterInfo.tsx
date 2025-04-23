@@ -228,134 +228,184 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 99;
 `;
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
-  //left: 50%;
-  //transform: translateX(-50%);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   background: linear-gradient(
     180deg,
     #d3edff 0%,
     #e7f6f7 46.2%,
     #feffee 97.27%
   );
+
   background-blend-mode: overlay, normal;
+  //justify-content: center;
+  //left: 50%;
+  //transform: translateX(-50%);
 `;
 const Cancel = styled.span`
   position: absolute;
-  cursor: pointer;
   top: 10px;
   right: 16px;
+
+  cursor: pointer;
 `;
 const Container = styled.div`
-  margin-top: 48px;
+  position: relative;
+
   display: flex;
-  flex-direction: column;
+
   flex: 1 0 0;
+  flex-direction: column;
+
+  gap: 24px;
+
   width: calc(100% - 48px);
+
+  margin-top: 48px;
   margin-right: 24px;
   margin-left: 24px;
-  position: relative;
-  gap: 24px;
 `;
 const Title = styled.div<{ $keyboardVisible: boolean }>`
   position: relative;
-  margin-top: 0;
-  margin-bottom: 0;
+
+  display: ${(props) => (props.$keyboardVisible ? 'none' : 'flex')};
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
-  display: ${(props) => (props.$keyboardVisible ? 'none' : 'flex')};
+
+  margin-top: 0;
+  margin-bottom: 0;
 `;
 const Text = styled.span`
   display: inline-block;
-  color: #243348;
-  text-align: center;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #243348;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const MainCotainer = styled.div<{ $shiftup?: boolean; $isopen?: string }>`
-  display: flex;
-  padding: 20px;
-  align-items: center;
-  flex-direction: column;
-  //justify-content: center;
-  gap: 22px;
-  top: 0;
   position: relative;
+  top: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 22px;
+  align-items: center;
+
+  padding: 20px;
   margin-top: 0;
-  border-radius: 12px;
+
   background: #fff;
+  border-radius: 12px;
   box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
-  transition: transform 0.3s ease;
+
   transform: ${(props) =>
     props.$shiftup ? 'translateY(0.8rem)' : 'translateY(0)'};
+
+  transition: transform 0.3s ease;
+  //justify-content: center;
 `;
 
 const InputBox = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 0;
-  //margin-bottom: 4px;
-  height: 60px;
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  width: 100%;
+  height: 60px;
+
+  margin-top: 0;
+
   border-bottom: 1px dashed #dee2e6;
+  //margin-bottom: 4px;
 `;
 const InputLogo = styled.div`
-  color: #495057;
-  font-family: var(--Typography-family-caption, SUIT);
-  font-size: 11px;
-  width: 100%;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 16px;
-  letter-spacing: -0.5px;
   position: absolute; /* 위치 고정 */
   top: 0; /* 고정 위치 */
   left: 0;
+
+  width: 100%;
+
+  font-family: var(--Typography-family-caption, SUIT);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+
+  line-height: 16px;
+
+  color: #495057;
+
+  letter-spacing: -0.5px;
 `;
 const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
   width: 232px;
   height: 26px;
-  border: 0;
+
   padding-left: 0;
   margin-top: 28px;
   margin-bottom: 6px;
-  background-color: #ffffff;
+
   cursor: pointer;
+
+  background-color: #ffffff;
+  border: 0;
   &::placeholder {
-    color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
+
     line-height: 24px;
+
+    color: #adb5bd;
+
     letter-spacing: -0.5px;
   }
   &:valid {
-    color: #212529;
     font-family: var(--Typography-family-title, SUIT);
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
+
     line-height: 24px;
+
+    color: #212529;
+
     letter-spacing: -0.5px;
   }
   &:focus {
@@ -364,52 +414,72 @@ const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
 `;
 const InputBoxRow = styled.div`
   display: flex;
+
   flex-direction: row;
+
   align-items: center;
-  cursor: pointer;
+
   margin-bottom: 6px;
+
+  cursor: pointer;
 `;
 const SelectDate = styled.span`
+  width: 100%;
+
+  margin-top: 28px;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
-  width: 100%;
-  border: 0;
   font-style: normal;
   font-weight: 400;
+
   line-height: 24px;
+
   letter-spacing: -0.5px;
-  margin-top: 28px;
+
+  border: 0;
 `;
 const Calender = styled.span`
   position: absolute;
-  cursor: pointer;
   right: 0;
+
   margin-top: 28px;
+
+  cursor: pointer;
 `;
 const Button = styled.button<{ $keyboardVisible: boolean }>`
-  display: flex;
-  margin-left: 16px;
-  margin-right: 16px;
-  cursor: pointer;
-  height: 48px;
-  padding: 14px 20px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  align-self: stretch;
-  border-radius: 50px;
   position: relative;
   bottom: 20px;
 
-  // 키보드가 보일 때 버튼 숨기기
+  display: flex;
+
+  /* 키보드가 보일 때 버튼 숨기기 */
   display: ${(props) => (props.$keyboardVisible ? 'none' : 'flex')};
+
+  gap: 8px;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+
+  height: 48px;
+
+  padding: 14px 20px;
+  margin-right: 16px;
+  margin-left: 16px;
+
+  cursor: pointer;
+
+  border-radius: 50px;
 `;
 const ButtonTxt = styled.div`
-  color: #fff;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 `;

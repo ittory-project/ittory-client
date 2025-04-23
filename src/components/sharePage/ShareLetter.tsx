@@ -205,11 +205,15 @@ export const ShareLetter = () => {
 
 const Background = styled.div<{ $backgroundimg: string }>`
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
+
   background-image: url(${(props) => props.$backgroundimg});
   background-size: cover;
 `;
@@ -218,23 +222,30 @@ const CloseBtn = styled.img`
   position: absolute;
   top: 20px;
   right: 20px;
+
   width: 24px;
   height: 24px;
+
   cursor: pointer;
 `;
 
 const CoverContainer = styled.div<{ $boardimg: string }>`
   position: relative;
+
   flex-shrink: 0;
+
   width: 272px;
   height: 355px;
+
   background-image: url(${(props) => props.$boardimg});
   border-radius: 5px 15px 15px 5px;
 `;
 
 const CoverShadow = styled.div`
   display: flex;
+
   align-items: center;
+
   background-size: cover;
   border-radius: 5px 15px 15px 5px;
   box-shadow:
@@ -247,20 +258,26 @@ const CoverShadow = styled.div`
 
 const BtnContainer = styled.div`
   display: flex;
+
   gap: 10px;
   align-items: center;
   justify-content: center;
+
   width: 320px;
+
   padding: 10px 16px 5px 16px;
 `;
 
 const StoreBtn = styled.button`
   display: flex;
+
   gap: var(--Border-Radius-radius_300, 8px);
   align-items: center;
   justify-content: center;
+
   width: 140px;
   height: 48px;
+
   padding: var(--Typography-size-s, 14px) 20px;
 
   /* body/small_bold */
@@ -268,9 +285,13 @@ const StoreBtn = styled.button`
   font-size: var(--Typography-size-s, 14px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+
   color: var(--Color-grayscale-gray700, #495057);
+
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+
   background: var(--color-black-white-white, #fff);
   border-radius: var(--Border-Radius-radius_circle, 50px);
   box-shadow:
@@ -284,11 +305,14 @@ const StoreBtn = styled.button`
 
 const ShareBtn = styled.button`
   display: flex;
+
   gap: var(--Border-Radius-radius_300, 8px);
   align-items: center;
   justify-content: center;
+
   width: 140px;
   height: 48px;
+
   padding: var(--Typography-size-s, 14px) 20px;
 
   /* body/small_bold */
@@ -296,9 +320,13 @@ const ShareBtn = styled.button`
   font-size: var(--Typography-size-s, 14px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+
   color: var(--color-black-white-white, #fff);
+
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+
   background: var(--Color-primary-orange, #ffa256);
   border-radius: var(--Border-Radius-radius_circle, 50px);
   box-shadow:
@@ -315,20 +343,29 @@ const CopyAlert = styled.div`
   bottom: 32px;
   left: 50%;
   z-index: 100;
+
   display: flex;
+
   gap: 10px;
   align-items: center;
   justify-content: center;
+
   padding: var(--Border-Radius-radius_300, 8px) 20px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
   color: #fff;
+
   text-align: center;
   letter-spacing: -0.5px;
+
   background: rgba(0, 0, 0, 0.6);
   border-radius: 4px;
+
   transform: translateX(-50%);
 `;

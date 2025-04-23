@@ -76,20 +76,27 @@ export const WriteLocation: React.FC<LocationProps> = ({
 
 const Background = styled.div`
   display: flex;
+
   justify-content: center;
+
   width: 66px;
   height: 82px;
+
   background-image: url(${img});
   background-size: cover;
 `;
 
 const Profile = styled.div<{ profileImage: string | undefined }>`
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 56px;
   height: 56px;
+
   margin: 4px 0 0 0;
+
   background-image: url(${({ profileImage }) =>
     profileImage ? profileImage : '/assets/common/profile_bunny.svg'});
   background-position: center;
@@ -99,14 +106,20 @@ const Profile = styled.div<{ profileImage: string | undefined }>`
 
 const Contents = styled.div`
   position: relative;
+
   box-sizing: border-box;
   display: flex;
+
   flex-shrink: 0;
+
   align-items: center;
   justify-content: center;
+
   width: 56px;
   height: 56px;
+
   padding: 8px;
+
   background: rgba(6, 13, 36, 0.8);
   border-radius: 28px;
 `;
@@ -126,19 +139,27 @@ const Circle = styled.circle`
 const Name = styled.div<{ color: string }>`
   position: relative;
   z-index: 1;
+
   display: flex;
+
   flex-shrink: 0;
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   width: 36px;
   height: 34px;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-2xs, 11px);
   font-style: bold;
   font-weight: 400;
+
   line-height: var(--Typography-line_height-2xs, 16px); /* 145.455% */
+
   color: ${({ color }) => color};
+
   text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;

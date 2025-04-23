@@ -238,10 +238,14 @@ export const Menu = ({ onClose }: Props) => {
 
 const BackGround = styled.div`
   position: relative;
+
   display: flex;
+
   flex-shrink: 0;
   flex-direction: column;
+
   align-items: center;
+
   width: 260px;
   height: calc(var(--vh, 1vh) * 100);
 `;
@@ -249,152 +253,212 @@ const Cancel = styled.div`
   position: absolute;
   top: 12px;
   right: 12px;
+
   box-sizing: border-box;
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 24px;
   height: 24px;
+
   cursor: pointer;
 `;
 const Profile = styled.div`
   position: relative;
+
   display: flex;
+
   flex-shrink: 0;
+
   gap: 8px;
   align-items: center;
+
   width: 100%;
   height: 52px;
+
   margin-top: 72px;
 `;
 const ImageContainer = styled.div`
   box-sizing: border-box;
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 52px;
   height: 52px;
+
   margin-left: 16px;
 `;
 const ProfileImage = styled.img`
   width: 44px;
   height: 44px;
+
   border-radius: 120.93px;
 `;
 
 const UserSet = styled.div`
   display: flex;
+
   flex-direction: column;
+
   gap: 2px;
   align-items: flex-start;
   justify-content: center;
 `;
 const UserName = styled.div`
   width: 168px;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
   color: #000;
+
   letter-spacing: -0.5px;
 `;
 const UserSetting = styled.div`
   display: flex;
+
   gap: 2px;
   align-items: center;
+
   font-family: SUIT;
   font-size: 11px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px;
+
   color: #868e96;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const NavigateLogin = styled.div`
   display: flex;
+
   gap: 9px;
   align-items: center;
   justify-content: center;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
   color: #000;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const LetterContainer = styled.div`
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   width: 228px;
+
   margin-top: 1rem;
   margin-bottom: 0.75rem;
+
   background: #f8f9fa;
   border-radius: 8px;
 `;
 const CreatedLetter = styled.div`
   box-sizing: border-box;
   display: flex;
+
   gap: 6px;
   align-items: center;
   align-self: stretch;
   justify-content: flex-start;
+
   height: 60px;
+
   padding: 19px 12px 21px 12px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
   color: #343a40;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const ReceivedLetter = styled.div`
   box-sizing: border-box;
   display: flex;
+
   gap: 6px;
   align-items: center;
   align-self: stretch;
   justify-content: flex-start;
+
   height: 60px;
+
   padding: 19px 12px 21px 12px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
   color: #343a40;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const LetterNum = styled.div`
   position: absolute;
   right: 32px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 16px;
+
   color: #343a40;
+
   letter-spacing: -0.5px;
 `;
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
+
   gap: 8px;
   align-items: center;
   align-self: stretch;
   justify-content: center;
+
   width: 228px;
   height: 36px;
+
   padding: var(--Typography-size-s, 14px) 20px;
   margin-left: 16px;
+
   background: #ffa256;
   border-radius: 50px;
 `;
@@ -403,44 +467,63 @@ const ButtonTxt = styled.div`
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px;
+
   color: #fff;
+
   letter-spacing: -0.5px;
 `;
 const List = styled.div`
   position: absolute;
   bottom: 1.5rem;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   width: 228px;
 `;
 const AskContainer = styled.div`
   box-sizing: border-box;
   display: flex;
+
   gap: 8px;
   align-items: center;
   align-self: stretch;
   justify-content: flex-start;
+
   width: 100%;
+
   padding: 16px 0px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
   color: #212529;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const Navi = styled.div`
   position: absolute;
   right: 0;
+
   box-sizing: border-box;
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 16px;
   height: 16px;
+
   padding: 3px 6px 3px 5px;
 `;

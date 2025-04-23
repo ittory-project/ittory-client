@@ -38,53 +38,73 @@ export const Received_Modal = ({ setIsModalOpen, setPopup }: Props) => {
 const ModalContainer = styled.div`
   position: absolute;
   bottom: 0;
-  display: flex;
-  width: 100%;
-  border-radius: 20px 20px 0px 0px;
-  background: #fff;
   z-index: 100;
+
+  display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
+  width: 100%;
+
+  background: #fff;
+  border-radius: 20px 20px 0px 0px;
 `;
 const Header = styled.div`
+  box-sizing: border-box;
   display: flex;
-  height: 44px;
-  padding: 24px 20px 0 0;
+
   flex-direction: column;
+
   align-items: flex-end;
   align-self: stretch;
-  box-sizing: border-box;
+
+  height: 44px;
+
+  padding: 24px 20px 0 0;
 `;
 const Cancel = styled.img`
+  flex-shrink: 0;
+
   width: 14px;
   height: 14px;
-  flex-shrink: 0;
+
   margin-right: 7.3px;
 `;
 const Contents = styled.div`
   display: flex;
-  padding: 0px 20px 24px 16px;
+
   flex-direction: column;
+
   align-items: flex-end;
   align-self: stretch;
+
+  padding: 0px 20px 24px 16px;
 `;
 const List = styled.div`
   display: flex;
-  padding: 12px 0px;
-  align-items: center;
+
   gap: 8px;
+  align-items: center;
   align-self: stretch;
+
+  padding: 12px 0px;
 `;
 const DeleteIcon = styled.img`
+  flex-shrink: 0;
+
   width: 24px;
   height: 24px;
-  flex-shrink: 0;
 `;
 const Txt = styled.div`
-  color: #212529;
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
+
   line-height: 24px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
 `;

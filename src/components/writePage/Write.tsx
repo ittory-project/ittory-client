@@ -575,10 +575,14 @@ export const Write = ({
 
 const Container = styled.div`
   display: flex;
+
   flex-direction: column;
+
   width: 100%;
   height: 100%;
+
   padding: 10px 20px;
+
   background-color: #212529;
 `;
 
@@ -592,16 +596,23 @@ const AlertContainer = styled.div`
   position: absolute;
   top: 60px;
   z-index: 3;
+
   display: flex;
+
   flex-direction: column;
+
   width: 100%;
+
   padding: 0px;
+
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const ScrollableOrderList = styled.div`
   flex-grow: 1;
+
   margin: 10px 5px;
+
   overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
@@ -612,6 +623,7 @@ const ButtonContainer = styled.div`
   position: sticky;
   bottom: 10px;
   z-index: 3;
+
   background-color: transparent;
 `;
 
@@ -620,6 +632,7 @@ const LocationContainer = styled.div`
   right: 10px;
   bottom: 10px;
   z-index: 3;
+
   background-color: transparent;
 `;
 
@@ -628,9 +641,12 @@ const ModalOverlay = styled.div`
   top: 0;
   left: 0;
   z-index: 3;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 100%;
   height: 100%;
 `;

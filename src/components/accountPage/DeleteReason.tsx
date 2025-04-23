@@ -197,20 +197,29 @@ const Overlay = styled.div`
   top: 0;
   left: 0;
   z-index: 80;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
 `;
 const BackGround = styled.div`
   position: relative;
   left: 50%;
+
   display: flex;
+
   flex-direction: column;
+
   width: 101%;
   height: calc(var(--vh, 1vh) * 100);
+
   overflow-y: scroll;
+
   background: #fff;
+
   transform: translateX(-50%);
   //position: fixed;
 
@@ -222,41 +231,59 @@ const BackGround = styled.div`
 const Header = styled.div`
   box-sizing: border-box;
   display: flex;
+
   align-items: center;
   justify-content: space-between;
+
   width: 100%;
+
   padding: 0px var(--Border-Radius-radius_100, 4px);
 `;
 const Prev = styled.img`
   flex-shrink: 0;
+
   width: 8px;
   height: 16px;
+
   margin-right: 12px;
   margin-left: 16px;
+
   cursor: pointer;
 `;
 const HeaderTxt = styled.div`
   display: flex;
+
   flex: 1 0 0;
+
   gap: 16px;
   align-items: center;
+
   height: 24px;
+
   padding: 12px;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
   color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const Container = styled.div`
   box-sizing: border-box;
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   align-self: stretch;
+
   padding: 0px 16px 20px 16px;
+
   overflow-y: scroll;
 
   /* 스크롤바 숨기기 */
@@ -266,43 +293,58 @@ const Container = styled.div`
 `;
 const TitleContainer = styled.div`
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
   align-items: flex-start;
   align-self: stretch;
+
   margin-top: 16px;
   margin-bottom: 28px;
 `;
 const Title = styled.div`
   align-self: stretch;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
   color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const SubTitle = styled.div`
   display: flex;
+
   flex-direction: column;
+
   gap: 2px;
   align-items: flex-start;
   align-self: stretch;
 `;
 const Txt = styled.div`
   align-self: stretch;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
   color: #868e96;
+
   letter-spacing: -0.5px;
 `;
 const CheckList = styled.div`
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
   align-items: center;
   align-self: stretch;
@@ -310,19 +352,28 @@ const CheckList = styled.div`
 const CheckContainer = styled.div`
   box-sizing: border-box;
   display: flex;
+
   gap: 8px;
   align-items: center;
   align-self: stretch;
+
   height: 52px;
+
   padding: 16px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 20px;
+
   color: #000;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
+
   background: #f8f9fa;
   border-radius: 12px;
 `;
@@ -342,8 +393,10 @@ const CheckBox = styled.input`
 const CheckBox = styled.input`
   width: 20px;
   height: 20px;
+
   appearance: none;
   cursor: pointer;
+
   background: none;
 
   &:checked {
@@ -353,6 +406,7 @@ const CheckBox = styled.input`
   &::before {
     width: 100%;
     height: 100%;
+
     content: url(${check});
   }
 
@@ -363,9 +417,12 @@ const CheckBox = styled.input`
 
 const InputArea = styled.div<InputAreaProps>`
   position: relative;
+
   width: 98%;
   height: 140px;
+
   margin-bottom: 80px;
+
   border: 1px solid
     ${({ $otherReason }) =>
       $otherReason && $otherReason.length > 0 ? '#212529' : '#adb5bd'};
@@ -374,20 +431,31 @@ const InputArea = styled.div<InputAreaProps>`
 
 const Input = styled.textarea`
   position: relative;
+
   box-sizing: border-box;
+
   flex: 1 0 0;
+
   gap: 2px;
   align-items: flex-start;
+
   width: 100%;
   height: 108px;
+
   padding: 16px 16px 0px 16px;
+
   overflow: auto;
+
   font-family: SUIT;
   font-size: 14px;
   font-weight: 400;
+
   line-height: 20px;
+
   letter-spacing: -0.5px;
+
   resize: none;
+
   background-color: #fff;
   border: none;
   border-radius: 12px;
@@ -402,6 +470,7 @@ const Input = styled.textarea`
   }
   &:focus {
     outline: none;
+
     border: none;
   }
 `;
@@ -413,43 +482,59 @@ const Count = styled.span`
 `;
 const CntTxt = styled.span`
   width: 0;
+
   font-size: 11px;
   font-weight: 400;
+
   line-height: 16px;
+
   letter-spacing: -0.5px;
 `;
 const ButtonContainer = styled.div`
   position: fixed;
   bottom: 0;
   z-index: 3;
+
   box-sizing: border-box;
   display: flex;
+
   gap: 10px;
+
   width: 100%;
+
   padding: 4px 16px 16px 16px;
+
   background: #fff;
   &::before {
     position: absolute;
     top: -19px;
     left: 0;
     z-index: 4;
+
     width: 100%;
     height: 20px;
+
     content: '';
+
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #fff 100%);
   }
 `;
 const Button = styled.button<{ $selectedReason: number }>`
   z-index: 3;
+
   box-sizing: border-box;
   display: flex;
+
   gap: 8px;
   align-items: center;
   justify-content: center;
+
   width: 100%;
   height: 48px;
+
   padding: 14px 0px;
   margin-top: ${(props) => (props.$selectedReason !== 4 ? '2.5rem' : '0')};
+
   border: none;
   border-radius: 50px;
   box-shadow:
@@ -462,7 +547,10 @@ const ButtonTxt = styled.div`
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
   color: #fff;
+
   letter-spacing: -0.5px;
 `;

@@ -55,36 +55,42 @@ export const Login = () => {
 };
 
 const LoginContainer = styled.div`
-  height: 100%;
-  background-color: white;
   position: relative;
 
+  height: 100%;
+
   font-family: var(--Typography-family-title);
+
+  background-color: white;
 `;
 
 const CloseBtn = styled.button`
-  height: 20px;
-  width: 20px;
-
   position: absolute;
   top: 12px;
   right: 16px;
 
-  background: url('/assets/btn_close.svg') no-repeat center;
+  width: 20px;
+  height: 20px;
+
   padding: 0;
-  border: none;
+
+  background: url('/assets/btn_close.svg') no-repeat center;
   background-size: contain;
+  border: none;
 `;
 
 const LogoArea = styled.div`
   position: absolute;
   top: 128px;
-  width: 100%;
 
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
   align-items: center;
+
+  width: 100%;
 `;
 
 const LogoImage = styled.img`
@@ -95,44 +101,52 @@ const LogoImage = styled.img`
 const LogoDescription = styled.div`
   font-size: 14px;
   font-weight: 400;
+
   color: var(--Color-grayscale-gray600);
 `;
 
 const BottomArea = styled.div`
   position: absolute;
   bottom: 40px;
-  width: 100%;
 
   display: flex;
+
   flex-direction: column;
+
+  gap: 16px;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+
+  width: 100%;
 `;
 
 const Icon = styled.img`
   width: 20px;
   height: 20px;
+
   margin-right: 8px;
 `;
 
 const LoginBtn = styled.button`
-  height: 48px;
-  width: 100%;
-  max-width: 288px;
-
-  background-color: #fee500;
-
-  font-weight: bold;
-  font-size: 16px;
-  color: black;
-
-  border: none;
-  border-radius: 2rem;
-  padding: 0 20px;
   display: flex;
+
   align-items: center;
   justify-content: center;
+
+  width: 100%;
+  max-width: 288px;
+  height: 48px;
+
+  padding: 0 20px;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  color: black;
+
+  background-color: #fee500;
+  border: none;
+  border-radius: 2rem;
 `;
 
 const LoginDesc = styled.div`
@@ -140,12 +154,14 @@ const LoginDesc = styled.div`
   max-width: 288px;
 
   font-size: 12px;
+
   color: var(--Color-grayscale-gray600);
 
   a {
     color: var(--Color-grayscale-gray600);
 
     text-decoration: underline;
+
     cursor: pointer;
 
     &:hover {

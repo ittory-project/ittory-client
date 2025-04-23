@@ -330,62 +330,86 @@ export const Invite = () => {
 };
 
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
-  //left: 50%;
-  //transform: translateX(-50%);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   background:
     url(${texture}) 0 0 / auto auto repeat,
     /* 질감 이미지 크기 자동 조정 */ #d3edff; /* 기본 배경색 */
+
   background-blend-mode: overlay;
+  //left: 50%;
+  //transform: translateX(-50%);
 `;
 
 const HostAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  position: absolute;
+  top: 110px;
+  left: 50%;
   z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
+
+  display: flex;
+
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+
   font-family: SUIT;
-  font-weight: 500;
   font-size: 12px;
   font-style: normal;
+  font-weight: 500;
+
   line-height: 16px;
+
+  color: #fff;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  top: 110px;
-  transform: translateX(-50%);
   white-space: nowrap;
+
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+
+  transform: translateX(-50%);
 `;
 const ExitAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  position: absolute;
+  top: 60px;
+  left: 50%;
   z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
+
+  display: flex;
+
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+
   font-family: SUIT;
-  font-weight: 500;
   font-size: 12px;
   font-style: normal;
+  font-weight: 500;
+
   line-height: 16px;
+
+  color: #fff;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  top: 60px;
+
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+
   transform: translateX(-50%);
 `;

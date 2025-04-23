@@ -202,12 +202,16 @@ export const CreatedLetter = ({
 };
 
 const Container = styled.div`
-  display: flex;
   box-sizing: border-box;
-  padding: 0px 16px;
+  display: flex;
+
   flex-direction: column;
+
   align-items: center;
   align-self: stretch;
+
+  padding: 0px 16px;
+
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -215,65 +219,87 @@ const Container = styled.div`
   }
 `;
 const NumberHeader = styled.div`
-  display: flex;
   box-sizing: border-box;
-  padding: 16px 0px;
+  display: flex;
+
   align-items: flex-start;
   align-self: stretch;
+
+  padding: 16px 0px;
 `;
 const NumberTxt = styled.span`
-  color: #212529;
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
+
   line-height: 16px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const LetterContainer = styled.div<{ $bgColor: string }>`
-  display: flex;
-  width: 100%;
-  margin-bottom: 16px;
   box-sizing: border-box;
-  padding: 20px 16px;
-  align-items: flex-start;
+  display: flex;
+
   gap: 12px;
-  border-radius: 12px;
+  align-items: flex-start;
+
+  width: 100%;
+
+  padding: 20px 16px;
+  margin-bottom: 16px;
+
   background-color: ${(props) => props.$bgColor};
+  border-radius: 12px;
 `;
 
 const BookCover = styled.img`
   width: 36px;
+
   object-fit: cover;
 `;
 const Content = styled.div`
   display: flex;
-  flex-direction: column;
+
   flex: 1;
+  flex-direction: column;
+
   cursor: pointer;
 `;
 const BookName = styled.div`
   flex: 1 0 0;
-  color: #212529;
+
+  margin-bottom: 4px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
-  margin-bottom: 4px;
 `;
 const StyledDeliverDay = styled.div`
-  color: #868e96;
   font-family: SUIT;
   font-size: 11px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #868e96;
+
   letter-spacing: -0.5px;
 `;
 const MoreButton = styled.img`
+  flex-shrink: 0;
+
   width: 20px;
   height: 20px;
-  flex-shrink: 0;
+
   cursor: pointer;
 `;

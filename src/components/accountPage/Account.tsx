@@ -54,59 +54,81 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 10;
 `;
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
+
+  display: flex;
+
+  flex-direction: column;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   background: #fff;
+
+  transform: translateX(-50%);
 `;
 const Prev = styled.img`
   width: 8px;
   height: 16px;
-  margin-left: 20px;
+
   margin-top: 16px;
+  margin-left: 20px;
+
   cursor: pointer;
 `;
 const List = styled.div`
   display: flex;
-  margin-left: 21px;
-  margin-right: 16px;
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   align-self: stretch;
+
   margin-top: 12px;
+  margin-right: 16px;
+  margin-left: 21px;
 `;
 const Container = styled.div`
-  justify-content: flex-start;
   display: flex;
-  margin-top: 16px;
-  padding-bottom: 16px;
-  align-items: center;
+
   gap: 8px;
+  align-items: center;
   align-self: stretch;
-  color: #060d24;
+  justify-content: flex-start;
+
+  padding-bottom: 16px;
+  margin-top: 16px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
+
+  color: #060d24;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const Area = styled.div`
   display: flex;
-  align-items: center;
-  cursor: pointer;
+
   gap: 8px;
+  align-items: center;
+
+  cursor: pointer;
 `;
