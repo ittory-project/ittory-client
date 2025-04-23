@@ -46,7 +46,10 @@ export const stompClient = (): Client => {
     if (frame.headers.message?.toLowerCase().includes('unauthorized')) {
       try {
         await accessTokenRepository.refresh();
-        client.connectHeaders.Authorization = accessTokenRepository.get();
+        const authorization = accessTokenRepository.get();
+        if (authorization) {
+          client.connectHeaders.Authorization = authorization;
+        }
 
         if (client.connected) {
           client.deactivate();

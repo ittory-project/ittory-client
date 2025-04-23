@@ -11,6 +11,7 @@ import { ImageUrlRequest } from '../../../api/model/ImageModel';
 import { getCoverTypes } from '../../../api/service/CoverService';
 import { getAllFont } from '../../../api/service/FontService';
 import { postCoverImage } from '../../../api/service/ImageService';
+import { ImageExtension } from '../../../constants';
 import { SessionLogger } from '../../../utils/SessionLogger';
 import { fontProps } from '../CoverDeco/CoverStyle';
 import FontPopup from '../CoverDeco/FontPopup';
@@ -33,10 +34,6 @@ interface Props {
   setSelectFid: React.Dispatch<React.SetStateAction<number>>;
   selectFid: number;
 }
-
-const ImageExtension = {
-  JPG: 'JPG',
-};
 
 export default function CoverModal({
   title,
