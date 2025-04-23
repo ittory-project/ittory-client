@@ -144,75 +144,102 @@ export const WriteElement = ({
 
 const Container = styled.div`
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   width: 100vw;
   min-width: 300px;
   height: calc(var(--vh, 1vh) * 100);
+
   padding: 10px 0;
+
   background-color: #212529;
 `;
 
 const Content = styled.div`
   display: flex;
+
   flex-shrink: 0;
   flex-direction: column;
+
   align-items: flex-start;
+
   width: 95%;
+
   background: var(--color-black-white-white, #fff);
   border-radius: 20px;
 `;
 
 const Header = styled.div`
   display: flex;
+
   gap: 16px;
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
+
   height: 44px;
+
   margin: 10px 20px 5px 20px;
 `;
 
 const CloseBtn = styled.img`
   display: flex;
+
   flex-shrink: 0;
+
   align-items: center;
   justify-content: center;
+
   width: 20px;
   height: 20px;
 `;
 
 const ClockIcon = styled.img`
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 20px;
   height: 20px;
+
   margin: 0px 5px;
 `;
 
 const ClockText = styled.div`
   display: flex;
+
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+
   color: var(--Color-primary-orange, #ffa256);
+
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
 const WriteContent = styled.div`
   display: flex;
+
   flex-direction: column;
+
   gap: 10px;
   align-items: center;
   align-self: stretch;
   justify-content: center;
+
   height: 270px;
+
   padding: 16px;
   margin: 5px 20px 20px 20px;
+
   background: var(--Color-grayscale-gray50, #f8f9fa);
   border: 1px dashed var(--Color-grayscale-gray400, #ced4da);
   border-radius: var(--Border-Radius-radius_300, 8px);
@@ -220,40 +247,57 @@ const WriteContent = styled.div`
 
 const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   padding: 4px 12px;
+
   color: #fff;
+
   cursor: ${({ $isdisabled }) => ($isdisabled ? 'not-allowed' : 'pointer')};
+
   background: ${({ $isdisabled }) => ($isdisabled ? '#d3d3d3' : '#000')};
   border-radius: 4px;
 `;
 
 const PhotoDiv = styled.div`
   display: flex;
+
   justify-content: center;
 `;
 
 const LetterImage = styled.img`
   width: 164px;
   height: 164px;
+
   object-fit: cover;
+
   border-radius: 10px;
 `;
 
 const WriteTa = styled.textarea`
   display: flex;
+
   flex-direction: column;
+
   gap: 10px;
   align-items: flex-start;
   align-self: stretch;
+
   width: 80%;
+
   padding: 16px;
   margin: 0 auto;
+
   overflow: hidden;
+
   color: #000;
+
   resize: none;
+
   background: var(--Color-grayscale-gray50, #f8f9fa);
   border: none;
 
@@ -268,13 +312,18 @@ const WriteTa = styled.textarea`
 
 const ControlContainer = styled.div`
   display: flex;
+
   justify-content: space-between;
+
   width: 100%;
+
   margin-top: 10px;
 `;
 
 const CharacterCount = styled.div`
   display: flex;
+
   font-size: 14px;
+
   color: #000;
 `;

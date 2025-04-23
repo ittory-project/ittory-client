@@ -55,17 +55,24 @@ export const Loading = ({ loadstatus }: Props) => {
 };
 
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
   justify-content: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   background:
     100px 100px repeat,
     #d3edff;
+
   background-blend-mode: overlay, normal;
+
+  transform: translateX(-50%);
 `;

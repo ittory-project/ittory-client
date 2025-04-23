@@ -73,72 +73,101 @@ export const Delete_letterbox = ({
 };
 
 const Modal = styled.div`
-  display: flex;
-  width: 272px;
-  box-sizing: border-box;
-  padding: 24px;
-  flex-direction: column;
-  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 16px;
-  border: 3px solid #d3edff;
-  background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
   z-index: 100;
+
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 272px;
+
+  padding: 24px;
+
+  background: linear-gradient(144deg, #fff -0.87%, #fff 109.18%);
+  border: 3px solid #d3edff;
+  border-radius: 16px;
+
+  transform: translate(-50%, -50%);
 `;
 const Title = styled.div`
   display: flex;
+
   flex-direction: column;
-  align-items: center;
+
   gap: var(--Border-Radius-radius_300, 8px);
+  align-items: center;
   align-self: stretch;
-  color: #212529;
-  text-align: center;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #212529;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const Contents = styled.div`
-  margin-top: 8px;
   display: flex;
+
   flex-direction: column;
-  align-items: center;
+
   gap: var(--Border-Radius-radius_300, 8px);
+  align-items: center;
   align-self: stretch;
-  color: #868e96;
-  text-align: center;
+
+  margin-top: 8px;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px;
+
+  color: #868e96;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const ButtonContainer = styled.div`
-  margin-top: 20px;
-  align-items: flex-start;
-  gap: 8px;
-  align-self: stretch;
   position: relative;
-  justify-content: center;
+
   display: flex;
-  width: 100%;
+
+  gap: 8px;
+  align-items: flex-start;
   align-items: center;
+  align-self: stretch;
+  justify-content: center;
+
+  width: 100%;
+
+  margin-top: 20px;
 `;
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
-  height: 40px;
-  padding: 14px 20px;
-  align-items: center;
-  gap: 8px;
+
   flex: 1 0 0;
+
+  gap: 8px;
+  align-items: center;
   justify-content: center;
+
+  height: 40px;
+
+  padding: 14px 20px;
+
   border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
@@ -149,6 +178,8 @@ const ButtonTxt = styled.div`
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px;
+
   letter-spacing: -0.5px;
 `;

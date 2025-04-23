@@ -208,216 +208,303 @@ export default function EditLetter({
 }
 
 const BackGround = styled.div`
+  position: relative;
+  position: relative;
+
   display: flex;
-  position: relative;
+
   flex-direction: column;
+
   align-items: center;
-  //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
+
   width: 100%;
-  position: relative;
+  height: calc(var(--vh, 1vh) * 100);
+
+  overflow: hidden;
+  //justify-content: center;
   //left: 50%;
   //transform: translateX(-50%);
-  overflow: hidden;
 `;
 const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 50;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 50;
 `;
 const Container = styled.div`
-  margin-top: 32px;
-  display: flex;
-  width: calc(100% - 48px);
-  margin-left: 24px;
-  margin-right: 24px;
-  padding: 22px 12px 16px 12px;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
   z-index: 0;
+
   box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+  align-items: flex-start;
+
+  width: calc(100% - 48px);
+
+  padding: 22px 12px 16px 12px;
+  margin-top: 32px;
+  margin-right: 24px;
+  margin-left: 24px;
+
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 6px 0px rgba(36, 51, 72, 0.08);
 `;
 const Info = styled.div`
-  display: flex;
-  width: 100%;
   position: relative;
+
   box-sizing: border-box;
-  padding: 0px 12px 20px 12px;
+  display: flex;
+
   flex-direction: column;
-  align-items: flex-start;
+
   gap: 12px;
+  align-items: flex-start;
+
+  width: 100%;
+
+  padding: 0px 12px 20px 12px;
+
   background-color: #fff;
 `;
 const TitleTxt = styled.div`
   display: block;
-  color: #212529;
+
+  align-self: flex-start;
+
   padding: 6px 0px;
-  text-align: left;
+  margin-bottom: 0.5rem;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #212529;
+
+  text-align: left;
   letter-spacing: -0.5px;
-  margin-bottom: 0.5rem;
-  align-self: flex-start;
 `;
 const CompleteBtn = styled.span`
   position: absolute;
-  cursor: pointer;
   right: 12px;
+
   display: flex;
-  border-radius: 4px;
-  background: #000;
-  padding: var(--Border-Radius-radius_100, 4px) 12px;
+
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
-  color: #fff;
+  justify-content: center;
+
+  padding: var(--Border-Radius-radius_100, 4px) 12px;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
+
+  cursor: pointer;
+
+  background: #000;
+  border-radius: 4px;
 `;
 const EditBtn = styled.div`
   position: absolute;
-  cursor: pointer;
   right: 12px;
+
   display: flex;
+
+  gap: var(--Border-Radius-radius_300, 8px);
+  align-items: center;
+  justify-content: center;
+
   width: 24px;
   height: 24px;
-  justify-content: center;
-  align-items: center;
-  gap: var(--Border-Radius-radius_300, 8px);
-  border-radius: 50px;
+
+  cursor: pointer;
+
   background: #fff2e8;
+  border-radius: 50px;
 `;
 
 const Cover = styled.div`
-  display: flex;
-  width: 100%;
   position: relative;
+
   box-sizing: border-box;
-  padding: 12px 12px 20px 12px;
+  display: flex;
+
   flex-direction: column;
-  align-self: stretch;
-  border-radius: 8px;
-  background: #f8f9fa;
+
   align-items: center;
+  align-self: stretch;
+
+  width: 100%;
+
+  padding: 12px 12px 20px 12px;
+
+  background: #f8f9fa;
+  border-radius: 8px;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
   width: 120px;
   height: 156.429px;
-  position: relative;
+
   margin-top: 15px;
-  border-radius: 3.833px 11.5px 11.5px 3.833px;
+
   background-image: url(${(props) => props.$backgroundImage});
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-size: contain; /* 이미지를 자르지 않고 크기에 맞춰 조정 */
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
+  background-size: contain; /* 이미지를 자르지 않고 크기에 맞춰 조정 */
+  border-radius: 3.833px 11.5px 11.5px 3.833px;
 `;
 const Bright = styled.img`
-  width: 78px;
-  height: 78px;
-  margin-left: 3px;
-  margin-top: 44px;
   position: absolute;
   z-index: 0;
+
   flex-shrink: 0;
+
+  width: 78px;
+  height: 78px;
+
+  margin-top: 44px;
+  margin-left: 3px;
 `;
 const Shadow = styled.img`
-  margin-left: 01px;
-  margin-top: 39px;
   position: absolute;
   z-index: 1;
+
   flex-shrink: 0;
+
+  margin-top: 39px;
+  margin-left: 01px;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
   z-index: 0;
+
+  flex-shrink: 0;
+
+  gap: 4px;
+
   width: 74px;
   height: 74px;
-  gap: 4px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  background-image: url(${(props) => props.$bgimg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
   margin-top: 23.5px;
   margin-left: 2.26px;
+
+  background-image: url(${(props) => props.$bgimg});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   border: 1px rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
 `;
 const BookTitle = styled.div<{ $font: string }>`
   display: flex;
-  justify-content: center;
-  align-items: center;
+
   flex-shrink: 0;
+
+  align-items: center;
+  justify-content: center;
+
   margin-top: 10px;
-  color: #fff;
-  text-align: center;
+
   text-overflow: ellipsis;
+
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
     props.$font === 'Ownglyph_UNZ-Rg' ? '12px' : '8.571px'};
+
+  color: #fff;
+
+  text-align: center;
 `;
 const InputBox = styled.div`
   display: flex;
-  width: 224px;
+
   flex-direction: column;
-  justify-content: center;
+
   gap: 8px;
+  justify-content: center;
+
+  width: 224px;
+
   margin-top: 0;
+
+  background-color: #fff;
   border-bottom: 1px dashed #dee2e6;
   //margin-bottom: 12px;
-  background-color: #fff;
 `;
 const InputLogo = styled.div`
-  color: #868e96;
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #868e96;
+
   letter-spacing: -0.5px;
 `;
 const Input = styled.input`
   width: 232px;
   height: 20px;
-  border: 0;
+
   padding: 0;
-  background-color: #fff;
   margin-bottom: 4px;
+
   cursor: pointer;
+
+  background-color: #fff;
+  border: 0;
   &::placeholder {
-    color: #adb5bd;
     font-family: var(--Typography-family-title, SUIT);
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
+
     line-height: 20px;
+
+    color: #adb5bd;
+
     letter-spacing: -0.5px;
   }
   &:valid {
-    color: #212529;
     font-family: var(--Typography-family-title, SUIT);
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
+
     line-height: 20px;
+
+    color: #212529;
+
     letter-spacing: -0.5px;
   }
   &:focus {
@@ -426,8 +513,11 @@ const Input = styled.input`
 `;
 const InputBoxRow = styled.div`
   display: flex;
+
   flex-direction: row;
+
   align-items: center;
+
   margin-bottom: 4px;
 `;
 const SelectDate = styled.span`
@@ -435,12 +525,16 @@ const SelectDate = styled.span`
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 24px;
+
   letter-spacing: -0.5px;
+
   cursor: pointer;
 `;
 const Calender = styled.span`
   position: absolute;
-  cursor: pointer;
   right: 1rem;
+
+  cursor: pointer;
 `;

@@ -20,23 +20,30 @@ export const WriteOrderInactiveItem: React.FC<InactiveItemProps> = ({
 
 const Wrapper = styled.div`
   display: flex;
+
   align-items: center;
-  margin: 20px 0;
+
   padding: 10px;
+  margin: 20px 0;
 `;
 
 const Icon = styled.img`
-  width: 40px;
-  height: 40px;
   display: flex;
+
   align-items: center;
   justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  margin-right: 10px;
+
   background-color: #ddd;
   border-radius: 50%;
-  margin-right: 10px;
 `;
 
 const Content = styled.div`
   font-size: 18px;
+
   color: #868e96;
 `;

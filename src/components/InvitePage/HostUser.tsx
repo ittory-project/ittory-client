@@ -371,209 +371,285 @@ export const HostUser = ({
 };
 
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //justify-content: center;
-  height: calc(var(--vh, 1vh) * 100);
-  overflow: hidden;
-  width: 100%;
   position: relative;
   left: 50%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
+  overflow: hidden;
+
   transform: translateX(-50%);
+  //justify-content: center;
 `;
 const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 10;
 `;
 const CopyAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
   z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
+
+  display: flex;
+
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+
   font-family: SUIT;
-  font-weight: 500;
   font-size: 12px;
   font-style: normal;
+  font-weight: 500;
+
   line-height: 16px;
+
+  color: #fff;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
+
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+
   transform: translateX(-50%);
 `;
 
 const Header = styled.div`
-  //position: absolute;
-  box-sizing: border-box;
   top: 0;
+
+  box-sizing: border-box;
   display: flex;
-  width: 100%;
-  padding: 0px 20px 0px 20px;
-  justify-content: space-between;
+
   align-items: center;
   align-self: stretch;
-  //padding-bottom: 16px;
+  justify-content: space-between;
+
+  width: 100%;
+
+  padding: 0px 20px 0px 20px;
   margin-bottom: 16px;
+  //position: absolute;
+  //padding-bottom: 16px;
 `;
 const ReceiverContainer = styled.div`
-  display: flex;
   position: relative;
+
+  display: flex;
+
   align-items: center;
+
   height: 48px;
 `;
 const Receiver = styled.span`
   height: 24px;
-  //flex: 1 0 0;
-  color: #212529;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
+  //flex: 1 0 0;
   &:first-of-type {
     margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
   }
 `;
 const IconContainer = styled.div`
   display: flex;
+
   gap: 18px;
   align-items: center;
 `;
 const Icon = styled.img`
-  cursor: pointer;
   width: 24px;
   height: 24px;
+
+  cursor: pointer;
 `;
 const MainContainer = styled.div`
   display: flex;
-  width: 288px;
+
   flex-direction: column;
+
   align-items: center;
+
+  width: 288px;
   //margin-top: 16px;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
   width: 200px;
   height: 261px;
-  border-radius: 3.833px 11.5px 11.5px 3.833px;
+
   background-image: url(${(props) => props.$backgroundImage});
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
+  border-radius: 3.833px 11.5px 11.5px 3.833px;
 `;
 const TitleContainer = styled.div<{ $font: string }>`
   display: flex;
-  margin-top: 8px;
-  width: 224px;
-  color: #fff;
-  padding: 16px 0px 12px 0px;
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
+
+  width: 224px;
+
+  padding: 16px 0px 12px 0px;
+  margin-top: 8px;
+
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
     props.$font === 'Ownglyph_UNZ-Rg' ? '20.286px' : '14.286px'};
   font-style: normal;
   font-weight: 500;
-  letter-spacing: -0.446px;
+
   line-height: 21.429px;
+
+  color: #fff;
+
+  letter-spacing: -0.446px;
 `;
 const DeliverDay = styled.div`
-  color: #ffffff;
-  opacity: 80%;
   margin-top: -14px;
-  text-align: center;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 8px;
   font-style: normal;
   font-weight: Bold;
+
   line-height: 14.286px;
+
+  color: #ffffff;
+
+  text-align: center;
   letter-spacing: -0.446px;
+
+  opacity: 80%;
 `;
 const Bright = styled.img`
+  position: absolute;
+  z-index: 2;
+
+  flex-shrink: 0;
+
   width: 131px;
   height: 131px;
-  margin-left: 4.2px;
+
   margin-top: 73.6px;
-  position: absolute;
-  z-index: 2;
-  flex-shrink: 0;
+  margin-left: 4.2px;
 `;
 const Shadow = styled.img`
-  width: 145px;
-  height: 145px;
-  margin-left: 1px;
-  margin-top: 66px;
   position: absolute;
   z-index: 3;
+
   flex-shrink: 0;
+
+  width: 145px;
+  height: 145px;
+
+  margin-top: 66px;
+  margin-left: 1px;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
+  z-index: 2;
+
+  flex-shrink: 0;
+
+  gap: 4px;
+
   width: 123px;
   height: 123px;
-  gap: 4px;
-  z-index: 2;
-  flex-shrink: 0;
-  border-radius: 17.647px;
-  background-image: url(${(props) => props.$bgimg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
   margin-top: 20px;
   margin-left: 2.5px;
+
+  background-image: url(${(props) => props.$bgimg});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 17.647px;
 `;
 const NameBar = styled.div`
-  margin-top: 20px;
+  position: relative;
+
+  display: flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+  justify-content: center;
+
   width: 200px;
   height: 23px;
-  flex-shrink: 0;
+
+  margin-top: 20px;
+
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-right: none;
   border-left: none;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 const NameContainer = styled.div`
+  display: flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+  justify-content: center;
+
   width: 200px;
   height: 21px;
-  flex-shrink: 0;
+
+  text-align: center;
+
   background: rgba(255, 255, 255, 0.5);
   box-shadow: 0.823px 0.823px 0.823px 0px rgba(255, 255, 255, 0.25) inset;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  text-align: center;
 `;
 
 const NameTxt = styled.div<{ $book: number }>`
-  padding: 0 12px 0 12px;
   width: 200px;
-  text-align: center;
+
+  padding: 0 12px 0 12px;
+
   text-overflow: ellipsis;
+
   font-family: SUIT;
   font-size: 8px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 12px;
-  letter-spacing: -0.4px;
+
   color: ${({ $book }) => {
     if ($book === 1) return '#715142';
     if ($book === 2) return '#335839';
@@ -581,155 +657,210 @@ const NameTxt = styled.div<{ $book: number }>`
     if ($book === 4) return '#232D3D';
     if ($book === 5) return '#232D3D';
   }};
+
+  text-align: center;
+  letter-spacing: -0.4px;
 `;
 const BarWrapper = styled.div`
   position: relative;
+
+  flex-shrink: 0;
+
   width: 288px;
   height: 14px;
-  flex-shrink: 0;
+
   background: #d3edff;
 `;
 const Bar = styled.div`
+  flex-shrink: 0;
+
   width: 288px;
   height: 14px;
-  flex-shrink: 0;
-  border-radius: 2px 2px 4px 4px;
+
   background: linear-gradient(245deg, #f1e2bc 33.53%, #e7d5a6 121.78%);
-  mix-blend-mode: luminosity;
+  border-radius: 2px 2px 4px 4px;
   box-shadow:
     0px -1px 0.5px 0px rgba(203, 186, 145, 0.8) inset,
     0px 1px 0.5px 0px rgba(255, 247, 226, 0.7) inset;
+
+  mix-blend-mode: luminosity;
 `;
 
 const BarShadow = styled.div<{ $img: string }>`
+  flex-shrink: 0;
+
   width: 288px;
   height: 18px;
-  flex-shrink: 0;
+
   background-image: url(${(props) => props.$img});
-  background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 `;
 const BoxContainer = styled.div`
   display: flex;
+
   flex-direction: column;
-  align-items: center; //수직
-  justify-content: center; //수평
+
+  align-items: center;
+  justify-content: center;
 `;
 const PinArea = styled.div`
   display: flex;
-  width: 232px;
-  margin-top: 10px;
+
   align-items: center;
   justify-content: space-between;
+
+  width: 232px;
+
+  margin-top: 10px;
 `;
 //8px로 하면 얇아보여서 일단 9px로..
 const Pin = styled.div`
-  width: 20px;
-  display: inline-block;
-  height: 9px;
-  transform: rotate(-90deg);
-  top: 4px;
   position: relative;
+  top: 4px;
+
+  display: inline-block;
+
   flex-shrink: 0;
-  border-radius: var(--Border-Radius-radius_300, 8px);
+
+  width: 20px;
+  height: 9px;
+
   background: var(--Color-grayscale-gray400, #ced4da);
+  border-radius: var(--Border-Radius-radius_300, 8px);
   box-shadow:
     0px 1px 0.5px 0px rgba(255, 255, 255, 0.5) inset,
     0px -1px 0.5px 0px rgba(0, 0, 0, 0.1) inset;
+
+  transform: rotate(-90deg);
 `;
 const Box = styled.div`
+  box-sizing: border-box;
   display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+  align-items: center;
+
   width: 288px;
   height: 7rem;
-  box-sizing: border-box;
+
   padding: 24px 16px 20px 16px;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  border-radius: var(--Border-Radius-radius_400, 12px);
-  border: 2px solid var(--Color-grayscale-gray100, #f1f3f5);
+
   background: var(--color-black-white-white, #fff);
+  border: 2px solid var(--Color-grayscale-gray100, #f1f3f5);
+  border-radius: var(--Border-Radius-radius_400, 12px);
   box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
 `;
 const List = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
+
   gap: 9px;
+  align-items: center;
   align-self: stretch;
+  justify-content: center;
 `;
 const User = styled.div`
   display: flex;
-  width: 44px;
+
   flex-direction: column;
+
   align-items: center;
+
+  width: 44px;
   //gap: var(--Border-Radius-radius_200, 6px);
 `;
 const MainUser = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
   width: 44px;
 `;
 const InvitedUser = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
   width: 44px;
 `;
 const UserNameContainer = styled.div`
   display: flex;
+
   align-items: center;
+
   white-space: nowrap;
 `;
 const InviteIcon = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
 `;
 const Crown = styled.span<{ $img: string }>`
-  width: 14px;
-  height: 8px;
-  background-image: url(${(props) => props.$img});
   position: absolute;
   top: -6px; /* ProfileImg의 위에 위치 */
   left: 50%;
+
+  width: 14px;
+  height: 8px;
+
+  background-image: url(${(props) => props.$img});
+
   transform: translateX(-50%);
 `;
 const ToolTip = styled.span<{ $img: string }>`
-  width: 104px;
-  height: 56px;
-  background-image: url(${(props) => props.$img});
   position: absolute;
   top: -65px; /* ProfileImg의 위에 위치 */
   left: 50%;
+
+  width: 104px;
+  height: 56px;
+
+  background-image: url(${(props) => props.$img});
+
   transform: translateX(-50%);
 `;
 const ProfileImg = styled.div<{ $img: string }>`
   width: 40px;
   height: 40px;
-  border-radius: 40px;
-  border: 2px solid #fff;
+
+  margin-bottom: 6px;
+
   background-image: url(${(props) => props.$img});
-  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  margin-bottom: 6px;
+  background-size: cover;
+  border: 2px solid #fff;
+  border-radius: 40px;
 `;
 const UserName = styled.div`
   overflow: hidden;
-  color: #000;
-  text-align: center;
   text-overflow: ellipsis;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #000;
+
+  text-align: center;
   letter-spacing: -0.5px;
   white-space: nowrap;
   &:first-of-type {
@@ -738,29 +869,37 @@ const UserName = styled.div`
 `;
 
 const Button = styled.button`
+  position: fixed;
+  bottom: 0;
+
   box-sizing: border-box;
   display: flex;
-  width: calc(100% - 32px);
-  height: 48px;
-  padding: var(--Typography-size-s, 14px) 20px;
+
   align-items: center;
   justify-content: center;
-  border-radius: 50px;
+
+  width: calc(100% - 32px);
+  height: 48px;
+
+  padding: var(--Typography-size-s, 14px) 20px;
+  margin: 0px 16px 20px 16px;
+
   background: #ffa256;
   border: 0;
+  border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  position: fixed;
-  margin: 0px 16px 20px 16px;
-  bottom: 0;
 `;
 const ButtonTxt = styled.div`
-  color: #fff;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #fff;
+
   letter-spacing: -0.5px;
 `;

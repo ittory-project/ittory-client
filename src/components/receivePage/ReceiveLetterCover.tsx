@@ -54,78 +54,108 @@ export const ReceiveLetterCover = ({
 };
 
 const CoverImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
 `;
 
 const CoverContent = styled.div`
   position: relative;
   z-index: 2;
+
   padding: 20px;
+
   color: #333;
 `;
 
 const TitleDiv = styled.div<{ $fonttype: string }>`
-  font-size: 22px;
   display: flex;
-  font-weight: bold;
+
   justify-content: center;
+
   overflow: hidden;
-  color: var(--color-black-white-white, #fff);
-  text-align: center;
   text-overflow: ellipsis;
+
   font-family: ${(props) => props.$fonttype};
+  font-size: 22px;
   font-size: 20px;
   font-style: normal;
+  font-weight: bold;
   font-weight: 500;
+
   line-height: 24px; /* 120% */
+
+  color: var(--color-black-white-white, #fff);
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 
 const DateDiv = styled.div<{ $fonttype: string }>`
-  font-size: 16px;
   display: flex;
-  color: #666;
-  margin-bottom: 20px;
+
   justify-content: center;
+
+  margin-bottom: 20px;
+
   overflow: hidden;
-  color: rgba(255, 255, 255, 0.8);
-  text-align: center;
   text-overflow: ellipsis;
+
   font-family: ${(props) => props.$fonttype};
+  font-size: 16px;
   font-size: var(--Typography-size-2xs, 11px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-2xs, 16px); /* 145.455% */
+
+  color: #666;
+  color: rgba(255, 255, 255, 0.8);
+
+  text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
 const PhotoDiv = styled.div`
   display: flex;
+
   justify-content: center;
+
   margin-top: 45px;
 `;
 
 const ProfileImage = styled.img`
   width: 164px;
   height: 164px;
-  border-radius: 20px;
+
   object-fit: cover;
+
+  border-radius: 20px;
 `;
 
 const DescriptionDiv = styled.div<{ $coverId: number; $fonttype: string }>`
   height: 16px;
-  font-size: 16px;
-  line-height: 1.5;
-  text-align: center;
+
+  margin-top: ${(props) =>
+    props.$coverId === 1 || props.$coverId === 2 ? '45px' : '35px'};
+
   overflow: hidden;
-  text-align: center;
   text-overflow: ellipsis;
+
   font-family: ${(props) => props.$fonttype};
+  font-size: 16px;
+  font-size: var(--Typography-size-2xs, 11px);
+  font-style: normal;
+  font-weight: 700;
+
+  line-height: 1.5;
+  line-height: var(--Typography-line_height-2xs, 16px);
+
   color: ${({ $coverId }) => {
     if ($coverId === 1) return '#715142';
     if ($coverId === 2) return '#335839';
@@ -133,11 +163,8 @@ const DescriptionDiv = styled.div<{ $coverId: number; $fonttype: string }>`
     if ($coverId === 4) return '#232D3D';
     if ($coverId === 5) return '#232D3D';
   }};
-  margin-top: ${(props) =>
-    props.$coverId === 1 || props.$coverId === 2 ? '45px' : '35px'};
-  font-size: var(--Typography-size-2xs, 11px);
-  font-style: normal;
-  font-weight: 700;
-  line-height: var(--Typography-line_height-2xs, 16px);
+
+  text-align: center;
+  text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;

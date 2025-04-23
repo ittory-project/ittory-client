@@ -99,127 +99,175 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
 };
 
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
+
+  display: flex;
+
+  flex-direction: column;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   background: #fff;
+
+  transform: translateX(-50%);
 `;
 const Header = styled.div`
-  display: flex;
-  width: 100%;
   box-sizing: border-box;
-  padding: 0px var(--Border-Radius-radius_100, 4px);
-  justify-content: space-between;
+  display: flex;
+
   align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  padding: 0px var(--Border-Radius-radius_100, 4px);
 `;
 const Prev = styled.img`
+  flex-shrink: 0;
+
   width: 8px;
   height: 16px;
-  margin-left: 16px;
+
   margin-right: 12px;
-  flex-shrink: 0;
+  margin-left: 16px;
+
   cursor: pointer;
 `;
 const HeaderTxt = styled.div`
   display: flex;
-  height: 24px;
-  padding: 12px;
-  align-items: center;
-  gap: 16px;
+
   flex: 1 0 0;
-  color: #212529;
+
+  gap: 16px;
+  align-items: center;
+
+  height: 24px;
+
+  padding: 12px;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const Container = styled.div`
-  display: flex;
-  padding: 0px 16px 20px 16px;
-  flex-direction: column;
-  align-items: center;
-  flex: 1 0 0;
-  align-self: stretch;
   box-sizing: border-box;
+  display: flex;
+
+  flex: 1 0 0;
+  flex-direction: column;
+
+  align-items: center;
+  align-self: stretch;
+
+  padding: 0px 16px 20px 16px;
   margin-top: 0.75rem;
 `;
 const Bell = styled.img`
+  flex-shrink: 0;
+
   width: 32px;
   height: 36px;
-  flex-shrink: 0;
+
   margin-top: 6px;
   margin-bottom: 14px;
 `;
 const Title = styled.div`
   align-self: stretch;
-  text-align: center;
-  color: #000;
+
   font-family: SUIT;
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #000;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const Contents = styled.div`
-  display: flex;
   box-sizing: border-box;
-  margin-top: 24px;
-  padding: 20px 0px;
+  display: flex;
+
   flex-direction: column;
-  align-items: flex-start;
+
   gap: 12px;
+  align-items: flex-start;
   align-self: stretch;
+
+  padding: 20px 0px;
+  margin-top: 24px;
+
   background: #f8f9fa;
   border-radius: 16px;
 `;
 const TxtList = styled.div`
   display: flex;
-  padding: 0px 16px;
-  align-items: flex-start;
+
   gap: 12px;
+  align-items: flex-start;
   align-self: stretch;
-  color: #495057;
+
+  padding: 0px 16px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 16px;
+
+  color: #495057;
+
   letter-spacing: -0.5px;
 `;
 const Check = styled.div`
   display: flex;
-  padding-top: 2px;
-  align-items: flex-start;
+
   gap: 10px;
+  align-items: flex-start;
   align-self: stretch;
+
+  padding-top: 2px;
 `;
 const ButtonContainer = styled.div`
-  align-items: flex-start;
-  gap: 8px;
-  padding: 0px 16px 20px 16px;
-  align-self: stretch;
   position: relative;
-  justify-content: center;
+
   display: flex;
+
+  gap: 8px;
+  align-items: flex-start;
   align-items: center;
+  align-self: stretch;
+  justify-content: center;
+
+  padding: 0px 16px 20px 16px;
 `;
 const Button = styled.button`
   box-sizing: border-box;
   display: flex;
+
+  flex: 1 0 0;
+
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
   width: 140px;
   height: 48px;
+
   padding: 14px 20px;
-  align-items: center;
-  gap: 8px;
-  flex: 1 0 0;
-  justify-content: center;
+
   border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
@@ -230,6 +278,8 @@ const ButtonTxt = styled.div`
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px;
+
   letter-spacing: -0.5px;
 `;

@@ -80,17 +80,25 @@ export default function FontSelect({
 const Container = styled.div`
   box-sizing: border-box;
   display: flex;
+
   flex-direction: column;
+
   align-items: flex-start;
+
   width: 100%;
 `;
 
 const FontSelectorContainer = styled.div`
   display: flex;
+
   flex-direction: row;
+
   gap: 0.4rem;
+
   padding: 11px 16px;
+
   overflow-x: auto;
+
   white-space: nowrap;
 
   /* 스크롤바 스타일 (브라우저에 따라 다를 수 있음) */
@@ -109,28 +117,38 @@ const FontSelectorContainer = styled.div`
 const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   box-sizing: border-box;
   display: inline-flex;
+
   gap: 4px;
   align-items: center;
   justify-content: center;
+
   width: 80px;
   height: 34px;
+
   text-align: center;
+
   cursor: pointer;
+
   background: ${(props) => (props.$selected ? '#fff2e8' : '#f1f3f5')};
   border: ${(props) =>
     props.$selected ? '1px solid #ffa256' : '1px solid #ced4da'};
   border-radius: 50px;
+
   transition: background-color 0.3s;
   //padding: 6px 16px;
 `;
 const Fonttxt = styled.span<{ $fontFamily: string; $selected: boolean }>`
   margin-top: ${(props) =>
     props.$fontFamily === 'GmarketSans' ? '3px' : '1px'};
+
   font-family: ${(props) => props.$fontFamily};
   font-size: ${(props) =>
     props.$fontFamily === 'Ownglyph_UNZ-Rg' ? '20px' : '14px'};
   font-weight: ${(props) => (props.$fontFamily === 'GmarketSans' ? 500 : 400)};
+
   line-height: 20px;
+
   color: ${(props) => (props.$selected ? '#ffa256' : '#858e96')};
+
   letter-spacing: -0.5px;
 `;

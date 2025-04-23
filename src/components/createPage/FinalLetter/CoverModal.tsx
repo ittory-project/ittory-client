@@ -382,20 +382,27 @@ const CameraIcon = styled.div`
   position: absolute;
   top: 8px;
   right: 8px;
+
   box-sizing: border-box;
   display: flex;
+
   flex-shrink: 0;
+
   gap: 8.571px;
   align-items: center;
   justify-content: center;
+
   width: 24px;
   height: 24px;
+
   padding: 3.429px;
+
   background: rgba(0, 0, 0, 0.5);
   border-radius: 13.714px;
 `;
 const Camera = styled.img`
   flex-shrink: 0;
+
   width: 16px;
   height: 16px;
 `;
@@ -406,13 +413,18 @@ const ModalContainer = styled.div<{
   position: absolute;
   bottom: 1px;
   z-index: 50;
+
   box-sizing: border-box;
   display: flex;
+
   flex-direction: column;
+
   width: 100%;
   height: ${({ $isKeyboardOpen, $keyboardHeight }) =>
     $isKeyboardOpen ? `calc(33rem - ${$keyboardHeight}px)` : '33rem'};
+
   padding: 24px 24px 20px 0px;
+
   background: #fff;
   border-radius: 24px 24px 0px 0px;
   box-shadow: -4px 0px 14px 0px rgba(0, 0, 0, 0.05);
@@ -420,97 +432,136 @@ const ModalContainer = styled.div<{
 `;
 const ButtonContainer = styled.button`
   display: flex;
+
   flex-shrink: 0;
   flex-direction: column;
+
   gap: 4px;
   align-items: center;
   justify-content: center;
+
   width: 150px;
   height: 150px;
+
   margin-top: 2.5px;
   margin-right: 35px;
   margin-left: 39px;
+
   cursor: pointer;
+
   background: #e9ecef;
   border-radius: 100px;
   &:focus {
     outline: none;
+
     border: none;
   }
 `;
 const BtnTxt = styled.div`
   padding-top: 4px;
+
   font-family: SUIT;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px;
+
   color: #495057;
+
   letter-spacing: -0.5px;
 `;
 const Header = styled.div`
   position: relative;
+
   display: flex;
+
   gap: 10px;
   align-items: center;
   align-self: stretch;
   justify-content: center;
+
   padding-left: 24px;
 `;
 const Title = styled.span`
   display: block;
+
   flex: 1 0 0;
+
   align-self: flex-start;
+
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
   color: #000;
+
   text-align: left;
   letter-spacing: -0.5px;
 `;
 const Cancel = styled.span`
   position: absolute;
   right: 4.17px;
+
   cursor: pointer;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
   position: absolute;
   left: 50%;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   width: 224px;
   height: 294px;
+
   margin-top: 3rem;
+
   background-image: url(${(props) => props.$backgroundImage});
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
   background-size: cover; /* 이미지를 자르지 않고 크기에 맞춰 조정 */
   border-radius: 3.833px 11.5px 11.5px 3.833px;
+
   transform: translateX(-50%);
 `;
 const Shadow = styled.img`
   position: absolute;
   z-index: 3;
+
   flex-shrink: 0;
+
   width: 158px;
   height: 153px;
+
   margin-top: 76px;
   margin-left: -3px;
+
   pointer-events: none;
+
   object-fit: cover;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
   position: relative;
   z-index: 0;
+
   flex-shrink: 0;
+
   gap: 4px;
+
   width: 135.7px;
   height: 135.7px;
+
   margin-top: 17px;
+
   cursor: pointer;
+
   background-image: url(${(props) => props.$bgimg});
   background-repeat: no-repeat;
   background-position: center;
@@ -519,46 +570,64 @@ const BtnImgContainer = styled.div<{ $bgimg: string }>`
 `;
 const TitleContainer = styled.div`
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   width: 224px;
+
   padding: 16px 0px 12px 0px;
 `;
 const Input = styled.input<{ $font: string }>`
   box-sizing: border-box;
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 179px;
   height: 40px;
+
   padding: 0px 16px;
+
   text-align: center;
+
   cursor: pointer;
+
   background: rgba(255, 255, 255, 0);
   border: 0;
   &::placeholder {
     text-overflow: ellipsis;
+
     font-family: ${(props) => props.$font};
     font-size: ${(props) =>
       props.$font === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
+
     line-height: 24px;
+
     color: #f1f3f5;
+
     text-align: center;
     text-align: center;
     letter-spacing: -0.5px;
   }
   &:valid {
     text-overflow: ellipsis;
+
     font-family: ${(props) => props.$font};
     font-size: ${(props) =>
       props.$font === 'Ownglyph_UNZ-Rg' ? '24px' : '16px'};
     font-style: normal;
     font-weight: 500;
+
     line-height: 24px;
+
     color: #f1f3f5;
+
     text-align: center;
     letter-spacing: -0.5px;
   }
@@ -568,24 +637,34 @@ const Input = styled.input<{ $font: string }>`
 `;
 const NameContainer = styled.div<{ $book: number }>`
   display: flex;
+
   flex-shrink: 0;
+
   align-items: center;
   justify-content: center;
+
   width: 224px;
   height: 21px;
+
   margin-top: ${(props) =>
     props.$book === 0 || props.$book === 1 ? '34px' : '25px'};
+
   text-align: center;
 `;
 const NameTxt = styled.div<{ $book: number }>`
   width: 200px;
+
   padding: 0 12px 0 12px;
+
   text-overflow: ellipsis;
+
   font-family: SUIT;
   font-size: 9px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 13px;
+
   color: ${({ $book }) => {
     if ($book === 0) return '#715142';
     if ($book === 1) return '#335839';
@@ -593,31 +672,41 @@ const NameTxt = styled.div<{ $book: number }>`
     if ($book === 3) return '#232D3D';
     if ($book === 4) return '#232D3D';
   }};
+
   text-align: center;
   letter-spacing: -0.5px;
 `;
 const ImageContainer = styled.div`
   position: relative;
+
   display: flex;
+
   gap: var(--Border-Radius-radius_300, 8px);
   align-items: center;
   align-self: stretch;
   justify-content: center;
+
   height: 56px;
+
   margin-top: 21rem;
 `;
 
 const Image = styled.div<{ $clicked: boolean; $img: string }>`
   flex-shrink: 0;
+
   width: ${(props) => (props.$clicked ? '56px' : '48px')};
   height: ${(props) => (props.$clicked ? '56px' : '48px')};
+
   cursor: pointer;
+
   background-image: url(${(props) => props.$img});
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   border-radius: 10.2px;
+
   opacity: ${(props) => (props.$clicked ? '' : '0.4')};
+
   transition: all 0.2s ease;
 `;
 
@@ -625,24 +714,30 @@ const Button = styled.button<{ $isKeyboardOpen: boolean }>`
   position: fixed;
   bottom: 20px;
   left: 50%;
+
   box-sizing: border-box;
   display: ${(props) =>
     props.$isKeyboardOpen
       ? 'none'
       : 'flex'}; /* 키보드가 올라왔을 때 버튼 숨김 */
+
   gap: 8px;
   align-items: center;
   align-self: stretch;
   align-self: stretch;
   justify-content: center;
+
   width: 288px;
   height: 48px;
+
   padding: var(--Typography-size-s, 14px) 20px;
+
   background: #343a40;
   border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
+
   transform: translateX(-50%);
 `;
 const ButtonTxt = styled.div`
@@ -650,7 +745,10 @@ const ButtonTxt = styled.div`
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
   color: #fff;
+
   letter-spacing: -0.5px;
 `;

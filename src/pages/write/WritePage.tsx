@@ -123,9 +123,12 @@ export const WritePage = () => {
 
 const Container = styled.div`
   position: relative;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
 `;
@@ -137,7 +140,9 @@ const Countdown = styled.img`
   bottom: 0;
   left: 0;
   z-index: 6;
+
   width: 100%;
   height: 100%;
+
   background-color: rgba(0, 0, 0, 0.7);
 `;

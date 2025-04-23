@@ -217,162 +217,219 @@ export default function UserFinishModal({
 }
 const ModalContainer = styled.div`
   position: absolute;
+  bottom: 0;
+  z-index: 100;
+
   box-sizing: border-box;
   display: flex;
-  width: 100%;
-  padding: 24px 24px 20px 24px;
-  border-radius: 24px 24px 0px 0px;
-  background: #fff;
-  z-index: 100;
+
   flex-direction: column;
+
   align-items: center;
-  bottom: 0;
+
+  width: 100%;
+
+  padding: 24px 24px 20px 24px;
+
+  background: #fff;
+  border-radius: 24px 24px 0px 0px;
   box-shadow: -4px 0px 14px 0px rgba(0, 0, 0, 0.05);
 `;
 const Header = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column; //세로정렬
-  gap: 6px;
-  align-self: stretch;
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
 `;
 const Title = styled.span`
-  text-align: center;
-  color: #000;
   font-family: var(--Typography-family-title, SUIT);
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
+  color: #000;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const MainContainer = styled.div`
   display: flex;
-  width: 220px;
+
   flex-direction: column;
-  align-items: center;
+
   gap: 12px;
+  align-items: center;
+
+  width: 220px;
+
   margin-top: 24px;
 `;
 const Receiver = styled.div`
-  display: flex;
-  color: #000;
-  text-align: center;
-  align-items: center;
   position: relative;
+
+  display: flex;
+
+  align-items: center;
+
   font-family: var(--Typography-family-body, SUIT);
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
+
+  color: #000;
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const LetterImg = styled.div<{ $img: string }>`
   width: 19px;
   height: 14px;
-  background-image: url(${(props) => props.$img});
-  background-size: cover;
-  background-repeat: no-repeat;
+
   margin-left: 2px;
+
+  background-image: url(${(props) => props.$img});
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
   width: 224px;
   height: 292px;
-  border-radius: 3.833px 11.5px 11.5px 3.833px;
+
   background-image: url(${(props) => props.$backgroundImage});
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-size: cover; /* 이미지를 자르지 않고 크기에 맞춰 조정 */
   background-repeat: no-repeat; /* 이미지를 반복하지 않도록 설정 */
   background-position: center; /* 이미지를 가운데 정렬 */
+  background-size: cover; /* 이미지를 자르지 않고 크기에 맞춰 조정 */
+  border-radius: 3.833px 11.5px 11.5px 3.833px;
 `;
 const TitleContainer = styled.div<{ $font: string }>`
   display: flex;
-  width: 224px;
-  color: #fff;
-  padding: 16px 0px 12px 0px;
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
+
+  width: 224px;
+
+  padding: 16px 0px 12px 0px;
+  margin-top: 8px;
+
   font-family: ${(props) => props.$font};
   font-size: ${(props) =>
     props.$font === 'Ownglyph_UNZ-Rg' ? '21px' : '16px'};
   font-style: normal;
   font-weight: 500;
-  letter-spacing: -0.5px;
+
   line-height: 24px;
-  margin-top: 8px;
+
+  color: #fff;
+
+  letter-spacing: -0.5px;
 `;
 const DeliverDay = styled.div`
-  color: rgba(255, 255, 255, 0.8);
   margin-top: -14px;
-  text-align: center;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: 10px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 14px;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  text-align: center;
   letter-spacing: -0.5px;
 `;
 const Shadow = styled.img`
-  width: 161px;
-  height: 161px;
-  margin-left: 0px;
-  margin-top: 73px;
   position: absolute;
   z-index: 3;
+
   flex-shrink: 0;
+
+  width: 161px;
+  height: 161px;
+
+  margin-top: 73px;
+  margin-left: 0px;
 `;
 const ButtonContainer = styled.div`
-  padding: 0px 16px 0px 16px;
-  box-sizing: border-box;
-  align-items: flex-start;
-  gap: 8px;
-  align-self: stretch;
-  display: flex;
   position: relative;
-  margin-top: 24px;
-  width: 100%; /* 컨테이너의 너비를 조정 */
-  justify-content: center; /* 버튼들을 중앙에 배치 */
   z-index: 200;
+
+  box-sizing: border-box;
+  display: flex;
+
+  gap: 8px;
+  align-items: flex-start;
+  align-self: stretch;
+  justify-content: center; /* 버튼들을 중앙에 배치 */
+
+  width: 100%; /* 컨테이너의 너비를 조정 */
+
+  padding: 0px 16px 0px 16px;
+  margin-top: 24px;
 `;
 const Button = styled.button`
   z-index: 200;
+
   box-sizing: border-box;
   display: flex;
+
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
   width: 140px;
   height: 48px;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
+
+  border: none;
   border-radius: 50px;
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
   //position: relative;
-  border: none;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
   letter-spacing: -0.5px;
 `;
 const BtnImgContainer = styled.div<{ $bgimg: string }>`
+  z-index: 2;
+
+  flex-shrink: 0;
+
+  gap: 4px;
+
   width: 137px;
   height: 137px;
-  gap: 4px;
-  z-index: 2;
-  flex-shrink: 0;
-  border-radius: 20px;
-  background-image: url(${(props) => props.$bgimg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
   margin-top: 26.59px;
   margin-left: 1.8px;
+
+  background-image: url(${(props) => props.$bgimg});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 20px;
 `;

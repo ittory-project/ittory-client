@@ -217,70 +217,93 @@ export const Letter = ({
 };
 
 const Background = styled.div<{ $backgroundimg: string }>`
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
-  background-image: url(${(props) => props.$backgroundimg});
-  background-size: cover;
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
+  background-image: url(${(props) => props.$backgroundimg});
+  background-size: cover;
 `;
 const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 99;
 `;
 const Header = styled.div`
-  display: flex;
-  width: 100%;
-  height: 48px;
   position: absolute;
   top: 0;
   left: 0;
-  padding: 0px 4px;
-  align-items: center;
 
   /* NOTE: box-sizing: content-box이면 width 100% + padding 크기가 되어버림 */
   box-sizing: border-box;
+  display: flex;
+
+  align-items: center;
+
+  width: 100%;
+  height: 48px;
+
+  padding: 0px 4px;
 `;
 const CancelBox = styled.div`
-  display: flex;
-  padding: 12px;
   box-sizing: border-box;
+  display: flex;
+
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
+  justify-content: center;
+
+  padding: 12px;
 `;
 const StyledChevronLeft = styled(ChevronLeft)`
-  cursor: pointer;
   width: 24px;
   height: 24px;
+
   color: white;
+
+  cursor: pointer;
 `;
 const MoreBox = styled.div`
-  display: flex;
-  padding: 12px;
   position: absolute;
   right: 4px;
+
   box-sizing: border-box;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: flex;
+
   flex-shrink: 0;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px;
 `;
 const More = styled.img`
   display: flex;
+
+  flex-shrink: 0;
+
   width: 3px;
   height: 17px;
-  flex-shrink: 0;
-  margin-right: 10.5px;
+
   margin-top: 4px;
+  margin-right: 10.5px;
+
   cursor: pointer;
 `;
 
@@ -288,12 +311,15 @@ const CoverContainer = styled.div<{
   $coverType: keyof typeof backgroundGradientMap;
 }>`
   position: relative;
+
+  flex-shrink: 0;
+
   width: 272px;
   height: 355px;
-  flex-shrink: 0;
-  border-radius: 0 15px 15px 0;
+
   background: ${(props) => backgroundGradientMap[props.$coverType]};
   background-size: cover;
+  border-radius: 0 15px 15px 0;
   box-shadow:
     0 2px 1px rgba(28, 21, 21, 0.09),
     0 4px 2px rgba(0, 0, 0, 0.09),
@@ -303,18 +329,21 @@ const CoverContainer = styled.div<{
 `;
 
 const ToDiv = styled.div<{ $fonttype: string }>`
-  font-size: 24px;
-  margin-bottom: 30px;
   padding: 0px 6px 10px;
-  color: var(--color-black-white-white, #fff);
-  text-align: center;
+  margin-bottom: 30px;
 
   /* title/base_bold */
   font-family: ${(props) => props.$fonttype};
+  font-size: 24px;
   font-size: var(--Typography-size-base, 16px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-s, 24px); /* 150% */
+
+  color: var(--color-black-white-white, #fff);
+
+  text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 
   border-bottom: 2px dashed rgba(255, 255, 255, 0.5);

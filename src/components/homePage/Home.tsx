@@ -213,11 +213,16 @@ const MenuOverlay = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 0;
   z-index: 10;
+
   visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
+
   background: rgb(0 0 0 / 80%);
+
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
+
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease;
@@ -227,19 +232,28 @@ const MenuContainer = styled.div<{ $isOpen: boolean }>`
   top: 0;
   right: 0;
   z-index: 20;
+
   visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+
   width: 260px;
   height: calc(var(--vh, 1vh) * 100);
+
   background: #fff;
+
   transform: translateX(${(props) => (props.$isOpen ? '0' : '100%')});
+
   transition: transform 0.3s ease;
 `;
 const Container = styled.div`
   z-index: 2;
+
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
+
   overflow: hidden scroll;
+
   scrollbar-width: none;
+
   background: #fff;
   -ms-overflow-style: none;
 
@@ -250,14 +264,17 @@ const Container = styled.div`
 `;
 const BodySection = styled.div`
   display: flex;
+
   align-items: flex-start; /* 이미지를 위쪽에 정렬 */
   justify-content: center; /* 이미지를 가운데 정렬 */
+
   width: 100%; /* 화면 크기만큼 차지 */
   min-height: 100vh; /* 최소한 화면 크기만큼 차지 */
 `;
 
 const Image = styled.img`
   display: block; /* 불필요한 여백 제거 */
+
   width: 100%; /* 이미지를 화면 너비에 맞게 */
   height: auto; /* 비율을 유지하여 높이를 자동으로 조정 */
 `;
@@ -283,18 +300,24 @@ const fadeInDown = keyframes`
 const Logo = styled.div<$Props>`
   position: relative;
   top: 10%;
+
   width: 170px;
   height: 94px;
+
   margin: 0 auto;
+
   pointer-events: none;
+
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: contain;
+
   animation: ${fadeInDown} 1.7s ease-out;
 `;
 
 const FirstSection = styled.div<$Props>`
   width: 100%; /* 화면 크기만큼 차지 */
   height: calc(var(--vh, 1vh) * 100);
+
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-position: center;
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
@@ -302,24 +325,31 @@ const FirstSection = styled.div<$Props>`
 const Section = styled.div<$Props>`
   width: 100%; /* 화면 크기만큼 차지 */
   height: calc(var(--vh, 1vh) * 100);
+
   overflow-x: hidden;
+
   background: ${(props) => `url(${props.$img}) no-repeat center center`};
   background-size: cover; /* 이미지가 전체 화면을 덮도록 */
 `;
 const FinalButton = styled.button`
   position: relative;
   top: 89.6%;
+
   box-sizing: border-box;
   display: flex;
+
   gap: 8px;
   align-items: center;
   justify-content: center;
+
   width: calc(100% - 32px);
   height: 48px;
+
   padding: 8px 20px;
   margin: 0 auto;
   margin-right: 16px;
   margin-left: 16px;
+
   background: #243348;
   border-radius: 50px;
   box-shadow:
@@ -329,20 +359,27 @@ const FinalButton = styled.button`
 const ButtonContainer = styled.button`
   position: relative;
   top: 12%;
+
   box-sizing: border-box;
   display: flex;
+
   gap: 8px;
   align-items: center;
   justify-content: center;
+
   width: 138px;
+
   padding: 8px 20px;
   margin: 0 auto;
+
   background: #243348;
   border-radius: 50px;
   box-shadow:
     -1.5px -1.5px 1.5px 0 var(--Color-secondary-navy, #1c2231) inset,
     -3.5px -1.5px 12px 0 var(--Color-secondary-navy, #1c2231) inset;
+
   opacity: 0; /* 초기에는 숨김 */
+
   animation: ${fadeIn} 1.8s ease-out;
   animation-fill-mode: forwards; /* 애니메이션이 끝난 후 상태 유지 */
 `;
@@ -351,46 +388,65 @@ const ButtonTxt = styled.div`
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 20px; /* 142.857% */
+
   color: var(--color-black-white-white, #fff);
+
   letter-spacing: -0.5px;
 `;
 const LastSection = styled.div`
   box-sizing: border-box;
   display: flex;
+
   align-items: center;
+
   width: 100%;
+
   padding: 40px 24px;
+
   overflow-x: hidden;
+
   scroll-snap-align: start;
+
   background: #2f3641;
   //justify-content: center;
 `;
 const SectionBox = styled.div`
   display: flex;
+
   flex-shrink: 0;
   flex-direction: column;
+
   align-items: flex-start;
   //width: 272px;
 `;
 const Title = styled.div`
   margin-bottom: 20px;
+
   font-family: var(--Typography-family-body, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 16px; /* 142.857% */
+
   color: #adb5bd;
+
   letter-spacing: -0.5px;
 `;
 const SubTitle = styled.div`
   margin-bottom: 8px;
+
   font-family: var(--Typography-family-body, SUIT);
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
+
   line-height: 16px; /* 142.857% */
+
   color: #adb5bd;
+
   letter-spacing: -0.5px;
 `;
 const SnsContainer = styled.div`
@@ -400,5 +456,6 @@ const SnsContainer = styled.div`
 const SnsIcon = styled.img`
   width: 24px;
   height: 24px;
+
   margin-right: 16px;
 `;

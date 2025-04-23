@@ -104,26 +104,35 @@ const Overlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 5;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
   height: 100%;
+
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 5;
 `;
 
 const Popup = styled.div`
   display: flex;
-  width: 70%;
-  margin: auto;
-  padding: 32px 15px 24px 15px;
+
   flex-direction: column;
+
+  gap: 16px;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  border-radius: var(--Border-Radius-radius_500, 16px);
+
+  width: 70%;
+
+  padding: 32px 15px 24px 15px;
+  margin: auto;
+
   background: linear-gradient(144deg, #fff -0.87%, #c3f1ff 109.18%);
+  border-radius: var(--Border-Radius-radius_500, 16px);
   box-shadow:
     0px 4px 0px 0px rgba(195, 241, 255, 0.8) inset,
     0px -4px 0px 0px rgba(0, 0, 0, 0.1) inset;
@@ -131,69 +140,91 @@ const Popup = styled.div`
 
 const PopupTitle = styled.div`
   align-self: stretch;
-  color: var(--Color-grayscale-gray900, #212529);
-  text-align: center;
   /* title/medium_bold */
   font-family: var(--Typography-family-title, SUIT);
   font-size: var(--Typography-size-m, 18px);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-s, 24px); /* 133.333% */
+
+  color: var(--Color-grayscale-gray900, #212529);
+
+  text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
 const PopupTitleDetail = styled.div`
-  color: var(--Color-grayscale-gray600, #868e96);
-  text-align: center;
   font-family: var(--Typography-family-body, SUIT);
   font-size: var(--Typography-size-s, 14px);
   font-style: normal;
   font-weight: 500;
+
   line-height: var(--Typography-line_height-xs, 20px); /* 142.857% */
+
+  color: var(--Color-grayscale-gray600, #868e96);
+
+  text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
 const PopupList = styled.div`
   display: flex;
-  max-height: 50vh;
+
+  flex-direction: column;
+
+  gap: 16px;
+  align-items: center;
+
   width: 60%;
-  margin: 0 auto;
+  max-height: 50vh;
+
   padding: 0px var(--Typography-line_height-l, 40px) 16px
     var(--Typography-line_height-l, 40px);
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  border-radius: var(--Border-Radius-radius_400, 12px);
-  border: 3px solid var(--Color-secondary-soft_blue, #d3edff);
+  margin: 0 auto;
+
   background: var(--color-black-white-white, #fff);
+  border: 3px solid var(--Color-secondary-soft_blue, #d3edff);
+  border-radius: var(--Border-Radius-radius_400, 12px);
 `;
 
 const PopupListTitle = styled.div`
   display: flex;
-  width: 106px;
-  padding: var(--Border-Radius-radius_100, 4px) 20px;
-  justify-content: center;
-  align-items: center;
+
   gap: 10px;
-  border-radius: 0px 0px 12px 12px;
-  background: var(--Color-secondary-soft_blue, #d3edff);
-  box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.04) inset;
-  color: var(--Color-secondary-blue, #4db4ff);
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+
+  width: 106px;
+
+  padding: var(--Border-Radius-radius_100, 4px) 20px;
+
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-xs, 12px);
   font-style: normal;
   font-weight: 500;
+
   line-height: var(--Typography-line_height-2xs, 16px); /* 133.333% */
+
+  color: var(--Color-secondary-blue, #4db4ff);
+
+  text-align: center;
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+
+  background: var(--Color-secondary-soft_blue, #d3edff);
+  border-radius: 0px 0px 12px 12px;
+  box-shadow: 0px -2px 0px 0px rgba(0, 0, 0, 0.04) inset;
 `;
 
 const List = styled.ul`
-  z-index: 2;
   position: relative;
+  z-index: 2;
+
   width: 100%;
+
   padding: 0;
   margin: 0;
+
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -202,71 +233,93 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  display: flex;
-  align-items: center;
-  padding: 0px 20px 12px 0px;
   z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0px 20px 12px 0px;
 `;
 
 const ListNumber = styled.div`
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
   width: var(--Typography-size-m, 18px);
   height: var(--Typography-size-m, 18px);
+
   padding: 4px var(--Border-Radius-radius_100, 4px);
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  color: var(--color-black-white-white, #fff);
-  text-align: center;
+
   font-family: var(--Typography-family-number, 'Gmarket Sans');
   font-size: 12px;
   font-style: bold;
+
   line-height: var(--Typography-line_height-2xs, 16px); /* 160% */
-  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
-  border-radius: var(--Border-Radius-radius_circle, 50px);
-  background: var(--Color-secondary-blue, #4db4ff);
+
   color: var(--color-black-white-white, #fff);
+  color: var(--color-black-white-white, #fff);
+
+  text-align: center;
+  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+
+  background: var(--Color-secondary-blue, #4db4ff);
+  border-radius: var(--Border-Radius-radius_circle, 50px);
 `;
 
 const Avatar = styled.img`
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+
   margin: 0 6px 0 20px;
+
+  border-radius: 50%;
 `;
 
 const Name = styled.span`
   font-size: 18px;
+
   color: #333;
 `;
 
 const Line = styled.div<{ $itemnum: number }>`
-  border-left: 1.5px dashed rgba(111, 176, 255, 0.5);
-  height: ${({ $itemnum }) => `calc(${$itemnum} * 48px - 35px)`};
+  position: absolute;
   top: 18px;
   left: 12px;
-  position: absolute;
   z-index: 1;
+
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 48px - 35px)`};
+
+  border-left: 1.5px dashed rgba(111, 176, 255, 0.5);
 `;
 
 const ClockIcon = styled.img`
   display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   width: 12px;
   height: 13px;
+
   margin: 1px 5px 0px 0px;
-  justify-content: center;
-  align-items: center;
 `;
 
 const ClockText = styled.div`
-  margin: 16px 0px 0px 0px;
   display: flex;
-  color: var(--Color-secondary-soft_navy_blue, #99adc9);
+
+  margin: 16px 0px 0px 0px;
 
   /* caption/xsmall_bold */
   font-family: var(--Typography-family-caption, SUIT);
   font-size: var(--Typography-size-xs, 0.75rem);
   font-style: normal;
   font-weight: 700;
+
   line-height: var(--Typography-line_height-2xs, 1rem); /* 133.333% */
+
+  color: var(--Color-secondary-soft_navy_blue, #99adc9);
+
   letter-spacing: var(--Typography-letter_spacing-default, -0.03125rem);
 `;

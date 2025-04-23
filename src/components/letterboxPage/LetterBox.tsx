@@ -210,116 +210,168 @@ export const LetterBox = () => {
 };
 
 const DeleteAlert = styled.div`
-  display: flex;
-  padding: var(--Border-Radius-radius_300, 8px) 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
   z-index: 100;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  text-align: center;
+
+  display: flex;
+
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--Border-Radius-radius_300, 8px) 20px;
+
   font-family: SUIT;
-  font-weight: 500;
   font-size: 12px;
   font-style: normal;
+  font-weight: 500;
+
   line-height: 16px;
+
+  color: #fff;
+
+  text-align: center;
   letter-spacing: -0.5px;
-  position: absolute;
-  left: 50%;
-  bottom: 32px;
+
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+
   transform: translateX(-50%);
 `;
 
 const BackGround = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100%;
   position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
   background: #fff;
 `;
 const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99;
+
   width: 100%;
   height: 100%;
+
   background: rgba(0, 0, 0, 0.6);
+
   transition: background 0.3s ease;
-  z-index: 99;
 `;
 const Header = styled.div`
-  display: flex;
-  width: 100%;
   box-sizing: border-box;
-  padding: 0px var(--Border-Radius-radius_100, 4px);
-  justify-content: space-between;
+  display: flex;
+
   align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  padding: 0px var(--Border-Radius-radius_100, 4px);
 `;
 const Prev = styled.img`
+  flex-shrink: 0;
+
   width: 8px;
   height: 16px;
-  margin-left: 16px;
+
   margin-right: 12px;
-  flex-shrink: 0;
+  margin-left: 16px;
+
   cursor: pointer;
 `;
 const HeaderTxt = styled.div`
   display: flex;
-  height: 24px;
-  padding: 12px;
-  align-items: center;
-  gap: 16px;
+
   flex: 1 0 0;
-  color: #212529;
+
+  gap: 16px;
+  align-items: center;
+
+  height: 24px;
+
+  padding: 12px;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
+  color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const TitleContainer = styled.div`
   display: flex;
+
   align-items: center;
   align-self: stretch;
+
   width: 100%;
 `;
 const CreatedLetterBox = styled.div<{ $focus: boolean }>`
-  display: flex;
-    cursor: pointer;
   box-sizing: border-box;
-  padding: 12px 0px;
-  flex-direction: column;
-  align-items: center;
+  display: flex;
+
   flex: 1 0 0;
+  flex-direction: column;
+
+  align-items: center;
   align-self: stretch;
+
+  padding: 12px 0px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
-  letter-spacing:;-0.5px;
+
   color: ${(props) => (props.$focus ? '#212529' : '#ADB5BD')};
-  border-bottom:${(props) => (props.$focus ? '1px solid #212529' : '1px solid #dee2e6')};
+
+  letter-spacing: -0.5px;
+
+  cursor: pointer;
+
+  border-bottom: ${(props) =>
+    props.$focus ? '1px solid #212529' : '1px solid #dee2e6'};
 `;
 const ReceivedLetterBox = styled.div<{ $focus: boolean }>`
-  display: flex;
-    cursor: pointer;
   box-sizing: border-box;
-  padding: 12px 0px;
-  flex-direction: column;
-  align-items: center;
+  display: flex;
+
   flex: 1 0 0;
+  flex-direction: column;
+
+  align-items: center;
   align-self: stretch;
+
+  padding: 12px 0px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
-  letter-spacing:;-0.5px;
+
   color: ${(props) => (props.$focus ? '#212529' : '#ADB5BD')};
-    border-bottom:${(props) => (props.$focus ? '1px solid #212529' : '1px solid #dee2e6')};
+
+  letter-spacing: -0.5px;
+
+  cursor: pointer;
+
+  border-bottom: ${(props) =>
+    props.$focus ? '1px solid #212529' : '1px solid #dee2e6'};
 `;

@@ -128,6 +128,7 @@ export default FontPopup;
 
 const ParentDiv = styled.div`
   position: relative;
+
   width: 100%;
 `;
 
@@ -138,15 +139,20 @@ const BackGround = styled.div<{
   position: absolute;
   bottom: ${(props) => props.$bottomOffset - 2}px;
   z-index: 100;
+
   display: flex;
+
   width: 100%;
   height: ${(props) => (props.$isKeyboardVisible ? '64px' : '149px')};
+
   overflow-x: hidden;
   overflow-y: hidden;
+
   box-shadow: ${(props) =>
     props.$isKeyboardVisible
       ? '0px'
       : '0px -4px 14px 0px rgba(0, 0, 0, 0.10);'};
+
   transition:
     bottom 0.3s ease,
     height 0.3s ease;
@@ -154,12 +160,18 @@ const BackGround = styled.div<{
 
 const FontContainer = styled.div`
   z-index: 10;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   width: 100%;
+
   overflow-x: auto;
   overflow-y: hidden;
+
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0) -61.61%,
@@ -179,22 +191,31 @@ const Button = styled.button<{ $isKeyboardVisible: boolean }>`
   position: fixed;
   bottom: 20px;
   z-index: 10;
+
   display: ${(props) => (props.$isKeyboardVisible ? 'none' : 'flex')};
+
   gap: 8px;
   align-items: center;
   align-self: stretch;
   justify-content: center;
+
   width: calc(100% - 32px);
   height: 48px;
+
   padding: 14px 20px;
   margin-right: 16px;
   margin-left: 16px;
+
   overflow: hidden;
+
   font-size: var(--Typography-size-base, 16px);
   font-style: normal;
   font-weight: 700;
+
   color: #fff;
+
   cursor: pointer;
+
   background: #343a40;
   border: none;
   border-radius: 50px;

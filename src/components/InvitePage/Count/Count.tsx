@@ -258,101 +258,143 @@ const ModalContainer = styled.div`
   position: absolute;
   bottom: 0;
   z-index: 100;
+
   box-sizing: border-box;
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   width: 100%;
+
   padding: 0px 16px 20px 16px;
+
   background: #fff;
   border-radius: 20px 20px 0px 0px;
 `;
 const Header = styled.div`
   box-sizing: border-box;
   display: flex;
+
   gap: 24px;
   align-items: center;
   align-self: stretch;
+
   width: 100%;
+
   padding: 16px 0px 16px 0px;
 `;
 const Title = styled.div`
   flex: 1 0 0;
+
   font-family: SUIT;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
   color: #212529;
+
   letter-spacing: -0.5px;
 `;
 const Cancel = styled.span`
   box-sizing: border-box;
   display: flex;
+
   flex-shrink: 0;
+
   align-items: center;
   justify-content: center;
+
   width: 20px;
   height: 20px;
+
   padding: 4.175px 4.167px 3.825px 3.833px;
+
   cursor: pointer;
 `;
 const Contents = styled.div`
   position: relative;
+
   box-sizing: border-box;
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   width: 100%;
+
   padding: 0px 16px 20px 16px;
 `;
 const List = styled.div`
   position: relative;
+
   box-sizing: border-box;
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   width: 288px;
   height: 200px;
+
   padding: 8px 0px 16px 0px;
+
   background: #f1f3f5;
   border-radius: 16px;
 `;
 const Picker = styled.div`
   position: relative;
   z-index: 1;
+
   margin-right: 35px;
 `;
 const Select = styled.div`
   position: absolute;
   bottom: 83.5px;
   z-index: 1;
+
   box-sizing: border-box;
   display: flex;
+
   gap: 2px;
   align-items: center;
   justify-content: center;
+
   width: 240px;
   height: 40px;
+
   padding: 8px 0px;
   padding-left: 36px;
+
   font-family: SUIT;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 32px;
+
   color: #ffa256;
+
   letter-spacing: -0.5px;
+
   background: #fff;
   border-radius: 50px;
 `;
 const SlideContent = styled.div<SlideContentProps>`
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   height: calc(14rem / 5);
+
   font-family: 'GmarketSans';
   font-size: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
@@ -369,8 +411,11 @@ const SlideContent = styled.div<SlideContentProps>`
   }};
   font-style: normal;
   font-weight: 400;
+
   line-height: normal;
+
   color: ${(props) => (props.$isActive ? '#ffa256' : '#CED4DA')};
+
   text-align: center;
   letter-spacing: -0.096px;
   letter-spacing: ${(props) => {
@@ -386,6 +431,7 @@ const SlideContent = styled.div<SlideContentProps>`
     }
     return '-0.08px';
   }};
+
   opacity: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
     const distance = Math.abs(
@@ -399,6 +445,7 @@ const SlideContent = styled.div<SlideContentProps>`
     }
     return '0.5';
   }};
+
   transition:
     color 0.11s ease,
     opacity 0.11s ease,
@@ -407,59 +454,82 @@ const SlideContent = styled.div<SlideContentProps>`
 `;
 const Notice = styled.div`
   position: relative;
+
   box-sizing: border-box;
   display: flex;
+
   align-items: center;
+
   width: 288px;
+
   padding: 2px 4px 8px 4px;
   margin-top: 16px;
 `;
 const IconImg = styled.div`
   position: relative;
   left: 0;
+
   display: flex;
 `;
 const TitleTxt = styled.div`
   display: flex;
+
   gap: 6px;
   align-items: center;
+
   margin-top: 2px;
   margin-left: 5px;
+
   font-family: SUIT;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 20px;
+
   color: #868e96;
+
   text-align: center;
   letter-spacing: -0.5px;
 `;
 const TotalTxt = styled.div`
   position: absolute;
   right: 0;
+
   display: flex;
+
   gap: 2px;
   align-items: center;
+
   margin-bottom: 2px;
+
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+
   line-height: 24px;
+
   color: #495057;
+
   text-align: center;
   letter-spacing: -0.5px;
 `;
 
 const Button = styled.button`
   position: relative;
+
   box-sizing: border-box;
   display: flex;
+
   gap: 8px;
   align-items: center;
   justify-content: center;
+
   width: 288px;
   height: 48px;
+
   padding: 14px 0px;
+
   background: #ffa256;
   border-radius: 50px;
   box-shadow:
@@ -471,7 +541,10 @@ const ButtonTxt = styled.div`
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+
   line-height: 24px;
+
   color: #fff;
+
   letter-spacing: -0.5px;
 `;
