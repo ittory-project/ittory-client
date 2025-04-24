@@ -13,6 +13,7 @@ import direction from '../../public/assets/navigate.svg';
 import X from '../../public/assets/x.svg';
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
 import { getLetterCounts, getMyPage } from '../api/service/MemberService';
+import { TempLoginArea } from './TempLogin';
 
 interface Props {
   onClose: () => void;
@@ -111,14 +112,16 @@ export const Menu = ({ onClose }: Props) => {
       '_blank',
     );
   };
+
   const handleCreateBtn = () => {
     if (!accessTokenRepository.isLoggedIn()) {
       navigate('/login');
       onClose();
     } else {
-      navigate('/create');
+      window.location.href = '/create';
     }
   };
+
   return (
     <BackGround>
       <Cancel>
@@ -211,6 +214,7 @@ export const Menu = ({ onClose }: Props) => {
       <Button onClick={handleCreateBtn}>
         <ButtonTxt>편지 쓰러 가기</ButtonTxt>
       </Button>
+      <TempLoginArea />
       <List>
         <svg
           xmlns="http://www.w3.org/2000/svg"
