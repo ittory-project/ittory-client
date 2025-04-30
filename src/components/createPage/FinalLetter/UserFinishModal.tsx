@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import Player from 'lottie-react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -16,6 +14,7 @@ import { postLetter } from '../../../api/service/LetterService';
 //import { postNickname } from '../../../api/service/ParticipantService';
 //import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
 import { postEnter } from '../../../api/service/LetterService';
+import { formatDeliverDate } from './formatDeliverDate';
 
 interface Props {
   myName: string;
@@ -177,20 +176,11 @@ export default function UserFinishModal({
           </Receiver>
           <Book $backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}>
             <TitleContainer $font={selectfont}>{title}</TitleContainer>
+            <DeliverDay>{formatDeliverDate(deliverDay)}</DeliverDay>
             <>
               <Shadow src={shadow} />
               <BtnImgContainer $bgimg={croppedImage} />
             </>
-            {deliverDay === null ? (
-              <></>
-            ) : (
-              <DeliverDay>
-                {`${format(deliverDay, 'yyyy')}.`}
-                {`${format(deliverDay, 'MM')}.`}
-                {format(deliverDay, 'dds')}
-                {` (${format(deliverDay, 'E', { locale: ko })})`}
-              </DeliverDay>
-            )}
           </Book>
         </MainContainer>
         <ButtonContainer>

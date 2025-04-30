@@ -87,6 +87,7 @@ export default function FinalInfo({
   const handleComplete = () => {
     setComplete(true);
   };
+
   const Book: React.FC<BookProps> = ({ backgroundImage, children }) => {
     return (
       <div
