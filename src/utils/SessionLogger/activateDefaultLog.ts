@@ -22,5 +22,6 @@ export const activateDefaultLog = () => {
     'write',
     'menu',
     'commonError',
+    'browserInfo',
   ]);
 };
