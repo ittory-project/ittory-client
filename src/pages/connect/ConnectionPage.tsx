@@ -1,23 +1,9 @@
-import { useEffect } from 'react';
-
-import { useNavigate } from 'react-router-dom';
-
 import { Connection } from '../../components/connectionPage/Connection';
+import { usePreventBack } from '../../hooks';
 
 export const ConnectionPage = () => {
-  const navigate = useNavigate();
-  const handleGoBack = () => {
-    navigate('/');
-  };
-  useEffect(() => {
-    history.pushState(null, '', window.location.href);
+  usePreventBack();
 
-    window.addEventListener('popstate', handleGoBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleGoBack);
-    };
-  }, []);
   return (
     <div>
       <Connection />
