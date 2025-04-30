@@ -87,11 +87,12 @@ export const Created_Modal = ({
   const handleShare = async () => {
     const letterId = encodeId;
     if (letterInfo) {
+      const encodedReceiverName = encodeURIComponent(letterInfo.receiverName);
       const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
         .map((element) => element)
         .join(', ')}`;
       if (!isMobile) {
-        const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`;
+        const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -113,7 +114,7 @@ export const Created_Modal = ({
         try {
           await navigator.share({
             text: shareText,
-            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
+            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`,
           });
           logger.debug('공유 성공');
         } catch (e) {
