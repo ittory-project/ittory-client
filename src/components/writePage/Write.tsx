@@ -487,7 +487,8 @@ export const Write = ({
     setShowSubmitPage(true);
   };
 
-  useEffect(() => {
+  // 위치 아이콘 (내 차례)
+  /*useEffect(() => {
     if (!nowItemRef.current) return;
 
     const observer = new IntersectionObserver(
@@ -505,7 +506,33 @@ export const Write = ({
     return () => {
       if (nowItemRef.current) observer.unobserve(nowItemRef.current);
     };
-  }, [nowItemId, nowItemRef]);
+  }, [nowItemId, nowItemRef]);*/
+  useEffect(() => {
+    let observer: IntersectionObserver | null = null;
+
+    const setupObserver = () => {
+      if (nowItemRef.current) {
+        observer = new IntersectionObserver(
+          ([entry]) => {
+            setIsNowItemVisible(entry.isIntersecting);
+          },
+          { threshold: 0.1 }, // 가시성 10%만 되어도 true
+        );
+
+        observer.observe(nowItemRef.current);
+      }
+    };
+
+    // DOM이 완전히 연결된 후 실행
+    const id = requestAnimationFrame(setupObserver);
+
+    return () => {
+      if (observer && nowItemRef.current) {
+        observer.unobserve(nowItemRef.current);
+      }
+      cancelAnimationFrame(id);
+    };
+  }, [nowItemRef.current, nowItemId]);
 
   // 데이터 삭제버튼
   // <button onClick={handleClearData}>삭삭제</button>
@@ -555,19 +582,30 @@ export const Write = ({
           <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
         </ButtonContainer>
       ) : (
-        <LocationContainer onClick={goWritePage}>
-          <WriteLocation
-            progressTime={Math.max(0, remainingTime)}
-            name={
-              writeOrderList.find((item) => item.sequence === nowSequence)
-                ?.nickname ?? '알 수 없음'
-            }
-            profileImage={
-              writeOrderList.find((item) => item.sequence === nowSequence)
-                ?.imageUrl
-            }
-          />
-        </LocationContainer>
+        <>
+          <LocationContainer onClick={goWritePage}>
+            <WriteLocation
+              progressTime={Math.max(0, remainingTime)}
+              name={
+                writeOrderList.find((item) => item.sequence === nowSequence)
+                  ?.nickname || ''
+              }
+              profileImage={
+                writeOrderList.find((item) => item.sequence === nowSequence)
+                  ?.imageUrl || ''
+              }
+            />
+          </LocationContainer>
+          <AlertContainer>
+            <WriteOrderAlert
+              name={
+                writeOrderList.find((item) => item.sequence === nowSequence)
+                  ?.nickname || ''
+              }
+              isNextAlert={false}
+            />
+          </AlertContainer>
+        </>
       )}
       {showSubmitPage && (
         <ModalOverlay>
