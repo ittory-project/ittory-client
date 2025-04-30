@@ -1,4 +1,4 @@
-type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+type LogLevel = 'info' | 'warn' | 'error' | 'uncaughtError' | 'debug';
 type Feature =
   | 'nav'
   | 'http'
@@ -11,12 +11,15 @@ type Feature =
   | 'login'
   | 'share'
   | 'write'
-  | 'menu';
+  | 'menu'
+  | 'commonError'
+  | 'browserInfo';
 
 const logLevelConsoleMap: Record<LogLevel, 'log' | 'warn' | 'error'> = {
   info: 'log',
   warn: 'warn',
-  error: 'error',
+  uncaughtError: 'log',
+  error: 'log', // console.error 자체에 이미 몽키패칭되어 있어서, 무한 루프가 발생함
   debug: 'log', // console.debug는 함수는 있으나, 동작이 없음
 };
 
@@ -88,6 +91,10 @@ export class SessionLogger {
     this.log('error', ...args);
   }
 
+  uncaughtError(...args: unknown[]) {
+    this.log('uncaughtError', ...args);
+  }
+
   debug(...args: unknown[]) {
     this.log('debug', ...args);
   }
@@ -101,7 +108,7 @@ export class SessionLogger {
     return args
       .map((arg) => {
         if (typeof arg === 'object') {
-          return JSON.stringify(arg);
+          return JSON.stringify(arg, null, '\t').replace(/\\n/g, '\n');
         }
         return String(arg);
       })
@@ -131,7 +138,13 @@ export class SessionLogger {
 
     this.appendLog(logEntry);
 
-    // 콘솔에 출력
-    console[logLevelConsoleMap[type]](`[${type}][${this.feature}]`, ...args);
+    if (!this.isLogEnabled(type)) {
+      return;
+    }
+
+    // thrown error는 어차피 표시되므로 생략
+    if (type !== 'uncaughtError') {
+      console[logLevelConsoleMap[type]](`[${type}][${this.feature}]`, ...args);
+    }
   }
 }

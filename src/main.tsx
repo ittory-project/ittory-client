@@ -8,11 +8,17 @@ import App from './App.tsx';
 import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
 import { persistor, store } from './api/config/state.ts';
 import './index.css';
-import { activateDefaultLog } from './utils/activateDefaultLog.ts';
-import { attachLoggerOnNavigate } from './utils/attachLoggerOnNavigate.ts';
+import {
+  activateDefaultLog,
+  attachLoggerOnError,
+  attachLoggerOnNavigate,
+  logBrowserInformation,
+} from './utils/SessionLogger';
 
 activateDefaultLog();
 attachLoggerOnNavigate();
+attachLoggerOnError();
+logBrowserInformation();
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
