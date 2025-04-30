@@ -12,7 +12,8 @@ type Feature =
   | 'share'
   | 'write'
   | 'menu'
-  | 'commonError';
+  | 'commonError'
+  | 'browserInfo';
 
 const logLevelConsoleMap: Record<LogLevel, 'log' | 'warn' | 'error'> = {
   info: 'log',

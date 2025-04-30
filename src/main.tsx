@@ -12,11 +12,13 @@ import {
   activateDefaultLog,
   attachLoggerOnError,
   attachLoggerOnNavigate,
+  logBrowserInformation,
 } from './utils/SessionLogger';
 
 activateDefaultLog();
 attachLoggerOnNavigate();
 attachLoggerOnError();
+logBrowserInformation();
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
