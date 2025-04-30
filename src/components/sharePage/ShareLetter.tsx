@@ -145,12 +145,14 @@ export const ShareLetter = () => {
 
   const createShare = async () => {
     if (letterInfo) {
+      const encodedReceiverName = encodeURIComponent(letterInfo.receiverName);
+
       const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
         .map((element) => element)
         .join(', ')}`;
 
       if (!isMobile) {
-        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`;
+        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -171,7 +173,7 @@ export const ShareLetter = () => {
         try {
           await navigator.share({
             text: shareText,
-            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${letterInfo.receiverName}`,
+            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`,
           });
           logger.debug('공유 성공');
         } catch (e) {
