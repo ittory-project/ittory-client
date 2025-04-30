@@ -113,6 +113,10 @@ export const Write = ({
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
 
+  // 현재 아이템 추적
+  const nowItemRef = useRef<HTMLDivElement | null>(null);
+  const [isNowItemVisible, setIsNowItemVisible] = useState(true);
+
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
     throw 'Error: 잘못된 접근입니다.';
@@ -483,6 +487,26 @@ export const Write = ({
     setShowSubmitPage(true);
   };
 
+  useEffect(() => {
+    if (!nowItemRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsNowItemVisible(entry.isIntersecting);
+      },
+      {
+        root: null,
+        threshold: 0.1, // 10% 이상 보이면 보임으로 판단
+      },
+    );
+
+    observer.observe(nowItemRef.current);
+
+    return () => {
+      if (nowItemRef.current) observer.unobserve(nowItemRef.current);
+    };
+  }, [nowItemId, nowItemRef]);
+
   // 데이터 삭제버튼
   // <button onClick={handleClearData}>삭삭제</button>
   return writeOrderList.length > 0 ? (
@@ -522,9 +546,11 @@ export const Write = ({
           letterItems={[...letterItems, ...lockedItems]}
           nowItemId={nowItemId}
           progressTime={remainingTime}
+          nowItemRef={nowItemRef}
         />
       </ScrollableOrderList>
-      {nowMemberId === Number(getUserIdFromLocalStorage()) ? (
+      {nowMemberId === Number(getUserIdFromLocalStorage()) &&
+      isNowItemVisible ? (
         <ButtonContainer>
           <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
         </ButtonContainer>
@@ -533,18 +559,12 @@ export const Write = ({
           <WriteLocation
             progressTime={Math.max(0, remainingTime)}
             name={
-              writeOrderList[
-                writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence,
-                )
-              ].nickname
+              writeOrderList.find((item) => item.sequence === nowSequence)
+                ?.nickname ?? '알 수 없음'
             }
             profileImage={
-              writeOrderList[
-                writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence,
-                )
-              ].imageUrl
+              writeOrderList.find((item) => item.sequence === nowSequence)
+                ?.imageUrl
             }
           />
         </LocationContainer>
