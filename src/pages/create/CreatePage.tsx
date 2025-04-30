@@ -1,15 +1,8 @@
 import { useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom';
-
 import { Create } from '../../components/createPage/Create';
 
 export const CreatePage = () => {
-  const navigate = useNavigate();
-  const handleGoBack = () => {
-    navigate('/');
-  };
-
   useEffect(() => {
     if (localStorage.getItem('load')) {
       localStorage.removeItem('load');
@@ -19,15 +12,8 @@ export const CreatePage = () => {
       localStorage.removeItem('letterId');
       localStorage.removeItem('guideOpen');
     }
-
-    history.pushState(null, '', window.location.href);
-
-    window.addEventListener('popstate', handleGoBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleGoBack);
-    };
   }, []);
+
   return (
     <div>
       <Create />

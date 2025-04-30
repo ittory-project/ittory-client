@@ -9,8 +9,11 @@ import { LetterStartInfoGetResponse } from '../../api/model/LetterModel';
 import { getLetterStartInfo } from '../../api/service/LetterService';
 import { Write } from '../../components/writePage/Write';
 import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
+import { usePreventBack } from '../../hooks';
 
 export const WritePage = () => {
+  usePreventBack();
+
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   // 불러온 편지 정보
