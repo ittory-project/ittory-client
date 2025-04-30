@@ -488,25 +488,6 @@ export const Write = ({
   };
 
   // 위치 아이콘 (내 차례)
-  /*useEffect(() => {
-    if (!nowItemRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsNowItemVisible(entry.isIntersecting);
-      },
-      {
-        root: null,
-        threshold: 0.1, // 10% 이상 보이면 보임으로 판단
-      },
-    );
-
-    observer.observe(nowItemRef.current);
-
-    return () => {
-      if (nowItemRef.current) observer.unobserve(nowItemRef.current);
-    };
-  }, [nowItemId, nowItemRef]);*/
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
 
@@ -516,7 +497,7 @@ export const Write = ({
           ([entry]) => {
             setIsNowItemVisible(entry.isIntersecting);
           },
-          { threshold: 0.1 }, // 가시성 10%만 되어도 true
+          { threshold: 1 }, // 화면에 100% 보여질 때만
         );
 
         observer.observe(nowItemRef.current);
@@ -532,7 +513,7 @@ export const Write = ({
       }
       cancelAnimationFrame(id);
     };
-  }, [nowItemRef.current, nowItemId]);
+  }, [nowItemRef.current]);
 
   // 데이터 삭제버튼
   // <button onClick={handleClearData}>삭삭제</button>
