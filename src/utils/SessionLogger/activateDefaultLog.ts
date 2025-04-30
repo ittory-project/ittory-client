@@ -1,7 +1,13 @@
 import { SessionLogger } from './SessionLogger';
 
 export const activateDefaultLog = () => {
-  SessionLogger.enableLogLevels(['info', 'warn', 'error', 'debug']);
+  SessionLogger.enableLogLevels([
+    'info',
+    'warn',
+    'error',
+    'uncaughtError',
+    'debug',
+  ]);
   SessionLogger.enableFeatures([
     'nav',
     'http',
@@ -15,5 +21,6 @@ export const activateDefaultLog = () => {
     'share',
     'write',
     'menu',
+    'commonError',
   ]);
 };
