@@ -5,7 +5,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 
-import { SessionLogger } from '../../utils/SessionLogger';
+import { SessionLogger, formatObjectString } from '../../utils/SessionLogger';
 import {
   accessTokenRepository,
   refreshEndpoint,
@@ -17,7 +17,7 @@ const logger = new SessionLogger('http');
 
 export const logRequest = (config: InternalAxiosRequestConfig) => {
   logger.debug(
-    `[Request] [${config.method?.toUpperCase()} ${config.url}] ${JSON.stringify(
+    `[Request] [${config.method?.toUpperCase()} ${config.url}] ${formatObjectString(
       {
         params: config.params,
         data: config.data,
@@ -28,7 +28,7 @@ export const logRequest = (config: InternalAxiosRequestConfig) => {
 };
 export const logResponse = (response: AxiosResponse) => {
   logger.debug(
-    `[Response] [${response.config.method?.toUpperCase()} ${response.config.url}] ${JSON.stringify(
+    `[Response] [${response.config.method?.toUpperCase()} ${response.config.url}] ${formatObjectString(
       {
         status: response.status,
         data: response.data,
@@ -95,12 +95,18 @@ export const tryTokenRefresh = async (
     return api(config);
   }
 
+  // NOTE: 이 경우는 Uncaught가 아니라 예상된 오류도 포함됨
   // NOTE: 전체 객체를 보내면 시인성이 부족
   // @ts-expect-error code, message 타입이 추론되지 않음 (실제로 존재)
   const { method, url, data, headers, code, message, response } = config;
-  logger.error(
-    `네트워크 오류: code: [${code}], message: [${message}], name: [${name}], url: [${method} ${url}], requestData: [${data}], headers: [${headers}], response: [${JSON.stringify(response)}]`,
-  );
+  logger.error(`네트워크 오류: 
+    code: [${code}]
+    message: [${message}]
+    name: [${name}]
+    url: [${method} ${url}]
+    requestData: [${formatObjectString(data)}]
+    headers: [${formatObjectString(headers)}]
+    response: [${formatObjectString(response)}]`);
 
   // NOTE: error 객체를 반환하면 Promise.resolve()로 감싸져 성공 응답으로 처리되므로,
   // 명시적으로 Promise.reject()로 반환해야 한다.
