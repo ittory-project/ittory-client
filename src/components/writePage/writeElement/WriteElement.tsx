@@ -26,6 +26,7 @@ export const WriteElement = ({
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
   const [elementImg, setElementImg] = useState('');
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const getLetterImg = async () => {
     if (!letterId) {
@@ -81,6 +82,16 @@ export const WriteElement = ({
     }
   }, []);
 
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 850);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // const handleKeyboardEnterEvent = (e: KeyboardEvent<HTMLTextAreaElement>) => {
   //   e.preventDefault();
   //   handleWriteComplete();
@@ -92,9 +103,76 @@ export const WriteElement = ({
     event.currentTarget.src = '/assets/write/img_error.svg';
   };
 
+  useEffect(() => {
+    const handleTouchOrClick = (e: MouseEvent | TouchEvent) => {
+      // 클릭 대상이 textarea나 자식이면 무시
+      if (
+        taRef.current &&
+        (taRef.current === e.target || taRef.current.contains(e.target as Node))
+      ) {
+        return;
+      }
+      // 강제로 다시 focus 줌
+      taRef.current?.focus();
+    };
+
+    document.addEventListener('mousedown', handleTouchOrClick);
+    document.addEventListener('touchstart', handleTouchOrClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleTouchOrClick);
+      document.removeEventListener('touchstart', handleTouchOrClick);
+    };
+  }, []);
+
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState<number>(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.visualViewport) {
+        let keyboardHeight = window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+        console.log(keyboardHeight);
+
+        if (keyboardHeight < 0) {
+          keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
+        }
+
+        if (keyboardHeight > 0) {
+          if (window.innerWidth < 850) {
+            setKeyboardVisible(true);
+            setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
+          } else {
+            setKeyboardVisible(false);
+            setBottomOffset(0);
+          }
+        } else {
+          setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
+          setBottomOffset(0); // 키보드 높이를 0으로 설정
+        }
+      }
+    };
+
+    window.visualViewport?.addEventListener('resize', handleResize);
+    window.visualViewport?.addEventListener('scroll', handleResize);
+
+    handleResize();
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', handleResize);
+      window.visualViewport?.removeEventListener('scroll', handleResize);
+    };
+  }, []);
+
   return (
-    <Container>
-      <Content>
+    <Container isMobile={isMobile}>
+      <Content
+        isMobile={isMobile}
+        style={{
+          marginBottom: keyboardVisible ? `${bottomOffset}px` : '0',
+          transition: 'margin-bottom 0.3s ease',
+        }}
+      >
         <Header>
           <ClockText>
             <ClockIcon src="/assets/write/clock.svg" />
@@ -142,13 +220,14 @@ export const WriteElement = ({
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
 
   flex-direction: column;
 
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
+  ${({ isMobile }) => !isMobile && 'justify-content: center;'}
 
   width: 100vw;
   min-width: 300px;
@@ -159,7 +238,7 @@ const Container = styled.div`
   background-color: #212529;
 `;
 
-const Content = styled.div`
+const Content = styled.div<{ isMobile: boolean }>`
   display: flex;
 
   flex-shrink: 0;
@@ -167,7 +246,8 @@ const Content = styled.div`
 
   align-items: flex-start;
 
-  width: 95%;
+  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:95%;')}
+  //width: 95%;
 
   background: var(--color-black-white-white, #fff);
   border-radius: 20px;
