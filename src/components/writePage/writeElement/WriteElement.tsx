@@ -125,9 +125,54 @@ export const WriteElement = ({
     };
   }, []);
 
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState<number>(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.visualViewport) {
+        let keyboardHeight = window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+        console.log(keyboardHeight);
+
+        if (keyboardHeight < 0) {
+          keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
+        }
+
+        if (keyboardHeight > 0) {
+          if (window.innerWidth < 850) {
+            setKeyboardVisible(true);
+            setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
+          } else {
+            setKeyboardVisible(false);
+            setBottomOffset(0);
+          }
+        } else {
+          setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
+          setBottomOffset(0); // 키보드 높이를 0으로 설정
+        }
+      }
+    };
+
+    window.visualViewport?.addEventListener('resize', handleResize);
+    window.visualViewport?.addEventListener('scroll', handleResize);
+
+    handleResize();
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', handleResize);
+      window.visualViewport?.removeEventListener('scroll', handleResize);
+    };
+  }, []);
+
   return (
     <Container isMobile={isMobile}>
-      <Content isMobile={isMobile}>
+      <Content
+        isMobile={isMobile}
+        style={{
+          marginBottom: keyboardVisible ? `${bottomOffset}px` : '0',
+          transition: 'margin-bottom 0.3s ease',
+        }}
+      >
         <Header>
           <ClockText>
             <ClockIcon src="/assets/write/clock.svg" />
@@ -203,7 +248,6 @@ const Content = styled.div<{ isMobile: boolean }>`
 
   ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:95%;')}
   //width: 95%;
-  ${({ isMobile }) => isMobile && 'margin-top:5%;'}
 
   background: var(--color-black-white-white, #fff);
   border-radius: 20px;
