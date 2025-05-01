@@ -15,11 +15,11 @@ interface ListComponentProps {
 }
 
 // 편지 작성 페이지의 리스트
-export const WriteOrderList: React.FC<ListComponentProps> = ({
-  letterItems,
-  nowItemId,
-  progressTime,
-}) => {
+export const WriteOrderList: React.FC<
+  ListComponentProps & {
+    nowItemRef: React.MutableRefObject<HTMLDivElement | null>;
+  }
+> = ({ letterItems, nowItemId, progressTime, nowItemRef }) => {
   // 위치 버튼 누르면 해당 부분으로 이동되는 기능
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   useEffect(() => {
@@ -45,10 +45,18 @@ export const WriteOrderList: React.FC<ListComponentProps> = ({
       <Line />
       <ListItem>
         {letterItems.map((item, index) => {
+          const isNowItem =
+            item.elementId &&
+            item.userId &&
+            item.userNickname &&
+            !item.letterImg;
           return (
             <div
               key={item.elementId}
-              ref={(el) => (itemRefs.current[index] = el)}
+              ref={(el) => {
+                itemRefs.current[index] = el;
+                if (isNowItem && nowItemRef) nowItemRef.current = el;
+              }}
             >
               {item.userNickname && item.letterImg && !item.userId && (
                 <WriteOrderActivateItem

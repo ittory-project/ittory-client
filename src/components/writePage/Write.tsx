@@ -113,6 +113,10 @@ export const Write = ({
   // updateResponse flag
   const [updateResponse, setUpdateResponse] = useState(false);
 
+  // 현재 아이템 추적
+  const nowItemRef = useRef<HTMLDivElement | null>(null);
+  const [isNowItemVisible, setIsNowItemVisible] = useState(true);
+
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterNumId) {
     throw 'Error: 잘못된 접근입니다.';
@@ -483,6 +487,34 @@ export const Write = ({
     setShowSubmitPage(true);
   };
 
+  // 위치 아이콘 (내 차례)
+  useEffect(() => {
+    let observer: IntersectionObserver | null = null;
+
+    const setupObserver = () => {
+      if (nowItemRef.current) {
+        observer = new IntersectionObserver(
+          ([entry]) => {
+            setIsNowItemVisible(entry.isIntersecting);
+          },
+          { threshold: 1 }, // 화면에 100% 보여질 때만
+        );
+
+        observer.observe(nowItemRef.current);
+      }
+    };
+
+    // DOM이 완전히 연결된 후 실행
+    const id = requestAnimationFrame(setupObserver);
+
+    return () => {
+      if (observer && nowItemRef.current) {
+        observer.unobserve(nowItemRef.current);
+      }
+      cancelAnimationFrame(id);
+    };
+  }, [nowItemRef.current]);
+
   // 데이터 삭제버튼
   // <button onClick={handleClearData}>삭삭제</button>
   return writeOrderList.length > 0 ? (
@@ -522,32 +554,39 @@ export const Write = ({
           letterItems={[...letterItems, ...lockedItems]}
           nowItemId={nowItemId}
           progressTime={remainingTime}
+          nowItemRef={nowItemRef}
         />
       </ScrollableOrderList>
-      {nowMemberId === Number(getUserIdFromLocalStorage()) ? (
+      {nowMemberId === Number(getUserIdFromLocalStorage()) &&
+      isNowItemVisible ? (
         <ButtonContainer>
           <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
         </ButtonContainer>
       ) : (
-        <LocationContainer onClick={goWritePage}>
-          <WriteLocation
-            progressTime={Math.max(0, remainingTime)}
-            name={
-              writeOrderList[
-                writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence,
-                )
-              ].nickname
-            }
-            profileImage={
-              writeOrderList[
-                writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence,
-                )
-              ].imageUrl
-            }
-          />
-        </LocationContainer>
+        <>
+          <LocationContainer onClick={goWritePage}>
+            <WriteLocation
+              progressTime={Math.max(0, remainingTime)}
+              name={
+                writeOrderList.find((item) => item.sequence === nowSequence)
+                  ?.nickname || ''
+              }
+              profileImage={
+                writeOrderList.find((item) => item.sequence === nowSequence)
+                  ?.imageUrl || ''
+              }
+            />
+          </LocationContainer>
+          <AlertContainer>
+            <WriteOrderAlert
+              name={
+                writeOrderList.find((item) => item.sequence === nowSequence)
+                  ?.nickname || ''
+              }
+              isNextAlert={false}
+            />
+          </AlertContainer>
+        </>
       )}
       {showSubmitPage && (
         <ModalOverlay>
