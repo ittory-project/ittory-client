@@ -26,6 +26,7 @@ export const WriteElement = ({
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
   const [elementImg, setElementImg] = useState('');
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const getLetterImg = async () => {
     if (!letterId) {
@@ -81,6 +82,16 @@ export const WriteElement = ({
     }
   }, []);
 
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 850);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // const handleKeyboardEnterEvent = (e: KeyboardEvent<HTMLTextAreaElement>) => {
   //   e.preventDefault();
   //   handleWriteComplete();
@@ -92,9 +103,31 @@ export const WriteElement = ({
     event.currentTarget.src = '/assets/write/img_error.svg';
   };
 
+  useEffect(() => {
+    const handleTouchOrClick = (e: MouseEvent | TouchEvent) => {
+      // 클릭 대상이 textarea나 자식이면 무시
+      if (
+        taRef.current &&
+        (taRef.current === e.target || taRef.current.contains(e.target as Node))
+      ) {
+        return;
+      }
+      // 강제로 다시 focus 줌
+      taRef.current?.focus();
+    };
+
+    document.addEventListener('mousedown', handleTouchOrClick);
+    document.addEventListener('touchstart', handleTouchOrClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleTouchOrClick);
+      document.removeEventListener('touchstart', handleTouchOrClick);
+    };
+  }, []);
+
   return (
-    <Container>
-      <Content>
+    <Container isMobile={isMobile}>
+      <Content isMobile={isMobile}>
         <Header>
           <ClockText>
             <ClockIcon src="/assets/write/clock.svg" />
@@ -142,13 +175,14 @@ export const WriteElement = ({
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
 
   flex-direction: column;
 
   align-items: center;
-  justify-content: center;
+  //justify-content: center;
+  ${({ isMobile }) => !isMobile && 'justify-content: center;'}
 
   width: 100vw;
   min-width: 300px;
@@ -159,7 +193,7 @@ const Container = styled.div`
   background-color: #212529;
 `;
 
-const Content = styled.div`
+const Content = styled.div<{ isMobile: boolean }>`
   display: flex;
 
   flex-shrink: 0;
@@ -167,7 +201,9 @@ const Content = styled.div`
 
   align-items: flex-start;
 
-  width: 95%;
+  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:95%;')}
+  //width: 95%;
+  ${({ isMobile }) => isMobile && 'margin-top:5%;'}
 
   background: var(--color-black-white-white, #fff);
   border-radius: 20px;
