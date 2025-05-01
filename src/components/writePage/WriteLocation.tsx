@@ -16,7 +16,7 @@ export const WriteLocation: React.FC<LocationProps> = ({
   name,
   profileImage,
 }) => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [, setIsMobile] = useState(false);
 
   const handleResize = () => {
     setIsMobile(window.innerWidth < 850);
@@ -35,10 +35,7 @@ export const WriteLocation: React.FC<LocationProps> = ({
 
   useEffect(() => {
     if (circleRef.current) {
-      const offset = isMobile
-        ? (circumference * progressTime) / 100
-        : -(circumference * (1 - progressTime / 100));
-      // const offset = circumference * (1 - progressTime / 100);
+      const offset = circumference * (1 - progressTime / 100);
       circleRef.current.style.strokeDashoffset = `${offset}`;
     }
   }, [progressTime, circumference]);
