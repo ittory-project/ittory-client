@@ -30,7 +30,7 @@ export const Invite = () => {
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [memberIndex, setMemberIndex] = useState<number>(-1);
   const [participants, setParticipants] = useState<Participants[]>([]);
-  const [, setUserId] = useState<number>(-1);
+  const [userId, setUserId] = useState<number>(-1);
 
   const getletterId = location.state.letterId;
   const userName = location.state.userName;
@@ -109,40 +109,37 @@ export const Invite = () => {
       setName(userNameFromApi);
       setUserId(userIdFromApi);
 
+      logger.debug('participants[0].memberId' + participants[0].memberId);
+      logger.debug('userId : ' + userId);
+
       if (participants.length < 1) {
         fetchParticipants();
       } else {
-        if (memberIndex > -1) {
-          return;
-        } else {
-          if (participants[0].nickname) {
-            logger.debug('방장지정');
-            if (
-              participants[0].nickname === name ||
-              participants[0].nickname === userName
-            ) {
-              localStorage.removeItem('load');
-              setLoad(false);
-              setMemberIndex(0);
-            } else {
-              localStorage.removeItem('load');
-              setLoad(false);
-              setMemberIndex(1);
-            }
+        if (participants[0].nickname) {
+          logger.debug('방장지정');
+          if (participants[0].memberId === userId) {
+            localStorage.removeItem('load');
+            setLoad(false);
+            setMemberIndex(0);
+            console.log('0');
           } else {
-            if (localStorage.getItem('load') === 'done') {
-              setLoad(true);
-              setLoadstatus(true);
-            } else {
-              localStorage.setItem('load', 'done');
-              navigate('/loading', {
-                state: {
-                  letterId: getletterId,
-                  userName: userName,
-                  guideOpen: guideOpen,
-                },
-              });
-            }
+            localStorage.removeItem('load');
+            setLoad(false);
+            setMemberIndex(1);
+          }
+        } else {
+          if (localStorage.getItem('load') === 'done') {
+            setLoad(true);
+            setLoadstatus(true);
+          } else {
+            localStorage.setItem('load', 'done');
+            navigate('/loading', {
+              state: {
+                letterId: getletterId,
+                userName: userName,
+                guideOpen: guideOpen,
+              },
+            });
           }
         }
       }
