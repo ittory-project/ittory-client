@@ -15,6 +15,8 @@ interface WriteElementProps {
   clientRef: React.MutableRefObject<Client | null>;
 }
 
+// 키보드 올라올때 화면 테스트 못하나 ..
+
 export const WriteElement = ({
   sequence,
   setShowSubmitPage,
@@ -26,7 +28,6 @@ export const WriteElement = ({
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
 
   const [elementImg, setElementImg] = useState('');
-  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const getLetterImg = async () => {
     if (!letterId) {
@@ -82,16 +83,6 @@ export const WriteElement = ({
     }
   }, []);
 
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 850);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   // const handleKeyboardEnterEvent = (e: KeyboardEvent<HTMLTextAreaElement>) => {
   //   e.preventDefault();
   //   handleWriteComplete();
@@ -105,15 +96,16 @@ export const WriteElement = ({
 
   useEffect(() => {
     const handleTouchOrClick = (e: MouseEvent | TouchEvent) => {
-      // 클릭 대상이 textarea나 자식이면 무시
       if (
         taRef.current &&
         (taRef.current === e.target || taRef.current.contains(e.target as Node))
       ) {
         return;
       }
-      // 강제로 다시 focus 줌
-      taRef.current?.focus();
+
+      setTimeout(() => {
+        taRef.current?.focus();
+      }, 0);
     };
 
     document.addEventListener('mousedown', handleTouchOrClick);
@@ -132,7 +124,6 @@ export const WriteElement = ({
     const handleResize = () => {
       if (window.visualViewport) {
         let keyboardHeight = window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
-        console.log(keyboardHeight);
 
         if (keyboardHeight < 0) {
           keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
@@ -165,12 +156,11 @@ export const WriteElement = ({
   }, []);
 
   return (
-    <Container isMobile={isMobile}>
+    <Container isMobile={keyboardVisible}>
       <Content
-        isMobile={isMobile}
+        isMobile={keyboardVisible}
         style={{
           marginBottom: keyboardVisible ? `${bottomOffset}px` : '0',
-          transition: 'margin-bottom 0.3s ease',
         }}
       >
         <Header>
@@ -247,7 +237,6 @@ const Content = styled.div<{ isMobile: boolean }>`
   align-items: flex-start;
 
   ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:95%;')}
-  //width: 95%;
 
   background: var(--color-black-white-white, #fff);
   border-radius: 20px;
