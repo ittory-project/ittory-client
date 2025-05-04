@@ -7,19 +7,24 @@ type ChannelConfig<Handlers extends ResponseHandlers> = (
 ) => void;
 
 // 전체 Definition 타입
-type DefinitionGuideline = Record<string, ChannelConfig<ResponseHandlers>>;
+export type ResponseMapperDefinition = Record<
+  string,
+  ChannelConfig<ResponseHandlers>
+>;
 
-export class TypeSafeWebSocket<UserDefinition extends DefinitionGuideline> {
-  private definition: UserDefinition;
+export class TypeSafeWebSocket<
+  UserResponseMapperDefinition extends ResponseMapperDefinition,
+> {
+  private definition: UserResponseMapperDefinition;
 
-  constructor(definition: UserDefinition) {
+  constructor(definition: UserResponseMapperDefinition) {
     this.definition = definition;
   }
 
   // unsubscribe만 반환하면 됨!
-  public subscribe<Channel extends keyof UserDefinition>(
+  public subscribe<Channel extends keyof UserResponseMapperDefinition>(
     channel: Channel,
-    handlerConfig: Parameters<UserDefinition[Channel]>[0],
+    handlerConfig: Parameters<UserResponseMapperDefinition[Channel]>[0],
   ) {
     //do nothing!
     console.log(this.definition[channel](handlerConfig));
