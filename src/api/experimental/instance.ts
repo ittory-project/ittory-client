@@ -1,4 +1,7 @@
-import { ResponseMapperDefinition } from './TypeSafeWebSocket';
+import {
+  ResponseMapperDefinition,
+  TypeSafeWebSocket,
+} from './TypeSafeWebSocket';
 
 // channel로 전달되는 raw response를 각 response로 변환하는 과정은 사용자가 직접 정의해야 함
 // Mapper + Switch-Case 구현 파트
@@ -26,4 +29,13 @@ export const userResponseMapperDefinition = {
   },
 } satisfies ResponseMapperDefinition;
 
-// export const websocketApi = new TypeSafeWebSocket(userResponseMapperDefinition);
+let instance: TypeSafeWebSocket<typeof userResponseMapperDefinition> | null =
+  null;
+
+export const getWebSocketApi = async () => {
+  if (!instance) {
+    instance = new TypeSafeWebSocket(userResponseMapperDefinition);
+  }
+  await instance.isInitialized;
+  return instance;
+};
