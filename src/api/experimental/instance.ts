@@ -32,10 +32,9 @@ export const userResponseMapperDefinition = {
 let instance: TypeSafeWebSocket<typeof userResponseMapperDefinition> | null =
   null;
 
-export const getWebSocketApi = async () => {
+export const getWebSocketApi = () => {
   if (!instance) {
     instance = new TypeSafeWebSocket(userResponseMapperDefinition);
   }
-  await instance.isInitialized;
   return instance;
 };
