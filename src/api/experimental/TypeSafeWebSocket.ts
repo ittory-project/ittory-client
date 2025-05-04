@@ -33,15 +33,19 @@ export class TypeSafeWebSocket<
     keyof UserResponseMapperDefinition,
     ((_message: unknown) => void)[]
   >;
+  public isInitialized: Promise<boolean>;
 
   constructor(responseMapperDefinition: UserResponseMapperDefinition) {
     this.definition = responseMapperDefinition;
     this.stompClient = createStompClient();
     this.subscriptions = new Map();
     this.channelListeners = new Map();
-
-    // FIXME: 현재는 Auth 토큰 생성 등 때문에 타이밍 맞춰서 생성해야 함
-    this.stompClient.activate();
+    this.isInitialized = new Promise((resolve) => {
+      this.stompClient.activate();
+      this.stompClient.onConnect = () => {
+        resolve(true);
+      };
+    });
   }
 
   // keyof를 쓰면 아무리 string key로 설정했더라도 항상 number|string|symbol 타입으로 추론되므로 & string을 추가
@@ -57,6 +61,8 @@ export class TypeSafeWebSocket<
     const channelName = this.definition[channel].channelMapper(
       ...channelMapperParams,
     );
+
+    console.log('channelName', channelName);
 
     // 아직 리스너 배열이 없으면 리스너 배열 생성
     const channelListeners = this.channelListeners.get(channelName) ?? [];
@@ -87,8 +93,10 @@ export class TypeSafeWebSocket<
       if (!channelListeners) {
         return;
       }
+      console.log('unsub!', channel);
       channelListeners.filter((listener) => listener !== currentListener);
       if (channelListeners.length === 0) {
+        console.log('no listeners left, unsubscribing', channel);
         this.subscriptions.get(channel)?.unsubscribe();
         this.subscriptions.delete(channel);
       }
