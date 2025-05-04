@@ -26,7 +26,6 @@ import {
   getLetterPartiList,
   getLetterStartInfo,
 } from '../../api/service/LetterService';
-import { quitLetterWs } from '../../api/service/WsService';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
 import { WriteExit } from './WriteExit';
@@ -188,7 +187,6 @@ export const Write = ({
           logger.debug('턴이 넘어가서 퇴장됨');
           clientRef.current?.deactivate();
           setShowExitPage(true);
-          quitLetterWs(letterNumId);
           clientRef.current?.deactivate();
         }
       }
@@ -198,7 +196,6 @@ export const Write = ({
       window.alert(event);
       if (!event.persisted) {
         logger.debug('Page hide');
-        quitLetterWs(letterNumId);
         clientRef.current?.deactivate();
         event.preventDefault();
         event.returnValue = true; // 경고창 표시
@@ -212,7 +209,7 @@ export const Write = ({
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('pagehide', handlePageHide);
     };
-  }, [letterNumId, quitLetterWs]);
+  }, [letterNumId]);
 
   // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
   const clientRef = useRef<Client | null>(null);
