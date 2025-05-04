@@ -1,6 +1,6 @@
 import { TypeSafeWebSocket } from './TypeSafeWebSocket';
 
-export const WebSocketChannelDefinition = {
+export const userDefinition = {
   letter: {
     exit: (payload: unknown) => payload as string,
     submit: (payload: unknown) => payload as string,
@@ -12,4 +12,4 @@ export const WebSocketChannelDefinition = {
   },
 };
 
-export const websocketApi = new TypeSafeWebSocket(WebSocketChannelDefinition);
+export const websocketApi = new TypeSafeWebSocket(userDefinition);
