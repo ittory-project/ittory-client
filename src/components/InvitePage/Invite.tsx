@@ -234,7 +234,6 @@ export const Invite = () => {
     event.preventDefault(); // 경고 메시지 표시
     event.returnValue = ''; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
 
-    //quitLetterWs(letterId);
     logger.debug('탭이 닫힘');
   }, []);
 
@@ -250,8 +249,6 @@ export const Invite = () => {
     return () => {
       window.removeEventListener('beforeunload', beforeUnloadListener);
       window.removeEventListener('unload', handleTabClosed);
-      // quitLetterWs(letterId);
-      // navigate('/');
     };
   }, [handleTabClosed]);
 
