@@ -1,5 +1,4 @@
-// 자동 추론되게
+// 아예 별도의 파일에서 추론되는지 확인
 import { websocketApi } from './instance';
 
-// 음? 이건 또 되네. 외지?
 websocketApi.subscribe('chat').join({ userId: '123' });
