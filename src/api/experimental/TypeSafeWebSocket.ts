@@ -33,22 +33,25 @@ export class TypeSafeWebSocket<
     keyof UserResponseMapperDefinition,
     ((_message: unknown) => void)[]
   >;
-  public isInitialized: Promise<boolean>;
+  private activateWaitQueue: (() => void)[] = [];
 
   constructor(responseMapperDefinition: UserResponseMapperDefinition) {
     this.definition = responseMapperDefinition;
-    this.stompClient = createStompClient();
     this.subscriptions = new Map();
     this.channelListeners = new Map();
-    this.isInitialized = new Promise((resolve) => {
-      this.stompClient.activate();
-      this.stompClient.onConnect = () => {
-        resolve(true);
-      };
-    });
+    this.activateWaitQueue = [];
+
+    // stomp-specific
+    this.stompClient = createStompClient();
+    this.stompClient.onConnect = () => {
+      this.activateWaitQueue.forEach((job) => job());
+      this.activateWaitQueue = [];
+    };
+    this.stompClient.activate();
   }
 
-  // keyof를 쓰면 아무리 string key로 설정했더라도 항상 number|string|symbol 타입으로 추론되므로 & string을 추가
+  // NOTE: activate 이전에 호출됨
+  // NOTE: keyof를 쓰면 아무리 string key로 설정했더라도 항상 number|string|symbol 타입으로 추론되므로 & string을 추가
   public subscribe<Channel extends keyof UserResponseMapperDefinition & string>(
     channel: Channel,
     channelMapperParams: Parameters<
@@ -58,42 +61,49 @@ export class TypeSafeWebSocket<
       UserResponseMapperDefinition[Channel]['mapper']
     >[0],
   ) {
-    const channelName = this.definition[channel].channelMapper(
-      ...channelMapperParams,
-    );
+    let currentListener: ((_payload: unknown) => void) | null = null;
 
-    console.log('channelName', channelName);
+    this.activateWaitQueue.push(() => {
+      const channelName = this.definition[channel].channelMapper(
+        ...channelMapperParams,
+      );
 
-    // 아직 리스너 배열이 없으면 리스너 배열 생성
-    const channelListeners = this.channelListeners.get(channelName) ?? [];
-    if (!channelListeners) {
-      this.channelListeners.set(channelName, channelListeners);
-    }
+      console.log('channelName', channelName);
 
-    // 리스너 배열에 리스너 추가
-    const currentListener = this.definition[channel]
-      .mapper(handlerConfig)
-      .bind(this.definition[channel]);
-    channelListeners.push(currentListener);
+      // 아직 리스너 배열이 없으면 리스너 배열 생성
+      const channelListeners = this.channelListeners.get(channelName) ?? [];
+      if (!channelListeners) {
+        this.channelListeners.set(channelName, channelListeners);
+      }
 
-    // 아직 구독 중이지 않으면 구독 필요
-    if (!this.subscriptions.has(channel)) {
-      const callListeners = (message: unknown) => {
-        this.channelListeners
-          .get(channel)
-          ?.forEach((listener) => listener(message));
-      };
-      const subscription = this.stompClient.subscribe(channel, callListeners);
-      this.subscriptions.set(channel, subscription);
-    }
+      // 리스너 배열에 리스너 추가
+      currentListener = this.definition[channel]
+        .mapper(handlerConfig)
+        .bind(this.definition[channel]);
+      channelListeners.push(currentListener);
+
+      // 아직 구독 중이지 않으면 구독 필요
+      if (!this.subscriptions.has(channel)) {
+        const callListeners = (message: unknown) => {
+          this.channelListeners
+            .get(channel)
+            ?.forEach((listener) => listener(message));
+        };
+        const subscription = this.stompClient.subscribe(channel, callListeners);
+        this.subscriptions.set(channel, subscription);
+      }
+    });
 
     // 모든 listeners가 없으면 구독도 종료
     return () => {
+      console.log('unsub 1');
+
       const channelListeners = this.channelListeners.get(channel);
       if (!channelListeners) {
+        console.log('unsub 2', channel);
         return;
       }
-      console.log('unsub!', channel);
+      console.log('unsub 3', channel);
       channelListeners.filter((listener) => listener !== currentListener);
       if (channelListeners.length === 0) {
         console.log('no listeners left, unsubscribing', channel);
