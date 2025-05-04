@@ -39,6 +39,9 @@ export class TypeSafeWebSocket<
     this.stompClient = createStompClient();
     this.subscriptions = new Map();
     this.channelListeners = new Map();
+
+    // FIXME: 현재는 Auth 토큰 생성 등 때문에 타이밍 맞춰서 생성해야 함
+    this.stompClient.activate();
   }
 
   // keyof를 쓰면 아무리 string key로 설정했더라도 항상 number|string|symbol 타입으로 추론되므로 & string을 추가
