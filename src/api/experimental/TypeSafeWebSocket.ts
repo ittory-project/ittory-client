@@ -1,26 +1,27 @@
-type Deserializer<Payload> = (_payload: unknown) => Payload;
+type ResponseHandler<Payload> = (_payload: Payload) => void;
 
-// 사용자에게 제공할 '가이드라인'
-// 이 타입을 그대로 쓰면 타입 추론이 아예 안 되기 때문에, 제네릭으로 인자를 받아 실제 타입을 추론해야 함.
-export type DefinitionGuideline = {
-  [channel: string]: {
-    [event: string]: Deserializer<unknown>;
-  };
-};
+type ResponseHandlers = Record<string, ResponseHandler<unknown>>;
 
-export class TypeSafeWebSocket<
-  UserDefinition extends DefinitionGuideline,
-  Channels extends keyof UserDefinition, // Definition에서 채널 목록을 타입으로 추출
-> {
+type ChannelConfig<Handlers extends ResponseHandlers> = (
+  _handlers: Handlers,
+) => void;
+
+// 전체 Definition 타입
+type DefinitionGuideline = Record<string, ChannelConfig<ResponseHandlers>>;
+
+export class TypeSafeWebSocket<UserDefinition extends DefinitionGuideline> {
   private definition: UserDefinition;
 
   constructor(definition: UserDefinition) {
     this.definition = definition;
   }
 
-  public subscribe<Channel extends Channels>(
+  // unsubscribe만 반환하면 됨!
+  public subscribe<Channel extends keyof UserDefinition>(
     channel: Channel,
-  ): UserDefinition[Channel] {
-    return this.definition[channel];
+    handlerConfig: Parameters<UserDefinition[Channel]>[0],
+  ) {
+    //do nothing!
+    console.log(this.definition[channel](handlerConfig));
   }
 }
