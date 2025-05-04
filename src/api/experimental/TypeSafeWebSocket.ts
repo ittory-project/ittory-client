@@ -13,7 +13,11 @@ type ChannelConfig<Handlers extends ResponseHandlers> = (
 // 전체 Definition 타입
 export type ResponseMapperDefinition = Record<
   string,
-  ChannelConfig<ResponseHandlers>
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    channelMapper: (..._args: any[]) => string;
+    mapper: ChannelConfig<ResponseHandlers>;
+  }
 >;
 
 export class TypeSafeWebSocket<
@@ -40,18 +44,27 @@ export class TypeSafeWebSocket<
   // keyof를 쓰면 아무리 string key로 설정했더라도 항상 number|string|symbol 타입으로 추론되므로 & string을 추가
   public subscribe<Channel extends keyof UserResponseMapperDefinition & string>(
     channel: Channel,
-    handlerConfig: Parameters<UserResponseMapperDefinition[Channel]>[0],
+    channelMapperParams: Parameters<
+      UserResponseMapperDefinition[Channel]['channelMapper']
+    >,
+    handlerConfig: Parameters<
+      UserResponseMapperDefinition[Channel]['mapper']
+    >[0],
   ) {
+    const channelName = this.definition[channel].channelMapper(
+      ...channelMapperParams,
+    );
+
     // 아직 리스너 배열이 없으면 리스너 배열 생성
-    const channelListeners = this.channelListeners.get(channel) ?? [];
+    const channelListeners = this.channelListeners.get(channelName) ?? [];
     if (!channelListeners) {
-      this.channelListeners.set(channel, channelListeners);
+      this.channelListeners.set(channelName, channelListeners);
     }
 
     // 리스너 배열에 리스너 추가
-    const currentListener = this.definition[channel](handlerConfig).bind(
-      this.definition[channel],
-    );
+    const currentListener = this.definition[channel]
+      .mapper(handlerConfig)
+      .bind(this.definition[channel]);
     channelListeners.push(currentListener);
 
     // 아직 구독 중이지 않으면 구독 필요
