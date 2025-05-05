@@ -13,7 +13,8 @@ type Feature =
   | 'write'
   | 'menu'
   | 'commonError'
-  | 'browserInfo';
+  | 'browserInfo'
+  | 'websocket-infra';
 
 const logLevelConsoleMap: Record<LogLevel, 'log' | 'warn' | 'error'> = {
   info: 'log',
