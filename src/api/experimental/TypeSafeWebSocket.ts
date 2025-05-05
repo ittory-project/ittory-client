@@ -3,6 +3,8 @@ import { Client, StompSubscription } from '@stomp/stompjs';
 import { SessionLogger } from '../../utils';
 import { createStompClient } from './createStompClient';
 
+type RequestMapper<Payload> = (_payload: Payload) => string;
+
 type ResponseHandler<Payload> = (_payload: Payload) => void;
 
 type ResponseHandlers = Record<string, ResponseHandler<unknown>>;
@@ -12,6 +14,17 @@ type ChannelConfig<Handlers extends ResponseHandlers> = (
 ) => (_payload: unknown) => void;
 
 // 전체 Definition 타입
+// 되게 단순함 이거는 channelMapper랑 payloadMapper만 있으면 됨
+export type RequestMapperDefinition = Record<
+  string,
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    channelMapper: (..._args: any[]) => string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mapper: RequestMapper<any>;
+  }
+>;
+
 export type ResponseMapperDefinition = Record<
   string,
   {
@@ -24,9 +37,11 @@ export type ResponseMapperDefinition = Record<
 const logger = new SessionLogger('websocket-infra');
 
 export class TypeSafeWebSocket<
+  UserRequestMapperDefinition extends RequestMapperDefinition,
   UserResponseMapperDefinition extends ResponseMapperDefinition,
 > {
-  private definition: UserResponseMapperDefinition;
+  private requestDefinition: UserRequestMapperDefinition;
+  private responseDefinition: UserResponseMapperDefinition;
   private stompClient: Client;
   private subscriptions: Map<
     keyof UserResponseMapperDefinition,
@@ -42,8 +57,12 @@ export class TypeSafeWebSocket<
   // 연결 시 모든 큐에서 대기하던 작업을 실행하고 큐를 비움
   private connectWaitQueue: (() => void)[] = [];
 
-  constructor(responseMapperDefinition: UserResponseMapperDefinition) {
-    this.definition = responseMapperDefinition;
+  constructor(
+    requestMapperDefinition: UserRequestMapperDefinition,
+    responseMapperDefinition: UserResponseMapperDefinition,
+  ) {
+    this.requestDefinition = requestMapperDefinition;
+    this.responseDefinition = responseMapperDefinition;
     this.subscriptions = new Map();
     this.channelListeners = new Map();
     this.connectWaitQueue = [];
@@ -73,7 +92,7 @@ export class TypeSafeWebSocket<
     >[0],
   ) {
     let currentListener: ((_payload: unknown) => void) | null = null;
-    const channelName = this.definition[channel].channelMapper(
+    const channelName = this.responseDefinition[channel].channelMapper(
       ...channelMapperParams,
     );
     logger.debug('channelName', channelName);
@@ -83,9 +102,9 @@ export class TypeSafeWebSocket<
     this.channelListeners.set(channelName, channelListeners);
 
     // 리스너 배열에 리스너 추가
-    currentListener = this.definition[channel]
+    currentListener = this.responseDefinition[channel]
       .mapper(handlerConfig)
-      .bind(this.definition[channel]);
+      .bind(this.responseDefinition[channel]);
     channelListeners.push(currentListener);
 
     logger.debug('channelListeners', channelListeners, this.channelListeners);
@@ -129,11 +148,20 @@ export class TypeSafeWebSocket<
   }
 
   // TODO: type-safe하게 channel, payload 타입 제한 필요
-  public publish(channel: string, payload: unknown) {
+  public send<Channel extends keyof UserRequestMapperDefinition & string>(
+    channel: Channel,
+    channelMapperParams: Parameters<
+      UserRequestMapperDefinition[Channel]['channelMapper']
+    >,
+    payload: Parameters<UserRequestMapperDefinition[Channel]['mapper']>[0],
+  ) {
     this.doAsyncJobSafely(() => {
+      // TODO: stomp-specific으로 분리
       this.stompClient.publish({
-        destination: channel,
-        body: JSON.stringify(payload),
+        destination: this.requestDefinition[channel].channelMapper(
+          ...channelMapperParams,
+        ),
+        body: this.requestDefinition[channel].mapper(payload),
       });
     });
   }

@@ -1,7 +1,17 @@
 import {
+  RequestMapperDefinition,
   ResponseMapperDefinition,
   TypeSafeWebSocket,
 } from './TypeSafeWebSocket';
+
+export const userRequestMapperDefinition = {
+  letter: {
+    channelMapper: (letterId: number) => `/topic/letter/${letterId}`,
+    mapper: (payload: { name: string; age: number }) => {
+      return JSON.stringify(payload);
+    },
+  },
+} satisfies RequestMapperDefinition;
 
 // channel로 전달되는 raw response를 각 response로 변환하는 과정은 사용자가 직접 정의해야 함
 // Mapper + Switch-Case 구현 파트
@@ -29,12 +39,17 @@ export const userResponseMapperDefinition = {
   },
 } satisfies ResponseMapperDefinition;
 
-let instance: TypeSafeWebSocket<typeof userResponseMapperDefinition> | null =
-  null;
+let instance: TypeSafeWebSocket<
+  typeof userRequestMapperDefinition,
+  typeof userResponseMapperDefinition
+> | null = null;
 
 export const getWebSocketApi = () => {
   if (!instance) {
-    instance = new TypeSafeWebSocket(userResponseMapperDefinition);
+    instance = new TypeSafeWebSocket(
+      userRequestMapperDefinition,
+      userResponseMapperDefinition,
+    );
   }
   return instance;
 };
