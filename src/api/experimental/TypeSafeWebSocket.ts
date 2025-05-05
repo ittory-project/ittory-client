@@ -53,6 +53,10 @@ export class TypeSafeWebSocket<
     this.stompClient.onConnect = () => {
       this.connectWaitQueue.forEach((job) => job());
       this.connectWaitQueue = [];
+      this.isConnected = true;
+    };
+    this.stompClient.onDisconnect = () => {
+      this.isConnected = false;
     };
     this.stompClient.activate();
   }
@@ -122,6 +126,16 @@ export class TypeSafeWebSocket<
         this.subscriptions.delete(channelName);
       }
     };
+  }
+
+  // TODO: type-safe하게 channel, payload 타입 제한 필요
+  public publish(channel: string, payload: unknown) {
+    this.doAsyncJobSafely(() => {
+      this.stompClient.publish({
+        destination: channel,
+        body: JSON.stringify(payload),
+      });
+    });
   }
 
   private doAsyncJobSafely(job: () => void) {
