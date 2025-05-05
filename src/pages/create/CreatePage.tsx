@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { WebSocketUsageExample } from '../../api/experimental/usage';
 import { Create } from '../../components/createPage/Create';
 
 export const CreatePage = () => {
@@ -17,6 +18,7 @@ export const CreatePage = () => {
   return (
     <div>
       <Create />
+      <WebSocketUsageExample />
     </div>
   );
 };

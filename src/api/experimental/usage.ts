@@ -17,6 +17,11 @@ export const WebSocketUsageExample = () => {
     });
     logger.debug('subscribing useEffect', unsubscribe);
 
+    webSocket.send('letter', [3241], {
+      name: 'John',
+      age: 20,
+    });
+
     return () => {
       logger.debug('unsubscribing useEffect');
       unsubscribe();
