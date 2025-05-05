@@ -1,5 +1,6 @@
 import { Client, StompSubscription } from '@stomp/stompjs';
 
+import { SessionLogger } from '../../utils';
 import { createStompClient } from './createStompClient';
 
 type ResponseHandler<Payload> = (_payload: Payload) => void;
@@ -20,6 +21,8 @@ export type ResponseMapperDefinition = Record<
   }
 >;
 
+const logger = new SessionLogger('websocket-infra');
+
 export class TypeSafeWebSocket<
   UserResponseMapperDefinition extends ResponseMapperDefinition,
 > {
@@ -33,19 +36,23 @@ export class TypeSafeWebSocket<
     keyof UserResponseMapperDefinition,
     ((_message: unknown) => void)[]
   >;
-  private activateWaitQueue: (() => void)[] = [];
+  private isConnected = false;
+
+  // NOTE: 연결 상태가 아닐 때 클라이언트 요청이 발생하는 경우 해당 큐에서 대기.
+  // 연결 시 모든 큐에서 대기하던 작업을 실행하고 큐를 비움
+  private connectWaitQueue: (() => void)[] = [];
 
   constructor(responseMapperDefinition: UserResponseMapperDefinition) {
     this.definition = responseMapperDefinition;
     this.subscriptions = new Map();
     this.channelListeners = new Map();
-    this.activateWaitQueue = [];
+    this.connectWaitQueue = [];
 
     // stomp-specific
     this.stompClient = createStompClient();
     this.stompClient.onConnect = () => {
-      this.activateWaitQueue.forEach((job) => job());
-      this.activateWaitQueue = [];
+      this.connectWaitQueue.forEach((job) => job());
+      this.connectWaitQueue = [];
     };
     this.stompClient.activate();
   }
@@ -62,54 +69,66 @@ export class TypeSafeWebSocket<
     >[0],
   ) {
     let currentListener: ((_payload: unknown) => void) | null = null;
+    const channelName = this.definition[channel].channelMapper(
+      ...channelMapperParams,
+    );
+    logger.debug('channelName', channelName);
 
-    this.activateWaitQueue.push(() => {
-      const channelName = this.definition[channel].channelMapper(
-        ...channelMapperParams,
-      );
+    // 아직 리스너 배열이 없으면 리스너 배열 생성
+    const channelListeners = this.channelListeners.get(channelName) ?? [];
+    this.channelListeners.set(channelName, channelListeners);
 
-      console.log('channelName', channelName);
+    // 리스너 배열에 리스너 추가
+    currentListener = this.definition[channel]
+      .mapper(handlerConfig)
+      .bind(this.definition[channel]);
+    channelListeners.push(currentListener);
 
-      // 아직 리스너 배열이 없으면 리스너 배열 생성
-      const channelListeners = this.channelListeners.get(channelName) ?? [];
-      if (!channelListeners) {
-        this.channelListeners.set(channelName, channelListeners);
-      }
+    logger.debug('channelListeners', channelListeners, this.channelListeners);
+    logger.debug('currentListener', currentListener);
 
-      // 리스너 배열에 리스너 추가
-      currentListener = this.definition[channel]
-        .mapper(handlerConfig)
-        .bind(this.definition[channel]);
-      channelListeners.push(currentListener);
+    // 아직 구독 중이지 않으면 구독 필요
+    if (!this.subscriptions.has(channelName)) {
+      const callListeners = (message: unknown) => {
+        this.channelListeners
+          .get(channelName)
+          ?.forEach((listener) => listener(message));
+      };
 
-      // 아직 구독 중이지 않으면 구독 필요
-      if (!this.subscriptions.has(channel)) {
-        const callListeners = (message: unknown) => {
-          this.channelListeners
-            .get(channel)
-            ?.forEach((listener) => listener(message));
-        };
-        const subscription = this.stompClient.subscribe(channel, callListeners);
-        this.subscriptions.set(channel, subscription);
-      }
-    });
+      this.doAsyncJobSafely(() => {
+        const subscription = this.stompClient.subscribe(
+          channelName,
+          callListeners,
+        );
+        this.subscriptions.set(channelName, subscription);
+      });
+    }
 
     // 모든 listeners가 없으면 구독도 종료
     return () => {
-      console.log('unsub 1');
-
-      const channelListeners = this.channelListeners.get(channel);
+      logger.debug('unsubscribing', channelName);
+      let channelListeners = this.channelListeners.get(channelName);
       if (!channelListeners) {
-        console.log('unsub 2', channel);
-        return;
+        throw new Error('channelListeners not found - it should never happen');
       }
-      console.log('unsub 3', channel);
-      channelListeners.filter((listener) => listener !== currentListener);
+      channelListeners = channelListeners.filter(
+        (listener) => listener !== currentListener,
+      );
+
       if (channelListeners.length === 0) {
-        console.log('no listeners left, unsubscribing', channel);
-        this.subscriptions.get(channel)?.unsubscribe();
-        this.subscriptions.delete(channel);
+        logger.debug('no listeners left, unsubscribing', channelName);
+        this.channelListeners.delete(channelName);
+        this.subscriptions.get(channelName)?.unsubscribe();
+        this.subscriptions.delete(channelName);
       }
     };
+  }
+
+  private doAsyncJobSafely(job: () => void) {
+    if (!this.isConnected) {
+      this.connectWaitQueue.push(job);
+    } else {
+      job();
+    }
   }
 }
