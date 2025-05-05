@@ -21,7 +21,7 @@ export type RequestMapperDefinition = Record<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     channelMapper: (..._args: any[]) => string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    requestMapper: RequestMapper<any>;
+    requestMapper?: RequestMapper<any>;
   }
 >;
 
@@ -154,9 +154,15 @@ export class TypeSafeWebSocket<
     channelMapperParams: Parameters<
       UserRequestMapperDefinition[Channel]['channelMapper']
     >,
-    payload: Parameters<
-      UserRequestMapperDefinition[Channel]['requestMapper']
-    >[0],
+    // NOTE: rest parameter로 타입을 정의해야 인자 존재 여부 자체를 분기할 수 있음.
+    // `...args: []`로 타입을 정의하면 추가 인자 없음을 표시할 수 있기 때문임
+    // 현재 UserRequestMapperDefinition[Channel]['requestMapper'] = RequestMapper<infer Payload> | undefined 이기 때문에 타입 분기 필요함
+    // 타입 분기는 `extends` 키워드로 가능하며, `infer` 키워드로 타입에 대한 변수 선언이 가능함
+    ...args: UserRequestMapperDefinition[Channel]['requestMapper'] extends RequestMapper<
+      infer Payload
+    >
+      ? [payload: Payload]
+      : []
   ) {
     this.doAsyncJobSafely(() => {
       // TODO: stomp-specific으로 분리
@@ -164,7 +170,11 @@ export class TypeSafeWebSocket<
         destination: this.requestDefinition[channel].channelMapper(
           ...channelMapperParams,
         ),
-        body: this.requestDefinition[channel].requestMapper(payload),
+        // undefined이면 안 가겠지?
+        body:
+          args.length > 0
+            ? this.requestDefinition[channel].requestMapper?.(args[0])
+            : undefined,
       });
     });
   }

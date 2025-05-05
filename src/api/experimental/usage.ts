@@ -22,6 +22,9 @@ export const WebSocketUsageExample = () => {
       age: 20,
     });
 
+    // payload 타입이 아예 없음!
+    webSocket.send('start', [3241]);
+
     return () => {
       logger.debug('unsubscribing useEffect');
       unsubscribe();
