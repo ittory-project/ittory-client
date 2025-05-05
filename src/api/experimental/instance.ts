@@ -7,7 +7,7 @@ import {
 export const userRequestMapperDefinition = {
   letter: {
     channelMapper: (letterId: number) => `/topic/letter/${letterId}`,
-    mapper: (payload: { name: string; age: number }) => {
+    requestMapper: (payload: { name: string; age: number }) => {
       return JSON.stringify(payload);
     },
   },
@@ -20,14 +20,14 @@ export const userRequestMapperDefinition = {
 export const userResponseMapperDefinition = {
   letter: {
     channelMapper: (letterId: number) => `/topic/letter/${letterId}`,
-    mapper:
+    responseMapper:
       (handlers: {
         exit?: (_payload: string) => void;
         submit?: (_payload: number) => void;
         timeout?: (_payload: boolean) => void;
       }) =>
-      (payload: unknown) => {
-        const _processed = JSON.parse(payload as string);
+      (payload) => {
+        const parsedPayload = JSON.parse(payload);
         if (Math.random() > 0.5) {
           handlers.exit?.('exit');
         } else if (Math.random() > 0.3) {

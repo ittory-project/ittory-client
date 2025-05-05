@@ -1,4 +1,4 @@
-import { Client, StompSubscription } from '@stomp/stompjs';
+import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 
 import { SessionLogger } from '../../utils';
 import { createStompClient } from './createStompClient';
@@ -7,11 +7,11 @@ type RequestMapper<Payload> = (_payload: Payload) => string;
 
 type ResponseHandler<Payload> = (_payload: Payload) => void;
 
-type ResponseHandlers = Record<string, ResponseHandler<unknown>>;
+type ResponseHandlers = Record<string, ResponseHandler<string>>;
 
 type ChannelConfig<Handlers extends ResponseHandlers> = (
   _handlers: Handlers,
-) => (_payload: unknown) => void;
+) => (_payload: string) => void;
 
 // 전체 Definition 타입
 // 되게 단순함 이거는 channelMapper랑 payloadMapper만 있으면 됨
@@ -21,7 +21,7 @@ export type RequestMapperDefinition = Record<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     channelMapper: (..._args: any[]) => string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mapper: RequestMapper<any>;
+    requestMapper: RequestMapper<any>;
   }
 >;
 
@@ -30,7 +30,7 @@ export type ResponseMapperDefinition = Record<
   {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     channelMapper: (..._args: any[]) => string;
-    mapper: ChannelConfig<ResponseHandlers>;
+    responseMapper: ChannelConfig<ResponseHandlers>;
   }
 >;
 
@@ -49,7 +49,7 @@ export class TypeSafeWebSocket<
   >;
   private channelListeners: Map<
     keyof UserResponseMapperDefinition,
-    ((_message: unknown) => void)[]
+    ResponseHandler<string>[]
   >;
   private isConnected = false;
 
@@ -88,10 +88,10 @@ export class TypeSafeWebSocket<
       UserResponseMapperDefinition[Channel]['channelMapper']
     >,
     handlerConfig: Parameters<
-      UserResponseMapperDefinition[Channel]['mapper']
+      UserResponseMapperDefinition[Channel]['responseMapper']
     >[0],
   ) {
-    let currentListener: ((_payload: unknown) => void) | null = null;
+    let currentListener: ((_payload: string) => void) | null = null;
     const channelName = this.responseDefinition[channel].channelMapper(
       ...channelMapperParams,
     );
@@ -103,7 +103,7 @@ export class TypeSafeWebSocket<
 
     // 리스너 배열에 리스너 추가
     currentListener = this.responseDefinition[channel]
-      .mapper(handlerConfig)
+      .responseMapper(handlerConfig)
       .bind(this.responseDefinition[channel]);
     channelListeners.push(currentListener);
 
@@ -112,10 +112,11 @@ export class TypeSafeWebSocket<
 
     // 아직 구독 중이지 않으면 구독 필요
     if (!this.subscriptions.has(channelName)) {
-      const callListeners = (message: unknown) => {
+      // FIXME: stomp-specific && 실제로 string으로 올텐데 왜 IMessage 타입인지 확인 필요
+      const callListeners = (message: IMessage) => {
         this.channelListeners
           .get(channelName)
-          ?.forEach((listener) => listener(message));
+          ?.forEach((listener) => listener(message.body));
       };
 
       this.doAsyncJobSafely(() => {
@@ -153,7 +154,9 @@ export class TypeSafeWebSocket<
     channelMapperParams: Parameters<
       UserRequestMapperDefinition[Channel]['channelMapper']
     >,
-    payload: Parameters<UserRequestMapperDefinition[Channel]['mapper']>[0],
+    payload: Parameters<
+      UserRequestMapperDefinition[Channel]['requestMapper']
+    >[0],
   ) {
     this.doAsyncJobSafely(() => {
       // TODO: stomp-specific으로 분리
@@ -161,7 +164,7 @@ export class TypeSafeWebSocket<
         destination: this.requestDefinition[channel].channelMapper(
           ...channelMapperParams,
         ),
-        body: this.requestDefinition[channel].mapper(payload),
+        body: this.requestDefinition[channel].requestMapper(payload),
       });
     });
   }
