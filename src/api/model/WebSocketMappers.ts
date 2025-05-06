@@ -1,9 +1,9 @@
 import { SessionLogger } from '../../utils/SessionLogger';
-import { WsEnterResponse, WsExitResponse, WsResponse } from '../model/WsModel';
 import {
   RequestMapperDefinition,
   ResponseMapperDefinition,
-} from './TypeSafeWebSocket';
+} from '../websockets/SharedTypeSafeWebSocket';
+import { WsEnterResponse, WsExitResponse, WsResponse } from './WsModel';
 
 const logger = new SessionLogger('websocket-infra');
 

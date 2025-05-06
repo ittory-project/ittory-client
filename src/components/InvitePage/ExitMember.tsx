@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getWebSocketApi } from '../../api/experimental/instance';
+import { getWebSocketApi } from '../../api/websockets';
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;

@@ -4,11 +4,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import texture from '../../../public/assets/invite/texture1.png';
-import { getWebSocketApi } from '../../api/experimental/instance';
 import { MypageGetResponse } from '../../api/model/MemberModel';
 import { WsEnterResponse, WsExitResponse } from '../../api/model/WsModel';
 import { getParticipants } from '../../api/service/LetterService';
 import { getMyPage } from '../../api/service/MemberService';
+import { getWebSocketApi } from '../../api/websockets';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { HostUser } from './HostUser';
 import { Loading } from './Loading';

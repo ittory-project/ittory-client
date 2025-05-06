@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import { getWebSocketApi } from '../../../api/experimental/instance';
 import {
   deleteLetter,
   getLetterInfo,
 } from '../../../api/service/LetterService';
+import { getWebSocketApi } from '../../../api/websockets';
 import { SessionLogger } from '../../../utils';
 import { DeleteConfirm } from './DeleteConfirm';
 

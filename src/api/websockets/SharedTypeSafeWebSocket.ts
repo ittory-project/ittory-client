@@ -1,7 +1,7 @@
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 
 import { SessionLogger } from '../../utils';
-import { createStompClient } from './createStompClient';
+import { createStompClient } from './stompjs';
 
 type RequestMapper<Payload> = (_payload: Payload) => string;
 
@@ -36,7 +36,7 @@ export type ResponseMapperDefinition = Record<
 
 const logger = new SessionLogger('websocket-infra');
 
-export class TypeSafeWebSocket<
+export class SharedTypeSafeWebSocket<
   UserRequestMapperDefinition extends RequestMapperDefinition,
   UserResponseMapperDefinition extends ResponseMapperDefinition,
 > {

@@ -1,17 +1,17 @@
-import { TypeSafeWebSocket } from './TypeSafeWebSocket';
 import {
   ittoryRequestMapperDefinition,
   userResponseMapperDefinition,
-} from './ittoryWebSocketSchema';
+} from '../model/WebSocketMappers';
+import { SharedTypeSafeWebSocket } from './SharedTypeSafeWebSocket';
 
-let instance: TypeSafeWebSocket<
+let instance: SharedTypeSafeWebSocket<
   typeof ittoryRequestMapperDefinition,
   typeof userResponseMapperDefinition
 > | null = null;
 
 export const getWebSocketApi = () => {
   if (!instance) {
-    instance = new TypeSafeWebSocket(
+    instance = new SharedTypeSafeWebSocket(
       ittoryRequestMapperDefinition,
       userResponseMapperDefinition,
     );
