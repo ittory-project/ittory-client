@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { decodeLetterId } from '../../../api/config/base64';
 import { ElementImgGetResponse } from '../../../api/model/ElementModel';
 import { getElementImg } from '../../../api/service/ElementService';
+import { getWebSocketApi } from '../../../api/websockets';
 
 interface WriteElementProps {
   sequence: number;
@@ -21,8 +22,8 @@ export const WriteElement = ({
   sequence,
   setShowSubmitPage,
   progressTime,
-  clientRef,
 }: WriteElementProps) => {
+  const wsApi = getWebSocketApi();
   const [text, setText] = useState('');
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
@@ -66,12 +67,10 @@ export const WriteElement = ({
     if (text.length <= 0) {
       return;
     }
-    // writeLetterWs 완료 여부를 기다림
-    // await writeLetterWs(letterNumId, Number(repeat), text);
-    // clientRef를 통해 client 객체에 접근
-    clientRef.current?.publish({
-      destination: `/ws/letter/${letterNumId}/elements`,
-      body: JSON.stringify({ sequence: sequence, content: text }),
+
+    wsApi.send('writeLetterElement', [letterNumId], {
+      sequence,
+      content: text,
     });
   };
 

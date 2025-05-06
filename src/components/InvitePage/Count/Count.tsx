@@ -13,7 +13,7 @@ import photo from '../../../../public/assets/photo.svg';
 import X from '../../../../public/assets/x.svg';
 import { postRepeatCount } from '../../../api/service/LetterService';
 import { postRandom } from '../../../api/service/ParticipantService';
-import { startLetterWs } from '../../../api/service/WsService';
+import { getWebSocketApi } from '../../../api/websockets';
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,6 +35,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [selectNumber, setSelectNumber] = useState<number>(1);
   const navigate = useNavigate();
+  const wsApi = getWebSocketApi();
   const backgroundImages: { [key: number]: string } = {
     1: bg1,
     2: bg2,
@@ -85,7 +86,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
     await postRepeatCount(requestBody);
     await postRandom({ letterId: id });
 
-    startLetterWs(letterId);
+    wsApi.send('startLetter', [letterId]);
     navigate('/Connection', {
       state: {
         letterId: letterId,

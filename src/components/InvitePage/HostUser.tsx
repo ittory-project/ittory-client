@@ -32,7 +32,7 @@ import plus from '/assets/plus.svg';
 const logger = new SessionLogger('invite');
 
 interface Props {
-  guideOpen: string;
+  guideOpen: boolean;
   hostname: string;
   items: Participants[];
   letterId: number;
@@ -50,7 +50,7 @@ export const HostUser = ({
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [sliceName, setSliceName] = useState<string>('');
-  const [guide, setGuide] = useState<string>(guideOpen);
+  const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewCount, setViewCount] = useState<boolean>(false);
   const [popup, setPopup] = useState<boolean>(false);
@@ -112,7 +112,7 @@ export const HostUser = ({
   };
 
   const handleGuide = () => {
-    setGuide('true');
+    setGuide(true);
   };
 
   const handleDeleteview = () => {
@@ -211,7 +211,7 @@ export const HostUser = ({
 
   return (
     <BackGround>
-      {guide === 'true' && <Overlay />}
+      {guide && <Overlay />}
       {viewCount && <Overlay />}
       {viewDelete && <Overlay />}
       {viewExit && <Overlay />}
@@ -349,7 +349,7 @@ export const HostUser = ({
             </Button>
           </MainContainer>
 
-          {guide === 'true' && <UserGuide setGuide={setGuide} />}
+          {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
             <Count

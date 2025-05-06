@@ -5,5 +5,7 @@ export const API_ERROR_CODE = {
 };
 
 export const WEBSOCKET_CONFIG = {
-  RECONNECT_DELAY: 500,
+  RECONNECT_DELAY: 1_000,
+  HEARTBEAT_INCOMING: 1_000 * 1, // 현재 서버에서는 이 값과 무관하게 60초로 자름.
+  HEARTBEAT_OUTGOING: 1_000 * 1,
 };
