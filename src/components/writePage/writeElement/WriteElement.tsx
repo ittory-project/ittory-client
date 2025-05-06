@@ -16,8 +16,6 @@ interface WriteElementProps {
   clientRef: React.MutableRefObject<Client | null>;
 }
 
-// 키보드 올라올때 화면 테스트 못하나 ..
-
 export const WriteElement = ({
   sequence,
   setShowSubmitPage,
@@ -137,6 +135,7 @@ export const WriteElement = ({
             setBottomOffset(0);
           }
         } else {
+          //setKeyboardVisible(true); // 로컬 테스트 용
           setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
           setBottomOffset(0); // 키보드 높이를 0으로 설정
         }
@@ -162,22 +161,23 @@ export const WriteElement = ({
           marginBottom: keyboardVisible ? `${bottomOffset}px` : '0',
         }}
       >
-        <Header>
+        <Header isMobile={keyboardVisible}>
           <ClockText>
             <ClockIcon src="/assets/write/clock.svg" />
             {Math.max(0, Math.floor(progressTime))}초
           </ClockText>
           <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
         </Header>
+        <PhotoDiv isMobile={keyboardVisible}>
+          <LetterImage src={'' + elementImg} onError={handleImageError} />
+        </PhotoDiv>
         <WriteContent>
-          <PhotoDiv>
-            <LetterImage src={'' + elementImg} onError={handleImageError} />
-          </PhotoDiv>
           <WriteTa
             ref={taRef}
             placeholder="그림을 보고 편지를 채워 주세요"
             value={text}
             onChange={(e) => setText(e.target.value)}
+            maxLength={40}
           />
           <ControlContainer>
             {text.length > 0 ? (
@@ -224,7 +224,15 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   padding: 10px 0;
 
-  background-color: #212529;
+  background: rgba(0, 0, 0, 0.6);
+
+  overflow: auto;
+  /* 스크롤바 숨기기 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 const Content = styled.div<{ isMobile: boolean }>`
@@ -235,20 +243,22 @@ const Content = styled.div<{ isMobile: boolean }>`
 
   align-items: flex-start;
 
-  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:95%;')}
+  ${({ isMobile }) =>
+    isMobile ? 'width:100%;' : 'width:95%;border-radius: 20px;'}
 
   background: var(--color-black-white-white, #fff);
-  border-radius: 20px;
 `;
 
-const Header = styled.div`
+const Header = styled.div<{ isMobile: boolean }>`
   display: flex;
+  ${({ isMobile }) => isMobile && 'position: fixed;'}
 
   gap: 16px;
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
 
+  ${({ isMobile }) => (isMobile ? 'width:90%;' : 'width:88%;')}
   height: 44px;
 
   margin: 10px 20px 5px 20px;
@@ -293,24 +303,59 @@ const ClockText = styled.div`
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
+const PhotoDiv = styled.div<{ isMobile: boolean }>`
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+
+  margin: auto;
+  margin-bottom: 16px;
+
+  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:160px;')}
+
+  ${({ isMobile }) => isMobile && 'margin: 60px 0 16px 0;'}
+  // 위에 Header 고정이므로 약간 아래 띄움
+
+  @media (max-width: 320px) {
+    margin: 20px 0 16px 0; // 좁은 해상도에서는 이미지 위로 붙음
+  }
+`;
+
+const LetterImage = styled.img`
+  width: 100%;
+  max-width: 50vw; // 디바이스 크기에 비례해서 커지도록
+  aspect-ratio: 1 / 1;
+  min-width: 132px;
+  min-height: 132px;
+  object-fit: cover;
+  border-radius: 10px;
+
+  @media (max-width: 320px) {
+    max-width: 80vw; // 작은 디바이스에선 좀 더 작게
+  }
+`;
+
 const WriteContent = styled.div`
   display: flex;
 
   flex-direction: column;
 
-  gap: 10px;
   align-items: center;
   align-self: stretch;
   justify-content: center;
 
-  height: 270px;
+  padding: 10px 14px;
+  gap: 12px;
 
-  padding: 16px;
+  //height: 270px;
+
   margin: 5px 20px 20px 20px;
 
-  background: var(--Color-grayscale-gray50, #f8f9fa);
-  border: 1px dashed var(--Color-grayscale-gray400, #ced4da);
-  border-radius: var(--Border-Radius-radius_300, 8px);
+  border-radius: 9.375px;
+  border: 1.172px dashed #ced4da;
+  background: #f1f3f5;
 `;
 
 const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
@@ -331,21 +376,6 @@ const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
   border-radius: 4px;
 `;
 
-const PhotoDiv = styled.div`
-  display: flex;
-
-  justify-content: center;
-`;
-
-const LetterImage = styled.img`
-  width: 164px;
-  height: 164px;
-
-  object-fit: cover;
-
-  border-radius: 10px;
-`;
-
 const WriteTa = styled.textarea`
   display: flex;
 
@@ -357,8 +387,8 @@ const WriteTa = styled.textarea`
 
   width: 80%;
 
-  padding: 16px;
-  margin: 0 auto;
+  //padding: 16px;
+  //margin: 0 auto;
 
   overflow: hidden;
 
@@ -366,7 +396,7 @@ const WriteTa = styled.textarea`
 
   resize: none;
 
-  background: var(--Color-grayscale-gray50, #f8f9fa);
+  background: #f1f3f5;
   border: none;
 
   &:focus {
