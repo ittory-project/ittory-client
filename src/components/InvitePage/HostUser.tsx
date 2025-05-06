@@ -112,7 +112,7 @@ export const HostUser = ({
   };
 
   const handleGuide = () => {
-    setGuide('true');
+    setGuide(true);
   };
 
   const handleDeleteview = () => {
