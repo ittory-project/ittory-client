@@ -1,6 +1,16 @@
 import { useEffect } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 export const usePreventBack = () => {
+  const location = useLocation();
+
+  const fullUrl =
+    window.location.origin +
+    location.pathname +
+    location.search +
+    location.hash;
+
   useEffect(() => {
     const preventGoBack = () => {
       window.history.go(1); // STEP 2. 뒤로가기 시 다시 앞으로 이동
@@ -17,7 +27,7 @@ export const usePreventBack = () => {
         ...window.history.state,
       },
       '',
-      window.location.href,
+      fullUrl,
     );
     window.addEventListener('popstate', preventGoBack);
     window.addEventListener('beforeunload', preventUnload);
