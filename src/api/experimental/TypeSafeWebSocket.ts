@@ -165,16 +165,21 @@ export class TypeSafeWebSocket<
       : []
   ) {
     this.doAsyncJobSafely(() => {
+      const destination = this.requestDefinition[channel].channelMapper(
+        ...channelMapperParams,
+      );
+      const body =
+        args.length > 0
+          ? this.requestDefinition[channel].requestMapper?.(args[0])
+          : undefined;
+
+      logger.debug('publish:', destination, body, channelMapperParams, args);
+
       // TODO: stomp-specific으로 분리
       this.stompClient.publish({
-        destination: this.requestDefinition[channel].channelMapper(
-          ...channelMapperParams,
-        ),
+        destination,
         // undefined이면 안 가겠지?
-        body:
-          args.length > 0
-            ? this.requestDefinition[channel].requestMapper?.(args[0])
-            : undefined,
+        body,
       });
     });
   }
