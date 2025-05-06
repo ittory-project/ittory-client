@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { decodeLetterId } from '../../../api/config/base64';
+import { getWebSocketApi } from '../../../api/experimental/instance';
 import { ElementImgGetResponse } from '../../../api/model/ElementModel';
 import { getElementImg } from '../../../api/service/ElementService';
 
@@ -21,8 +22,8 @@ export const WriteElement = ({
   sequence,
   setShowSubmitPage,
   progressTime,
-  clientRef,
 }: WriteElementProps) => {
+  const wsApi = getWebSocketApi();
   const [text, setText] = useState('');
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
@@ -67,10 +68,7 @@ export const WriteElement = ({
       return;
     }
 
-    clientRef.current?.publish({
-      destination: `/ws/letter/${letterNumId}/elements`,
-      body: JSON.stringify({ sequence: sequence, content: text }),
-    });
+    wsApi.send('writeLetterElement', [letterNumId, sequence, text]);
   };
 
   // 접속 시 무조건 focusing 되도록 해야 키보드가 올라온다.
