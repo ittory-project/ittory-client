@@ -48,7 +48,7 @@ function App() {
 
           {/* TODO: 편지 작성 퍼널로 변경 */}
           <Route path="/create" element={<CreatePage />} />
-          <Route path="/invite" element={<InvitePage />} />
+          <Route path="/invite/:letterId" element={<InvitePage />} />
           <Route path="/join/:letterId" element={<JoinPage />} />
           <Route path="/connection" element={<ConnectionPage />} />
           <Route path="/write/:letterId" element={<WritePage />} />
