@@ -15,8 +15,6 @@ interface WriteElementProps {
   clientRef: React.MutableRefObject<Client | null>;
 }
 
-// 키보드 올라올때 화면 테스트 못하나 ..
-
 export const WriteElement = ({
   sequence,
   setShowSubmitPage,
@@ -127,12 +125,12 @@ export const WriteElement = ({
 
         // 로컬에서 테스트 시 nexus5 키보드로 인식하기 위한 코드
         if (window.visualViewport.height < 500) {
-          console.log('키보드 열림으로 인식');
+          setBottomOffset(0);
+          setKeyboardVisible(true);
+          console.log('키보드 열림으로 인식' + keyboardVisible);
           console.log(
             'window.visualViewport.height: ' + window.visualViewport.height,
           );
-          setBottomOffset(0);
-          setKeyboardVisible(true);
         }
 
         if (keyboardHeight < 0) {
@@ -148,6 +146,7 @@ export const WriteElement = ({
             setBottomOffset(0);
           }
         } else {
+          //setKeyboardVisible(true);
           setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
           setBottomOffset(0); // 키보드 높이를 0으로 설정
         }
@@ -180,15 +179,16 @@ export const WriteElement = ({
           </ClockText>
           <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
         </Header>
+        <PhotoDiv>
+          <LetterImage src={'' + elementImg} onError={handleImageError} />
+        </PhotoDiv>
         <WriteContent>
-          <PhotoDiv>
-            <LetterImage src={'' + elementImg} onError={handleImageError} />
-          </PhotoDiv>
           <WriteTa
             ref={taRef}
             placeholder="그림을 보고 편지를 채워 주세요"
             value={text}
             onChange={(e) => setText(e.target.value)}
+            maxLength={40}
           />
           <ControlContainer>
             {text.length > 0 ? (
@@ -246,10 +246,10 @@ const Content = styled.div<{ isMobile: boolean }>`
 
   align-items: flex-start;
 
-  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:95%;')}
+  ${({ isMobile }) =>
+    isMobile ? 'width:100%;' : 'width:95%;border-radius: 20px;'}
 
   background: var(--color-black-white-white, #fff);
-  border-radius: 20px;
 `;
 
 const Header = styled.div`
@@ -304,24 +304,55 @@ const ClockText = styled.div`
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
+const PhotoDiv = styled.div`
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+
+  margin-bottom: 16px;
+
+  width: 100%;
+
+  @media (max-width: 320px) {
+    margin-top: 0; // 최소 해상도에서는 이미지가 위로 붙음
+  }
+`;
+
+const LetterImage = styled.img`
+  width: 100%;
+  max-width: 50vw; // 디바이스 크기에 비례해서 커지도록
+  aspect-ratio: 1 / 1;
+  min-width: 132px;
+  min-height: 132px;
+  object-fit: cover;
+  border-radius: 10px;
+
+  @media (max-width: 320px) {
+    max-width: 80vw; // 작은 디바이스에선 좀 더 작게
+  }
+`;
+
 const WriteContent = styled.div`
   display: flex;
 
   flex-direction: column;
 
-  gap: 10px;
   align-items: center;
   align-self: stretch;
   justify-content: center;
 
-  height: 270px;
+  padding: 10px 14px;
+  gap: 12px;
 
-  padding: 16px;
+  //height: 270px;
+
   margin: 5px 20px 20px 20px;
 
-  background: var(--Color-grayscale-gray50, #f8f9fa);
-  border: 1px dashed var(--Color-grayscale-gray400, #ced4da);
-  border-radius: var(--Border-Radius-radius_300, 8px);
+  border-radius: 9.375px;
+  border: 1.172px dashed #ced4da;
+  background: #f1f3f5;
 `;
 
 const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
@@ -342,21 +373,6 @@ const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
   border-radius: 4px;
 `;
 
-const PhotoDiv = styled.div`
-  display: flex;
-
-  justify-content: center;
-`;
-
-const LetterImage = styled.img`
-  width: 164px;
-  height: 164px;
-
-  object-fit: cover;
-
-  border-radius: 10px;
-`;
-
 const WriteTa = styled.textarea`
   display: flex;
 
@@ -368,8 +384,8 @@ const WriteTa = styled.textarea`
 
   width: 80%;
 
-  padding: 16px;
-  margin: 0 auto;
+  //padding: 16px;
+  //margin: 0 auto;
 
   overflow: hidden;
 
@@ -377,7 +393,7 @@ const WriteTa = styled.textarea`
 
   resize: none;
 
-  background: var(--Color-grayscale-gray50, #f8f9fa);
+  background: #f1f3f5;
   border: none;
 
   &:focus {
