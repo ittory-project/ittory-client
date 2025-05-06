@@ -1,3 +1,7 @@
+export interface WsResponse {
+  action: string;
+}
+
 export interface Participants {
   sequence: number;
   memberId: number;
@@ -5,11 +9,10 @@ export interface Participants {
   imageUrl: string;
 }
 
-export interface WsEnterResponse {
+export interface WsEnterResponse extends WsResponse {
   participantId: number;
   nickname: string;
   imageUrl: string;
-  action: string;
   participants: Participants[];
 }
 
@@ -22,9 +25,8 @@ export interface LetterItemResponse {
   writeSequence: number;
 }
 
-export interface WsExitResponse {
+export interface WsExitResponse extends WsResponse {
   participantId: number;
-  action: string;
   isManager: boolean;
   nickname: string;
 }

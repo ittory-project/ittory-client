@@ -4,7 +4,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import texture from '../../../public/assets/invite/texture1.png';
-import { stompClient } from '../../api/config/stompInterceptor';
 import { getWebSocketApi } from '../../api/experimental/instance';
 import { MypageGetResponse } from '../../api/model/MemberModel';
 import { WsEnterResponse, WsExitResponse } from '../../api/model/WsModel';
@@ -26,7 +25,7 @@ export interface Participants {
 
 export const Invite = () => {
   const wsApi = getWebSocketApi();
-  const { letterId: _letterId } = useParams<{
+  const params = useParams<{
     letterId: string;
   }>();
   const navigate = useNavigate();
@@ -37,9 +36,17 @@ export const Invite = () => {
   const [myPageData, setMyPageData] = useState<MypageGetResponse | null>(null); // TODO: useQuery로 이관
   const [participants, setParticipants] = useState<Participants[]>([]);
 
-  const letterId = Number(_letterId); // FIXME: 이 값으로는 조회가 안되나본데?
+  const letterId = Number(params.letterId); // FIXME: 이 값으로는 조회가 안되나본데?
 
-  logger.debug('letterId', _letterId, letterId);
+  logger.debug(
+    'letterId',
+    params,
+    params.letterId,
+    letterId,
+    window.location.href, // https://localhost:5173/invite/3261?guideOpen=false
+    location.pathname, // /invite/0 로 나오는 이유?
+    location.search,
+  );
 
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [exitName, setExitName] = useState<string>(''); // ?
@@ -83,56 +90,43 @@ export const Invite = () => {
 
       wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
 
-      const client = stompClient();
-      client.onConnect = () => {
-        client.subscribe(`/topic/letter/${letterId}`, (message) => {
-          const response: WsEnterResponse | WsExitResponse = JSON.parse(
-            message.body,
-          );
-
-          if (
-            response.action === 'EXIT' &&
-            'nickname' in response &&
-            'isManager' in response
-          ) {
-            refetchParticipants();
-
-            if (response.isManager) {
-              logger.debug('방장 퇴장 감지');
-              setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
-              if (participants[0]) {
-                setHostAlert(
-                  `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
-                );
-              }
-            } else {
-              setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
-            }
-          } else if (response.action === 'END') {
-            setViewDelete(true);
-          } else if (response.action === 'START') {
-            navigate('/Connection', {
-              state: {
-                letterId,
-                coverId: Number(localStorage.getItem('coverId')),
-                bg: localStorage.getItem('bgImg'),
-              },
-            });
-          } else if (
-            response.action === 'ENTER' &&
-            'participants' in response
-          ) {
-            if (response.participants) {
-              setParticipants(response.participants);
-            }
+      const unsubscribe = wsApi.subscribe('letter', [letterId], {
+        enter: (response: WsEnterResponse) => {
+          if (response.participants) {
+            setParticipants(response.participants);
           }
-        });
-      };
-      client.activate();
+        },
+        exit: async (response: WsExitResponse) => {
+          refetchParticipants();
+
+          if (response.isManager) {
+            logger.debug('방장 퇴장 감지');
+            setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
+            await refetchParticipants();
+            setHostAlert(
+              `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
+            );
+          } else {
+            setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
+          }
+        },
+        end: () => {
+          setViewDelete(true);
+        },
+        start: () => {
+          navigate('/Connection', {
+            state: {
+              letterId,
+              coverId: Number(localStorage.getItem('coverId')),
+              bg: localStorage.getItem('bgImg'),
+            },
+          });
+        },
+      });
+
       return () => {
-        (async () => {
-          client.deactivate();
-        })();
+        logger.debug('unsubscribe call from useEffect');
+        unsubscribe();
       };
     },
     [
