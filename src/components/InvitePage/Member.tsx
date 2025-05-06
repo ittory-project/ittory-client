@@ -34,7 +34,7 @@ import plus from '/assets/plus.svg';
 const logger = new SessionLogger('invite');
 
 interface Props {
-  guideOpen: string;
+  guideOpen: boolean;
   items: Participants[];
   letterId: number;
   viewDelete: boolean;
@@ -44,7 +44,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [sliceName, setSliceName] = useState<string>('');
-  const [guide, setGuide] = useState<string>(guideOpen);
+  const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(', ');
@@ -106,7 +106,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
 
   const handleGuide = () => {
-    setGuide('true');
+    setGuide(true);
   };
 
   const handleExit = () => {
@@ -208,7 +208,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
 
   return (
     <BackGround>
-      {guide === 'true' && <Overlay />}
+      {guide && <Overlay />}
       {viewExit && <Overlay />}
       {items.length > 0 && (
         <>
@@ -360,7 +360,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     </Box>
                   </BoxContainer>
                 </MainContainer>
-                {guide === 'true' && <UserGuide setGuide={setGuide} />}
+                {guide && <UserGuide setGuide={setGuide} />}
                 {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
               </>
             )}

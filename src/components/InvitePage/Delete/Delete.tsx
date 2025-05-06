@@ -6,7 +6,7 @@ import {
   deleteLetter,
   getLetterInfo,
 } from '../../../api/service/LetterService';
-import { endLetterWs } from '../../../api/service/WsService';
+import { getWebSocketApi } from '../../../api/websockets';
 import { SessionLogger } from '../../../utils';
 import { DeleteConfirm } from './DeleteConfirm';
 
@@ -18,6 +18,7 @@ interface Props {
 }
 
 export const Delete = ({ setViewDelete, letterId }: Props) => {
+  const wsApi = getWebSocketApi();
   const [viewConfirm, setViewConfirm] = useState<boolean>(false);
   const handleDelete = () => {
     setViewDelete(false);
@@ -41,7 +42,7 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
         logger.error('삭제 실패:', error);
       },
     );
-    endLetterWs(letterId);
+    wsApi.send('endLetter', [letterId]);
     setViewConfirm(true);
   };
 

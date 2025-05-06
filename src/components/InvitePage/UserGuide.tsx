@@ -12,7 +12,7 @@ import guide5 from '../../../public/assets/guide5.svg';
 import guide6 from '../../../public/assets/guide6.svg';
 
 interface Props {
-  setGuide: React.Dispatch<React.SetStateAction<string>>;
+  setGuide: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserGuide = ({ setGuide }: Props) => {
@@ -41,7 +41,7 @@ export const UserGuide = ({ setGuide }: Props) => {
   };
 
   const handleComplete = () => {
-    setGuide('false');
+    setGuide(false);
     localStorage.removeItem('guideOpen');
   };
 

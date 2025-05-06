@@ -21,11 +21,8 @@ export const Loading = ({ loadstatus }: Props) => {
   const fetchData = async () => {
     // 로컬스토리지에서 값 가져오기
     const letterId = Number(localStorage.getItem('letterId'));
-    const userName = localStorage.getItem('userName');
     const guideOpen = localStorage.getItem('guideOpen');
-    navigate('/Invite', {
-      state: { letterId, userName, guideOpen },
-    });
+    navigate(`/invite/${letterId}?guideOpen=${guideOpen}`);
   };
 
   useEffect(() => {

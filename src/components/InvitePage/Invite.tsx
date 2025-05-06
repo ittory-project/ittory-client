@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import texture from '../../../public/assets/invite/texture1.png';
-import { stompClient } from '../../api/config/stompInterceptor';
+import { MypageGetResponse } from '../../api/model/MemberModel';
 import { WsEnterResponse, WsExitResponse } from '../../api/model/WsModel';
 import { getParticipants } from '../../api/service/LetterService';
 import { getMyPage } from '../../api/service/MemberService';
+import { getWebSocketApi } from '../../api/websockets';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { HostUser } from './HostUser';
 import { Loading } from './Loading';
@@ -23,259 +24,176 @@ export interface Participants {
 }
 
 export const Invite = () => {
-  const location = useLocation();
+  const wsApi = getWebSocketApi();
+  const params = useParams<{
+    letterId: string;
+  }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const guideOpen = searchParams.get('guideOpen') === 'true';
+
+  const [myPageData, setMyPageData] = useState<MypageGetResponse | null>(null); // TODO: useQuery로 이관
+  const [participants, setParticipants] = useState<Participants[]>([]);
+
+  const letterId = Number(params.letterId); // FIXME: 이 값으로는 조회가 안되나본데?
+
+  logger.debug(
+    'letterId',
+    params,
+    params.letterId,
+    letterId,
+    window.location.href, // https://localhost:5173/invite/3261?guideOpen=false
+    location.pathname, // /invite/0 로 나오는 이유?
+    location.search,
+  );
 
   const [exitAlert, setExitAlert] = useState<string | null>(null);
+  const [exitName, setExitName] = useState<string>(''); // ?
   const [hostAlert, setHostAlert] = useState<string | null>(null);
-  const [memberIndex, setMemberIndex] = useState<number>(-1);
-  const [participants, setParticipants] = useState<Participants[]>([]);
-  const [userId, setUserId] = useState<number>(-1);
+  const [viewDelete, setViewDelete] = useState<boolean>(false); // 필요 여부 체크 필요함
 
-  const getletterId = location.state.letterId;
-  const userName = location.state.userName;
-  const guideOpen = location.state.guideOpen;
+  const isLoading = !myPageData || participants.length === 0;
 
-  const [letterId] = useState<number>(getletterId);
-  const [name, setName] = useState<string>('');
-  const [exitName, setExitName] = useState<string>('');
-  const [viewDelete, setViewDelete] = useState<boolean>(false);
-  const [, setLoad] = useState<boolean>(true);
-  const [loadstatus, setLoadstatus] = useState<boolean>(true);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
 
-  const fetchParticipants = async () => {
-    setLoad(true);
+  const isRoomMaster =
+    participants[0] && participants[0].memberId === myPageData?.memberId;
+
+  const refetchParticipants = useCallback(async () => {
     const data = await getParticipants(letterId);
-
     setParticipants(data);
-  };
+  }, [letterId]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const mydata = await getMyPage();
-      const userNameFromApi = mydata.name;
-      const userIdFromApi = mydata.memberId;
-
-      setName(userNameFromApi);
-      setUserId(userIdFromApi);
-
-      if (participants.length < 1) {
-        fetchParticipants();
-      } else {
-        if (memberIndex > -1) {
-          return;
-        } else {
-          if (participants[0].nickname) {
-            logger.debug('방장지정');
-            if (
-              participants[0].nickname === name ||
-              participants[0].nickname === userName
-            ) {
-              localStorage.removeItem('load');
-              setLoad(false);
-              setMemberIndex(0);
-            } else {
-              localStorage.removeItem('load');
-              setLoad(false);
-              setMemberIndex(1);
-            }
-          } else {
-            if (localStorage.getItem('load') === 'done') {
-              setLoad(true);
-              setLoadstatus(true);
-            } else {
-              localStorage.setItem('load', 'done');
-              navigate('/loading', {
-                state: {
-                  letterId: getletterId,
-                  userName: userName,
-                  guideOpen: guideOpen,
-                },
-              });
-            }
-          }
-        }
+  useEffect(
+    function fetchMyPageIfNotLoaded() {
+      if (!myPageData) {
+        const fetchMyPage = async () => {
+          const mydata = await getMyPage();
+          setMyPageData(mydata);
+        };
+        fetchMyPage();
       }
-    };
-    fetchData();
-  }, []);
+    },
+    [myPageData],
+  );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const mydata = await getMyPage();
-      const userNameFromApi = mydata.name;
-      const userIdFromApi = mydata.memberId;
-
-      setName(userNameFromApi);
-      setUserId(userIdFromApi);
-
-      logger.debug('participants[0].memberId' + participants[0].memberId);
-      logger.debug('userId : ' + userId);
-
-      if (participants.length < 1) {
-        fetchParticipants();
-      } else {
-        if (participants[0].nickname) {
-          logger.debug('방장지정');
-          if (participants[0].memberId === userId) {
-            localStorage.removeItem('load');
-            setLoad(false);
-            setMemberIndex(0);
-            console.log('0');
-          } else {
-            localStorage.removeItem('load');
-            setLoad(false);
-            setMemberIndex(1);
-          }
-        } else {
-          if (localStorage.getItem('load') === 'done') {
-            setLoad(true);
-            setLoadstatus(true);
-          } else {
-            localStorage.setItem('load', 'done');
-            navigate('/loading', {
-              state: {
-                letterId: getletterId,
-                userName: userName,
-                guideOpen: guideOpen,
-              },
-            });
-          }
-        }
+  useEffect(
+    function processOnMount() {
+      if (!myPageData || isSubscribed) {
+        return;
       }
-    };
-    fetchData();
-  }, [participants]);
 
-  useEffect(() => {
-    const client = stompClient();
+      setIsSubscribed(true);
 
-    client.onConnect = () => {
-      // WebSocket 구독
-      client.subscribe(`/topic/letter/${letterId}`, (message) => {
-        const response: WsEnterResponse | WsExitResponse = JSON.parse(
-          message.body,
-        );
+      logger.debug('doInviteJobs start');
 
-        if (
-          response.action === 'EXIT' &&
-          'nickname' in response &&
-          'isManager' in response
-        ) {
+      wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
+
+      const unsubscribe = wsApi.subscribe('letter', [letterId], {
+        enter: (response: WsEnterResponse) => {
+          logger.debug('enterLetter response', response);
+          setParticipants(response.participants);
+          logger.debug(
+            'after enterLetter participants',
+            participants,
+            response.participants,
+          );
+        },
+        exit: async (response: WsExitResponse) => {
+          logger.debug('exitLetter response', response);
+          await refetchParticipants();
+
           if (response.isManager) {
             logger.debug('방장 퇴장 감지');
             setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
-            fetchParticipants();
-            if (participants[0]) {
-              setHostAlert(
-                `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
-              );
-            }
+            await refetchParticipants();
+            setHostAlert(
+              `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
+            );
           } else {
             setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
-            fetchParticipants();
           }
-        } else if (response.action === 'END') {
+        },
+        end: () => {
+          logger.debug('endLetter response');
           setViewDelete(true);
-        } else if (response.action === 'START') {
+        },
+        start: () => {
+          logger.debug('startLetter response');
           navigate('/Connection', {
             state: {
-              letterId: letterId,
+              letterId,
               coverId: Number(localStorage.getItem('coverId')),
               bg: localStorage.getItem('bgImg'),
             },
           });
-        } else if (response.action === 'ENTER' && 'participants' in response) {
-          if (response.participants) {
-            setParticipants(response.participants);
-          }
+        },
+      });
+
+      return () => {
+        logger.debug('unsubscribe call from useEffect');
+        unsubscribe();
+      };
+    },
+    [
+      letterId,
+      navigate,
+      participants,
+      myPageData,
+      wsApi,
+      refetchParticipants,
+      isLoading,
+      isSubscribed,
+    ],
+  );
+
+  useEffect(
+    function noticeOnExit() {
+      const exitTimer = setTimeout(() => {
+        refetchParticipants();
+        setExitAlert(null);
+        if (exitName) {
+          setExitName('');
         }
-      });
+      }, 5000); // 5초 있다가 notice 제거하는 거였음
 
-      client.publish({
-        destination: `/ws/letter/enter/${letterId}`,
-        body: JSON.stringify({ nickname: name }),
-      });
-    };
-    client.activate();
-    return () => {
-      (async () => {
-        client.deactivate();
-      })();
-    };
-  }, []);
+      return () => clearTimeout(exitTimer);
+    },
+    [exitAlert, refetchParticipants, exitName],
+  );
 
-  //퇴장 알림
-  useEffect(() => {
-    logger.debug('퇴장 알림');
-    const exitTimer = setTimeout(() => {
-      fetchParticipants();
-      setExitAlert(null);
-      if (exitName) {
-        setExitName('');
-      }
-    }, 5000);
+  useEffect(
+    function noticeOnRoomMasterChange() {
+      const hostTimer = setTimeout(() => {
+        refetchParticipants();
+        setHostAlert(null);
+      }, 10000);
 
-    return () => clearTimeout(exitTimer);
-  }, [exitAlert]);
+      return () => clearTimeout(hostTimer);
+    },
+    [hostAlert, refetchParticipants],
+  );
 
-  //방장 바뀜 알림
-  useEffect(() => {
-    const hostTimer = setTimeout(() => {
-      fetchParticipants();
-      setHostAlert(null);
-    }, 10000);
-
-    return () => clearTimeout(hostTimer);
-  }, [hostAlert]);
-
-  //PC 감지
-  const handleTabClosed = useCallback(async (event: BeforeUnloadEvent) => {
-    event.preventDefault(); // 경고 메시지 표시
-    event.returnValue = ''; // 일부 브라우저에서 탭을 닫을 때 경고 창을 띄움
-
-    //quitLetterWs(letterId);
-    logger.debug('탭이 닫힘');
-  }, []);
-
-  useEffect(() => {
-    // 탭 닫기 전에 호출
-    logger.debug('탭이 닫힘');
-    const beforeUnloadListener = (event: BeforeUnloadEvent) => {
-      handleTabClosed(event);
-    };
-    window.addEventListener('beforeunload', beforeUnloadListener);
-    window.addEventListener('unload', handleTabClosed);
-
-    return () => {
-      window.removeEventListener('beforeunload', beforeUnloadListener);
-      window.removeEventListener('unload', handleTabClosed);
-      // quitLetterWs(letterId);
-      // navigate('/');
-    };
-  }, [handleTabClosed]);
-
+  // TODO: myData suspense 사용 및 로딩을 fallback으로 추출 (실제로 보이는 일은 없게 될 듯)
   return (
     <BackGround>
-      {memberIndex < 0 ? (
-        <Loading loadstatus={loadstatus} setLoad={setLoad} />
+      {isLoading ? (
+        <Loading loadstatus={true} />
       ) : (
         <>
           {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
           {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-          {memberIndex === 0 && (
-            <>
-              <HostUser
-                guideOpen={guideOpen}
-                items={participants}
-                letterId={letterId}
-                viewDelete={viewDelete}
-                setViewDelete={setViewDelete}
-                hostname={name}
-              />
-            </>
-          )}
-          {memberIndex === 1 && (
+          {isRoomMaster ? (
+            <HostUser
+              guideOpen={guideOpen}
+              items={participants}
+              letterId={letterId}
+              viewDelete={viewDelete}
+              setViewDelete={setViewDelete}
+              hostname={myPageData?.name ?? ''}
+            />
+          ) : (
             <Member
               letterId={letterId}
               guideOpen={guideOpen}
