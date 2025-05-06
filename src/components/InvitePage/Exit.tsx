@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { quitLetterWs } from '../../api/service/WsService';
+import { getWebSocketApi } from '../../api/experimental/instance';
 
 interface Props {
   setViewExit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,13 +11,14 @@ interface Props {
 }
 //방장에게만 적용되는 팝업
 export const Exit = ({ setViewExit, letterId }: Props) => {
+  const wsApi = getWebSocketApi();
   const navigate = useNavigate();
   const handleExitCancel = () => {
     setViewExit(false);
   };
 
   const handleExit = () => {
-    quitLetterWs(letterId);
+    wsApi.send('quitLetter', [letterId]);
     navigate('/', { replace: true });
   };
 
