@@ -79,13 +79,7 @@ export default function UserFinishModal({
     const nickname = myName;
     const enterresponse = await postEnter(Number(letterId), { nickname });
     if (enterresponse.enterStatus === true) {
-      navigate('/Invite', {
-        state: {
-          letterId: letterId,
-          guideOpen: false,
-          userName: myName,
-        },
-      });
+      navigate(`/invite/${letterId}?guideOpen=false`);
     }
   };
 

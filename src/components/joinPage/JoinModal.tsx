@@ -61,23 +61,8 @@ export const JoinModal = ({
 
   const fianlAccess = () => {
     localStorage.removeItem('letterId');
-    if (visited) {
-      navigate('/Invite', {
-        state: {
-          letterId: letterId,
-          guideOpen: false,
-          userName: nickname,
-        },
-      });
-    } else {
-      navigate('/Invite', {
-        state: {
-          letterId: letterId,
-          guideOpen: true,
-          userName: nickname,
-        },
-      });
-    }
+
+    navigate(`/invite/${letterId}?guideOpen=${!visited}`);
   };
 
   return (
