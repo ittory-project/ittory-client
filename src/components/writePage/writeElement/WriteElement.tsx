@@ -125,6 +125,16 @@ export const WriteElement = ({
       if (window.visualViewport) {
         let keyboardHeight = window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
 
+        // 로컬에서 테스트 시 nexus5 키보드로 인식하기 위한 코드
+        if (window.visualViewport.height < 500) {
+          console.log('키보드 열림으로 인식');
+          console.log(
+            'window.visualViewport.height: ' + window.visualViewport.height,
+          );
+          setBottomOffset(0);
+          setKeyboardVisible(true);
+        }
+
         if (keyboardHeight < 0) {
           keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
         }
@@ -225,7 +235,7 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   padding: 10px 0;
 
-  background-color: #212529;
+  background: rgba(0, 0, 0, 0.6);
 `;
 
 const Content = styled.div<{ isMobile: boolean }>`
