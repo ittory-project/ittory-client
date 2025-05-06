@@ -311,9 +311,10 @@ const PhotoDiv = styled.div<{ isMobile: boolean }>`
   align-items: center;
   align-self: stretch;
 
+  margin: auto;
   margin-bottom: 16px;
 
-  width: 100%;
+  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:160px;')}
 
   ${({ isMobile }) => isMobile && 'margin: 60px 0 16px 0;'}
   // 위에 Header 고정이므로 약간 아래 띄움
