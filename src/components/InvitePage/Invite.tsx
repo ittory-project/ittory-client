@@ -92,12 +92,17 @@ export const Invite = () => {
 
       const unsubscribe = wsApi.subscribe('letter', [letterId], {
         enter: (response: WsEnterResponse) => {
-          if (response.participants) {
-            setParticipants(response.participants);
-          }
+          logger.debug('enterLetter response', response);
+          setParticipants(response.participants);
+          logger.debug(
+            'after enterLetter participants',
+            participants,
+            response.participants,
+          );
         },
         exit: async (response: WsExitResponse) => {
-          refetchParticipants();
+          logger.debug('exitLetter response', response);
+          await refetchParticipants();
 
           if (response.isManager) {
             logger.debug('방장 퇴장 감지');
@@ -111,9 +116,11 @@ export const Invite = () => {
           }
         },
         end: () => {
+          logger.debug('endLetter response');
           setViewDelete(true);
         },
         start: () => {
+          logger.debug('startLetter response');
           navigate('/Connection', {
             state: {
               letterId,
@@ -149,7 +156,7 @@ export const Invite = () => {
         if (exitName) {
           setExitName('');
         }
-      }, 5000); // FIXME: 필요한지 체크
+      }, 5000); // 5초 있다가 notice 제거하는 거였음
 
       return () => clearTimeout(exitTimer);
     },
