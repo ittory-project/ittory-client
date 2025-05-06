@@ -58,7 +58,7 @@ export const Invite = () => {
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
 
   const isRoomMaster =
-    participants[0] && participants[0].nickname === myPageData?.name;
+    participants[0] && participants[0].memberId === myPageData?.memberId;
 
   const refetchParticipants = useCallback(async () => {
     const data = await getParticipants(letterId);
