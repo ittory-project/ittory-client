@@ -123,16 +123,6 @@ export const WriteElement = ({
       if (window.visualViewport) {
         let keyboardHeight = window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
 
-        // 로컬에서 테스트 시 nexus5 키보드로 인식하기 위한 코드
-        if (window.visualViewport.height < 500) {
-          setBottomOffset(0);
-          setKeyboardVisible(true);
-          console.log('키보드 열림으로 인식' + keyboardVisible);
-          console.log(
-            'window.visualViewport.height: ' + window.visualViewport.height,
-          );
-        }
-
         if (keyboardHeight < 0) {
           keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
         }
@@ -146,7 +136,7 @@ export const WriteElement = ({
             setBottomOffset(0);
           }
         } else {
-          //setKeyboardVisible(true);
+          //setKeyboardVisible(true); // 로컬 테스트 용
           setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
           setBottomOffset(0); // 키보드 높이를 0으로 설정
         }
@@ -172,14 +162,14 @@ export const WriteElement = ({
           marginBottom: keyboardVisible ? `${bottomOffset}px` : '0',
         }}
       >
-        <Header>
+        <Header isMobile={keyboardVisible}>
           <ClockText>
             <ClockIcon src="/assets/write/clock.svg" />
             {Math.max(0, Math.floor(progressTime))}초
           </ClockText>
           <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
         </Header>
-        <PhotoDiv>
+        <PhotoDiv isMobile={keyboardVisible}>
           <LetterImage src={'' + elementImg} onError={handleImageError} />
         </PhotoDiv>
         <WriteContent>
@@ -236,6 +226,14 @@ const Container = styled.div<{ isMobile: boolean }>`
   padding: 10px 0;
 
   background: rgba(0, 0, 0, 0.6);
+
+  overflow: auto;
+  /* 스크롤바 숨기기 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 const Content = styled.div<{ isMobile: boolean }>`
@@ -252,14 +250,16 @@ const Content = styled.div<{ isMobile: boolean }>`
   background: var(--color-black-white-white, #fff);
 `;
 
-const Header = styled.div`
+const Header = styled.div<{ isMobile: boolean }>`
   display: flex;
+  ${({ isMobile }) => isMobile && 'position: fixed;'}
 
   gap: 16px;
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
 
+  ${({ isMobile }) => (isMobile ? 'width:90%;' : 'width:88%;')}
   height: 44px;
 
   margin: 10px 20px 5px 20px;
@@ -304,7 +304,7 @@ const ClockText = styled.div`
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
-const PhotoDiv = styled.div`
+const PhotoDiv = styled.div<{ isMobile: boolean }>`
   display: flex;
 
   justify-content: center;
@@ -315,8 +315,11 @@ const PhotoDiv = styled.div`
 
   width: 100%;
 
+  ${({ isMobile }) => isMobile && 'margin: 60px 0 16px 0;'}
+  // 위에 Header 고정이므로 약간 아래 띄움
+
   @media (max-width: 320px) {
-    margin-top: 0; // 최소 해상도에서는 이미지가 위로 붙음
+    margin: 20px 0 16px 0; // 좁은 해상도에서는 이미지 위로 붙음
   }
 `;
 
