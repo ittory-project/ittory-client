@@ -11,9 +11,9 @@ import bg4 from '../../../../public/assets/connect/bg4.png';
 import bg5 from '../../../../public/assets/connect/bg5.png';
 import photo from '../../../../public/assets/photo.svg';
 import X from '../../../../public/assets/x.svg';
-import { getWebSocketApi } from '../../../api/experimental/instance';
 import { postRepeatCount } from '../../../api/service/LetterService';
 import { postRandom } from '../../../api/service/ParticipantService';
+import { getWebSocketApi } from '../../../api/websockets';
 
 interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;

@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { decodeLetterId } from '../../../api/config/base64';
-import { getWebSocketApi } from '../../../api/experimental/instance';
 import { ElementImgGetResponse } from '../../../api/model/ElementModel';
 import { getElementImg } from '../../../api/service/ElementService';
+import { getWebSocketApi } from '../../../api/websockets';
 
 interface WriteElementProps {
   sequence: number;
