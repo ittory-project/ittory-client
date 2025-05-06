@@ -42,11 +42,6 @@ export class TypeSafeWebSocket<
 > {
   private requestDefinition: UserRequestMapperDefinition;
   private responseDefinition: UserResponseMapperDefinition;
-  private stompClient: Client;
-  private subscriptions: Map<
-    keyof UserResponseMapperDefinition,
-    StompSubscription
-  >;
   private channelListeners: Map<
     keyof UserResponseMapperDefinition,
     ResponseHandler<string>[]
@@ -57,17 +52,31 @@ export class TypeSafeWebSocket<
   // 연결 시 모든 큐에서 대기하던 작업을 실행하고 큐를 비움
   private connectWaitQueue: (() => void)[] = [];
 
+  // stomp-specific
+  private stompClient: Client;
+  private stompSubscriptions: Map<
+    keyof UserResponseMapperDefinition,
+    StompSubscription
+  >;
+  private stompSubscribers: Map<
+    keyof UserResponseMapperDefinition,
+    (_message: IMessage) => void
+  >;
+
   constructor(
     requestMapperDefinition: UserRequestMapperDefinition,
     responseMapperDefinition: UserResponseMapperDefinition,
   ) {
     this.requestDefinition = requestMapperDefinition;
     this.responseDefinition = responseMapperDefinition;
-    this.subscriptions = new Map();
     this.channelListeners = new Map();
     this.connectWaitQueue = [];
 
     // stomp-specific
+    this.stompSubscriptions = new Map();
+    this.stompSubscribers = new Map();
+
+    // stomp-client specific
     this.stompClient = createStompClient();
     this.stompClient.onConnect = (iframe) => {
       logger.debug('onConnect', iframe);
@@ -75,6 +84,8 @@ export class TypeSafeWebSocket<
       this.connectWaitQueue.forEach((job) => job());
       this.connectWaitQueue = [];
       this.isConnected = true;
+
+      this.subscribeAllSubscriptions();
     };
     this.stompClient.onDisconnect = (iframe) => {
       logger.debug('onDisconnect', iframe); //호출되지 않음
@@ -116,10 +127,8 @@ export class TypeSafeWebSocket<
     logger.debug('channelListeners', channelListeners, this.channelListeners);
     logger.debug('currentListener', currentListener);
 
-    // TODO: reconnect 시 다시 연결해야 함
-
     // 아직 구독 중이지 않으면 구독 필요
-    if (!this.subscriptions.has(channelName)) {
+    if (!this.stompSubscriptions.has(channelName)) {
       // FIXME: stomp-specific && 실제로 string으로 올텐데 왜 IMessage 타입인지 확인 필요
       const callListeners = (message: IMessage) => {
         this.channelListeners
@@ -127,13 +136,7 @@ export class TypeSafeWebSocket<
           ?.forEach((listener) => listener(message.body));
       };
 
-      this.doAsyncJobSafely(() => {
-        const subscription = this.stompClient.subscribe(
-          channelName,
-          callListeners,
-        );
-        this.subscriptions.set(channelName, subscription);
-      });
+      this.stompSubscribers.set(channelName, callListeners);
     }
 
     // 모든 listeners가 없으면 구독도 종료
@@ -150,8 +153,8 @@ export class TypeSafeWebSocket<
       if (channelListeners.length === 0) {
         logger.debug('no listeners left, unsubscribing', channelName);
         this.channelListeners.delete(channelName);
-        this.subscriptions.get(channelName)?.unsubscribe();
-        this.subscriptions.delete(channelName);
+        this.stompSubscriptions.get(channelName)?.unsubscribe();
+        this.stompSubscriptions.delete(channelName);
       }
     };
   }
@@ -190,6 +193,22 @@ export class TypeSafeWebSocket<
         body,
       });
     });
+  }
+
+  // NOTE: channel 별 listener 들을 stompClient에 등록
+  // 최초 connect 시점 이전에 subscribe하거나 re-connect 시 다시 subscribe 해야 하는 경우를 처리
+  private subscribeAllSubscriptions() {
+    this.stompSubscriptions.clear();
+
+    for (const [channelName, callListeners] of this.stompSubscribers) {
+      const subscription = this.stompClient.subscribe(
+        channelName as string,
+        callListeners,
+      );
+      this.stompSubscriptions.set(channelName, subscription);
+    }
+
+    logger.debug('subscribeAllSubscriptions', this.stompSubscriptions);
   }
 
   private doAsyncJobSafely(job: () => void) {
