@@ -106,7 +106,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   };
 
   const handleGuide = () => {
-    setGuide('true');
+    setGuide(true);
   };
 
   const handleExit = () => {
