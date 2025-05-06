@@ -42,7 +42,7 @@ export class TypeSafeWebSocket<
 > {
   private requestDefinition: UserRequestMapperDefinition;
   private responseDefinition: UserResponseMapperDefinition;
-  private channelListeners: Map<
+  private observersByChannel: Map<
     keyof UserResponseMapperDefinition,
     ResponseHandler<string>[]
   >;
@@ -69,7 +69,7 @@ export class TypeSafeWebSocket<
   ) {
     this.requestDefinition = requestMapperDefinition;
     this.responseDefinition = responseMapperDefinition;
-    this.channelListeners = new Map();
+    this.observersByChannel = new Map();
     this.connectWaitQueue = [];
 
     // stomp-specific
@@ -108,32 +108,39 @@ export class TypeSafeWebSocket<
       UserResponseMapperDefinition[Channel]['responseMapper']
     >[0],
   ) {
-    let currentListener: ((_payload: string) => void) | null = null;
     const channelName = this.responseDefinition[channel].channelMapper(
       ...channelMapperParams,
     );
     logger.debug('channelName', channelName);
 
     // 아직 리스너 배열이 없으면 리스너 배열 생성
-    const channelListeners = this.channelListeners.get(channelName) ?? [];
-    this.channelListeners.set(channelName, channelListeners);
+    const oberversForChannel = this.observersByChannel.get(channelName) ?? [];
+    if (!this.observersByChannel.has(channelName)) {
+      this.observersByChannel.set(channelName, oberversForChannel);
+    }
 
-    // 리스너 배열에 리스너 추가
-    currentListener = this.responseDefinition[channel]
+    const newChannelObserver = this.responseDefinition[channel]
       .responseMapper(handlerConfig)
       .bind(this.responseDefinition[channel]);
-    channelListeners.push(currentListener);
+    oberversForChannel.push(newChannelObserver);
 
-    logger.debug('channelListeners', channelListeners, this.channelListeners);
-    logger.debug('currentListener', currentListener);
+    logger.debug(
+      'oberversForChannel',
+      oberversForChannel,
+      this.observersByChannel,
+    );
+    logger.debug('newChannelObserver', newChannelObserver);
 
     // 아직 구독 중이지 않으면 구독 필요
     if (!this.stompSubscriptions.has(channelName)) {
       // FIXME: stomp-specific && 실제로 string으로 올텐데 왜 IMessage 타입인지 확인 필요
       const callListeners = (message: IMessage) => {
-        this.channelListeners
-          .get(channelName)
-          ?.forEach((listener) => listener(message.body));
+        logger.debug(
+          'calling all callListeners with',
+          message,
+          oberversForChannel,
+        );
+        oberversForChannel.forEach((listener) => listener(message.body));
       };
 
       this.stompSubscribers.set(channelName, callListeners);
@@ -142,17 +149,21 @@ export class TypeSafeWebSocket<
     // 모든 listeners가 없으면 구독도 종료
     return () => {
       logger.debug('unsubscribing', channelName);
-      let channelListeners = this.channelListeners.get(channelName);
-      if (!channelListeners) {
-        throw new Error('channelListeners not found - it should never happen');
+      if (!oberversForChannel) {
+        throw new Error(
+          'oberversForChannel not found - it should never happen',
+        );
       }
-      channelListeners = channelListeners.filter(
-        (listener) => listener !== currentListener,
+      this.observersByChannel.set(
+        channelName,
+        oberversForChannel.filter(
+          (listener) => listener !== newChannelObserver,
+        ),
       );
 
-      if (channelListeners.length === 0) {
+      if (oberversForChannel.length === 0) {
         logger.debug('no listeners left, unsubscribing', channelName);
-        this.channelListeners.delete(channelName);
+        this.observersByChannel.delete(channelName);
         this.stompSubscriptions.get(channelName)?.unsubscribe();
         this.stompSubscriptions.delete(channelName);
       }
@@ -208,9 +219,10 @@ export class TypeSafeWebSocket<
       this.stompSubscriptions.set(channelName, subscription);
     }
 
-    logger.debug('subscribeAllSubscriptions', this.stompSubscriptions);
+    logger.debug('subscribeAll - stompSubscribers:', this.stompSubscribers);
   }
 
+  // TODO: enqueueJob으로 개선
   private doAsyncJobSafely(job: () => void) {
     if (!this.isConnected) {
       this.connectWaitQueue.push(job);

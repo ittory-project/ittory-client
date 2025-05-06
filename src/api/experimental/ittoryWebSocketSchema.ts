@@ -1,8 +1,11 @@
+import { SessionLogger } from '../../utils/SessionLogger';
 import { WsEnterResponse, WsExitResponse, WsResponse } from '../model/WsModel';
 import {
   RequestMapperDefinition,
   ResponseMapperDefinition,
 } from './TypeSafeWebSocket';
+
+const logger = new SessionLogger('websocket-infra');
 
 export const ittoryRequestMapperDefinition = {
   writeLetterElement: {
@@ -40,6 +43,7 @@ export const userResponseMapperDefinition = {
       }) =>
       (payload) => {
         const response = JSON.parse(payload) as WsResponse;
+        logger.debug('letter response', response);
         switch (response.action) {
           case 'START':
             handlers.start?.();

@@ -18,9 +18,7 @@ export const createStompClient = (): Client => {
     connectHeaders: {
       Authorization: authorization,
     },
-    debug: (str) => {
-      logger.debug(``, str);
-    },
+    debug: logger.debug.bind(logger),
     // NOTE: 토큰 갱신 시 기본값인 5000ms는 너무 길어서, 500ms 대기 후 재연결
     reconnectDelay: WEBSOCKET_CONFIG.RECONNECT_DELAY,
     logRawCommunication: true,
