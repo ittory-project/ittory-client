@@ -23,5 +23,6 @@ export const activateDefaultLog = () => {
     'menu',
     'commonError',
     'browserInfo',
+    'websocket-infra',
   ]);
 };

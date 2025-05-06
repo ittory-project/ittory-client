@@ -69,13 +69,19 @@ export class TypeSafeWebSocket<
 
     // stomp-specific
     this.stompClient = createStompClient();
-    this.stompClient.onConnect = () => {
+    this.stompClient.onConnect = (iframe) => {
+      logger.debug('onConnect', iframe);
+
       this.connectWaitQueue.forEach((job) => job());
       this.connectWaitQueue = [];
       this.isConnected = true;
     };
-    this.stompClient.onDisconnect = () => {
+    this.stompClient.onDisconnect = (iframe) => {
+      logger.debug('onDisconnect', iframe); //호출되지 않음
       this.isConnected = false;
+    };
+    this.stompClient.onWebSocketClose = (event) => {
+      logger.debug('onWebSocketClose', event);
     };
     this.stompClient.activate();
   }
@@ -109,6 +115,8 @@ export class TypeSafeWebSocket<
 
     logger.debug('channelListeners', channelListeners, this.channelListeners);
     logger.debug('currentListener', currentListener);
+
+    // TODO: reconnect 시 다시 연결해야 함
 
     // 아직 구독 중이지 않으면 구독 필요
     if (!this.subscriptions.has(channelName)) {

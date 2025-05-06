@@ -1,3 +1,4 @@
+import { WsEnterResponse, WsExitResponse, WsResponse } from '../model/WsModel';
 import {
   RequestMapperDefinition,
   ResponseMapperDefinition,
@@ -32,18 +33,26 @@ export const userResponseMapperDefinition = {
     channelMapper: (letterId: number) => `/topic/letter/${letterId}`,
     responseMapper:
       (handlers: {
-        exit?: (_payload: string) => void;
-        submit?: (_payload: number) => void;
-        timeout?: (_payload: boolean) => void;
+        start?: () => void;
+        enter?: (_response: WsEnterResponse) => void;
+        exit?: (_response: WsExitResponse) => void;
+        end?: () => void;
       }) =>
       (payload) => {
-        const parsedPayload = JSON.parse(payload);
-        if (Math.random() > 0.5) {
-          handlers.exit?.('exit');
-        } else if (Math.random() > 0.3) {
-          handlers.submit?.(1);
-        } else {
-          handlers.timeout?.(true);
+        const response = JSON.parse(payload) as WsResponse;
+        switch (response.action) {
+          case 'START':
+            handlers.start?.();
+            break;
+          case 'ENTER':
+            handlers.enter?.(response as WsEnterResponse);
+            break;
+          case 'EXIT':
+            handlers.exit?.(response as WsExitResponse);
+            break;
+          case 'END':
+            handlers.end?.();
+            break;
         }
       },
   },
