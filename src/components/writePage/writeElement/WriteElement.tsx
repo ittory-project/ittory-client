@@ -68,7 +68,10 @@ export const WriteElement = ({
       return;
     }
 
-    wsApi.send('writeLetterElement', [letterNumId, sequence, text]);
+    wsApi.send('writeLetterElement', [letterNumId], {
+      sequence,
+      content: text,
+    });
   };
 
   // 접속 시 무조건 focusing 되도록 해야 키보드가 올라온다.
