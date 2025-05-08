@@ -145,8 +145,8 @@ export const WriteElement = ({
             setBottomOffset(0);
           }
         } else {
-          setKeyboardVisible(true); // 로컬 테스트 용
-          //setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
+          //setKeyboardVisible(true); // 로컬 테스트 용
+          setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
           setBottomOffset(0); // 키보드 높이를 0으로 설정
         }
       }
@@ -168,7 +168,10 @@ export const WriteElement = ({
       <Content
         isMobile={keyboardVisible}
         style={{
-          paddingBottom: keyboardVisible ? `${bottomOffset}px` : '0',
+          paddingBottom: keyboardVisible ? `${bottomOffset}px` : '0px',
+          maxHeight: keyboardVisible
+            ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
+            : undefined,
         }}
       >
         <Header isMobile={keyboardVisible}>
@@ -253,8 +256,6 @@ const Content = styled.div<{ isMobile: boolean }>`
         width: 100%;
         flex-grow: 1; // 세로 공간 꽉 채움
         overflow-y: auto;
-        max-height: calc(var(--vh, 1vh) * 100);
-        padding-bottom: 20px;
 
         &::-webkit-scrollbar {
           display: none;
