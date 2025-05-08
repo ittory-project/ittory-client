@@ -145,21 +145,21 @@ export const WriteElement = ({
             setBottomOffset(0);
           }
         } else {
-          //setKeyboardVisible(true); // 로컬 테스트 용
-          setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
+          setKeyboardVisible(true); // 로컬 테스트 용
+          //setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
           setBottomOffset(0); // 키보드 높이를 0으로 설정
         }
       }
     };
 
     window.visualViewport?.addEventListener('resize', handleResize);
-    window.visualViewport?.addEventListener('scroll', handleResize);
+    //window.visualViewport?.addEventListener('scroll', handleResize);
 
     handleResize();
 
     return () => {
       window.visualViewport?.removeEventListener('resize', handleResize);
-      window.visualViewport?.removeEventListener('scroll', handleResize);
+      //window.visualViewport?.removeEventListener('scroll', handleResize);
     };
   }, []);
 
