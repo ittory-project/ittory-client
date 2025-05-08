@@ -199,6 +199,13 @@ export const WriteElement = ({
 
   return (
     <Container isMobile={mobile}>
+      <Header isMobile={mobile}>
+        <ClockText>
+          <ClockIcon src="/assets/write/clock.svg" />
+          {Math.max(0, Math.floor(progressTime))}초
+        </ClockText>
+        <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
+      </Header>
       <Content
         isMobile={mobile}
         style={{
@@ -208,13 +215,6 @@ export const WriteElement = ({
             : undefined,
         }}
       >
-        <Header isMobile={mobile}>
-          <ClockText>
-            <ClockIcon src="/assets/write/clock.svg" />
-            {Math.max(0, Math.floor(progressTime))}초
-          </ClockText>
-          <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
-        </Header>
         <PhotoDiv isMobile={mobile}>
           <LetterImage src={'' + elementImg} onError={handleImageError} />
         </PhotoDiv>
