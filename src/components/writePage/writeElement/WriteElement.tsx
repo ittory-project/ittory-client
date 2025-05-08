@@ -126,40 +126,6 @@ export const WriteElement = ({
     checkInitialDevice();
   }, []);
 
-  /*useEffect(() => {
-    const handleResize = () => {
-      let keyboardHeight = 0;
-      if (window.visualViewport) {
-        keyboardHeight = window.innerHeight - window.visualViewport.height;
-      } else {
-        keyboardHeight =
-          window.innerHeight - document.documentElement.clientHeight;
-      }
-
-      if (keyboardHeight < 0) {
-        keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
-      }
-
-      if (keyboardHeight > 0) {
-        if (window.innerWidth < 850) {
-          setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
-        } else {
-          setBottomOffset(0);
-        }
-      } else {
-        setBottomOffset(0); // 키보드 높이를 0으로 설정
-      }
-    };
-
-    window.visualViewport?.addEventListener('resize', handleResize);
-
-    handleResize();
-
-    return () => {
-      window.visualViewport?.removeEventListener('resize', handleResize);
-    };
-  }, []);*/
-
   useEffect(() => {
     const setVh = () => {
       const vh = window.innerHeight * 0.01;
@@ -182,6 +148,8 @@ export const WriteElement = ({
       } else {
         setBottomOffset(0);
       }
+
+      setVh();
     };
 
     setVh();
@@ -198,22 +166,24 @@ export const WriteElement = ({
 
   return (
     <Container isMobile={mobile}>
+      <Header isMobile={mobile}>
+        <ClockText>
+          <ClockIcon src="/assets/write/clock.svg" />
+          {Math.max(0, Math.floor(progressTime))}초
+        </ClockText>
+        <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
+      </Header>
       <Content
         isMobile={mobile}
         style={{
           //paddingBottom: mobile ? `10px` : '0px',
-          height: mobile
+          /*height: mobile
             ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
-            : undefined,
+            : undefined,*/
+          height: `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`,
+          bottom: `${bottomOffset - 2}px`,
         }}
       >
-        <Header isMobile={mobile}>
-          <ClockText>
-            <ClockIcon src="/assets/write/clock.svg" />
-            {Math.max(0, Math.floor(progressTime))}초
-          </ClockText>
-          <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
-        </Header>
         <PhotoDiv isMobile={mobile}>
           <LetterImage src={'' + elementImg} onError={handleImageError} />
         </PhotoDiv>
