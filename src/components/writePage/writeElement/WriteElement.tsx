@@ -161,12 +161,19 @@ export const WriteElement = ({
   }, []);
 
   return (
-    <Container isMobile={mobile}>
+    <Container
+      isMobile={mobile}
+      style={{
+        height: mobile
+          ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
+          : 'calc(var(--vh, 1vh) * 100)',
+      }}
+    >
       <Content
         isMobile={mobile}
         style={{
           //paddingBottom: mobile ? `${bottomOffset}px` : '0px',
-          maxHeight: mobile
+          height: mobile
             ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
             : undefined,
         }}
@@ -230,7 +237,6 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   width: 100vw;
   min-width: 300px;
-  height: calc(var(--vh, 1vh) * 100);
 
   padding: 10px 0;
 
@@ -251,7 +257,6 @@ const Content = styled.div<{ isMobile: boolean }>`
     isMobile
       ? `
         width: 100%;
-        flex-grow: 1; // 세로 공간 꽉 채움
         overflow-y: auto;
 
         &::-webkit-scrollbar {
