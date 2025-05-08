@@ -114,13 +114,13 @@ export const WriteElement = ({
     };
   }, []);
 
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const [bottomOffset, setBottomOffset] = useState<number>(0);
 
   useEffect(() => {
     const checkInitialDevice = () => {
       const isMobile = window.innerWidth < 850;
-      setKeyboardVisible(isMobile); // 초기 화면 크기 기반 설정
+      setMobile(isMobile); // 초기 화면 크기 기반 설정
     };
 
     checkInitialDevice();
@@ -128,59 +128,57 @@ export const WriteElement = ({
 
   useEffect(() => {
     const handleResize = () => {
+      let keyboardHeight = 0;
       if (window.visualViewport) {
-        let keyboardHeight = window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
+        keyboardHeight = window.innerHeight - window.visualViewport.height;
+      } else {
+        keyboardHeight =
+          window.innerHeight - document.documentElement.clientHeight;
+      }
 
-        if (keyboardHeight < 0) {
-          keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
-        }
+      if (keyboardHeight < 0) {
+        keyboardHeight = Math.max(0, keyboardHeight); // 음수는 0으로 처리
+      }
 
-        if (keyboardHeight > 0) {
-          if (window.innerWidth < 850) {
-            setKeyboardVisible(true);
-            setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
-          } else {
-            setKeyboardVisible(false);
-            setBottomOffset(0);
-          }
+      if (keyboardHeight > 0) {
+        if (window.innerWidth < 850) {
+          setBottomOffset(keyboardHeight); // 키보드 높이가 0 이상인 경우만 설정
         } else {
-          //setKeyboardVisible(true); // 로컬 테스트 용
-          setKeyboardVisible(false); // 키보드가 닫히면 키보드 상태를 숨김
-          setBottomOffset(0); // 키보드 높이를 0으로 설정
+          setBottomOffset(0);
         }
+      } else {
+        setBottomOffset(0); // 키보드 높이를 0으로 설정
       }
     };
 
     window.visualViewport?.addEventListener('resize', handleResize);
-    //window.visualViewport?.addEventListener('scroll', handleResize);
 
     handleResize();
 
     return () => {
       window.visualViewport?.removeEventListener('resize', handleResize);
-      //window.visualViewport?.removeEventListener('scroll', handleResize);
     };
   }, []);
 
   return (
-    <Container isMobile={keyboardVisible}>
+    <Container isMobile={mobile}>
       <Content
-        isMobile={keyboardVisible}
+        isMobile={mobile}
         style={{
-          paddingBottom: keyboardVisible ? `${bottomOffset}px` : '0px',
-          maxHeight: keyboardVisible
+          //paddingBottom: mobile ? `${bottomOffset}px` : '0px',
+          maxHeight: mobile
             ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
             : undefined,
         }}
       >
-        <Header isMobile={keyboardVisible}>
+        <Header isMobile={mobile}>
           <ClockText>
             <ClockIcon src="/assets/write/clock.svg" />
             {Math.max(0, Math.floor(progressTime))}초
           </ClockText>
           <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
         </Header>
-        <PhotoDiv isMobile={keyboardVisible}>
+        <PhotoDiv isMobile={mobile}>
           <LetterImage src={'' + elementImg} onError={handleImageError} />
         </PhotoDiv>
         <WriteContent>
