@@ -119,6 +119,15 @@ export const WriteElement = ({
   const [bottomOffset, setBottomOffset] = useState<number>(0);
 
   useEffect(() => {
+    const checkInitialDevice = () => {
+      const isMobile = window.innerWidth < 850;
+      setKeyboardVisible(isMobile); // 초기 화면 크기 기반 설정
+    };
+
+    checkInitialDevice();
+  }, []);
+
+  useEffect(() => {
     const handleResize = () => {
       if (window.visualViewport) {
         let keyboardHeight = window.innerHeight - window.visualViewport.height; // 키보드 높이 계산
@@ -159,7 +168,7 @@ export const WriteElement = ({
       <Content
         isMobile={keyboardVisible}
         style={{
-          marginBottom: keyboardVisible ? `${bottomOffset}px` : '0',
+          paddingBottom: keyboardVisible ? `${bottomOffset}px` : '0',
         }}
       >
         <Header isMobile={keyboardVisible}>
@@ -227,13 +236,7 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   background: rgba(0, 0, 0, 0.6);
 
-  overflow: auto;
-  /* 스크롤바 숨기기 */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  overflow: hidden;
 `;
 
 const Content = styled.div<{ isMobile: boolean }>`
@@ -245,9 +248,24 @@ const Content = styled.div<{ isMobile: boolean }>`
   align-items: flex-start;
 
   ${({ isMobile }) =>
-    isMobile ? 'width:100%;' : 'width:95%;border-radius: 20px;'}
+    isMobile
+      ? `
+        width: 100%;
+        flex-grow: 1; // 세로 공간 꽉 채움
+        overflow-y: auto;
+        max-height: calc(var(--vh, 1vh) * 100);
+        padding-bottom: 20px;
 
-  background: var(--color-black-white-white, #fff);
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      `
+      : `
+        width: 95%;
+        border-radius: 20px;
+      `}
+
+  background: white;
 `;
 
 const Header = styled.div<{ isMobile: boolean }>`
