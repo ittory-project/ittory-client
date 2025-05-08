@@ -126,7 +126,7 @@ export const WriteElement = ({
     checkInitialDevice();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const handleResize = () => {
       let keyboardHeight = 0;
       if (window.visualViewport) {
@@ -158,21 +158,50 @@ export const WriteElement = ({
     return () => {
       window.visualViewport?.removeEventListener('resize', handleResize);
     };
+  }, []);*/
+
+  useEffect(() => {
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    const handleResize = () => {
+      let keyboardHeight = 0;
+      if (window.visualViewport) {
+        keyboardHeight = window.innerHeight - window.visualViewport.height;
+      } else {
+        keyboardHeight =
+          window.innerHeight - document.documentElement.clientHeight;
+      }
+
+      keyboardHeight = Math.max(0, keyboardHeight); // 음수 방지
+
+      if (window.innerWidth < 850) {
+        setBottomOffset(keyboardHeight);
+      } else {
+        setBottomOffset(0);
+      }
+    };
+
+    setVh();
+    handleResize();
+
+    window.addEventListener('resize', setVh);
+    window.visualViewport?.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', setVh);
+      window.visualViewport?.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
-    <Container
-      isMobile={mobile}
-      style={{
-        height: mobile
-          ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
-          : 'calc(var(--vh, 1vh) * 100)',
-      }}
-    >
+    <Container isMobile={mobile}>
       <Content
         isMobile={mobile}
         style={{
-          //paddingBottom: mobile ? `${bottomOffset}px` : '0px',
+          //paddingBottom: mobile ? `10px` : '0px',
           height: mobile
             ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
             : undefined,
@@ -237,6 +266,7 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   width: 100vw;
   min-width: 300px;
+  height: calc(var(--vh, 1vh) * 100);
 
   padding: 10px 0;
 
