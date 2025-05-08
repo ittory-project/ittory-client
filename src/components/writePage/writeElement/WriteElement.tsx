@@ -152,13 +152,13 @@ export const WriteElement = ({
     };
 
     window.visualViewport?.addEventListener('resize', handleResize);
-    window.visualViewport?.addEventListener('scroll', handleResize);
+    //window.visualViewport?.addEventListener('scroll', handleResize);
 
     handleResize();
 
     return () => {
       window.visualViewport?.removeEventListener('resize', handleResize);
-      window.visualViewport?.removeEventListener('scroll', handleResize);
+      //window.visualViewport?.removeEventListener('scroll', handleResize);
     };
   }, []);
 
@@ -167,7 +167,10 @@ export const WriteElement = ({
       <Content
         isMobile={keyboardVisible}
         style={{
-          paddingBottom: keyboardVisible ? `${bottomOffset}px` : '0',
+          paddingBottom: keyboardVisible ? `${bottomOffset}px` : '0px',
+          maxHeight: keyboardVisible
+            ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
+            : undefined,
         }}
       >
         <Header isMobile={keyboardVisible}>
@@ -252,8 +255,6 @@ const Content = styled.div<{ isMobile: boolean }>`
         width: 100%;
         flex-grow: 1; // 세로 공간 꽉 채움
         overflow-y: auto;
-        max-height: calc(var(--vh, 1vh) * 100);
-        padding-bottom: 20px;
 
         &::-webkit-scrollbar {
           display: none;
