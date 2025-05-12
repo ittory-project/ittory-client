@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import tanStackQuery from '@tanstack/eslint-plugin-query';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -12,6 +13,7 @@ export default tseslint.config({
   extends: [
     js.configs.recommended,
     ...tseslint.configs.recommended,
+    ...tanStackQuery.configs['flat/recommended'], // @see https://tanstack.com/query/v5/docs/eslint/eslint-plugin-query#recommended-setup
     prettierRecommended,
   ],
   files: ['**/*.{js,jsx,ts,tsx}'],
