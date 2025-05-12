@@ -1,34 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Client } from '@stomp/stompjs';
-import { useDispatch, useSelector } from 'react-redux';
+import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { decodeLetterId } from '../../api/config/base64';
-import { getUserIdFromLocalStorage } from '../../api/config/setToken';
-import {
-  AppDispatch,
-  addData,
-  selectParsedData,
-  selectParsedOrderData,
-  setOrderData,
-} from '../../api/config/state';
-import { stompClient } from '../../api/config/stompInterceptor';
-import {
-  LetterItem,
-  LetterPartiItem,
-  LetterPartiListGetResponse,
-  LetterStartInfoGetResponse,
-} from '../../api/model/LetterModel';
-import { LetterItemResponse, WsExitResponse } from '../../api/model/WsModel';
-import {
-  getLetterPartiList,
-  getLetterStartInfo,
-} from '../../api/service/LetterService';
+import { ElementResponse } from '../../api/model/ElementModel';
+import { letterQuery, userQuery } from '../../api/queries';
+import { postPartiLetterBox } from '../../api/service/LetterBoxService';
+import { getWebSocketApi } from '../../api/websockets';
+import { useDialog } from '../../hooks';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
-import { WriteExit } from './WriteExit';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { WriteLocation } from './WriteLocation';
 import { WriteOrderAlert } from './WriteOrderAlert';
@@ -39,573 +22,185 @@ import { WriteOrderList } from './writeMainList/WriteOrderList';
 
 const logger = new SessionLogger('write');
 
-interface WriteElementProps {
-  remainingTime: number;
-  // resetTime: number | null;
-  setResetTime: React.Dispatch<React.SetStateAction<number | null>>;
-  letterTitle: string;
-}
-
-// 작성 현황을 볼 수 있는 페이지
-// /write/:letterId
-// letterId: base64로 인코딩한 편지 아이디
-// [TODO]: 다음 차례로 넘어갔을 때 setProgressTime을 통해 타이머 리셋
-export const Write = ({
-  remainingTime,
-  /// resetTime,
-  setResetTime,
-  letterTitle,
-}: WriteElementProps) => {
+export const Write = () => {
   const navigate = useNavigate();
-  // redux 사용을 위한 dispatch
-  const dispatch = useDispatch<AppDispatch>();
-  // 편지 아이디 식별
-  const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  // redux 값 가져오기
-  const data = useSelector(selectParsedData);
-  const [letterItems, setLetterItems] = useState<LetterItem[]>(data);
-  // 진행 순서
-  const orderData = useSelector(selectParsedOrderData);
-  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>([]);
-  // 현재 유저의 멤버 아이디
-  const [nowMemberId, setNowMemberId] = useState(0);
-  // 다음 유저의 멤버 아이디 (상단바 설정용)
-  const [nextMemberId, setNextMemberId] = useState(0);
-  // 현재 작성해야 하는 편지 아이디
-  const storedNowLetterId = window.localStorage.getItem('nowLetterId');
-  const [nowLetterId, setNowLetterId] = useState(
-    Number(storedNowLetterId || 1),
-  );
-  // 현재 유저 순서(sequence)
-  const storedNowSequence = window.localStorage.getItem('nowSequence');
-  const [nowSequence, setNowSequence] = useState(
-    Number(storedNowSequence || 1),
-  );
-  // 현재 반복 횟수
-  const storedNowRepeat = window.localStorage.getItem('nowRepeat');
-  const [nowRepeat] = useState(Number(storedNowRepeat || 1));
-  // 전체 편지 아이템 횟수
-  const storedTotalItem = window.localStorage.getItem('totalItem');
-  const [totalItem, setTotalItem] = useState(Number(storedTotalItem || 1));
-  // 현재 예정 편지 아이템 횟수
-  const storedNowTotalItem = window.localStorage.getItem('nowTotalItem');
-  const [nowTotalItem, setNowTotalItem] = useState(
-    Number(storedNowTotalItem || 1),
-  );
-  // 총 참여자 수
-  const [partiNum, setPartiNum] = useState(-1);
-  // 총 반복 횟수
-  const [, setRepeatNum] = useState(-1);
-  // 잠금된 아이템
-  const [lockedItems, setLockedItems] = useState<LetterItem[]>([]);
-  // 퇴장 정보
-  const [exitUser, setExitUser] = useState('');
-  // 퇴장 팝업 띄우기
-  const [hasExitUser, setHasExitUser] = useState(false);
-  // 작성 페이지 보여주기
-  const [showSubmitPage, setShowSubmitPage] = useState(false);
-  // 완료 모달 보여주기
-  const [showFinishedModal, setShowFinishedModal] = useState(false);
-  // 퇴장 페이지
-  const [showExitPage, setShowExitPage] = useState(false);
-  // updateResponse flag
-  const [updateResponse, setUpdateResponse] = useState(false);
+  const queryClient = useQueryClient();
+  const wsApi = getWebSocketApi();
+  const { letterId: _letterId } = useParams();
+  const letterId = decodeLetterId(String(_letterId));
+  const [
+    { data: myInfo },
+    { data: startInfo },
+    { data: elements },
+    { data: participants },
+  ] = useSuspenseQueries({
+    queries: [
+      userQuery.myInfoQuery(),
+      letterQuery.letterStartInfoByLetterIdQuery(letterId),
+      letterQuery.elementsByLetterIdQuery(letterId),
+      letterQuery.participantsByLetterIdQuery(letterId),
+    ],
+  });
 
-  // 현재 아이템 추적
-  const nowItemRef = useRef<HTMLDivElement | null>(null);
-  const [isNowItemVisible, setIsNowItemVisible] = useState(true);
+  // ErrorBoundary 구성하기
+  if (participants.participants.length === 0) {
+    throw 'Error: 참여자가 없습니다.';
+  }
+
+  const waitingElement = elements.find((element) => element.content === null);
+  const isRoomMaster =
+    participants.participants[0].memberId === myInfo.memberId;
+  const isMyTurnToWrite = waitingElement?.memberId === myInfo.memberId;
+
+  const {
+    isOpen: isExitAlertOpen,
+    openDialog: openExitAlert,
+    dialogParams: exitUser,
+  } = useDialog<string>({
+    closeTimeout: 5_000,
+  });
+
+  const { isOpen: isFinishedModalOpen, openDialog: openFinishedModal } =
+    useDialog({ closeTimeout: 5_000 });
+
+  const [isWriting, setIsWriting] = useState(false);
+
+  const openWritingDialog = () => {
+    setIsWriting(true);
+  };
+
+  const handleWriteSubmit = (content: string) => {
+    if (!waitingElement) {
+      return;
+    }
+
+    logger.debug('작성 정보 전송: ', content);
+    wsApi.send('writeLetterElement', [letterId], {
+      elementId: waitingElement.elementId,
+      content,
+    });
+    closeWritingDialog();
+  };
+
+  const closeWritingDialog = () => {
+    setIsWriting(false);
+  };
 
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
-  if (!letterNumId) {
+  if (!letterId) {
     throw 'Error: 잘못된 접근입니다.';
   }
 
-  // 각각의 아이템들을 세션에서 가져올 수 있도록 하기
   useEffect(() => {
-    window.localStorage.setItem('nowLetterId', String(nowLetterId));
-  }, [nowLetterId]);
-  useEffect(() => {
-    window.localStorage.setItem('nowSequence', String(nowSequence));
-  }, [nowSequence]);
-  useEffect(() => {
-    window.localStorage.setItem('nowRepeat', String(nowRepeat));
-  }, [nowRepeat]);
-  useEffect(() => {
-    window.localStorage.setItem('totalItem', String(totalItem));
-  }, [totalItem]);
-  useEffect(() => {
-    window.localStorage.setItem('nowTotalItem', String(nowTotalItem));
-  }, [nowTotalItem]);
-  useEffect(() => {
-    setWriteOrderList(orderData);
-    logger.debug(orderData);
-  }, [orderData]);
-
-  // 편지 데이터가 변경될 때마다 redux에서 편지 아이템들을 불러오고 세팅한다.
-  useEffect(() => {
-    setLetterItems(data);
-  }, [data]);
-
-  // 편지 작성 순서가 변경되거나, 새로 작성이 완료됐을 때마다 Redux에서 순서를 불러오고 세팅한다.
-  useEffect(() => {
-    setWriteOrderList(orderData);
-    // orderData의 변경 외에, 응답이 왔을 때 응답에 대한 내용을 처리하기 위함
-    // response를 받았을 때
-    if (updateResponse && remainingTime > -5) {
-      updateOrderAndLockedItems();
-      setShowSubmitPage(false);
-      setUpdateResponse(false);
-      setResetTime(Date.now() + 100 * 1000);
-      window.localStorage.setItem('resetTime', String(Date.now() + 100 * 1000));
-    }
-  }, [orderData, updateResponse]);
-
-  useEffect(() => {
-    // 5초를 기다렸는데도 response가 오지 않았을 때
-    if (remainingTime <= -5) {
-      updateOrderAndLockedItems();
-      setShowSubmitPage(false);
-    }
-  }, [remainingTime]);
-
-  // useEffect(() => {
-  //   if (resetTime !== null) {
-  //     setResetTime(Date.now() + 100 * 1000);
-  //   }
-  // }, [nowLetterId]);
-
-  // 편지 작성 시 이탈 처리
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        logger.debug('백그라운드 전환');
-      } else if (document.visibilityState === 'visible') {
-        logger.debug('다시돌아옴');
-        const storedResetTime = window.localStorage.getItem('resetTime');
-        if (storedResetTime && Date.now() > Number(storedResetTime)) {
-          logger.debug('턴이 넘어가서 퇴장됨');
-          clientRef.current?.deactivate();
-          setShowExitPage(true);
-          clientRef.current?.deactivate();
-        }
-      }
-    };
-
-    const handlePageHide = (event: PageTransitionEvent) => {
-      window.alert(event);
-      if (!event.persisted) {
-        logger.debug('Page hide');
-        clientRef.current?.deactivate();
-        event.preventDefault();
-        event.returnValue = true; // 경고창 표시
-      }
-    };
-    // 리스너
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('pagehide', handlePageHide);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('pagehide', handlePageHide);
-    };
-  }, [letterNumId]);
-
-  // client 객체를 WriteElement.tsx에서도 사용해야 해서 props로 넘겨주기 위한 설정을 함
-  const clientRef = useRef<Client | null>(null);
-  // 외부 값 받아오기 위해 구독만 + 퇴장 감지
-  useEffect(() => {
-    const client = stompClient();
-    clientRef.current = client;
-    client.onConnect = () => {
-      client.subscribe(
-        `/topic/letter/${letterNumId}`,
-        (message: { body: string }) => {
-          const response: LetterItemResponse | WsExitResponse = JSON.parse(
-            message.body,
-          );
-
-          if ('action' in response && response.action === 'EXIT') {
-            const exitResponse = response as WsExitResponse;
-            logger.debug('퇴장 정보: ', exitResponse);
-            fetchParticipantsAndUpdateLockedItems();
-            setExitUser(exitResponse.nickname);
-          } else if ('elementId' in response) {
-            const letterResponse = response as LetterItemResponse;
-            logger.debug('작성 내용: ', letterResponse);
-            const responseToLetterItem: LetterItem = {
-              elementId: Number(response.elementId),
-              content: response.content,
-              userNickname: response.nickname,
-              letterImg: response.imageUrl,
-            };
-            dispatch(addData(responseToLetterItem));
-            setLetterItems((prevItems) => [...prevItems, responseToLetterItem]);
-            // 아래의 두 동작을 useState로 분리함: redux로 불러오는 것에 약간의 딜레이가 발생, useState로 저장하는 데에도 약간의 딜레이가 발생함
-            // 해결방법: updateResponse라는 flag를 만들어 현재 업데이트를 해야 하는 상황인지 아닌지 판단 후 useEffect에서 실행
-            // updateOrderAndLockedItems();
-            // setShowSubmitPage(false)
-            setUpdateResponse(true);
-          }
-        },
-      );
-    };
-    client.activate();
-
-    return () => {
-      (async () => {
-        client.deactivate();
-      })();
-    };
-  }, [dispatch, letterNumId]);
-
-  // 현재 반복 순서, 현재 멤버 아이디, 현재 편지 아이디 세팅
-  // 편지 아이템이 작성됐을 때
-  const updateOrderAndLockedItems = async () => {
-    if (writeOrderList.length > 0) {
-      const currentIndex = writeOrderList.findIndex(
-        (item) => item.sequence === nowSequence,
-      );
-      const nextIndex = (currentIndex + 1) % writeOrderList.length;
-      // 상태 업데이트
-      setNowSequence(writeOrderList[nextIndex].sequence);
-      setNowMemberId(writeOrderList[nextIndex].memberId);
-      logger.debug(
-        '다음 사람 인덱스: ',
-        (nextIndex + 1) % partiNum,
-        '다음 사람 누구 (멤버 아이디): ',
-        writeOrderList[(nextIndex + 1) % partiNum].memberId,
-      );
-      setNextMemberId(writeOrderList[(nextIndex + 1) % partiNum].memberId);
-      if (remainingTime <= -5) {
-        setResetTime(Date.now() + 100 * 1000);
-        window.localStorage.setItem(
-          'resetTime',
-          String(Date.now() + 100 * 1000),
-        );
-      } else {
-        setNowLetterId((prevNowLetterId) => prevNowLetterId + 1);
-        if (nowLetterId >= nowTotalItem) {
-          setShowFinishedModal(true);
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    logger.debug(
-      `현재 진행하는 유저의 순서: ${nowSequence}, 현재 진행하는 유저의 아이디: ${nowMemberId}, 편지인덱스: ${nowLetterId}`,
-    );
-    logger.debug(
-      `다음 멤버 아이디: ${nextMemberId}, 현재 멤버 아이디: ${nowMemberId}, 나: ${Number(getUserIdFromLocalStorage())}`,
-    );
-  }, [nowSequence, nowMemberId, nowLetterId]);
-
-  // 참여자 리스트를 불러와서 다시 세팅하고, 잠금 아이템을 표시한다.
-  // 유저 퇴장 또는 시작 시
-  const fetchParticipantsAndUpdateLockedItems = async () => {
-    const response: LetterPartiListGetResponse =
-      await getLetterPartiList(letterNumId);
-    setPartiNum(response.participants.length);
-    // 마지막 순서에서 이탈했다면
-    if (nowSequence > response.participants.length) {
-      setNowSequence((prevNowLetterId) => prevNowLetterId - 1);
-    }
-    dispatch(setOrderData(response.participants));
-
-    // 계산 로직
-    logger.debug(`현재 작성 숫자: ${nowLetterId}`);
-    logger.debug(
-      `현재 총 아이템 수: ${totalItem - ((totalItem - nowSequence + 1) % partiNum)}`,
-    );
-    // setNowTotalItem(totalItem - ((totalItem - nowSequence + 1) % partiNum));
-    setNowTotalItem(totalItem);
-    // writeOrderList가 업데이트 된 후에 locked items 세팅
-    if (writeOrderList.length > 0) {
-      setLockedWriteItems();
-    }
-  };
-
-  const fetchRepeatCount = async () => {
-    const info: LetterStartInfoGetResponse =
-      await getLetterStartInfo(letterNumId);
-    setRepeatNum(info.repeatCount);
-    setTotalItem(info.elementCount);
-  };
-
-  // 참여자 목록 불러오기
-  // 컴포넌트가 처음 렌더링될 때 참여자 목록을 불러옵니다.
-  useEffect(() => {
-    const initialize = async () => {
-      await fetchRepeatCount();
-      await fetchParticipantsAndUpdateLockedItems();
-
-      if (writeOrderList.length > 0) {
-        setNowMemberId(writeOrderList[nowSequence - 1].memberId);
-        logger.debug(
-          '다음 사람 인덱스: ',
-          1 % partiNum,
-          'partinum: ',
-          partiNum,
-          '다음 사람 멤버아이디: ',
-          writeOrderList[1 % partiNum].memberId,
-        );
-        setNextMemberId(writeOrderList[1 % partiNum].memberId);
-      }
-    };
-    initialize();
-    // initialize를 partiNum 세팅 이후에 작동되게 하고 싶은데, 만약 이렇게 하면 partiNum이 바뀌고 나서(특정 유저 퇴장 이후) 작동될 수 있어서 조치 필요
-  }, [partiNum]);
-
-  // 아직 안 쓴 유저들 리스트 보여주기용 잠금 아이템 만들기
-  const setLockedWriteItems = () => {
-    const tempItemNum = nowTotalItem - nowLetterId;
-    const currentIndex = writeOrderList.findIndex(
-      (item) => item.sequence === nowSequence,
-    );
-    const nowItem: LetterItem = {
-      elementId: nowLetterId,
-      userId: nowMemberId,
-      userNickname:
-        writeOrderList[currentIndex].nickname ||
-        `유저 ${writeOrderList[currentIndex].sequence}`,
-    };
-    const tempItems: LetterItem[] = Array.from(
-      { length: tempItemNum },
-      (_, index) => ({
-        elementId: nowLetterId + index + 1,
-      }),
-    );
-
-    if (tempItemNum < 0) {
-      setLockedItems([]);
-    } else {
-      setLockedItems([nowItem, ...tempItems]);
-    }
-  };
-  useEffect(() => {
-    // const setRepeatNum = async () => {
-    //   await fetchRepeatCount()
-    // }
-    // setRepeatNum()
-    if (writeOrderList.length > 0) {
-      setLockedWriteItems();
-    }
-    // [퇴장]: writeOrderList를 추가함
-  }, [
-    nowRepeat,
-    partiNum,
-    nowSequence,
-    nowLetterId,
-    nowMemberId,
-    writeOrderList,
-  ]);
-
-  // 퇴장 감지 후 팝업창 띄우기
-  useEffect(() => {
-    if (exitUser.length !== 0) {
-      setHasExitUser(true);
-      const timer = setTimeout(() => {
-        setHasExitUser(false);
-        setExitUser('');
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [exitUser]);
-
-  // 현재 유저 감지 후 팝업창 띄우기
-  const [nowUserPopup, setNowUserPopup] = useState<number | null>(null);
-  useEffect(() => {
-    if (
-      Number(getUserIdFromLocalStorage()) === nowMemberId &&
-      writeOrderList.length > 1
-    ) {
-      setNowUserPopup(nowMemberId);
-      const timer = setTimeout(() => {
-        setNowUserPopup(null);
-        setExitUser('');
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [nowMemberId]);
-
-  // 다음 유저 감지 후 팝업창 띄우기
-  const [nextUserPopup, setNextUserPopup] = useState<number | null>(null);
-  useEffect(() => {
-    if (
-      Number(getUserIdFromLocalStorage()) === nextMemberId &&
-      writeOrderList.length > 1
-    ) {
-      setNextUserPopup(nextMemberId);
-      const timer = setTimeout(() => {
-        setNextUserPopup(null);
-        setExitUser('');
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [nextMemberId]);
-
-  // 완료 모달 띄우는 시간 설정
-  useEffect(() => {
-    if (showFinishedModal) {
-      const Timer = setTimeout(() => {
-        setShowFinishedModal(false);
-        navigate(`/share/${letterId}?page=1`);
-      }, 5000);
-      return () => clearTimeout(Timer);
-    }
-  }, [showFinishedModal]);
-
-  // 처음에 시작하기 전 페이지에 이거 넣기
-  // const handleClearData = () => {
-  //   dispatch(clearOrderData())
-  //   dispatch(clearData());
-  //   window.localStorage.setItem('nowLetterId', "1")
-  //   window.localStorage.setItem('nowSequence', "1")
-  //   window.localStorage.setItem('nowRepeat', "1")
-  //   window.localStorage.setItem('totalItem', "1")
-  //   window.localStorage.setItem('resetTime', "")
-  // };
-
-  // 위치 버튼 누르면 그 부분으로 이동하는 액션
-  const [nowItemId, setNowItemId] = useState<number | undefined>(undefined);
-  const goWritePage = () => {
-    handleScrollTo(nowLetterId + 1);
-    setTimeout(() => {
-      setNowItemId(undefined);
-    }, 1000);
-  };
-  const handleScrollTo = (id: number) => {
-    setNowItemId(id);
-  };
-
-  // 작성 페이지 이동
-  const handleWritePage = () => {
-    setShowSubmitPage(true);
-  };
-
-  // 위치 아이콘 (내 차례)
-  useEffect(() => {
-    let observer: IntersectionObserver | null = null;
-
-    const setupObserver = () => {
-      if (nowItemRef.current) {
-        observer = new IntersectionObserver(
-          ([entry]) => {
-            setIsNowItemVisible(entry.isIntersecting);
+    const unsubscribe = wsApi.subscribe('letter', [letterId], {
+      write(response) {
+        logger.debug('ws 응답으로 cache 갱신');
+        queryClient.setQueryData(
+          letterQuery.queryKeys.elementsByLetterId(letterId),
+          (currentData: ElementResponse[]) => {
+            return currentData.map((element) => {
+              if (element.elementId === response.completedElement.elementId) {
+                return response.completedElement;
+              }
+              if (element.elementId === response.upcomingElement.elementId) {
+                return response.upcomingElement;
+              }
+              return element;
+            });
           },
-          { threshold: 1 }, // 화면에 100% 보여질 때만
         );
+      },
+      timeout() {
+        logger.debug('타임 아웃!');
+        queryClient.invalidateQueries({
+          queryKey: letterQuery.queryKeys.elementsByLetterId(letterId),
+        });
+      },
+      exit(response) {
+        logger.debug('퇴장!', response);
+        openExitAlert(response.nickname);
+        queryClient.invalidateQueries({
+          queryKey: letterQuery.queryKeys.byLetterId(letterId),
+        });
+      },
+      async finish() {
+        logger.debug('완료');
+        openFinishedModal(isRoomMaster);
+        await postPartiLetterBox(letterId);
 
-        observer.observe(nowItemRef.current);
-      }
-    };
-
-    // DOM이 완전히 연결된 후 실행
-    const id = requestAnimationFrame(setupObserver);
+        // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
+        setTimeout(() => {
+          navigate(`/share/${letterId}?page=1`);
+          queryClient.invalidateQueries({
+            queryKey: letterQuery.queryKeys.byLetterId(letterId),
+          });
+        }, 5000);
+      },
+    });
 
     return () => {
-      if (observer && nowItemRef.current) {
-        observer.unobserve(nowItemRef.current);
-      }
-      cancelAnimationFrame(id);
+      logger.debug('unsubscribe call from useEffect');
+      unsubscribe();
     };
-  }, [nowItemRef.current]);
+  }, []);
 
-  // 데이터 삭제버튼
-  // <button onClick={handleClearData}>삭삭제</button>
-  return writeOrderList.length > 0 ? (
-    <Container>
-      <StickyHeader>
-        <WriteOrderTitle writeOrderList={writeOrderList} title={letterTitle} />
-      </StickyHeader>
+  return (
+    <>
+      {isFinishedModalOpen && <WriteFinishedModal />}
       <AlertContainer>
-        {nextUserPopup && (
-          <WriteOrderAlert
-            name={
-              writeOrderList[
-                writeOrderList.findIndex(
-                  (item) => item.memberId === nextMemberId,
-                )
-              ].nickname
-            }
-            isNextAlert={true}
-          />
+        {!isMyTurnToWrite && waitingElement?.nickname && (
+          <WriteOrderAlert name={waitingElement.nickname} isNextAlert={false} />
         )}
-        {nowUserPopup && (
-          <WriteOrderAlert
-            name={
-              writeOrderList[
-                writeOrderList.findIndex(
-                  (item) => item.sequence === nowSequence,
-                )
-              ].nickname
-            }
-            isNextAlert={false}
-          />
-        )}
-        {hasExitUser && <WriteQuitAlert name={exitUser} />}
+        {isExitAlertOpen && exitUser && <WriteQuitAlert name={exitUser} />}
       </AlertContainer>
-      <ScrollableOrderList>
-        <WriteOrderList
-          letterItems={[...letterItems, ...lockedItems]}
-          nowItemId={nowItemId}
-          progressTime={remainingTime}
-          nowItemRef={nowItemRef}
-        />
-      </ScrollableOrderList>
-      {nowMemberId === Number(getUserIdFromLocalStorage()) &&
-      isNowItemVisible ? (
-        <ButtonContainer>
-          <Button text="작성하기" color="#FCFFAF" onClick={handleWritePage} />
-        </ButtonContainer>
-      ) : (
-        <>
-          <LocationContainer onClick={goWritePage}>
-            <WriteLocation
-              progressTime={Math.max(0, remainingTime)}
-              name={
-                writeOrderList.find((item) => item.sequence === nowSequence)
-                  ?.nickname || ''
-              }
-              profileImage={
-                writeOrderList.find((item) => item.sequence === nowSequence)
-                  ?.imageUrl || ''
-              }
-            />
-          </LocationContainer>
-          <AlertContainer>
-            <WriteOrderAlert
-              name={
-                writeOrderList.find((item) => item.sequence === nowSequence)
-                  ?.nickname || ''
-              }
-              isNextAlert={false}
-            />
-          </AlertContainer>
-        </>
-      )}
-      {showSubmitPage && (
-        <ModalOverlay>
-          <WriteElement
-            sequence={nowLetterId}
-            setShowSubmitPage={setShowSubmitPage}
-            progressTime={remainingTime}
-            clientRef={clientRef}
+      <Container>
+        <StickyHeader>
+          <WriteOrderTitle
+            writeOrderList={participants.participants}
+            title={startInfo.title}
           />
+        </StickyHeader>
+        <ScrollableOrderList>
+          <WriteOrderList
+            elements={elements}
+            isMyTurnToWrite={isMyTurnToWrite}
+          />
+        </ScrollableOrderList>
+        {isMyTurnToWrite ? (
+          <ButtonContainer>
+            <Button
+              text="작성하기"
+              color="#FCFFAF"
+              onClick={openWritingDialog}
+            />
+          </ButtonContainer>
+        ) : (
+          <LocationContainer>
+            {waitingElement?.nickname && (
+              <WriteLocation
+                progressTime={0}
+                name={waitingElement.nickname}
+                profileImage={waitingElement.imageUrl}
+              />
+            )}
+          </LocationContainer>
+        )}
+        {/* TODO: 별도의 페이지로 구성하기 */}
+        {/* {showExitPage && <WriteExit reasonText="장시간 접속하지 않아서" />} */}
+      </Container>
+
+      {isWriting && (
+        <ModalOverlay>
+          {waitingElement && (
+            <WriteElement
+              element={waitingElement}
+              onSubmit={handleWriteSubmit}
+              onClose={closeWritingDialog}
+            />
+          )}
         </ModalOverlay>
       )}
-      {showFinishedModal && (
-        <WriteFinishedModal
-          isFirstUser={
-            writeOrderList[0].memberId === Number(getUserIdFromLocalStorage())
-          }
-        />
-      )}
-      {showExitPage && <WriteExit reasonText={'장시간 접속하지 않아서'} />}
-    </Container>
-  ) : (
-    <>접속 오류</>
+    </>
   );
 };
 
