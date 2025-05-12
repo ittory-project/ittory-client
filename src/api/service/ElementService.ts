@@ -19,3 +19,11 @@ export async function getElementImg(
   );
   return response.data.data;
 }
+
+export const getElementsByLetterId = (letterId: number) => {
+  return api.get(`/api/letter/${letterId}/elements`, {
+    params: {
+      letterId,
+    },
+  });
+};
