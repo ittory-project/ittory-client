@@ -16,6 +16,26 @@ export interface WsEnterResponse extends WsResponse {
   participants: Participants[];
 }
 
+export interface WsWriteResponse extends WsResponse {
+  action: 'WRITE';
+  completedElement: {
+    elementId: number;
+    imageUrl: string;
+    content: string;
+    startedAt: string;
+    memberId: number;
+    nickname: string;
+  };
+  upcomingElement: {
+    elementId: number;
+    imageUrl: string;
+    content: null;
+    startedAt: string;
+    memberId: number;
+    nickname: string;
+  };
+}
+
 export interface LetterItemResponse {
   elementId: string;
   imageUrl: string;
