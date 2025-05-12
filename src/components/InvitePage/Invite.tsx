@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import texture from '../../../public/assets/invite/texture1.png';
-import { MypageGetResponse } from '../../api/model/MemberModel';
 import { WsEnterResponse, WsExitResponse } from '../../api/model/WsModel';
+import { userQuery } from '../../api/queries';
 import { getParticipants } from '../../api/service/LetterService';
-import { getMyPage } from '../../api/service/MemberService';
 import { getWebSocketApi } from '../../api/websockets';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { HostUser } from './HostUser';
-import { Loading } from './Loading';
 import { Member } from './Member';
 
 const logger = new SessionLogger('invite');
@@ -33,29 +32,15 @@ export const Invite = () => {
   const searchParams = new URLSearchParams(location.search);
   const guideOpen = searchParams.get('guideOpen') === 'true';
 
-  const [myPageData, setMyPageData] = useState<MypageGetResponse | null>(null); // TODO: useQuery로 이관
   const [participants, setParticipants] = useState<Participants[]>([]);
 
-  const letterId = Number(params.letterId); // FIXME: 이 값으로는 조회가 안되나본데?
+  const letterId = Number(params.letterId);
 
-  logger.debug(
-    'letterId',
-    params,
-    params.letterId,
-    letterId,
-    window.location.href, // https://localhost:5173/invite/3261?guideOpen=false
-    location.pathname, // /invite/0 로 나오는 이유?
-    location.search,
-  );
-
+  const { data: myPageData } = useSuspenseQuery(userQuery.myInfoQuery());
   const [exitAlert, setExitAlert] = useState<string | null>(null);
   const [exitName, setExitName] = useState<string>(''); // ?
   const [hostAlert, setHostAlert] = useState<string | null>(null);
   const [viewDelete, setViewDelete] = useState<boolean>(false); // 필요 여부 체크 필요함
-
-  const isLoading = !myPageData || participants.length === 0;
-
-  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
 
   const isRoomMaster =
     participants[0] && participants[0].memberId === myPageData?.memberId;
@@ -65,88 +50,59 @@ export const Invite = () => {
     setParticipants(data);
   }, [letterId]);
 
-  useEffect(
-    function fetchMyPageIfNotLoaded() {
-      if (!myPageData) {
-        const fetchMyPage = async () => {
-          const mydata = await getMyPage();
-          setMyPageData(mydata);
-        };
-        fetchMyPage();
-      }
-    },
-    [myPageData],
-  );
+  useEffect(function processOnMount() {
+    logger.debug('processOnMount call');
 
-  useEffect(
-    function processOnMount() {
-      if (!myPageData || isSubscribed) {
-        return;
-      }
+    logger.debug('doInviteJobs start');
 
-      setIsSubscribed(true);
+    wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
 
-      logger.debug('doInviteJobs start');
+    const unsubscribe = wsApi.subscribe('letter', [letterId], {
+      enter: (response: WsEnterResponse) => {
+        logger.debug('enterLetter response', response);
+        setParticipants(response.participants);
+        logger.debug(
+          'after enterLetter participants',
+          participants,
+          response.participants,
+        );
+      },
+      exit: async (response: WsExitResponse) => {
+        logger.debug('exitLetter response', response);
+        await refetchParticipants();
 
-      wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
-
-      const unsubscribe = wsApi.subscribe('letter', [letterId], {
-        enter: (response: WsEnterResponse) => {
-          logger.debug('enterLetter response', response);
-          setParticipants(response.participants);
-          logger.debug(
-            'after enterLetter participants',
-            participants,
-            response.participants,
-          );
-        },
-        exit: async (response: WsExitResponse) => {
-          logger.debug('exitLetter response', response);
+        if (response.isManager) {
+          logger.debug('방장 퇴장 감지');
+          setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
           await refetchParticipants();
+          setHostAlert(
+            `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
+          );
+        } else {
+          setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
+        }
+      },
+      finish: () => {
+        logger.debug('finishLetter response');
+        setViewDelete(true);
+      },
+      start: () => {
+        logger.debug('startLetter response');
+        navigate('/Connection', {
+          state: {
+            letterId,
+            coverId: Number(localStorage.getItem('coverId')),
+            bg: localStorage.getItem('bgImg'),
+          },
+        });
+      },
+    });
 
-          if (response.isManager) {
-            logger.debug('방장 퇴장 감지');
-            setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
-            await refetchParticipants();
-            setHostAlert(
-              `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
-            );
-          } else {
-            setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
-          }
-        },
-        end: () => {
-          logger.debug('endLetter response');
-          setViewDelete(true);
-        },
-        start: () => {
-          logger.debug('startLetter response');
-          navigate('/Connection', {
-            state: {
-              letterId,
-              coverId: Number(localStorage.getItem('coverId')),
-              bg: localStorage.getItem('bgImg'),
-            },
-          });
-        },
-      });
-
-      return () => {
-        logger.debug('unsubscribe call from useEffect');
-        unsubscribe();
-      };
-    },
-    [
-      letterId,
-      navigate,
-      participants,
-      myPageData,
-      wsApi,
-      refetchParticipants,
-      isLoading,
-      isSubscribed,
-    ],
-  );
+    return () => {
+      logger.debug('unsubscribe call from useEffect');
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(
     function noticeOnExit() {
@@ -178,30 +134,24 @@ export const Invite = () => {
   // TODO: myData suspense 사용 및 로딩을 fallback으로 추출 (실제로 보이는 일은 없게 될 듯)
   return (
     <BackGround>
-      {isLoading ? (
-        <Loading loadstatus={true} />
+      {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
+      {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
+      {isRoomMaster ? (
+        <HostUser
+          guideOpen={guideOpen}
+          items={participants}
+          letterId={letterId}
+          viewDelete={viewDelete}
+          setViewDelete={setViewDelete}
+          hostname={myPageData?.name ?? ''}
+        />
       ) : (
-        <>
-          {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
-          {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
-          {isRoomMaster ? (
-            <HostUser
-              guideOpen={guideOpen}
-              items={participants}
-              letterId={letterId}
-              viewDelete={viewDelete}
-              setViewDelete={setViewDelete}
-              hostname={myPageData?.name ?? ''}
-            />
-          ) : (
-            <Member
-              letterId={letterId}
-              guideOpen={guideOpen}
-              items={participants}
-              viewDelete={viewDelete}
-            />
-          )}
-        </>
+        <Member
+          letterId={letterId}
+          guideOpen={guideOpen}
+          items={participants}
+          viewDelete={viewDelete}
+        />
       )}
     </BackGround>
   );

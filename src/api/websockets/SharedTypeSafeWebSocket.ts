@@ -111,7 +111,7 @@ export class SharedTypeSafeWebSocket<
     const channelName = this.responseDefinition[channel].channelMapper(
       ...channelMapperParams,
     );
-    logger.debug('channelName', channelName);
+    logger.debug('subscribe - channelName', channelName);
 
     // 아직 리스너 배열이 없으면 리스너 배열 생성
     const oberversForChannel = this.observersByChannel.get(channelName) ?? [];
@@ -122,14 +122,20 @@ export class SharedTypeSafeWebSocket<
     const newChannelObserver = this.responseDefinition[channel]
       .responseMapper(handlerConfig)
       .bind(this.responseDefinition[channel]);
+
     oberversForChannel.push(newChannelObserver);
 
     logger.debug(
-      'oberversForChannel',
+      'subscribe - oberversForChannel',
       oberversForChannel,
       this.observersByChannel,
     );
-    logger.debug('newChannelObserver', newChannelObserver);
+    logger.debug(
+      'subscribe - newChannelObserver: ',
+      newChannelObserver,
+      ', oberversForChannel: ',
+      oberversForChannel,
+    );
 
     // 아직 구독 중이지 않으면 구독 필요
     if (!this.stompSubscriptions.has(channelName)) {
@@ -140,20 +146,37 @@ export class SharedTypeSafeWebSocket<
           message,
           oberversForChannel,
         );
-        oberversForChannel.forEach((listener) => listener(message.body));
+
+        // oberversForChannel 로 해두면 이후의 subscriber를 호출하지 않게 됨;
+        this.observersByChannel
+          .get(channelName)
+          ?.forEach((listener) => listener(message.body));
       };
 
+      // 이미 연결되어 있는 경우 직접 subscribe 필요함
+      if (this.isConnected) {
+        const subscription = this.stompClient.subscribe(
+          channelName as string,
+          callListeners,
+        );
+        this.stompSubscriptions.set(channelName, subscription);
+      }
+
       this.stompSubscribers.set(channelName, callListeners);
+    } else {
+      logger.debug('channel is already subscribed', channelName);
     }
 
     // 모든 listeners가 없으면 구독도 종료
     return () => {
-      logger.debug('unsubscribing', channelName);
+      // 현재 시점의 최신 값을 조회해야 함.
+      const oberversForChannel = this.observersByChannel.get(channelName);
       if (!oberversForChannel) {
         throw new Error(
           'oberversForChannel not found - it should never happen',
         );
       }
+
       this.observersByChannel.set(
         channelName,
         oberversForChannel.filter(
@@ -161,11 +184,35 @@ export class SharedTypeSafeWebSocket<
         ),
       );
 
-      if (oberversForChannel.length === 0) {
-        logger.debug('no listeners left, unsubscribing', channelName);
+      logger.debug(
+        'unsubscribing',
+        channelName,
+        ', observer: ',
+        newChannelObserver,
+        ', after unsub:',
+        this.observersByChannel.get(channelName),
+      );
+
+      // 이거 실수했었네.
+      if (this.observersByChannel.get(channelName)?.length === 0) {
         this.observersByChannel.delete(channelName);
         this.stompSubscriptions.get(channelName)?.unsubscribe();
         this.stompSubscriptions.delete(channelName);
+        this.stompSubscribers.delete(channelName); // 이거 빠졌었네
+        logger.debug(
+          'no listeners left, unsubscribing',
+          channelName,
+          ', this.observersByChannel:',
+          this.observersByChannel,
+          ', this.stompSubscriptions:',
+          this.stompSubscriptions,
+        );
+      } else {
+        logger.debug(
+          'listeners left, not unsubscribing',
+          channelName,
+          oberversForChannel,
+        );
       }
     };
   }
