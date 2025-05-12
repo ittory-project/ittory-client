@@ -1,29 +1,15 @@
 import { ApiResponse, api } from '../config/api';
-import { ElementImgGetResponse } from '../model/ElementModel';
+import { PagedElements } from '../model/ElementModel';
 
-// 편지 아이템 이미지 불러오기 API
-// param: 편지 ID, 편지 순서
-// response: ElementImgGetResponse
-export async function getElementImg(
-  letterId: number,
-  sequence: number,
-): Promise<ElementImgGetResponse> {
-  const response: ApiResponse<ElementImgGetResponse> = await api.get(
-    `/api/element/image`,
+export const getElementsByLetterId = async (letterId: number) => {
+  const response: ApiResponse<PagedElements> = await api.get(
+    `/api/letter/${letterId}/elements`,
     {
       params: {
         letterId,
-        sequence,
       },
     },
   );
-  return response.data.data;
-}
 
-export const getElementsByLetterId = (letterId: number) => {
-  return api.get(`/api/letter/${letterId}/elements`, {
-    params: {
-      letterId,
-    },
-  });
+  return response.data.data.elements;
 };
