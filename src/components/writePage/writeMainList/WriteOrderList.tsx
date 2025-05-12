@@ -1,88 +1,48 @@
-import React, { useEffect, useRef } from 'react';
-
 import styled from 'styled-components';
 
-import { LetterItem } from '../../../api/model/LetterModel';
+import { ElementResponse } from '../../../api/model/ElementModel';
 import { WriteOrderActivateItem } from './WriteOrderActivateItem';
 import { WriteOrderFinalItem } from './WriteOrderFinalItem';
 import { WriteOrderInactiveItem } from './WriteOrderInactiveItem';
 import { WriteOrderNowItem } from './WriteOrderNowItem';
 
 interface ListComponentProps {
-  letterItems: LetterItem[];
-  nowItemId?: number;
-  progressTime: number;
+  elements: ElementResponse[];
+  isMyTurnToWrite: boolean;
 }
 
 // 편지 작성 페이지의 리스트
-export const WriteOrderList: React.FC<
-  ListComponentProps & {
-    nowItemRef: React.MutableRefObject<HTMLDivElement | null>;
-  }
-> = ({ letterItems, nowItemId, progressTime, nowItemRef }) => {
-  // 위치 버튼 누르면 해당 부분으로 이동되는 기능
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  useEffect(() => {
-    movePosition();
-  }, [nowItemId]);
-
-  const movePosition = () => {
-    if (nowItemId !== undefined) {
-      const targetIndex = letterItems.findIndex(
-        (item) => Number(item.elementId) === nowItemId,
-      );
-      if (targetIndex !== -1 && itemRefs.current) {
-        itemRefs.current[targetIndex]?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        });
-      }
-    }
-  };
-
+export const WriteOrderList = ({
+  elements,
+  isMyTurnToWrite,
+}: ListComponentProps) => {
   return (
     <Wrapper>
       <Line />
       <ListItem>
-        {letterItems.map((item, index) => {
-          const isNowItem =
-            item.elementId &&
-            item.userId &&
-            item.userNickname &&
-            !item.letterImg;
+        {elements.map((item, index) => {
           return (
-            <div
-              key={item.elementId}
-              ref={(el) => {
-                itemRefs.current[index] = el;
-                if (isNowItem && nowItemRef) nowItemRef.current = el;
-              }}
-            >
-              {item.userNickname && item.letterImg && !item.userId && (
+            <div key={item.elementId}>
+              {/* 나중에 ElementResponse를 넘기고, 이름 개선, 시간 표시 개선 */}
+              {item.content && item.nickname && (
                 <WriteOrderActivateItem
                   key={item.elementId}
-                  letterImageUrl={item.letterImg}
-                  name={item.userNickname}
-                  content={item.content || ''}
+                  letterImageUrl={item.imageUrl}
+                  name={item.nickname}
+                  content={item.content}
                   itemId={index + 1}
                 />
               )}
-              {item.elementId &&
-                item.userId &&
-                item.userNickname &&
-                !item.letterImg && (
-                  <WriteOrderNowItem
-                    key={item.elementId}
-                    elementId={item.elementId}
-                    nowUserId={item.userId}
-                    time={Math.max(0, progressTime)}
-                  />
-                )}
-              {!item.userNickname && (
-                <WriteOrderInactiveItem
+              {item.content === null && item.startedAt !== null && (
+                <WriteOrderNowItem
                   key={item.elementId}
-                  idx={Number(item.elementId)}
+                  isMyTurnToWrite={isMyTurnToWrite}
+                  element={item}
+                  time={0}
                 />
+              )}
+              {item.content === null && item.startedAt === null && (
+                <WriteOrderInactiveItem key={item.elementId} idx={index + 1} />
               )}
             </div>
           );
