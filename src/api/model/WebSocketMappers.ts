@@ -70,6 +70,11 @@ export const userResponseMapperDefinition = {
             handlers.finish?.();
             break;
           default:
+            // FIXME: 서버 response 타입 오류
+            // @ts-expect-error
+            if (response.actionType === 'EXIT') {
+              handlers.exit?.(response as WsExitResponse);
+            }
             logger.debug('bad response schema', response);
         }
       },
