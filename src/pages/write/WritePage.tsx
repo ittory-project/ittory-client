@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -17,8 +17,6 @@ export const WritePage = () => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   // 불러온 편지 정보
-  const [letterTitle, setLetterTitle] = useState('');
-  // const [partiCount, setPartiCount] = useState<Number | null>();
   const [repeatCount, setRepeatCount] = useState<number | null>();
   const [elementCount, setElementCount] = useState<number | null>();
   // 초기 팝업 띄우기
@@ -29,7 +27,6 @@ export const WritePage = () => {
   const [resetTime, setResetTime] = useState<number | null>(
     storedResetTime ? Number(storedResetTime) : null,
   );
-  const [remainingTime, setRemainingTime] = useState(100); // 남은 시간을 보여줄 상태
   // 편지 시작까지 남은 시간 계산
   const [startCountdown, setStartCountdown] = useState<number>(10);
 
@@ -41,8 +38,6 @@ export const WritePage = () => {
     } else {
       const response: LetterStartInfoGetResponse =
         await getLetterStartInfo(letterNumId);
-      setLetterTitle(response.title);
-      // setPartiCount(response.participantCount);
       setRepeatCount(response.repeatCount);
       setElementCount(response.elementCount);
     }
@@ -93,15 +88,6 @@ export const WritePage = () => {
   }, []);
 
   // 남은 시간을 업데이트하는 useEffect
-  useEffect(() => {
-    if (resetTime === null) return;
-    const interval = setInterval(() => {
-      const timeLeft = (resetTime - Date.now()) / 1000; // 남은 시간을 초 단위로 계산
-      setRemainingTime(timeLeft);
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [resetTime]);
 
   return (
     <Container>
@@ -114,12 +100,9 @@ export const WritePage = () => {
         />
       )}
       {showCountdown && <Countdown src={CountdownGif} />}
-      <Write
-        remainingTime={resetTime ? remainingTime : 100}
-        // resetTime={resetTime}
-        setResetTime={setResetTime}
-        letterTitle={letterTitle}
-      />
+      <Suspense>
+        <Write />
+      </Suspense>
     </Container>
   );
 };

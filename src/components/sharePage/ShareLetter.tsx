@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { decodeLetterId } from '../../api/config/base64';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
 import { FontGetResponse } from '../../api/model/FontModel';
@@ -27,7 +26,7 @@ export const ShareLetter = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const [letterNumId] = useState(Number(letterId));
   const [isMobile, setIsMobile] = useState(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();

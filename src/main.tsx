@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
@@ -8,6 +9,7 @@ import App from './App.tsx';
 import { accessTokenRepository } from './api/config/AccessTokenRepository.ts';
 import { persistor, store } from './api/config/state.ts';
 import './index.css';
+import { ReactQueryClientProvider } from './react-query-provider.tsx';
 import {
   activateDefaultLog,
   attachLoggerOnError,
@@ -31,7 +33,10 @@ accessTokenRepository.refresh().finally(() => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <HelmetProvider>
-          <App />
+          <ReactQueryClientProvider>
+            <App />
+            <ReactQueryDevtools position="right" initialIsOpen={false} />
+          </ReactQueryClientProvider>
         </HelmetProvider>
       </PersistGate>
     </Provider>,

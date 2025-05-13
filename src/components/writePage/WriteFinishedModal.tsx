@@ -1,37 +1,6 @@
-import { useEffect, useState } from 'react';
-
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { decodeLetterId } from '../../api/config/base64';
-import { postPartiLetterBox } from '../../api/service/LetterBoxService';
-import { SessionLogger } from '../../utils';
-
-const logger = new SessionLogger('write');
-
-interface FinishModalProps {
-  isFirstUser: boolean;
-}
-
-export const WriteFinishedModal = ({ isFirstUser }: FinishModalProps) => {
-  const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
-
-  const storeNowLetter = async () => {
-    const response: boolean = await postPartiLetterBox(letterNumId);
-    if (response) {
-      logger.debug('저장 성공');
-    } else {
-      logger.debug('저장 실패');
-    }
-  };
-  useEffect(() => {
-    logger.debug('첫 번째 유저 여부', isFirstUser);
-    if (isFirstUser) {
-      storeNowLetter();
-    }
-  }, []);
-
+export const WriteFinishedModal = () => {
   return (
     <Overlay>
       <Popup>
