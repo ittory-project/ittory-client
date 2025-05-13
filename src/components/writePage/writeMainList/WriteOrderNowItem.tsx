@@ -3,24 +3,25 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { ElementResponse } from '../../../api/model/ElementModel';
+import { useTimeLeft } from '../../../hooks/useTimeLeft';
 
 interface WriteOrderProps {
   isMyTurnToWrite: boolean;
   element: ElementResponse;
-  time: number;
 }
 
 // 현재 순서(myTurn/othersTurn) 아이템
 export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
   isMyTurnToWrite,
   element,
-  time,
 }) => {
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
     event.currentTarget.src = '/assets/write/img_error.svg';
   };
+
+  const timeLeft = useTimeLeft(element.startedAt);
 
   return (
     <Wrapper $isMyTurnToWrite={isMyTurnToWrite}>
@@ -31,7 +32,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
             <MainText>내 차례예요</MainText>
             <ClockText>
               <ClockIcon src="/assets/write/clock.svg" />
-              {Math.floor(Number(time))}초
+              {Math.floor(Number(timeLeft))}초
             </ClockText>
           </MyTurn>
         ) : (
@@ -39,7 +40,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
             <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
             <ClockText>
               <ClockIcon src="/assets/write/clock.svg" />
-              {Math.floor(Number(time))}초
+              {Math.floor(Number(timeLeft))}초
             </ClockText>
           </>
         )}
