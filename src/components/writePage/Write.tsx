@@ -184,7 +184,7 @@ export const Write = () => {
           <LocationContainer>
             {waitingElement?.nickname && (
               <WriteLocation
-                progressTime={0}
+                startedAt={waitingElement.startedAt}
                 name={waitingElement.nickname}
                 profileImage={waitingElement.imageUrl}
               />

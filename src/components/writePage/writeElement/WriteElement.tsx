@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { ElementResponse } from '../../../api/model/ElementModel';
+import { useTimeLeft } from '../../../hooks';
 
 interface WriteElementProps {
   element: ElementResponse;
@@ -16,7 +17,7 @@ export const WriteElement = ({
   onClose,
 }: WriteElementProps) => {
   const [text, setText] = useState('');
-  const progressTime = 100; // TODO: 시간 흐르게 설정해야 함
+  const progressTime = useTimeLeft(element.startedAt);
 
   const handleClose = () => {
     onClose();

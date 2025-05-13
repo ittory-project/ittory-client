@@ -38,7 +38,6 @@ export const WriteOrderList = ({
                   key={item.elementId}
                   isMyTurnToWrite={isMyTurnToWrite}
                   element={item}
-                  time={0}
                 />
               )}
               {item.content === null && item.startedAt === null && (
