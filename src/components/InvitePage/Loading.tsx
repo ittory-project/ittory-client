@@ -1,42 +1,9 @@
-import React, { useEffect } from 'react';
-
 import Player from 'lottie-react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import animation from '../../../public/assets/loading.json';
 
-interface Props {
-  loadstatus?: boolean;
-  setLoad?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const Loading = ({ loadstatus }: Props) => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    // 로컬스토리지에서 값 가져오기
-    const letterId = Number(localStorage.getItem('letterId'));
-    const guideOpen = localStorage.getItem('guideOpen');
-    navigate(`/invite/${letterId}?guideOpen=${guideOpen}`);
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem('load') === 'done') {
-      if (loadstatus === true) {
-        fetchData();
-      } else {
-        localStorage.removeItem('load');
-      }
-    } else {
-      fetchData();
-    }
-  }, [loadstatus]);
-
+export const Loading = () => {
   return (
     <BackGround>
       <Player

@@ -13,7 +13,10 @@ import out from '../../../public/assets/out.svg';
 import shadow from '../../../public/assets/shadow2.svg';
 import tip from '../../../public/assets/tooltip.svg';
 import { CoverType } from '../../api/model/CoverType';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
+import {
+  LetterDetailGetResponse,
+  LetterPartiItem,
+} from '../../api/model/LetterModel';
 import { getCoverTypes } from '../../api/service/CoverService';
 import { getFontById } from '../../api/service/FontService';
 import { getLetterInfo } from '../../api/service/LetterService';
@@ -24,7 +27,6 @@ import { Count } from './Count/Count';
 import { CountPopup } from './Count/CountPopup';
 import { Delete } from './Delete/Delete';
 import { Exit } from './Exit';
-import { Participants } from './Invite';
 import { UserGuide } from './UserGuide';
 import crown from '/assets/crown.svg';
 import plus from '/assets/plus.svg';
@@ -34,7 +36,7 @@ const logger = new SessionLogger('invite');
 interface Props {
   guideOpen: boolean;
   hostname: string;
-  items: Participants[];
+  items: LetterPartiItem[];
   letterId: number;
   viewDelete: boolean;
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;

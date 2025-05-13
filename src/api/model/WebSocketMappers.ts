@@ -3,14 +3,19 @@ import {
   RequestMapperDefinition,
   ResponseMapperDefinition,
 } from '../websockets/SharedTypeSafeWebSocket';
-import { WsEnterResponse, WsExitResponse, WsResponse } from './WsModel';
+import {
+  WsEnterResponse,
+  WsExitResponse,
+  WsResponse,
+  WsWriteResponse,
+} from './WsModel';
 
 const logger = new SessionLogger('websocket-infra');
 
 export const ittoryRequestMapperDefinition = {
   writeLetterElement: {
-    channelMapper: (letterId: number) => `/ws/letter/${letterId}/elements`,
-    requestMapper: (payload: { sequence: number; content: string }) => {
+    channelMapper: (letterId: number) => `/ws/letter/element/write/${letterId}`,
+    requestMapper: (payload: { elementId: number; content: string }) => {
       return JSON.stringify(payload);
     },
   },
@@ -38,12 +43,13 @@ export const userResponseMapperDefinition = {
       (handlers: {
         start?: () => void;
         enter?: (_response: WsEnterResponse) => void;
+        write?: (_response: WsWriteResponse) => void;
+        timeout?: () => void;
         exit?: (_response: WsExitResponse) => void;
-        end?: () => void;
+        finish?: () => void;
       }) =>
       (payload) => {
         const response = JSON.parse(payload) as WsResponse;
-        logger.debug('letter response', response);
         switch (response.action) {
           case 'START':
             handlers.start?.();
@@ -51,12 +57,25 @@ export const userResponseMapperDefinition = {
           case 'ENTER':
             handlers.enter?.(response as WsEnterResponse);
             break;
+          case 'WRITE':
+            handlers.write?.(response as WsWriteResponse);
+            break;
+          case 'TIMEOUT':
+            handlers?.timeout?.();
+            break;
           case 'EXIT':
             handlers.exit?.(response as WsExitResponse);
             break;
-          case 'END':
-            handlers.end?.();
+          case 'FINISH':
+            handlers.finish?.();
             break;
+          default:
+            // FIXME: 서버 response 타입 오류
+            // @ts-expect-error
+            if (response.actionType === 'EXIT') {
+              handlers.exit?.(response as WsExitResponse);
+            }
+            logger.debug('bad response schema', response);
         }
       },
   },

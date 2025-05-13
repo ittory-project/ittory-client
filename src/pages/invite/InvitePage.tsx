@@ -1,4 +1,7 @@
+import { Suspense } from 'react';
+
 import { Invite } from '../../components/InvitePage/Invite';
+import { Loading } from '../../components/InvitePage/Loading';
 import { usePreventBack } from '../../hooks';
 
 export const InvitePage = () => {
@@ -6,7 +9,9 @@ export const InvitePage = () => {
 
   return (
     <div>
-      <Invite />
+      <Suspense fallback={<Loading />}>
+        <Invite />
+      </Suspense>
     </div>
   );
 };

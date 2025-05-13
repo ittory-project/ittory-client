@@ -3,16 +3,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import img from '../../../public/assets/location.svg';
+import { useTimeLeft } from '../../hooks';
 
 interface LocationProps {
-  progressTime: number;
+  startedAt: string | null;
   name: string;
   profileImage: string | undefined;
 }
 
 // 위치 컴포넌트
 export const WriteLocation: React.FC<LocationProps> = ({
-  progressTime,
+  startedAt,
   name,
   profileImage,
 }) => {
@@ -32,6 +33,8 @@ export const WriteLocation: React.FC<LocationProps> = ({
 
   const radius = 25;
   const circumference = 2 * Math.PI * radius;
+
+  const progressTime = useTimeLeft(startedAt);
 
   useEffect(() => {
     if (circleRef.current) {

@@ -1,75 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Client } from '@stomp/stompjs';
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { decodeLetterId } from '../../../api/config/base64';
-import { ElementImgGetResponse } from '../../../api/model/ElementModel';
-import { getElementImg } from '../../../api/service/ElementService';
-import { getWebSocketApi } from '../../../api/websockets';
+import { ElementResponse } from '../../../api/model/ElementModel';
+import { useTimeLeft } from '../../../hooks';
 
 interface WriteElementProps {
-  sequence: number;
-  setShowSubmitPage: React.Dispatch<React.SetStateAction<boolean>>;
-  progressTime: number;
-  clientRef: React.MutableRefObject<Client | null>;
+  element: ElementResponse;
+  onSubmit: (_content: string) => void;
+  onClose: () => void;
 }
 
 export const WriteElement = ({
-  sequence,
-  setShowSubmitPage,
-  progressTime,
+  element,
+  onSubmit,
+  onClose,
 }: WriteElementProps) => {
-  const wsApi = getWebSocketApi();
   const [text, setText] = useState('');
-  const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const progressTime = useTimeLeft(element.startedAt);
 
-  const [elementImg, setElementImg] = useState('');
-
-  const getLetterImg = async () => {
-    if (!letterId) {
-      window.alert('잘못된 접근입니다.');
-    } else if (!letterNumId) {
-      window.alert('잘못된 접근입니다.');
-    } else {
-      const response: ElementImgGetResponse = await getElementImg(
-        letterNumId,
-        sequence,
-      );
-      setElementImg(response.elementImageUrl);
-    }
-  };
-  useEffect(() => {
-    getLetterImg();
-  }, []);
-
-  const handleExit = () => {
-    setShowSubmitPage(false);
+  const handleClose = () => {
+    onClose();
   };
 
-  useEffect(() => {
-    if (progressTime <= 0.5) {
-      if (text.length > 0) {
-        handleWriteComplete();
-      }
-    }
-  }, [progressTime]);
-
-  // 작성 완료 버튼
-  const handleWriteComplete = async () => {
-    if (!sequence) {
-      return window.alert('오류');
-    }
+  const handleSubmit = async () => {
     if (text.length <= 0) {
       return;
     }
 
-    wsApi.send('writeLetterElement', [letterNumId], {
-      sequence,
-      content: text,
-    });
+    onSubmit(text);
   };
 
   // 접속 시 무조건 focusing 되도록 해야 키보드가 올라온다.
@@ -79,11 +38,6 @@ export const WriteElement = ({
       taRef.current.focus();
     }
   }, []);
-
-  // const handleKeyboardEnterEvent = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-  //   e.preventDefault();
-  //   handleWriteComplete();
-  // }
 
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
@@ -171,21 +125,17 @@ export const WriteElement = ({
           <ClockIcon src="/assets/write/clock.svg" />
           {Math.max(0, Math.floor(progressTime))}초
         </ClockText>
-        <CloseBtn onClick={handleExit} src="/assets/btn_close.svg" />
+        <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
       </Header>
       <Content
         isMobile={mobile}
         style={{
-          //paddingBottom: mobile ? `10px` : '0px',
-          /*height: mobile
-            ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
-            : undefined,*/
           height: `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`,
           bottom: `${bottomOffset - 2}px`,
         }}
       >
         <PhotoDiv isMobile={mobile}>
-          <LetterImage src={'' + elementImg} onError={handleImageError} />
+          <LetterImage src={element.imageUrl} onError={handleImageError} />
         </PhotoDiv>
         <WriteContent>
           <WriteTa
@@ -213,7 +163,7 @@ export const WriteElement = ({
               </>
             )}
             <CompleteBtn
-              onClick={handleWriteComplete}
+              onClick={handleSubmit}
               $isdisabled={text.length === 0 || text.length > 30}
             >
               완료
