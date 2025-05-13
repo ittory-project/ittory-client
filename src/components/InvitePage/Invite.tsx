@@ -1,85 +1,110 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import texture from '../../../public/assets/invite/texture1.png';
+import { LetterPartiListGetResponse } from '../../api/model/LetterModel';
 import { WsEnterResponse, WsExitResponse } from '../../api/model/WsModel';
-import { userQuery } from '../../api/queries';
-import { getParticipants } from '../../api/service/LetterService';
+import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
+import { useDialog } from '../../hooks';
+import { inMillis } from '../../utils';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { HostUser } from './HostUser';
 import { Member } from './Member';
 
 const logger = new SessionLogger('invite');
 
-export interface Participants {
-  sequence: number;
-  memberId: number;
-  nickname: string;
-  imageUrl: string;
-}
-
 export const Invite = () => {
+  const queryClient = useQueryClient();
   const wsApi = getWebSocketApi();
   const params = useParams<{
     letterId: string;
   }>();
+  const letterId = Number(params.letterId);
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const guideOpen = searchParams.get('guideOpen') === 'true';
 
-  const [participants, setParticipants] = useState<Participants[]>([]);
-
-  const letterId = Number(params.letterId);
-
   const { data: myPageData } = useSuspenseQuery(userQuery.myInfoQuery());
-  const [exitAlert, setExitAlert] = useState<string | null>(null);
-  const [exitName, setExitName] = useState<string>(''); // ?
-  const [hostAlert, setHostAlert] = useState<string | null>(null);
+  const { data: participants } = useSuspenseQuery({
+    ...letterQuery.participantsByLetterIdQuery(letterId),
+    // NOTE: useSuspenseQueries를 사용하면 타입이 any로 잡힘
+    refetchInterval: (query) => {
+      const me = query.state.data?.participants.find(
+        (participant) => participant.memberId === myPageData.memberId,
+      );
+      return me ? false : inMillis().seconds(1).value();
+    },
+  });
+
   const [viewDelete, setViewDelete] = useState<boolean>(false); // 필요 여부 체크 필요함
 
+  const {
+    isOpen: isExitAlertOpen,
+    openDialog: openExitAlert,
+    dialogParams: exitUser,
+  } = useDialog<string>({
+    closeTimeout: 5_000,
+  });
+
+  const {
+    isOpen: isHostAlertOpen,
+    openDialog: openHostAlert,
+    dialogParams: hostAlert,
+  } = useDialog<string>({
+    closeTimeout: 5_000,
+  });
+
   const isRoomMaster =
-    participants[0] && participants[0].memberId === myPageData?.memberId;
+    participants.participants[0]?.memberId === myPageData.memberId;
 
-  const refetchParticipants = useCallback(async () => {
-    const data = await getParticipants(letterId);
-    setParticipants(data);
-  }, [letterId]);
-
-  useEffect(function processOnMount() {
-    logger.debug('processOnMount call');
-
-    logger.debug('doInviteJobs start');
-
+  useEffect(function handleWebSocketJobs() {
+    // enterLetter는 반드시 보내야 하는 요청.
+    // 현재 subscribe 완료 이전에 보내서 응답도 그 이전에 오는 상황
+    // onSubscribe 콜백을 만들려고 했는데, 얘도 서버 응답이 없어서 타이밍 보장이 불가능함.
+    // ws 수준에서 타이밍을 보장하려면 receipt, ack 등을 활용 필요 (굳이 그정도까지 빨라야 할 필요는 없음)
+    // enterLetter는 한 번만 호출하고, participants만 지속해서 폴링하는 방식으로 처리
     wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
 
     const unsubscribe = wsApi.subscribe('letter', [letterId], {
       enter: (response: WsEnterResponse) => {
         logger.debug('enterLetter response', response);
-        setParticipants(response.participants);
-        logger.debug(
-          'after enterLetter participants',
-          participants,
-          response.participants,
+        queryClient.setQueryData(
+          letterQuery.participantsByLetterIdQuery(letterId).queryKey,
+          (oldData: LetterPartiListGetResponse) => {
+            return {
+              ...oldData,
+              participants: response.participants,
+            };
+          },
         );
       },
       exit: async (response: WsExitResponse) => {
         logger.debug('exitLetter response', response);
-        await refetchParticipants();
+        queryClient.invalidateQueries({
+          queryKey: letterQuery.participantsByLetterIdQuery(letterId).queryKey,
+        });
+
+        const exitUserNickname = participants.participants.find(
+          (participant) => participant.memberId === response.exitMemberId,
+        )?.nickname;
 
         if (response.isManager) {
           logger.debug('방장 퇴장 감지');
-          setExitAlert(`방장 '${response.nickname}'님이 퇴장했어요`);
-          await refetchParticipants();
-          setHostAlert(
-            `참여한 순서대로 '${participants[0].nickname}'님이 방장이 되었어요`,
+          openExitAlert(`방장 '${exitUserNickname}'님이 퇴장했어요`);
+          await queryClient.invalidateQueries({
+            queryKey:
+              letterQuery.participantsByLetterIdQuery(letterId).queryKey,
+          });
+          openHostAlert(
+            `참여한 순서대로 '${participants.participants[0].nickname}'님이 방장이 되었어요`,
           );
         } else {
-          setExitAlert(`'${response.nickname}'님이 퇴장했어요`);
+          openExitAlert(`'${exitUserNickname}'님이 퇴장했어요`);
         }
       },
       finish: () => {
@@ -88,7 +113,7 @@ export const Invite = () => {
       },
       start: () => {
         logger.debug('startLetter response');
-        navigate('/Connection', {
+        navigate('/connection', {
           state: {
             letterId,
             coverId: Number(localStorage.getItem('coverId')),
@@ -104,42 +129,14 @@ export const Invite = () => {
     };
   }, []);
 
-  useEffect(
-    function noticeOnExit() {
-      const exitTimer = setTimeout(() => {
-        refetchParticipants();
-        setExitAlert(null);
-        if (exitName) {
-          setExitName('');
-        }
-      }, 5000); // 5초 있다가 notice 제거하는 거였음
-
-      return () => clearTimeout(exitTimer);
-    },
-    [exitAlert, refetchParticipants, exitName],
-  );
-
-  useEffect(
-    function noticeOnRoomMasterChange() {
-      const hostTimer = setTimeout(() => {
-        refetchParticipants();
-        setHostAlert(null);
-      }, 10000);
-
-      return () => clearTimeout(hostTimer);
-    },
-    [hostAlert, refetchParticipants],
-  );
-
-  // TODO: myData suspense 사용 및 로딩을 fallback으로 추출 (실제로 보이는 일은 없게 될 듯)
   return (
     <BackGround>
-      {exitAlert && <ExitAlert>{exitAlert}</ExitAlert>}
-      {hostAlert && <HostAlert>{hostAlert}</HostAlert>}
+      {isExitAlertOpen && <ExitAlert>{exitUser}</ExitAlert>}
+      {isHostAlertOpen && <HostAlert>{hostAlert}</HostAlert>}
       {isRoomMaster ? (
         <HostUser
           guideOpen={guideOpen}
-          items={participants}
+          items={participants.participants}
           letterId={letterId}
           viewDelete={viewDelete}
           setViewDelete={setViewDelete}
@@ -149,7 +146,7 @@ export const Invite = () => {
         <Member
           letterId={letterId}
           guideOpen={guideOpen}
-          items={participants}
+          items={participants.participants}
           viewDelete={viewDelete}
         />
       )}
