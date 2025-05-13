@@ -118,7 +118,13 @@ export const Write = () => {
       },
       exit(response) {
         logger.debug('퇴장!', response);
-        openExitAlert(response.nickname);
+        const exitMember = participants.participants.find(
+          (participant) => participant.memberId === response.exitMemberId,
+        );
+        if (!exitMember) {
+          throw 'Error: 참여자가 없습니다.';
+        }
+        openExitAlert(exitMember.nickname);
         queryClient.invalidateQueries({
           queryKey: letterQuery.queryKeys.byLetterId(letterId),
         });

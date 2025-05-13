@@ -46,9 +46,8 @@ export interface LetterItemResponse {
 }
 
 export interface WsExitResponse extends WsResponse {
-  participantId: number;
+  exitMemberId: number;
   isManager: boolean;
-  nickname: string;
 }
 
 export interface WsEndResponse {
