@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,12 +8,9 @@ import styled from 'styled-components';
 import ChevronLeft from '../../../public/assets/letterbox/chevron_left.svg?react';
 import more from '../../../public/assets/more_white.svg';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
-import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
 import { FontGetResponse } from '../../api/model/FontModel';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getCoverTypeById } from '../../api/service/CoverTypeService';
+import { coverQuery, letterQuery } from '../../api/queries';
 import { getFontById } from '../../api/service/FontService';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
 import { SessionLogger } from '../../utils';
 import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
@@ -63,21 +61,29 @@ export const Letter = ({
   setDeleteAlert,
   deleteAlert,
 }: Props) => {
+  const { data: letterInfo } = useSuspenseQuery(
+    letterQuery.detailByLetterIdQuery(letterId),
+  );
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const coverType = coverTypes.find(
+    (type) => type.id === letterInfo.coverTypeId, // FIXME: letterInfo가 먼저 반드시 있어야 함
+  );
+  if (!coverType) {
+    throw new Error('커버 타입을 찾을 수 없습니다.');
+  }
+
   const [deleteName, setDeleteName] = useState<string>('');
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [, setPartiList] = useState<string>('');
   const [font, setFont] = useState<FontGetResponse>();
-  const [coverType, setCoverType] = useState<CoverTypeGetResponse | null>(null);
-  const [elementLength, setElementLength] = useState<number>(0);
 
   const handleCancel = () => {
     setOpenLetter(false);
     window.history.replaceState({}, '', '/letterbox');
     navigate('/letterbox', { replace: true });
   };
+
   const handleMore = () => {
     setIsModalOpen(true);
   };
@@ -109,27 +115,13 @@ export const Letter = ({
     window.localStorage.setItem('resetTime', '');
 
     const fetchData = async () => {
-      // Letter 상세 정보 가져오기
-      const response = await getLetterDetailInfo(Number(letterId));
-      setLetterInfo(response);
-
-      // 참여자 목록 문자열화
-      const nicknameString = response.elements
-        .map((element) => element.nickname)
-        .join(', ');
-      setPartiList(nicknameString);
-      setElementLength(response.elements.length);
-
       // 스타일 정보 가져오기
-      const fontResponse = await getFontById(response.fontId);
+      const fontResponse = await getFontById(letterInfo.fontId);
       if (fontResponse) setFont(fontResponse);
-
-      const coverTypeResponse = await getCoverTypeById(response.coverTypeId);
-      if (coverTypeResponse) setCoverType(coverTypeResponse);
     };
 
     fetchData();
-  }, [letterId]);
+  }, [letterId, coverType, font, letterInfo]);
 
   const renderPageContent = () => {
     if (!coverType || !font || !letterInfo || !letterId) {
@@ -180,7 +172,7 @@ export const Letter = ({
             >
               {renderPageContent()}
             </CoverContainer>
-            <Pagination totalPages={elementLength + 1} />
+            <Pagination totalPages={letterInfo.elements.length + 1} />
 
             {isModalOpen &&
               (context === 'created' ? (
