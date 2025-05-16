@@ -36,9 +36,9 @@ export const Write = () => {
   ] = useSuspenseQueries({
     queries: [
       userQuery.myInfo(),
-      letterQuery.startInfoByLetterId(letterId),
-      letterQuery.elementsByLetterId(letterId),
-      letterQuery.participantsByLetterId(letterId),
+      letterQuery.startInfoById(letterId),
+      letterQuery.elementsById(letterId),
+      letterQuery.participantsById(letterId),
     ],
   });
 
@@ -96,7 +96,7 @@ export const Write = () => {
       write(response) {
         logger.debug('ws 응답으로 cache 갱신');
         queryClient.setQueryData(
-          letterQuery.queryKeys.elementsByLetterId(letterId),
+          letterQuery.queryKeys.elementsById(letterId),
           (currentData: ElementResponse[]) => {
             return currentData.map((element) => {
               if (element.elementId === response.completedElement.elementId) {
@@ -113,7 +113,7 @@ export const Write = () => {
       timeout() {
         logger.debug('타임 아웃!');
         queryClient.invalidateQueries({
-          queryKey: letterQuery.queryKeys.elementsByLetterId(letterId),
+          queryKey: letterQuery.queryKeys.elementsById(letterId),
         });
       },
       exit(response) {
@@ -126,7 +126,7 @@ export const Write = () => {
         }
         openExitAlert(exitMember.nickname);
         queryClient.invalidateQueries({
-          queryKey: letterQuery.queryKeys.byLetterId(letterId),
+          queryKey: letterQuery.queryKeys.byId(letterId),
         });
       },
       async finish() {
@@ -138,7 +138,7 @@ export const Write = () => {
         setTimeout(() => {
           navigate(`/share/${letterId}?page=1`);
           queryClient.invalidateQueries({
-            queryKey: letterQuery.queryKeys.byLetterId(letterId),
+            queryKey: letterQuery.queryKeys.byId(letterId),
           });
         }, 5000);
       },

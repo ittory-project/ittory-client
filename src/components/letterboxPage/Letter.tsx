@@ -60,7 +60,7 @@ export const Letter = ({
   deleteAlert,
 }: Props) => {
   const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.detailByLetterId(letterId),
+    letterQuery.detailById(letterId),
   );
   const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
   const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
