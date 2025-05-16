@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import CountdownGif from '../../../public/img/letter_start_count.gif';
 import { decodeLetterId } from '../../api/config/base64';
-import { startInfoByLetterIdQuery } from '../../api/queries/letter';
+import { letterQuery } from '../../api/queries';
 import { Write } from '../../components/writePage/Write';
 import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
 import { usePreventBack } from '../../hooks';
@@ -20,7 +20,7 @@ export const WritePage = () => {
     throw new Error('잘못된 접근입니다.');
   }
   const { data: startInfo } = useSuspenseQuery(
-    startInfoByLetterIdQuery(letterNumId),
+    letterQuery.startInfoByLetterId(letterNumId),
   );
 
   // 초기 팝업 띄우기

@@ -37,35 +37,35 @@ export const queryKeys = {
   ],
 };
 
-export const participantsByLetterIdQuery = (letterId: number) => ({
+export const participantsByLetterId = (letterId: number) => ({
   queryKey: queryKeys.participantsByLetterId(letterId),
   queryFn: () => getLetterPartiList(letterId),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });
 
-export const elementsByLetterIdQuery = (letterId: number) => ({
+export const elementsByLetterId = (letterId: number) => ({
   queryKey: queryKeys.elementsByLetterId(letterId),
   queryFn: () => getElementsByLetterId(letterId),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });
 
-export const startInfoByLetterIdQuery = (letterId: number) => ({
+export const startInfoByLetterId = (letterId: number) => ({
   queryKey: queryKeys.startInfoByLetterId(letterId),
   queryFn: () => getLetterStartInfo(letterId),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });
 
-export const infoByLetterIdQuery = (letterId: number) => ({
+export const infoByLetterId = (letterId: number) => ({
   queryKey: queryKeys.infoByLetterId(letterId),
   queryFn: () => getLetterInfo(letterId),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });
 
-export const detailByLetterIdQuery = (letterId: number) => ({
+export const detailByLetterId = (letterId: number) => ({
   queryKey: queryKeys.detailInfoByLetterId(letterId),
   queryFn: () => getLetterDetailInfo(letterId),
   staleTime: inMillis().minutes(30).value(),

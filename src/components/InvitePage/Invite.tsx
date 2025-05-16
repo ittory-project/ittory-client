@@ -29,9 +29,9 @@ export const Invite = () => {
   const searchParams = new URLSearchParams(location.search);
   const guideOpen = searchParams.get('guideOpen') === 'true';
 
-  const { data: myPageData } = useSuspenseQuery(userQuery.myInfoQuery());
+  const { data: myPageData } = useSuspenseQuery(userQuery.myInfo());
   const { data: participants } = useSuspenseQuery({
-    ...letterQuery.participantsByLetterIdQuery(letterId),
+    ...letterQuery.participantsByLetterId(letterId),
     // NOTE: useSuspenseQueries를 사용하면 타입이 any로 잡힘
     refetchInterval: (query) => {
       const me = query.state.data?.participants.find(
@@ -74,7 +74,7 @@ export const Invite = () => {
       enter: (response: WsEnterResponse) => {
         logger.debug('enterLetter response', response);
         queryClient.setQueryData(
-          letterQuery.participantsByLetterIdQuery(letterId).queryKey,
+          letterQuery.participantsByLetterId(letterId).queryKey,
           (oldData: LetterPartiListGetResponse) => {
             return {
               ...oldData,
@@ -86,7 +86,7 @@ export const Invite = () => {
       exit: async (response: WsExitResponse) => {
         logger.debug('exitLetter response', response);
         queryClient.invalidateQueries({
-          queryKey: letterQuery.participantsByLetterIdQuery(letterId).queryKey,
+          queryKey: letterQuery.participantsByLetterId(letterId).queryKey,
         });
 
         const exitUserNickname = participants.participants.find(
@@ -97,8 +97,7 @@ export const Invite = () => {
           logger.debug('방장 퇴장 감지');
           openExitAlert(`방장 '${exitUserNickname}'님이 퇴장했어요`);
           await queryClient.invalidateQueries({
-            queryKey:
-              letterQuery.participantsByLetterIdQuery(letterId).queryKey,
+            queryKey: letterQuery.participantsByLetterId(letterId).queryKey,
           });
           openHostAlert(
             `참여한 순서대로 '${participants.participants[0].nickname}'님이 방장이 되었어요`,

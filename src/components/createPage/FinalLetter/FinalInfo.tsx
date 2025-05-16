@@ -58,8 +58,8 @@ export default function FinalInfo({
   setSelectFid,
   selectFid,
 }: Props) {
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
-  const { data: visit } = useSuspenseQuery(userQuery.visitUserQuery());
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+  const { data: visit } = useSuspenseQuery(userQuery.visitUser());
 
   const [viewEdit, setViewEdit] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState<boolean>(false);

@@ -29,11 +29,11 @@ export interface GroupItem {
 export const Menu = ({ onClose }: Props) => {
   const isLoggedIn = accessTokenRepository.isLoggedIn();
   const { data: myInfo } = useQuery({
-    ...userQuery.myInfoQuery(),
+    ...userQuery.myInfo(),
     enabled: isLoggedIn,
   });
   const { data: letterCounts } = useQuery({
-    ...userQuery.letterCountsQuery(),
+    ...userQuery.letterCounts(),
     enabled: isLoggedIn,
   });
   const partiLetter = letterCounts?.participationLetterCount ?? 0;

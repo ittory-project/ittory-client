@@ -35,10 +35,10 @@ export const Write = () => {
     { data: participants },
   ] = useSuspenseQueries({
     queries: [
-      userQuery.myInfoQuery(),
-      letterQuery.startInfoByLetterIdQuery(letterId),
-      letterQuery.elementsByLetterIdQuery(letterId),
-      letterQuery.participantsByLetterIdQuery(letterId),
+      userQuery.myInfo(),
+      letterQuery.startInfoByLetterId(letterId),
+      letterQuery.elementsByLetterId(letterId),
+      letterQuery.participantsByLetterId(letterId),
     ],
   });
 

@@ -45,16 +45,14 @@ interface Props {
 }
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
   const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.infoByLetterIdQuery(letterId),
+    letterQuery.infoByLetterId(letterId),
   );
   const deliverDay = parseISO(letterInfo.deliveryDate);
   const sliceName = letterInfo.receiverName.slice(0, 9);
 
-  const { data: font } = useSuspenseQuery(
-    fontQuery.fontByIdQuery(letterInfo.fontId),
-  );
+  const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
 
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
