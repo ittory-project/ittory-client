@@ -4,6 +4,7 @@ import {
   getMyPage,
   getParticipatedLetter,
   getReceivedLetter,
+  getVisitUser,
 } from '../service/MemberService';
 
 const queryKeyNamespaces = {
@@ -12,6 +13,7 @@ const queryKeyNamespaces = {
 
 export const queryKeys = {
   myInfo: () => [queryKeyNamespaces.user, 'my', 'info'],
+  visitUser: () => [queryKeyNamespaces.user, 'my', 'visit'],
   letterCounts: () => [queryKeyNamespaces.user, 'letter', 'counts'],
   participatedLetter: () => [queryKeyNamespaces.user, 'letter', 'participated'],
   receivedLetter: () => [queryKeyNamespaces.user, 'letter', 'received'],
@@ -22,6 +24,13 @@ export const myInfoQuery = () => ({
   queryFn: () => getMyPage(),
   staleTime: inMillis().hours(1).value(),
   cacheTime: inMillis().hours(1).value(),
+});
+
+export const visitUserQuery = () => ({
+  queryKey: queryKeys.visitUser(),
+  queryFn: () => getVisitUser(),
+  staleTime: inMillis().seconds(30).value(),
+  cacheTime: inMillis().seconds(30).value(),
 });
 
 export const letterCountsQuery = () => ({
