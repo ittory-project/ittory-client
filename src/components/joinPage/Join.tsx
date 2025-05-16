@@ -8,8 +8,6 @@ import { getMyPage, getVisitUser } from '../../api/service/MemberService';
 import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
 import Deleted from './Deleted';
 import { JoinModal } from './JoinModal';
-//import { NicknamePostRequest } from "../../api/model/ParticipantModel";
-//import { postNickname } from "../../api/service/ParticipantService";
 import NoAccess from './NoAccess';
 import Started from './Started';
 
@@ -62,16 +60,6 @@ export const Join = () => {
 
   const handleModal = async () => {
     if (nickname) {
-      /*const requestBody: NicknamePostRequest = {
-        nickname: nickname,
-      };
-      const response = await postNickname(requestBody, Number(letterId));
-      if (response.isSuccess) {
-        setDuplicateError(false);
-        setViewModal(true);
-      } else {
-        setDuplicateError(true);
-      }*/
       setViewModal(true);
     }
   };
@@ -91,7 +79,6 @@ export const Join = () => {
 
     // 문자열 뒤쪽 공백 제거
     setNickname(value.trimEnd());
-    //setNickname(value);
     setDuplicateError(false);
   };
 

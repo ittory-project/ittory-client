@@ -115,7 +115,6 @@ const FontPopup = forwardRef<HTMLDivElement, Props>(
               handlePopupClick={handlePopupClick}
             />
           </FontContainer>
-          {/*<Line src={_Line} />*/}
           <Button onClick={handleButton} $isKeyboardVisible={isKeyboardVisible}>
             완료
           </Button>
@@ -179,15 +178,8 @@ const FontContainer = styled.div`
     #fff 18.75%
   );
   box-shadow: 0px -4px 14px 0px rgba(0, 0, 0, 0.04);
-  //margin-top: 5px;
 `;
-/*
-const Line = styled.img`
-  width: 100%;
-  position: absolute;
-  left: 0;
-  margin-top: 65px;
-`;*/
+
 const Button = styled.button<{ $isKeyboardVisible: boolean }>`
   position: fixed;
   bottom: 20px;

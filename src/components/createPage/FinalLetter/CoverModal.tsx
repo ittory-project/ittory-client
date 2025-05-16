@@ -425,7 +425,6 @@ const ModalContainer = styled.div<{
   background: #fff;
   border-radius: 24px 24px 0px 0px;
   box-shadow: -4px 0px 14px 0px rgba(0, 0, 0, 0.05);
-  //align-items: center;
 `;
 const ButtonContainer = styled.button`
   display: flex;

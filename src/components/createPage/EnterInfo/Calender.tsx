@@ -12,7 +12,7 @@ interface Props {
   setValue: React.Dispatch<React.SetStateAction<Date | null | string>>;
   deliverDay: Date | null | string;
 }
-//7번, 8번 QA 반영 어려움
+
 //반응형 (width) 떄문에 30px고정시키면 간격 안맞아짐
 export default function Calender({
   current,
@@ -22,13 +22,9 @@ export default function Calender({
   deliverDay,
 }: Props) {
   const monthStart = startOfMonth(currentMonth);
-  //현재 달의 시작일일
   const monthEnd = endOfMonth(monthStart);
-  //현재 달의 막날
   const startDate = startOfWeek(monthStart);
-  //아예 첫날
   const endDate = endOfWeek(monthEnd);
-  //아예 막날
 
   const rows: React.ReactNode[] = [];
   let days: React.ReactNode[] = [];

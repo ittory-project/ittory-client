@@ -358,8 +358,6 @@ const Info = styled.div`
   padding: 0px 12px 6px 12px;
 
   background-color: #fff;
-  //gap: var(--Border-Radius-radius_300, 8px);
-  //align-self: stretch;
 `;
 const TitleTxt = styled.span`
   display: block;

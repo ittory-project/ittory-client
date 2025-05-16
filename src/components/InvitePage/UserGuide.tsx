@@ -123,7 +123,6 @@ const GuideImage = styled.img`
   object-fit: cover;
 
   border-radius: 16px;
-  //align-items: center;
 `;
 const Description = styled.div`
   display: flex;

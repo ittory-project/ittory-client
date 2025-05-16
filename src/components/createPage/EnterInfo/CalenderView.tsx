@@ -86,7 +86,6 @@ const Wrapper = styled.div`
   position: relative;
 
   width: 100%;
-  //height: 100%;
 `;
 const Container = styled.div`
   position: relative;
@@ -113,7 +112,6 @@ const Header = styled.div`
   padding-top: 4px;
   margin-right: 20px;
   margin-left: 20px;
-  //width: 100%;
 `;
 const PrevButton = styled.span`
   position: relative;
@@ -131,7 +129,6 @@ const PrevButton = styled.span`
   padding: 4px 8px;
 
   cursor: pointer;
-  //padding-left: 0.2rem;
 `;
 const Current = styled.span`
   position: absolute;
@@ -166,7 +163,6 @@ const NextButton = styled.span`
   padding: 4px 8px;
 
   cursor: pointer;
-  //padding-right: 0.2rem;
 `;
 const Days = styled.div`
   display: flex;
@@ -179,8 +175,6 @@ const Days = styled.div`
   margin-top: 24px;
   margin-right: 22px;
   margin-left: 22px;
-  //width: 100%;
-  //gap: 1%;
 `;
 const Day = styled.span`
   display: flex;
@@ -194,9 +188,6 @@ const Day = styled.span`
   color: #868e96;
 
   text-align: center;
-  //height: 1rem;
-  //width: 9.1%;
-  //padding: 5px 9.5px 9px 7px;
 `;
 const Body = styled.div`
   position: relative;

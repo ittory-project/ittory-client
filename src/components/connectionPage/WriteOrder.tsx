@@ -74,13 +74,11 @@ export const WriteOrder = ({ letterId }: Props) => {
     const client = stompClient();
 
     client.onConnect = () => {
-      // WebSocket 구독
       client.subscribe(`/topic/letter/${letterId}`, (message) => {
         const response: WsEnterResponse | WsExitResponse = JSON.parse(
           message.body,
         );
 
-        // 퇴장 메시지 처리
         if (response.action === 'EXIT') {
           fetchParticipants();
         }

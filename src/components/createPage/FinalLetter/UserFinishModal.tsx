@@ -11,8 +11,6 @@ import { CoverType } from '../../../api/model/CoverType';
 import { LetterRequestBody } from '../../../api/model/LetterModel';
 import { getCoverTypes } from '../../../api/service/CoverService';
 import { postLetter } from '../../../api/service/LetterService';
-//import { postNickname } from '../../../api/service/ParticipantService';
-//import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
 import { postEnter } from '../../../api/service/LetterService';
 import { formatDeliverDate } from './formatDeliverDate';
 
@@ -386,7 +384,6 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  //position: relative;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);

@@ -181,7 +181,6 @@ const Container = styled.div<{ isMobile: boolean }>`
   flex-direction: column;
 
   align-items: center;
-  //justify-content: center;
   ${({ isMobile }) => !isMobile && 'justify-content: center;'}
 
   width: 100vw;
@@ -190,9 +189,9 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   padding: 10px 0;
 
-  background: rgba(0, 0, 0, 0.6);
-
   overflow: hidden;
+
+  background: rgba(0, 0, 0, 0.6);
 `;
 
 const Content = styled.div<{ isMobile: boolean }>`
@@ -278,9 +277,9 @@ const ClockText = styled.div`
 const PhotoDiv = styled.div<{ isMobile: boolean }>`
   display: flex;
 
-  justify-content: center;
   align-items: center;
   align-self: stretch;
+  justify-content: center;
 
   margin: auto;
   margin-bottom: 16px;
@@ -288,24 +287,26 @@ const PhotoDiv = styled.div<{ isMobile: boolean }>`
   ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:160px;')}
 
   ${({ isMobile }) => isMobile && 'margin: 60px 0 16px 0;'}
-  // 위에 Header 고정이므로 약간 아래 띄움
+  /* 위에 Header 고정이므로 약간 아래 띄움 */
 
   @media (max-width: 320px) {
-    margin: 20px 0 16px 0; // 좁은 해상도에서는 이미지 위로 붙음
+    margin: 20px 0 16px 0; /* 좁은 해상도에서는 이미지 위로 붙음 */
   }
 `;
 
 const LetterImage = styled.img`
   width: 100%;
-  max-width: 50vw; // 디바이스 크기에 비례해서 커지도록
-  aspect-ratio: 1 / 1;
   min-width: 132px;
+  max-width: 50vw; /* 디바이스 크기에 비례해서 커지도록 */
   min-height: 132px;
+  aspect-ratio: 1 / 1;
+
   object-fit: cover;
+
   border-radius: 10px;
 
   @media (max-width: 320px) {
-    max-width: 80vw; // 작은 디바이스에선 좀 더 작게
+    max-width: 80vw; /* 작은 디바이스에선 좀 더 작게 */
   }
 `;
 
@@ -314,20 +315,17 @@ const WriteContent = styled.div`
 
   flex-direction: column;
 
+  gap: 12px;
   align-items: center;
   align-self: stretch;
   justify-content: center;
 
   padding: 10px 14px;
-  gap: 12px;
-
-  //height: 270px;
-
   margin: 5px 20px 20px 20px;
 
-  border-radius: 9.375px;
-  border: 1.172px dashed #ced4da;
   background: #f1f3f5;
+  border: 1.172px dashed #ced4da;
+  border-radius: 9.375px;
 `;
 
 const CompleteBtn = styled.div<{ $isdisabled: boolean }>`
@@ -358,9 +356,6 @@ const WriteTa = styled.textarea`
   align-self: stretch;
 
   width: 80%;
-
-  //padding: 16px;
-  //margin: 0 auto;
 
   overflow: hidden;
 
