@@ -221,9 +221,6 @@ const BackGround = styled.div`
   height: calc(var(--vh, 1vh) * 100);
 
   overflow: hidden;
-  //justify-content: center;
-  //left: 50%;
-  //transform: translateX(-50%);
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -458,7 +455,6 @@ const InputBox = styled.div`
 
   background-color: #fff;
   border-bottom: 1px dashed #dee2e6;
-  //margin-bottom: 12px;
 `;
 const InputLogo = styled.div`
   font-family: var(--Typography-family-caption, SUIT);

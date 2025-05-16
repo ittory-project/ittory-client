@@ -23,7 +23,6 @@ export const WriteOrderList = ({
         {elements.map((item, index) => {
           return (
             <div key={item.elementId}>
-              {/* 나중에 ElementResponse를 넘기고, 이름 개선, 시간 표시 개선 */}
               {item.content && item.nickname && (
                 <WriteOrderActivateItem
                   key={item.elementId}

@@ -35,7 +35,6 @@ export default function LetterInfo({
 }: Props) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
-  //const keyboardRef = useRef<HTMLInputElement | null>(null);
   const receiverInputRef = useRef<HTMLInputElement | null>(null);
   const myNameInputRef = useRef<HTMLInputElement | null>(null);
   const [focusedField, setFocusedField] = useState<
@@ -117,7 +116,6 @@ export default function LetterInfo({
           <InputBox>
             <InputLogo>받는 사람</InputLogo>
             <Input
-              //ref={keyboardRef}
               ref={receiverInputRef}
               onFocus={() => handleFocus('receiver')}
               required
@@ -138,7 +136,6 @@ export default function LetterInfo({
           <InputBox>
             <InputLogo>내 이름</InputLogo>
             <Input
-              //ref={keyboardRef}
               ref={myNameInputRef}
               onFocus={() => handleFocus('myName')}
               required
@@ -257,9 +254,6 @@ const BackGround = styled.div`
   );
 
   background-blend-mode: overlay, normal;
-  //justify-content: center;
-  //left: 50%;
-  //transform: translateX(-50%);
 `;
 const Cancel = styled.span`
   position: absolute;
@@ -334,7 +328,6 @@ const MainCotainer = styled.div<{ $shiftup?: boolean; $isopen?: string }>`
     props.$shiftup ? 'translateY(0.8rem)' : 'translateY(0)'};
 
   transition: transform 0.3s ease;
-  //justify-content: center;
 `;
 
 const InputBox = styled.div`
@@ -352,7 +345,6 @@ const InputBox = styled.div`
   margin-top: 0;
 
   border-bottom: 1px dashed #dee2e6;
-  //margin-bottom: 4px;
 `;
 const InputLogo = styled.div`
   position: absolute; /* 위치 고정 */

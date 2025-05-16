@@ -160,7 +160,6 @@ const ButtonContainer = styled.div`
   width: 224px;
 
   margin-top: 1.35rem;
-  //bottom: 20px;
 `;
 const Button = styled.button`
   box-sizing: border-box;

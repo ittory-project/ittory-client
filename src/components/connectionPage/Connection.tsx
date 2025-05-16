@@ -11,9 +11,7 @@ import bg4 from '../../../public/assets/connect/bg4.png';
 import bg5 from '../../../public/assets/connect/bg5.png';
 import '../../App.css';
 import { encodeLetterId } from '../../api/config/base64';
-//import { WriteOrder } from "./WriteOrder";
 import { clearData, clearOrderData } from '../../api/config/state';
-import { postRandom } from '../../api/service/ParticipantService';
 
 const scaleAnimation = keyframes`
   0% {
@@ -34,21 +32,12 @@ const hideDuringAnimation = keyframes`
 `;
 
 export const Connection = () => {
-  //const [isAnimationComplete] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const letterId = location.state.letterId;
   const coverId = location.state.coverId;
-  //const topBackground = location.state.bg;
-  /*
-  const backgroundImages: { [key: number]: string } = {
-    1: bg1,
-    2: bg2,
-    3: bg3,
-    4: bg4,
-    5: bg5,
-  };*/
+
   const [topBackground, setTopBackground] = useState<string | null>(
     location.state.bg || null,
   );
@@ -62,14 +51,6 @@ export const Connection = () => {
     window.localStorage.setItem('nowRepeat', '1');
     window.localStorage.setItem('totalItem', '1');
     window.localStorage.setItem('resetTime', '');
-
-    const postRandomParti = async () => {
-      await postRandom({
-        letterId: letterId,
-      });
-    };
-
-    postRandomParti();
   }, []);
 
   useEffect(() => {
@@ -102,40 +83,12 @@ export const Connection = () => {
     }
   }, []);
 
-  /*useEffect(() => {
-    switch (coverId) {
-      case 1:
-        setTopBackground("bg1");
-        break;
-      case 2:
-        setTopBackground("bg2");
-        break;
-      case 3:
-        setTopBackground("bg3");
-        break;
-      case 4:
-        setTopBackground("bg4");
-        break;
-      case 5:
-        setTopBackground("bg5");
-        break;
-      default:
-        setTopBackground(null);
-    }
-  }, []);*/
-
   useEffect(() => {
     if (topBackground) {
       const img = new Image();
-      img.src = topBackground; // 이미지를 미리 로드
+      img.src = topBackground;
     }
   }, [topBackground]);
-
-  /*이미지 로딩 완료 여부를 제어하고 싶다면 이 방식으로
-        <BackGround>
-          <BgImage src={topBackground} alt="Background" />
-   */
-  //<BackGround className={topBackground}>
 
   return (
     <>
@@ -170,15 +123,7 @@ const BackGround = styled.div<{ topBackground: string | null }>`
   animation: ${scaleAnimation} 1s ease-in-out;
   animation-delay: 1.6s;
 `;
-/*const BgImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.5s ease-in-out;
-`;*/
+
 const Contents = styled.div`
   position: absolute;
   z-index: 2;

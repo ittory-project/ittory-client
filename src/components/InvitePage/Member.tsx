@@ -193,7 +193,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
           fallbackCopyTextToClipboard(shareTextPc);
         }
       } else {
-        // 모바일이면
         try {
           await navigator.share({
             url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
@@ -459,7 +458,6 @@ const ReceiverContainer = styled.div`
   display: flex;
 
   align-items: center;
-  //height: 48px;
 `;
 const Receiver = styled.span`
   height: 24px;
@@ -474,7 +472,6 @@ const Receiver = styled.span`
   color: #212529;
 
   letter-spacing: -0.5px;
-  //flex: 1 0 0;
   &:first-of-type {
     margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
   }
@@ -501,7 +498,6 @@ const MainContainer = styled.div`
   align-items: center;
 
   width: 288px;
-  //margin-top: 76px;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
   display: flex;
@@ -797,7 +793,6 @@ const User = styled.div`
   align-items: center;
 
   width: 44px;
-  //gap: var(--Border-Radius-radius_200, 6px);
 `;
 const MainUser = styled.div`
   position: relative;

@@ -144,7 +144,6 @@ export const Letter = ({
             letterStyle={coverType}
             letterFontStyle={font}
             letterContent={letterInfo}
-            //partiList={partiList}
           />
         );
       else

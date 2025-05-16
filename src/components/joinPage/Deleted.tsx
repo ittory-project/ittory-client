@@ -44,7 +44,6 @@ const BackGround = styled.div`
   background: #fff;
 
   transform: translateX(-50%);
-  //justify-content: center;
 `;
 const Container = styled.div`
   display: flex;
