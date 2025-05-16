@@ -21,7 +21,6 @@ import { getCoverTypes } from '../../api/service/CoverService';
 import { getFontById } from '../../api/service/FontService';
 import { getLetterInfo } from '../../api/service/LetterService';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
-import { getMyPage } from '../../api/service/MemberService';
 import { isMobileDevice } from '../../utils';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { Count } from './Count/Count';
@@ -58,8 +57,6 @@ export const HostUser = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(', ');
-  const [, setMemberId] = useState<number>(0);
-  const [, setName] = useState<string>('');
   const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [cropImg, setCropImg] = useState<string>('');
   const [deliverDay, setDeliverDay] = useState<Date | null>();
@@ -81,10 +78,6 @@ export const HostUser = ({
 
       const types = await getCoverTypes();
       setCoverTypes(types);
-
-      const myData = await getMyPage();
-      setMemberId(myData.memberId);
-      setName(myData.name);
     };
 
     const fetchFont = async () => {

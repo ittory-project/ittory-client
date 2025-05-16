@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 
 import Player, { LottieRefCurrentProps } from 'lottie-react';
 import { useNavigate } from 'react-router-dom';
@@ -124,7 +124,9 @@ export const Home = () => {
         <>
           <MenuOverlay $isOpen={isMenuOpen} onClick={handleOverlayClick} />
           <MenuContainer $isOpen={isMenuOpen}>
-            <Menu onClose={closeMenu} />
+            <Suspense>
+              <Menu onClose={closeMenu} />
+            </Suspense>
           </MenuContainer>
         </>
         <Container ref={containerRef}>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
-import { getMyPage, getVisitUser } from '../../api/service/MemberService';
+import { myInfoQuery } from '../../api/queries/user';
+import { getVisitUser } from '../../api/service/MemberService';
 import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
 import Deleted from './Deleted';
 import { JoinModal } from './JoinModal';
@@ -12,13 +13,11 @@ import NoAccess from './NoAccess';
 import Started from './Started';
 
 export const Join = () => {
+  const { data: myInfo } = useSuspenseQuery(myInfoQuery());
   const [nickname, setNickname] = useState<string>('');
-  const [name, setName] = useState<string>('');
   const [viewModal, setViewModal] = useState<boolean>(false);
-  const [login, setLogin] = useState<boolean>(false);
   const [visited, setVisited] = useState<boolean>(false);
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
-  const navigate = useNavigate();
   const { letterId } = useParams();
   const [started, setStarted] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
@@ -33,30 +32,15 @@ export const Join = () => {
 
   useEffect(() => {
     const fetchVisitUser = async () => {
-      if (!accessTokenRepository.isLoggedIn()) {
-        navigate('/login');
+      const visitdata = await getVisitUser();
+      if (visitdata.isVisited === true) {
+        setVisited(true);
       } else {
-        setLogin(true);
-        const visitdata = await getVisitUser();
-        if (visitdata.isVisited === true) {
-          setVisited(true);
-        } else {
-          setVisited(false);
-        }
+        setVisited(false);
       }
     };
     fetchVisitUser();
   }, []);
-
-  useEffect(() => {
-    const fetchMyPageData = async () => {
-      if (login) {
-        const myPageData = await getMyPage();
-        setName(myPageData.name);
-      }
-    };
-    fetchMyPageData();
-  }, [login]);
 
   const handleModal = async () => {
     if (nickname) {
@@ -95,7 +79,7 @@ export const Join = () => {
           {
             <>
               <Title>
-                <Text>{name}님, 환영해요!</Text>
+                <Text>{myInfo.name}님, 환영해요!</Text>
                 <Text>편지에 사용할 닉네임을 정해주세요</Text>
               </Title>
               <Container>

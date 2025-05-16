@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import bell from '../../../public/assets/bell.svg';
 import check from '../../../public/assets/check.svg';
 import prev from '../../../public/assets/prev.svg';
-import { getMyPage } from '../../api/service/MemberService';
+import { myInfoQuery } from '../../api/queries/user';
 import { DeleteReason } from './DeleteReason';
 
 interface Props {
@@ -13,16 +14,8 @@ interface Props {
 }
 
 export const AccountDelete = ({ setViewDelete }: Props) => {
+  const { data: myInfo } = useSuspenseQuery(myInfoQuery());
   const [viewReason, setViewReason] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
-
-  useEffect(() => {
-    const fetchMyPageData = async () => {
-      const myPageData = await getMyPage();
-      setName(myPageData.name);
-    };
-    fetchMyPageData();
-  }, []);
 
   const handleDelete = () => {
     setViewDelete(false);
@@ -42,7 +35,7 @@ export const AccountDelete = ({ setViewDelete }: Props) => {
           </Header>
           <Container>
             <Bell src={bell} />
-            <Title>{name}님,</Title>
+            <Title>{myInfo.name}님,</Title>
             <Title>탈퇴하기시 전에 확인해 주세요</Title>
             <Contents>
               <TxtList>

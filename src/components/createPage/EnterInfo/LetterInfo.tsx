@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,7 @@ import styled from 'styled-components';
 
 import calender from '../../../../public/assets/calendar.svg';
 import X from '../../../../public/assets/x.svg';
-import { getMyPage } from '../../../api/service/MemberService';
+import { myInfoQuery } from '../../../api/queries/user';
 import BottomSheet from './BotttomSheet';
 
 interface Props {
@@ -33,6 +34,7 @@ export default function LetterInfo({
   setViewCoverDeco,
   setViewStartpage,
 }: Props) {
+  const { data: myInfo } = useSuspenseQuery(myInfoQuery());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
   const receiverInputRef = useRef<HTMLInputElement | null>(null);
@@ -40,16 +42,7 @@ export default function LetterInfo({
   const [focusedField, setFocusedField] = useState<
     'receiver' | 'myName' | null
   >(null);
-  const [name, setName] = useState<string>('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchMyPageData = async () => {
-      const myPageData = await getMyPage();
-      setName(myPageData.name);
-    };
-    fetchMyPageData();
-  }, []);
 
   const handleCancel = () => {
     navigate('/');
@@ -109,7 +102,7 @@ export default function LetterInfo({
       </Cancel>
       <Container>
         <Title $keyboardVisible={keyboardVisible}>
-          <Text>{name}님,</Text>
+          <Text>{myInfo.name}님,</Text>
           <Text>같이 편지를 만들어봐요!</Text>
         </Title>
         <MainCotainer $shiftup={keyboardVisible} $isopen={String(isModalOpen)}>
