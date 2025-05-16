@@ -1,4 +1,4 @@
-import React, { ReactNode, Suspense, useEffect, useState } from 'react';
+import React, { ReactNode, Suspense, useState } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -7,8 +7,7 @@ import styled from 'styled-components';
 
 import EditImg from '../../../../public/assets/edit.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
-import { coverQuery } from '../../../api/queries';
-import { getVisitUser } from '../../../api/service/MemberService';
+import { coverQuery, userQuery } from '../../../api/queries';
 import EditLetter from '../FinalLetter/EditLetter';
 import CompleteModal from './CompleteModal';
 import CoverModal from './CoverModal';
@@ -60,21 +59,12 @@ export default function FinalInfo({
   selectFid,
 }: Props) {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: visit } = useSuspenseQuery(userQuery.visitUserQuery());
 
   const [viewEdit, setViewEdit] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState<boolean>(false);
   const [, setKeyboardVisible] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
-  const [visit, setVisit] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const user = await getVisitUser();
-      setVisit(user.isVisited);
-    };
-
-    fetchData();
-  }, []);
 
   const handleEditview = () => {
     setViewEdit(true);
