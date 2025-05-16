@@ -29,7 +29,7 @@ export const ReceiveLetter = () => {
   const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
   const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
   const coverType = coverTypes.find(
-    (type) => type.id === letterInfo?.coverTypeId, // FIXME: letterInfo가 먼저 반드시 있어야 함
+    (type) => type.id === letterInfo.coverTypeId,
   );
   if (!coverType) {
     throw new Error('커버 타입을 찾을 수 없습니다.');
