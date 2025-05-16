@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import prev from '../../../public/assets/prev.svg';
 import { SessionLogger } from '../../utils';
 import { CreatedLetter } from './CreatedLetter';
+import { Loading } from './Loading';
 import { ReceivedLetter } from './ReceivedLetter';
 
 const logger = new SessionLogger('letterbox');
@@ -159,7 +160,7 @@ export const LetterBox = () => {
 
   return (
     <BackGround>
-      <Suspense>
+      <Suspense fallback={<Loading />}>
         {(isModalOpen || popup) && <Overlay />}
         {!openLetter && (
           <>

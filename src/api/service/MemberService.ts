@@ -3,6 +3,7 @@ import {
   LetterCountsGetResponse,
   LetterboxDeleteResponse,
   MypageGetResponse,
+  ParticipateLetterModel,
   ParticipationGetResponse,
   ReceivedGetResponse,
   VisitGetResponse,
@@ -39,11 +40,13 @@ export async function getReceivedLetter(): Promise<ReceivedGetResponse> {
   return response.data;
 }
 
-export async function getParticipatedLetter(): Promise<ParticipationGetResponse> {
+export async function getParticipatedLetter(): Promise<
+  ParticipateLetterModel[]
+> {
   const response = await api.get<ParticipationGetResponse>(
     `api/member/participations`,
   );
-  return response.data;
+  return response.data.data.letters;
 }
 
 //재방문 유저 확인

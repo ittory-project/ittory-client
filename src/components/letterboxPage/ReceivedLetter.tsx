@@ -112,7 +112,7 @@ export const ReceivedLetter = ({
                   총
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '700' }}>
-                  {letterCounts.receiveLetterCount}
+                  {letterCounts}
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '400' }}>개</NumberTxt>
               </NumberHeader>
