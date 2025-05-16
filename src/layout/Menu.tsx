@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -12,7 +13,8 @@ import defaultImage from '../../public/assets/menu/profileImg.png';
 import direction from '../../public/assets/navigate.svg';
 import X from '../../public/assets/x.svg';
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
-import { getLetterCounts, getMyPage } from '../api/service/MemberService';
+import { myInfoQuery } from '../api/queries/user';
+import { getLetterCounts } from '../api/service/MemberService';
 import { TempLoginArea } from './TempLogin';
 
 interface Props {
@@ -26,10 +28,13 @@ export interface GroupItem {
 }
 
 export const Menu = ({ onClose }: Props) => {
+  const isLoggedIn = accessTokenRepository.isLoggedIn();
+  const { data: myInfo } = useQuery({
+    ...myInfoQuery(),
+    enabled: isLoggedIn,
+  });
+
   const navigate = useNavigate();
-  const [user, setUser] = useState<boolean>(false);
-  const [, setFocusCreate] = useState<boolean>(false);
-  const [, setFocusReceive] = useState<boolean>(false);
   const [navigatePath, setNavigatePath] = useState<string | null>(null);
   const [navigateState, setNavigateState] = useState<{
     focusCreate: boolean;
@@ -37,29 +42,18 @@ export const Menu = ({ onClose }: Props) => {
   } | null>(null);
   const [partiLetter, setPartiLetter] = useState<number>(0);
   const [receiveLetter, setReceiveLetter] = useState<number>(0);
-  const [profileImage, setProfileImage] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
-    if (accessTokenRepository.isLoggedIn()) {
-      setUser(true);
+    if (isLoggedIn) {
       const fetchLetterCounts = async () => {
         const counts = await getLetterCounts();
         setPartiLetter(counts.participationLetterCount);
         setReceiveLetter(counts.receiveLetterCount);
       };
 
-      const fetchMyPageData = async () => {
-        const myPageData = await getMyPage();
-        setProfileImage(myPageData.profileImage);
-        setUserName(myPageData.name);
-      };
       fetchLetterCounts();
-      fetchMyPageData();
-    } else {
-      setUser(false);
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const navigateToAccount = () => {
     navigate('/Account');
@@ -73,15 +67,13 @@ export const Menu = ({ onClose }: Props) => {
       setNavigateState(null);
       onClose();
     }
-  }, [navigatePath, navigateState]);
+  }, [navigatePath, navigateState, navigate, onClose]);
 
   const handleCreate = () => {
     if (!accessTokenRepository.isLoggedIn()) {
       navigate('/login');
       onClose();
     } else {
-      setFocusCreate(true);
-      setFocusReceive(false);
       setNavigateState({ focusCreate: true, focusReceive: false });
       setNavigatePath('/LetterBox');
     }
@@ -92,8 +84,6 @@ export const Menu = ({ onClose }: Props) => {
       navigate('/login');
       onClose();
     } else {
-      setFocusCreate(false);
-      setFocusReceive(true);
       setNavigateState({ focusCreate: false, focusReceive: true });
       setNavigatePath('/LetterBox');
     }
@@ -134,9 +124,9 @@ export const Menu = ({ onClose }: Props) => {
       </Cancel>
       <Profile>
         <ImageContainer>
-          {user ? (
-            profileImage ? (
-              <ProfileImage src={profileImage} alt="Profile" />
+          {myInfo ? (
+            myInfo.profileImage ? (
+              <ProfileImage src={myInfo.profileImage} alt="Profile" />
             ) : (
               <ProfileImage src={logindefault} alt="Profile" />
             )
@@ -144,7 +134,7 @@ export const Menu = ({ onClose }: Props) => {
             <ProfileImage src={defaultImage} alt="Profile" />
           )}
         </ImageContainer>
-        {user === false ? (
+        {!myInfo ? (
           <>
             <NavigateLogin onClick={handleLogin}>
               로그인하고 이용하기
@@ -153,7 +143,7 @@ export const Menu = ({ onClose }: Props) => {
           </>
         ) : (
           <UserSet>
-            <UserName>{userName}</UserName>
+            <UserName>{myInfo.name}</UserName>
             <UserSetting onClick={navigateToAccount}>
               계정 관리
               <img
@@ -175,7 +165,7 @@ export const Menu = ({ onClose }: Props) => {
             style={{ width: '20px', height: '20px', marginBottom: '1.2px' }}
           />
           참여한 편지
-          {user === false ? (
+          {!myInfo ? (
             <LetterNum style={{ color: '#ADB5BD' }}>0개</LetterNum>
           ) : (
             <LetterNum
@@ -200,7 +190,7 @@ export const Menu = ({ onClose }: Props) => {
             style={{ width: '20px', height: '20px', marginBottom: '1.2px' }}
           />
           받은 편지
-          {user === false ? (
+          {!myInfo ? (
             <LetterNum style={{ color: '#ADB5BD' }}>0개</LetterNum>
           ) : (
             <LetterNum
