@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
@@ -17,12 +18,11 @@ import notice from '../../../public/assets/notice.svg';
 import out from '../../../public/assets/out.svg';
 import shadow from '../../../public/assets/shadow2.svg';
 import tip from '../../../public/assets/tooltip.svg';
-import { CoverType } from '../../api/model/CoverType';
 import {
   LetterDetailGetResponse,
   LetterPartiItem,
 } from '../../api/model/LetterModel';
-import { getCoverTypes } from '../../api/service/CoverService';
+import { coverQuery } from '../../api/queries';
 import { getFontById } from '../../api/service/FontService';
 import { getLetterInfo } from '../../api/service/LetterService';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
@@ -43,13 +43,14 @@ interface Props {
 }
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(', ');
-  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
 
   const [cropImg, setCropImg] = useState<string>('');
   const [deliverDay, setDeliverDay] = useState<Date | null>(null);
@@ -76,10 +77,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   }, [receiverName]);
 
   useEffect(() => {
-    const fetchCoverTypes = async () => {
-      const types = await getCoverTypes();
-      setCoverTypes(types);
-    };
     const fetchLetterInfo = async () => {
       const letterData = await getLetterInfo(letterId);
       setCropImg(letterData.coverPhotoUrl);
@@ -92,7 +89,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
       setTitle(letterData.title);
     };
 
-    fetchCoverTypes();
     fetchLetterInfo();
   }, []);
 

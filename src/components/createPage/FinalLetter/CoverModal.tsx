@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import camera from '../../../../public/assets/camera.svg';
 import camera_mini from '../../../../public/assets/camera_mini.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
 import X from '../../../../public/assets/x.svg';
-import { CoverType } from '../../../api/model/CoverType';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
-import { getCoverTypes } from '../../../api/service/CoverService';
+import { coverQuery } from '../../../api/queries';
 import { getAllFont } from '../../../api/service/FontService';
 import { postCoverImage } from '../../../api/service/ImageService';
 import { ImageExtension } from '../../../constants';
@@ -51,6 +51,8 @@ export default function CoverModal({
   setBackgroundimage,
   selectFid,
 }: Props) {
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
@@ -60,7 +62,6 @@ export default function CoverModal({
   const [originalImage, setOriginalImage] = useState<string>('');
   const [, setCropperKey] = useState<number>(0);
   const [, setBookimage] = useState<number>(backgroundimage - 1);
-  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
   const [backgroundImage, setBackgroundImage] = useState<string>(
     String(backgroundimage),
@@ -86,15 +87,6 @@ export default function CoverModal({
     };
     fetchFonts();
     setSelectfid(selectFid);
-  }, []);
-
-  useEffect(() => {
-    const fetchCoverTypes = async () => {
-      const types = await getCoverTypes();
-      setCoverTypes(types);
-    };
-
-    fetchCoverTypes();
   }, []);
 
   useEffect(() => {

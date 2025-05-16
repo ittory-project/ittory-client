@@ -61,20 +61,18 @@ export const Create = () => {
       {load ? (
         <Loading />
       ) : (
-        <>
+        <Suspense fallback={<Loading />}>
           {viewStartpage && (
-            <Suspense>
-              <LetterInfo
-                myName={myName}
-                receiverName={receiverName}
-                deliverDay={deliverDay}
-                setReceiverName={setReceiverName}
-                setMyName={setMyName}
-                setDeliverDay={setDeliverDay}
-                setViewCoverDeco={setViewCoverDeco}
-                setViewStartpage={setViewStartpage}
-              />
-            </Suspense>
+            <LetterInfo
+              myName={myName}
+              receiverName={receiverName}
+              deliverDay={deliverDay}
+              setReceiverName={setReceiverName}
+              setMyName={setMyName}
+              setDeliverDay={setDeliverDay}
+              setViewCoverDeco={setViewCoverDeco}
+              setViewStartpage={setViewStartpage}
+            />
           )}
           {viewCoverDeco && (
             <CoverDeco
@@ -114,7 +112,7 @@ export const Create = () => {
               selectFid={selectFid}
             />
           )}
-        </>
+        </Suspense>
       )}
     </BackGround>
   );
