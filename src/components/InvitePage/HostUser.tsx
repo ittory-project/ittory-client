@@ -14,8 +14,7 @@ import out from '../../../public/assets/out.svg';
 import shadow from '../../../public/assets/shadow2.svg';
 import tip from '../../../public/assets/tooltip.svg';
 import { LetterPartiItem } from '../../api/model/LetterModel';
-import { coverQuery, letterQuery } from '../../api/queries';
-import { getFontById } from '../../api/service/FontService';
+import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { isMobileDevice } from '../../utils';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { Count } from './Count/Count';
@@ -48,6 +47,9 @@ export const HostUser = ({
   const { data: letterInfo } = useSuspenseQuery(
     letterQuery.infoByLetterIdQuery(letterId),
   );
+  const { data: font } = useSuspenseQuery(
+    fontQuery.fontByIdQuery(letterInfo.fontId),
+  );
 
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);
@@ -56,18 +58,6 @@ export const HostUser = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(', ');
-  const [selectfont, setSelectfont] = useState<string>('');
-
-  useEffect(() => {
-    const fetchFont = async () => {
-      const fontdata = await getFontById(letterInfo.fontId);
-      setSelectfont(fontdata.value);
-    };
-
-    if (letterInfo.fontId > -1) {
-      fetchFont();
-    }
-  }, [letterId]);
 
   useEffect(() => {
     if (letterInfo.receiverName.length > 9) {
@@ -190,7 +180,7 @@ export const HostUser = ({
                 coverTypes[letterInfo.coverTypeId - 1]?.confirmImageUrl
               }
             >
-              <TitleContainer $font={selectfont}>
+              <TitleContainer $font={font.value}>
                 {letterInfo.title}
               </TitleContainer>
               {letterInfo.deliveryDate ? (

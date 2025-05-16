@@ -5,9 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { decodeLetterId } from '../../api/config/base64';
-import { FontGetResponse } from '../../api/model/FontModel';
-import { coverQuery, letterQuery } from '../../api/queries';
-import { getFontById } from '../../api/service/FontService';
+import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import {
   getLetterStorageCheck,
   postLetterStore,
@@ -28,6 +26,9 @@ export const ReceiveLetter = () => {
   const { data: letterInfo } = useSuspenseQuery(
     letterQuery.detailByLetterIdQuery(letterNumId),
   );
+  const { data: font } = useSuspenseQuery(
+    fontQuery.fontByIdQuery(letterInfo.fontId),
+  );
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
   const coverType = coverTypes.find(
     (type) => type.id === letterInfo?.coverTypeId, // FIXME: letterInfo가 먼저 반드시 있어야 함
@@ -37,7 +38,6 @@ export const ReceiveLetter = () => {
   }
 
   const navigate = useNavigate();
-  const [font, setFont] = useState<FontGetResponse>();
 
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,19 +46,6 @@ export const ReceiveLetter = () => {
     const page = Number(query.get('page')) || 1;
     setCurrentPage(page);
   }, [query]);
-
-  const getSharedLetterStyle = async () => {
-    if (letterInfo) {
-      const fontResponse = await getFontById(letterInfo.fontId);
-      if (fontResponse) {
-        setFont(fontResponse);
-      }
-    }
-  };
-
-  useEffect(() => {
-    getSharedLetterStyle();
-  }, [letterInfo]);
 
   type AlertState = 'LOADING' | 'SAVED' | 'ISSTORED';
   const [saveAlert, setSaveAlert] = useState<AlertState>('LOADING');

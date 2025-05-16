@@ -8,12 +8,10 @@ import camera_mini from '../../../../public/assets/camera_mini.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
 import X from '../../../../public/assets/x.svg';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
-import { coverQuery } from '../../../api/queries';
-import { getAllFont } from '../../../api/service/FontService';
+import { coverQuery, fontQuery } from '../../../api/queries';
 import { postCoverImage } from '../../../api/service/ImageService';
 import { ImageExtension } from '../../../constants';
 import { SessionLogger } from '../../../utils/SessionLogger';
-import { fontProps } from '../CoverDeco/CoverStyle';
 import FontPopup from '../CoverDeco/FontPopup';
 
 const logger = new SessionLogger('create');
@@ -52,6 +50,7 @@ export default function CoverModal({
   selectFid,
 }: Props) {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: fonts } = useSuspenseQuery(fontQuery.allFontsQuery());
 
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
@@ -68,7 +67,6 @@ export default function CoverModal({
   );
   const [ImageIndex, setImageIndex] = useState<number>(backgroundimage);
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const [fonts, setFonts] = useState<fontProps[]>([]);
   const [font, setFont] = useState<string>(selectfont);
   const [selectf, setSelectf] = useState<string>('');
   const [selectfid, setSelectfid] = useState<number>(0);
@@ -81,11 +79,6 @@ export default function CoverModal({
   }, [ImageIndex, coverTypes]);
 
   useEffect(() => {
-    const fetchFonts = async () => {
-      const types = await getAllFont();
-      setFonts(types);
-    };
-    fetchFonts();
     setSelectfid(selectFid);
   }, []);
 

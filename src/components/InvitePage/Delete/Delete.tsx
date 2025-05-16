@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
-import {
-  deleteLetter,
-  getLetterInfo,
-} from '../../../api/service/LetterService';
+import { deleteLetter } from '../../../api/service/LetterService';
 import { getWebSocketApi } from '../../../api/websockets';
 import { SessionLogger } from '../../../utils';
 import { DeleteConfirm } from './DeleteConfirm';
@@ -23,14 +20,6 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
   const handleDelete = () => {
     setViewDelete(false);
   };
-
-  useEffect(() => {
-    const fetchLetterInfo = async () => {
-      await getLetterInfo(letterId);
-    };
-
-    fetchLetterInfo();
-  }, []);
 
   const handleConfirm = async () => {
     deleteLetter(
