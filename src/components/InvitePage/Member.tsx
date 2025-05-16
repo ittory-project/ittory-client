@@ -26,7 +26,7 @@ import { getCoverTypes } from '../../api/service/CoverService';
 import { getFontById } from '../../api/service/FontService';
 import { getLetterInfo } from '../../api/service/LetterService';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
-import { SessionLogger } from '../../utils';
+import { SessionLogger, isMobileDevice } from '../../utils';
 import { DeleteConfirm } from './Delete/DeleteConfirm';
 import { Exit } from './ExitMember';
 import { UserGuide } from './UserGuide';
@@ -44,7 +44,6 @@ interface Props {
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
@@ -135,17 +134,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
     getSharedLetter();
   }, [letterId]);
 
-  // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 850);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -174,7 +162,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   // 모바일, 데스크톱 화면 구분해서 공유하게 함
   const handleShare = async () => {
     if (letterInfo) {
-      if (!isMobile) {
+      if (!isMobileDevice()) {
         const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
         if (
           navigator.clipboard &&
