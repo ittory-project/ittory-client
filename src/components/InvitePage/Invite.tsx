@@ -110,8 +110,12 @@ export const Invite = () => {
         logger.debug('finishLetter response');
         setViewDelete(true);
       },
-      start: () => {
+      start: async () => {
         logger.debug('startLetter response');
+        await queryClient.invalidateQueries({
+          queryKey: letterQuery.queryKeys.participantsById(letterId),
+        });
+
         navigate('/connection', {
           state: {
             letterId,
