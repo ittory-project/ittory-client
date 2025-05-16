@@ -3,7 +3,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
-import { setUserIdFromAccessToken } from '../api/config/setToken';
 import { postLogout, postTemporaryLogin } from '../api/service/AuthService';
 import { SessionLogger } from '../utils';
 
@@ -14,10 +13,7 @@ const tempLogin = async (loginId: string) => {
     await postLogout();
   }
 
-  const { accessToken } = await postTemporaryLogin(loginId);
-
-  // NOTE: 현재 로컬스토리지로 유저id 공유 중이어서 아직 필요...
-  setUserIdFromAccessToken(accessToken);
+  await postTemporaryLogin(loginId);
 
   logger.debug('임시 로그인 완료 - 새로고침');
   alert('임시 로그인에 성공했습니다. 새로고침합니다.');
