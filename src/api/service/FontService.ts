@@ -1,7 +1,6 @@
 import { ApiResponse, api } from '../config/api';
 import { FontGetResponse } from '../model/FontModel';
 import { FontAllResponse } from '../model/FontModel';
-import { Font } from '../model/FontModel';
 
 // 특정 폰트 이름 조회 API
 // param: 폰트 ID
@@ -13,7 +12,7 @@ export async function getFontById(fontId: number): Promise<FontGetResponse> {
   return response.data.data;
 }
 
-export async function getAllFont(): Promise<Font[]> {
+export async function getAllFont(): Promise<FontAllResponse> {
   const response: ApiResponse<FontAllResponse> = await api.get(`/api/font/all`);
   return response.data.data;
 }
