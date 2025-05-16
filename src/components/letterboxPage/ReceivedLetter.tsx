@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import more from '../../../public/assets/more.svg';
 import { ReceiveLetterModel } from '../../api/model/MemberModel';
-import {
-  getLetterCounts,
-  getReceivedLetter,
-} from '../../api/service/MemberService';
+import { userQuery } from '../../api/queries';
+import { getReceivedLetter } from '../../api/service/MemberService';
 import { Delete_letterbox } from './Delete_letterbox';
 import { EmptyLetter } from './EmptyLetter';
 import { Letter } from './Letter';
@@ -42,17 +41,18 @@ export const ReceivedLetter = ({
   setDeleteAlert,
   setDeletedAlert,
 }: Props) => {
+  const { data: letterCounts } = useSuspenseQuery(
+    userQuery.letterCountsQuery(),
+  );
+
   const [deleteTitle, setDeleteTitle] = useState<string>('');
   const [selectId, setSelectId] = useState<number>(-1);
-  const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<ReceiveLetterModel[]>([]);
   const [load, setLoad] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchLetter = async () => {
       const letterdata = await getReceivedLetter();
-      const counts = await getLetterCounts();
-      setLetterCounts(counts.receiveLetterCount);
       setLetters(letterdata.data.letters);
       setLoad(false);
     };
@@ -73,8 +73,6 @@ export const ReceivedLetter = ({
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
         const letterdata = await getReceivedLetter();
-        const counts = await getLetterCounts();
-        setLetterCounts(counts.receiveLetterCount);
         setLetters(letterdata.data.letters);
 
         const deletedMessage = localStorage.getItem('deletedLetter');
@@ -114,7 +112,7 @@ export const ReceivedLetter = ({
                   총
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '700' }}>
-                  {letterCounts}
+                  {letterCounts.receiveLetterCount}
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '400' }}>개</NumberTxt>
               </NumberHeader>

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import more from '../../../public/assets/more.svg';
 import { ParticipateLetterModel } from '../../api/model/MemberModel';
-import {
-  getLetterCounts,
-  getParticipatedLetter,
-} from '../../api/service/MemberService';
+import { userQuery } from '../../api/queries';
+import { getParticipatedLetter } from '../../api/service/MemberService';
 import { Created_Modal } from './Created_Modal';
 import { Delete_letterbox } from './Delete_letterbox';
 import { EmptyLetter } from './EmptyLetter';
@@ -42,17 +41,18 @@ export const CreatedLetter = ({
   setDeleteAlert,
   setDeletedAlert,
 }: Props) => {
+  const { data: letterCounts } = useSuspenseQuery(
+    userQuery.letterCountsQuery(),
+  );
+
   const [deleteName, setDeleteName] = useState<string>('');
   const [selectId, setSelectId] = useState<number>(-1);
-  const [letterCounts, setLetterCounts] = useState<number>(0);
   const [letters, setLetters] = useState<ParticipateLetterModel[]>([]);
   const [load, setLoad] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchLetter = async () => {
       const letterdata = await getParticipatedLetter();
-      const counts = await getLetterCounts();
-      setLetterCounts(counts.participationLetterCount);
       setLetters(letterdata.data.letters);
       setLoad(false);
     };
@@ -63,8 +63,6 @@ export const CreatedLetter = ({
   useEffect(() => {
     const fetchLetter = async () => {
       const letterdata = await getParticipatedLetter();
-      const counts = await getLetterCounts();
-      setLetterCounts(counts.participationLetterCount);
       setLetters(letterdata.data.letters);
       setLoad(false);
     };
@@ -86,8 +84,6 @@ export const CreatedLetter = ({
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
         const letterdata = await getParticipatedLetter();
-        const counts = await getLetterCounts();
-        setLetterCounts(counts.participationLetterCount);
         setLetters(letterdata.data.letters);
 
         const deletedMessage = localStorage.getItem('deletedLetter');
@@ -126,7 +122,7 @@ export const CreatedLetter = ({
                   총
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '700' }}>
-                  {letterCounts}
+                  {letterCounts.participationLetterCount}
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '400' }}>개</NumberTxt>
               </NumberHeader>
