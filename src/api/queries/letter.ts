@@ -42,7 +42,7 @@ export const elementsByLetterIdQuery = (letterId: number) => ({
   cacheTime: inMillis().minutes(30).value(),
 });
 
-export const letterStartInfoByLetterIdQuery = (letterId: number) => ({
+export const startInfoByLetterIdQuery = (letterId: number) => ({
   queryKey: queryKeys.startInfoByLetterId(letterId),
   queryFn: () => getLetterStartInfo(letterId),
   staleTime: inMillis().minutes(30).value(),

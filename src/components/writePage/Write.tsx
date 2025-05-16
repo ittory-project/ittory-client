@@ -36,7 +36,7 @@ export const Write = () => {
   ] = useSuspenseQueries({
     queries: [
       userQuery.myInfoQuery(),
-      letterQuery.letterStartInfoByLetterIdQuery(letterId),
+      letterQuery.startInfoByLetterIdQuery(letterId),
       letterQuery.elementsByLetterIdQuery(letterId),
       letterQuery.participantsByLetterIdQuery(letterId),
     ],
