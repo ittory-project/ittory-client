@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { decodeLetterId } from '../../../api/config/base64';
-import {
-  LetterPartiItem,
-  LetterPartiListGetResponse,
-} from '../../../api/model/LetterModel';
-import { getLetterPartiList } from '../../../api/service/LetterService';
+import { letterQuery } from '../../../api/queries';
 
 interface WriteModalProps {
   repeatCount: number;
@@ -23,28 +20,15 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
 }) => {
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  const [writeOrderList, setWriteOrderList] = useState<LetterPartiItem[]>();
-
-  const getPartiList = async () => {
-    if (!letterId) {
-      window.alert('잘못된 접근입니다.');
-    } else if (!letterNumId) {
-      window.alert('잘못된 접근입니다.');
-    } else {
-      const response: LetterPartiListGetResponse =
-        await getLetterPartiList(letterNumId);
-      setWriteOrderList(response.participants);
-    }
-  };
-  useEffect(() => {
-    getPartiList();
-  }, []);
+  const { data: writeOrderList } = useSuspenseQuery(
+    letterQuery.participantsByLetterIdQuery(letterNumId),
+  );
 
   return (
     <Overlay>
       <Popup>
         <PopupTitle>
-          {String(writeOrderList?.length)}명의 참여자가
+          {String(writeOrderList.participants.length)}명의 참여자가
           <br />
           <span style={{ color: '#FFA256' }}>
             {String(repeatCount)}번씩
@@ -55,22 +39,22 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           총 {String(elementCount)}개의 그림이 생성돼요
         </PopupTitleDetail>
         <PopupList>
-          {writeOrderList && writeOrderList.length > 1 ? (
+          {writeOrderList && writeOrderList.participants.length > 1 ? (
             <PopupListTitle>작성 순서</PopupListTitle>
           ) : (
             <div style={{ padding: '3px' }}></div>
           )}
           {writeOrderList ? (
             <List>
-              {writeOrderList.length > 1 && (
-                <Line $itemnum={Number(writeOrderList.length)} />
+              {writeOrderList.participants.length > 1 && (
+                <Line $itemnum={Number(writeOrderList.participants.length)} />
               )}
-              {writeOrderList
+              {writeOrderList.participants
                 .slice()
                 .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
                 .map((participant) => (
                   <ListItem key={participant.sequence}>
-                    {writeOrderList.length > 1 && (
+                    {writeOrderList.participants.length > 1 && (
                       <ListNumber>{participant.sequence}</ListNumber>
                     )}
                     <Avatar
