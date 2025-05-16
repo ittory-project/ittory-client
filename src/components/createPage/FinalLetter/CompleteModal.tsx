@@ -11,8 +11,6 @@ import { CoverType } from '../../../api/model/CoverType';
 import { LetterRequestBody } from '../../../api/model/LetterModel';
 import { getCoverTypes } from '../../../api/service/CoverService';
 import { postLetter } from '../../../api/service/LetterService';
-//import { postNickname } from '../../../api/service/ParticipantService';
-//import { NicknamePostRequest } from '../../../api/model/ParticipantModel';
 import { postEnter } from '../../../api/service/LetterService';
 import { formatDeliverDate } from './formatDeliverDate';
 

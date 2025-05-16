@@ -11,14 +11,12 @@ import {
 import { getLetterPartiList } from '../../../api/service/LetterService';
 
 interface WriteModalProps {
-  // partiCount: number;
   repeatCount: number;
   elementCount: number;
   startCountdown: number;
 }
 
 export const WriteMainModal: React.FC<WriteModalProps> = ({
-  // partiCount,
   repeatCount,
   elementCount,
   startCountdown,
@@ -46,7 +44,6 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
     <Overlay>
       <Popup>
         <PopupTitle>
-          {/* 참여자 수가 제대로 불러와지지 않음 - 임시방편: writeOrderList.length 값 넣음 */}
           {String(writeOrderList?.length)}명의 참여자가
           <br />
           <span style={{ color: '#FFA256' }}>

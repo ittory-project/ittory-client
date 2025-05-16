@@ -221,7 +221,6 @@ const BackGround = styled.div`
   background: #fff;
 
   transform: translateX(-50%);
-  //position: fixed;
 
   /* 스크롤바 숨기기 */
   &::-webkit-scrollbar {
@@ -377,19 +376,7 @@ const CheckContainer = styled.div`
   background: #f8f9fa;
   border-radius: 12px;
 `;
-/*
-const CheckBox = styled.input`
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background-image: url(${check});
-  background-size: cover;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  &:checked {
-    background-image: url(${checked});
-  }
-`;*/
+
 const CheckBox = styled.input`
   width: 20px;
   height: 20px;

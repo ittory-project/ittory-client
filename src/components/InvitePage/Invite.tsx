@@ -171,8 +171,6 @@ const BackGround = styled.div`
     /* 질감 이미지 크기 자동 조정 */ #d3edff; /* 기본 배경색 */
 
   background-blend-mode: overlay;
-  //left: 50%;
-  //transform: translateX(-50%);
 `;
 
 const HostAlert = styled.div`

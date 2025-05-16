@@ -77,7 +77,6 @@ export default function CoverStyle({
   setBackgroundimage,
   setSelectfont,
   setViewFinalInfo,
-  //selectedImageIndex,
   setSelectedImageIndex,
   setSelectFid,
 }: Props) {
@@ -120,10 +119,6 @@ export default function CoverStyle({
       setSelectfid(fonts[0].id);
     }
   }, [fonts]);
-
-  /*const handleImageClick = (index: number) => {
-    setImageIndex(index);
-  };*/
 
   //Cover 변경
   useEffect(() => {
@@ -456,10 +451,6 @@ const BackGround = styled.div`
   );
 
   background-blend-mode: overlay, normal;
-  //align-items: center;
-  //position: relative;
-  //left: 50%;
-  //transform: translateX(-50%);
 `;
 const Prev = styled.span`
   position: absolute;
@@ -483,8 +474,6 @@ const Container = styled.div`
   margin-bottom: 6rem;
 
   overflow: hidden;
-  //position: relative;
-  //align-self: stretch;
 `;
 const Button = styled.button`
   position: fixed;
@@ -554,7 +543,6 @@ const Text = styled.span`
 
   text-align: center;
   letter-spacing: -0.5px;
-  //position: fixed;
 `;
 const TitleContainer = styled.div`
   display: flex;

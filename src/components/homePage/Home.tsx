@@ -411,7 +411,6 @@ const LastSection = styled.div`
   scroll-snap-align: start;
 
   background: #2f3641;
-  //justify-content: center;
 `;
 const SectionBox = styled.div`
   display: flex;
@@ -420,7 +419,6 @@ const SectionBox = styled.div`
   flex-direction: column;
 
   align-items: flex-start;
-  //width: 272px;
 `;
 const Title = styled.div`
   margin-bottom: 20px;
