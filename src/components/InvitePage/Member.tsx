@@ -19,13 +19,12 @@ import out from '../../../public/assets/out.svg';
 import shadow from '../../../public/assets/shadow2.svg';
 import tip from '../../../public/assets/tooltip.svg';
 import {
-  LetterDetailGetResponse,
+  LetterInfoGetResponse,
   LetterPartiItem,
 } from '../../api/model/LetterModel';
 import { coverQuery } from '../../api/queries';
 import { getFontById } from '../../api/service/FontService';
 import { getLetterInfo } from '../../api/service/LetterService';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
 import { SessionLogger, isMobileDevice } from '../../utils';
 import { DeleteConfirm } from './Delete/DeleteConfirm';
 import { Exit } from './ExitMember';
@@ -45,7 +44,7 @@ interface Props {
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
 
-  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
+  const [letterInfo, setLetterInfo] = useState<LetterInfoGetResponse>();
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
@@ -123,7 +122,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   useEffect(() => {
     const getSharedLetter = async () => {
       if (letterId) {
-        const response = await getLetterDetailInfo(letterId);
+        const response = await getLetterInfo(letterId);
         setLetterInfo(response);
       }
     };
