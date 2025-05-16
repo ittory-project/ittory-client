@@ -1,5 +1,5 @@
 import { inMillis } from '../../utils';
-import { getMyPage } from '../service/MemberService';
+import { getLetterCounts, getMyPage } from '../service/MemberService';
 
 const queryKeyNamespaces = {
   user: 'user',
@@ -7,6 +7,7 @@ const queryKeyNamespaces = {
 
 export const queryKeys = {
   myInfo: () => [queryKeyNamespaces.user, 'my', 'info'],
+  letterCounts: () => [queryKeyNamespaces.user, 'letter', 'counts'],
 };
 
 export const myInfoQuery = () => ({
@@ -14,4 +15,11 @@ export const myInfoQuery = () => ({
   queryFn: () => getMyPage(),
   staleTime: inMillis().hours(1).value(),
   cacheTime: inMillis().hours(1).value(),
+});
+
+export const letterCountsQuery = () => ({
+  queryKey: queryKeys.letterCounts(),
+  queryFn: () => getLetterCounts(),
+  staleTime: inMillis().seconds(30).value(),
+  cacheTime: inMillis().seconds(30).value(),
 });
