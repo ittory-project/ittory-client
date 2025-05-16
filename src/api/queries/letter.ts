@@ -6,10 +6,7 @@ import {
   getLetterPartiList,
   getLetterStartInfo,
 } from '../service/LetterService';
-
-const queryKeyNamespaces = {
-  letter: 'letter',
-};
+import { queryKeyNamespaces } from './_namespaces';
 
 export const queryKeys = {
   byLetterId: (letterId: number) => [queryKeyNamespaces.letter, letterId],

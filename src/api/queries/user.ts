@@ -6,10 +6,7 @@ import {
   getReceivedLetter,
   getVisitUser,
 } from '../service/MemberService';
-
-const queryKeyNamespaces = {
-  user: 'user',
-};
+import { queryKeyNamespaces } from './_namespaces';
 
 export const queryKeys = {
   myInfo: () => [queryKeyNamespaces.user, 'my', 'info'],

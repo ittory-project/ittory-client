@@ -1,9 +1,6 @@
 import { inMillis } from '../../utils';
 import { getCoverTypes } from '../service/CoverService';
-
-const queryKeyNamespaces = {
-  cover: 'cover',
-};
+import { queryKeyNamespaces } from './_namespaces';
 
 export const queryKeys = {
   allTypes: () => [queryKeyNamespaces.cover, 'types'],
