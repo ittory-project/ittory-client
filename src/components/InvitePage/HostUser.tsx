@@ -92,9 +92,7 @@ export const HostUser = ({
       setSelectfont(fontdata.value);
     };
 
-    //fetchCoverTypes();
     fetchLetterInfo();
-    //fetchMyPageData();
 
     if (fontId > -1) {
       fetchFont();
@@ -388,7 +386,6 @@ const BackGround = styled.div`
   overflow: hidden;
 
   transform: translateX(-50%);
-  //justify-content: center;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -449,8 +446,6 @@ const Header = styled.div`
 
   padding: 0px 20px 0px 20px;
   margin-bottom: 16px;
-  //position: absolute;
-  //padding-bottom: 16px;
 `;
 const ReceiverContainer = styled.div`
   position: relative;
@@ -474,7 +469,6 @@ const Receiver = styled.span`
   color: #212529;
 
   letter-spacing: -0.5px;
-  //flex: 1 0 0;
   &:first-of-type {
     margin-right: 0; /* 첫 번째 Receiver와 다음 Receiver 사이의 간격을 제거 */
   }
@@ -499,7 +493,6 @@ const MainContainer = styled.div`
   align-items: center;
 
   width: 288px;
-  //margin-top: 16px;
 `;
 const Book = styled.div<{ $backgroundImage: string }>`
   position: relative;
@@ -772,7 +765,6 @@ const User = styled.div`
   align-items: center;
 
   width: 44px;
-  //gap: var(--Border-Radius-radius_200, 6px);
 `;
 const MainUser = styled.div`
   position: relative;

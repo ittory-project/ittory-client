@@ -57,7 +57,6 @@ export default function FontSelect({
             key={fontlist.id}
             $fontFamily={fontlist.value}
             $selected={fontlist.value === font}
-            //onClick={() => handleFontChange(fontlist.value, fontlist.id)}
             onClick={(e) => {
               handleFontChange(fontlist.value, fontlist.id);
               handlePopupClick(e);
@@ -135,7 +134,6 @@ const FontItem = styled.div<{ $fontFamily: string; $selected: boolean }>`
   border-radius: 50px;
 
   transition: background-color 0.3s;
-  //padding: 6px 16px;
 `;
 const Fonttxt = styled.span<{ $fontFamily: string; $selected: boolean }>`
   margin-top: ${(props) =>

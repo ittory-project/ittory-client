@@ -96,10 +96,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
     });
   };
 
-  // Swiper 참조를 위한 useRef
   const swiperRef = useRef<SwiperRef | null>(null);
-
-  // 디바운스를 위한 타이머 변수
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // 스크롤 이벤트를 통해 슬라이드 이동
@@ -144,23 +141,6 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const onSlideChange = (swiper: SwiperClass) => {
     setActiveIndex(swiper.realIndex);
   };
-
-  /*useEffect(() => {
-    // activeIndex가 변경될 때 Swiper로 이동
-    if (swiperRef.current) {
-      swiperRef.current.swiper.slideTo(activeIndex);
-    }
-  }, [activeIndex]);*/
-
-  /*useEffect(() => {
-    // activeIndex가 변경될 때만 Swiper로 이동하도록 조건 추가
-    if (
-      swiperRef.current &&
-      swiperRef.current.swiper.realIndex !== activeIndex
-    ) {
-      swiperRef.current.swiper.slideTo(activeIndex);
-    }
-  }, [activeIndex]);*/
 
   useEffect(() => {
     // activeIndex가 변경될 때만 Swiper로 이동하도록 조건 추가
@@ -210,7 +190,6 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
                 slideToClickedSlide={true}
                 centeredSlides={true}
                 onSlideChange={onSlideChange}
-                //onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 style={{ height: '100%' }}
                 ref={swiperRef}
                 speed={129.5}

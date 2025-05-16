@@ -111,7 +111,6 @@ const ButtonContainer = styled.div`
   width: 224px;
 
   margin-top: 1.35rem;
-  //bottom: 20px;
 `;
 const Button = styled.button`
   box-sizing: border-box;
@@ -132,7 +131,6 @@ const Button = styled.button`
   box-shadow:
     -1px -1px 0.4px 0px rgba(0, 0, 0, 0.14) inset,
     1px 1px 0.4px 0px rgba(255, 255, 255, 0.3) inset;
-  //position: relative;
 `;
 const ButtonTxt = styled.div`
   font-family: var(--Typography-family-title, SUIT);

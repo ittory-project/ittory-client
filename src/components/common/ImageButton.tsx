@@ -10,7 +10,7 @@ export const ImageButton = styled.button`
   background: none;
   border: none;
 
-  // NOTE: 키보드 네비게이션 시에만 outline 표시
+  /* NOTE: 키보드 네비게이션 시에만 outline 표시 */
   &:focus {
     outline: none;
   }

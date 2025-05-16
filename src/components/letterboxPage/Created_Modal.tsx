@@ -110,7 +110,6 @@ export const Created_Modal = ({
           fallbackCopyTextToClipboard(shareTextPc);
         }
       } else {
-        // 모바일이면
         try {
           await navigator.share({
             text: shareText,
