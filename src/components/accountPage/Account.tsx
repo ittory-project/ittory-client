@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -46,7 +46,11 @@ export const Account = () => {
         </>
       )}
       {popup && <Logout setPopup={setPopup} />}
-      {viewDelete && <AccountDelete setViewDelete={setViewDelete} />}
+      {viewDelete && (
+        <Suspense>
+          <AccountDelete setViewDelete={setViewDelete} />
+        </Suspense>
+      )}
     </BackGround>
   );
 };

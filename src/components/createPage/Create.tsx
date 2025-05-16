@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -63,16 +63,18 @@ export const Create = () => {
       ) : (
         <>
           {viewStartpage && (
-            <LetterInfo
-              myName={myName}
-              receiverName={receiverName}
-              deliverDay={deliverDay}
-              setReceiverName={setReceiverName}
-              setMyName={setMyName}
-              setDeliverDay={setDeliverDay}
-              setViewCoverDeco={setViewCoverDeco}
-              setViewStartpage={setViewStartpage}
-            />
+            <Suspense>
+              <LetterInfo
+                myName={myName}
+                receiverName={receiverName}
+                deliverDay={deliverDay}
+                setReceiverName={setReceiverName}
+                setMyName={setMyName}
+                setDeliverDay={setDeliverDay}
+                setViewCoverDeco={setViewCoverDeco}
+                setViewStartpage={setViewStartpage}
+              />
+            </Suspense>
           )}
           {viewCoverDeco && (
             <CoverDeco
