@@ -46,9 +46,7 @@ interface Props {
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
-  const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.infoByLetterId(letterId),
-  );
+  const { data: letterInfo } = useSuspenseQuery(letterQuery.infoById(letterId));
   const deliverDay = parseISO(letterInfo.deliveryDate);
   const sliceName = letterInfo.receiverName.slice(0, 9);
 

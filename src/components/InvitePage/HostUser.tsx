@@ -44,9 +44,7 @@ export const HostUser = ({
   setViewDelete,
 }: Props) => {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
-  const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.infoByLetterId(letterId),
-  );
+  const { data: letterInfo } = useSuspenseQuery(letterQuery.infoById(letterId));
   const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
 
   const [sliceName, setSliceName] = useState<string>('');

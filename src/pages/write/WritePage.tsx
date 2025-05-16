@@ -20,7 +20,7 @@ export const WritePage = () => {
     throw new Error('잘못된 접근입니다.');
   }
   const { data: startInfo } = useSuspenseQuery(
-    letterQuery.startInfoByLetterId(letterNumId),
+    letterQuery.startInfoById(letterNumId),
   );
 
   // 초기 팝업 띄우기

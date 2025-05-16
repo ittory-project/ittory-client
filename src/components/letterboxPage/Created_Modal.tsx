@@ -25,7 +25,7 @@ export const Created_Modal = ({
   letterId,
 }: Props) => {
   const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.detailByLetterId(letterId),
+    letterQuery.detailById(letterId),
   );
 
   const [copied, setCopied] = useState<boolean>(false);

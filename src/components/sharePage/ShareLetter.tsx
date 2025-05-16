@@ -23,7 +23,7 @@ export const ShareLetter = () => {
   const letterNumId = Number(letterId);
 
   const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.detailByLetterId(letterNumId),
+    letterQuery.detailById(letterNumId),
   );
   const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
   const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
