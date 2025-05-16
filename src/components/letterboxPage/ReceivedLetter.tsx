@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import more from '../../../public/assets/more.svg';
-import { ReceiveLetterModel } from '../../api/model/MemberModel';
 import { userQuery } from '../../api/queries';
-import { getReceivedLetter } from '../../api/service/MemberService';
 import { Delete_letterbox } from './Delete_letterbox';
 import { EmptyLetter } from './EmptyLetter';
 import { Letter } from './Letter';
-import { Loading } from './Loading';
 import { Received_Modal } from './Received_Modal';
 
 interface Props {
@@ -41,24 +38,14 @@ export const ReceivedLetter = ({
   setDeleteAlert,
   setDeletedAlert,
 }: Props) => {
+  const queryClient = useQueryClient();
   const { data: letterCounts } = useSuspenseQuery(
     userQuery.letterCountsQuery(),
   );
+  const { data: letters } = useSuspenseQuery(userQuery.receivedLetterQuery());
 
   const [deleteTitle, setDeleteTitle] = useState<string>('');
   const [selectId, setSelectId] = useState<number>(-1);
-  const [letters, setLetters] = useState<ReceiveLetterModel[]>([]);
-  const [load, setLoad] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchLetter = async () => {
-      const letterdata = await getReceivedLetter();
-      setLetters(letterdata.data.letters);
-      setLoad(false);
-    };
-
-    fetchLetter();
-  }, [letterCounts]);
 
   const openModal = (itemId: number) => {
     setSelectId(itemId);
@@ -72,8 +59,9 @@ export const ReceivedLetter = ({
   useEffect(() => {
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
-        const letterdata = await getReceivedLetter();
-        setLetters(letterdata.data.letters);
+        queryClient.invalidateQueries({
+          queryKey: userQuery.queryKeys.receivedLetter(),
+        });
 
         const deletedMessage = localStorage.getItem('deletedLetter');
         setDeletedAlert(deletedMessage);
@@ -83,26 +71,9 @@ export const ReceivedLetter = ({
     fetchLetter();
   }, [deleteAlert]);
 
-  const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
-    const date = new Date(deliverDate);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-    const weekday = weekdays[date.getDay()];
-
-    return (
-      <StyledDeliverDay>{`${year}. ${month}. ${day} (${weekday}) 전달`}</StyledDeliverDay>
-    );
-  };
-
   return (
     <>
-      {load === true ? (
-        <Loading />
-      ) : letters.length !== 0 ? (
+      {letters.length !== 0 ? (
         <>
           {!openLetter && letters && (
             <Container>
@@ -112,7 +83,7 @@ export const ReceivedLetter = ({
                   총
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '700' }}>
-                  {letterCounts}
+                  {letterCounts.receiveLetterCount}
                 </NumberTxt>
                 <NumberTxt style={{ fontWeight: '400' }}>개</NumberTxt>
               </NumberHeader>
@@ -182,6 +153,21 @@ export const ReceivedLetter = ({
         <EmptyLetter context="received" />
       )}
     </>
+  );
+};
+
+const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
+  const date = new Date(deliverDate);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = weekdays[date.getDay()];
+
+  return (
+    <StyledDeliverDay>{`${year}. ${month}. ${day} (${weekday}) 전달`}</StyledDeliverDay>
   );
 };
 
