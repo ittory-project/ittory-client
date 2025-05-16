@@ -11,7 +11,7 @@ import { LetterDetailGetResponse } from '../../api/model/LetterModel';
 import { getCoverTypeById } from '../../api/service/CoverTypeService';
 import { getFontById } from '../../api/service/FontService';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
-import { SessionLogger } from '../../utils';
+import { SessionLogger, isMobileDevice } from '../../utils';
 import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
 import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
@@ -27,7 +27,6 @@ export const ShareLetter = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { letterId } = useParams();
   const [letterNumId] = useState(Number(letterId));
-  const [isMobile, setIsMobile] = useState(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [font, setFont] = useState<FontGetResponse>();
@@ -41,16 +40,6 @@ export const ShareLetter = () => {
     const page = Number(query.get('page')) || 1;
     setCurrentPage(page);
   }, [query]);
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 850);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   const getSharedLetter = async (letterNumId: number) => {
     const response = await getLetterDetailInfo(letterNumId);
@@ -150,7 +139,7 @@ export const ShareLetter = () => {
         .map((element) => element)
         .join(', ')}`;
 
-      if (!isMobile) {
+      if (!isMobileDevice()) {
         const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
