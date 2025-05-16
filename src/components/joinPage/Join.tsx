@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { userQuery } from '../../api/queries';
-import { myInfoQuery } from '../../api/queries/user';
 import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
 import Deleted from './Deleted';
 import { JoinModal } from './JoinModal';
@@ -13,8 +12,8 @@ import NoAccess from './NoAccess';
 import Started from './Started';
 
 export const Join = () => {
-  const { data: myInfo } = useSuspenseQuery(myInfoQuery());
-  const { data: visit } = useSuspenseQuery(userQuery.visitUserQuery());
+  const { data: myInfo } = useSuspenseQuery(userQuery.myInfo());
+  const { data: visit } = useSuspenseQuery(userQuery.visitUser());
 
   const [nickname, setNickname] = useState<string>('');
   const [viewModal, setViewModal] = useState<boolean>(false);

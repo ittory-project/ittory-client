@@ -43,13 +43,11 @@ export const HostUser = ({
   viewDelete,
   setViewDelete,
 }: Props) => {
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
   const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.infoByLetterIdQuery(letterId),
+    letterQuery.infoByLetterId(letterId),
   );
-  const { data: font } = useSuspenseQuery(
-    fontQuery.fontByIdQuery(letterInfo.fontId),
-  );
+  const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
 
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);

@@ -41,7 +41,7 @@ export default function CompleteModal({
   setKeyboardVisible,
   selectFid,
 }: Props) {
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
 
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);

@@ -56,7 +56,7 @@ export default function EditLetter({
   setSelectFid,
   selectFid,
 }: Props) {
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
 
   const [calenderOpen, setCalenderOpen] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState<boolean>(false);

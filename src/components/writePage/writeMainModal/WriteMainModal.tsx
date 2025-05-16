@@ -21,7 +21,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const { data: writeOrderList } = useSuspenseQuery(
-    letterQuery.participantsByLetterIdQuery(letterNumId),
+    letterQuery.participantsByLetterId(letterNumId),
   );
 
   return (

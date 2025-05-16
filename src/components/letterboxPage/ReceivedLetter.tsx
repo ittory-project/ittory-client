@@ -39,10 +39,8 @@ export const ReceivedLetter = ({
   setDeletedAlert,
 }: Props) => {
   const queryClient = useQueryClient();
-  const { data: letterCounts } = useSuspenseQuery(
-    userQuery.letterCountsQuery(),
-  );
-  const { data: letters } = useSuspenseQuery(userQuery.receivedLetterQuery());
+  const { data: letterCounts } = useSuspenseQuery(userQuery.letterCounts());
+  const { data: letters } = useSuspenseQuery(userQuery.receivedLetter());
 
   const [deleteTitle, setDeleteTitle] = useState<string>('');
   const [selectId, setSelectId] = useState<number>(-1);

@@ -49,8 +49,8 @@ export default function CoverModal({
   setBackgroundimage,
   selectFid,
 }: Props) {
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
-  const { data: fonts } = useSuspenseQuery(fontQuery.allFontsQuery());
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+  const { data: fonts } = useSuspenseQuery(fontQuery.all());
 
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);

@@ -3,19 +3,19 @@ import { getAllFont, getFontById } from '../service/FontService';
 import { queryKeyNamespaces } from './_namespaces';
 
 export const queryKeys = {
-  allFonts: () => [queryKeyNamespaces.font],
-  fontById: (fontId: number) => [queryKeyNamespaces.font, fontId],
+  all: () => [queryKeyNamespaces.font, 'all'],
+  byId: (fontId: number) => [queryKeyNamespaces.font, fontId],
 };
 
-export const allFontsQuery = () => ({
-  queryKey: queryKeys.allFonts(),
+export const all = () => ({
+  queryKey: queryKeys.all(),
   queryFn: () => getAllFont(),
   staleTime: inMillis().hours(1).value(),
   cacheTime: inMillis().hours(1).value(),
 });
 
-export const fontByIdQuery = (fontId: number) => ({
-  queryKey: queryKeys.fontById(fontId),
+export const byId = (fontId: number) => ({
+  queryKey: queryKeys.byId(fontId),
   queryFn: () => getFontById(fontId),
   staleTime: inMillis().hours(1).value(),
   cacheTime: inMillis().hours(1).value(),

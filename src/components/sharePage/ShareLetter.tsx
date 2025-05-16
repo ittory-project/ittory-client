@@ -23,12 +23,10 @@ export const ShareLetter = () => {
   const letterNumId = Number(letterId);
 
   const { data: letterInfo } = useSuspenseQuery(
-    letterQuery.detailByLetterIdQuery(letterNumId),
+    letterQuery.detailByLetterId(letterNumId),
   );
-  const { data: font } = useSuspenseQuery(
-    fontQuery.fontByIdQuery(letterInfo.fontId),
-  );
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
   const coverType = coverTypes.find(
     (type) => type.id === letterInfo?.coverTypeId, // FIXME: letterInfo가 먼저 반드시 있어야 함
   );

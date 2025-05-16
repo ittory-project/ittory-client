@@ -79,8 +79,8 @@ export default function CoverStyle({
   setSelectedImageIndex,
   setSelectFid,
 }: Props) {
-  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
-  const { data: fonts } = useSuspenseQuery(fontQuery.allFontsQuery());
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+  const { data: fonts } = useSuspenseQuery(fontQuery.all());
 
   const [, setIsKeyboardOpen] = useState<boolean>(false);
   const [, setKeyboardHeight] = useState<number>(0);
