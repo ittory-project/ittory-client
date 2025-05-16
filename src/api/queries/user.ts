@@ -1,5 +1,9 @@
 import { inMillis } from '../../utils';
-import { getLetterCounts, getMyPage } from '../service/MemberService';
+import {
+  getLetterCounts,
+  getMyPage,
+  getParticipatedLetter,
+} from '../service/MemberService';
 
 const queryKeyNamespaces = {
   user: 'user',
@@ -8,6 +12,7 @@ const queryKeyNamespaces = {
 export const queryKeys = {
   myInfo: () => [queryKeyNamespaces.user, 'my', 'info'],
   letterCounts: () => [queryKeyNamespaces.user, 'letter', 'counts'],
+  participatedLetter: () => [queryKeyNamespaces.user, 'letter', 'participated'],
 };
 
 export const myInfoQuery = () => ({
@@ -20,6 +25,13 @@ export const myInfoQuery = () => ({
 export const letterCountsQuery = () => ({
   queryKey: queryKeys.letterCounts(),
   queryFn: () => getLetterCounts(),
+  staleTime: inMillis().seconds(30).value(),
+  cacheTime: inMillis().seconds(30).value(),
+});
+
+export const participatedLetterQuery = () => ({
+  queryKey: queryKeys.participatedLetter(),
+  queryFn: () => getParticipatedLetter(),
   staleTime: inMillis().seconds(30).value(),
   cacheTime: inMillis().seconds(30).value(),
 });
