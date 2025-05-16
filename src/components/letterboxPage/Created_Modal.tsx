@@ -8,7 +8,7 @@ import X from '../../../public/assets/x.svg';
 import { encodeLetterId } from '../../api/config/base64';
 import { LetterDetailGetResponse } from '../../api/model/LetterModel';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
-import { SessionLogger } from '../../utils';
+import { SessionLogger, isMobileDevice } from '../../utils';
 
 const logger = new SessionLogger('letterbox');
 
@@ -25,7 +25,6 @@ export const Created_Modal = ({
   letterId,
 }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [encodeId, setEncodeId] = useState<string>('');
 
@@ -46,17 +45,6 @@ export const Created_Modal = ({
     };
     getSharedLetter();
   }, [letterId]);
-
-  // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 850);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
   const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement('textarea');
@@ -91,7 +79,7 @@ export const Created_Modal = ({
       const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
         .map((element) => element)
         .join(', ')}`;
-      if (!isMobile) {
+      if (!isMobileDevice()) {
         const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
