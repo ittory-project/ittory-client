@@ -18,13 +18,8 @@ import notice from '../../../public/assets/notice.svg';
 import out from '../../../public/assets/out.svg';
 import shadow from '../../../public/assets/shadow2.svg';
 import tip from '../../../public/assets/tooltip.svg';
-import {
-  LetterInfoGetResponse,
-  LetterPartiItem,
-} from '../../api/model/LetterModel';
-import { coverQuery } from '../../api/queries';
-import { getFontById } from '../../api/service/FontService';
-import { getLetterInfo } from '../../api/service/LetterService';
+import { LetterPartiItem } from '../../api/model/LetterModel';
+import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { SessionLogger, isMobileDevice } from '../../utils';
 import { DeleteConfirm } from './Delete/DeleteConfirm';
 import { Exit } from './ExitMember';
@@ -33,6 +28,14 @@ import crown from '/assets/crown.svg';
 import plus from '/assets/plus.svg';
 
 const logger = new SessionLogger('invite');
+
+const backgroundImages: { [key: number]: string } = {
+  1: bg1,
+  2: bg2,
+  3: bg3,
+  4: bg4,
+  5: bg5,
+};
 
 interface Props {
   guideOpen: boolean;
@@ -43,59 +46,25 @@ interface Props {
 
 export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: letterInfo } = useSuspenseQuery(
+    letterQuery.infoByLetterIdQuery(letterId),
+  );
+  const deliverDay = parseISO(letterInfo.deliveryDate);
+  const sliceName = letterInfo.receiverName.slice(0, 9);
 
-  const [letterInfo, setLetterInfo] = useState<LetterInfoGetResponse>();
-  const [sliceName, setSliceName] = useState<string>('');
+  const { data: font } = useSuspenseQuery(
+    fontQuery.fontByIdQuery(letterInfo.fontId),
+  );
+
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(', ');
 
-  const [cropImg, setCropImg] = useState<string>('');
-  const [deliverDay, setDeliverDay] = useState<Date | null>(null);
-  const [title, setTitle] = useState<string>('');
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-  const [selectfont, setSelectfont] = useState<string>('');
-  const [fontId, setFontId] = useState<number>(-1);
-  const [receiverName, setReceiverName] = useState<string>('');
-  const backgroundImages: { [key: number]: string } = {
-    1: bg1,
-    2: bg2,
-    3: bg3,
-    4: bg4,
-    5: bg5,
-  };
-  const [background, setBackground] = useState<string | null>(null);
-
   useEffect(() => {
-    if (receiverName.length > 9) {
-      setSliceName(receiverName.slice(0, 9));
-    } else {
-      setSliceName(receiverName);
-    }
-  }, [receiverName]);
-
-  useEffect(() => {
-    const fetchLetterInfo = async () => {
-      const letterData = await getLetterInfo(letterId);
-      setCropImg(letterData.coverPhotoUrl);
-      setDeliverDay(parseISO(letterData.deliveryDate));
-      setReceiverName(letterData.receiverName);
-      setSelectedImageIndex(letterData.coverTypeId);
-      localStorage.setItem('coverId', String(letterData.coverTypeId));
-      setBackground(backgroundImages[letterData.coverTypeId]);
-      setFontId(letterData.fontId);
-      setTitle(letterData.title);
-    };
-
-    fetchLetterInfo();
-  }, []);
-
-  useEffect(() => {
-    if (background) {
-      localStorage.setItem('bgImg', background);
-    }
-  }, [background]);
+    localStorage.setItem('bgImg', backgroundImages[letterInfo.coverTypeId]);
+    localStorage.setItem('coverId', String(letterInfo.coverTypeId));
+  }, [letterInfo.coverTypeId]);
 
   const handleUserName = (name: string) => {
     return name.slice(0, 3);
@@ -108,26 +77,6 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const handleExit = () => {
     setViewExit(true);
   };
-
-  useEffect(() => {
-    const fetchFont = async () => {
-      const fontdata = await getFontById(fontId);
-      setSelectfont(fontdata.value);
-    };
-    if (fontId > -1) {
-      fetchFont();
-    }
-  }, [fontId]);
-
-  useEffect(() => {
-    const getSharedLetter = async () => {
-      if (letterId) {
-        const response = await getLetterInfo(letterId);
-        setLetterInfo(response);
-      }
-    };
-    getSharedLetter();
-  }, [letterId]);
 
   const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement('textarea');
@@ -197,14 +146,14 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
       {items.length > 0 && (
         <>
           {!viewDelete &&
-            title !== '' &&
+            letterInfo.title !== '' &&
             items[0].nickname &&
-            receiverName !== '' && (
+            letterInfo.receiverName !== '' && (
               <>
                 <Header>
                   <ReceiverContainer>
                     <Receiver>To.{sliceName}</Receiver>
-                    {receiverName.length > 9 && (
+                    {letterInfo.receiverName.length > 9 && (
                       <Receiver style={{ letterSpacing: '-0.2em' }}>
                         ···
                       </Receiver>
@@ -218,10 +167,12 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                 <MainContainer>
                   <Book
                     $backgroundImage={
-                      coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+                      coverTypes[letterInfo.coverTypeId - 1]?.confirmImageUrl
                     }
                   >
-                    <TitleContainer $font={selectfont}>{title}</TitleContainer>
+                    <TitleContainer $font={font.value}>
+                      {letterInfo.title}
+                    </TitleContainer>
                     {deliverDay ? (
                       <DeliverDay>
                         {`${format(deliverDay as Date, 'yyyy')}. `}
@@ -235,11 +186,11 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                     <>
                       <Bright src={bright} />
                       <Shadow src={shadow} />
-                      <BtnImgContainer $bgimg={cropImg} />
+                      <BtnImgContainer $bgimg={letterInfo.coverPhotoUrl} />
                     </>
                     <NameBar>
                       <NameContainer>
-                        <NameTxt $book={selectedImageIndex}>
+                        <NameTxt $book={letterInfo.coverTypeId}>
                           {namesString}
                         </NameTxt>
                       </NameContainer>

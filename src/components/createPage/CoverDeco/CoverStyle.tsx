@@ -14,8 +14,7 @@ import camera from '../../../../public/assets/camera.svg';
 import PrevImg from '../../../../public/assets/pageprev.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
-import { coverQuery } from '../../../api/queries';
-import { getAllFont } from '../../../api/service/FontService';
+import { coverQuery, fontQuery } from '../../../api/queries';
 import { postCoverImage } from '../../../api/service/ImageService';
 import { ImageExtension } from '../../../constants';
 import { SessionLogger } from '../../../utils';
@@ -81,6 +80,7 @@ export default function CoverStyle({
   setSelectFid,
 }: Props) {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: fonts } = useSuspenseQuery(fontQuery.allFontsQuery());
 
   const [, setIsKeyboardOpen] = useState<boolean>(false);
   const [, setKeyboardHeight] = useState<number>(0);
@@ -92,7 +92,6 @@ export default function CoverStyle({
   const [, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
-  const [fonts, setFonts] = useState<fontProps[]>([]);
   const [font, setFont] = useState<string>('');
   const [selectf, setSelectf] = useState<string>('');
   const [selectfid, setSelectfid] = useState<number>(1);
@@ -100,12 +99,6 @@ export default function CoverStyle({
 
   useEffect(() => {
     setSelectedImageIndex(ImageIndex);
-
-    const fetchFonts = async () => {
-      const types = await getAllFont();
-      setFonts(types);
-    };
-    fetchFonts();
   }, []);
 
   useEffect(() => {

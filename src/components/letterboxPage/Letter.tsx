@@ -8,9 +8,7 @@ import styled from 'styled-components';
 import ChevronLeft from '../../../public/assets/letterbox/chevron_left.svg?react';
 import more from '../../../public/assets/more_white.svg';
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
-import { FontGetResponse } from '../../api/model/FontModel';
-import { coverQuery, letterQuery } from '../../api/queries';
-import { getFontById } from '../../api/service/FontService';
+import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { SessionLogger } from '../../utils';
 import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
@@ -64,6 +62,9 @@ export const Letter = ({
   const { data: letterInfo } = useSuspenseQuery(
     letterQuery.detailByLetterIdQuery(letterId),
   );
+  const { data: font } = useSuspenseQuery(
+    fontQuery.fontByIdQuery(letterInfo.fontId),
+  );
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
   const coverType = coverTypes.find(
     (type) => type.id === letterInfo.coverTypeId, // FIXME: letterInfo가 먼저 반드시 있어야 함
@@ -76,7 +77,6 @@ export const Letter = ({
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const [font, setFont] = useState<FontGetResponse>();
 
   const handleCancel = () => {
     setOpenLetter(false);
@@ -113,15 +113,7 @@ export const Letter = ({
     window.localStorage.setItem('nowRepeat', '1');
     window.localStorage.setItem('totalItem', '1');
     window.localStorage.setItem('resetTime', '');
-
-    const fetchData = async () => {
-      // 스타일 정보 가져오기
-      const fontResponse = await getFontById(letterInfo.fontId);
-      if (fontResponse) setFont(fontResponse);
-    };
-
-    fetchData();
-  }, [letterId, coverType, font, letterInfo]);
+  }, []);
 
   const renderPageContent = () => {
     if (!coverType || !font || !letterInfo || !letterId) {
