@@ -22,6 +22,7 @@ import { getFontById } from '../../api/service/FontService';
 import { getLetterInfo } from '../../api/service/LetterService';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
 import { getMyPage } from '../../api/service/MemberService';
+import { isMobileDevice } from '../../utils';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { Count } from './Count/Count';
 import { CountPopup } from './Count/CountPopup';
@@ -50,7 +51,6 @@ export const HostUser = ({
   setViewDelete,
 }: Props) => {
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
@@ -136,17 +136,6 @@ export const HostUser = ({
     getSharedLetter();
   }, [letterId]);
 
-  // 현재 화면 크기 기준 (430px가 트리거) 모바일 화면인지, 데스크톱 화면인지 구분
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 850);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -175,7 +164,7 @@ export const HostUser = ({
   // 모바일, 데스크톱 화면 구분해서 공유하게 함
   const handleShare = async () => {
     if (letterInfo) {
-      if (!isMobile) {
+      if (!isMobileDevice()) {
         const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
         if (
           navigator.clipboard &&

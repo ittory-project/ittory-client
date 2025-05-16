@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
@@ -17,18 +17,6 @@ export const WriteLocation: React.FC<LocationProps> = ({
   name,
   profileImage,
 }) => {
-  const [, setIsMobile] = useState(false);
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 850);
-  };
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const circleRef = useRef<SVGCircleElement>(null);
 
   const radius = 25;
