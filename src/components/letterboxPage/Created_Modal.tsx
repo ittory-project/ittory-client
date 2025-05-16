@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import delete2 from '../../../public/assets/delete2.svg';
 import share from '../../../public/assets/share.svg';
 import X from '../../../public/assets/x.svg';
 import { encodeLetterId } from '../../api/config/base64';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
+import { letterQuery } from '../../api/queries';
 import { SessionLogger, isMobileDevice } from '../../utils';
 
 const logger = new SessionLogger('letterbox');
@@ -24,9 +24,11 @@ export const Created_Modal = ({
   setPopup,
   letterId,
 }: Props) => {
-  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
+  const { data: letterInfo } = useSuspenseQuery(
+    letterQuery.detailById(letterId),
+  );
+
   const [copied, setCopied] = useState<boolean>(false);
-  const [encodeId, setEncodeId] = useState<string>('');
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -36,15 +38,6 @@ export const Created_Modal = ({
     setIsModalOpen(false);
     setPopup(true);
   };
-
-  useEffect(() => {
-    const getSharedLetter = async () => {
-      const response = await getLetterDetailInfo(Number(letterId));
-      setLetterInfo(response);
-      setEncodeId(encodeLetterId(letterId));
-    };
-    getSharedLetter();
-  }, [letterId]);
 
   const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement('textarea');
@@ -73,7 +66,7 @@ export const Created_Modal = ({
 
   // 모바일, 데스크톱 화면 구분해서 공유하게 함
   const handleShare = async () => {
-    const letterId = encodeId;
+    const letterId = encodeLetterId(letterInfo.letterId);
     if (letterInfo) {
       const encodedReceiverName = encodeURIComponent(letterInfo.receiverName);
       const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames

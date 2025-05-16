@@ -1,14 +1,13 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, Suspense, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
 import EditImg from '../../../../public/assets/edit.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
-import { CoverType } from '../../../api/model/CoverType';
-import { getCoverTypes } from '../../../api/service/CoverService';
-import { getVisitUser } from '../../../api/service/MemberService';
+import { coverQuery, userQuery } from '../../../api/queries';
 import EditLetter from '../FinalLetter/EditLetter';
 import CompleteModal from './CompleteModal';
 import CoverModal from './CoverModal';
@@ -59,23 +58,13 @@ export default function FinalInfo({
   setSelectFid,
   selectFid,
 }: Props) {
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+  const { data: visit } = useSuspenseQuery(userQuery.visitUser());
+
   const [viewEdit, setViewEdit] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState<boolean>(false);
   const [, setKeyboardVisible] = useState<boolean>(false);
   const [complete, setComplete] = useState<boolean>(false);
-  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [visit, setVisit] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const types = await getCoverTypes();
-      setCoverTypes(types);
-      const user = await getVisitUser();
-      setVisit(user.isVisited);
-    };
-
-    fetchData();
-  }, []);
 
   const handleEditview = () => {
     setViewEdit(true);
@@ -88,175 +77,181 @@ export default function FinalInfo({
     setComplete(true);
   };
 
-  const Book: React.FC<BookProps> = ({ backgroundImage, children }) => {
-    return (
-      <div
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '120px',
-          height: '157px',
-          boxSizing: 'border-box',
-          marginBottom: '8px',
-        }}
-      >
-        {children}
-      </div>
-    );
-  };
-
   return (
     <BackGround>
-      {coverOpen && <Overlay />}
-      {complete && <Overlay />}
-      {viewEdit === false ? (
-        <>
-          <Header>
-            <Title>입력한 정보를 확인해 보세요</Title>
-            <SubTitle>게임 시작하기 전, 마지막으로 수정할 수 있어요</SubTitle>
-          </Header>
-          <Container>
-            <Info>
-              <TitleTxt>편지 정보</TitleTxt>
-              <EditBtn onClick={handleEditview}>
-                <img
-                  src={EditImg}
-                  alt="Edit Icon"
-                  style={{ width: '11px', height: '11px' }}
-                />
-              </EditBtn>
-              <InfoBlock>
-                <InfoTitle>받는 사람</InfoTitle>
-                <InfoTxt>{receiverName}</InfoTxt>
-              </InfoBlock>
-              <InfoBlock>
-                <InfoTitle>내 이름</InfoTitle>
-                <InfoTxt>{myName}</InfoTxt>
-              </InfoBlock>
-              <InfoBlock>
-                <InfoTitle>전달 날짜</InfoTitle>
-                {deliverDay ? (
-                  <InfoTxt>
-                    {`${format(deliverDay, 'yyyy')}.`}
-                    {`${format(deliverDay, 'M')}.`}
-                    {`${format(deliverDay, 'd')}`}
-                    {` (${format(deliverDay, 'E', { locale: ko })})`}
-                  </InfoTxt>
+      <Suspense>
+        {coverOpen && <Overlay />}
+        {complete && <Overlay />}
+        {viewEdit === false ? (
+          <>
+            <Header>
+              <Title>입력한 정보를 확인해 보세요</Title>
+              <SubTitle>게임 시작하기 전, 마지막으로 수정할 수 있어요</SubTitle>
+            </Header>
+            <Container>
+              <Info>
+                <TitleTxt>편지 정보</TitleTxt>
+                <EditBtn onClick={handleEditview}>
+                  <img
+                    src={EditImg}
+                    alt="Edit Icon"
+                    style={{ width: '11px', height: '11px' }}
+                  />
+                </EditBtn>
+                <InfoBlock>
+                  <InfoTitle>받는 사람</InfoTitle>
+                  <InfoTxt>{receiverName}</InfoTxt>
+                </InfoBlock>
+                <InfoBlock>
+                  <InfoTitle>내 이름</InfoTitle>
+                  <InfoTxt>{myName}</InfoTxt>
+                </InfoBlock>
+                <InfoBlock>
+                  <InfoTitle>전달 날짜</InfoTitle>
+                  {deliverDay ? (
+                    <InfoTxt>
+                      {`${format(deliverDay, 'yyyy')}.`}
+                      {`${format(deliverDay, 'M')}.`}
+                      {`${format(deliverDay, 'd')}`}
+                      {` (${format(deliverDay, 'E', { locale: ko })})`}
+                    </InfoTxt>
+                  ) : (
+                    <></>
+                  )}
+                </InfoBlock>
+              </Info>
+              <Cover>
+                <TitleTxt>표지 꾸미기</TitleTxt>
+                <EditBtn
+                  onClick={() => {
+                    openCoveredit();
+                  }}
+                >
+                  <img
+                    src={EditImg}
+                    alt="Edit Icon"
+                    style={{ width: '11px', height: '11px' }}
+                  />
+                </EditBtn>
+                {croppedImage === '' ? (
+                  <Book
+                    backgroundImage={
+                      coverTypes[backgroundimage]?.confirmImageUrl
+                    }
+                  >
+                    <BookTitle $font={selectfont}>{title}</BookTitle>
+                  </Book>
                 ) : (
-                  <></>
+                  <Book
+                    backgroundImage={
+                      coverTypes[backgroundimage]?.confirmImageUrl
+                    }
+                  >
+                    <BookTitle $font={selectfont}>{title}</BookTitle>
+                    <Shadow src={shadow} />
+                    <BtnImgContainer $bgimg={croppedImage}></BtnImgContainer>
+                  </Book>
                 )}
-              </InfoBlock>
-            </Info>
-            <Cover>
-              <TitleTxt>표지 꾸미기</TitleTxt>
-              <EditBtn
-                onClick={() => {
-                  openCoveredit();
-                }}
-              >
-                <img
-                  src={EditImg}
-                  alt="Edit Icon"
-                  style={{ width: '11px', height: '11px' }}
-                />
-              </EditBtn>
-              {croppedImage === '' ? (
-                <Book
-                  backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
-                >
-                  <BookTitle $font={selectfont}>{title}</BookTitle>
-                </Book>
-              ) : (
-                <Book
-                  backgroundImage={coverTypes[backgroundimage]?.confirmImageUrl}
-                >
-                  <BookTitle $font={selectfont}>{title}</BookTitle>
-                  <Shadow src={shadow} />
-                  <BtnImgContainer $bgimg={croppedImage}></BtnImgContainer>
-                </Book>
-              )}
-            </Cover>
-          </Container>
-          <Button onClick={handleComplete}>
-            <ButtonTxt>확인했어요</ButtonTxt>
-          </Button>
-        </>
-      ) : (
-        <EditLetter
-          myName={myName}
-          receiverName={receiverName}
-          deliverDay={deliverDay}
-          setReceiverName={setReceiverName}
-          setMyName={setMyName}
-          setDeliverDay={setDeliverDay}
-          title={title}
-          setTitle={setTitle}
-          croppedImage={croppedImage}
-          setCroppedImage={setCroppedImage}
-          backgroundimage={backgroundimage}
-          setBackgroundimage={setBackgroundimage}
-          selectfont={selectfont}
-          setSelectfont={setSelectfont}
-          setViewEdit={setViewEdit}
-          selectedImageIndex={selectedImageIndex}
-          setSelectedImageIndex={setSelectedImageIndex}
-          setSelectFid={setSelectFid}
-          selectFid={selectFid}
-        />
-      )}
-      {coverOpen && (
-        <CoverModal
-          title={title}
-          setTitle={setTitle}
-          croppedImage={croppedImage}
-          backgroundimage={backgroundimage}
-          setCroppedImage={setCroppedImage}
-          setBackgroundimage={setBackgroundimage}
-          selectfont={selectfont}
-          setSelectfont={setSelectfont}
-          setIsModalOpen={setCoveropen}
-          setKeyboardVisible={setKeyboardVisible}
-          selectedImageIndex={selectedImageIndex}
-          setSelectedImageIndex={setSelectedImageIndex}
-          setSelectFid={setSelectFid}
-          selectFid={selectFid}
-        />
-      )}
-      {complete &&
-        (visit ? (
-          <UserFinishModal
-            setKeyboardVisible={setKeyboardVisible}
+              </Cover>
+            </Container>
+            <Button onClick={handleComplete}>
+              <ButtonTxt>확인했어요</ButtonTxt>
+            </Button>
+          </>
+        ) : (
+          <EditLetter
             myName={myName}
             receiverName={receiverName}
             deliverDay={deliverDay}
+            setReceiverName={setReceiverName}
+            setMyName={setMyName}
+            setDeliverDay={setDeliverDay}
             title={title}
+            setTitle={setTitle}
+            croppedImage={croppedImage}
+            setCroppedImage={setCroppedImage}
+            backgroundimage={backgroundimage}
+            setBackgroundimage={setBackgroundimage}
+            selectfont={selectfont}
+            setSelectfont={setSelectfont}
+            setViewEdit={setViewEdit}
+            selectedImageIndex={selectedImageIndex}
+            setSelectedImageIndex={setSelectedImageIndex}
+            setSelectFid={setSelectFid}
+            selectFid={selectFid}
+          />
+        )}
+        {coverOpen && (
+          <CoverModal
+            title={title}
+            setTitle={setTitle}
             croppedImage={croppedImage}
             backgroundimage={backgroundimage}
+            setCroppedImage={setCroppedImage}
+            setBackgroundimage={setBackgroundimage}
             selectfont={selectfont}
-            setIsModalOpen={setComplete}
-            selectedImageIndex={selectedImageIndex}
-            selectFid={selectFid}
-          />
-        ) : (
-          <CompleteModal
+            setSelectfont={setSelectfont}
+            setIsModalOpen={setCoveropen}
             setKeyboardVisible={setKeyboardVisible}
-            myName={myName}
-            receiverName={receiverName}
-            deliverDay={deliverDay}
-            title={title}
-            croppedImage={croppedImage}
-            backgroundImage={backgroundimage}
-            selectfont={selectfont}
-            setIsModalOpen={setComplete}
             selectedImageIndex={selectedImageIndex}
+            setSelectedImageIndex={setSelectedImageIndex}
+            setSelectFid={setSelectFid}
             selectFid={selectFid}
           />
-        ))}
+        )}
+        {complete &&
+          (visit ? (
+            <UserFinishModal
+              setKeyboardVisible={setKeyboardVisible}
+              myName={myName}
+              receiverName={receiverName}
+              deliverDay={deliverDay}
+              title={title}
+              croppedImage={croppedImage}
+              backgroundimage={backgroundimage}
+              selectfont={selectfont}
+              setIsModalOpen={setComplete}
+              selectedImageIndex={selectedImageIndex}
+              selectFid={selectFid}
+            />
+          ) : (
+            <CompleteModal
+              setKeyboardVisible={setKeyboardVisible}
+              myName={myName}
+              receiverName={receiverName}
+              deliverDay={deliverDay}
+              title={title}
+              croppedImage={croppedImage}
+              backgroundImage={backgroundimage}
+              selectfont={selectfont}
+              setIsModalOpen={setComplete}
+              selectedImageIndex={selectedImageIndex}
+              selectFid={selectFid}
+            />
+          ))}
+      </Suspense>
     </BackGround>
   );
 }
+
+const Book: React.FC<BookProps> = ({ backgroundImage, children }) => {
+  return (
+    <div
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '120px',
+        height: '157px',
+        boxSizing: 'border-box',
+        marginBottom: '8px',
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const BackGround = styled.div`
   position: relative;

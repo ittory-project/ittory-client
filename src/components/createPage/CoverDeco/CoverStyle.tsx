@@ -6,16 +6,15 @@ import React, {
   useState,
 } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import bookshadow from '../../../../public/assets/book_shadow.svg';
 import camera from '../../../../public/assets/camera.svg';
 import PrevImg from '../../../../public/assets/pageprev.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
-import { CoverType } from '../../../../src/api/model/CoverType';
-import { getCoverTypes } from '../../../../src/api/service/CoverService';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
-import { getAllFont } from '../../../api/service/FontService';
+import { coverQuery, fontQuery } from '../../../api/queries';
 import { postCoverImage } from '../../../api/service/ImageService';
 import { ImageExtension } from '../../../constants';
 import { SessionLogger } from '../../../utils';
@@ -80,6 +79,9 @@ export default function CoverStyle({
   setSelectedImageIndex,
   setSelectFid,
 }: Props) {
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+  const { data: fonts } = useSuspenseQuery(fontQuery.all());
+
   const [, setIsKeyboardOpen] = useState<boolean>(false);
   const [, setKeyboardHeight] = useState<number>(0);
 
@@ -90,27 +92,13 @@ export default function CoverStyle({
   const [, setCropperKey] = useState<number>(0);
   const [ImageIndex, setImageIndex] = useState<number>(0);
   const [fontPopup, setFontPopup] = useState<boolean>(false);
-  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-  const [fonts, setFonts] = useState<fontProps[]>([]);
   const [font, setFont] = useState<string>('');
   const [selectf, setSelectf] = useState<string>('');
   const [selectfid, setSelectfid] = useState<number>(1);
-  const [backgroundImage, setBackgroundImage] = useState<string>('');
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const fetchCoverTypes = async () => {
-      const types = await getCoverTypes();
-      setCoverTypes(types);
-      setSelectedImageIndex(ImageIndex);
-      setBackgroundImage(coverTypes[ImageIndex]?.editImageUrl);
-    };
-    const fetchFonts = async () => {
-      const types = await getAllFont();
-      setFonts(types);
-    };
-    fetchCoverTypes();
-    fetchFonts();
+    setSelectedImageIndex(ImageIndex);
   }, []);
 
   useEffect(() => {
@@ -122,9 +110,8 @@ export default function CoverStyle({
 
   //Cover 변경
   useEffect(() => {
-    setBackgroundImage(coverTypes[ImageIndex]?.editImageUrl);
     setSelectedImageIndex(ImageIndex);
-  }, [ImageIndex, coverTypes]);
+  }, [ImageIndex]);
 
   // 폰트 바를 클릭할 때 input에 포커스를 유지시켜 키보드가 내려가지 않도록 하기
   const handlePopupClick = (e: React.MouseEvent) => {
@@ -265,7 +252,7 @@ export default function CoverStyle({
         <Title>
           <Text>표지를 꾸며주세요!</Text>
         </Title>
-        <Book backgroundimage={backgroundImage}>
+        <Book backgroundimage={coverTypes[ImageIndex].editImageUrl}>
           <TitleContainer>
             <Input
               ref={inputRef}

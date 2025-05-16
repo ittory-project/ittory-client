@@ -80,20 +80,12 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const handleSubmit = async () => {
     const count = Number(selectNumber);
     const id = letterId;
-    const coverid = coverId;
 
     const requestBody = { letterId: id, repeatCount: count };
     await postRepeatCount(requestBody);
     await postRandom({ letterId: id });
 
     wsApi.send('startLetter', [letterId]);
-    navigate('/Connection', {
-      state: {
-        letterId: letterId,
-        coverId: coverid,
-        bg: background,
-      },
-    });
   };
 
   const swiperRef = useRef<SwiperRef | null>(null);

@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
-import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
-import { FontGetResponse } from '../../api/model/FontModel';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getCoverTypeById } from '../../api/service/CoverTypeService';
-import { getFontById } from '../../api/service/FontService';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
+import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { SessionLogger, isMobileDevice } from '../../utils';
 import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
@@ -23,15 +19,24 @@ function Query() {
 }
 
 export const ShareLetter = () => {
+  const { letterId } = useParams();
+  const letterNumId = Number(letterId);
+
+  const { data: letterInfo } = useSuspenseQuery(
+    letterQuery.detailById(letterNumId),
+  );
+  const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+  const coverType = coverTypes.find(
+    (type) => type.id === letterInfo.coverTypeId,
+  );
+  if (!coverType) {
+    throw new Error('커버 타입을 찾을 수 없습니다.');
+  }
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { letterId } = useParams();
-  const [letterNumId] = useState(Number(letterId));
   const [copied, setCopied] = useState<boolean>(false);
-  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [font, setFont] = useState<FontGetResponse>();
-  const [coverType, setCoverType] = useState<CoverTypeGetResponse>();
-  const [elementLength, setElementLength] = useState<number>(0);
 
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,25 +45,6 @@ export const ShareLetter = () => {
     const page = Number(query.get('page')) || 1;
     setCurrentPage(page);
   }, [query]);
-
-  const getSharedLetter = async (letterNumId: number) => {
-    const response = await getLetterDetailInfo(letterNumId);
-    setLetterInfo(response);
-    setElementLength(response.elements.length);
-  };
-
-  const getSharedLetterStyle = async () => {
-    if (letterInfo) {
-      const fontResponse = await getFontById(letterInfo.fontId);
-      if (fontResponse) {
-        setFont(fontResponse);
-      }
-      const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId);
-      if (coverTypeResponse) {
-        setCoverType(coverTypeResponse);
-      }
-    }
-  };
 
   useEffect(() => {
     dispatch(clearOrderData());
@@ -69,12 +55,6 @@ export const ShareLetter = () => {
     window.localStorage.setItem('totalItem', '1');
     window.localStorage.setItem('resetTime', '');
   }, []);
-  useEffect(() => {
-    getSharedLetter(letterNumId);
-  }, [letterNumId]);
-  useEffect(() => {
-    getSharedLetterStyle();
-  }, [letterInfo]);
 
   const renderPageContent = () => {
     if (!letterInfo || !coverType || !font) {
@@ -181,7 +161,7 @@ export const ShareLetter = () => {
           {renderPageContent()}
         </CoverContainer>
       </CoverShadow>
-      <Pagination totalPages={elementLength + 1} />
+      <Pagination totalPages={letterInfo.elements.length + 1} />
       <BtnContainer>
         <StoreBtn onClick={handleStorage}>편지함 이동하기</StoreBtn>
         <ShareBtn onClick={createShare}>지금 전달하기</ShareBtn>

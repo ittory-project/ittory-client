@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import calender from '../../../../public/assets/calendar.svg';
 import X from '../../../../public/assets/x.svg';
-import { myInfoQuery } from '../../../api/queries/user';
+import { userQuery } from '../../../api/queries';
 import BottomSheet from './BotttomSheet';
 
 interface Props {
@@ -34,7 +34,7 @@ export default function LetterInfo({
   setViewCoverDeco,
   setViewStartpage,
 }: Props) {
-  const { data: myInfo } = useSuspenseQuery(myInfoQuery());
+  const { data: myInfo } = useSuspenseQuery(userQuery.myInfo());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [keyboardVisible, setKeyboardVisible] = useState<boolean>(false);
   const receiverInputRef = useRef<HTMLInputElement | null>(null);

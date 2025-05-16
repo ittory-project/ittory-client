@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import Player from 'lottie-react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,9 +8,8 @@ import styled from 'styled-components';
 import animation from '../../../../public/assets/confetti.json';
 import letter from '../../../../public/assets/letter.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
-import { CoverType } from '../../../api/model/CoverType';
 import { LetterRequestBody } from '../../../api/model/LetterModel';
-import { getCoverTypes } from '../../../api/service/CoverService';
+import { coverQuery } from '../../../api/queries';
 import { postLetter } from '../../../api/service/LetterService';
 import { postEnter } from '../../../api/service/LetterService';
 import { formatDeliverDate } from './formatDeliverDate';
@@ -41,21 +41,13 @@ export default function CompleteModal({
   setKeyboardVisible,
   selectFid,
 }: Props) {
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
   const [, setGuideOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [adjustDay, setAdjustDay] = useState<string>('');
-
-  useEffect(() => {
-    const fetchCoverTypes = async () => {
-      const types = await getCoverTypes();
-      setCoverTypes(types);
-    };
-
-    fetchCoverTypes();
-  }, []);
 
   useEffect(() => {
     const changeType = () => {

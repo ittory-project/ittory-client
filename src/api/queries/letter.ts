@@ -1,50 +1,69 @@
 import { inMillis } from '../../utils';
 import { getElementsByLetterId } from '../service/ElementService';
 import {
+  getLetterDetailInfo,
+  getLetterInfo,
   getLetterPartiList,
   getLetterStartInfo,
 } from '../service/LetterService';
-
-const queryKeyNamespaces = {
-  letter: 'letter',
-};
+import { queryKeyNamespaces } from './_namespaces';
 
 export const queryKeys = {
-  byLetterId: (letterId: number) => [queryKeyNamespaces.letter, letterId],
-  startInfoByLetterId: (letterId: number) => [
+  byId: (letterId: number) => [queryKeyNamespaces.letter, letterId],
+  infoById: (letterId: number) => [queryKeyNamespaces.letter, letterId, 'info'],
+  startInfoById: (letterId: number) => [
     queryKeyNamespaces.letter,
     letterId,
     'startInfo',
   ],
-  participantsByLetterId: (letterId: number) => [
+  detailInfoById: (letterId: number) => [
+    queryKeyNamespaces.letter,
+    letterId,
+    'detail',
+  ],
+  participantsById: (letterId: number) => [
     queryKeyNamespaces.letter,
     letterId,
     'participants',
   ],
-  elementsByLetterId: (letterId: number) => [
+  elementsById: (letterId: number) => [
     queryKeyNamespaces.letter,
     letterId,
     'elements',
   ],
 };
 
-export const participantsByLetterIdQuery = (letterId: number) => ({
-  queryKey: queryKeys.participantsByLetterId(letterId),
+export const participantsById = (letterId: number) => ({
+  queryKey: queryKeys.participantsById(letterId),
   queryFn: () => getLetterPartiList(letterId),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });
 
-export const elementsByLetterIdQuery = (letterId: number) => ({
-  queryKey: queryKeys.elementsByLetterId(letterId),
+export const elementsById = (letterId: number) => ({
+  queryKey: queryKeys.elementsById(letterId),
   queryFn: () => getElementsByLetterId(letterId),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });
 
-export const letterStartInfoByLetterIdQuery = (letterId: number) => ({
-  queryKey: queryKeys.startInfoByLetterId(letterId),
+export const startInfoById = (letterId: number) => ({
+  queryKey: queryKeys.startInfoById(letterId),
   queryFn: () => getLetterStartInfo(letterId),
+  staleTime: inMillis().minutes(30).value(),
+  cacheTime: inMillis().minutes(30).value(),
+});
+
+export const infoById = (letterId: number) => ({
+  queryKey: queryKeys.infoById(letterId),
+  queryFn: () => getLetterInfo(letterId),
+  staleTime: inMillis().minutes(30).value(),
+  cacheTime: inMillis().minutes(30).value(),
+});
+
+export const detailById = (letterId: number) => ({
+  queryKey: queryKeys.detailInfoById(letterId),
+  queryFn: () => getLetterDetailInfo(letterId),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });
