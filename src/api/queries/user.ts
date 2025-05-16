@@ -3,6 +3,7 @@ import {
   getLetterCounts,
   getMyPage,
   getParticipatedLetter,
+  getReceivedLetter,
 } from '../service/MemberService';
 
 const queryKeyNamespaces = {
@@ -13,6 +14,7 @@ export const queryKeys = {
   myInfo: () => [queryKeyNamespaces.user, 'my', 'info'],
   letterCounts: () => [queryKeyNamespaces.user, 'letter', 'counts'],
   participatedLetter: () => [queryKeyNamespaces.user, 'letter', 'participated'],
+  receivedLetter: () => [queryKeyNamespaces.user, 'letter', 'received'],
 };
 
 export const myInfoQuery = () => ({
@@ -32,6 +34,13 @@ export const letterCountsQuery = () => ({
 export const participatedLetterQuery = () => ({
   queryKey: queryKeys.participatedLetter(),
   queryFn: () => getParticipatedLetter(),
+  staleTime: inMillis().seconds(30).value(),
+  cacheTime: inMillis().seconds(30).value(),
+});
+
+export const receivedLetterQuery = () => ({
+  queryKey: queryKeys.receivedLetter(),
+  queryFn: () => getReceivedLetter(),
   staleTime: inMillis().seconds(30).value(),
   cacheTime: inMillis().seconds(30).value(),
 });
