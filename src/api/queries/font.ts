@@ -1,9 +1,6 @@
 import { inMillis } from '../../utils';
 import { getAllFont, getFontById } from '../service/FontService';
-
-const queryKeyNamespaces = {
-  font: 'font',
-};
+import { queryKeyNamespaces } from './_namespaces';
 
 export const queryKeys = {
   allFonts: () => [queryKeyNamespaces.font],
