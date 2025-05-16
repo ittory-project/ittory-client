@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
@@ -12,12 +13,11 @@ import defaultImg from '../../../public/assets/menu/logindefault.png';
 import out from '../../../public/assets/out.svg';
 import shadow from '../../../public/assets/shadow2.svg';
 import tip from '../../../public/assets/tooltip.svg';
-import { CoverType } from '../../api/model/CoverType';
 import {
   LetterDetailGetResponse,
   LetterPartiItem,
 } from '../../api/model/LetterModel';
-import { getCoverTypes } from '../../api/service/CoverService';
+import { coverQuery } from '../../api/queries';
 import { getFontById } from '../../api/service/FontService';
 import { getLetterInfo } from '../../api/service/LetterService';
 import { getLetterDetailInfo } from '../../api/service/LetterService';
@@ -49,6 +49,8 @@ export const HostUser = ({
   viewDelete,
   setViewDelete,
 }: Props) => {
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);
@@ -57,7 +59,6 @@ export const HostUser = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(', ');
-  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
   const [cropImg, setCropImg] = useState<string>('');
   const [deliverDay, setDeliverDay] = useState<Date | null>();
   const [title, setTitle] = useState<string>('');
@@ -75,9 +76,6 @@ export const HostUser = ({
       setReceiverName(letterData.receiverName);
       setSelectedImageIndex(letterData.coverTypeId);
       setFontId(letterData.fontId);
-
-      const types = await getCoverTypes();
-      setCoverTypes(types);
     };
 
     const fetchFont = async () => {

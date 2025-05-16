@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { decodeLetterId } from '../../api/config/base64';
-import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
 import { FontGetResponse } from '../../api/model/FontModel';
 import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getCoverTypeById } from '../../api/service/CoverTypeService';
+import { coverQuery } from '../../api/queries';
 import { getFontById } from '../../api/service/FontService';
 import {
   getLetterDetailInfo,
@@ -25,11 +25,19 @@ function Query() {
 
 export const ReceiveLetter = () => {
   const { letterId } = useParams();
+
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const coverType = coverTypes.find(
+    (type) => type.id === letterInfo?.coverTypeId, // FIXME: letterInfo가 먼저 반드시 있어야 함
+  );
+  if (!coverType) {
+    throw new Error('커버 타입을 찾을 수 없습니다.');
+  }
+
   const navigate = useNavigate();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
   const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [font, setFont] = useState<FontGetResponse>();
-  const [coverType, setCoverType] = useState<CoverTypeGetResponse>();
   const [elementLength, setElementLength] = useState<number>(0);
 
   const query = Query();
@@ -51,10 +59,6 @@ export const ReceiveLetter = () => {
       const fontResponse = await getFontById(letterInfo.fontId);
       if (fontResponse) {
         setFont(fontResponse);
-      }
-      const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId);
-      if (coverTypeResponse) {
-        setCoverType(coverTypeResponse);
       }
     }
   };
