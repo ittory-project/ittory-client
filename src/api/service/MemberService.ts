@@ -5,6 +5,7 @@ import {
   MypageGetResponse,
   ParticipateLetterModel,
   ParticipationGetResponse,
+  ReceiveLetterModel,
   ReceivedGetResponse,
   VisitGetResponse,
   WithdrawPostRequest,
@@ -35,9 +36,9 @@ export async function postWithdraw(
   return response.data;
 }
 
-export async function getReceivedLetter(): Promise<ReceivedGetResponse> {
+export async function getReceivedLetter(): Promise<ReceiveLetterModel[]> {
   const response = await api.get<ReceivedGetResponse>(`api/member/received`);
-  return response.data;
+  return response.data.data.letters;
 }
 
 export async function getParticipatedLetter(): Promise<

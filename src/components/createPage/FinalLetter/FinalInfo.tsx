@@ -87,25 +87,6 @@ export default function FinalInfo({
     setComplete(true);
   };
 
-  const Book: React.FC<BookProps> = ({ backgroundImage, children }) => {
-    return (
-      <div
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '120px',
-          height: '157px',
-          boxSizing: 'border-box',
-          marginBottom: '8px',
-        }}
-      >
-        {children}
-      </div>
-    );
-  };
-
   return (
     <BackGround>
       <Suspense>
@@ -262,6 +243,25 @@ export default function FinalInfo({
     </BackGround>
   );
 }
+
+const Book: React.FC<BookProps> = ({ backgroundImage, children }) => {
+  return (
+    <div
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '120px',
+        height: '157px',
+        boxSizing: 'border-box',
+        marginBottom: '8px',
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const BackGround = styled.div`
   position: relative;
