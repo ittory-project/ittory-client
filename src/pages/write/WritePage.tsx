@@ -1,12 +1,12 @@
 import { Suspense, useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CountdownGif from '../../../public/img/letter_start_count.gif';
 import { decodeLetterId } from '../../api/config/base64';
-import { LetterStartInfoGetResponse } from '../../api/model/LetterModel';
-import { getLetterStartInfo } from '../../api/service/LetterService';
+import { letterQuery } from '../../api/queries';
 import { Write } from '../../components/writePage/Write';
 import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
 import { usePreventBack } from '../../hooks';
@@ -16,9 +16,13 @@ export const WritePage = () => {
 
   const { letterId } = useParams();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  // 불러온 편지 정보
-  const [repeatCount, setRepeatCount] = useState<number | null>();
-  const [elementCount, setElementCount] = useState<number | null>();
+  if (!letterNumId) {
+    throw new Error('잘못된 접근입니다.');
+  }
+  const { data: startInfo } = useSuspenseQuery(
+    letterQuery.startInfoById(letterNumId),
+  );
+
   // 초기 팝업 띄우기
   const [showPopup, setShowPopup] = useState(true);
   const [showCountdown, setShowCountdown] = useState(false);
@@ -29,22 +33,6 @@ export const WritePage = () => {
   );
   // 편지 시작까지 남은 시간 계산
   const [startCountdown, setStartCountdown] = useState<number>(10);
-
-  const getStartInfo = async () => {
-    if (!letterId) {
-      window.alert('잘못된 접근입니다.');
-    } else if (!letterNumId) {
-      window.alert('잘못된 접근입니다.');
-    } else {
-      const response: LetterStartInfoGetResponse =
-        await getLetterStartInfo(letterNumId);
-      setRepeatCount(response.repeatCount);
-      setElementCount(response.elementCount);
-    }
-  };
-  useEffect(() => {
-    getStartInfo();
-  }, []);
 
   // 모달 띄우는 시간 설정
   useEffect(() => {
@@ -87,15 +75,12 @@ export const WritePage = () => {
     };
   }, []);
 
-  // 남은 시간을 업데이트하는 useEffect
-
   return (
     <Container>
       {showPopup && (
         <WriteMainModal
-          // partiCount={Number(partiCount)}
-          repeatCount={Number(repeatCount)}
-          elementCount={Number(elementCount)}
+          repeatCount={Number(startInfo.repeatCount)}
+          elementCount={Number(startInfo.elementCount)}
           startCountdown={startCountdown}
         />
       )}

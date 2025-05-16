@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import prev from '../../../public/assets/prev.svg';
 import { SessionLogger } from '../../utils';
 import { CreatedLetter } from './CreatedLetter';
+import { Loading } from './Loading';
 import { ReceivedLetter } from './ReceivedLetter';
 
 const logger = new SessionLogger('letterbox');
@@ -159,52 +160,54 @@ export const LetterBox = () => {
 
   return (
     <BackGround>
-      {(isModalOpen || popup) && <Overlay />}
-      {!openLetter && (
-        <>
-          {deletedAlert && <DeleteAlert>{deletedAlert}</DeleteAlert>}
-          <Header>
-            <Prev src={prev} onClick={navigateBack} />
-            <HeaderTxt>편지함</HeaderTxt>
-          </Header>
-          <TitleContainer>
-            <CreatedLetterBox $focus={create} onClick={handleFocusCreate}>
-              참여한 편지
-            </CreatedLetterBox>
-            <ReceivedLetterBox $focus={receive} onClick={handleFocusReceive}>
-              받은 편지
-            </ReceivedLetterBox>
-          </TitleContainer>
-        </>
-      )}
-      {create && (
-        <CreatedLetter
-          setIsModalOpen={setIsModalOpen}
-          isModalOpen={isModalOpen}
-          setPopup={setPopup}
-          popup={popup}
-          setOpenLetter={setOpenLetter}
-          openLetter={openLetter}
-          deleteAlert={deleteAlert}
-          setDeleteAlert={setDeleteAlert}
-          deletedAlert={deletedAlert}
-          setDeletedAlert={setDeletedAlert}
-        />
-      )}
-      {receive && (
-        <ReceivedLetter
-          setIsModalOpen={setIsModalOpen}
-          isModalOpen={isModalOpen}
-          setPopup={setPopup}
-          popup={popup}
-          setOpenLetter={setOpenLetter}
-          openLetter={openLetter}
-          deleteAlert={deleteAlert}
-          setDeleteAlert={setDeleteAlert}
-          deletedAlert={deletedAlert}
-          setDeletedAlert={setDeletedAlert}
-        />
-      )}
+      <Suspense fallback={<Loading />}>
+        {(isModalOpen || popup) && <Overlay />}
+        {!openLetter && (
+          <>
+            {deletedAlert && <DeleteAlert>{deletedAlert}</DeleteAlert>}
+            <Header>
+              <Prev src={prev} onClick={navigateBack} />
+              <HeaderTxt>편지함</HeaderTxt>
+            </Header>
+            <TitleContainer>
+              <CreatedLetterBox $focus={create} onClick={handleFocusCreate}>
+                참여한 편지
+              </CreatedLetterBox>
+              <ReceivedLetterBox $focus={receive} onClick={handleFocusReceive}>
+                받은 편지
+              </ReceivedLetterBox>
+            </TitleContainer>
+          </>
+        )}
+        {create && (
+          <CreatedLetter
+            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isModalOpen}
+            setPopup={setPopup}
+            popup={popup}
+            setOpenLetter={setOpenLetter}
+            openLetter={openLetter}
+            deleteAlert={deleteAlert}
+            setDeleteAlert={setDeleteAlert}
+            deletedAlert={deletedAlert}
+            setDeletedAlert={setDeletedAlert}
+          />
+        )}
+        {receive && (
+          <ReceivedLetter
+            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isModalOpen}
+            setPopup={setPopup}
+            popup={popup}
+            setOpenLetter={setOpenLetter}
+            openLetter={openLetter}
+            deleteAlert={deleteAlert}
+            setDeleteAlert={setDeleteAlert}
+            deletedAlert={deletedAlert}
+            setDeletedAlert={setDeletedAlert}
+          />
+        )}
+      </Suspense>
     </BackGround>
   );
 };

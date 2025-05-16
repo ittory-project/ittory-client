@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import bell from '../../../public/assets/bell.svg';
 import check from '../../../public/assets/check.svg';
 import prev from '../../../public/assets/prev.svg';
-import { myInfoQuery } from '../../api/queries/user';
+import { userQuery } from '../../api/queries';
 import { DeleteReason } from './DeleteReason';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const AccountDelete = ({ setViewDelete }: Props) => {
-  const { data: myInfo } = useSuspenseQuery(myInfoQuery());
+  const { data: myInfo } = useSuspenseQuery(userQuery.myInfo());
   const [viewReason, setViewReason] = useState<boolean>(false);
 
   const handleDelete = () => {

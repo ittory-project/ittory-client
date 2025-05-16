@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { decodeLetterId } from '../../api/config/base64';
-import { CoverTypeGetResponse } from '../../api/model/CoverTypeModel';
-import { FontGetResponse } from '../../api/model/FontModel';
-import { LetterDetailGetResponse } from '../../api/model/LetterModel';
-import { getCoverTypeById } from '../../api/service/CoverTypeService';
-import { getFontById } from '../../api/service/FontService';
+import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import {
-  getLetterDetailInfo,
   getLetterStorageCheck,
   postLetterStore,
 } from '../../api/service/LetterService';
@@ -25,12 +21,21 @@ function Query() {
 
 export const ReceiveLetter = () => {
   const { letterId } = useParams();
-  const navigate = useNavigate();
   const [letterNumId] = useState(decodeLetterId(String(letterId)));
-  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
-  const [font, setFont] = useState<FontGetResponse>();
-  const [coverType, setCoverType] = useState<CoverTypeGetResponse>();
-  const [elementLength, setElementLength] = useState<number>(0);
+
+  const { data: letterInfo } = useSuspenseQuery(
+    letterQuery.detailById(letterNumId),
+  );
+  const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+  const coverType = coverTypes.find(
+    (type) => type.id === letterInfo.coverTypeId,
+  );
+  if (!coverType) {
+    throw new Error('커버 타입을 찾을 수 없습니다.');
+  }
+
+  const navigate = useNavigate();
 
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,32 +44,6 @@ export const ReceiveLetter = () => {
     const page = Number(query.get('page')) || 1;
     setCurrentPage(page);
   }, [query]);
-
-  const getSharedLetter = async (letterNumId: number) => {
-    const response = await getLetterDetailInfo(letterNumId);
-    setLetterInfo(response);
-    setElementLength(response.elements.length);
-  };
-
-  const getSharedLetterStyle = async () => {
-    if (letterInfo) {
-      const fontResponse = await getFontById(letterInfo.fontId);
-      if (fontResponse) {
-        setFont(fontResponse);
-      }
-      const coverTypeResponse = await getCoverTypeById(letterInfo.coverTypeId);
-      if (coverTypeResponse) {
-        setCoverType(coverTypeResponse);
-      }
-    }
-  };
-
-  useEffect(() => {
-    getSharedLetter(letterNumId);
-  }, [letterNumId]);
-  useEffect(() => {
-    getSharedLetterStyle();
-  }, [letterInfo]);
 
   type AlertState = 'LOADING' | 'SAVED' | 'ISSTORED';
   const [saveAlert, setSaveAlert] = useState<AlertState>('LOADING');
@@ -108,7 +87,7 @@ export const ReceiveLetter = () => {
             letterContent={letterInfo}
           />
         );
-      else if (currentPage === elementLength + 2)
+      else if (currentPage === letterInfo.elements.length + 2)
         return <ReceiveLetterSave handleSaveLetter={handleSaveLetter} />;
       else
         return (
@@ -120,7 +99,7 @@ export const ReceiveLetter = () => {
     }
   };
 
-  return letterInfo && coverType && font && elementLength > 0 ? (
+  return letterInfo && coverType && font && letterInfo.elements.length > 0 ? (
     <Background $backgroundimg={'' + coverType.outputBackgroundImageUrl}>
       <ToDiv $fonttype={font.name}>To. {letterInfo.receiverName}</ToDiv>
       <CoverShadow>
@@ -128,7 +107,7 @@ export const ReceiveLetter = () => {
           {renderPageContent()}
         </CoverContainer>
       </CoverShadow>
-      <Pagination totalPages={elementLength + 2} />
+      <Pagination totalPages={letterInfo.elements.length + 2} />
       {saveAlert === 'SAVED' && (
         <ModalOverlay>
           <PopupContainer>

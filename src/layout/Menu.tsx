@@ -13,8 +13,7 @@ import defaultImage from '../../public/assets/menu/profileImg.png';
 import direction from '../../public/assets/navigate.svg';
 import X from '../../public/assets/x.svg';
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
-import { myInfoQuery } from '../api/queries/user';
-import { getLetterCounts } from '../api/service/MemberService';
+import { userQuery } from '../api/queries';
 import { TempLoginArea } from './TempLogin';
 
 interface Props {
@@ -30,9 +29,15 @@ export interface GroupItem {
 export const Menu = ({ onClose }: Props) => {
   const isLoggedIn = accessTokenRepository.isLoggedIn();
   const { data: myInfo } = useQuery({
-    ...myInfoQuery(),
+    ...userQuery.myInfo(),
     enabled: isLoggedIn,
   });
+  const { data: letterCounts } = useQuery({
+    ...userQuery.letterCounts(),
+    enabled: isLoggedIn,
+  });
+  const partiLetter = letterCounts?.participationLetterCount ?? 0;
+  const receiveLetter = letterCounts?.receiveLetterCount ?? 0;
 
   const navigate = useNavigate();
   const [navigatePath, setNavigatePath] = useState<string | null>(null);
@@ -40,20 +45,6 @@ export const Menu = ({ onClose }: Props) => {
     focusCreate: boolean;
     focusReceive: boolean;
   } | null>(null);
-  const [partiLetter, setPartiLetter] = useState<number>(0);
-  const [receiveLetter, setReceiveLetter] = useState<number>(0);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      const fetchLetterCounts = async () => {
-        const counts = await getLetterCounts();
-        setPartiLetter(counts.participationLetterCount);
-        setReceiveLetter(counts.receiveLetterCount);
-      };
-
-      fetchLetterCounts();
-    }
-  }, [isLoggedIn]);
 
   const navigateToAccount = () => {
     navigate('/Account');

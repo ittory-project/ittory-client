@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
@@ -8,8 +9,7 @@ import bright from '../../../../public/assets/border.svg';
 import calender from '../../../../public/assets/calendar.svg';
 import EditImg from '../../../../public/assets/edit.svg';
 import shadow from '../../../../public/assets/shadow2.svg';
-import { CoverType } from '../../../api/model/CoverType';
-import { getCoverTypes } from '../../../api/service/CoverService';
+import { coverQuery } from '../../../api/queries';
 import BottomSheet from '../EnterInfo/BotttomSheet';
 import CoverModal from '../FinalLetter/CoverModal';
 
@@ -56,19 +56,11 @@ export default function EditLetter({
   setSelectFid,
   selectFid,
 }: Props) {
+  const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
+
   const [calenderOpen, setCalenderOpen] = useState<boolean>(false);
   const [coverOpen, setCoveropen] = useState<boolean>(false);
   const [, setKeyboardVisible] = useState<boolean>(false);
-  const [coverTypes, setCoverTypes] = useState<CoverType[]>([]);
-
-  useEffect(() => {
-    const fetchCoverTypes = async () => {
-      const types = await getCoverTypes();
-      setCoverTypes(types);
-    };
-
-    fetchCoverTypes();
-  }, []);
 
   const openCalender = () => {
     setCalenderOpen(true);
@@ -186,22 +178,24 @@ export default function EditLetter({
         />
       )}
       {coverOpen && (
-        <CoverModal
-          title={title}
-          setTitle={setTitle}
-          croppedImage={croppedImage}
-          backgroundimage={backgroundimage}
-          setCroppedImage={setCroppedImage}
-          setBackgroundimage={setBackgroundimage}
-          selectfont={selectfont}
-          setSelectfont={setSelectfont}
-          setIsModalOpen={setCoveropen}
-          setKeyboardVisible={setKeyboardVisible}
-          selectedImageIndex={selectedImageIndex}
-          setSelectedImageIndex={setSelectedImageIndex}
-          setSelectFid={setSelectFid}
-          selectFid={selectFid}
-        />
+        <Suspense>
+          <CoverModal
+            title={title}
+            setTitle={setTitle}
+            croppedImage={croppedImage}
+            backgroundimage={backgroundimage}
+            setCroppedImage={setCroppedImage}
+            setBackgroundimage={setBackgroundimage}
+            selectfont={selectfont}
+            setSelectfont={setSelectfont}
+            setIsModalOpen={setCoveropen}
+            setKeyboardVisible={setKeyboardVisible}
+            selectedImageIndex={selectedImageIndex}
+            setSelectedImageIndex={setSelectedImageIndex}
+            setSelectFid={setSelectFid}
+            selectFid={selectFid}
+          />
+        </Suspense>
       )}
     </BackGround>
   );
