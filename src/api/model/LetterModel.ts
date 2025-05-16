@@ -110,14 +110,7 @@ export interface LetterEnterResponse {
 }
 
 // 편지 상세 정보 조회 API Response
-export interface LetterDetailGetResponse {
-  letterId: number;
-  coverTypeId: number;
-  fontId: number;
-  receiverName: string;
-  deliveryDate: string;
-  title: string;
-  coverPhotoUrl: string;
+export interface LetterDetailGetResponse extends LetterInfoGetResponse {
   participantNames: string[];
   elements: LetterDetail[];
 }
