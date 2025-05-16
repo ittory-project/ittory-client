@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import more from '../../../public/assets/more.svg';
-import { ParticipateLetterModel } from '../../api/model/MemberModel';
 import { userQuery } from '../../api/queries';
-import { getParticipatedLetter } from '../../api/service/MemberService';
 import { Created_Modal } from './Created_Modal';
 import { Delete_letterbox } from './Delete_letterbox';
 import { EmptyLetter } from './EmptyLetter';
 import { Letter } from './Letter';
-import { Loading } from './Loading';
 
 interface DeliverDayProps {
   deliverDate: string;
@@ -41,34 +38,16 @@ export const CreatedLetter = ({
   setDeleteAlert,
   setDeletedAlert,
 }: Props) => {
+  const queryClient = useQueryClient();
   const { data: letterCounts } = useSuspenseQuery(
     userQuery.letterCountsQuery(),
+  );
+  const { data: letters } = useSuspenseQuery(
+    userQuery.participatedLetterQuery(),
   );
 
   const [deleteName, setDeleteName] = useState<string>('');
   const [selectId, setSelectId] = useState<number>(-1);
-  const [letters, setLetters] = useState<ParticipateLetterModel[]>([]);
-  const [load, setLoad] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchLetter = async () => {
-      const letterdata = await getParticipatedLetter();
-      setLetters(letterdata.data.letters);
-      setLoad(false);
-    };
-
-    fetchLetter();
-  }, []);
-
-  useEffect(() => {
-    const fetchLetter = async () => {
-      const letterdata = await getParticipatedLetter();
-      setLetters(letterdata.data.letters);
-      setLoad(false);
-    };
-
-    fetchLetter();
-  }, [setDeletedAlert]);
 
   const openModal = (itemId: number) => {
     setSelectId(itemId);
@@ -83,8 +62,12 @@ export const CreatedLetter = ({
   useEffect(() => {
     const fetchLetter = async () => {
       if (deleteAlert !== null) {
-        const letterdata = await getParticipatedLetter();
-        setLetters(letterdata.data.letters);
+        queryClient.invalidateQueries({
+          queryKey: userQuery.queryKeys.letterCounts(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: userQuery.queryKeys.participatedLetter(),
+        });
 
         const deletedMessage = localStorage.getItem('deletedLetter');
         setDeletedAlert(deletedMessage);
@@ -94,26 +77,9 @@ export const CreatedLetter = ({
     fetchLetter();
   }, [deleteAlert]);
 
-  const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
-    const date = new Date(deliverDate);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-    const weekday = weekdays[date.getDay()];
-
-    return (
-      <StyledDeliverDay>{`${year}. ${month}. ${day} (${weekday}) 전달`}</StyledDeliverDay>
-    );
-  };
-
   return (
     <>
-      {load === true ? (
-        <Loading />
-      ) : letters.length !== 0 ? (
+      {letters.length !== 0 ? (
         <>
           {!openLetter && letters && (
             <Container>
@@ -194,6 +160,21 @@ export const CreatedLetter = ({
         <EmptyLetter context="created" />
       )}
     </>
+  );
+};
+
+const DeliverDay: React.FC<DeliverDayProps> = ({ deliverDate }) => {
+  const date = new Date(deliverDate);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = weekdays[date.getDay()];
+
+  return (
+    <StyledDeliverDay>{`${year}. ${month}. ${day} (${weekday}) 전달`}</StyledDeliverDay>
   );
 };
 
