@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
@@ -13,14 +13,9 @@ import defaultImg from '../../../public/assets/menu/logindefault.png';
 import out from '../../../public/assets/out.svg';
 import shadow from '../../../public/assets/shadow2.svg';
 import tip from '../../../public/assets/tooltip.svg';
-import {
-  LetterDetailGetResponse,
-  LetterPartiItem,
-} from '../../api/model/LetterModel';
-import { coverQuery } from '../../api/queries';
+import { LetterPartiItem } from '../../api/model/LetterModel';
+import { coverQuery, letterQuery } from '../../api/queries';
 import { getFontById } from '../../api/service/FontService';
-import { getLetterInfo } from '../../api/service/LetterService';
-import { getLetterDetailInfo } from '../../api/service/LetterService';
 import { isMobileDevice } from '../../utils';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { Count } from './Count/Count';
@@ -50,8 +45,10 @@ export const HostUser = ({
   setViewDelete,
 }: Props) => {
   const { data: coverTypes } = useSuspenseQuery(coverQuery.allTypesQuery());
+  const { data: letterInfo } = useSuspenseQuery(
+    letterQuery.infoByLetterIdQuery(letterId),
+  );
 
-  const [letterInfo, setLetterInfo] = useState<LetterDetailGetResponse>();
   const [sliceName, setSliceName] = useState<string>('');
   const [guide, setGuide] = useState<boolean>(guideOpen);
   const [copied, setCopied] = useState<boolean>(false);
@@ -59,44 +56,26 @@ export const HostUser = ({
   const [popup, setPopup] = useState<boolean>(false);
   const [viewExit, setViewExit] = useState<boolean>(false);
   const namesString = items.map((item) => item.nickname).join(', ');
-  const [cropImg, setCropImg] = useState<string>('');
-  const [deliverDay, setDeliverDay] = useState<Date | null>();
-  const [title, setTitle] = useState<string>('');
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-  const [fontId, setFontId] = useState<number>(-1);
   const [selectfont, setSelectfont] = useState<string>('');
-  const [receiverName, setReceiverName] = useState<string>('');
 
   useEffect(() => {
-    const fetchLetterInfo = async () => {
-      const letterData = await getLetterInfo(letterId);
-      setCropImg(letterData.coverPhotoUrl);
-      setTitle(letterData.title);
-      setDeliverDay(parseISO(letterData.deliveryDate));
-      setReceiverName(letterData.receiverName);
-      setSelectedImageIndex(letterData.coverTypeId);
-      setFontId(letterData.fontId);
-    };
-
     const fetchFont = async () => {
-      const fontdata = await getFontById(fontId);
+      const fontdata = await getFontById(letterInfo.fontId);
       setSelectfont(fontdata.value);
     };
 
-    fetchLetterInfo();
-
-    if (fontId > -1) {
+    if (letterInfo.fontId > -1) {
       fetchFont();
     }
   }, [letterId]);
 
   useEffect(() => {
-    if (receiverName.length > 9) {
-      setSliceName(receiverName.slice(0, 9));
+    if (letterInfo.receiverName.length > 9) {
+      setSliceName(letterInfo.receiverName.slice(0, 9));
     } else {
-      setSliceName(receiverName);
+      setSliceName(letterInfo.receiverName);
     }
-  }, [receiverName]);
+  }, [letterInfo.receiverName]);
 
   const handleUserName = (name: string) => {
     return name.slice(0, 3);
@@ -116,16 +95,6 @@ export const HostUser = ({
   const handleCountview = () => {
     setPopup(true);
   };
-
-  useEffect(() => {
-    const getSharedLetter = async () => {
-      if (letterId) {
-        const response = await getLetterDetailInfo(letterId);
-        setLetterInfo(response);
-      }
-    };
-    getSharedLetter();
-  }, [letterId]);
 
   const fallbackCopyTextToClipboard = (text: string) => {
     const textArea = document.createElement('textarea');
@@ -196,12 +165,12 @@ export const HostUser = ({
       {viewDelete && <Overlay />}
       {viewExit && <Overlay />}
       {popup && <Overlay />}
-      {items.length > 0 && fontId > -1 && (
+      {items.length > 0 && letterInfo.fontId > -1 && (
         <>
           <Header>
             <ReceiverContainer>
               <Receiver>To.{sliceName}</Receiver>
-              {receiverName.length > 9 && (
+              {letterInfo.receiverName.length > 9 && (
                 <Receiver style={{ letterSpacing: '-0.2em' }}>···</Receiver>
               )}
             </ReceiverContainer>
@@ -218,16 +187,18 @@ export const HostUser = ({
           <MainContainer>
             <Book
               $backgroundImage={
-                coverTypes[selectedImageIndex - 1]?.confirmImageUrl
+                coverTypes[letterInfo.coverTypeId - 1]?.confirmImageUrl
               }
             >
-              <TitleContainer $font={selectfont}>{title}</TitleContainer>
-              {deliverDay ? (
+              <TitleContainer $font={selectfont}>
+                {letterInfo.title}
+              </TitleContainer>
+              {letterInfo.deliveryDate ? (
                 <DeliverDay>
-                  {`${format(deliverDay as Date, 'yyyy')}. `}
-                  {`${format(deliverDay as Date, 'MM')}. `}
-                  {format(deliverDay as Date, 'dd')}
-                  {` (${format(deliverDay as Date, 'E', { locale: ko })})`}
+                  {`${format(letterInfo.deliveryDate, 'yyyy')}. `}
+                  {`${format(letterInfo.deliveryDate, 'MM')}. `}
+                  {format(letterInfo.deliveryDate, 'dd')}
+                  {` (${format(letterInfo.deliveryDate, 'E', { locale: ko })})`}
                 </DeliverDay>
               ) : (
                 <></>
@@ -235,11 +206,13 @@ export const HostUser = ({
               <>
                 <Bright src={bright} />
                 <Shadow src={shadow} />
-                <BtnImgContainer $bgimg={cropImg} />
+                <BtnImgContainer $bgimg={letterInfo.coverPhotoUrl} />
               </>
               <NameBar>
                 <NameContainer>
-                  <NameTxt $book={selectedImageIndex}>{namesString}</NameTxt>
+                  <NameTxt $book={letterInfo.coverTypeId}>
+                    {namesString}
+                  </NameTxt>
                 </NameContainer>
               </NameBar>
             </Book>
@@ -334,7 +307,7 @@ export const HostUser = ({
           {viewCount && (
             <Count
               letterId={letterId}
-              coverId={selectedImageIndex}
+              coverId={letterInfo.coverTypeId}
               setViewCount={setViewCount}
               member={items.length}
             />
