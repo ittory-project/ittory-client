@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { userQuery } from '../../api/queries';
+import { Policies } from '../../constants';
 import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
 import Deleted from './Deleted';
 import { JoinModal } from './JoinModal';
@@ -35,18 +36,19 @@ export const Join = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
 
-    if (value.length > 5) {
-      value = value.slice(0, 5);
+    let unicodeChars = Array.from(value);
+    if (unicodeChars.length > Policies.NICKNAME_MAX_LENGTH) {
+      value = unicodeChars.slice(0, Policies.NICKNAME_MAX_LENGTH).join('');
+      unicodeChars = Array.from(value);
     }
 
-    // 공백만 입력된 경우 빈 문자열로 처리
-    if (value.trim() === '') {
+    const trimmedValue = value.trim();
+    if (trimmedValue === '') {
       setNickname('');
       return;
     }
 
-    // 문자열 뒤쪽 공백 제거
-    setNickname(value.trimEnd());
+    setNickname(trimmedValue);
     setDuplicateError(false);
   };
 
@@ -77,7 +79,6 @@ export const Join = () => {
                     onChange={handleInputChange}
                     spellCheck={false}
                     minLength={1}
-                    maxLength={5}
                   />
                 </InputBox>
                 {duplicateError && nickname && (
