@@ -69,7 +69,7 @@ export const WriteElement = ({
   }, []);
 
   const [mobile, setMobile] = useState(false);
-  const [bottomOffset, setBottomOffset] = useState<number>(0);
+  const [, setBottomOffset] = useState<number>(0);
 
   useEffect(() => {
     const checkInitialDevice = () => {
@@ -118,6 +118,10 @@ export const WriteElement = ({
     };
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Container isMobile={mobile}>
       <Header isMobile={mobile}>
@@ -129,10 +133,10 @@ export const WriteElement = ({
       </Header>
       <Content
         isMobile={mobile}
-        style={{
+        /*style={{
           height: `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`,
           bottom: `${bottomOffset - 2}px`,
-        }}
+        }}*/
       >
         <PhotoDiv isMobile={mobile}>
           <LetterImage src={element.imageUrl} onError={handleImageError} />
