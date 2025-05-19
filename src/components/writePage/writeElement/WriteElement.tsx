@@ -18,6 +18,24 @@ export const WriteElement = ({
 }: WriteElementProps) => {
   const [text, setText] = useState('');
   const progressTime = useTimeLeft(element.startedAt);
+  const [mobile, setMobile] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState<number>(0);
+  const [isScrollable, setIsScrollable] = useState(false);
+  const [mobileCheck, setMobileCheck] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const vh = window.innerHeight * 0.01;
+      const calculatedHeight = vh * 100 - bottomOffset;
+
+      setIsScrollable(calculatedHeight < 320);
+    };
+
+    handleResize(); // 초기 실행
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [bottomOffset]);
 
   const handleClose = () => {
     onClose();
@@ -69,14 +87,11 @@ export const WriteElement = ({
     };
   }, []);
 
-  const [mobile, setMobile] = useState(false);
-  const [bottomOffset, setBottomOffset] = useState<number>(0);
-
   useEffect(() => {
     const checkInitialDevice = () => {
       const isMobile = window.innerWidth < 850;
       setMobile(isMobile); // 초기 화면 크기 기반 설정
-      window.scrollTo(0, 0);
+      setMobileCheck(true);
     };
 
     checkInitialDevice();
@@ -122,73 +137,89 @@ export const WriteElement = ({
   }, []);
 
   return (
-    <Container isMobile={mobile}>
-      <Content
-        isMobile={mobile}
-        style={{
-          height: `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`,
-          bottom: `${bottomOffset - 2}px`,
-        }}
-      >
-        <Header isMobile={mobile}>
-          <ClockText>
-            <ClockIcon src="/assets/write/clock.svg" />
-            {Math.max(0, Math.floor(progressTime))}초
-          </ClockText>
-          <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
-        </Header>
-        <WriteDiv>
-          <PhotoDiv isMobile={mobile}>
-            <LetterImage src={element.imageUrl} onError={handleImageError} />
-          </PhotoDiv>
-          <WriteContent>
-            <WriteTa
-              ref={taRef}
-              placeholder="그림을 보고 편지를 채워 주세요"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              maxLength={40}
-            />
-            <ControlContainer>
-              {text.length > 0 ? (
-                <>
-                  <CharacterCount>
-                    <div
-                      style={{ color: text.length > 30 ? '#FF0004' : 'black' }}
-                    >
-                      {text.length}
-                    </div>
-                    /30자
-                  </CharacterCount>
-                </>
-              ) : (
-                <>
-                  <CharacterCount></CharacterCount>
-                </>
-              )}
-              <CompleteBtn
-                onClick={handleSubmit}
-                $isdisabled={text.length === 0 || text.length > 30}
-              >
-                완료
-              </CompleteBtn>
-            </ControlContainer>
-          </WriteContent>
-        </WriteDiv>
-      </Content>
-    </Container>
+    mobileCheck && (
+      <>
+        <Container isMobile={mobile}>
+          <Content
+            isMobile={mobile}
+            style={{
+              height: `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`,
+            }}
+          >
+            <Header isMobile={mobile}>
+              <ClockText>
+                <ClockIcon src="/assets/write/clock.svg" />
+                {Math.max(0, Math.floor(progressTime))}초
+              </ClockText>
+              <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
+            </Header>
+            <WriteDiv isScrollable={isScrollable}>
+              <PhotoDiv isMobile={mobile}>
+                <LetterImage
+                  src={element.imageUrl}
+                  onError={handleImageError}
+                />
+              </PhotoDiv>
+              <WriteContent>
+                <WriteTa
+                  ref={taRef}
+                  placeholder="그림을 보고 편지를 채워 주세요"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  maxLength={40}
+                />
+                <ControlContainer>
+                  {text.length > 0 ? (
+                    <>
+                      <CharacterCount>
+                        <div
+                          style={{
+                            color: text.length > 30 ? '#FF0004' : 'black',
+                          }}
+                        >
+                          {text.length}
+                        </div>
+                        /30자
+                      </CharacterCount>
+                    </>
+                  ) : (
+                    <>
+                      <CharacterCount></CharacterCount>
+                    </>
+                  )}
+                  <CompleteBtn
+                    onClick={handleSubmit}
+                    $isdisabled={text.length === 0 || text.length > 30}
+                  >
+                    완료
+                  </CompleteBtn>
+                </ControlContainer>
+              </WriteContent>
+            </WriteDiv>
+          </Content>
+        </Container>
+      </>
+    )
   );
 };
 
-const WriteDiv = styled.div`
+const WriteDiv = styled.div<{ isScrollable: boolean }>`
   display: flex;
   flex-direction: column;
 
   width: 100%;
   align-items: center;
-  overflow-y:auto;
-       &::-webkit-scrollbar {
-        display: none;
+  ${({ isScrollable }) =>
+    isScrollable
+      ? `
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  `
+      : `
+    overflow-y: hidden;
+  `}
 `;
 const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
@@ -225,13 +256,10 @@ const Content = styled.div<{ isMobile: boolean }>`
         height:100%;
         overflow:hidden;
       }
-        //height: calc(var(--vh, 1vh) * 100);
       `
       : `
         width: 95%;
-        border-radius: 20px;
-
-        
+        border-radius: 20px; 
       `}
 `;
 
