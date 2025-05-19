@@ -211,6 +211,7 @@ const Container = styled.div<{ isMobile: boolean }>`
 
 const Content = styled.div<{ isMobile: boolean }>`
   display: flex;
+  background: white;
 
   flex-shrink: 0;
   flex-direction: column;
@@ -232,13 +233,12 @@ const Content = styled.div<{ isMobile: boolean }>`
 
         
       `}
-
-  background: white;
 `;
 
 const Header = styled.div<{ isMobile: boolean }>`
   display: flex;
-  ${({ isMobile }) => isMobile && 'position: fixed;'}
+  position: absolute;
+  top: 0;
 
   gap: 16px;
   align-items: center;
