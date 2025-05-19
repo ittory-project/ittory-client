@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
-import { postPartiLetterBox } from '../../api/service/LetterBoxService';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
 import { SessionLogger } from '../../utils';
@@ -131,7 +130,6 @@ export const Write = () => {
       async finish() {
         logger.debug('완료');
         openFinishedModal(isRoomMaster);
-        await postPartiLetterBox(letterId);
 
         // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
         setTimeout(() => {
