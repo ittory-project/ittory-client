@@ -42,7 +42,6 @@ export const Connection = () => {
   );
 
   useEffect(() => {
-    localStorage.removeItem('letterId');
     dispatch(clearOrderData());
     dispatch(clearData());
     window.localStorage.setItem('nowLetterId', '1');

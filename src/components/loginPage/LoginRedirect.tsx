@@ -21,12 +21,7 @@ export const LoginRedirect = () => {
 
       await kakaoLogin(kakaoSocialLoginCode);
 
-      if (localStorage.letterId) {
-        const letterId = localStorage.letterId;
-        navigate(`/join/${letterId}`);
-      } else {
-        navigate('/');
-      }
+      navigate('/');
     };
 
     handleLogin();
