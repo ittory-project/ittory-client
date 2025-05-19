@@ -8,6 +8,7 @@ import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
+import { use100vh } from '../../hooks/use100vh';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
 import { ErrorFullScreen } from '../common/ErrorFullScreen';
@@ -40,6 +41,11 @@ export const Write = () => {
       letterQuery.participantsById(letterId),
     ],
   });
+  const vh = use100vh();
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, [vh]);
 
   // ErrorBoundary 구성하기
   if (participants.participants.length === 0) {
@@ -221,7 +227,7 @@ const Container = styled.div`
   flex-direction: column;
 
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 
   padding: 10px 20px;
 
