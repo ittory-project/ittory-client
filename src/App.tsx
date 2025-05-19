@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import './App.css';
+import { ApiErrorBoundary } from './components/common/ErrorBoundary';
 import { MainLayout } from './layout/MainLayout';
 import { AccountPage } from './pages/account/AccountPage';
 import { ConnectionPage } from './pages/connect/ConnectionPage';
@@ -36,28 +37,32 @@ function App() {
   return (
     <Router>
       <MainLayout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/login/redirect" element={<LoginRedirectPage />} />
-          <Route path="/receive/:letterId" element={<ReceivePage />} />
-          <Route
-            path="/receive/letter/:letterId"
-            element={<ReceiveLetterPage />}
-          />
+        <ApiErrorBoundary>
+          <Suspense>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login/redirect" element={<LoginRedirectPage />} />
+              <Route path="/receive/:letterId" element={<ReceivePage />} />
+              <Route
+                path="/receive/letter/:letterId"
+                element={<ReceiveLetterPage />}
+              />
 
-          {/* TODO: 편지 작성 퍼널로 변경 */}
-          <Route path="/create" element={<CreatePage />} />
-          <Route path="/invite/:letterId" element={<InvitePage />} />
-          <Route path="/join/:letterId" element={<JoinPage />} />
-          <Route path="/connection" element={<ConnectionPage />} />
-          <Route path="/write/:letterId" element={<WritePage />} />
-          <Route path="/share/:letterId" element={<ShareLetterPage />} />
+              {/* TODO: 편지 작성 퍼널로 변경 */}
+              <Route path="/create" element={<CreatePage />} />
+              <Route path="/invite/:letterId" element={<InvitePage />} />
+              <Route path="/join/:letterId" element={<JoinPage />} />
+              <Route path="/connection" element={<ConnectionPage />} />
+              <Route path="/write/:letterId" element={<WritePage />} />
+              <Route path="/share/:letterId" element={<ShareLetterPage />} />
 
-          <Route path="/account" element={<AccountPage />} />
-          <Route path="/letterbox" element={<LetterBoxPage />} />
-          <Route path="/loading" element={<LoadingPage />} />
-        </Routes>
+              <Route path="/account" element={<AccountPage />} />
+              <Route path="/letterbox" element={<LetterBoxPage />} />
+              <Route path="/loading" element={<LoadingPage />} />
+            </Routes>
+          </Suspense>
+        </ApiErrorBoundary>
       </MainLayout>
     </Router>
   );

@@ -89,7 +89,6 @@ export default function UserFinishModal({
     const response = await postLetter(requestBody);
     const letterId = response.letterId;
 
-    localStorage.setItem('letterId', String(letterId));
     localStorage.setItem('guideOpen', String(false));
     localStorage.setItem('userName', myName);
 
@@ -111,7 +110,6 @@ export default function UserFinishModal({
     const response = await postLetter(requestBody);
     const letterId = response.letterId;
 
-    localStorage.setItem('letterId', String(letterId));
     localStorage.setItem('guideOpen', String(true));
     localStorage.setItem('userName', myName);
 

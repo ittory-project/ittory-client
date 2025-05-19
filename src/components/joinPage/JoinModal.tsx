@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { postEnter } from '../../api/service/LetterService';
-import { patchNickname } from '../../api/service/ParticipantService';
 
 interface Props {
+  letterId: number;
   nickname: string;
   setViewModal: React.Dispatch<React.SetStateAction<boolean>>;
   visited: boolean;
@@ -18,6 +18,7 @@ interface Props {
 }
 
 export const JoinModal = ({
+  letterId,
   nickname,
   setViewModal,
   visited,
@@ -27,18 +28,14 @@ export const JoinModal = ({
   setDeleteConf,
 }: Props) => {
   const navigate = useNavigate();
-  const letterId = localStorage.letterId;
 
   const handleCancel = async () => {
-    const response = await patchNickname(letterId);
-    if (response.success) {
-      setViewModal(false);
-    }
+    setViewModal(false);
   };
 
   const handleAccess = async () => {
     try {
-      const enterresponse = await postEnter(Number(letterId), { nickname });
+      const enterresponse = await postEnter(letterId, { nickname });
       if (enterresponse.enterStatus === true) {
         fianlAccess();
       } else {
@@ -60,8 +57,6 @@ export const JoinModal = ({
   };
 
   const fianlAccess = () => {
-    localStorage.removeItem('letterId');
-
     navigate(`/invite/${letterId}?guideOpen=${!visited}`);
   };
 

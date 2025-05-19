@@ -47,9 +47,15 @@ export default tseslint.config({
       },
     ],
     'no-multiple-empty-lines': 'error',
-    'no-unused-vars': [
-      'error',
-      { args: 'after-used', argsIgnorePattern: '^_' },
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+        vars: 'all',
+        varsIgnorePattern: '^_',
+      },
     ],
     eqeqeq: 'error',
   },

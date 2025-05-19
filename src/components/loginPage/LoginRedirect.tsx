@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { kakaoLogin } from '../../api/config/kakaoLogin';
-import { SessionLogger } from '../../utils';
+import { SessionLogger, SessionStore } from '../../utils';
 
 const logger = new SessionLogger('login');
 
@@ -21,12 +21,9 @@ export const LoginRedirect = () => {
 
       await kakaoLogin(kakaoSocialLoginCode);
 
-      if (localStorage.letterId) {
-        const letterId = localStorage.letterId;
-        navigate(`/join/${letterId}`);
-      } else {
-        navigate('/');
-      }
+      const redirectUrl = SessionStore.getLoginRedirectUrl();
+      navigate(redirectUrl ?? '/');
+      SessionStore.clearLoginRedirectUrl();
     };
 
     handleLogin();

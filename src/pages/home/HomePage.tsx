@@ -7,7 +7,6 @@ export const HomePage = () => {
     localStorage.removeItem('load');
     localStorage.removeItem('userName');
     localStorage.removeItem('guideOpen');
-    localStorage.removeItem('letterId');
     localStorage.removeItem('receiver');
     localStorage.removeItem('myName');
     localStorage.removeItem('Date');

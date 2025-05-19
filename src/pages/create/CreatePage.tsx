@@ -9,7 +9,6 @@ export const CreatePage = () => {
     }
     if (localStorage.getItem('userName')) {
       localStorage.removeItem('userName');
-      localStorage.removeItem('letterId');
       localStorage.removeItem('guideOpen');
     }
   }, []);
