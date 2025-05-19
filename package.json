@@ -15,6 +15,7 @@
     "typecheck:verbose": "tsc --project ./tsconfig.app.json --noEmit"
   },
   "dependencies": {
+    "@hotjar/browser": "^1.0.9",
     "@reduxjs/toolkit": "^2.3.0",
     "@sentry/react": "^9.13.0",
     "@sentry/vite-plugin": "^3.3.1",
