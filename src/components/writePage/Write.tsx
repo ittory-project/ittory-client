@@ -157,7 +157,7 @@ export const Write = () => {
     };
   }, []);
 
-  //키보드 올라올때 body 스크롤 막기
+  //키보드 올라올때 body
   useEffect(() => {
     if (isWriting) {
       document.body.style.overflow = 'hidden';
