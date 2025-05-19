@@ -4,7 +4,6 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { decodeLetterId } from '../../api/config/base64';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import {
   getLetterStorageCheck,
@@ -21,7 +20,7 @@ function Query() {
 
 export const ReceiveLetter = () => {
   const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const letterNumId = Number(letterId);
 
   const { data: letterInfo } = useSuspenseQuery(
     letterQuery.detailById(letterNumId),
