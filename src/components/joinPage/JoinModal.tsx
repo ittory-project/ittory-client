@@ -27,13 +27,9 @@ export const JoinModal = ({
   setDeleteConf,
 }: Props) => {
   const navigate = useNavigate();
-  const letterId = localStorage.letterId;
 
   const handleCancel = async () => {
-    const response = await patchNickname(letterId);
-    if (response.success) {
       setViewModal(false);
-    }
   };
 
   const handleAccess = async () => {
