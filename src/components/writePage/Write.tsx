@@ -157,6 +157,20 @@ export const Write = () => {
     };
   }, []);
 
+  //키보드 올라올때 body 스크롤 막기
+  useEffect(() => {
+    if (isWriting) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    // 컴포넌트 언마운트 시 원상복구
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isWriting]);
+
   return (
     <>
       {userNotParticipated && (
@@ -179,7 +193,9 @@ export const Write = () => {
             title={startInfo.title}
           />
         </StickyHeader>
-        <ScrollableOrderList>
+        <ScrollableOrderList
+          style={{ overflowY: isWriting ? 'hidden' : 'auto' }}
+        >
           <WriteOrderList
             elements={elements}
             isMyTurnToWrite={isMyTurnToWrite}
@@ -263,7 +279,6 @@ const ScrollableOrderList = styled.div`
 
   margin: 10px 5px;
 
-  overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
   }
