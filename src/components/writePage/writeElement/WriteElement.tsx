@@ -39,10 +39,6 @@ export const WriteElement = ({
     }
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
@@ -73,12 +69,13 @@ export const WriteElement = ({
   }, []);
 
   const [mobile, setMobile] = useState(false);
-  const [, setBottomOffset] = useState<number>(0);
+  const [bottomOffset, setBottomOffset] = useState<number>(0);
 
   useEffect(() => {
     const checkInitialDevice = () => {
       const isMobile = window.innerWidth < 850;
       setMobile(isMobile); // 초기 화면 크기 기반 설정
+      window.scrollTo(0, 0);
     };
 
     checkInitialDevice();
@@ -112,6 +109,7 @@ export const WriteElement = ({
 
     setVh();
     handleResize();
+    window.scrollTo(0, 0);
 
     window.addEventListener('resize', setVh);
     window.visualViewport?.addEventListener('resize', handleResize);
@@ -126,10 +124,10 @@ export const WriteElement = ({
     <Container isMobile={mobile}>
       <Content
         isMobile={mobile}
-        /*style={{
+        style={{
           height: `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`,
           bottom: `${bottomOffset - 2}px`,
-        }}*/
+        }}
       >
         <Header isMobile={mobile}>
           <ClockText>
