@@ -39,6 +39,10 @@ export const WriteElement = ({
     }
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
@@ -108,7 +112,6 @@ export const WriteElement = ({
 
     setVh();
     handleResize();
-    window.scrollTo(0, 0);
 
     window.addEventListener('resize', setVh);
     window.visualViewport?.addEventListener('resize', handleResize);
@@ -184,10 +187,11 @@ const WriteDiv = styled.div`
 
   width: 100%;
   align-items: center;
+
   overflow-y: auto;
-  /*&::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
-  }*/
+  }
 `;
 const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
@@ -199,7 +203,7 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   width: 100vw;
   min-width: 300px;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100%;
 
   padding: 10px 0;
 
@@ -220,11 +224,14 @@ const Content = styled.div<{ isMobile: boolean }>`
     isMobile
       ? `
         width: 100%;
+        height:100%;
         //height: calc(var(--vh, 1vh) * 100);
       `
       : `
         width: 95%;
         border-radius: 20px;
+
+        
       `}
 
   background: white;
