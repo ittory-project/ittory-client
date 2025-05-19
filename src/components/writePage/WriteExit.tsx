@@ -4,20 +4,23 @@ import styled from 'styled-components';
 import exitImg from '../../../public/assets/write/img_exit.svg';
 
 interface WriteExitProps {
-  reasonText: string | null;
+  reasonText?: string | null;
 }
 
-export const WriteExit = ({ reasonText }: WriteExitProps) => {
+export const WriteExit = ({
+  reasonText = '알 수 없는 이유가 발생하여',
+}: WriteExitProps) => {
   const navigate = useNavigate();
 
   const handleButton = () => {
     navigate('/', { replace: true });
   };
+
   return (
     <BackGround>
       <Container>
         <Icon src={exitImg} />
-        <Title>{reasonText || '알 수 없는 이유가 발생하여'}</Title>
+        <Title>{reasonText}</Title>
         <Title>자동으로 퇴장되었어요</Title>
       </Container>
 
