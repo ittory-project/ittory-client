@@ -4,7 +4,6 @@ import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { decodeLetterId } from '../../api/config/base64';
 import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
 import { postPartiLetterBox } from '../../api/service/LetterBoxService';
@@ -27,7 +26,7 @@ export const Write = () => {
   const queryClient = useQueryClient();
   const wsApi = getWebSocketApi();
   const { letterId: _letterId } = useParams();
-  const letterId = decodeLetterId(String(_letterId));
+  const letterId = Number(_letterId);
   const [
     { data: myInfo },
     { data: startInfo },

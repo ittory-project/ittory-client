@@ -1,10 +1,7 @@
-import { useState } from 'react';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { decodeLetterId } from '../../../api/config/base64';
 import { letterQuery } from '../../../api/queries';
 
 interface WriteModalProps {
@@ -19,7 +16,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
   startCountdown,
 }) => {
   const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const letterNumId = Number(letterId);
   const { data: writeOrderList } = useSuspenseQuery(
     letterQuery.participantsById(letterNumId),
   );

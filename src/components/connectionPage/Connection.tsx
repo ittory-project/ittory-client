@@ -10,7 +10,6 @@ import bg3 from '../../../public/assets/connect/bg3.png';
 import bg4 from '../../../public/assets/connect/bg4.png';
 import bg5 from '../../../public/assets/connect/bg5.png';
 import '../../App.css';
-import { encodeLetterId } from '../../api/config/base64';
 import { clearData, clearOrderData } from '../../api/config/state';
 
 const scaleAnimation = keyframes`
@@ -55,7 +54,7 @@ export const Connection = () => {
 
   useEffect(() => {
     const routingTimer = setTimeout(() => {
-      navigate(`/write/${encodeLetterId(letterId)}`);
+      navigate(`/write/${letterId}`);
     }, 2500);
 
     return () => clearTimeout(routingTimer);
