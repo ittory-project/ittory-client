@@ -1,5 +1,3 @@
-import { Suspense } from 'react';
-
 import * as Sentry from '@sentry/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import ReactDOM from 'react-dom/client';
@@ -36,10 +34,7 @@ accessTokenRepository.refresh().finally(() => {
       <PersistGate loading={null} persistor={persistor}>
         <HelmetProvider>
           <ReactQueryClientProvider>
-            {/* 임시 suspense */}
-            <Suspense>
-              <App />
-            </Suspense>
+            <App />
             <ReactQueryDevtools position="right" initialIsOpen={false} />
           </ReactQueryClientProvider>
         </HelmetProvider>

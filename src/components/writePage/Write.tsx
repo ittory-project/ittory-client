@@ -10,7 +10,7 @@ import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
-import { WriteExit } from './WriteExit';
+import { ErrorFullScreen } from '../common/ErrorFullScreen';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { WriteLocation } from './WriteLocation';
 import { WriteOrderAlert } from './WriteOrderAlert';
@@ -155,7 +155,9 @@ export const Write = () => {
     <>
       {userNotParticipated && (
         // NOTE: 현재 퇴장 정책은 2번 이상 무응답 외 없음
-        <WriteExit reasonText="2번 이상 편지를 적지 않아서" />
+        <ErrorFullScreen
+          errorMessage={`2번 이상 편지를 적지 않아서\n자동으로 퇴장되었어요`}
+        />
       )}
       {isFinishedModalOpen && <WriteFinishedModal />}
       <AlertContainer>
