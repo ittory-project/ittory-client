@@ -10,6 +10,7 @@ import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
+import { WriteExit } from './WriteExit';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { WriteLocation } from './WriteLocation';
 import { WriteOrderAlert } from './WriteOrderAlert';
@@ -49,6 +50,9 @@ export const Write = () => {
   const isRoomMaster =
     participants.participants[0].memberId === myInfo.memberId;
   const isMyTurnToWrite = waitingElement?.memberId === myInfo.memberId;
+  const userNotParticipated = !participants.participants.some(
+    (participant) => participant.memberId === myInfo.memberId,
+  );
 
   const {
     isOpen: isExitAlertOpen,
@@ -149,6 +153,7 @@ export const Write = () => {
 
   return (
     <>
+      {userNotParticipated && <WriteExit reasonText="장시간 접속하지 않아서" />}
       {isFinishedModalOpen && <WriteFinishedModal />}
       <AlertContainer>
         {!isMyTurnToWrite && waitingElement?.nickname && (
@@ -188,8 +193,6 @@ export const Write = () => {
             )}
           </LocationContainer>
         )}
-        {/* TODO: 별도의 페이지로 구성하기 */}
-        {/* {showExitPage && <WriteExit reasonText="장시간 접속하지 않아서" />} */}
       </Container>
 
       {isWriting && (
