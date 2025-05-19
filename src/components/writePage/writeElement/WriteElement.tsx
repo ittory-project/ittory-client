@@ -124,13 +124,6 @@ export const WriteElement = ({
 
   return (
     <Container isMobile={mobile}>
-      <Header isMobile={mobile}>
-        <ClockText>
-          <ClockIcon src="/assets/write/clock.svg" />
-          {Math.max(0, Math.floor(progressTime))}초
-        </ClockText>
-        <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
-      </Header>
       <Content
         isMobile={mobile}
         /*style={{
@@ -138,6 +131,13 @@ export const WriteElement = ({
           bottom: `${bottomOffset - 2}px`,
         }}*/
       >
+        <Header isMobile={mobile}>
+          <ClockText>
+            <ClockIcon src="/assets/write/clock.svg" />
+            {Math.max(0, Math.floor(progressTime))}초
+          </ClockText>
+          <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
+        </Header>
         <PhotoDiv isMobile={mobile}>
           <LetterImage src={element.imageUrl} onError={handleImageError} />
         </PhotoDiv>
@@ -210,6 +210,7 @@ const Content = styled.div<{ isMobile: boolean }>`
     isMobile
       ? `
         width: 100%;
+        height: calc(var(--vh, 1vh) * 100);
         overflow-y: auto;
 
         &::-webkit-scrollbar {

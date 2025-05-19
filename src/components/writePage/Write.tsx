@@ -221,6 +221,8 @@ const Container = styled.div`
   padding: 10px 20px;
 
   background-color: #212529;
+  /* 키보드에 영향 안 받게 고정 */
+  overflow: hidden;
 `;
 
 const StickyHeader = styled.div`
