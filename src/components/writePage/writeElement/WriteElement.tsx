@@ -108,6 +108,7 @@ export const WriteElement = ({
 
     setVh();
     handleResize();
+    window.scrollTo(0, 0);
 
     window.addEventListener('resize', setVh);
     window.visualViewport?.addEventListener('resize', handleResize);
@@ -116,10 +117,6 @@ export const WriteElement = ({
       window.removeEventListener('resize', setVh);
       window.visualViewport?.removeEventListener('resize', handleResize);
     };
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
   }, []);
 
   return (
@@ -138,47 +135,60 @@ export const WriteElement = ({
           </ClockText>
           <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
         </Header>
-        <PhotoDiv isMobile={mobile}>
-          <LetterImage src={element.imageUrl} onError={handleImageError} />
-        </PhotoDiv>
-        <WriteContent>
-          <WriteTa
-            ref={taRef}
-            placeholder="그림을 보고 편지를 채워 주세요"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            maxLength={40}
-          />
-          <ControlContainer>
-            {text.length > 0 ? (
-              <>
-                <CharacterCount>
-                  <div
-                    style={{ color: text.length > 30 ? '#FF0004' : 'black' }}
-                  >
-                    {text.length}
-                  </div>
-                  /30자
-                </CharacterCount>
-              </>
-            ) : (
-              <>
-                <CharacterCount></CharacterCount>
-              </>
-            )}
-            <CompleteBtn
-              onClick={handleSubmit}
-              $isdisabled={text.length === 0 || text.length > 30}
-            >
-              완료
-            </CompleteBtn>
-          </ControlContainer>
-        </WriteContent>
+        <WriteDiv>
+          <PhotoDiv isMobile={mobile}>
+            <LetterImage src={element.imageUrl} onError={handleImageError} />
+          </PhotoDiv>
+          <WriteContent>
+            <WriteTa
+              ref={taRef}
+              placeholder="그림을 보고 편지를 채워 주세요"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              maxLength={40}
+            />
+            <ControlContainer>
+              {text.length > 0 ? (
+                <>
+                  <CharacterCount>
+                    <div
+                      style={{ color: text.length > 30 ? '#FF0004' : 'black' }}
+                    >
+                      {text.length}
+                    </div>
+                    /30자
+                  </CharacterCount>
+                </>
+              ) : (
+                <>
+                  <CharacterCount></CharacterCount>
+                </>
+              )}
+              <CompleteBtn
+                onClick={handleSubmit}
+                $isdisabled={text.length === 0 || text.length > 30}
+              >
+                완료
+              </CompleteBtn>
+            </ControlContainer>
+          </WriteContent>
+        </WriteDiv>
       </Content>
     </Container>
   );
 };
 
+const WriteDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  align-items: center;
+  overflow-y: auto;
+  /*&::-webkit-scrollbar {
+    display: none;
+  }*/
+`;
 const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
 
@@ -210,12 +220,7 @@ const Content = styled.div<{ isMobile: boolean }>`
     isMobile
       ? `
         width: 100%;
-        height: calc(var(--vh, 1vh) * 100);
-        overflow-y: auto;
-
-        &::-webkit-scrollbar {
-          display: none;
-        }
+        //height: calc(var(--vh, 1vh) * 100);
       `
       : `
         width: 95%;
