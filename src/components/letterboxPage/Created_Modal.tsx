@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import delete2 from '../../../public/assets/delete2.svg';
 import share from '../../../public/assets/share.svg';
 import X from '../../../public/assets/x.svg';
-import { encodeLetterId } from '../../api/config/base64';
 import { letterQuery } from '../../api/queries';
 import { SessionLogger, isMobileDevice } from '../../utils';
 
@@ -66,7 +65,7 @@ export const Created_Modal = ({
 
   // 모바일, 데스크톱 화면 구분해서 공유하게 함
   const handleShare = async () => {
-    const letterId = encodeLetterId(letterInfo.letterId);
+    const { letterId } = letterInfo;
     if (letterInfo) {
       const encodedReceiverName = encodeURIComponent(letterInfo.receiverName);
       const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames

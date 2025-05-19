@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CountdownGif from '../../../public/img/letter_start_count.gif';
-import { decodeLetterId } from '../../api/config/base64';
 import { letterQuery } from '../../api/queries';
 import { Write } from '../../components/writePage/Write';
 import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
@@ -15,7 +14,7 @@ export const WritePage = () => {
   usePreventBack();
 
   const { letterId } = useParams();
-  const [letterNumId] = useState(decodeLetterId(String(letterId)));
+  const letterNumId = Number(letterId);
   if (!letterNumId) {
     throw new Error('잘못된 접근입니다.');
   }

@@ -4,14 +4,13 @@ import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { decodeLetterId } from '../../api/config/base64';
 import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
-import { postPartiLetterBox } from '../../api/service/LetterBoxService';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
+import { ErrorFullScreen } from '../common/ErrorFullScreen';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { WriteLocation } from './WriteLocation';
 import { WriteOrderAlert } from './WriteOrderAlert';
@@ -27,7 +26,7 @@ export const Write = () => {
   const queryClient = useQueryClient();
   const wsApi = getWebSocketApi();
   const { letterId: _letterId } = useParams();
-  const letterId = decodeLetterId(String(_letterId));
+  const letterId = Number(_letterId);
   const [
     { data: myInfo },
     { data: startInfo },
@@ -51,6 +50,9 @@ export const Write = () => {
   const isRoomMaster =
     participants.participants[0].memberId === myInfo.memberId;
   const isMyTurnToWrite = waitingElement?.memberId === myInfo.memberId;
+  const userNotParticipated = !participants.participants.some(
+    (participant) => participant.memberId === myInfo.memberId,
+  );
 
   const {
     isOpen: isExitAlertOpen,
@@ -132,7 +134,6 @@ export const Write = () => {
       async finish() {
         logger.debug('완료');
         openFinishedModal(isRoomMaster);
-        await postPartiLetterBox(letterId);
 
         // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
         setTimeout(() => {
@@ -152,6 +153,12 @@ export const Write = () => {
 
   return (
     <>
+      {userNotParticipated && (
+        // NOTE: 현재 퇴장 정책은 2번 이상 무응답 외 없음
+        <ErrorFullScreen
+          errorMessage={`2번 이상 편지를 적지 않아서\n자동으로 퇴장되었어요`}
+        />
+      )}
       {isFinishedModalOpen && <WriteFinishedModal />}
       <AlertContainer>
         {!isMyTurnToWrite && waitingElement?.nickname && (
@@ -191,8 +198,6 @@ export const Write = () => {
             )}
           </LocationContainer>
         )}
-        {/* TODO: 별도의 페이지로 구성하기 */}
-        {/* {showExitPage && <WriteExit reasonText="장시간 접속하지 않아서" />} */}
       </Container>
 
       {isWriting && (

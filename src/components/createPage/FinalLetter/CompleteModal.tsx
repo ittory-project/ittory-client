@@ -107,7 +107,6 @@ export default function CompleteModal({
     const response = await postLetter(requestBody);
     const letterId = response.letterId;
 
-    localStorage.setItem('letterId', String(letterId));
     localStorage.setItem('guideOpen', String(true));
     localStorage.setItem('userName', myName);
 

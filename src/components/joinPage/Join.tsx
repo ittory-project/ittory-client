@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { userQuery } from '../../api/queries';
+import { Policies } from '../../constants';
 import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
 import Deleted from './Deleted';
 import { JoinModal } from './JoinModal';
@@ -12,23 +13,19 @@ import NoAccess from './NoAccess';
 import Started from './Started';
 
 export const Join = () => {
+  const { letterId } = useParams();
+  const letterNumId = Number(letterId);
+
   const { data: myInfo } = useSuspenseQuery(userQuery.myInfo());
   const { data: visit } = useSuspenseQuery(userQuery.visitUser());
 
   const [nickname, setNickname] = useState<string>('');
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
-  const { letterId } = useParams();
   const [started, setStarted] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
   const [deleteConf, setDeleteConf] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (letterId) {
-      localStorage.setItem('letterId', letterId);
-    }
-  }, [letterId]);
 
   const handleModal = async () => {
     if (nickname) {
@@ -39,18 +36,19 @@ export const Join = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
 
-    if (value.length > 5) {
-      value = value.slice(0, 5);
+    let unicodeChars = Array.from(value);
+    if (unicodeChars.length > Policies.NICKNAME_MAX_LENGTH) {
+      value = unicodeChars.slice(0, Policies.NICKNAME_MAX_LENGTH).join('');
+      unicodeChars = Array.from(value);
     }
 
-    // 공백만 입력된 경우 빈 문자열로 처리
-    if (value.trim() === '') {
+    const trimmedValue = value.trim();
+    if (trimmedValue === '') {
       setNickname('');
       return;
     }
 
-    // 문자열 뒤쪽 공백 제거
-    setNickname(value.trimEnd());
+    setNickname(trimmedValue);
     setDuplicateError(false);
   };
 
@@ -81,7 +79,6 @@ export const Join = () => {
                     onChange={handleInputChange}
                     spellCheck={false}
                     minLength={1}
-                    maxLength={5}
                   />
                 </InputBox>
                 {duplicateError && nickname && (
@@ -108,6 +105,7 @@ export const Join = () => {
           }
           {viewModal && (
             <JoinModal
+              letterId={letterNumId}
               visited={visit.isVisited}
               nickname={nickname}
               setViewModal={setViewModal}
