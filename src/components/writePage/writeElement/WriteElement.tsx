@@ -56,6 +56,7 @@ export const WriteElement = ({
 
       setTimeout(() => {
         taRef.current?.focus();
+        window.scrollTo(0, 0);
       }, 0);
     };
 
@@ -185,6 +186,9 @@ const WriteDiv = styled.div`
 
   width: 100%;
   align-items: center;
+  overflow-y:auto;
+       &::-webkit-scrollbar {
+        display: none;
 `;
 const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
@@ -218,9 +222,7 @@ const Content = styled.div<{ isMobile: boolean }>`
       ? `
         width: 100%;
         height:100%;
-        overflow-y:auto;
-        &::-webkit-scrollbar {
-        display: none;
+        overflow:hidden;
       }
         //height: calc(var(--vh, 1vh) * 100);
       `
