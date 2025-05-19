@@ -153,7 +153,10 @@ export const Write = () => {
 
   return (
     <>
-      {userNotParticipated && <WriteExit reasonText="장시간 접속하지 않아서" />}
+      {userNotParticipated && (
+        // NOTE: 현재 퇴장 정책은 2번 이상 무응답 외 없음
+        <WriteExit reasonText="2번 이상 편지를 적지 않아서" />
+      )}
       {isFinishedModalOpen && <WriteFinishedModal />}
       <AlertContainer>
         {!isMyTurnToWrite && waitingElement?.nickname && (
