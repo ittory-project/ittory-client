@@ -187,11 +187,6 @@ const WriteDiv = styled.div`
 
   width: 100%;
   align-items: center;
-
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
 const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
