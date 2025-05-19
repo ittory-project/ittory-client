@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
@@ -12,23 +12,19 @@ import NoAccess from './NoAccess';
 import Started from './Started';
 
 export const Join = () => {
+  const { letterId } = useParams();
+  const letterNumId = Number(letterId);
+
   const { data: myInfo } = useSuspenseQuery(userQuery.myInfo());
   const { data: visit } = useSuspenseQuery(userQuery.visitUser());
 
   const [nickname, setNickname] = useState<string>('');
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [duplicateError, setDuplicateError] = useState<boolean>(false);
-  const { letterId } = useParams();
   const [started, setStarted] = useState<boolean>(false);
   const [deleted, setDeleted] = useState<boolean>(false);
   const [deleteConf, setDeleteConf] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (letterId) {
-      localStorage.setItem('letterId', letterId);
-    }
-  }, [letterId]);
 
   const handleModal = async () => {
     if (nickname) {
@@ -108,6 +104,7 @@ export const Join = () => {
           }
           {viewModal && (
             <JoinModal
+              letterId={letterNumId}
               visited={visit.isVisited}
               nickname={nickname}
               setViewModal={setViewModal}
