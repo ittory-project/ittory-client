@@ -1,3 +1,4 @@
+import Hotjar from '@hotjar/browser';
 import * as Sentry from '@sentry/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import ReactDOM from 'react-dom/client';
@@ -26,6 +27,13 @@ Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [Sentry.captureConsoleIntegration({ levels: ['error'] })],
 });
+
+if (!import.meta.env.DEV) {
+  // TODO: 프론트 배포 시 서버 환경 변수 설정이 가능할 때까지 유보
+  const siteId = 6407654;
+  const hotjarVersion = 6;
+  Hotjar.init(siteId, hotjarVersion);
+}
 
 // TODO: 로그인 로딩에 대한 더 좋은 방식 찾기.
 accessTokenRepository.refresh().finally(() => {
