@@ -120,6 +120,7 @@ export const Write = () => {
       },
       timeout() {
         logger.debug('타임 아웃!');
+        setIsWriting(false);
         queryClient.invalidateQueries({
           queryKey: letterQuery.queryKeys.elementsById(letterId),
         });
