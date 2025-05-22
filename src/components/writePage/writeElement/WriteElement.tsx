@@ -200,6 +200,7 @@ export const WriteElement = ({
 
 const WriteDiv = styled.div<{ isScrollable: boolean }>`
   display: flex;
+  position: relative;
 
   flex-direction: column;
 
@@ -233,7 +234,7 @@ const Container = styled.div<{ isMobile: boolean }>`
 
   padding: 10px 0;
 
-  overflow: hidden;
+  overflow-y: hidden;
 
   background: rgba(0, 0, 0, 0.6);
 `;
@@ -253,7 +254,7 @@ const Content = styled.div<{ isMobile: boolean }>`
       ? `
         width: 100%;
         height:100%;
-        overflow:hidden;
+        overflow-y: hidden;
       }
       `
       : `
@@ -263,16 +264,13 @@ const Content = styled.div<{ isMobile: boolean }>`
 `;
 
 const Header = styled.div<{ isMobile: boolean }>`
-<<<<<<< HEAD
-  position: absolute;
-  top: 0;
-=======
   display: flex;
-  position: relative;
+  position: absolute;
+  z-index: 1;
   //top: 0;
->>>>>>> 751e58e (Fix: pc 화면 꺠짐수정, mobilecheck 삭제)
 
   display: flex;
+  margin-bottom: 44px;
 
   gap: 16px;
   align-items: center;
@@ -331,13 +329,9 @@ const PhotoDiv = styled.div<{ isMobile: boolean }>`
   align-self: stretch;
   justify-content: center;
 
-  margin: auto;
-  margin-bottom: 16px;
+  margin: 60px auto 16px auto;
 
   ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:160px;')}
-
-  ${({ isMobile }) => isMobile && 'margin: 60px 0 16px 0;'}
-  /* 위에 Header 고정이므로 약간 아래 띄움 */
 
   @media (max-width: 320px) {
     margin: 20px 0 16px 0; /* 좁은 해상도에서는 이미지 위로 붙음 */
