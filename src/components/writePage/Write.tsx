@@ -120,6 +120,7 @@ export const Write = () => {
       },
       timeout() {
         logger.debug('타임 아웃!');
+        setIsWriting(false);
         queryClient.invalidateQueries({
           queryKey: letterQuery.queryKeys.elementsById(letterId),
         });
@@ -247,9 +248,10 @@ const Container = styled.div`
 
   padding: 10px 20px;
 
-  background-color: #212529;
   /* 키보드에 영향 안 받게 고정 */
   overflow: hidden;
+
+  background-color: #212529;
 `;
 
 const StickyHeader = styled.div`

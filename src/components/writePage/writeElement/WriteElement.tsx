@@ -205,10 +205,13 @@ export const WriteElement = ({
 
 const WriteDiv = styled.div<{ isScrollable: boolean }>`
   display: flex;
+
   flex-direction: column;
 
-  width: 100%;
   align-items: center;
+
+  width: 100%;
+
   ${({ isScrollable }) =>
     isScrollable
       ? `
@@ -242,12 +245,13 @@ const Container = styled.div<{ isMobile: boolean }>`
 
 const Content = styled.div<{ isMobile: boolean }>`
   display: flex;
-  background: white;
 
   flex-shrink: 0;
   flex-direction: column;
 
   align-items: flex-start;
+
+  background: white;
 
   ${({ isMobile }) =>
     isMobile
@@ -264,9 +268,10 @@ const Content = styled.div<{ isMobile: boolean }>`
 `;
 
 const Header = styled.div<{ isMobile: boolean }>`
-  display: flex;
   position: absolute;
   top: 0;
+
+  display: flex;
 
   gap: 16px;
   align-items: center;
