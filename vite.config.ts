@@ -15,8 +15,6 @@ export default defineConfig({
             '@locator/babel-jsx/dist',
             {
               env: 'development',
-              host: true,
-              port: 5173,
             },
           ],
         ],
