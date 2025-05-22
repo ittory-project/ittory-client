@@ -137,69 +137,64 @@ export const WriteElement = ({
   }, []);
 
   return (
-    mobileCheck && (
-      <>
-        <Container isMobile={mobile}>
-          <Content
-            isMobile={mobile}
-            style={{
-              height: `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`,
-            }}
-          >
-            <Header isMobile={mobile}>
-              <ClockText>
-                <ClockIcon src="/assets/write/clock.svg" />
-                {Math.max(0, Math.floor(progressTime))}초
-              </ClockText>
-              <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
-            </Header>
-            <WriteDiv isScrollable={isScrollable}>
-              <PhotoDiv isMobile={mobile}>
-                <LetterImage
-                  src={element.imageUrl}
-                  onError={handleImageError}
-                />
-              </PhotoDiv>
-              <WriteContent>
-                <WriteTa
-                  ref={taRef}
-                  placeholder="그림을 보고 편지를 채워 주세요"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  maxLength={40}
-                />
-                <ControlContainer>
-                  {text.length > 0 ? (
-                    <>
-                      <CharacterCount>
-                        <div
-                          style={{
-                            color: text.length > 30 ? '#FF0004' : 'black',
-                          }}
-                        >
-                          {text.length}
-                        </div>
-                        /30자
-                      </CharacterCount>
-                    </>
-                  ) : (
-                    <>
-                      <CharacterCount></CharacterCount>
-                    </>
-                  )}
-                  <CompleteBtn
-                    onClick={handleSubmit}
-                    $isdisabled={text.length === 0 || text.length > 30}
-                  >
-                    완료
-                  </CompleteBtn>
-                </ControlContainer>
-              </WriteContent>
-            </WriteDiv>
-          </Content>
-        </Container>
-      </>
-    )
+    <Container isMobile={mobile}>
+      <Content
+        isMobile={mobile}
+        style={{
+          height: mobile
+            ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
+            : 'auto',
+        }}
+      >
+        <Header isMobile={mobile}>
+          <ClockText>
+            <ClockIcon src="/assets/write/clock.svg" />
+            {Math.max(0, Math.floor(progressTime))}초
+          </ClockText>
+          <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
+        </Header>
+        <WriteDiv isScrollable={isScrollable}>
+          <PhotoDiv isMobile={mobile}>
+            <LetterImage src={element.imageUrl} onError={handleImageError} />
+          </PhotoDiv>
+          <WriteContent>
+            <WriteTa
+              ref={taRef}
+              placeholder="그림을 보고 편지를 채워 주세요"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              maxLength={40}
+            />
+            <ControlContainer>
+              {text.length > 0 ? (
+                <>
+                  <CharacterCount>
+                    <div
+                      style={{
+                        color: text.length > 30 ? '#FF0004' : 'black',
+                      }}
+                    >
+                      {text.length}
+                    </div>
+                    /30자
+                  </CharacterCount>
+                </>
+              ) : (
+                <>
+                  <CharacterCount></CharacterCount>
+                </>
+              )}
+              <CompleteBtn
+                onClick={handleSubmit}
+                $isdisabled={text.length === 0 || text.length > 30}
+              >
+                완료
+              </CompleteBtn>
+            </ControlContainer>
+          </WriteContent>
+        </WriteDiv>
+      </Content>
+    </Container>
   );
 };
 
@@ -268,8 +263,14 @@ const Content = styled.div<{ isMobile: boolean }>`
 `;
 
 const Header = styled.div<{ isMobile: boolean }>`
+<<<<<<< HEAD
   position: absolute;
   top: 0;
+=======
+  display: flex;
+  position: relative;
+  //top: 0;
+>>>>>>> 751e58e (Fix: pc 화면 꺠짐수정, mobilecheck 삭제)
 
   display: flex;
 
