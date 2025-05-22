@@ -133,6 +133,7 @@ export const WriteElement = ({
     return () => {
       window.removeEventListener('resize', setVh);
       window.visualViewport?.removeEventListener('resize', handleResize);
+      window.scrollTo(0, 0);
     };
   }, []);
 
@@ -207,8 +208,9 @@ const WriteDiv = styled.div<{ isScrollable: boolean }>`
   align-items: center;
 
   width: 100%;
+  overflow-y: hidden;
 
-  ${({ isScrollable }) =>
+  /*${({ isScrollable }) =>
     isScrollable
       ? `
     overflow-y: auto;
@@ -218,7 +220,7 @@ const WriteDiv = styled.div<{ isScrollable: boolean }>`
   `
       : `
     overflow-y: hidden;
-  `}
+  `}*/
 `;
 const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
