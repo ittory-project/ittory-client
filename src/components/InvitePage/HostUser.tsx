@@ -63,10 +63,6 @@ export const HostUser = ({
     }
   }, [letterInfo.receiverName]);
 
-  const handleUserName = (name: string) => {
-    return name.slice(0, 3);
-  };
-
   const handleGuide = () => {
     setGuide(true);
   };
@@ -224,18 +220,9 @@ export const HostUser = ({
                           ) : (
                             <ProfileImg $img={user.imageUrl} />
                           )}
-                          {user.nickname && user.nickname.length > 3 ? (
-                            <UserNameContainer>
-                              <UserName>
-                                {handleUserName(user.nickname)}
-                              </UserName>
-                              <UserName style={{ letterSpacing: '-0.2em' }}>
-                                ···
-                              </UserName>
-                            </UserNameContainer>
-                          ) : (
+                          <UserNameContainer>
                             <UserName>{user.nickname}</UserName>
-                          )}
+                          </UserNameContainer>
                         </User>
                       </MainUser>
                     ) : (
@@ -246,18 +233,9 @@ export const HostUser = ({
                           ) : (
                             <ProfileImg $img={user.imageUrl} />
                           )}
-                          {user.nickname.length > 3 ? (
-                            <UserNameContainer>
-                              <UserName>
-                                {handleUserName(user.nickname)}
-                              </UserName>
-                              <UserName style={{ letterSpacing: '-0.2em' }}>
-                                ···
-                              </UserName>
-                            </UserNameContainer>
-                          ) : (
+                          <UserNameContainer>
                             <UserName>{user.nickname}</UserName>
-                          )}
+                          </UserNameContainer>
                         </User>
                       </InvitedUser>
                     ),
@@ -781,6 +759,8 @@ const ProfileImg = styled.div<{ $img: string }>`
   border-radius: 40px;
 `;
 const UserName = styled.div`
+  width: 40px;
+
   overflow: hidden;
   text-overflow: ellipsis;
 
