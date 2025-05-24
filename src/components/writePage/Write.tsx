@@ -14,7 +14,6 @@ import Button from '../common/Button';
 import { ErrorFullScreen } from '../common/ErrorFullScreen';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { WriteLocation } from './WriteLocation';
-import { WriteOrderAlert } from './WriteOrderAlert';
 import { WriteOrderTitle } from './WriteOrderTitle';
 import { WriteQuitAlert } from './WriteQuitAlert';
 import { WriteElement } from './writeElement/WriteElement';
@@ -47,14 +46,9 @@ export const Write = () => {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }, [vh]);
 
-  // ErrorBoundary 구성하기
-  if (participants.participants.length === 0) {
-    throw 'Error: 참여자가 없습니다.';
-  }
-
   const waitingElement = elements.find((element) => element.content === null);
   const isRoomMaster =
-    participants.participants[0].memberId === myInfo.memberId;
+    participants.participants[0]?.memberId === myInfo.memberId;
   const isMyTurnToWrite = waitingElement?.memberId === myInfo.memberId;
   const userNotParticipated = !participants.participants.some(
     (participant) => participant.memberId === myInfo.memberId,
@@ -119,18 +113,19 @@ export const Write = () => {
         );
       },
       timeout() {
-        logger.debug('타임 아웃!');
+        closeWritingDialog();
         queryClient.invalidateQueries({
           queryKey: letterQuery.queryKeys.elementsById(letterId),
         });
       },
       exit(response) {
-        logger.debug('퇴장!', response);
         const exitMember = participants.participants.find(
           (participant) => participant.memberId === response.exitMemberId,
         );
+        // NOTE: 본인이 나가서 participant 목록에 없음
+        // 이 경우 `userNotParticipated` 값으로 자동으로 '2번 이상 무응답' 케이스로 분기
         if (!exitMember) {
-          throw 'Error: 참여자가 없습니다.';
+          return;
         }
         openExitAlert(exitMember.nickname);
         queryClient.invalidateQueries({
@@ -138,7 +133,6 @@ export const Write = () => {
         });
       },
       async finish() {
-        logger.debug('완료');
         openFinishedModal(isRoomMaster);
 
         // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
@@ -151,10 +145,7 @@ export const Write = () => {
       },
     });
 
-    return () => {
-      logger.debug('unsubscribe call from useEffect');
-      unsubscribe();
-    };
+    return unsubscribe;
   }, []);
 
   //키보드 올라올때 body
@@ -191,9 +182,6 @@ export const Write = () => {
       )}
       {isFinishedModalOpen && <WriteFinishedModal />}
       <AlertContainer>
-        {!isMyTurnToWrite && waitingElement?.nickname && (
-          <WriteOrderAlert name={waitingElement.nickname} isNextAlert={false} />
-        )}
         {isExitAlertOpen && exitUser && <WriteQuitAlert name={exitUser} />}
       </AlertContainer>
       <Container>
@@ -214,7 +202,7 @@ export const Write = () => {
         {isMyTurnToWrite ? (
           <ButtonContainer>
             <Button
-              text="작성하기"
+              text="편지를 적어주세요"
               color="#FCFFAF"
               onClick={openWritingDialog}
             />
@@ -256,10 +244,10 @@ const Container = styled.div`
   height: calc(var(--vh, 1vh) * 100);
 
   padding: 10px 20px;
-
-  background-color: #212529;
   /* 키보드에 영향 안 받게 고정 */
   overflow: hidden;
+
+  background-color: #212529;
 `;
 
 const StickyHeader = styled.div`

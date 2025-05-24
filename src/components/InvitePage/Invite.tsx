@@ -61,18 +61,18 @@ export const Invite = () => {
 
   const isRoomMaster =
     participants.participants[0]?.memberId === myPageData.memberId;
+  const isAlreadyJoined =
+    participants.participants.findIndex(
+      (participant) => participant.memberId === myPageData.memberId,
+    ) >= 0;
 
   useEffect(function handleWebSocketJobs() {
-    // enterLetter는 반드시 보내야 하는 요청.
-    // 현재 subscribe 완료 이전에 보내서 응답도 그 이전에 오는 상황
-    // onSubscribe 콜백을 만들려고 했는데, 얘도 서버 응답이 없어서 타이밍 보장이 불가능함.
-    // ws 수준에서 타이밍을 보장하려면 receipt, ack 등을 활용 필요 (굳이 그정도까지 빨라야 할 필요는 없음)
-    // enterLetter는 한 번만 호출하고, participants만 지속해서 폴링하는 방식으로 처리
-    wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
+    if (!isAlreadyJoined) {
+      wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
+    }
 
     const unsubscribe = wsApi.subscribe('letter', [letterId], {
       enter: (response: WsEnterResponse) => {
-        logger.debug('enterLetter response', response);
         queryClient.setQueryData(
           letterQuery.queryKeys.participantsById(letterId),
           (oldData: LetterPartiListGetResponse) => {
@@ -84,7 +84,6 @@ export const Invite = () => {
         );
       },
       exit: async (response: WsExitResponse) => {
-        logger.debug('exitLetter response', response);
         queryClient.invalidateQueries({
           queryKey: letterQuery.queryKeys.participantsById(letterId),
         });
@@ -94,7 +93,6 @@ export const Invite = () => {
         )?.nickname;
 
         if (response.isManager) {
-          logger.debug('방장 퇴장 감지');
           openExitAlert(`방장 '${exitUserNickname}'님이 퇴장했어요`);
           await queryClient.invalidateQueries({
             queryKey: letterQuery.queryKeys.participantsById(letterId),
@@ -106,12 +104,10 @@ export const Invite = () => {
           openExitAlert(`'${exitUserNickname}'님이 퇴장했어요`);
         }
       },
-      finish: () => {
-        logger.debug('finishLetter response');
+      delete: () => {
         setViewDelete(true);
       },
       start: async () => {
-        logger.debug('startLetter response');
         await queryClient.invalidateQueries({
           queryKey: letterQuery.queryKeys.participantsById(letterId),
         });
@@ -136,6 +132,7 @@ export const Invite = () => {
     <BackGround>
       {isExitAlertOpen && <ExitAlert>{exitUser}</ExitAlert>}
       {isHostAlertOpen && <HostAlert>{hostAlert}</HostAlert>}
+      {/* FIXME: 방장이 되면 가이드가 서로 다른 컴포넌트가 마운트/언마운트 되면서 다시 표시됨 - 두 컴포넌트를 하나로 합치거나 guideOpen 부분을 하나로 합쳐야 함 */}
       {isRoomMaster ? (
         <HostUser
           guideOpen={guideOpen}

@@ -156,9 +156,17 @@ const Avatar = styled.img`
 `;
 
 const Name = styled.span`
+  width: 40px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  font-family: SUIT;
   font-size: 16px;
 
   color: #333;
+
+  white-space: nowrap;
 `;
 
 const Line = styled.div<{ $itemnum: number }>`

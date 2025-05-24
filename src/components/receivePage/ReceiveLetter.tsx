@@ -4,11 +4,13 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import {
   getLetterStorageCheck,
   postLetterStore,
 } from '../../api/service/LetterService';
+import { SessionStore } from '../../utils';
 import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from './ReceiveLetterContents';
 import { ReceiveLetterCover } from './ReceiveLetterCover';
@@ -35,6 +37,7 @@ export const ReceiveLetter = () => {
   }
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const query = Query();
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +51,12 @@ export const ReceiveLetter = () => {
   const [saveAlert, setSaveAlert] = useState<AlertState>('LOADING');
 
   const handleSaveLetter = async () => {
+    if (!accessTokenRepository.isLoggedIn()) {
+      SessionStore.setLoginRedirectUrl(location.pathname + location.search);
+      navigate('/login');
+      return;
+    }
+
     const storeAvailableResponse = await getLetterStorageCheck(letterNumId);
     if (!storeAvailableResponse.isStored) {
       setSaveAlert('SAVED');

@@ -106,6 +106,8 @@ const ContentSaveBtn = styled.div`
 
   letter-spacing: -0.5px;
 
+  cursor: pointer;
+
   background: #343a40;
   border-radius: 50px;
   box-shadow:

@@ -78,27 +78,8 @@ export async function getParticipants(
 }
 
 // 편지 삭제 API
-export function deleteLetter(
-  letterId: number,
-  onSuccess: () => void, // 성공 시 호출, 반환 데이터 없음
-  onError: (_error: unknown) => void,
-): void {
-  api
-    .delete(`api/letter/${letterId}`)
-    .then((response) => {
-      if (response.status === 204) {
-        onSuccess(); // 204 No Content 성공 시 콜백 호출
-      } else {
-        onError(new Error('Unexpected response status'));
-      }
-    })
-    .catch((err) => {
-      if (err.response && err.response.data) {
-        onError(err.response.data); // 에러 데이터 콜백 호출
-      } else {
-        onError(err); // 예기치 않은 에러 콜백 호출
-      }
-    });
+export function deleteLetter(letterId: number) {
+  return api.delete(`api/letter/${letterId}`);
 }
 
 //반복 횟수 API

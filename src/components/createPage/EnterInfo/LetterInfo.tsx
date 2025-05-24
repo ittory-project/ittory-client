@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import calender from '../../../../public/assets/calendar.svg';
 import X from '../../../../public/assets/x.svg';
 import { userQuery } from '../../../api/queries';
+import { Policies } from '../../../constants';
 import BottomSheet from './BotttomSheet';
 
 interface Props {
@@ -136,13 +137,23 @@ export default function LetterInfo({
               type="text"
               value={myName}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length > 5) {
-                  e.target.value = e.target.value.slice(0, 5);
+                let value = e.target.value;
+                let unicodeChars = Array.from(value);
+                if (unicodeChars.length > Policies.NICKNAME_MAX_LENGTH) {
+                  value = unicodeChars
+                    .slice(0, Policies.NICKNAME_MAX_LENGTH)
+                    .join('');
+                  unicodeChars = Array.from(value);
                 }
-                setMyName(e.target.value);
+
+                const trimmedValue = value.trim();
+                if (trimmedValue === '') {
+                  setMyName('');
+                  return;
+                }
+                setMyName(trimmedValue);
               }}
               $minLength={1}
-              $maxLength={5}
               spellCheck="false"
             />
           </InputBox>
