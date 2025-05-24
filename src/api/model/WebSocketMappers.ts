@@ -28,8 +28,8 @@ export const ittoryRequestMapperDefinition = {
       return JSON.stringify(payload);
     },
   },
-  endLetter: {
-    channelMapper: (letterId: number) => `/ws/letter/end/${letterId}`,
+  deleteLetter: {
+    channelMapper: (letterId: number) => `/ws/letter/delete/${letterId}`,
   },
   quitLetter: {
     channelMapper: (letterId: number) => `/ws/letter/exit/${letterId}`,

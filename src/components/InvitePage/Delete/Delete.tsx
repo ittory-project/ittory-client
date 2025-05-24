@@ -31,7 +31,7 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
         logger.error('삭제 실패:', error);
       },
     );
-    wsApi.send('endLetter', [letterId]);
+    wsApi.send('deleteLetter', [letterId]);
     setViewConfirm(true);
   };
 
