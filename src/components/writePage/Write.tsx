@@ -206,7 +206,7 @@ export const Write = () => {
         {isMyTurnToWrite ? (
           <ButtonContainer>
             <Button
-              text="작성하기"
+              text="편지를 적어주세요"
               color="#FCFFAF"
               onClick={openWritingDialog}
             />
