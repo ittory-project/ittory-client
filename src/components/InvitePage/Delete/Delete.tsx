@@ -4,10 +4,7 @@ import styled from 'styled-components';
 
 import { deleteLetter } from '../../../api/service/LetterService';
 import { getWebSocketApi } from '../../../api/websockets';
-import { SessionLogger } from '../../../utils';
 import { DeleteConfirm } from './DeleteConfirm';
-
-const logger = new SessionLogger('invite');
 
 interface Props {
   setViewDelete: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,15 +19,7 @@ export const Delete = ({ setViewDelete, letterId }: Props) => {
   };
 
   const handleConfirm = async () => {
-    deleteLetter(
-      letterId,
-      () => {
-        logger.debug('삭제 성공');
-      },
-      (error) => {
-        logger.error('삭제 실패:', error);
-      },
-    );
+    await deleteLetter(letterId);
     wsApi.send('deleteLetter', [letterId]);
     setViewConfirm(true);
   };

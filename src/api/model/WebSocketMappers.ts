@@ -42,10 +42,11 @@ export const userResponseMapperDefinition = {
     responseMapper:
       (handlers: {
         start?: () => void;
-        enter?: (_response: WsEnterResponse) => void;
-        write?: (_response: WsWriteResponse) => void;
+        enter?: (response: WsEnterResponse) => void;
+        write?: (response: WsWriteResponse) => void;
         timeout?: () => void;
-        exit?: (_response: WsExitResponse) => void;
+        exit?: (response: WsExitResponse) => void;
+        delete?: () => void;
         finish?: () => void;
       }) =>
       (payload) => {
@@ -66,15 +67,13 @@ export const userResponseMapperDefinition = {
           case 'EXIT':
             handlers.exit?.(response as WsExitResponse);
             break;
+          case 'DELETE':
+            handlers.delete?.();
+            break;
           case 'FINISH':
             handlers.finish?.();
             break;
           default:
-            // FIXME: 서버 response 타입 오류
-            // @ts-expect-error
-            if (response.actionType === 'EXIT') {
-              handlers.exit?.(response as WsExitResponse);
-            }
             logger.debug('bad response schema', response);
         }
       },
