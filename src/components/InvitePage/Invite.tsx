@@ -61,14 +61,15 @@ export const Invite = () => {
 
   const isRoomMaster =
     participants.participants[0]?.memberId === myPageData.memberId;
+  const isAlreadyJoined =
+    participants.participants.findIndex(
+      (participant) => participant.memberId === myPageData.memberId,
+    ) >= 0;
 
   useEffect(function handleWebSocketJobs() {
-    // enterLetter는 반드시 보내야 하는 요청.
-    // 현재 subscribe 완료 이전에 보내서 응답도 그 이전에 오는 상황
-    // onSubscribe 콜백을 만들려고 했는데, 얘도 서버 응답이 없어서 타이밍 보장이 불가능함.
-    // ws 수준에서 타이밍을 보장하려면 receipt, ack 등을 활용 필요 (굳이 그정도까지 빨라야 할 필요는 없음)
-    // enterLetter는 한 번만 호출하고, participants만 지속해서 폴링하는 방식으로 처리
+    if (!isAlreadyJoined) {
     wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
+    }
 
     const unsubscribe = wsApi.subscribe('letter', [letterId], {
       enter: (response: WsEnterResponse) => {
