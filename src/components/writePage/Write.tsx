@@ -14,7 +14,6 @@ import Button from '../common/Button';
 import { ErrorFullScreen } from '../common/ErrorFullScreen';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { WriteLocation } from './WriteLocation';
-import { WriteOrderAlert } from './WriteOrderAlert';
 import { WriteOrderTitle } from './WriteOrderTitle';
 import { WriteQuitAlert } from './WriteQuitAlert';
 import { WriteElement } from './writeElement/WriteElement';
@@ -183,9 +182,6 @@ export const Write = () => {
       )}
       {isFinishedModalOpen && <WriteFinishedModal />}
       <AlertContainer>
-        {!isMyTurnToWrite && waitingElement?.nickname && (
-          <WriteOrderAlert name={waitingElement.nickname} isNextAlert={false} />
-        )}
         {isExitAlertOpen && exitUser && <WriteQuitAlert name={exitUser} />}
       </AlertContainer>
       <Container>
