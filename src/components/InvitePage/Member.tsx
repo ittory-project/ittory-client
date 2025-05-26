@@ -255,7 +255,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
                                   handleShare();
                                 }}
                               />
-                              <UserName>친구 초대</UserName>
+                              <FriendInviteDesc>친구 초대</FriendInviteDesc>
                             </User>
                           </InviteIcon>
                         ) : (
@@ -773,6 +773,21 @@ const ProfileImg = styled.div<{ $img: string }>`
   border: 2px solid #fff;
   border-radius: 40px;
 `;
+
+const FriendInviteDesc = styled.div`
+  font-family: SUIT;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+
+  line-height: 16px;
+
+  color: #000;
+
+  text-align: center;
+  letter-spacing: -0.5px;
+`;
+
 const UserName = styled.div`
   width: 40px;
 
