@@ -71,7 +71,6 @@ export const ShareLetter = () => {
       else
         return (
           <ReceiveLetterContents
-            letterFontStyle={font}
             letterContent={letterInfo.elements[currentPage - 2]}
           />
         );

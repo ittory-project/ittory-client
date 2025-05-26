@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Swiper, SwiperClass, SwiperRef, SwiperSlide } from 'swiper/react';
 
@@ -34,7 +33,6 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [selectNumber, setSelectNumber] = useState<number>(1);
-  const navigate = useNavigate();
   const wsApi = getWebSocketApi();
   const backgroundImages: { [key: number]: string } = {
     1: bg1,
