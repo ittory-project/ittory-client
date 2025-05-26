@@ -147,8 +147,8 @@ const ListNumber = styled.div`
 `;
 
 const Avatar = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
 
   margin: 0 15px 0 15px;
 
@@ -156,13 +156,13 @@ const Avatar = styled.img`
 `;
 
 const Name = styled.span`
-  width: 40px;
+  width: 70px;
 
   overflow: hidden;
   text-overflow: ellipsis;
 
   font-family: SUIT;
-  font-size: 16px;
+  font-size: 12px;
 
   color: #333;
 

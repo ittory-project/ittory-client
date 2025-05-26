@@ -18,7 +18,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
   const { letterId } = useParams();
   const letterNumId = Number(letterId);
   const { data: writeOrderList } = useSuspenseQuery(
-    letterQuery.participantsById(letterNumId),
+    letterQuery.participantsByIdInSequenceOrder(letterNumId),
   );
 
   return (
@@ -256,13 +256,13 @@ const Avatar = styled.img`
 `;
 
 const Name = styled.span`
-  width: 40px;
+  width: 70px;
 
   overflow: hidden;
   text-overflow: ellipsis;
 
   font-family: SUIT;
-  font-size: 18px;
+  font-size: 12px;
 
   color: #333;
 

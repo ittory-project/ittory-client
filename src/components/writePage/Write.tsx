@@ -37,7 +37,7 @@ export const Write = () => {
       userQuery.myInfo(),
       letterQuery.startInfoById(letterId),
       letterQuery.elementsById(letterId),
-      letterQuery.participantsById(letterId),
+      letterQuery.participantsByIdInSequenceOrder(letterId),
     ],
   });
   const vh = use100vh();

@@ -72,7 +72,7 @@ export const Created_Modal = ({
         .map((element) => element)
         .join(', ')}`;
       if (!isMobileDevice()) {
-        const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
+        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'

@@ -18,7 +18,6 @@ import { Member } from './Member';
 const logger = new SessionLogger('invite');
 
 export const Invite = () => {
-  const queryClient = useQueryClient();
   const wsApi = getWebSocketApi();
   const params = useParams<{
     letterId: string;
@@ -29,6 +28,7 @@ export const Invite = () => {
   const searchParams = new URLSearchParams(location.search);
   const guideOpen = searchParams.get('guideOpen') === 'true';
 
+  const queryClient = useQueryClient();
   const { data: myPageData } = useSuspenseQuery(userQuery.myInfo());
   const { data: participants } = useSuspenseQuery({
     ...letterQuery.participantsById(letterId),
@@ -84,24 +84,30 @@ export const Invite = () => {
         );
       },
       exit: async (response: WsExitResponse) => {
-        queryClient.invalidateQueries({
-          queryKey: letterQuery.queryKeys.participantsById(letterId),
-        });
+        // NOTE: participants가 변경될 때마다 UNSUB-SUB을 할 수는 없음
+        // FIXME: queryOption으로 변경해 타입 안정성 개선
+        const participants =
+          queryClient.getQueryData<LetterPartiListGetResponse>(
+            letterQuery.queryKeys.participantsById(letterId),
+          );
 
-        const exitUserNickname = participants.participants.find(
+        const exitUserNickname = participants?.participants.find(
           (participant) => participant.memberId === response.exitMemberId,
         )?.nickname;
 
         if (response.isManager) {
           openExitAlert(`방장 '${exitUserNickname}'님이 퇴장했어요`);
-          await queryClient.invalidateQueries({
+          openHostAlert(
+            `참여한 순서대로 '${participants?.participants[1]?.nickname}'님이 방장이 되었어요`,
+          );
+          queryClient.invalidateQueries({
             queryKey: letterQuery.queryKeys.participantsById(letterId),
           });
-          openHostAlert(
-            `참여한 순서대로 '${participants.participants[0].nickname}'님이 방장이 되었어요`,
-          );
         } else {
           openExitAlert(`'${exitUserNickname}'님이 퇴장했어요`);
+          queryClient.invalidateQueries({
+            queryKey: letterQuery.queryKeys.participantsById(letterId),
+          });
         }
       },
       delete: () => {
@@ -109,7 +115,8 @@ export const Invite = () => {
       },
       start: async () => {
         await queryClient.invalidateQueries({
-          queryKey: letterQuery.queryKeys.participantsById(letterId),
+          queryKey:
+            letterQuery.queryKeys.participantsByIdInSequenceOrder(letterId),
         });
 
         navigate('/connection', {

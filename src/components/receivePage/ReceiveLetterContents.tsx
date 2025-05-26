@@ -1,15 +1,12 @@
 import styled from 'styled-components';
 
-import { FontGetResponse } from '../../api/model/FontModel';
 import { LetterDetail } from '../../api/model/LetterModel';
 
 interface LetterContentProps {
-  letterFontStyle: FontGetResponse;
   letterContent: LetterDetail;
 }
 
 export const ReceiveLetterContents = ({
-  letterFontStyle,
   letterContent,
 }: LetterContentProps) => {
   return (
@@ -17,12 +14,8 @@ export const ReceiveLetterContents = ({
       <ProductLeftSide src="/img/cover/left.png" />
       <ProductRightSide src="/img/cover/product.svg" />
       <ContentImg src={letterContent.coverImageUrl} />
-      <Content $fonttype={letterFontStyle.name}>
-        {letterContent.content}
-      </Content>
-      <ContentWriter $fonttype={letterFontStyle.name}>
-        {letterContent.nickname}
-      </ContentWriter>
+      <Content>{letterContent.content}</Content>
+      <ContentWriter>{letterContent.nickname}</ContentWriter>
     </>
   );
 };
@@ -62,7 +55,7 @@ const ContentImg = styled.img`
   transform: translate(-47%, -0%);
 `;
 
-const Content = styled.div<{ $fonttype: string }>`
+const Content = styled.div`
   position: absolute;
   top: 65%;
   left: 50%;
@@ -76,7 +69,7 @@ const Content = styled.div<{ $fonttype: string }>`
 
   height: 41px;
 
-  font-family: ${(props) => props.$fonttype};
+  font-family: var(--Typography-family-title);
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -91,12 +84,12 @@ const Content = styled.div<{ $fonttype: string }>`
   transform: translate(-47%, -0%);
 `;
 
-const ContentWriter = styled.div<{ $fonttype: string }>`
+const ContentWriter = styled.div`
   position: absolute;
   top: 85%;
   right: 40px;
 
-  font-family: ${(props) => props.$fonttype};
+  font-family: var(--Typography-family-title);
   font-size: 16px;
   font-size: 11px;
   font-style: normal;

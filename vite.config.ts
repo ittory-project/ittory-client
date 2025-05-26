@@ -31,7 +31,7 @@ export default defineConfig({
     global: 'window',
   },
   server: {
-    allowedHosts: ['dev-client.ittory.co.kr'],
+    allowedHosts: ['dev-client.ittory.co.kr', '*.ngrok-free.app'],
   },
   build: {
     // @see https://github.com/vitejs/vite/issues/19402

@@ -21,7 +21,6 @@ export const WriteElement = ({
   const [mobile, setMobile] = useState(false);
   const [bottomOffset, setBottomOffset] = useState<number>(0);
   const [isScrollable, setIsScrollable] = useState(false);
-  const [mobileCheck, setMobileCheck] = useState<boolean>(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -91,7 +90,6 @@ export const WriteElement = ({
     const checkInitialDevice = () => {
       const isMobile = window.innerWidth < 850;
       setMobile(isMobile); // 초기 화면 크기 기반 설정
-      setMobileCheck(true);
     };
 
     checkInitialDevice();
@@ -200,14 +198,16 @@ export const WriteElement = ({
 };
 
 const WriteDiv = styled.div<{ isScrollable: boolean }>`
-  display: flex;
   position: relative;
+
+  display: flex;
 
   flex-direction: column;
 
   align-items: center;
 
   width: 100%;
+
   overflow-y: hidden;
 
   /*${({ isScrollable }) =>
@@ -266,13 +266,11 @@ const Content = styled.div<{ isMobile: boolean }>`
 `;
 
 const Header = styled.div<{ isMobile: boolean }>`
-  display: flex;
   position: absolute;
   z-index: 1;
-  //top: 0;
 
   display: flex;
-  margin-bottom: 44px;
+  display: flex;
 
   gap: 16px;
   align-items: center;
@@ -283,6 +281,8 @@ const Header = styled.div<{ isMobile: boolean }>`
   height: 44px;
 
   margin: 10px 20px 5px 20px;
+  margin-bottom: 44px;
+  //top: 0;
 `;
 
 const CloseBtn = styled.img`

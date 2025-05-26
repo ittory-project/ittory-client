@@ -100,7 +100,6 @@ export const ReceiveLetter = () => {
       else
         return (
           <ReceiveLetterContents
-            letterFontStyle={font}
             letterContent={letterInfo.elements[currentPage - 2]}
           />
         );
