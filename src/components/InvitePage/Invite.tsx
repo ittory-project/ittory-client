@@ -115,7 +115,8 @@ export const Invite = () => {
       },
       start: async () => {
         await queryClient.invalidateQueries({
-          queryKey: letterQuery.queryKeys.participantsById(letterId),
+          queryKey:
+            letterQuery.queryKeys.participantsByIdInSequenceOrder(letterId),
         });
 
         navigate('/connection', {

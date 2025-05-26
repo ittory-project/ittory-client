@@ -18,7 +18,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
   const { letterId } = useParams();
   const letterNumId = Number(letterId);
   const { data: writeOrderList } = useSuspenseQuery(
-    letterQuery.participantsById(letterNumId),
+    letterQuery.participantsByIdInSequenceOrder(letterNumId),
   );
 
   return (

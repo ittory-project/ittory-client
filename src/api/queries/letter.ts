@@ -25,6 +25,13 @@ export const queryKeys = {
     queryKeyNamespaces.letter,
     letterId,
     'participants',
+    'default',
+  ],
+  participantsByIdInSequenceOrder: (letterId: number) => [
+    queryKeyNamespaces.letter,
+    letterId,
+    'participants',
+    'sequence',
   ],
   elementsById: (letterId: number) => [
     queryKeyNamespaces.letter,
@@ -36,6 +43,13 @@ export const queryKeys = {
 export const participantsById = (letterId: number) => ({
   queryKey: queryKeys.participantsById(letterId),
   queryFn: () => getLetterPartiList(letterId),
+  staleTime: inMillis().minutes(30).value(),
+  cacheTime: inMillis().minutes(30).value(),
+});
+
+export const participantsByIdInSequenceOrder = (letterId: number) => ({
+  queryKey: queryKeys.participantsByIdInSequenceOrder(letterId),
+  queryFn: () => getLetterPartiList(letterId, 'sequence'),
   staleTime: inMillis().minutes(30).value(),
   cacheTime: inMillis().minutes(30).value(),
 });

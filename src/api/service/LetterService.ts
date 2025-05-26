@@ -32,12 +32,13 @@ export async function getLetterStartInfo(
 // response: LetterPartiListGetResponse
 export async function getLetterPartiList(
   letterId: number,
+  order?: string,
 ): Promise<LetterPartiListGetResponse> {
   const response: ApiResponse<LetterPartiListGetResponse> = await api.get(
     `/api/letter/participant/${letterId}`,
     {
       params: {
-        order: 'sequence',
+        order,
       },
     },
   );
