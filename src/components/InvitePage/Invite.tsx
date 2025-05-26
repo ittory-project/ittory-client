@@ -18,7 +18,6 @@ import { Member } from './Member';
 const logger = new SessionLogger('invite');
 
 export const Invite = () => {
-  const queryClient = useQueryClient();
   const wsApi = getWebSocketApi();
   const params = useParams<{
     letterId: string;
@@ -29,6 +28,7 @@ export const Invite = () => {
   const searchParams = new URLSearchParams(location.search);
   const guideOpen = searchParams.get('guideOpen') === 'true';
 
+  const queryClient = useQueryClient();
   const { data: myPageData } = useSuspenseQuery(userQuery.myInfo());
   const { data: participants } = useSuspenseQuery({
     ...letterQuery.participantsById(letterId),
@@ -84,9 +84,14 @@ export const Invite = () => {
         );
       },
       exit: async (response: WsExitResponse) => {
-        queryClient.invalidateQueries({
-          queryKey: letterQuery.queryKeys.participantsById(letterId),
-        });
+        // participants가 변경될 때마다 ws 연결을 해야함
+        const participants =
+          queryClient.getQueryData<LetterPartiListGetResponse>(
+            letterQuery.queryKeys.participantsById(letterId),
+          );
+        if (!participants) {
+          throw new Error('발생할 수 없는 오류');
+        }
 
         const exitUserNickname = participants.participants.find(
           (participant) => participant.memberId === response.exitMemberId,
@@ -102,6 +107,9 @@ export const Invite = () => {
           );
         } else {
           openExitAlert(`'${exitUserNickname}'님이 퇴장했어요`);
+          queryClient.invalidateQueries({
+            queryKey: letterQuery.queryKeys.participantsById(letterId),
+          });
         }
       },
       delete: () => {
