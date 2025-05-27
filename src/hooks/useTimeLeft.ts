@@ -1,6 +1,6 @@
 import { useIntervalRerender } from './useIntervalRerender';
 
-const OFFICIAL_TIME_LIMIT = 30;
+const OFFICIAL_TIME_LIMIT = 100;
 
 // NOTE: write 쪽에서만 쓰이는 다소 local한 훅
 export const useTimeLeft = (startedAt: string | null) => {
