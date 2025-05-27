@@ -7,10 +7,10 @@ export const WriteFinishedModal = () => {
         <PopupTitle>{`편지 작성이 끝났어요!`}</PopupTitle>
         <PopupTitleDetail>{`잠시만 기다려 주세요`}</PopupTitleDetail>
         <PopupMessage>
-          <MessageImg src="/img/write_letter_order.png" />
+          <MessageImg src="@/assets/write_letter_order.png" />
           {`편지 생성 중 ...`}
         </PopupMessage>
-        <Character src="/img/letter_complete_character.gif" />
+        <Character src="@/assets/letter_complete_character.gif" />
       </Popup>
     </Overlay>
   );

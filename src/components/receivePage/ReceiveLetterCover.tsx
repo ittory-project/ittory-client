@@ -23,7 +23,7 @@ export const ReceiveLetterCover = ({
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = '/img/profile.png';
+    event.currentTarget.src = '@/assets/profile.png';
   };
 
   return (

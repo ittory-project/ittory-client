@@ -4,7 +4,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import CountdownGif from '../../../public/img/letter_start_count.gif';
+import CountdownGif from '@/assets/letter_start_count.gif';
+
 import { letterQuery } from '../../api/queries';
 import { Write } from '../../components/writePage/Write';
 import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';

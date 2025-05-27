@@ -38,7 +38,7 @@ const Receive = () => {
           <DoorImg expanded={expanded}></DoorImg>
           <AnimatedDiv expanded={expanded}>
             <CharacterWrapper>
-              <CharacterImage src="/img/receive/thumbnail-spring-summer.png" />
+              <CharacterImage src="@/assets/receive/thumbnail-spring-summer.png" />
             </CharacterWrapper>
           </AnimatedDiv>
           {expanded ? (

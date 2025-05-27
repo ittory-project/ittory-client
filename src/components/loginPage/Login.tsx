@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import MainLogo from '../../../public/img/main_logo.svg';
+import MainLogo from '@/assets/main_logo.svg';
+
 import { getKakaoCode } from '../../api/config/setToken';
 
 const 개인정보처리방침URL =

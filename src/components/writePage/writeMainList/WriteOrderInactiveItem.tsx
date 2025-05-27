@@ -12,7 +12,7 @@ export const WriteOrderInactiveItem: React.FC<InactiveItemProps> = ({
 }) => {
   return (
     <Wrapper>
-      <Icon src="/img/order-lock.png" alt="hi" />
+      <Icon src="@/assets/order-lock.png" alt="hi" />
       <Content>{idx}번째 내용</Content>
     </Wrapper>
   );

@@ -11,8 +11,8 @@ export const ReceiveLetterContents = ({
 }: LetterContentProps) => {
   return (
     <>
-      <ProductLeftSide src="/img/cover/left.png" />
-      <ProductRightSide src="/img/cover/product.svg" />
+      <ProductLeftSide src="@/assets/cover/left.png" />
+      <ProductRightSide src="@/assets/cover/product.svg" />
       <ContentImg src={letterContent.coverImageUrl} />
       <Content>{letterContent.content}</Content>
       <ContentWriter>{letterContent.nickname}</ContentWriter>

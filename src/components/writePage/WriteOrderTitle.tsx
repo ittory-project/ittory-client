@@ -29,7 +29,7 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({
       <OuterContainer>
         <InnerContainer>
           <LeftContent>
-            <Img src="/img/write_letter_order.png" />
+            <Img src="@/assets/write_letter_order.png" />
             {title}
           </LeftContent>
           <OrderBtn
