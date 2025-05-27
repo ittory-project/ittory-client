@@ -183,7 +183,7 @@ const Background = styled.div<{ $backgroundimg: string }>`
   justify-content: center;
 
   width: 100%;
-  height: 100dvh;
+  height: calc(var(--vh, 1vh) * 100);
 
   background-image: url(${(props) => props.$backgroundimg});
   background-size: cover;
