@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import exportDebugLogImage from '@/assets/debug/export.png';
+
 export const ExportLogButton = () => {
   return (
     <Button
@@ -8,7 +10,7 @@ export const ExportLogButton = () => {
         window.exportSessionLogs();
       }}
     >
-      <ExportImage src="/assets/debug/export.png" alt="" />
+      <ExportImage src={exportDebugLogImage} alt="" />
       세션 로그 파일
     </Button>
   );

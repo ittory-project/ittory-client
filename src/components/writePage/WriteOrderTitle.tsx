@@ -2,6 +2,9 @@ import { useState } from 'react';
 
 import styled from 'styled-components';
 
+import orderBtn from '@/assets/write/order_btn.svg';
+import orderBtnClick from '@/assets/write/order_btn_click.svg';
+
 import { LetterPartiItem } from '../../api/model/LetterModel';
 import { WriteOrderPopover } from './WriteOrderPopover';
 
@@ -33,11 +36,7 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({
             {title}
           </LeftContent>
           <OrderBtn
-            src={
-              isPopover
-                ? '/assets/write/order_btn_click.svg'
-                : '/assets/write/order_btn.svg'
-            }
+            src={isPopover ? orderBtnClick : orderBtn}
             onClick={handleOrderBtn}
           />
         </InnerContainer>

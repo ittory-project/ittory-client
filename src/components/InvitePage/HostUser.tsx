@@ -6,11 +6,13 @@ import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
 import bright from '@/assets/border.svg';
+import crown from '@/assets/crown.svg';
 import deletebtn from '@/assets/delete.svg';
 import info from '@/assets/info.svg';
 import barShadow from '@/assets/invite/shadow.svg';
 import defaultImg from '@/assets/menu/logindefault.png';
 import out from '@/assets/out.svg';
+import plus from '@/assets/plus.svg';
 import shadow from '@/assets/shadow2.svg';
 import tip from '@/assets/tooltip.svg';
 
@@ -23,8 +25,6 @@ import { CountPopup } from './Count/CountPopup';
 import { Delete } from './Delete/Delete';
 import { Exit } from './Exit';
 import { UserGuide } from './UserGuide';
-import crown from '/assets/crown.svg';
-import plus from '/assets/plus.svg';
 
 const logger = new SessionLogger('invite');
 

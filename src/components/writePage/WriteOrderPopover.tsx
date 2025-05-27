@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import defaultImg from '@/assets/menu/logindefault.png';
+import popoverClose from '@/assets/popover_close.svg';
 
 import { LetterPartiItem } from '../../api/model/LetterModel';
 
@@ -18,7 +19,7 @@ export const WriteOrderPopover: React.FC<PopoverProps> = ({
     <Overlay onClick={onClose}>
       <Popup onClick={(e) => e.stopPropagation()}>
         <ButtonContainer>
-          <img src="/assets/popover_close.svg" onClick={onClose} />
+          <img src={popoverClose} onClick={onClose} />
         </ButtonContainer>
         {writeOrderList ? (
           <PopupList>

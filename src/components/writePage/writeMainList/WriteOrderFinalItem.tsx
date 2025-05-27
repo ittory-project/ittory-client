@@ -2,10 +2,12 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import finalFlag from '@/assets/write/final_flag.svg';
+
 export const WriteOrderFinalItem: React.FC = () => {
   return (
     <Wrapper>
-      <Icon src="/assets/write/final_flag.svg" alt="hi" />
+      <Icon src={finalFlag} alt="hi" />
       <Content>FINISH!</Content>
     </Wrapper>
   );

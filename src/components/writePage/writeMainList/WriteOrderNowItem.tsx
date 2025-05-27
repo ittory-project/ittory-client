@@ -2,6 +2,9 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import clock from '@/assets/write/clock.svg';
+import imgError from '@/assets/write/img_error.svg';
+
 import { ElementResponse } from '../../../api/model/ElementModel';
 import { useTimeLeft } from '../../../hooks/useTimeLeft';
 
@@ -18,7 +21,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = '/assets/write/img_error.svg';
+    event.currentTarget.src = imgError;
   };
 
   const timeLeft = useTimeLeft(element.startedAt);
@@ -31,7 +34,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
           <MyTurn>
             <MainText>내 차례예요</MainText>
             <ClockText>
-              <ClockIcon src="/assets/write/clock.svg" />
+              <ClockIcon src={clock} />
               {Math.floor(Number(timeLeft))}초
             </ClockText>
           </MyTurn>
@@ -39,7 +42,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
           <>
             <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
             <ClockText>
-              <ClockIcon src="/assets/write/clock.svg" />
+              <ClockIcon src={clock} />
               {Math.floor(Number(timeLeft))}초
             </ClockText>
           </>

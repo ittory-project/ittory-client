@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 
+import clock from '@/assets/write/clock.svg';
+import imgError from '@/assets/write/img_error.svg';
+
 import { ElementResponse } from '../../../api/model/ElementModel';
 import { useTimeLeft } from '../../../hooks';
 
@@ -59,7 +62,7 @@ export const WriteElement = ({
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = '/assets/write/img_error.svg';
+    event.currentTarget.src = imgError;
   };
 
   useEffect(() => {
@@ -147,10 +150,10 @@ export const WriteElement = ({
       >
         <Header isMobile={mobile}>
           <ClockText>
-            <ClockIcon src="/assets/write/clock.svg" />
+            <ClockIcon src={clock} />
             {Math.max(0, Math.floor(progressTime))}초
           </ClockText>
-          <CloseBtn onClick={handleClose} src="/assets/btn_close.svg" />
+          <CloseBtn onClick={handleClose} src={btnClose} />
         </Header>
         <WriteDiv isScrollable={isScrollable}>
           <PhotoDiv isMobile={mobile}>
@@ -270,7 +273,6 @@ const Header = styled.div<{ isMobile: boolean }>`
   z-index: 1;
 
   display: flex;
-  display: flex;
 
   gap: 16px;
   align-items: center;
@@ -282,7 +284,6 @@ const Header = styled.div<{ isMobile: boolean }>`
 
   margin: 10px 20px 5px 20px;
   margin-bottom: 44px;
-  //top: 0;
 `;
 
 const CloseBtn = styled.img`

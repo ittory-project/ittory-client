@@ -11,11 +11,13 @@ import bg2 from '@/assets/connect/bg2.png';
 import bg3 from '@/assets/connect/bg3.png';
 import bg4 from '@/assets/connect/bg4.png';
 import bg5 from '@/assets/connect/bg5.png';
+import crown from '@/assets/crown.svg';
 import info from '@/assets/info.svg';
 import barShadow from '@/assets/invite/shadow.svg';
 import defaultImg from '@/assets/menu/logindefault.png';
 import notice from '@/assets/notice.svg';
 import out from '@/assets/out.svg';
+import plus from '@/assets/plus.svg';
 import shadow from '@/assets/shadow2.svg';
 import tip from '@/assets/tooltip.svg';
 
@@ -25,8 +27,6 @@ import { SessionLogger, isMobileDevice } from '../../utils';
 import { DeleteConfirm } from './Delete/DeleteConfirm';
 import { Exit } from './ExitMember';
 import { UserGuide } from './UserGuide';
-import crown from '/assets/crown.svg';
-import plus from '/assets/plus.svg';
 
 const logger = new SessionLogger('invite');
 

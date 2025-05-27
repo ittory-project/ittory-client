@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import closeButton from '@/assets/btn_close.svg';
+import kakaoBubble from '@/assets/login/kakao_bubble.svg';
 import MainLogo from '@/assets/main_logo.svg';
 
 import { getKakaoCode } from '../../api/config/setToken';
@@ -32,7 +34,7 @@ export const Login = () => {
       </LogoArea>
       <BottomArea>
         <LoginBtn onClick={kakaoLogin}>
-          <Icon src="/assets/login/kakao_bubble.svg" alt="" />
+          <Icon src={kakaoBubble} alt="" />
           카카오로 시작하기
         </LoginBtn>
         <LoginDesc>
@@ -75,7 +77,7 @@ const CloseBtn = styled.button`
 
   padding: 0;
 
-  background: url('/assets/btn_close.svg') no-repeat center;
+  background: url(${closeButton}) no-repeat center;
   background-size: contain;
   border: none;
 `;
