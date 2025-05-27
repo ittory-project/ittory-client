@@ -8,7 +8,6 @@ import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
-import { use100vh } from '../../hooks/use100vh';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
 import { ErrorFullScreen } from '../common/ErrorFullScreen';
@@ -40,11 +39,6 @@ export const Write = () => {
       letterQuery.participantsByIdInSequenceOrder(letterId),
     ],
   });
-  const vh = use100vh();
-
-  useEffect(() => {
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }, [vh]);
 
   const waitingElement = elements.find((element) => element.content === null);
   const isRoomMaster =
@@ -161,16 +155,6 @@ export const Write = () => {
       document.body.style.overflow = '';
     };
   }, [isWriting]);
-
-  useEffect(() => {
-    const setVh = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-    setVh();
-    window.addEventListener('resize', setVh);
-    return () => window.removeEventListener('resize', setVh);
-  }, []);
 
   return (
     <>
