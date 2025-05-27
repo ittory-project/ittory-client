@@ -92,7 +92,7 @@ export const Connection = () => {
   return (
     <>
       {topBackground && (
-        <BackGround topBackground={topBackground}>
+        <BackGround $topBackground={topBackground}>
           <Contents>편지 쓰러 가는 중 . . .</Contents>
         </BackGround>
       )}
@@ -100,7 +100,7 @@ export const Connection = () => {
   );
 };
 
-const BackGround = styled.div<{ topBackground: string | null }>`
+const BackGround = styled.div<{ $topBackground: string | null }>`
   position: absolute;
 
   display: flex;
@@ -114,7 +114,7 @@ const BackGround = styled.div<{ topBackground: string | null }>`
 
   overflow: hidden;
 
-  background-image: url(${(props) => props.topBackground});
+  background-image: url(${(props) => props.$topBackground});
   background-repeat: no-repeat; /* 이미지 반복 방지 */
   background-position: center; /* 중앙 정렬 */
   background-size: cover;
