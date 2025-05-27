@@ -8,7 +8,7 @@ import share from '@/assets/share.svg';
 import X from '@/assets/x.svg';
 
 import { letterQuery } from '../../api/queries';
-import { SessionLogger, isMobileDevice } from '../../utils';
+import { SessionLogger, getHostUrl, isMobileDevice } from '../../utils';
 
 const logger = new SessionLogger('letterbox');
 
@@ -73,7 +73,7 @@ export const Created_Modal = ({
         .map((element) => element)
         .join(', ')}`;
       if (!isMobileDevice()) {
-        const shareTextPc = `${shareText}\n${location.protocol}//${location.hostname}/receive/${letterId}?to=${encodedReceiverName}`;
+        const shareTextPc = `${shareText}\n$${getHostUrl()}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -94,7 +94,7 @@ export const Created_Modal = ({
         try {
           await navigator.share({
             text: shareText,
-            url: `${location.protocol}//${location.hostname}/receive/${letterId}?to=${encodedReceiverName}`,
+            url: `$${getHostUrl()}/receive/${letterId}?to=${encodedReceiverName}`,
           });
           logger.debug('공유 성공');
         } catch (e) {
