@@ -3,13 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Swiper, SwiperClass, SwiperRef, SwiperSlide } from 'swiper/react';
 
-import bg1 from '../../../../public/assets/connect/bg1.png';
-import bg2 from '../../../../public/assets/connect/bg2.png';
-import bg3 from '../../../../public/assets/connect/bg3.png';
-import bg4 from '../../../../public/assets/connect/bg4.png';
-import bg5 from '../../../../public/assets/connect/bg5.png';
-import photo from '../../../../public/assets/photo.svg';
-import X from '../../../../public/assets/x.svg';
+import bg1 from '@/assets/connect/bg1.png';
+import bg2 from '@/assets/connect/bg2.png';
+import bg3 from '@/assets/connect/bg3.png';
+import bg4 from '@/assets/connect/bg4.png';
+import bg5 from '@/assets/connect/bg5.png';
+import photo from '@/assets/photo.svg';
+import X from '@/assets/x.svg';
+
 import { postRepeatCount } from '../../../api/service/LetterService';
 import { postRandom } from '../../../api/service/ParticipantService';
 import { getWebSocketApi } from '../../../api/websockets';

@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import img from '../../../public/assets/location.svg';
+import img from '@/assets/location.svg';
+
 import { useTimeLeft } from '../../hooks';
 
 interface LocationProps {

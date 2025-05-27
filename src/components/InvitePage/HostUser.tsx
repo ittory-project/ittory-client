@@ -5,14 +5,15 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
-import bright from '../../../public/assets/border.svg';
-import deletebtn from '../../../public/assets/delete.svg';
-import info from '../../../public/assets/info.svg';
-import barShadow from '../../../public/assets/invite/shadow.svg';
-import defaultImg from '../../../public/assets/menu/logindefault.png';
-import out from '../../../public/assets/out.svg';
-import shadow from '../../../public/assets/shadow2.svg';
-import tip from '../../../public/assets/tooltip.svg';
+import bright from '@/assets/border.svg';
+import deletebtn from '@/assets/delete.svg';
+import info from '@/assets/info.svg';
+import barShadow from '@/assets/invite/shadow.svg';
+import defaultImg from '@/assets/menu/logindefault.png';
+import out from '@/assets/out.svg';
+import shadow from '@/assets/shadow2.svg';
+import tip from '@/assets/tooltip.svg';
+
 import { LetterPartiItem } from '../../api/model/LetterModel';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { isMobileDevice } from '../../utils';

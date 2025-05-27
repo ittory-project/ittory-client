@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import more from '../../../public/assets/more.svg';
+import more from '@/assets/more.svg';
+
 import { userQuery } from '../../api/queries';
 import { Delete_letterbox } from './Delete_letterbox';
 import { EmptyLetter } from './EmptyLetter';

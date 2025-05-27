@@ -5,10 +5,11 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
-import bright from '../../../../public/assets/border.svg';
-import calender from '../../../../public/assets/calendar.svg';
-import EditImg from '../../../../public/assets/edit.svg';
-import shadow from '../../../../public/assets/shadow2.svg';
+import bright from '@/assets/border.svg';
+import calender from '@/assets/calendar.svg';
+import EditImg from '@/assets/edit.svg';
+import shadow from '@/assets/shadow2.svg';
+
 import { coverQuery } from '../../../api/queries';
 import BottomSheet from '../EnterInfo/BotttomSheet';
 import CoverModal from '../FinalLetter/CoverModal';

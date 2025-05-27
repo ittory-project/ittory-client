@@ -9,10 +9,11 @@ import React, {
 import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import bookshadow from '../../../../public/assets/book_shadow.svg';
-import camera from '../../../../public/assets/camera.svg';
-import PrevImg from '../../../../public/assets/pageprev.svg';
-import shadow from '../../../../public/assets/shadow2.svg';
+import bookshadow from '@/assets/book_shadow.svg';
+import camera from '@/assets/camera.svg';
+import PrevImg from '@/assets/pageprev.svg';
+import shadow from '@/assets/shadow2.svg';
+
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
 import { coverQuery, fontQuery } from '../../../api/queries';
 import { postCoverImage } from '../../../api/service/ImageService';

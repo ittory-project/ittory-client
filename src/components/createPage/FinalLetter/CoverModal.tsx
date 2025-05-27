@@ -3,10 +3,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import camera from '../../../../public/assets/camera.svg';
-import camera_mini from '../../../../public/assets/camera_mini.svg';
-import shadow from '../../../../public/assets/shadow2.svg';
-import X from '../../../../public/assets/x.svg';
+import camera from '@/assets/camera.svg';
+import camera_mini from '@/assets/camera_mini.svg';
+import shadow from '@/assets/shadow2.svg';
+import X from '@/assets/x.svg';
+
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
 import { coverQuery, fontQuery } from '../../../api/queries';
 import { postCoverImage } from '../../../api/service/ImageService';

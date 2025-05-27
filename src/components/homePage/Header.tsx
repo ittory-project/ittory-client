@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import menu from '../../../public/assets/home/menulogo.svg';
-import logo from '../../../public/assets/home/smalllogo.png';
+import menu from '@/assets/home/menulogo.svg';
+import logo from '@/assets/home/smalllogo.png';
 
 interface Props {
   backgroundColor: boolean;

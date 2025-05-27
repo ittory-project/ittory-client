@@ -6,8 +6,9 @@ import { ko } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import calender from '../../../../public/assets/calendar.svg';
-import X from '../../../../public/assets/x.svg';
+import calender from '@/assets/calendar.svg';
+import X from '@/assets/x.svg';
+
 import { userQuery } from '../../../api/queries';
 import { Policies } from '../../../constants';
 import BottomSheet from './BotttomSheet';

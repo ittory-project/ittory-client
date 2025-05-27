@@ -4,7 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import prev from '../../../public/assets/prev.svg';
+import prev from '@/assets/prev.svg';
+
 import { SessionLogger } from '../../utils';
 import { CreatedLetter } from './CreatedLetter';
 import { Loading } from './Loading';

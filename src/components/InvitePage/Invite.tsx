@@ -4,7 +4,8 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import texture from '../../../public/assets/invite/texture1.png';
+import texture from '@/assets/invite/texture1.png';
+
 import { LetterPartiListGetResponse } from '../../api/model/LetterModel';
 import { WsEnterResponse, WsExitResponse } from '../../api/model/WsModel';
 import { letterQuery, userQuery } from '../../api/queries';

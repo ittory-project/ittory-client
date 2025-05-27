@@ -4,14 +4,15 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import ask from '../../public/assets/menu/ask.svg';
-import graynavi from '../../public/assets/menu/graynavi.svg';
-import letter_create from '../../public/assets/menu/letter_create.svg';
-import letter_receive from '../../public/assets/menu/letter_receive.svg';
-import logindefault from '../../public/assets/menu/logindefault.png';
-import defaultImage from '../../public/assets/menu/profileImg.png';
-import direction from '../../public/assets/navigate.svg';
-import X from '../../public/assets/x.svg';
+import ask from '@/assets/menu/ask.svg';
+import graynavi from '@/assets/menu/graynavi.svg';
+import letter_create from '@/assets/menu/letter_create.svg';
+import letter_receive from '@/assets/menu/letter_receive.svg';
+import logindefault from '@/assets/menu/logindefault.png';
+import defaultImage from '@/assets/menu/profileImg.png';
+import direction from '@/assets/navigate.svg';
+import X from '@/assets/x.svg';
+
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
 import { userQuery } from '../api/queries';
 import { TempLoginArea } from './TempLogin';

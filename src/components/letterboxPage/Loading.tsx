@@ -1,7 +1,7 @@
 import Player from 'lottie-react';
 import styled from 'styled-components';
 
-import animation from '../../../public/assets/loading.json';
+import animation from '@/assets/loading.json';
 
 export const Loading = () => {
   return (

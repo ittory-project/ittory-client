@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import checked from '../../../public/assets/checkbox_black.svg';
-import check from '../../../public/assets/checkbox_gray.svg';
-import prev from '../../../public/assets/prev.svg';
+import checked from '@/assets/checkbox_black.svg';
+import check from '@/assets/checkbox_gray.svg';
+import prev from '@/assets/prev.svg';
+
 import { forceLogout } from '../../api/config/logout';
 import { WithdrawPostRequest } from '../../api/model/MemberModel';
 import { postWithdraw } from '../../api/service/MemberService';

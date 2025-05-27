@@ -3,9 +3,10 @@ import { Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import logout from '../../../public/assets/logout.svg';
-import out from '../../../public/assets/out_X.svg';
-import prev from '../../../public/assets/prev.svg';
+import logout from '@/assets/logout.svg';
+import out from '@/assets/out_X.svg';
+import prev from '@/assets/prev.svg';
+
 import { AccountDelete } from './AccountDelete';
 import { Logout } from './Logout';
 

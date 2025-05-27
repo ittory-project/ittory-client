@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { addMonths, format, subMonths } from 'date-fns';
 import styled from 'styled-components';
 
-import Next from '../../../../public/assets/next.svg';
-import Prev from '../../../../public/assets/pageprev.svg';
-import NonPrev from '../../../../public/assets/prev_non.svg';
+import Next from '@/assets/next.svg';
+import Prev from '@/assets/pageprev.svg';
+import NonPrev from '@/assets/prev_non.svg';
+
 import Calender from './Calender';
 
 interface Props {

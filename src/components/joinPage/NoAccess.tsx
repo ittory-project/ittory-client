@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import joinblock from '../../../public/assets/join/joinblock.svg';
+import joinblock from '@/assets/join/joinblock.svg';
 
 export default function NoAccess() {
   const navigate = useNavigate();
