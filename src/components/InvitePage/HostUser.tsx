@@ -108,7 +108,7 @@ export const HostUser = ({
   const handleShare = async () => {
     if (letterInfo) {
       if (!isMobileDevice()) {
-        const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
+        const shareTextPc = `${location.protocol}//${location.hostname}/join/${letterId}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -129,7 +129,7 @@ export const HostUser = ({
         // 모바일이면
         try {
           await navigator.share({
-            url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
+            url: `${location.protocol}//${location.hostname}/join/${letterId}`,
           });
           logger.debug('공유 성공');
         } catch (e) {

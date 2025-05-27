@@ -121,7 +121,7 @@ export const ShareLetter = () => {
         .join(', ')}`;
 
       if (!isMobileDevice()) {
-        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
+        const shareTextPc = `${shareText}\n${location.protocol}//${location.hostname}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -142,7 +142,7 @@ export const ShareLetter = () => {
         try {
           await navigator.share({
             text: shareText,
-            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`,
+            url: `${location.protocol}//${location.hostname}/receive/${letterId}?to=${encodedReceiverName}`,
           });
           logger.debug('공유 성공');
         } catch (e) {
