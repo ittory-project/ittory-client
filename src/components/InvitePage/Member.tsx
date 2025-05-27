@@ -5,27 +5,28 @@ import { format, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
-import bright from '../../../public/assets/border.svg';
-import bg1 from '../../../public/assets/connect/bg1.png';
-import bg2 from '../../../public/assets/connect/bg2.png';
-import bg3 from '../../../public/assets/connect/bg3.png';
-import bg4 from '../../../public/assets/connect/bg4.png';
-import bg5 from '../../../public/assets/connect/bg5.png';
-import info from '../../../public/assets/info.svg';
-import barShadow from '../../../public/assets/invite/shadow.svg';
-import defaultImg from '../../../public/assets/menu/logindefault.png';
-import notice from '../../../public/assets/notice.svg';
-import out from '../../../public/assets/out.svg';
-import shadow from '../../../public/assets/shadow2.svg';
-import tip from '../../../public/assets/tooltip.svg';
+import bright from '@/assets/border.svg';
+import bg1 from '@/assets/connect/bg1.png';
+import bg2 from '@/assets/connect/bg2.png';
+import bg3 from '@/assets/connect/bg3.png';
+import bg4 from '@/assets/connect/bg4.png';
+import bg5 from '@/assets/connect/bg5.png';
+import crown from '@/assets/crown.svg';
+import info from '@/assets/info.svg';
+import barShadow from '@/assets/invite/shadow.svg';
+import defaultImg from '@/assets/menu/logindefault.png';
+import notice from '@/assets/notice.svg';
+import out from '@/assets/out.svg';
+import plus from '@/assets/plus.svg';
+import shadow from '@/assets/shadow2.svg';
+import tip from '@/assets/tooltip.svg';
+
 import { LetterPartiItem } from '../../api/model/LetterModel';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { SessionLogger, isMobileDevice } from '../../utils';
 import { DeleteConfirm } from './Delete/DeleteConfirm';
 import { Exit } from './ExitMember';
 import { UserGuide } from './UserGuide';
-import crown from '/assets/crown.svg';
-import plus from '/assets/plus.svg';
 
 const logger = new SessionLogger('invite');
 

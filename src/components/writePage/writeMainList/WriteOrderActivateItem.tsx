@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import imgError from '@/assets/write/img_error.svg';
+
 interface WriteOrderProps {
   letterImageUrl: string | undefined;
   name: string;
@@ -17,7 +19,7 @@ export const WriteOrderActivateItem: React.FC<WriteOrderProps> = ({
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
-    event.currentTarget.src = '/assets/write/img_error.svg';
+    event.currentTarget.src = imgError;
   };
 
   return (

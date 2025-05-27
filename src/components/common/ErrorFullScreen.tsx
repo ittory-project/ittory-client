@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import exitImg from '../../../public/assets/write/img_exit.svg';
+import exitImg from '@/assets/write/img_exit.svg';
 
 interface ErrorFullScreenProps {
   errorMessage?: string | null;

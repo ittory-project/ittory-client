@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
+import doorKnobSvg from '@/assets/doorknob.svg';
+
 interface Props {
   letterId: string;
 }
@@ -49,7 +51,7 @@ export const DoorAnimation = ({ letterId }: Props) => {
   return (
     <Container>
       <Door>
-        <Handle src="/assets/doorknob.svg" />
+        <Handle src={doorKnobSvg} />
       </Door>
     </Container>
   );

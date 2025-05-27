@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import btnClose from '@/assets/btn_close_white.svg';
+
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { SessionLogger, isMobileDevice } from '../../utils';
@@ -154,7 +156,7 @@ export const ShareLetter = () => {
 
   return letterInfo && coverType && font ? (
     <Background $backgroundimg={'' + coverType.outputBackgroundImageUrl}>
-      <CloseBtn onClick={handleCloseBtn} src="/assets/btn_close_white.svg" />
+      <CloseBtn onClick={handleCloseBtn} src={btnClose} />
       <CoverShadow>
         <CoverContainer $boardimg={'' + coverType.outputBoardImageUrl}>
           {renderPageContent()}

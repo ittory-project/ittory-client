@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import ArrowPrev from '../../../public/assets/pagination/arrow_back.svg?react';
-import ArrowNext from '../../../public/assets/pagination/arrow_next.svg?react';
+import ArrowPrev from '@/assets/pagination/arrow_back.svg?react';
+import ArrowNext from '@/assets/pagination/arrow_next.svg?react';
 
 interface PaginationProps {
   totalPages: number;

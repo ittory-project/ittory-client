@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import timeblock from '../../../public/assets/join/timeblock.svg';
+import timeblock from '@/assets/join/timeblock.svg';
 
 export default function Started() {
   const navigate = useNavigate();

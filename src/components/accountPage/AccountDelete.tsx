@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import bell from '../../../public/assets/bell.svg';
-import check from '../../../public/assets/check.svg';
-import prev from '../../../public/assets/prev.svg';
+import bell from '@/assets/bell.svg';
+import check from '@/assets/check.svg';
+import prev from '@/assets/prev.svg';
+
 import { userQuery } from '../../api/queries';
 import { DeleteReason } from './DeleteReason';
 

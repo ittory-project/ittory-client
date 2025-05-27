@@ -3,6 +3,10 @@ import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
 
+import doorSvg from '@/assets/door.svg';
+import thumbnailSpringSummer from '@/assets/receive/thumbnail-spring-summer.png';
+import textBalloonUnder from '@/assets/text_balloon_under.svg';
+
 import { DoorAnimation } from './DoorAnimation';
 
 function Query() {
@@ -38,7 +42,7 @@ const Receive = () => {
           <DoorImg expanded={expanded}></DoorImg>
           <AnimatedDiv expanded={expanded}>
             <CharacterWrapper>
-              <CharacterImage src="/img/receive/thumbnail-spring-summer.png" />
+              <CharacterImage src={thumbnailSpringSummer} />
             </CharacterWrapper>
           </AnimatedDiv>
           {expanded ? (
@@ -49,7 +53,7 @@ const Receive = () => {
                   <ExpandTitle>
                     {`${receiver}님 맞으시죠?\n편지가 도착했어요!`}
                   </ExpandTitle>
-                  <BalloonUnder src="/assets/text_balloon_under.svg" />
+                  <BalloonUnder src={textBalloonUnder} />
                 </TextBalloon>
               )}
               {hideDoorImg && (
@@ -121,7 +125,7 @@ const DoorImg = styled.div<{ expanded: boolean }>`
   width: 100%;
   height: 70%;
 
-  background-image: url(/assets/door.svg);
+  background-image: url(${doorSvg});
   background-size: cover;
 
   transition: all 2s ease;

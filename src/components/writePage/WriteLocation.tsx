@@ -2,7 +2,9 @@ import React, { useEffect, useRef } from 'react';
 
 import styled from 'styled-components';
 
-import img from '../../../public/assets/location.svg';
+import profileBunny from '@/assets/common/profile_bunny.svg';
+import img from '@/assets/location.svg';
+
 import { useTimeLeft } from '../../hooks';
 
 interface LocationProps {
@@ -86,7 +88,7 @@ const Profile = styled.div<{ profileImage: string | undefined }>`
   margin: 4px 0 0 0;
 
   background-image: url(${({ profileImage }) =>
-    profileImage ? profileImage : '/assets/common/profile_bunny.svg'});
+    profileImage ? profileImage : profileBunny});
   background-position: center;
   background-size: cover;
   border-radius: 50%;

@@ -5,8 +5,9 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
-import EditImg from '../../../../public/assets/edit.svg';
-import shadow from '../../../../public/assets/shadow2.svg';
+import EditImg from '@/assets/edit.svg';
+import shadow from '@/assets/shadow2.svg';
+
 import { coverQuery, userQuery } from '../../../api/queries';
 import EditLetter from '../FinalLetter/EditLetter';
 import CompleteModal from './CompleteModal';

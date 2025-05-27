@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
-import delete2 from '../../../public/assets/delete2.svg';
-import share from '../../../public/assets/share.svg';
-import X from '../../../public/assets/x.svg';
+import delete2 from '@/assets/delete2.svg';
+import share from '@/assets/share.svg';
+import X from '@/assets/x.svg';
+
 import { letterQuery } from '../../api/queries';
 import { SessionLogger, isMobileDevice } from '../../utils';
 

@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import partiIcon from '../../../public/assets/letterbox/parIcon.svg';
-import recvIcon from '../../../public/assets/letterbox/recIcon.svg';
+import partiIcon from '@/assets/letterbox/parIcon.svg';
+import recvIcon from '@/assets/letterbox/recIcon.svg';
 
 interface Props {
   context: string;

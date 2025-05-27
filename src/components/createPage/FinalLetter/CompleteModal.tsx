@@ -5,9 +5,10 @@ import Player from 'lottie-react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import animation from '../../../../public/assets/confetti.json';
-import letter from '../../../../public/assets/letter.svg';
-import shadow from '../../../../public/assets/shadow2.svg';
+import animation from '@/assets/confetti.json';
+import letter from '@/assets/letter.svg';
+import shadow from '@/assets/shadow2.svg';
+
 import { LetterRequestBody } from '../../../api/model/LetterModel';
 import { coverQuery } from '../../../api/queries';
 import { postLetter } from '../../../api/service/LetterService';

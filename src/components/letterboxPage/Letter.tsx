@@ -5,8 +5,9 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import ChevronLeft from '../../../public/assets/letterbox/chevron_left.svg?react';
-import more from '../../../public/assets/more_white.svg';
+import ChevronLeft from '@/assets/letterbox/chevron_left.svg?react';
+import more from '@/assets/more_white.svg';
+
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { SessionLogger } from '../../utils';

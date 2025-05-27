@@ -2,6 +2,9 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import profileBunny from '@/assets/common/profile_bunny.svg';
+import clockGray from '@/assets/write/clock_gray.svg';
+
 import { letterQuery } from '../../../api/queries';
 
 interface WriteModalProps {
@@ -55,10 +58,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
                       <ListNumber>{participant.sequence}</ListNumber>
                     )}
                     <Avatar
-                      src={
-                        participant.imageUrl ||
-                        '/assets/common/profile_bunny.svg'
-                      }
+                      src={participant.imageUrl || profileBunny}
                       alt={participant.nickname}
                     />
                     <Name>{participant.nickname}</Name>
@@ -70,7 +70,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           )}
         </PopupList>
         <ClockText>
-          <ClockIcon src="/assets/write/clock_gray.svg" />
+          <ClockIcon src={clockGray} />
           {Math.floor(Number(startCountdown))}초 후 편지 시작
         </ClockText>
       </Popup>

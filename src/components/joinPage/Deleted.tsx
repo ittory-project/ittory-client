@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import deleteblock from '../../../public/assets/join/deleteblock.svg';
+import deleteblock from '@/assets/join/deleteblock.svg';
 
 export default function Deleted() {
   const navigate = useNavigate();

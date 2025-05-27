@@ -5,21 +5,21 @@ import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import styled, { keyframes } from 'styled-components';
 
-import animation from '../../../public/assets/home/animation.json';
-import divider2 from '../../../public/assets/home/bar.png';
-import insta from '../../../public/assets/home/insta.svg';
-import logo from '../../../public/assets/home/logo.png';
-import twitter from '../../../public/assets/home/twitter.svg';
+import bg8 from '@/assets/home/07.jpg';
+import animation from '@/assets/home/animation.json';
+import divider2 from '@/assets/home/bar.png';
+import body from '@/assets/home/body.jpg';
+import insta from '@/assets/home/insta.svg';
+import logo from '@/assets/home/logo.png';
+import bg1 from '@/assets/home/main.jpg';
+import twitter from '@/assets/home/twitter.svg';
+
 import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
 import { Menu } from '../../layout/Menu';
 import { SessionLogger } from '../../utils/SessionLogger';
 import Header from './Header';
 
 const logger = new SessionLogger('home');
-
-const bg1 = '/assets/home/main.jpg';
-const bg8 = '/assets/home/07.jpg';
-const body = '/assets/home/body.jpg';
 
 interface $Props {
   $img: string;

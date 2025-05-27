@@ -4,11 +4,12 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
-import bg1 from '../../../public/assets/connect/bg1.png';
-import bg2 from '../../../public/assets/connect/bg2.png';
-import bg3 from '../../../public/assets/connect/bg3.png';
-import bg4 from '../../../public/assets/connect/bg4.png';
-import bg5 from '../../../public/assets/connect/bg5.png';
+import bg1 from '@/assets/connect/bg1.png';
+import bg2 from '@/assets/connect/bg2.png';
+import bg3 from '@/assets/connect/bg3.png';
+import bg4 from '@/assets/connect/bg4.png';
+import bg5 from '@/assets/connect/bg5.png';
+
 import '../../App.css';
 import { clearData, clearOrderData } from '../../api/config/state';
 

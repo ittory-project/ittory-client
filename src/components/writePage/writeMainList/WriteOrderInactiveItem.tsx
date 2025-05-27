@@ -2,6 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 
+import orderLock from '@/assets/order-lock.png';
+
 interface InactiveItemProps {
   idx: number;
 }
@@ -12,7 +14,7 @@ export const WriteOrderInactiveItem: React.FC<InactiveItemProps> = ({
 }) => {
   return (
     <Wrapper>
-      <Icon src="/img/order-lock.png" alt="hi" />
+      <Icon src={orderLock} alt="hi" />
       <Content>{idx}번째 내용</Content>
     </Wrapper>
   );
