@@ -23,7 +23,7 @@ import tip from '@/assets/tooltip.svg';
 
 import { LetterPartiItem } from '../../api/model/LetterModel';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
-import { SessionLogger, isMobileDevice } from '../../utils';
+import { SessionLogger, getHostUrl, isMobileDevice } from '../../utils';
 import { DeleteConfirm } from './Delete/DeleteConfirm';
 import { Exit } from './ExitMember';
 import { UserGuide } from './UserGuide';
@@ -100,7 +100,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
   const handleShare = async () => {
     if (letterInfo) {
       if (!isMobileDevice()) {
-        const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
+        const shareTextPc = `${getHostUrl()}/join/${letterId}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -120,7 +120,7 @@ export const Member = ({ guideOpen, items, letterId, viewDelete }: Props) => {
       } else {
         try {
           await navigator.share({
-            url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
+            url: `${location.protocol}//${location.hostname}/join/${letterId}`,
           });
           logger.debug('공유 성공');
         } catch (e) {

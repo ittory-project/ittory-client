@@ -1,7 +1,11 @@
 import React from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { accessTokenRepository } from '@/api/config/AccessTokenRepository';
+import { userQuery } from '@/api/queries';
 
 import { postLogout } from '../../api/service/AuthService';
 
@@ -10,6 +14,7 @@ interface Props {
 }
 
 export const Logout = ({ setPopup }: Props) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const handleDelete = () => {
     setPopup(false);
@@ -17,6 +22,8 @@ export const Logout = ({ setPopup }: Props) => {
 
   const handleLogout = async () => {
     await postLogout();
+    accessTokenRepository.logout();
+    queryClient.setQueryData(userQuery.queryKeys.myInfo(), null);
     localStorage.clear();
     navigate('/', { replace: true });
   };

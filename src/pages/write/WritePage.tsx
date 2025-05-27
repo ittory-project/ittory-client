@@ -113,7 +113,7 @@ const Countdown = styled.img`
   z-index: 6;
 
   width: 100%;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100);
 
   background-color: rgba(0, 0, 0, 0.7);
 `;

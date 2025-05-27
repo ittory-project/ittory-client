@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useSuspenseQueries } from '@tanstack/react-query';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { userQuery } from '../../api/queries';
+import { letterQuery, userQuery } from '../../api/queries';
 import { Policies } from '../../constants';
 import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
 import Deleted from './Deleted';
@@ -13,11 +13,17 @@ import NoAccess from './NoAccess';
 import Started from './Started';
 
 export const Join = () => {
+  const navigate = useNavigate();
   const { letterId } = useParams();
   const letterNumId = Number(letterId);
-
-  const { data: myInfo } = useSuspenseQuery(userQuery.myInfo());
-  const { data: visit } = useSuspenseQuery(userQuery.visitUser());
+  const [{ data: myInfo }, { data: visit }, { data: participants }] =
+    useSuspenseQueries({
+      queries: [
+        userQuery.myInfo(),
+        userQuery.visitUser(),
+        letterQuery.participantsByIdInSequenceOrder(letterNumId),
+      ],
+    });
 
   const [nickname, setNickname] = useState<string>('');
   const [viewModal, setViewModal] = useState<boolean>(false);
@@ -26,6 +32,15 @@ export const Join = () => {
   const [deleted, setDeleted] = useState<boolean>(false);
   const [deleteConf, setDeleteConf] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
+
+  useEffect(function moveToWritePageIfAlreadyJoined() {
+    if (
+      participants.participants.length > 0 &&
+      participants.participants[0].sequence !== null
+    ) {
+      navigate(`/write/${letterNumId}`);
+    }
+  });
 
   const handleModal = async () => {
     if (nickname) {

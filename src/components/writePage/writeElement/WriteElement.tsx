@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 
-import btnClose from '@/assets/btn_close_white.svg';
+import btnClose from '@/assets/btn_close.svg';
+import btnCloseWhite from '@/assets/btn_close_white.svg';
 import clock from '@/assets/write/clock.svg';
 import imgError from '@/assets/write/img_error.svg';
+import { isMobileDevice, smootherScrollToY } from '@/utils';
 
 import { ElementResponse } from '../../../api/model/ElementModel';
 import { useTimeLeft } from '../../../hooks';
@@ -22,23 +24,7 @@ export const WriteElement = ({
 }: WriteElementProps) => {
   const [text, setText] = useState('');
   const progressTime = useTimeLeft(element.startedAt);
-  const [mobile, setMobile] = useState(false);
-  const [bottomOffset, setBottomOffset] = useState<number>(0);
-  const [isScrollable, setIsScrollable] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const vh = window.innerHeight * 0.01;
-      const calculatedHeight = vh * 100 - bottomOffset;
-
-      setIsScrollable(calculatedHeight < 320);
-    };
-
-    handleResize(); // 초기 실행
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, [bottomOffset]);
+  const isMobile = isMobileDevice();
 
   const handleClose = () => {
     onClose();
@@ -52,12 +38,19 @@ export const WriteElement = ({
     onSubmit(text);
   };
 
-  // 접속 시 무조건 focusing 되도록 해야 키보드가 올라온다.
-  const taRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
-    if (taRef.current) {
-      taRef.current.focus();
-    }
+    // 최초 접속 시에는 스크롤 없이 올리도록 지정 가능함
+    textareaRef.current?.focus({
+      preventScroll: true,
+    });
+
+    // iOS만 필요한 것일 수 있음
+    textareaRef.current?.addEventListener('focus', () => {
+      setTimeout(() => {
+        smootherScrollToY(0);
+      }, 150);
+    });
   }, []);
 
   const handleImageError = (
@@ -66,103 +59,26 @@ export const WriteElement = ({
     event.currentTarget.src = imgError;
   };
 
-  useEffect(() => {
-    const handleTouchOrClick = (e: MouseEvent | TouchEvent) => {
-      if (
-        taRef.current &&
-        (taRef.current === e.target || taRef.current.contains(e.target as Node))
-      ) {
-        return;
-      }
-
-      setTimeout(() => {
-        taRef.current?.focus();
-        window.scrollTo(0, 0);
-      }, 0);
-    };
-
-    document.addEventListener('mousedown', handleTouchOrClick);
-    document.addEventListener('touchstart', handleTouchOrClick);
-
-    return () => {
-      document.removeEventListener('mousedown', handleTouchOrClick);
-      document.removeEventListener('touchstart', handleTouchOrClick);
-    };
-  }, []);
-
-  useEffect(() => {
-    const checkInitialDevice = () => {
-      const isMobile = window.innerWidth < 850;
-      setMobile(isMobile); // 초기 화면 크기 기반 설정
-    };
-
-    checkInitialDevice();
-  }, []);
-
-  useEffect(() => {
-    const setVh = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-
-    const handleResize = () => {
-      let keyboardHeight = 0;
-      if (window.visualViewport) {
-        keyboardHeight = window.innerHeight - window.visualViewport.height;
-      } else {
-        keyboardHeight =
-          window.innerHeight - document.documentElement.clientHeight;
-      }
-
-      keyboardHeight = Math.max(0, keyboardHeight); // 음수 방지
-
-      if (window.innerWidth < 850) {
-        setBottomOffset(keyboardHeight);
-      } else {
-        setBottomOffset(0);
-      }
-
-      setVh();
-    };
-
-    setVh();
-    handleResize();
-    window.scrollTo(0, 0);
-
-    window.addEventListener('resize', setVh);
-    window.visualViewport?.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', setVh);
-      window.visualViewport?.removeEventListener('resize', handleResize);
-      window.scrollTo(0, 0);
-    };
-  }, []);
-
   return (
-    <Container isMobile={mobile}>
-      <Content
-        isMobile={mobile}
-        style={{
-          height: mobile
-            ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
-            : 'auto',
-        }}
-      >
-        <Header isMobile={mobile}>
+    <Container $isMobile={isMobile}>
+      <Content $isMobile={isMobile}>
+        <Header $isMobile={isMobile}>
           <ClockText>
             <ClockIcon src={clock} />
             {Math.max(0, Math.floor(progressTime))}초
           </ClockText>
-          <CloseBtn onClick={handleClose} src={btnClose} />
+          <CloseBtn
+            onClick={handleClose}
+            src={isMobile ? btnClose : btnCloseWhite}
+          />
         </Header>
-        <WriteDiv isScrollable={isScrollable}>
-          <PhotoDiv isMobile={mobile}>
+        <WriteDiv>
+          <PhotoDiv $isMobile={isMobile}>
             <LetterImage src={element.imageUrl} onError={handleImageError} />
           </PhotoDiv>
           <WriteContent>
             <WriteTa
-              ref={taRef}
+              ref={textareaRef}
               placeholder="그림을 보고 편지를 채워 주세요"
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -201,7 +117,7 @@ export const WriteElement = ({
   );
 };
 
-const WriteDiv = styled.div<{ isScrollable: boolean }>`
+const WriteDiv = styled.div`
   position: relative;
 
   display: flex;
@@ -211,41 +127,29 @@ const WriteDiv = styled.div<{ isScrollable: boolean }>`
   align-items: center;
 
   width: 100%;
-
-  overflow-y: hidden;
-
-  /*${({ isScrollable }) =>
-    isScrollable
-      ? `
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  `
-      : `
-    overflow-y: hidden;
-  `}*/
 `;
-const Container = styled.div<{ isMobile: boolean }>`
+const Container = styled.div<{ $isMobile: boolean }>`
   display: flex;
 
   flex-direction: column;
 
   align-items: center;
-  ${({ isMobile }) => !isMobile && 'justify-content: center;'}
+  ${({ $isMobile }) => !$isMobile && 'justify-content: center;'}
 
   width: 100vw;
   min-width: 300px;
-  height: 100%;
+  height: ${({ $isMobile }) =>
+    $isMobile ? 'calc(var(--vh, 1vh) * 100)' : '100%'};
 
   padding: 10px 0;
 
-  overflow-y: hidden;
+  ${({ $isMobile }) => !$isMobile && 'overflow-y: hidden;'}
 
-  background: rgba(0, 0, 0, 0.6);
+  background: ${({ $isMobile }) =>
+    $isMobile ? 'white' : 'rgba(0, 0, 0, 0.6);'}
 `;
 
-const Content = styled.div<{ isMobile: boolean }>`
+const Content = styled.div<{ $isMobile: boolean }>`
   display: flex;
 
   flex-shrink: 0;
@@ -255,12 +159,11 @@ const Content = styled.div<{ isMobile: boolean }>`
 
   background: white;
 
-  ${({ isMobile }) =>
-    isMobile
+  ${({ $isMobile }) =>
+    $isMobile
       ? `
         width: 100%;
         height:100%;
-        overflow-y: hidden;
       }
       `
       : `
@@ -269,7 +172,7 @@ const Content = styled.div<{ isMobile: boolean }>`
       `}
 `;
 
-const Header = styled.div<{ isMobile: boolean }>`
+const Header = styled.div<{ $isMobile: boolean }>`
   position: absolute;
   z-index: 1;
 
@@ -280,7 +183,7 @@ const Header = styled.div<{ isMobile: boolean }>`
   align-self: stretch;
   justify-content: space-between;
 
-  ${({ isMobile }) => (isMobile ? 'width:90%;' : 'width:88%;')}
+  ${({ $isMobile }) => ($isMobile ? 'width:90%;' : 'width:88%;')}
   height: 44px;
 
   margin: 10px 20px 5px 20px;
@@ -326,7 +229,7 @@ const ClockText = styled.div`
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
-const PhotoDiv = styled.div<{ isMobile: boolean }>`
+const PhotoDiv = styled.div<{ $isMobile: boolean }>`
   display: flex;
 
   align-items: center;
@@ -335,7 +238,7 @@ const PhotoDiv = styled.div<{ isMobile: boolean }>`
 
   margin: 60px auto 16px auto;
 
-  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:160px;')}
+  ${({ $isMobile }) => ($isMobile ? 'width:100%;' : 'width:160px;')}
 
   @media (max-width: 320px) {
     margin: 20px 0 16px 0; /* 좁은 해상도에서는 이미지 위로 붙음 */

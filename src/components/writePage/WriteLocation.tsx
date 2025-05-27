@@ -37,7 +37,7 @@ export const WriteLocation: React.FC<LocationProps> = ({
 
   return (
     <Background>
-      <Profile profileImage={profileImage}>
+      <Profile $profileImage={profileImage}>
         <Contents>
           <Svg
             width="56"
@@ -76,7 +76,7 @@ const Background = styled.div`
   background-size: cover;
 `;
 
-const Profile = styled.div<{ profileImage: string | undefined }>`
+const Profile = styled.div<{ $profileImage: string | undefined }>`
   display: flex;
 
   align-items: center;
@@ -87,8 +87,8 @@ const Profile = styled.div<{ profileImage: string | undefined }>`
 
   margin: 4px 0 0 0;
 
-  background-image: url(${({ profileImage }) =>
-    profileImage ? profileImage : profileBunny});
+  background-image: url(${({ $profileImage }) =>
+    $profileImage ? $profileImage : profileBunny});
   background-position: center;
   background-size: cover;
   border-radius: 50%;

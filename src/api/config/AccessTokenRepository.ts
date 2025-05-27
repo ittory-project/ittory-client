@@ -5,7 +5,6 @@ import { api } from './api';
  */
 declare global {
   interface Window {
-    // eslint-disable-next-line
     __DEBUG__forceAccessToken: (accessToken: string) => void;
   }
 }
@@ -51,6 +50,10 @@ export class AccessTokenRepository {
 
   isLoggedIn() {
     return this.#accessToken !== null;
+  }
+
+  logout() {
+    this.#accessToken = null;
   }
 
   // TODO: Sentry 등으로 오류 모니터링

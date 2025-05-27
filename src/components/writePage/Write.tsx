@@ -8,7 +8,6 @@ import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
-import { use100vh } from '../../hooks/use100vh';
 import { SessionLogger } from '../../utils';
 import Button from '../common/Button';
 import { ErrorFullScreen } from '../common/ErrorFullScreen';
@@ -40,11 +39,6 @@ export const Write = () => {
       letterQuery.participantsByIdInSequenceOrder(letterId),
     ],
   });
-  const vh = use100vh();
-
-  useEffect(() => {
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }, [vh]);
 
   const waitingElement = elements.find((element) => element.content === null);
   const isRoomMaster =
@@ -138,9 +132,6 @@ export const Write = () => {
         // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
         setTimeout(() => {
           navigate(`/share/${letterId}?page=1`);
-          queryClient.invalidateQueries({
-            queryKey: letterQuery.queryKeys.byId(letterId),
-          });
         }, 5000);
       },
     });
@@ -161,16 +152,6 @@ export const Write = () => {
       document.body.style.overflow = '';
     };
   }, [isWriting]);
-
-  useEffect(() => {
-    const setVh = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-    setVh();
-    window.addEventListener('resize', setVh);
-    return () => window.removeEventListener('resize', setVh);
-  }, []);
 
   return (
     <>
@@ -311,7 +292,7 @@ const ModalOverlay = styled.div`
   justify-content: center;
 
   width: 100%;
-  height: 100%;
+  height: calc(var(--vh, 1vh) * 100);
 
   overflow-y: hidden;
 `;

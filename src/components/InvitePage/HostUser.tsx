@@ -18,7 +18,7 @@ import tip from '@/assets/tooltip.svg';
 
 import { LetterPartiItem } from '../../api/model/LetterModel';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
-import { isMobileDevice } from '../../utils';
+import { getHostUrl, isMobileDevice } from '../../utils';
 import { SessionLogger } from '../../utils/SessionLogger';
 import { Count } from './Count/Count';
 import { CountPopup } from './Count/CountPopup';
@@ -108,7 +108,7 @@ export const HostUser = ({
   const handleShare = async () => {
     if (letterInfo) {
       if (!isMobileDevice()) {
-        const shareTextPc = `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`;
+        const shareTextPc = `${getHostUrl()}/join/${letterId}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -129,7 +129,7 @@ export const HostUser = ({
         // 모바일이면
         try {
           await navigator.share({
-            url: `${import.meta.env.VITE_FRONT_URL}/join/${letterId}`,
+            url: `${getHostUrl()}/join/${letterId}`,
           });
           logger.debug('공유 성공');
         } catch (e) {

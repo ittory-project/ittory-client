@@ -9,7 +9,7 @@ import btnClose from '@/assets/btn_close_white.svg';
 
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
-import { SessionLogger, isMobileDevice } from '../../utils';
+import { SessionLogger, getHostUrl, isMobileDevice } from '../../utils';
 import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
 import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
@@ -121,7 +121,7 @@ export const ShareLetter = () => {
         .join(', ')}`;
 
       if (!isMobileDevice()) {
-        const shareTextPc = `${shareText}\n${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`;
+        const shareTextPc = `${shareText}\n${getHostUrl()}/receive/${letterId}?to=${encodedReceiverName}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -142,7 +142,7 @@ export const ShareLetter = () => {
         try {
           await navigator.share({
             text: shareText,
-            url: `${import.meta.env.VITE_FRONT_URL}/receive/${letterId}?to=${encodedReceiverName}`,
+            url: `${getHostUrl()}/receive/${letterId}?to=${encodedReceiverName}`,
           });
           logger.debug('공유 성공');
         } catch (e) {
