@@ -140,24 +140,24 @@ export const WriteElement = ({
   }, []);
 
   return (
-    <Container isMobile={mobile}>
+    <Container $isMobile={mobile}>
       <Content
-        isMobile={mobile}
+        $isMobile={mobile}
         style={{
           height: mobile
             ? `calc(var(--vh, 1vh) * 100 - ${bottomOffset}px)`
             : 'auto',
         }}
       >
-        <Header isMobile={mobile}>
+        <Header $isMobile={mobile}>
           <ClockText>
             <ClockIcon src={clock} />
             {Math.max(0, Math.floor(progressTime))}초
           </ClockText>
           <CloseBtn onClick={handleClose} src={btnClose} />
         </Header>
-        <WriteDiv isScrollable={isScrollable}>
-          <PhotoDiv isMobile={mobile}>
+        <WriteDiv $isScrollable={isScrollable}>
+          <PhotoDiv $isMobile={mobile}>
             <LetterImage src={element.imageUrl} onError={handleImageError} />
           </PhotoDiv>
           <WriteContent>
@@ -201,7 +201,7 @@ export const WriteElement = ({
   );
 };
 
-const WriteDiv = styled.div<{ isScrollable: boolean }>`
+const WriteDiv = styled.div<{ $isScrollable: boolean }>`
   position: relative;
 
   display: flex;
@@ -214,8 +214,8 @@ const WriteDiv = styled.div<{ isScrollable: boolean }>`
 
   overflow-y: hidden;
 
-  /*${({ isScrollable }) =>
-    isScrollable
+  ${({ $isScrollable }) =>
+    $isScrollable
       ? `
     overflow-y: auto;
     &::-webkit-scrollbar {
@@ -224,15 +224,15 @@ const WriteDiv = styled.div<{ isScrollable: boolean }>`
   `
       : `
     overflow-y: hidden;
-  `}*/
+  `}
 `;
-const Container = styled.div<{ isMobile: boolean }>`
+const Container = styled.div<{ $isMobile: boolean }>`
   display: flex;
 
   flex-direction: column;
 
   align-items: center;
-  ${({ isMobile }) => !isMobile && 'justify-content: center;'}
+  ${({ $isMobile }) => !$isMobile && 'justify-content: center;'}
 
   width: 100vw;
   min-width: 300px;
@@ -245,7 +245,7 @@ const Container = styled.div<{ isMobile: boolean }>`
   background: rgba(0, 0, 0, 0.6);
 `;
 
-const Content = styled.div<{ isMobile: boolean }>`
+const Content = styled.div<{ $isMobile: boolean }>`
   display: flex;
 
   flex-shrink: 0;
@@ -255,8 +255,8 @@ const Content = styled.div<{ isMobile: boolean }>`
 
   background: white;
 
-  ${({ isMobile }) =>
-    isMobile
+  ${({ $isMobile }) =>
+    $isMobile
       ? `
         width: 100%;
         height:100%;
@@ -269,7 +269,7 @@ const Content = styled.div<{ isMobile: boolean }>`
       `}
 `;
 
-const Header = styled.div<{ isMobile: boolean }>`
+const Header = styled.div<{ $isMobile: boolean }>`
   position: absolute;
   z-index: 1;
 
@@ -280,7 +280,7 @@ const Header = styled.div<{ isMobile: boolean }>`
   align-self: stretch;
   justify-content: space-between;
 
-  ${({ isMobile }) => (isMobile ? 'width:90%;' : 'width:88%;')}
+  ${({ $isMobile }) => ($isMobile ? 'width:90%;' : 'width:88%;')}
   height: 44px;
 
   margin: 10px 20px 5px 20px;
@@ -326,7 +326,7 @@ const ClockText = styled.div`
   letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
 `;
 
-const PhotoDiv = styled.div<{ isMobile: boolean }>`
+const PhotoDiv = styled.div<{ $isMobile: boolean }>`
   display: flex;
 
   align-items: center;
@@ -335,7 +335,7 @@ const PhotoDiv = styled.div<{ isMobile: boolean }>`
 
   margin: 60px auto 16px auto;
 
-  ${({ isMobile }) => (isMobile ? 'width:100%;' : 'width:160px;')}
+  ${({ $isMobile }) => ($isMobile ? 'width:100%;' : 'width:160px;')}
 
   @media (max-width: 320px) {
     margin: 20px 0 16px 0; /* 좁은 해상도에서는 이미지 위로 붙음 */
