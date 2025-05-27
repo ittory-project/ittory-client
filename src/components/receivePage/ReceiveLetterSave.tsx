@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+import coverLeft from '@/assets/cover/left.png';
+import coverProductNoBackground from '@/assets/cover/product_no_background.svg';
+import letterSaveContents from '@/assets/letter_save_contents.svg';
+
 interface LetterContentProps {
   handleSaveLetter: () => Promise<void>;
 }
@@ -7,14 +11,14 @@ interface LetterContentProps {
 export const ReceiveLetterSave = ({ handleSaveLetter }: LetterContentProps) => {
   return (
     <>
-      <ProductLeftSide src="@/assets/cover/left.png" />
-      <ProductRightSide src="@/assets/cover/product_no_background.svg" />
+      <ProductLeftSide src={coverLeft} />
+      <ProductRightSide src={coverProductNoBackground} />
       <Content>
         받은 편지를
         <br />
         간직하고 싶다면?
       </Content>
-      <ContentImg src="@/assets/letter_save_contents.svg" />
+      <ContentImg src={letterSaveContents} />
       <ContentSaveBtn onClick={handleSaveLetter}>
         편지함에 보관하기
       </ContentSaveBtn>

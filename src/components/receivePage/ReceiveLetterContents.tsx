@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+import coverLeft from '@/assets/cover/left.png';
+import coverProduct from '@/assets/cover/product.svg';
+
 import { LetterDetail } from '../../api/model/LetterModel';
 
 interface LetterContentProps {
@@ -11,8 +14,8 @@ export const ReceiveLetterContents = ({
 }: LetterContentProps) => {
   return (
     <>
-      <ProductLeftSide src="@/assets/cover/left.png" />
-      <ProductRightSide src="@/assets/cover/product.svg" />
+      <ProductLeftSide src={coverLeft} />
+      <ProductRightSide src={coverProduct} />
       <ContentImg src={letterContent.coverImageUrl} />
       <Content>{letterContent.content}</Content>
       <ContentWriter>{letterContent.nickname}</ContentWriter>

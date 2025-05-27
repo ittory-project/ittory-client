@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import orderBtn from '@/assets/write/order_btn.svg';
 import orderBtnClick from '@/assets/write/order_btn_click.svg';
+import writeLetterOrder from '@/assets/write_letter_order.png';
 
 import { LetterPartiItem } from '../../api/model/LetterModel';
 import { WriteOrderPopover } from './WriteOrderPopover';
@@ -32,7 +33,7 @@ export const WriteOrderTitle: React.FC<TitleProps> = ({
       <OuterContainer>
         <InnerContainer>
           <LeftContent>
-            <Img src="@/assets/write_letter_order.png" />
+            <Img src={writeLetterOrder} />
             {title}
           </LeftContent>
           <OrderBtn

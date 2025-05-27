@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+import letterCompleteCharacter from '@/assets/letter_complete_character.gif';
+import writeLetterOrder from '@/assets/write_letter_order.png';
+
 export const WriteFinishedModal = () => {
   return (
     <Overlay>
@@ -7,10 +10,10 @@ export const WriteFinishedModal = () => {
         <PopupTitle>{`편지 작성이 끝났어요!`}</PopupTitle>
         <PopupTitleDetail>{`잠시만 기다려 주세요`}</PopupTitleDetail>
         <PopupMessage>
-          <MessageImg src="@/assets/write_letter_order.png" />
+          <MessageImg src={writeLetterOrder} />
           {`편지 생성 중 ...`}
         </PopupMessage>
-        <Character src="@/assets/letter_complete_character.gif" />
+        <Character src={letterCompleteCharacter} />
       </Popup>
     </Overlay>
   );
