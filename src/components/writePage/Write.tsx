@@ -132,9 +132,6 @@ export const Write = () => {
         // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
         setTimeout(() => {
           navigate(`/share/${letterId}?page=1`);
-          queryClient.invalidateQueries({
-            queryKey: letterQuery.queryKeys.byId(letterId),
-          });
         }, 5000);
       },
     });
