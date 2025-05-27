@@ -1,31 +1,28 @@
 import { useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
+
+import { userQuery } from '@/api/queries';
 
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
 import { postLogout, postTemporaryLogin } from '../api/service/AuthService';
-import { SessionLogger } from '../utils';
-
-const logger = new SessionLogger('login');
-
-const tempLogin = async (loginId: string) => {
-  if (accessTokenRepository.isLoggedIn()) {
-    await postLogout();
-  }
-
-  await postTemporaryLogin(loginId);
-
-  logger.debug('임시 로그인 완료 - 새로고침');
-  alert('임시 로그인에 성공했습니다. 새로고침합니다.');
-
-  window.location.reload();
-};
 
 export const TempLoginArea = () => {
+  const queryClient = useQueryClient();
   const [loginId, setLoginId] = useState('ittory1');
 
   const handleLoginIdChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLoginId(e.target.value);
+  };
+
+  const handleLogin = async (loginId: string) => {
+    if (accessTokenRepository.isLoggedIn()) {
+      await postLogout();
+    }
+    const { accessToken } = await postTemporaryLogin(loginId);
+    accessTokenRepository.onLogin(accessToken);
+    await queryClient.resetQueries(userQuery.myInfo());
   };
 
   return (
@@ -44,7 +41,7 @@ export const TempLoginArea = () => {
         </label>
       </div>
 
-      <button onClick={() => tempLogin(loginId)}>임시 로그인하기</button>
+      <button onClick={() => handleLogin(loginId)}>임시 로그인하기</button>
     </RootContainer>
   );
 };
