@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 
+import btnClose from '@/assets/btn_close_white.svg';
 import clock from '@/assets/write/clock.svg';
 import imgError from '@/assets/write/img_error.svg';
 
