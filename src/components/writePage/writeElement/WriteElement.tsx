@@ -88,7 +88,7 @@ export const WriteElement = ({
               value={text}
               onChange={(e) => {
                 const validated = sliceStringWithEmoji(
-                  e.target.value.trim(),
+                  e.target.value,
                   Policies.LETTER_CONTENT_MAX_LENGTH,
                 );
                 setText(validated.value);
@@ -319,6 +319,8 @@ const WriteTa = styled.textarea`
   width: 80%;
 
   overflow: hidden;
+
+  font-size: 14px;
 
   color: #000;
 

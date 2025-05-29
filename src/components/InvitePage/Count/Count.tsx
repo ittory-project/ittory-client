@@ -162,6 +162,7 @@ export const Count = ({ onSubmit, setViewCount, member, coverId }: Props) => {
                 slidesPerView={5}
                 loop={true}
                 slideToClickedSlide={true}
+                loopAdditionalSlides={1}
                 centeredSlides={true}
                 onSlideChange={onSlideChange}
                 style={{ height: '100%' }}
