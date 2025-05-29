@@ -320,6 +320,8 @@ const WriteTa = styled.textarea`
 
   overflow: hidden;
 
+  font-size: 14px;
+
   color: #000;
 
   resize: none;
