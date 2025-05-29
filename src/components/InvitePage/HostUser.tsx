@@ -25,6 +25,9 @@ import { CountPopup } from './Count/CountPopup';
 import { Delete } from './Delete/Delete';
 import { Exit } from './Exit';
 import { UserGuide } from './UserGuide';
+import { postRepeatCount } from '@/api/service/LetterService';
+import { postRandom } from '@/api/service/ParticipantService';
+import { getWebSocketApi } from '@/api/websockets';
 
 const logger = new SessionLogger('invite');
 
@@ -44,6 +47,8 @@ export const HostUser = ({
   viewDelete,
   setViewDelete,
 }: Props) => {
+  const wsApi = getWebSocketApi();
+
   const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
   const { data: letterInfo } = useSuspenseQuery(letterQuery.infoById(letterId));
   const { data: font } = useSuspenseQuery(fontQuery.byId(letterInfo.fontId));
@@ -63,6 +68,17 @@ export const HostUser = ({
       setSliceName(letterInfo.receiverName);
     }
   }, [letterInfo.receiverName]);
+
+  const handleSubmit = async (selectNumber: number) => {
+    const count = Number(selectNumber);
+    const id = letterId;
+
+    const requestBody = { letterId: id, repeatCount: count };
+    await postRepeatCount(requestBody);
+    await postRandom({ letterId: id });
+
+    wsApi.send('startLetter', [letterId]);
+  };
 
   const handleGuide = () => {
     setGuide(true);
@@ -271,10 +287,10 @@ export const HostUser = ({
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
             <Count
-              letterId={letterId}
               coverId={letterInfo.coverTypeId}
               setViewCount={setViewCount}
               member={items.length}
+              onSubmit={handleSubmit}
             />
           )}
         </>
