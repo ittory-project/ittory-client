@@ -17,6 +17,8 @@ import { accessTokenRepository } from '../api/config/AccessTokenRepository';
 import { userQuery } from '../api/queries';
 import { TempLoginArea } from './TempLogin';
 
+const isProdEnv = import.meta.env.VITE_DEPLOY_ENV === 'prod';
+
 interface Props {
   onClose: () => void;
 }
@@ -196,7 +198,7 @@ export const Menu = ({ onClose }: Props) => {
       <Button onClick={handleCreateBtn}>
         <ButtonTxt>편지 쓰러 가기</ButtonTxt>
       </Button>
-      <TempLoginArea />
+      {!isProdEnv && <TempLoginArea />}
       <List>
         <svg
           xmlns="http://www.w3.org/2000/svg"

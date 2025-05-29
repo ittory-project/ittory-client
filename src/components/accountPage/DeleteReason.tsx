@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import checked from '@/assets/checkbox_black.svg';
 import check from '@/assets/checkbox_gray.svg';
 import prev from '@/assets/prev.svg';
+import { Policies } from '@/constants';
+import { sliceStringWithEmoji } from '@/utils';
 
 import { forceLogout } from '../../api/config/logout';
 import { WithdrawPostRequest } from '../../api/model/MemberModel';
@@ -68,10 +70,12 @@ export const DeleteReason = ({ setViewReason }: Props) => {
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const value = e.target.value;
-    if (value.length <= 100) {
-      setOtherReason(value);
-      setLength(value.length);
-    }
+    const validated = sliceStringWithEmoji(
+      value.trim(),
+      Policies.USER_WITHDRAW_REASON_MAX_LENGTH,
+    );
+    setOtherReason(validated.value);
+    setLength(validated.length);
   };
 
   const handleWithdraw = async () => {
@@ -152,7 +156,6 @@ export const DeleteReason = ({ setViewReason }: Props) => {
                   value={otherReason}
                   onChange={handleOtherReasonChange}
                   spellCheck="false"
-                  maxLength={100}
                 />
                 {length > 0 && (
                   <Count>

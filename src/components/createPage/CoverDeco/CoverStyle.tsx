@@ -17,8 +17,8 @@ import shadow from '@/assets/shadow2.svg';
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
 import { coverQuery, fontQuery } from '../../../api/queries';
 import { postCoverImage } from '../../../api/service/ImageService';
-import { ImageExtension } from '../../../constants';
-import { SessionLogger } from '../../../utils';
+import { ImageExtension, Policies } from '../../../constants';
+import { SessionLogger, sliceStringWithEmoji } from '../../../utils';
 import FontPopup from './FontPopup';
 
 const logger = new SessionLogger('create');
@@ -263,11 +263,13 @@ export default function CoverStyle({
               type="text"
               value={title}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const newValue = e.target.value.slice(0, 12); // 최대 길이 12자로 제한
-                setTitle(newValue);
+                const validated = sliceStringWithEmoji(
+                  e.target.value.trim(),
+                  Policies.LETTER_TITLE_MAX_LENGTH,
+                );
+                setTitle(validated.value);
               }}
               minLength={1}
-              maxLength={12}
               spellCheck="false"
               $selectfont={font}
             />

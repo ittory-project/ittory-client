@@ -4,6 +4,8 @@ import { useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { sliceStringWithEmoji } from '@/utils';
+
 import { letterQuery, userQuery } from '../../api/queries';
 import { Policies } from '../../constants';
 import { DeleteConfirm } from '../InvitePage/Delete/DeleteConfirm';
@@ -49,21 +51,12 @@ export const Join = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-
-    let unicodeChars = Array.from(value);
-    if (unicodeChars.length > Policies.NICKNAME_MAX_LENGTH) {
-      value = unicodeChars.slice(0, Policies.NICKNAME_MAX_LENGTH).join('');
-      unicodeChars = Array.from(value);
-    }
-
-    const trimmedValue = value.trim();
-    if (trimmedValue === '') {
-      setNickname('');
-      return;
-    }
-
-    setNickname(trimmedValue);
+    const value = e.target.value;
+    const validated = sliceStringWithEmoji(
+      value.trim(),
+      Policies.NICKNAME_MAX_LENGTH,
+    );
+    setNickname(validated.value);
     setDuplicateError(false);
   };
 

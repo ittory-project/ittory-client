@@ -11,14 +11,10 @@ import bg5 from '@/assets/connect/bg5.png';
 import photo from '@/assets/photo.svg';
 import X from '@/assets/x.svg';
 
-import { postRepeatCount } from '../../../api/service/LetterService';
-import { postRandom } from '../../../api/service/ParticipantService';
-import { getWebSocketApi } from '../../../api/websockets';
-
 interface Props {
+  onSubmit: (selectNumber: number) => Promise<void>;
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
   member: number;
-  letterId: number;
   coverId: number;
 }
 
@@ -29,12 +25,11 @@ interface SlideContentProps {
   $totalSlides: number;
 }
 
-export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
+export const Count = ({ onSubmit, setViewCount, member, coverId }: Props) => {
   const length = Math.floor(50 / member);
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [selectNumber, setSelectNumber] = useState<number>(1);
-  const wsApi = getWebSocketApi();
   const backgroundImages: { [key: number]: string } = {
     1: bg1,
     2: bg2,
@@ -75,17 +70,6 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
       }
     }
   }, []);
-
-  const handleSubmit = async () => {
-    const count = Number(selectNumber);
-    const id = letterId;
-
-    const requestBody = { letterId: id, repeatCount: count };
-    await postRepeatCount(requestBody);
-    await postRandom({ letterId: id });
-
-    wsApi.send('startLetter', [letterId]);
-  };
 
   const swiperRef = useRef<SwiperRef | null>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -177,7 +161,6 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
                 direction={'vertical'}
                 slidesPerView={5}
                 loop={true}
-                loopAdditionalSlides={5}
                 slideToClickedSlide={true}
                 centeredSlides={true}
                 onSlideChange={onSlideChange}
@@ -218,7 +201,7 @@ export const Count = ({ setViewCount, member, letterId, coverId }: Props) => {
           </TotalTxt>
         </Notice>
       </Contents>
-      <Button onClick={handleSubmit}>
+      <Button onClick={() => onSubmit(selectNumber)}>
         <ButtonTxt>시작하기</ButtonTxt>
       </Button>
     </ModalContainer>
@@ -300,6 +283,8 @@ const Contents = styled.div`
   width: 100%;
 
   padding: 0px 16px 20px 16px;
+
+  cursor: grab;
 `;
 const List = styled.div`
   position: relative;

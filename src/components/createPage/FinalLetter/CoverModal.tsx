@@ -7,11 +7,12 @@ import camera from '@/assets/camera.svg';
 import camera_mini from '@/assets/camera_mini.svg';
 import shadow from '@/assets/shadow2.svg';
 import X from '@/assets/x.svg';
+import { sliceStringWithEmoji } from '@/utils';
 
 import { ImageUrlRequest } from '../../../api/model/ImageModel';
 import { coverQuery, fontQuery } from '../../../api/queries';
 import { postCoverImage } from '../../../api/service/ImageService';
-import { ImageExtension } from '../../../constants';
+import { ImageExtension, Policies } from '../../../constants';
 import { SessionLogger } from '../../../utils/SessionLogger';
 import FontPopup from '../CoverDeco/FontPopup';
 
@@ -258,13 +259,13 @@ export default function CoverModal({
             type="text"
             value={title}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.target.value.length > 12) {
-                e.target.value = e.target.value.slice(0, 12);
-              }
-              setTitle(e.target.value);
+              const validated = sliceStringWithEmoji(
+                e.target.value.trim(),
+                Policies.LETTER_TITLE_MAX_LENGTH,
+              );
+              setTitle(validated.value);
             }}
             minLength={1}
-            maxLength={12}
             spellCheck="false"
             $font={font}
           />

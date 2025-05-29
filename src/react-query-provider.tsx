@@ -30,6 +30,7 @@ const queryClient = new QueryClient({
       staleTime: QUERY_OPTIONS.STALE_TIME,
       gcTime: QUERY_OPTIONS.GC_TIME,
       retry: QUERY_OPTIONS.RETRY_COUNT,
+      refetchOnWindowFocus: 'always', // NOTE: true가 기본값인데, stale한 쿼리만 재요청
     },
     mutations: {
       onError: noticeUserOnServerError,
