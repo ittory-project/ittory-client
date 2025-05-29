@@ -23,16 +23,18 @@ attachLoggerOnNavigate();
 attachLoggerOnError();
 logBrowserInformation();
 
+const { DEV, VITE_SENTRY_DSN, VITE_HOTJAR_SITE_ID, VITE_HOTJAR_VERSION } =
+  import.meta.env;
+
 Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN,
+  dsn: VITE_SENTRY_DSN,
   integrations: [Sentry.captureConsoleIntegration({ levels: ['error'] })],
 });
 
-if (!import.meta.env.DEV) {
-  // TODO: 프론트 배포 시 서버 환경 변수 설정이 가능할 때까지 유보
-  const siteId = 6407654;
-  const hotjarVersion = 6;
-  Hotjar.init(siteId, hotjarVersion);
+if (!DEV) {
+  const siteId = Number(VITE_HOTJAR_SITE_ID);
+  const version = Number(VITE_HOTJAR_VERSION);
+  Hotjar.init(siteId, version);
 }
 
 // TODO: 로그인 로딩에 대한 더 좋은 방식 찾기.
