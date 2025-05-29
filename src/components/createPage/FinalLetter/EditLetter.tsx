@@ -446,7 +446,7 @@ const InputBox = styled.div`
   gap: 8px;
   justify-content: center;
 
-  width: 224px;
+  width: 100%;
 
   margin-top: 0;
 
