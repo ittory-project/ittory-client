@@ -88,7 +88,7 @@ export const WriteElement = ({
               value={text}
               onChange={(e) => {
                 const validated = sliceStringWithEmoji(
-                  e.target.value.trim(),
+                  e.target.value,
                   Policies.LETTER_CONTENT_MAX_LENGTH,
                 );
                 setText(validated.value);
