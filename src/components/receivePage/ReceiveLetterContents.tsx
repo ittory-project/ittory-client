@@ -9,6 +9,7 @@ interface LetterContentProps {
   letterContent: LetterDetail;
 }
 
+// FIXME: absolute로 레이아웃되어 있는데 처음부터 다시 해야 할 듯함
 export const ReceiveLetterContents = ({
   letterContent,
 }: LetterContentProps) => {
@@ -60,7 +61,7 @@ const ContentImg = styled.img`
 
 const Content = styled.div`
   position: absolute;
-  top: 65%;
+  top: 67%;
   left: 50%;
 
   display: flex;
@@ -68,7 +69,6 @@ const Content = styled.div`
   flex-direction: column;
 
   align-self: stretch;
-  justify-content: center;
 
   height: 41px;
 
