@@ -8,6 +8,7 @@ import styled from 'styled-components';
 
 import calender from '@/assets/calendar.svg';
 import X from '@/assets/x.svg';
+import { sliceStringWithEmoji } from '@/utils';
 
 import { userQuery } from '../../../api/queries';
 import { Policies } from '../../../constants';
@@ -118,13 +119,14 @@ export default function LetterInfo({
               type="text"
               value={receiverName}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length > 12) {
-                  e.target.value = e.target.value.slice(0, 12);
-                }
-                setReceiverName(e.target.value);
+                const validated = sliceStringWithEmoji(
+                  e.target.value.trim(),
+                  Policies.RECEIVER_MAX_LENGTH,
+                );
+                console.log(e.target.value, validated);
+                setReceiverName(validated.value);
               }}
-              $minLength={1}
-              $maxLength={12}
+              minLength={1}
               spellCheck="false"
             />
           </InputBox>
@@ -138,23 +140,14 @@ export default function LetterInfo({
               type="text"
               value={myName}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                let value = e.target.value;
-                let unicodeChars = Array.from(value);
-                if (unicodeChars.length > Policies.NICKNAME_MAX_LENGTH) {
-                  value = unicodeChars
-                    .slice(0, Policies.NICKNAME_MAX_LENGTH)
-                    .join('');
-                  unicodeChars = Array.from(value);
-                }
-
-                const trimmedValue = value.trim();
-                if (trimmedValue === '') {
-                  setMyName('');
-                  return;
-                }
-                setMyName(trimmedValue);
+                const value = e.target.value;
+                const validated = sliceStringWithEmoji(
+                  value.trim(),
+                  Policies.NICKNAME_MAX_LENGTH,
+                );
+                setMyName(validated.value);
               }}
-              $minLength={1}
+              minLength={1}
               spellCheck="false"
             />
           </InputBox>
@@ -369,7 +362,7 @@ const InputLogo = styled.div`
 
   letter-spacing: -0.5px;
 `;
-const Input = styled.input<{ $minLength?: number; $maxLength?: number }>`
+const Input = styled.input`
   width: 232px;
   height: 26px;
 

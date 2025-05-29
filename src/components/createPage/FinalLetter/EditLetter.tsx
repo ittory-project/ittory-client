@@ -9,6 +9,8 @@ import bright from '@/assets/border.svg';
 import calender from '@/assets/calendar.svg';
 import EditImg from '@/assets/edit.svg';
 import shadow from '@/assets/shadow2.svg';
+import { Policies } from '@/constants';
+import { sliceStringWithEmoji } from '@/utils';
 
 import { coverQuery } from '../../../api/queries';
 import BottomSheet from '../EnterInfo/BotttomSheet';
@@ -93,13 +95,13 @@ export default function EditLetter({
               type="text"
               value={receiverName}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length > 12) {
-                  e.target.value = e.target.value.slice(0, 12);
-                }
-                setReceiverName(e.target.value);
+                const validated = sliceStringWithEmoji(
+                  e.target.value.trim(),
+                  Policies.RECEIVER_MAX_LENGTH,
+                );
+                setReceiverName(validated.value);
               }}
               minLength={1}
-              maxLength={12}
             />
           </InputBox>
           <InputBox>
@@ -110,13 +112,13 @@ export default function EditLetter({
               type="text"
               value={myName}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length > 5) {
-                  e.target.value = e.target.value.slice(0, 5);
-                }
-                setMyName(e.target.value);
+                const validated = sliceStringWithEmoji(
+                  e.target.value.trim(),
+                  Policies.NICKNAME_MAX_LENGTH,
+                );
+                setMyName(validated.value);
               }}
               minLength={1}
-              maxLength={5}
             />
           </InputBox>
           <InputBox>

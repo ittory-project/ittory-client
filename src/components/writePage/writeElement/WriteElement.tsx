@@ -6,7 +6,12 @@ import btnClose from '@/assets/btn_close.svg';
 import btnCloseWhite from '@/assets/btn_close_white.svg';
 import clock from '@/assets/write/clock.svg';
 import imgError from '@/assets/write/img_error.svg';
-import { isMobileDevice, smootherScrollToY } from '@/utils';
+import { Policies } from '@/constants';
+import {
+  isMobileDevice,
+  sliceStringWithEmoji,
+  smootherScrollToY,
+} from '@/utils';
 
 import { ElementResponse } from '../../../api/model/ElementModel';
 import { useTimeLeft } from '../../../hooks';
@@ -81,8 +86,13 @@ export const WriteElement = ({
               ref={textareaRef}
               placeholder="그림을 보고 편지를 채워 주세요"
               value={text}
-              onChange={(e) => setText(e.target.value)}
-              maxLength={40}
+              onChange={(e) => {
+                const validated = sliceStringWithEmoji(
+                  e.target.value.trim(),
+                  Policies.LETTER_CONTENT_MAX_LENGTH,
+                );
+                setText(validated.value);
+              }}
             />
             <ControlContainer>
               {text.length > 0 ? (

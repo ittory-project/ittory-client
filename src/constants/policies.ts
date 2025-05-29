@@ -1,1 +1,5 @@
 export const NICKNAME_MAX_LENGTH = 5;
+export const LETTER_TITLE_MAX_LENGTH = 12;
+export const RECEIVER_MAX_LENGTH = 12;
+export const LETTER_CONTENT_MAX_LENGTH = 40;
+export const USER_WITHDRAW_REASON_MAX_LENGTH = 100;
