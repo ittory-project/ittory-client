@@ -30,6 +30,8 @@ declare global {
   }
 }
 
+const isProdEnv = import.meta.env.VITE_DEPLOY_ENV === 'prod';
+
 /**
  * Session(Tab) 단위로 로그를 출력하고 보관하는 Logger
  * - 새로 고침 시에도 로그 유지
@@ -52,7 +54,9 @@ export class SessionLogger {
       SessionLogger.logs = JSON.parse(storedLogs);
     }
 
-    window.exportSessionLogs = SessionLogger.exportAsTxt;
+    if (!isProdEnv) {
+      window.exportSessionLogs = SessionLogger.exportAsTxt;
+    }
   }
 
   static enableFeatures(features: Feature[]) {
@@ -118,6 +122,7 @@ export class SessionLogger {
 
   private isLogEnabled(type: LogLevel): boolean {
     return (
+      !isProdEnv &&
       SessionLogger.enabledLogLevels.includes(type) &&
       SessionLogger.enabledFeatures.includes(this.feature)
     );

@@ -3,6 +3,7 @@
 
 // NOTE: 환경 변수 타입 정의
 interface ImportMetaEnv {
+  VITE_DEPLOY_ENV: 'local' | 'dev' | 'prod';
   VITE_KAKAO_KEY: string;
   VITE_SERVER_URL: string;
   VITE_SENTRY_DSN: string;

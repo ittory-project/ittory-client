@@ -18,24 +18,28 @@ import {
   logBrowserInformation,
 } from './utils/SessionLogger';
 
-activateDefaultLog();
-attachLoggerOnNavigate();
-attachLoggerOnError();
-logBrowserInformation();
+const {
+  VITE_DEPLOY_ENV,
+  VITE_SENTRY_DSN,
+  VITE_HOTJAR_SITE_ID,
+  VITE_HOTJAR_VERSION,
+} = import.meta.env;
 
-const { DEV, VITE_SENTRY_DSN, VITE_HOTJAR_SITE_ID, VITE_HOTJAR_VERSION } =
-  import.meta.env;
+if (VITE_DEPLOY_ENV !== 'prod') {
+  activateDefaultLog();
+  attachLoggerOnNavigate();
+  attachLoggerOnError();
+  logBrowserInformation();
+} else {
+  const siteId = Number(VITE_HOTJAR_SITE_ID);
+  const version = Number(VITE_HOTJAR_VERSION);
+  Hotjar.init(siteId, version);
+}
 
 Sentry.init({
   dsn: VITE_SENTRY_DSN,
   integrations: [Sentry.captureConsoleIntegration({ levels: ['error'] })],
 });
-
-if (!DEV) {
-  const siteId = Number(VITE_HOTJAR_SITE_ID);
-  const version = Number(VITE_HOTJAR_VERSION);
-  Hotjar.init(siteId, version);
-}
 
 // TODO: 로그인 로딩에 대한 더 좋은 방식 찾기.
 accessTokenRepository.refresh().finally(() => {

@@ -13,6 +13,7 @@ export default defineConfig({
     // validation 실패 시 dev 서버 / build 실행 시 오류
     EnvironmentPlugin(
       {
+        VITE_DEPLOY_ENV: undefined,
         VITE_KAKAO_KEY: undefined,
         VITE_SERVER_URL: undefined,
         VITE_SENTRY_DSN: null,
