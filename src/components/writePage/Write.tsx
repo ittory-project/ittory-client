@@ -4,7 +4,6 @@ import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
@@ -90,7 +89,7 @@ export const Write = () => {
     throw 'Error: 잘못된 접근입니다.';
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     const unsubscribe = wsApi.subscribe('letter', [letterId], {
       write(response) {
         logger.debug('ws 응답으로 cache 갱신');
@@ -140,7 +139,7 @@ export const Write = () => {
     });
 
     return unsubscribe;
-  }, []);
+  }, []);*/
 
   //키보드 올라올때 body
   useEffect(() => {
@@ -177,6 +176,10 @@ export const Write = () => {
   const handleScrollToNowItem = () => {
     nowItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
+
+  const writingMember = participants.participants.find(
+    (participant) => participant.memberId === waitingElement?.memberId,
+  );
 
   return (
     <>
@@ -221,7 +224,7 @@ export const Write = () => {
                 <WriteLocation
                   startedAt={waitingElement.startedAt}
                   name={waitingElement.nickname}
-                  profileImage={waitingElement.imageUrl}
+                  profileImage={writingMember?.imageUrl}
                 />
               </LocationContainer>
             )
@@ -232,7 +235,7 @@ export const Write = () => {
               <WriteLocation
                 startedAt={waitingElement.startedAt}
                 name={waitingElement.nickname}
-                profileImage={waitingElement.imageUrl}
+                profileImage={writingMember?.imageUrl}
               />
             </LocationContainer>
           )
