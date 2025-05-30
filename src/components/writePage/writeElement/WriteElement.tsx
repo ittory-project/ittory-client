@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import btnClose from '@/assets/btn_close.svg';
-import btnCloseWhite from '@/assets/btn_close_white.svg';
 import clock from '@/assets/write/clock.svg';
 import imgError from '@/assets/write/img_error.svg';
 import { Policies } from '@/constants';
@@ -72,10 +71,7 @@ export const WriteElement = ({
             <ClockIcon src={clock} />
             {Math.max(0, Math.floor(progressTime))}초
           </ClockText>
-          <CloseBtn
-            onClick={handleClose}
-            src={isMobile ? btnClose : btnCloseWhite}
-          />
+          <CloseBtn onClick={handleClose} src={btnClose} />
         </Header>
         <WriteDiv>
           <PhotoDiv $isMobile={isMobile}>
@@ -210,6 +206,8 @@ const CloseBtn = styled.img`
 
   width: 20px;
   height: 20px;
+
+  cursor: pointer;
 `;
 
 const ClockIcon = styled.img`
