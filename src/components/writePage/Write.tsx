@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
@@ -61,6 +60,9 @@ export const Write = () => {
 
   const [isWriting, setIsWriting] = useState(false);
 
+  const nowItemRef = useRef<HTMLDivElement | null>(null);
+  const [isNowItemVisible, setIsNowItemVisible] = useState(true);
+
   const openWritingDialog = () => {
     setIsWriting(true);
   };
@@ -87,7 +89,7 @@ export const Write = () => {
     throw 'Error: 잘못된 접근입니다.';
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     const unsubscribe = wsApi.subscribe('letter', [letterId], {
       write(response) {
         logger.debug('ws 응답으로 cache 갱신');
@@ -137,7 +139,7 @@ export const Write = () => {
     });
 
     return unsubscribe;
-  }, []);
+  }, []);*/
 
   //키보드 올라올때 body
   useEffect(() => {
@@ -152,6 +154,32 @@ export const Write = () => {
       document.body.style.overflow = '';
     };
   }, [isWriting]);
+
+  // 위치 아이콘 클릭 시 이동
+  useEffect(() => {
+    if (!isMyTurnToWrite || !nowItemRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNowItemVisible(entry.isIntersecting),
+      { threshold: 1 }, // 완전히 보여야 true
+    );
+
+    observer.observe(nowItemRef.current);
+
+    return () => {
+      if (nowItemRef.current) {
+        observer.unobserve(nowItemRef.current);
+      }
+    };
+  }, [isMyTurnToWrite, nowItemRef.current]);
+
+  const handleScrollToNowItem = () => {
+    nowItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const writingMember = participants.participants.find(
+    (participant) => participant.memberId === waitingElement?.memberId,
+  );
 
   return (
     <>
@@ -178,26 +206,39 @@ export const Write = () => {
           <WriteOrderList
             elements={elements}
             isMyTurnToWrite={isMyTurnToWrite}
+            nowItemRef={nowItemRef}
           />
         </ScrollableOrderList>
         {isMyTurnToWrite ? (
-          <ButtonContainer>
-            <Button
-              text="편지를 적어주세요"
-              color="#FCFFAF"
-              onClick={openWritingDialog}
-            />
-          </ButtonContainer>
+          isNowItemVisible ? (
+            <ButtonContainer>
+              <Button
+                text="편지를 적어주세요"
+                color="#FCFFAF"
+                onClick={openWritingDialog}
+              />
+            </ButtonContainer>
+          ) : (
+            waitingElement?.nickname && (
+              <LocationContainer onClick={handleScrollToNowItem}>
+                <WriteLocation
+                  startedAt={waitingElement.startedAt}
+                  name={waitingElement.nickname}
+                  profileImage={writingMember?.imageUrl}
+                />
+              </LocationContainer>
+            )
+          )
         ) : (
-          <LocationContainer>
-            {waitingElement?.nickname && (
+          waitingElement?.nickname && (
+            <LocationContainer onClick={handleScrollToNowItem}>
               <WriteLocation
                 startedAt={waitingElement.startedAt}
                 name={waitingElement.nickname}
-                profileImage={waitingElement.imageUrl}
+                profileImage={writingMember?.imageUrl}
               />
-            )}
-          </LocationContainer>
+            </LocationContainer>
+          )
         )}
       </Container>
 
