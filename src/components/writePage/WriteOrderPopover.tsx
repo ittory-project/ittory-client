@@ -119,7 +119,7 @@ const ListItem = styled.li`
 
   align-items: center;
 
-  padding: 0px 20px 15px 0px;
+  padding-bottom: 15px;
 `;
 
 const ListNumber = styled.div`
@@ -158,7 +158,7 @@ const Avatar = styled.img`
 `;
 
 const Name = styled.span`
-  width: 70px;
+  flex: 1;
 
   overflow: hidden;
   text-overflow: ellipsis;
