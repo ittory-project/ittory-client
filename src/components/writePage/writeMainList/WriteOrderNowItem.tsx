@@ -35,7 +35,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
             <MainText>내 차례예요</MainText>
             <ClockText>
               <ClockIcon src={clock} />
-              {Math.floor(Number(timeLeft))}초
+              {timeLeft}초
             </ClockText>
           </MyTurn>
         ) : (
@@ -43,7 +43,7 @@ export const WriteOrderNowItem: React.FC<WriteOrderProps> = ({
             <MainTextWriting>편지를 작성하고 있어요...</MainTextWriting>
             <ClockText>
               <ClockIcon src={clock} />
-              {Math.floor(Number(timeLeft))}초
+              {timeLeft}초
             </ClockText>
           </>
         )}

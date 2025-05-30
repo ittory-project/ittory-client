@@ -8,7 +8,10 @@ export const useTimeLeft = (startedAt: string | null) => {
     new Date().getTime() - new Date(startedAt ?? new Date()).getTime();
   const timeLeft = Math.max(
     0,
-    OFFICIAL_TIME_LIMIT - Math.ceil(timeDiff / 1000),
+    Math.min(
+      OFFICIAL_TIME_LIMIT,
+      OFFICIAL_TIME_LIMIT - Math.ceil(timeDiff / 1000),
+    ),
   );
 
   useIntervalRerender(true, 1000);
