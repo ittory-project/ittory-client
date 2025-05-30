@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -60,6 +60,9 @@ export const Write = () => {
     useDialog({ closeTimeout: 5_000 });
 
   const [isWriting, setIsWriting] = useState(false);
+
+  const nowItemRef = useRef<HTMLDivElement | null>(null);
+  const [isNowItemVisible, setIsNowItemVisible] = useState(true);
 
   const openWritingDialog = () => {
     setIsWriting(true);
@@ -153,6 +156,28 @@ export const Write = () => {
     };
   }, [isWriting]);
 
+  // 위치 아이콘 클릭 시 이동
+  useEffect(() => {
+    if (!isMyTurnToWrite || !nowItemRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNowItemVisible(entry.isIntersecting),
+      { threshold: 1 }, // 완전히 보여야 true
+    );
+
+    observer.observe(nowItemRef.current);
+
+    return () => {
+      if (nowItemRef.current) {
+        observer.unobserve(nowItemRef.current);
+      }
+    };
+  }, [isMyTurnToWrite, nowItemRef.current]);
+
+  const handleScrollToNowItem = () => {
+    nowItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   return (
     <>
       {userNotParticipated && (
@@ -178,26 +203,39 @@ export const Write = () => {
           <WriteOrderList
             elements={elements}
             isMyTurnToWrite={isMyTurnToWrite}
+            nowItemRef={nowItemRef}
           />
         </ScrollableOrderList>
         {isMyTurnToWrite ? (
-          <ButtonContainer>
-            <Button
-              text="편지를 적어주세요"
-              color="#FCFFAF"
-              onClick={openWritingDialog}
-            />
-          </ButtonContainer>
+          isNowItemVisible ? (
+            <ButtonContainer>
+              <Button
+                text="편지를 적어주세요"
+                color="#FCFFAF"
+                onClick={openWritingDialog}
+              />
+            </ButtonContainer>
+          ) : (
+            waitingElement?.nickname && (
+              <LocationContainer onClick={handleScrollToNowItem}>
+                <WriteLocation
+                  startedAt={waitingElement.startedAt}
+                  name={waitingElement.nickname}
+                  profileImage={waitingElement.imageUrl}
+                />
+              </LocationContainer>
+            )
+          )
         ) : (
-          <LocationContainer>
-            {waitingElement?.nickname && (
+          waitingElement?.nickname && (
+            <LocationContainer onClick={handleScrollToNowItem}>
               <WriteLocation
                 startedAt={waitingElement.startedAt}
                 name={waitingElement.nickname}
                 profileImage={waitingElement.imageUrl}
               />
-            )}
-          </LocationContainer>
+            </LocationContainer>
+          )
         )}
       </Container>
 
