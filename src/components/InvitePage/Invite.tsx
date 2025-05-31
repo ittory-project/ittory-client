@@ -68,8 +68,16 @@ export const Invite = () => {
     ) >= 0;
 
   useEffect(function handleWebSocketJobs() {
-    if (!isAlreadyJoined) {
+    const enterJob = () => {
       wsApi.send('enterLetter', [letterId], { nickname: myPageData.name });
+    };
+
+    if (!isAlreadyJoined) {
+      enterJob();
+
+      // NOTE: 모바일에서 visibilityHidden이 될 때 웹소켓 연결이 끊기며, 복귀했을 때 일정 시간 이후에 웹소켓 연결이 재개됨
+      // refetchOnWindowFocus에 의존해도 해결되지 않기 때문에, reconnect 시점에 다시 호출해야 함.
+      wsApi.addOnConnectJob(enterJob);
     }
 
     const unsubscribe = wsApi.subscribe('letter', [letterId], {
@@ -133,6 +141,7 @@ export const Invite = () => {
     return () => {
       logger.debug('unsubscribe call from useEffect');
       unsubscribe();
+      wsApi.removeOnConnectJob(enterJob);
     };
   }, []);
 
