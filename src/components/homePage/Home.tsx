@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import styled, { keyframes } from 'styled-components';
 
-import bg8 from '@/assets/home/07.jpg';
+import bg1 from '@/assets/home/01.jpg';
+import bg2 from '@/assets/home/02.jpg';
+import bg3 from '@/assets/home/03.jpg';
+import bg4 from '@/assets/home/04.jpg';
+import bg5 from '@/assets/home/05.jpg';
+import bg7 from '@/assets/home/07.jpg';
 import animation from '@/assets/home/animation.json';
 import divider2 from '@/assets/home/bar.png';
-import body from '@/assets/home/body.jpg';
 import insta from '@/assets/home/insta.svg';
 import logo from '@/assets/home/logo.png';
-import bg1 from '@/assets/home/main.jpg';
+import landingBg from '@/assets/home/main.jpg';
 import twitter from '@/assets/home/twitter.svg';
 
 import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
@@ -137,7 +141,7 @@ export const Home = () => {
           />
           <>
             <FirstSection
-              $img={bg1}
+              $img={landingBg}
               ref={(el) => el && (sectionRefs.current[0] = el)}
             >
               <Logo $img={logo} />
@@ -160,10 +164,25 @@ export const Home = () => {
               />
             </FirstSection>
             <BodySection ref={(el) => el && (sectionRefs.current[1] = el)}>
-              <Image src={body} alt="Long Image" />
+              {/* FIXME: alt 속성 추가 */}
+              <picture>
+                <Image src={bg1} alt="" />
+              </picture>
+              <picture>
+                <Image src={bg2} alt="" />
+              </picture>
+              <picture>
+                <Image src={bg3} alt="" />
+              </picture>
+              <picture>
+                <Image src={bg4} alt="" />
+              </picture>
+              <picture>
+                <Image src={bg5} alt="" />
+              </picture>
             </BodySection>
             <Section
-              $img={bg8}
+              $img={bg7}
               ref={(el) => el && (sectionRefs.current[2] = el)}
             >
               <FinalButton onClick={handleButton}>
@@ -267,6 +286,8 @@ const Container = styled.div`
 `;
 const BodySection = styled.div`
   display: flex;
+
+  flex-direction: column;
 
   align-items: flex-start; /* 이미지를 위쪽에 정렬 */
   justify-content: center; /* 이미지를 가운데 정렬 */
