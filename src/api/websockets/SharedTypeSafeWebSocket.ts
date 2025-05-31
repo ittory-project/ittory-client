@@ -54,6 +54,9 @@ export class SharedTypeSafeWebSocket<
   // 연결 시 모든 큐에서 대기하던 작업을 실행하고 큐를 비움
   private connectWaitQueue: (() => void)[] = [];
 
+  // NOTE: 연결/재연결 시점마다 매번 호출되어야 하는 작업을 추가
+  private onConnectQueue: (() => void)[] = [];
+
   // stomp-specific
   private stompClient: Client;
   private stompRawSubscriptionObjects: Map<
@@ -85,6 +88,10 @@ export class SharedTypeSafeWebSocket<
 
       this.connectWaitQueue.forEach((job) => job());
       this.connectWaitQueue = [];
+
+      this.onConnectQueue.forEach((job) => job());
+      this.onConnectQueue = [];
+
       this.isConnected = true;
       this.isConnecting = false;
 
@@ -238,6 +245,14 @@ export class SharedTypeSafeWebSocket<
         body,
       });
     });
+  }
+
+  public addOnConnectJob(job: () => void) {
+    this.onConnectQueue.push(job);
+  }
+
+  public removeOnConnectJob(job: () => void) {
+    this.onConnectQueue = this.onConnectQueue.filter((j) => j !== job);
   }
 
   // NOTE: channel 별 listener 들을 stompClient에 등록
