@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import styled, { keyframes } from 'styled-components';
 
-import bg8 from '@/assets/home/07.jpg';
+import bg1 from '@/assets/home/01_75p.jpg';
+import bg2 from '@/assets/home/02_75p.jpg';
+import bg3 from '@/assets/home/03_75p.jpg';
+import bg4 from '@/assets/home/04_75p.jpg';
+import bg5 from '@/assets/home/05_75p.jpg';
+import bg7 from '@/assets/home/07_75p.jpg';
 import animation from '@/assets/home/animation.json';
 import divider2 from '@/assets/home/bar.png';
-import body from '@/assets/home/body.jpg';
 import insta from '@/assets/home/insta.svg';
 import logo from '@/assets/home/logo.png';
-import bg1 from '@/assets/home/main.jpg';
+import landingBg from '@/assets/home/main_75p.jpg';
 import twitter from '@/assets/home/twitter.svg';
 
 import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
@@ -24,6 +28,15 @@ const logger = new SessionLogger('home');
 interface $Props {
   $img: string;
 }
+
+// lazy loading을 위한 이미지 정보
+const webtoonImages = [
+  { src: bg1, alt: '' },
+  { src: bg2, alt: '' },
+  { src: bg3, alt: '' },
+  { src: bg4, alt: '' },
+  { src: bg5, alt: '' },
+];
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -137,7 +150,7 @@ export const Home = () => {
           />
           <>
             <FirstSection
-              $img={bg1}
+              $img={landingBg}
               ref={(el) => el && (sectionRefs.current[0] = el)}
             >
               <Logo $img={logo} />
@@ -160,10 +173,13 @@ export const Home = () => {
               />
             </FirstSection>
             <BodySection ref={(el) => el && (sectionRefs.current[1] = el)}>
-              <Image src={body} alt="Long Image" />
+              {webtoonImages.map((image, index) => (
+                <Image key={index} src={image.src} alt={image.alt} />
+              ))}
             </BodySection>
             <Section
-              $img={bg8}
+              // FIXME: Lazy Load할 수 있게 개선
+              $img={bg7}
               ref={(el) => el && (sectionRefs.current[2] = el)}
             >
               <FinalButton onClick={handleButton}>
@@ -267,6 +283,8 @@ const Container = styled.div`
 `;
 const BodySection = styled.div`
   display: flex;
+
+  flex-direction: column;
 
   align-items: flex-start; /* 이미지를 위쪽에 정렬 */
   justify-content: center; /* 이미지를 가운데 정렬 */
