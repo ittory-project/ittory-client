@@ -42,12 +42,12 @@ export default function UserFinishModal({
   myName,
   selectFid,
 }: Props) {
+  const navigate = useNavigate();
+
   const { data: coverTypes } = useSuspenseQuery(coverQuery.all());
 
   const modalBackground = useRef<HTMLDivElement | null>(null);
   const closeModal = () => setIsModalOpen(false);
-  const [, setGuideOpen] = useState<boolean>(false);
-  const navigate = useNavigate();
   const [adjustDay, setAdjustDay] = useState<string>('');
 
   useEffect(() => {
@@ -67,54 +67,25 @@ export default function UserFinishModal({
     changeType();
   }, [deliverDay]);
 
-  const fetchEnter = async (letterId: number) => {
+  const startLetterAsRoomMaster = async (guideOpen = false) => {
+    const requestBody: LetterRequestBody = {
+      coverTypeId: selectedImageIndex + 1,
+      fontId: selectFid,
+      deliveryDate: adjustDay,
+      receiverName: receiverName,
+      title: title,
+      coverPhotoUrl: croppedImage,
+    };
+
+    const response = await postLetter(requestBody);
+    const letterId = response.letterId;
+    localStorage.setItem('userName', myName);
+
     const nickname = myName;
     const enterresponse = await postEnter(Number(letterId), { nickname });
     if (enterresponse.enterStatus === true) {
-      navigate(`/invite/${letterId}?guideOpen=false`);
+      navigate(`/invite/${letterId}?guideOpen=${guideOpen}`);
     }
-  };
-
-  const navigateToInvite = async () => {
-    setGuideOpen(false);
-
-    const requestBody: LetterRequestBody = {
-      coverTypeId: selectedImageIndex + 1,
-      fontId: selectFid,
-      receiverName: receiverName,
-      deliveryDate: adjustDay,
-      title: title,
-      coverPhotoUrl: croppedImage,
-    };
-
-    const response = await postLetter(requestBody);
-    const letterId = response.letterId;
-
-    localStorage.setItem('guideOpen', String(false));
-    localStorage.setItem('userName', myName);
-
-    fetchEnter(letterId);
-  };
-
-  const handleguide = async () => {
-    setGuideOpen(true);
-
-    const requestBody: LetterRequestBody = {
-      coverTypeId: selectedImageIndex + 1,
-      fontId: selectFid,
-      deliveryDate: adjustDay,
-      receiverName: receiverName,
-      title: title,
-      coverPhotoUrl: croppedImage,
-    };
-
-    const response = await postLetter(requestBody);
-    const letterId = response.letterId;
-
-    localStorage.setItem('guideOpen', String(true));
-    localStorage.setItem('userName', myName);
-
-    fetchEnter(letterId);
   };
 
   useEffect(() => {
@@ -172,7 +143,7 @@ export default function UserFinishModal({
             style={{
               background: '#CED4DA',
             }}
-            onClick={handleguide}
+            onClick={() => startLetterAsRoomMaster(true)}
           >
             <ButtonTxt style={{ color: '#495057' }}>사용법 보기</ButtonTxt>
           </Button>
@@ -180,7 +151,7 @@ export default function UserFinishModal({
             style={{
               background: '#FFA256',
             }}
-            onClick={navigateToInvite}
+            onClick={() => startLetterAsRoomMaster()}
           >
             <ButtonTxt style={{ color: '#fff' }}>맘에 들어요!</ButtonTxt>
           </Button>
