@@ -5,17 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import styled, { keyframes } from 'styled-components';
 
-import bg1 from '@/assets/home/01.jpg';
-import bg2 from '@/assets/home/02.jpg';
-import bg3 from '@/assets/home/03.jpg';
-import bg4 from '@/assets/home/04.jpg';
-import bg5 from '@/assets/home/05.jpg';
-import bg7 from '@/assets/home/07.jpg';
+import bg1 from '@/assets/home/01_75p.jpg';
+import bg2 from '@/assets/home/02_75p.jpg';
+import bg3 from '@/assets/home/03_75p.jpg';
+import bg4 from '@/assets/home/04_75p.jpg';
+import bg5 from '@/assets/home/05_75p.jpg';
+import bg7 from '@/assets/home/07_75p.jpg';
 import animation from '@/assets/home/animation.json';
 import divider2 from '@/assets/home/bar.png';
 import insta from '@/assets/home/insta.svg';
 import logo from '@/assets/home/logo.png';
-import landingBg from '@/assets/home/main.jpg';
+import landingBg from '@/assets/home/main_75p.jpg';
 import twitter from '@/assets/home/twitter.svg';
 
 import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
@@ -28,6 +28,15 @@ const logger = new SessionLogger('home');
 interface $Props {
   $img: string;
 }
+
+// lazy loading을 위한 이미지 정보
+const webtoonImages = [
+  { src: bg1, alt: '' },
+  { src: bg2, alt: '' },
+  { src: bg3, alt: '' },
+  { src: bg4, alt: '' },
+  { src: bg5, alt: '' },
+];
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -164,24 +173,12 @@ export const Home = () => {
               />
             </FirstSection>
             <BodySection ref={(el) => el && (sectionRefs.current[1] = el)}>
-              {/* FIXME: alt 속성 추가 */}
-              <picture>
-                <Image src={bg1} alt="" />
-              </picture>
-              <picture>
-                <Image src={bg2} alt="" />
-              </picture>
-              <picture>
-                <Image src={bg3} alt="" />
-              </picture>
-              <picture>
-                <Image src={bg4} alt="" />
-              </picture>
-              <picture>
-                <Image src={bg5} alt="" />
-              </picture>
+              {webtoonImages.map((image, index) => (
+                <Image key={index} src={image.src} alt={image.alt} />
+              ))}
             </BodySection>
             <Section
+              // FIXME: Lazy Load할 수 있게 개선
               $img={bg7}
               ref={(el) => el && (sectionRefs.current[2] = el)}
             >
