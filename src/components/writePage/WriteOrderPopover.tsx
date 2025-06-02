@@ -121,26 +121,32 @@ const ListItem = styled.li`
 `;
 
 const ListNumber = styled.div`
-  gap: 10px;
+  /* FIXME: z-index 정책 만들기 */
+  z-index: 2;
+
+  box-sizing: border-box;
+  display: flex;
+
   align-items: center;
   justify-content: center;
 
-  width: var(--Typography-size-m, 18px);
-  height: var(--Typography-size-m, 18px);
+  width: 18px;
+  height: 18px;
 
-  padding: 4px var(--Border-Radius-radius_100, 4px);
+  padding: 4px;
+  margin-left: 4px;
 
-  font-family: var(--Typography-family-number, 'Gmarket Sans');
-  font-size: 12px;
-  font-style: bold;
+  font-family: var(--Typography-family-number, 'GmarketSans');
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 400;
 
-  line-height: var(--Typography-line_height-2xs, 16px); /* 160% */
+  line-height: normal;
 
-  color: var(--color-black-white-white, #fff);
   color: var(--color-black-white-white, #4db4ff);
 
   text-align: center;
-  letter-spacing: var(--Typography-letter_spacing-default, -0.5px);
+  letter-spacing: -0.4px;
 
   background: var(--Color-secondary-blue, #d3edff);
   border-radius: var(--Border-Radius-radius_circle, 50px);
@@ -171,11 +177,11 @@ const Name = styled.span`
 
 const Line = styled.div<{ $itemnum: number }>`
   position: absolute;
-  top: 7px;
+  top: 8px;
   left: 12px;
   z-index: 1;
 
-  height: ${({ $itemnum }) => `calc(${$itemnum} * 55px - 28px)`};
+  height: ${({ $itemnum }) => `calc(${$itemnum - 1} * 55px - 4px)`};
 
   border-left: 1.5px dashed #d3edff;
 `;
