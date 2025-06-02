@@ -26,6 +26,9 @@ export const Join = () => {
         letterQuery.participantsByIdInSequenceOrder(letterNumId),
       ],
     });
+  const alreadyStarted =
+    participants.participants.length > 0 &&
+    participants.participants[0].sequence !== null;
 
   const [nickname, setNickname] = useState<string>('');
   const [viewModal, setViewModal] = useState<boolean>(false);
@@ -34,15 +37,6 @@ export const Join = () => {
   const [deleted, setDeleted] = useState<boolean>(false);
   const [deleteConf, setDeleteConf] = useState<boolean>(false);
   const [noAccess, setNoAccess] = useState<boolean>(false);
-
-  useEffect(function moveToWritePageIfAlreadyJoined() {
-    if (
-      participants.participants.length > 0 &&
-      participants.participants[0].sequence !== null
-    ) {
-      navigate(`/write/${letterNumId}`);
-    }
-  });
 
   const handleModal = async () => {
     if (nickname) {
@@ -59,6 +53,17 @@ export const Join = () => {
     setNickname(validated.value);
     setDuplicateError(false);
   };
+
+  // NOTE: navigate는 마운트 이후에만 동작
+  useEffect(function moveToWritePageIfAlreadyJoined() {
+    if (alreadyStarted) {
+      navigate(`/write/${letterNumId}`);
+    }
+  }, []);
+
+  if (alreadyStarted) {
+    return null;
+  }
 
   return (
     <>
