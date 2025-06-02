@@ -103,8 +103,6 @@ const PopupList = styled.ul`
   padding: 0;
   margin: 0;
 
-  overflow-y: auto;
-
   list-style-type: none;
 
   &::-webkit-scrollbar {
