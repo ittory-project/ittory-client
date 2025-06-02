@@ -10,13 +10,13 @@ import { letterQuery } from '../../../api/queries';
 interface WriteModalProps {
   repeatCount: number;
   elementCount: number;
-  startCountdown: number;
+  secondsLeft: number;
 }
 
 export const WriteMainModal: React.FC<WriteModalProps> = ({
   repeatCount,
   elementCount,
-  startCountdown,
+  secondsLeft,
 }) => {
   const { letterId } = useParams();
   const letterNumId = Number(letterId);
@@ -71,7 +71,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
         </PopupList>
         <ClockText>
           <ClockIcon src={clockGray} />
-          {Math.floor(Number(startCountdown))}초 후 편지 시작
+          {Math.floor(Number(secondsLeft))}초 후 편지 시작
         </ClockText>
       </Popup>
     </Overlay>
