@@ -319,6 +319,7 @@ const WriteTa = styled.textarea`
 
   overflow: hidden;
 
+  font-family: var(--Typography-family-body);
   font-size: 14px;
 
   color: #000;
