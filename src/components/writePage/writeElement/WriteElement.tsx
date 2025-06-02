@@ -192,7 +192,8 @@ const Header = styled.div<{ $isMobile: boolean }>`
   align-self: stretch;
   justify-content: space-between;
 
-  ${({ $isMobile }) => ($isMobile ? 'width:90%;' : 'width:88%;')}
+  /* FIXME: 추후 absolute 제거 */
+  ${({ $isMobile }) => ($isMobile ? 'width:90%;' : 'width:86%;')}
   height: 44px;
 
   margin: 10px 20px 5px 20px;
