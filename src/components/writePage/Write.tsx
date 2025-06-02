@@ -62,6 +62,7 @@ export const Write = () => {
   const [isWriting, setIsWriting] = useState(false);
 
   const nowItemRef = useRef<HTMLDivElement | null>(null);
+  const [, setIsNowItemVisible] = useState(true);
 
   const openWritingDialog = () => {
     setIsWriting(true);
@@ -175,6 +176,24 @@ export const Write = () => {
   const writingMember = participants.participants.find(
     (participant) => participant.memberId === waitingElement?.memberId,
   );
+
+  // 위치 아이콘 클릭 시 이동
+  useEffect(() => {
+    if (!isMyTurnToWrite || !nowItemRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsNowItemVisible(entry.isIntersecting),
+      { threshold: 1 }, // 완전히 보여야 true
+    );
+
+    observer.observe(nowItemRef.current);
+
+    return () => {
+      if (nowItemRef.current) {
+        observer.unobserve(nowItemRef.current);
+      }
+    };
+  }, [nowItemRef.current]);
 
   return (
     <>
