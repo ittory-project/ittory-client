@@ -15,8 +15,7 @@ type Story = StoryObj<typeof Count>;
 
 export const Default: Story = {
   args: {
-    member: 3,
-    coverId: 1,
+    numOfParticipants: 3,
     onSubmit: async () => {},
     setViewCount: () => {},
   },
@@ -24,8 +23,7 @@ export const Default: Story = {
 
 export const Five: Story = {
   args: {
-    member: 5,
-    coverId: 2,
+    numOfParticipants: 5,
     onSubmit: async () => {},
     setViewCount: () => {},
   },
