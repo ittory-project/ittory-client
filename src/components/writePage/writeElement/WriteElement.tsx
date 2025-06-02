@@ -35,7 +35,10 @@ export const WriteElement = ({
   };
 
   const handleSubmit = async () => {
-    if (text.length <= 0) {
+    if (
+      text.length < Policies.LETTER_CONTENT_MIN_LENGTH ||
+      text.length > Policies.LETTER_CONTENT_MAX_LENGTH
+    ) {
       return;
     }
 
@@ -85,7 +88,7 @@ export const WriteElement = ({
               onChange={(e) => {
                 const validated = sliceStringWithEmoji(
                   e.target.value,
-                  Policies.LETTER_CONTENT_MAX_LENGTH,
+                  Policies.LETTER_CONTENT_WRITE_MAX_LENGTH,
                 );
                 setText(validated.value);
               }}
