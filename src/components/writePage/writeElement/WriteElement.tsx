@@ -314,8 +314,6 @@ const WriteTa = styled.textarea`
   align-items: flex-start;
   align-self: stretch;
 
-  width: 80%;
-
   overflow: hidden;
 
   font-size: 14px;
