@@ -62,7 +62,6 @@ export const Write = () => {
   const [isWriting, setIsWriting] = useState(false);
 
   const nowItemRef = useRef<HTMLDivElement | null>(null);
-  const [isNowItemVisible, setIsNowItemVisible] = useState(true);
 
   const openWritingDialog = () => {
     setIsWriting(true);
@@ -156,24 +155,6 @@ export const Write = () => {
     };
   }, [isWriting]);
 
-  // 위치 아이콘 클릭 시 이동
-  useEffect(() => {
-    if (!isMyTurnToWrite || !nowItemRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsNowItemVisible(entry.isIntersecting),
-      { threshold: 1 }, // 완전히 보여야 true
-    );
-
-    observer.observe(nowItemRef.current);
-
-    return () => {
-      if (nowItemRef.current) {
-        observer.unobserve(nowItemRef.current);
-      }
-    };
-  }, [isMyTurnToWrite, nowItemRef.current]);
-
   const handleScrollToNowItem = () => {
     nowItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
@@ -210,8 +191,8 @@ export const Write = () => {
             nowItemRef={nowItemRef}
           />
         </ScrollableOrderList>
-        {isMyTurnToWrite ? (
-          isNowItemVisible ? (
+        {isMyTurnToWrite
+          ? waitingElement?.nickname && (
             <ButtonContainer>
               <Button
                 text="편지를 적어주세요"
@@ -219,8 +200,8 @@ export const Write = () => {
                 onClick={openWritingDialog}
               />
             </ButtonContainer>
-          ) : (
-            waitingElement?.nickname && (
+            )
+          : waitingElement?.nickname && (
               <LocationContainer onClick={handleScrollToNowItem}>
                 <WriteLocation
                   startedAt={waitingElement.startedAt}
@@ -228,19 +209,7 @@ export const Write = () => {
                   profileImage={writingMember?.imageUrl}
                 />
               </LocationContainer>
-            )
-          )
-        ) : (
-          waitingElement?.nickname && (
-            <LocationContainer onClick={handleScrollToNowItem}>
-              <WriteLocation
-                startedAt={waitingElement.startedAt}
-                name={waitingElement.nickname}
-                profileImage={writingMember?.imageUrl}
-              />
-            </LocationContainer>
-          )
-        )}
+            )}
       </Container>
 
       {isWriting && (
