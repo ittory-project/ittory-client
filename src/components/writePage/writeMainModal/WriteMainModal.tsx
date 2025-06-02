@@ -221,22 +221,25 @@ const ListItem = styled.li`
 `;
 
 const ListNumber = styled.div`
-  gap: 10px;
+  box-sizing: border-box;
+  display: flex;
+
   align-items: center;
   justify-content: center;
 
-  width: var(--Typography-size-m, 18px);
-  height: var(--Typography-size-m, 18px);
+  width: 18px;
+  height: 18px;
 
-  padding: 4px var(--Border-Radius-radius_100, 4px);
+  padding: 4px;
+  margin-left: 4px;
 
-  font-family: var(--Typography-family-number, 'Gmarket Sans');
-  font-size: 12px;
-  font-style: bold;
+  font-family: var(--Typography-family-number, 'GmarketSans');
+  font-size: 10px;
+  font-style: normal;
+  font-weight: bold;
 
   line-height: var(--Typography-line_height-2xs, 16px); /* 160% */
 
-  color: var(--color-black-white-white, #fff);
   color: var(--color-black-white-white, #fff);
 
   text-align: center;
@@ -250,7 +253,7 @@ const Avatar = styled.img`
   width: 36px;
   height: 36px;
 
-  margin: 0 6px 0 20px;
+  margin: 0 6px 0 16px;
 
   border-radius: 50%;
 `;
@@ -275,7 +278,7 @@ const Line = styled.div<{ $itemnum: number }>`
   left: 12px;
   z-index: 1;
 
-  height: ${({ $itemnum }) => `calc(${$itemnum} * 48px - 35px)`};
+  height: ${({ $itemnum }) => `calc(${$itemnum - 1} * 48px - 4px)`};
 
   border-left: 1.5px dashed rgba(111, 176, 255, 0.5);
 `;
