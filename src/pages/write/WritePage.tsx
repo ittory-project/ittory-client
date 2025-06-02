@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useState } from 'react';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -19,12 +19,17 @@ export const WritePage = () => {
   if (!letterNumId) {
     throw new Error('잘못된 접근입니다.');
   }
-  const { data: startInfo } = useSuspenseQuery(
-    letterQuery.startInfoById(letterNumId),
-  );
+  const [{ data: startInfo }, { data: elements }] = useSuspenseQueries({
+    queries: [
+      letterQuery.startInfoById(letterNumId),
+      letterQuery.elementsById(letterNumId),
+    ],
+  });
+
+  const alreadyStarted = !!elements.some((element) => element.content);
 
   // 초기 팝업 띄우기
-  const [showPopup, setShowPopup] = useState(true);
+  const [showPopup, setShowPopup] = useState(!alreadyStarted);
   const [showCountdown, setShowCountdown] = useState(false);
   // 편지 작성 시간 계산
   const storedResetTime = window.localStorage.getItem('resetTime');
