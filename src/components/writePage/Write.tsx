@@ -62,7 +62,6 @@ export const Write = () => {
   const [isWriting, setIsWriting] = useState(false);
 
   const nowItemRef = useRef<HTMLDivElement | null>(null);
-  const [isNowItemVisible, setIsNowItemVisible] = useState(true);
 
   const openWritingDialog = () => {
     setIsWriting(true);
@@ -85,12 +84,22 @@ export const Write = () => {
     setIsWriting(false);
   };
 
+  // NOTE: 백그라운드 -> 포어그라운드 전환 시 즉시 웹소켓이 재연결되지 않으므로,
+  // windowFocus 시점과 소켓 연결 시점 사이의 이벤트를 받을 수 없으므로 필요
+  const refreshOnWsReconnect = () => {
+    queryClient.invalidateQueries({
+      queryKey: letterQuery.queryKeys.byId(letterId),
+    });
+  };
+
   // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
   if (!letterId) {
     throw 'Error: 잘못된 접근입니다.';
   }
 
   useEffect(() => {
+    wsApi.addOnConnectJob(refreshOnWsReconnect);
+
     const unsubscribe = wsApi.subscribe('letter', [letterId], {
       write(response) {
         logger.debug('ws 응답으로 cache 갱신');
@@ -139,7 +148,10 @@ export const Write = () => {
       },
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      wsApi.removeOnConnectJob(refreshOnWsReconnect);
+    };
   }, []);
 
   //키보드 올라올때 body
@@ -155,24 +167,6 @@ export const Write = () => {
       document.body.style.overflow = '';
     };
   }, [isWriting]);
-
-  // 위치 아이콘 클릭 시 이동
-  useEffect(() => {
-    if (!isMyTurnToWrite || !nowItemRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsNowItemVisible(entry.isIntersecting),
-      { threshold: 1 }, // 완전히 보여야 true
-    );
-
-    observer.observe(nowItemRef.current);
-
-    return () => {
-      if (nowItemRef.current) {
-        observer.unobserve(nowItemRef.current);
-      }
-    };
-  }, [isMyTurnToWrite, nowItemRef.current]);
 
   const handleScrollToNowItem = () => {
     nowItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -210,17 +204,17 @@ export const Write = () => {
             nowItemRef={nowItemRef}
           />
         </ScrollableOrderList>
-        {isMyTurnToWrite ? (
-          isNowItemVisible ? (
-            <ButtonContainer>
-              <Button
-                text="편지를 적어주세요"
-                color="#FCFFAF"
-                onClick={openWritingDialog}
-              />
-            </ButtonContainer>
-          ) : (
-            waitingElement?.nickname && (
+        {isMyTurnToWrite
+          ? waitingElement?.nickname && (
+              <ButtonContainer>
+                <Button
+                  text="편지를 적어주세요"
+                  color="#FCFFAF"
+                  onClick={openWritingDialog}
+                />
+              </ButtonContainer>
+            )
+          : waitingElement?.nickname && (
               <LocationContainer onClick={handleScrollToNowItem}>
                 <WriteLocation
                   startedAt={waitingElement.startedAt}
@@ -228,19 +222,7 @@ export const Write = () => {
                   profileImage={writingMember?.imageUrl}
                 />
               </LocationContainer>
-            )
-          )
-        ) : (
-          waitingElement?.nickname && (
-            <LocationContainer onClick={handleScrollToNowItem}>
-              <WriteLocation
-                startedAt={waitingElement.startedAt}
-                name={waitingElement.nickname}
-                profileImage={writingMember?.imageUrl}
-              />
-            </LocationContainer>
-          )
-        )}
+            )}
       </Container>
 
       {isWriting && (

@@ -89,8 +89,8 @@ export class SharedTypeSafeWebSocket<
       this.connectWaitQueue.forEach((job) => job());
       this.connectWaitQueue = [];
 
+      // NOTE: onConnect의 경우 reconnect에서도 실행해야 할 작업을 등록하는 것
       this.onConnectQueue.forEach((job) => job());
-      this.onConnectQueue = [];
 
       this.isConnected = true;
       this.isConnecting = false;

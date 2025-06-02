@@ -111,7 +111,6 @@ export const Letter = ({
     window.localStorage.setItem('nowSequence', '1');
     window.localStorage.setItem('nowRepeat', '1');
     window.localStorage.setItem('totalItem', '1');
-    window.localStorage.setItem('resetTime', '');
   }, []);
 
   const renderPageContent = () => {

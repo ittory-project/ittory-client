@@ -1,15 +1,19 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import CountdownGif from '@/assets/letter_start_count.gif';
+import CountdownGif from '@/assets/letter_start_count_no_loop.gif';
 
 import { letterQuery } from '../../api/queries';
 import { Write } from '../../components/writePage/Write';
 import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
 import { usePreventBack } from '../../hooks';
+import { useIntervalRerender } from '../../hooks/useIntervalRerender';
+import { SessionLogger } from '../../utils';
+
+const logger = new SessionLogger('write');
 
 export const WritePage = () => {
   usePreventBack();
@@ -19,69 +23,35 @@ export const WritePage = () => {
   if (!letterNumId) {
     throw new Error('잘못된 접근입니다.');
   }
-  const { data: startInfo } = useSuspenseQuery(
-    letterQuery.startInfoById(letterNumId),
+  const [{ data: startInfo }, { data: elements }] = useSuspenseQueries({
+    queries: [
+      letterQuery.startInfoById(letterNumId),
+      letterQuery.elementsById(letterNumId),
+    ],
+  });
+
+  const alreadyStarted = !!elements.some((element) => element.content);
+  const startTime = elements[0].startedAt;
+  const startTimeLeft = Math.floor(
+    (new Date(startTime ?? new Date()).getTime() - new Date().getTime()) / 1000,
   );
 
-  // 초기 팝업 띄우기
-  const [showPopup, setShowPopup] = useState(true);
-  const [showCountdown, setShowCountdown] = useState(false);
-  // 편지 작성 시간 계산
-  const storedResetTime = window.localStorage.getItem('resetTime');
-  const [resetTime, setResetTime] = useState<number | null>(
-    storedResetTime ? Number(storedResetTime) : null,
+  const showWriteOrderPopup = !alreadyStarted && startTimeLeft > 4;
+  const showCountdown = startTimeLeft <= 4 && startTimeLeft >= 0;
+
+  logger.debug(
+    `showWriteOrderPopup: ${showWriteOrderPopup}\n, showCountdown: ${showCountdown}\n, startTimeLeft: ${startTimeLeft}\n, alreadyStarted: ${alreadyStarted}\n, startTime: ${startTime}`,
   );
-  // 편지 시작까지 남은 시간 계산
-  const [startCountdown, setStartCountdown] = useState<number>(10);
 
-  // 모달 띄우는 시간 설정
-  useEffect(() => {
-    if (resetTime) {
-      setShowPopup(false);
-      setShowCountdown(false);
-      return;
-    }
-    const countdownTimer = window.setInterval(() => {
-      setStartCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(countdownTimer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    const showTimer = setTimeout(() => {
-      setShowPopup(false);
-      setShowCountdown(true);
-
-      const hideTimer = setTimeout(() => {
-        setShowCountdown(false);
-        setResetTime(Date.now() + 100 * 1000);
-        window.localStorage.setItem(
-          'resetTime',
-          String(Date.now() + 100 * 1000),
-        );
-      }, 4000);
-
-      return () => {
-        clearTimeout(hideTimer);
-      };
-    }, 10000);
-
-    return () => {
-      clearTimeout(showTimer);
-      clearTimeout(countdownTimer);
-    };
-  }, []);
+  useIntervalRerender(!alreadyStarted && startTimeLeft >= 0, 1000);
 
   return (
     <Container>
-      {showPopup && (
+      {showWriteOrderPopup && (
         <WriteMainModal
           repeatCount={Number(startInfo.repeatCount)}
           elementCount={Number(startInfo.elementCount)}
-          startCountdown={startCountdown}
+          secondsLeft={startTimeLeft - 4}
         />
       )}
       {showCountdown && <Countdown src={CountdownGif} />}
@@ -114,6 +84,8 @@ const Countdown = styled.img`
 
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
+
+  object-fit: cover;
 
   background-color: rgba(0, 0, 0, 0.7);
 `;
