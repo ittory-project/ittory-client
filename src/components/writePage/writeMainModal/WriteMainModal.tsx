@@ -47,23 +47,22 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           {writeOrderList ? (
             <List>
               {writeOrderList.participants.length > 1 && (
-                <Line $itemnum={Number(writeOrderList.participants.length)} />
+                <Line
+                  $itemnum={Number(writeOrderList.participants.length * 3)}
+                />
               )}
-              {writeOrderList.participants
-                .slice()
-                .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
-                .map((participant) => (
-                  <ListItem key={participant.sequence}>
-                    {writeOrderList.participants.length > 1 && (
-                      <ListNumber>{participant.sequence}</ListNumber>
-                    )}
-                    <Avatar
-                      src={participant.imageUrl || profileBunny}
-                      alt={participant.nickname}
-                    />
-                    <Name>{participant.nickname}</Name>
-                  </ListItem>
-                ))}
+              {writeOrderList.participants.map((participant) => (
+                <ListItem key={participant.sequence}>
+                  {writeOrderList.participants.length > 1 && (
+                    <ListNumber>{participant.sequence}</ListNumber>
+                  )}
+                  <Avatar
+                    src={participant.imageUrl || profileBunny}
+                    alt={participant.nickname}
+                  />
+                  <Name>{participant.nickname}</Name>
+                </ListItem>
+              ))}
             </List>
           ) : (
             <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
