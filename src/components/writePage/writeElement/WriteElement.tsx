@@ -35,7 +35,10 @@ export const WriteElement = ({
   };
 
   const handleSubmit = async () => {
-    if (text.length <= 0) {
+    if (
+      text.length < Policies.LETTER_CONTENT_MIN_LENGTH ||
+      text.length > Policies.LETTER_CONTENT_MAX_LENGTH
+    ) {
       return;
     }
 
@@ -85,7 +88,7 @@ export const WriteElement = ({
               onChange={(e) => {
                 const validated = sliceStringWithEmoji(
                   e.target.value,
-                  Policies.LETTER_CONTENT_MAX_LENGTH,
+                  Policies.LETTER_CONTENT_WRITE_MAX_LENGTH,
                 );
                 setText(validated.value);
               }}
@@ -189,7 +192,8 @@ const Header = styled.div<{ $isMobile: boolean }>`
   align-self: stretch;
   justify-content: space-between;
 
-  ${({ $isMobile }) => ($isMobile ? 'width:90%;' : 'width:88%;')}
+  /* FIXME: 추후 absolute 제거 */
+  ${({ $isMobile }) => ($isMobile ? 'width:90%;' : 'width:86%;')}
   height: 44px;
 
   margin: 10px 20px 5px 20px;
@@ -314,10 +318,9 @@ const WriteTa = styled.textarea`
   align-items: flex-start;
   align-self: stretch;
 
-  width: 80%;
-
   overflow: hidden;
 
+  font-family: var(--Typography-family-body);
   font-size: 14px;
 
   color: #000;

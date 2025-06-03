@@ -1,21 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
-import { Swiper, SwiperClass, SwiperRef, SwiperSlide } from 'swiper/react';
+import { Mousewheel } from 'swiper/modules';
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 
-import bg1 from '@/assets/connect/bg1.png';
-import bg2 from '@/assets/connect/bg2.png';
-import bg3 from '@/assets/connect/bg3.png';
-import bg4 from '@/assets/connect/bg4.png';
-import bg5 from '@/assets/connect/bg5.png';
 import photo from '@/assets/photo.svg';
 import X from '@/assets/x.svg';
 
 interface Props {
   onSubmit: (selectNumber: number) => Promise<void>;
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
-  member: number;
-  coverId: number;
+  numOfParticipants: number;
 }
 
 interface SlideContentProps {
@@ -25,21 +20,11 @@ interface SlideContentProps {
   $totalSlides: number;
 }
 
-export const Count = ({ onSubmit, setViewCount, member, coverId }: Props) => {
-  const length = Math.floor(50 / member);
+export const Count = ({ onSubmit, setViewCount, numOfParticipants }: Props) => {
+  const length = Math.floor(50 / numOfParticipants);
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [selectNumber, setSelectNumber] = useState<number>(1);
-  const backgroundImages: { [key: number]: string } = {
-    1: bg1,
-    2: bg2,
-    3: bg3,
-    4: bg4,
-    5: bg5,
-  };
-  const [background, setBackground] = useState<string | null>(
-    backgroundImages[coverId] || null,
-  );
 
   useEffect(() => {
     setSelectNumber(activeIndex + 1);
@@ -49,96 +34,15 @@ export const Count = ({ onSubmit, setViewCount, member, coverId }: Props) => {
     setViewCount(false);
   };
 
-  useEffect(() => {
-    if (!background) {
-      switch (coverId) {
-        case 1:
-          setBackground(bg1);
-          break;
-        case 2:
-          setBackground(bg2);
-          break;
-        case 3:
-          setBackground(bg3);
-          break;
-        case 4:
-          setBackground(bg4);
-          break;
-        case 5:
-          setBackground(bg5);
-          break;
-      }
-    }
-  }, []);
-
-  const swiperRef = useRef<SwiperRef | null>(null);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // 스크롤 이벤트를 통해 슬라이드 이동
-  const handleScroll = (event: WheelEvent) => {
-    event.preventDefault();
-
-    // 이미 타이머가 설정되어 있으면 현재 이벤트는 무시
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-
-    // 타이머를 설정해서 디바운스 적용
-    scrollTimeoutRef.current = setTimeout(() => {
-      if (event.deltaY > 0) {
-        // 아래로 스크롤 (다음 슬라이드)
-        if (swiperRef.current) {
-          swiperRef.current.swiper.slideNext();
-        }
-      } else {
-        // 위로 스크롤 (이전 슬라이드)
-        if (swiperRef.current) {
-          swiperRef.current.swiper.slidePrev();
-        }
-      }
-    }, 12);
-  };
-
-  useEffect(() => {
-    // 스크롤 이벤트 리스너 추가
-    window.addEventListener('wheel', handleScroll, { passive: false });
-
-    // 컴포넌트가 unmount될 때 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener('wheel', handleScroll);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, []);
-
   // Swiper 슬라이드 변경 시 호출되는 함수
   const onSlideChange = (swiper: SwiperClass) => {
     setActiveIndex(swiper.realIndex);
   };
 
-  useEffect(() => {
-    // activeIndex가 변경될 때만 Swiper로 이동하도록 조건 추가
-    if (
-      swiperRef.current &&
-      swiperRef.current.swiper.realIndex !== activeIndex
-    ) {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-
-      scrollTimeoutRef.current = setTimeout(() => {
-        if (swiperRef.current) {
-          swiperRef.current.swiper.slideTo(activeIndex);
-        }
-      }, -50); // 지연 후 슬라이드 이동
-    }
-  }, [activeIndex]);
-
   return (
     <ModalContainer>
       <Header>
-        <Title>{member}명이서 몇 번씩 이어 쓸까요?</Title>
+        <Title>{numOfParticipants}명이서 몇 번씩 이어 쓸까요?</Title>
         <Cancel onClick={handleCancel}>
           <img
             src={X}
@@ -158,16 +62,17 @@ export const Count = ({ onSubmit, setViewCount, member, coverId }: Props) => {
               style={{ width: '280px', height: '186px', overflow: 'hidden' }}
             >
               <Swiper
-                direction={'vertical'}
+                direction="vertical"
                 slidesPerView={5}
                 loop={true}
                 slideToClickedSlide={true}
-                loopAdditionalSlides={1}
+                mousewheel={{
+                  sensitivity: 2,
+                }}
                 centeredSlides={true}
+                modules={[Mousewheel]}
                 onSlideChange={onSlideChange}
                 style={{ height: '100%' }}
-                ref={swiperRef}
-                speed={129.5}
               >
                 {list.map((no, index) => (
                   <SwiperSlide key={no} style={{ height: 'calc(15rem / 4)' }}>
@@ -196,7 +101,7 @@ export const Count = ({ onSubmit, setViewCount, member, coverId }: Props) => {
           <TitleTxt>만들어질 그림 개수</TitleTxt>
           <TotalTxt>
             <span style={{ fontFamily: 'GmarketSans', marginTop: '2.8px' }}>
-              {selectNumber * member}
+              {selectNumber * numOfParticipants}
             </span>
             <span style={{ fontFamily: 'SUIT' }}>개</span>
           </TotalTxt>

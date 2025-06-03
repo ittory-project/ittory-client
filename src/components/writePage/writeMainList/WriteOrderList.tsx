@@ -17,14 +17,13 @@ export const WriteOrderList = ({
   elements,
   isMyTurnToWrite,
   nowItemRef,
-}: ListComponentProps & { nowItemRef: React.RefObject<HTMLDivElement> }) => {
+}: ListComponentProps) => {
   return (
     <Wrapper>
       <Line />
       <ListItem>
         {elements.map((item, index) => {
-          const isNowItem =
-            item.content === null && item.startedAt !== null && isMyTurnToWrite;
+          const isNowItem = item.startedAt !== null && item.content === null;
           return (
             <div key={item.elementId} ref={isNowItem ? nowItemRef : undefined}>
               {item.content && item.nickname && (

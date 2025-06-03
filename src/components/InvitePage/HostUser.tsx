@@ -5,6 +5,9 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import styled from 'styled-components';
 
+import { postRepeatCount } from '@/api/service/LetterService';
+import { postRandom } from '@/api/service/ParticipantService';
+import { getWebSocketApi } from '@/api/websockets';
 import bright from '@/assets/border.svg';
 import crown from '@/assets/crown.svg';
 import deletebtn from '@/assets/delete.svg';
@@ -25,9 +28,6 @@ import { CountPopup } from './Count/CountPopup';
 import { Delete } from './Delete/Delete';
 import { Exit } from './Exit';
 import { UserGuide } from './UserGuide';
-import { postRepeatCount } from '@/api/service/LetterService';
-import { postRandom } from '@/api/service/ParticipantService';
-import { getWebSocketApi } from '@/api/websockets';
 
 const logger = new SessionLogger('invite');
 
@@ -289,7 +289,7 @@ export const HostUser = ({
             <Count
               coverId={letterInfo.coverTypeId}
               setViewCount={setViewCount}
-              member={items.length}
+              numOfParticipants={items.length}
               onSubmit={handleSubmit}
             />
           )}

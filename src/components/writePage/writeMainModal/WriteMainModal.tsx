@@ -10,13 +10,13 @@ import { letterQuery } from '../../../api/queries';
 interface WriteModalProps {
   repeatCount: number;
   elementCount: number;
-  startCountdown: number;
+  secondsLeft: number;
 }
 
 export const WriteMainModal: React.FC<WriteModalProps> = ({
   repeatCount,
   elementCount,
-  startCountdown,
+  secondsLeft,
 }) => {
   const { letterId } = useParams();
   const letterNumId = Number(letterId);
@@ -47,23 +47,22 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           {writeOrderList ? (
             <List>
               {writeOrderList.participants.length > 1 && (
-                <Line $itemnum={Number(writeOrderList.participants.length)} />
+                <Line
+                  $itemnum={Number(writeOrderList.participants.length * 3)}
+                />
               )}
-              {writeOrderList.participants
-                .slice()
-                .sort((a, b) => a.sequence - b.sequence) // sequence대로 정렬
-                .map((participant) => (
-                  <ListItem key={participant.sequence}>
-                    {writeOrderList.participants.length > 1 && (
-                      <ListNumber>{participant.sequence}</ListNumber>
-                    )}
-                    <Avatar
-                      src={participant.imageUrl || profileBunny}
-                      alt={participant.nickname}
-                    />
-                    <Name>{participant.nickname}</Name>
-                  </ListItem>
-                ))}
+              {writeOrderList.participants.map((participant) => (
+                <ListItem key={participant.sequence}>
+                  {writeOrderList.participants.length > 1 && (
+                    <ListNumber>{participant.sequence}</ListNumber>
+                  )}
+                  <Avatar
+                    src={participant.imageUrl || profileBunny}
+                    alt={participant.nickname}
+                  />
+                  <Name>{participant.nickname}</Name>
+                </ListItem>
+              ))}
             </List>
           ) : (
             <PopupTitleDetail>유저가 존재하지 않습니다.</PopupTitleDetail>
@@ -71,7 +70,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
         </PopupList>
         <ClockText>
           <ClockIcon src={clockGray} />
-          {Math.floor(Number(startCountdown))}초 후 편지 시작
+          {Math.floor(Number(secondsLeft))}초 후 편지 시작
         </ClockText>
       </Popup>
     </Overlay>
@@ -221,22 +220,25 @@ const ListItem = styled.li`
 `;
 
 const ListNumber = styled.div`
-  gap: 10px;
+  box-sizing: border-box;
+  display: flex;
+
   align-items: center;
   justify-content: center;
 
-  width: var(--Typography-size-m, 18px);
-  height: var(--Typography-size-m, 18px);
+  width: 18px;
+  height: 18px;
 
-  padding: 4px var(--Border-Radius-radius_100, 4px);
+  padding: 4px;
+  margin-left: 4px;
 
-  font-family: var(--Typography-family-number, 'Gmarket Sans');
-  font-size: 12px;
-  font-style: bold;
+  font-family: var(--Typography-family-number, 'GmarketSans');
+  font-size: 10px;
+  font-style: normal;
+  font-weight: bold;
 
   line-height: var(--Typography-line_height-2xs, 16px); /* 160% */
 
-  color: var(--color-black-white-white, #fff);
   color: var(--color-black-white-white, #fff);
 
   text-align: center;
@@ -250,7 +252,7 @@ const Avatar = styled.img`
   width: 36px;
   height: 36px;
 
-  margin: 0 6px 0 20px;
+  margin: 0 6px 0 16px;
 
   border-radius: 50%;
 `;
@@ -275,7 +277,7 @@ const Line = styled.div<{ $itemnum: number }>`
   left: 12px;
   z-index: 1;
 
-  height: ${({ $itemnum }) => `calc(${$itemnum} * 48px - 35px)`};
+  height: ${({ $itemnum }) => `calc(${$itemnum - 1} * 48px - 4px)`};
 
   border-left: 1.5px dashed rgba(111, 176, 255, 0.5);
 `;
