@@ -1,14 +1,14 @@
 import { Suspense } from 'react';
 
 import { useSuspenseQueries } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 import CountdownGif from '@/assets/letter_start_count_no_loop.gif';
 
 import { letterQuery } from '../../api/queries';
 import { Write } from '../../components/writePage/Write';
-import { WriteMainModal } from '../../components/writePage/writeMainModal/WriteMainModal';
+import { WriteOrderPreviewModal } from '../../components/writePage/WriteOrderPreviewModal/WriteOrderPreviewModal';
 import { usePreventBack } from '../../hooks';
 import { useIntervalRerender } from '../../hooks/useIntervalRerender';
 import { SessionLogger } from '../../utils';
@@ -48,7 +48,7 @@ export const WritePage = () => {
   return (
     <Container>
       {showWriteOrderPopup && (
-        <WriteMainModal
+        <WriteOrderPreviewModal
           repeatCount={Number(startInfo.repeatCount)}
           elementCount={Number(startInfo.elementCount)}
           secondsLeft={startTimeLeft - 4}

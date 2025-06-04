@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 import prev from '@/assets/prev.svg';

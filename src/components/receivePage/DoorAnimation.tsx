@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled, { keyframes } from 'styled-components';
 
 import doorKnobSvg from '@/assets/doorknob.svg';

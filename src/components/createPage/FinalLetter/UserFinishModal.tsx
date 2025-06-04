@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import Player from 'lottie-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import animation from '@/assets/confetti.json';

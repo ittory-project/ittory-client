@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import ArrowPrev from '@/assets/pagination/arrow_back.svg?react';

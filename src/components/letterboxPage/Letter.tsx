@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import ChevronLeft from '@/assets/letterbox/chevron_left.svg?react';

@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import logout from '@/assets/logout.svg';

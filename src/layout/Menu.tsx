@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import ask from '@/assets/menu/ask.svg';

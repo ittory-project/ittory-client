@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 import profileBunny from '@/assets/common/profile_bunny.svg';
@@ -7,17 +7,17 @@ import clockGray from '@/assets/write/clock_gray.svg';
 
 import { letterQuery } from '../../../api/queries';
 
-interface WriteModalProps {
+interface WriteOrderPreviewModalProps {
   repeatCount: number;
   elementCount: number;
   secondsLeft: number;
 }
 
-export const WriteMainModal: React.FC<WriteModalProps> = ({
+export const WriteOrderPreviewModal = ({
   repeatCount,
   elementCount,
   secondsLeft,
-}) => {
+}: WriteOrderPreviewModalProps) => {
   const { letterId } = useParams();
   const letterNumId = Number(letterId);
   const { data: writeOrderList } = useSuspenseQuery(
@@ -47,9 +47,7 @@ export const WriteMainModal: React.FC<WriteModalProps> = ({
           {writeOrderList ? (
             <List>
               {writeOrderList.participants.length > 1 && (
-                <Line
-                  $itemnum={Number(writeOrderList.participants.length * 3)}
-                />
+                <Line $itemnum={writeOrderList.participants.length} />
               )}
               {writeOrderList.participants.map((participant) => (
                 <ListItem key={participant.sequence}>
@@ -154,7 +152,6 @@ const PopupList = styled.div`
   align-items: center;
 
   width: 60%;
-  max-height: 50vh;
 
   padding: 0px var(--Typography-line_height-l, 40px) 16px
     var(--Typography-line_height-l, 40px);
@@ -201,8 +198,6 @@ const List = styled.ul`
 
   padding: 0;
   margin: 0;
-
-  overflow-y: auto;
 
   &::-webkit-scrollbar {
     display: none;

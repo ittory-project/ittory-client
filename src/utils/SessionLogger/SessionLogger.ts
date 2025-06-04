@@ -7,6 +7,7 @@ type Feature =
   | 'create'
   | 'home'
   | 'invite'
+  | 'join'
   | 'letterbox'
   | 'login'
   | 'share'

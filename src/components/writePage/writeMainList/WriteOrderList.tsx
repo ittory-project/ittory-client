@@ -9,23 +9,25 @@ import { WriteOrderNowItem } from './WriteOrderNowItem';
 interface ListComponentProps {
   elements: ElementResponse[];
   isMyTurnToWrite: boolean;
-  nowItemRef: React.MutableRefObject<HTMLDivElement | null>;
+  nowElementRef: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-// 편지 작성 페이지의 리스트
 export const WriteOrderList = ({
   elements,
   isMyTurnToWrite,
-  nowItemRef,
+  nowElementRef,
 }: ListComponentProps) => {
   return (
     <Wrapper>
       <Line />
       <ListItem>
         {elements.map((item, index) => {
-          const isNowItem = item.startedAt !== null && item.content === null;
+          const isNowElement = item.startedAt !== null && item.content === null;
           return (
-            <div key={item.elementId} ref={isNowItem ? nowItemRef : undefined}>
+            <div
+              key={item.elementId}
+              ref={isNowElement ? nowElementRef : undefined}
+            >
               {item.content && item.nickname && (
                 <WriteOrderActivateItem
                   key={item.elementId}

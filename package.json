@@ -35,7 +35,7 @@
     "react-helmet-async": "^2.0.5",
     "react-redux": "^9.1.2",
     "react-responsive": "^10.0.0",
-    "react-router-dom": "^6.25.1",
+    "react-router": "^7.6.2",
     "react-swipeable": "^7.0.1",
     "redux-persist": "^6.0.0",
     "styled-components": "^6.1.12",
@@ -67,10 +67,13 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.8.0",
     "lefthook": "^1.11.6",
+    "msw": "^2.9.0",
+    "msw-storybook-addon": "^2.0.4",
     "postcss-styled-syntax": "^0.7.1",
     "prettier": "^3.3.3",
     "sass": "^1.80.6",
     "storybook": "^9.0.0",
+    "storybook-addon-remix-react-router": "^5.0.0",
     "stylelint": "^16.18.0",
     "stylelint-config-recess-order": "^6.0.0",
     "stylelint-config-standard": "^38.0.0",
@@ -80,5 +83,10 @@
     "vite-plugin-mkcert": "^1.17.8",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

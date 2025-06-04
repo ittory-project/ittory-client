@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 
 import btnClose from '@/assets/btn_close_white.svg';
