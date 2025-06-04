@@ -5,7 +5,9 @@ import { reactRouterParameters } from 'storybook-addon-remix-react-router';
 import styled from 'styled-components';
 
 import {
+  MOCK_FIVE_PARTICIPANTS,
   MOCK_PARTICIPANTS_DEFAULT,
+  MOCK_SINGLE_PARTICIPANT,
   letterParticipantsApiMocks,
 } from '@/mocks/api/letter-participants-api-mocks';
 
@@ -38,11 +40,6 @@ const meta: Meta<typeof WriteOrderPreviewModal> = {
     ),
   ],
   parameters: {
-    msw: {
-      handlers: [
-        letterParticipantsApiMocks(MOCK_LETTER_ID, MOCK_PARTICIPANTS_DEFAULT),
-      ],
-    },
     layout: 'fullscreen',
     reactRouter: reactRouterParameters({
       routing: {
@@ -61,49 +58,55 @@ export default meta;
 type Story = StoryObj<typeof WriteOrderPreviewModal>;
 
 export const Default: Story = {
+  parameters: {
+    msw: {
+      handlers: {
+        letterParticipants: letterParticipantsApiMocks(
+          MOCK_LETTER_ID,
+          MOCK_PARTICIPANTS_DEFAULT,
+        ),
+      },
+    },
+  },
   args: {
-    repeatCount: 2,
-    elementCount: 6,
-    secondsLeft: 30,
+    repeatCount: 1,
+    elementCount: 1,
+    secondsLeft: 1,
   },
 };
 
 export const SingleParticipant: Story = {
-  args: {
-    repeatCount: 3,
-    elementCount: 3,
-    secondsLeft: 15,
+  parameters: {
+    msw: {
+      handlers: {
+        letterParticipants: letterParticipantsApiMocks(
+          MOCK_LETTER_ID,
+          MOCK_SINGLE_PARTICIPANT,
+        ),
+      },
+    },
   },
-};
-
-export const ManyParticipants: Story = {
-  args: {
-    repeatCount: 2,
-    elementCount: 12,
-    secondsLeft: 45,
-  },
-};
-
-export const ParticipantsWithoutImages: Story = {
   args: {
     repeatCount: 1,
-    elementCount: 3,
-    secondsLeft: 60,
+    elementCount: 1,
+    secondsLeft: 1,
   },
 };
 
-export const HighRepeatCount: Story = {
-  args: {
-    repeatCount: 5,
-    elementCount: 15,
-    secondsLeft: 10,
+export const MaxParticipants: Story = {
+  parameters: {
+    msw: {
+      handlers: {
+        letterParticipants: letterParticipantsApiMocks(
+          MOCK_LETTER_ID,
+          MOCK_FIVE_PARTICIPANTS,
+        ),
+      },
+    },
   },
-};
-
-export const AlmostStarting: Story = {
   args: {
-    repeatCount: 2,
-    elementCount: 6,
-    secondsLeft: 3,
+    repeatCount: 1,
+    elementCount: 1,
+    secondsLeft: 1,
   },
 };
