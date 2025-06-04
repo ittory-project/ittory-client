@@ -7,17 +7,17 @@ import clockGray from '@/assets/write/clock_gray.svg';
 
 import { letterQuery } from '../../../api/queries';
 
-interface WriteModalProps {
+interface WriteOrderPreviewModalProps {
   repeatCount: number;
   elementCount: number;
   secondsLeft: number;
 }
 
-export const WriteMainModal: React.FC<WriteModalProps> = ({
+export const WriteOrderPreviewModal = ({
   repeatCount,
   elementCount,
   secondsLeft,
-}) => {
+}: WriteOrderPreviewModalProps) => {
   const { letterId } = useParams();
   const letterNumId = Number(letterId);
   const { data: writeOrderList } = useSuspenseQuery(
