@@ -3,7 +3,6 @@ import { HttpResponse } from 'msw';
 
 import { LetterPartiListGetResponse } from '@/api/model/LetterModel';
 
-// Mock 데이터
 export const MOCK_PARTICIPANTS_DEFAULT: LetterPartiListGetResponse = {
   participants: [
     {
@@ -38,7 +37,7 @@ export const MOCK_SINGLE_PARTICIPANT: LetterPartiListGetResponse = {
   ],
 };
 
-export const MOCK_MANY_PARTICIPANTS: LetterPartiListGetResponse = {
+export const MOCK_FIVE_PARTICIPANTS: LetterPartiListGetResponse = {
   participants: [
     {
       sequence: 1,
@@ -70,33 +69,6 @@ export const MOCK_MANY_PARTICIPANTS: LetterPartiListGetResponse = {
       nickname: '정수연',
       imageUrl: undefined,
     },
-    {
-      sequence: 6,
-      memberId: 6,
-      nickname: '장민호',
-      imageUrl: undefined,
-    },
-  ],
-};
-
-export const MOCK_PARTICIPANTS_WITHOUT_IMAGES: LetterPartiListGetResponse = {
-  participants: [
-    {
-      sequence: 1,
-      memberId: 1,
-      nickname: '이미지없는사용자',
-    },
-    {
-      sequence: 2,
-      memberId: 2,
-      nickname: '김테스트',
-      imageUrl: undefined,
-    },
-    {
-      sequence: 3,
-      memberId: 3,
-      nickname: '매우긴닉네임을가진사용자입니다',
-    },
   ],
 };
 
@@ -107,12 +79,9 @@ export const letterParticipantsApiMocks = (
   const serverUrl = import.meta.env.VITE_SERVER_URL;
   const fetchUrl = `${serverUrl}/api/letter/participant/${letterId}`;
 
-  return http.get(
-    fetchUrl,
-    () => {
-      return HttpResponse.json({
-        data: payload,
-      });
-    },
+  return http.get(fetchUrl, () =>
+    HttpResponse.json({
+      data: payload,
+    }),
   );
 };
