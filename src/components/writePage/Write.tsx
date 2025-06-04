@@ -61,8 +61,8 @@ export const Write = () => {
 
   const [isWriting, setIsWriting] = useState(false);
 
-  const nowItemRef = useRef<HTMLDivElement | null>(null);
-  const [, setIsNowItemVisible] = useState(true);
+  const nowElementRef = useRef<HTMLDivElement | null>(null);
+  const elementListRef = useRef<HTMLDivElement | null>(null);
 
   const openWritingDialog = () => {
     setIsWriting(true);
@@ -169,31 +169,30 @@ export const Write = () => {
     };
   }, [isWriting]);
 
-  const handleScrollToNowItem = () => {
-    nowItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const scrollToFocusNowElement = () => {
+    if (!nowElementRef.current || !elementListRef.current) {
+      return;
+    }
+
+    // NOTE: getBoundingClientRect() 함수는 뷰포트 상 좌표를 반환, 뷰포트 위로 이탈한 경우 음수가 됨
+    const nowElementY = nowElementRef.current.getBoundingClientRect().top;
+    const elementListY = elementListRef.current.getBoundingClientRect().top;
+    const listScrollTop = elementListRef.current.scrollTop; // NOTE: 스크롤을 내릴수록 양수로 커지는 값
+
+    const STICKY_HEADER_HEIGHT = 70;
+    const elementYInList = nowElementY - elementListY;
+    const yAboveCurrentElement =
+      listScrollTop + elementYInList - STICKY_HEADER_HEIGHT;
+
+    elementListRef.current.scrollTo({
+      top: yAboveCurrentElement,
+      behavior: 'smooth',
+    });
   };
 
   const writingMember = participants.participants.find(
     (participant) => participant.memberId === waitingElement?.memberId,
   );
-
-  // 위치 아이콘 클릭 시 이동
-  useEffect(() => {
-    if (!isMyTurnToWrite || !nowItemRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsNowItemVisible(entry.isIntersecting),
-      { threshold: 1 }, // 완전히 보여야 true
-    );
-
-    observer.observe(nowItemRef.current);
-
-    return () => {
-      if (nowItemRef.current) {
-        observer.unobserve(nowItemRef.current);
-      }
-    };
-  }, [nowItemRef.current]);
 
   return (
     <>
@@ -208,19 +207,20 @@ export const Write = () => {
         {isExitAlertOpen && exitUser && <WriteQuitAlert name={exitUser} />}
       </AlertContainer>
       <Container>
-        <StickyHeader>
-          <WriteOrderTitle
-            writeOrderList={participants.participants}
-            title={startInfo.title}
-          />
-        </StickyHeader>
         <ScrollableOrderList
+          ref={elementListRef}
           style={{ overflowY: isWriting ? 'hidden' : 'auto' }}
         >
+          <StickyHeader>
+            <WriteOrderTitle
+              writeOrderList={participants.participants}
+              title={startInfo.title}
+            />
+          </StickyHeader>
           <WriteOrderList
             elements={elements}
             isMyTurnToWrite={isMyTurnToWrite}
-            nowItemRef={nowItemRef}
+            nowElementRef={nowElementRef}
           />
         </ScrollableOrderList>
         {isMyTurnToWrite
@@ -234,7 +234,7 @@ export const Write = () => {
               </ButtonContainer>
             )
           : waitingElement?.nickname && (
-              <LocationContainer onClick={handleScrollToNowItem}>
+              <LocationContainer onClick={scrollToFocusNowElement}>
                 <WriteLocation
                   startedAt={waitingElement.startedAt}
                   name={waitingElement.nickname}
