@@ -9,6 +9,7 @@ import {
 
 import { ignoreDevResources } from '../src/mocks';
 import { ReactQueryClientProvider } from '../src/react-query-provider';
+import { ResetQueries } from './reset-queries';
 
 initializeMSW({
   onUnhandledRequest: ignoreDevResources,
@@ -20,6 +21,7 @@ const preview: Preview = {
     (Story) => (
       <ReactQueryClientProvider>
         <Story />
+        <ResetQueries />
       </ReactQueryClientProvider>
     ),
   ],
