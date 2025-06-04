@@ -1,7 +1,7 @@
 import React from 'react';
 
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { ApiErrorCodes } from '@/api/config/errorCodes';

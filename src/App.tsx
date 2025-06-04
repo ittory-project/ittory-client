@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from 'react';
 
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router';
 
 import './App.css';
 import { ApiErrorBoundary } from './components/common/ErrorBoundary';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 export const usePreventBack = () => {
   const location = useLocation();

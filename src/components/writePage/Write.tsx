@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 
 import { ElementResponse } from '../../api/model/ElementModel';

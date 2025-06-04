@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import { useSuspenseQueries } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 import CountdownGif from '@/assets/letter_start_count_no_loop.gif';

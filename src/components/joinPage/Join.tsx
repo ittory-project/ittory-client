@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useSuspenseQueries } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 
 import { sliceStringWithEmoji } from '@/utils';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 import { kakaoLogin } from '../../api/config/kakaoLogin';
 import { SessionLogger, SessionStore } from '../../utils';
