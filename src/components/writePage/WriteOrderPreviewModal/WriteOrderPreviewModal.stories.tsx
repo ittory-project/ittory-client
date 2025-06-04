@@ -21,8 +21,9 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
+  /* iPhone SE 기준 */
+  width: 375px;
+  height: 667px;
 `;
 
 const MOCK_LETTER_ID = 1;
