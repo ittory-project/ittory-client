@@ -7,6 +7,7 @@ import {
   withRouter,
 } from 'storybook-addon-remix-react-router';
 
+import '../src/index.css';
 import { ignoreDevResources } from '../src/mocks';
 import { ReactQueryClientProvider } from '../src/react-query-provider';
 import { ResetQueries } from './reset-queries';

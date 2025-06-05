@@ -27,6 +27,7 @@ const PATHS_IGNORED_BY_MSW = [
   '.json',
   'favicon',
   'fonts',
+  'amazonaws',
 ];
 
 type OnUnHandledRequest = SharedOptions['onUnhandledRequest'];

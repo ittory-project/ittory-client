@@ -62,11 +62,11 @@ const Wrapper = styled.div`
 
 const Line = styled.div`
   position: absolute;
-  top: 0px;
+  top: 50px;
   left: 30px;
   z-index: 1;
 
-  height: 100%;
+  height: calc(100% - 100px);
 
   border-left: 1px dashed #868e96;
 `;
