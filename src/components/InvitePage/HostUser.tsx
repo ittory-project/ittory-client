@@ -122,9 +122,11 @@ export const HostUser = ({
 
   // 모바일, 데스크톱 화면 구분해서 공유하게 함
   const handleShare = async () => {
+    const shareText = `${items[0].nickname}님이 ”${letterInfo.title}“ 편지에 초대했습니다!`;
+
     if (letterInfo) {
       if (!isMobileDevice()) {
-        const shareTextPc = `${getHostUrl()}/join/${letterId}`;
+        const shareTextPc = `${shareText}\n${getHostUrl()}/join/${letterId}`;
         if (
           navigator.clipboard &&
           typeof navigator.clipboard.writeText === 'function'
@@ -145,6 +147,7 @@ export const HostUser = ({
         // 모바일이면
         try {
           await navigator.share({
+            text: shareText,
             url: `${getHostUrl()}/join/${letterId}`,
           });
           logger.debug('공유 성공');
