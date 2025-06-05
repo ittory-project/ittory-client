@@ -9,12 +9,10 @@ import btnClose from '@/assets/btn_close_white.svg';
 
 import { AppDispatch, clearData, clearOrderData } from '../../api/config/state';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
-import { SessionLogger, getHostUrl, isMobileDevice } from '../../utils';
+import { shareReceiveLetter } from '../../features/share';
 import { Pagination } from '../common/Pagination';
 import { ReceiveLetterContents } from '../receivePage/ReceiveLetterContents';
 import { ReceiveLetterCover } from '../receivePage/ReceiveLetterCover';
-
-const logger = new SessionLogger('share');
 
 function Query() {
   return new URLSearchParams(useLocation().search);
@@ -86,67 +84,17 @@ export const ShareLetter = () => {
     navigate('/');
   };
 
-  const fallbackCopyTextToClipboard = (text: string) => {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed'; // 화면에서 보이지 않도록 고정
-    textArea.style.top = '-9999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      const successful = document.execCommand('copy');
-      if (successful) {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } else {
-        alert('텍스트 복사에 실패했습니다.');
-      }
-    } catch (error) {
-      logger.error('텍스트 복사 실패', error);
-      alert('텍스트 복사에 실패했습니다.');
-    } finally {
-      document.body.removeChild(textArea);
-    }
-  };
-
   const createShare = async () => {
-    const encodedReceiverName = encodeURIComponent(letterInfo.receiverName);
-
-    const shareText = `To. ${letterInfo.receiverName}\n${letterInfo.title}\nFrom. ${letterInfo.participantNames
-      .map((element) => element)
-      .join(', ')}`;
-
-    if (!isMobileDevice()) {
-      const shareTextPc = `${shareText}\n${getHostUrl()}/receive/${letterId}?to=${encodedReceiverName}`;
-      if (
-        navigator.clipboard &&
-        typeof navigator.clipboard.writeText === 'function'
-      ) {
-        try {
-          await navigator.clipboard.writeText(shareTextPc);
-          setCopied(true);
-          setTimeout(() => setCopied(false), 3000);
-        } catch (error) {
-          logger.error('공유 실패: ', error);
-          fallbackCopyTextToClipboard(shareTextPc);
-        }
-      } else {
-        // Safari 호환용 대체 복사 방식
-        fallbackCopyTextToClipboard(shareTextPc);
-      }
-    } else {
-      try {
-        await navigator.share({
-          text: shareText,
-          url: `${getHostUrl()}/receive/${letterId}?to=${encodedReceiverName}`,
-        });
-        logger.debug('공유 성공');
-      } catch (e) {
-        logger.debug('공유 실패', e);
-      }
-    }
+    await shareReceiveLetter({
+      letterId: letterNumId,
+      receiverName: letterInfo.receiverName,
+      title: letterInfo.title,
+      participantNames: letterInfo.participantNames,
+      onCopySuccess: () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      },
+    });
   };
 
   return (
