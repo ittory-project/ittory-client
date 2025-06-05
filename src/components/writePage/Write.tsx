@@ -4,6 +4,8 @@ import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 
+import { Policies } from '@/constants';
+
 import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
@@ -26,20 +28,31 @@ export const Write = () => {
   const wsApi = getWebSocketApi();
   const { letterId: _letterId } = useParams();
   const letterId = Number(_letterId);
+
+  if (!letterId) {
+    throw new Error('존재하지 않는 편지입니다.');
+  }
+
   const [
     { data: myInfo },
     { data: startInfo },
+    { data: letterDetailInfo },
     { data: elements },
     { data: participants },
   ] = useSuspenseQueries({
     queries: [
       userQuery.myInfo(),
       letterQuery.startInfoById(letterId),
+      letterQuery.detailById(letterId),
       letterQuery.elementsById(letterId),
       letterQuery.participantsByIdInSequenceOrder(letterId),
     ],
   });
 
+  const isWholeWritingFinished =
+    letterDetailInfo.finishedAt &&
+    new Date().getTime() - new Date(letterDetailInfo.finishedAt).getTime() >=
+      Policies.LETTER_WRITE_DONE_DIALOG_SHOW_TIME;
   const waitingElement = elements.find((element) => element.content === null);
   const isRoomMaster =
     participants.participants[0]?.memberId === myInfo.memberId;
@@ -93,11 +106,6 @@ export const Write = () => {
     });
   };
 
-  // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
-  if (!letterId) {
-    throw 'Error: 잘못된 접근입니다.';
-  }
-
   useEffect(() => {
     wsApi.addOnConnectJob(refreshOnWsReconnect);
 
@@ -145,7 +153,7 @@ export const Write = () => {
         // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
         setTimeout(() => {
           navigate(`/share/${letterId}?page=1`);
-        }, 5000);
+        }, Policies.LETTER_WRITE_DONE_DIALOG_SHOW_TIME);
       },
     });
 
@@ -193,6 +201,11 @@ export const Write = () => {
   const writingMember = participants.participants.find(
     (participant) => participant.memberId === waitingElement?.memberId,
   );
+
+  if (isWholeWritingFinished) {
+    navigate(`/share/${letterId}?page=1`);
+    return null;
+  }
 
   return (
     <>
