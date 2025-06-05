@@ -23,8 +23,8 @@ import { LetterPartiItem } from '../../api/model/LetterModel';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
 import { getHostUrl, isMobileDevice } from '../../utils';
 import { SessionLogger } from '../../utils/SessionLogger';
-import { Count } from './Count/Count';
-import { CountPopup } from './Count/CountPopup';
+import { CountWheelPicker } from './CountWheelPicker/CountWheelPicker';
+import { CountWheelPickerPopup } from './CountWheelPicker/CountWheelPickerPopup';
 import { Delete } from './Delete/Delete';
 import { Exit } from './Exit';
 import { UserGuide } from './UserGuide';
@@ -286,7 +286,7 @@ export const HostUser = ({
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
-            <Count
+            <CountWheelPicker
               setViewCount={setViewCount}
               numOfParticipants={items.length}
               onSubmit={handleSubmit}
@@ -298,7 +298,12 @@ export const HostUser = ({
         <Delete letterId={letterId} setViewDelete={setViewDelete} />
       )}
       {viewExit && <Exit setViewExit={setViewExit} letterId={letterId} />}
-      {popup && <CountPopup setPopup={setPopup} setViewCount={setViewCount} />}
+      {popup && (
+        <CountWheelPickerPopup
+          setPopup={setPopup}
+          setViewCount={setViewCount}
+        />
+      )}
     </BackGround>
   );
 };

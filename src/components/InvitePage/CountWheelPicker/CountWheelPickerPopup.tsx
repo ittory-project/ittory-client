@@ -7,7 +7,7 @@ interface Props {
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const CountPopup = ({ setPopup, setViewCount }: Props) => {
+export const CountWheelPickerPopup = ({ setPopup, setViewCount }: Props) => {
   const handleCancel = () => {
     setPopup(false);
   };

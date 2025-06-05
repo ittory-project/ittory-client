@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Count } from './Count';
+import { CountWheelPicker } from './CountWheelPicker';
 
-const meta: Meta<typeof Count> = {
-  title: 'InvitePage/Count',
-  component: Count,
+const meta: Meta<typeof CountWheelPicker> = {
+  title: 'InvitePage/CountWheelPicker',
+  component: CountWheelPicker,
   parameters: {
     layout: 'fullscreen',
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Count>;
+type Story = StoryObj<typeof CountWheelPicker>;
 
 export const Default: Story = {
   args: {

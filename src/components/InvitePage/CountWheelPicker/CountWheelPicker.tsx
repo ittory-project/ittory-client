@@ -9,7 +9,7 @@ import X from '@/assets/x.svg';
 
 const SWIPER_CLASSNAME = 'counter-swiper';
 
-interface Props {
+interface CountWheelPickerProps {
   onSubmit: (selectNumber: number) => Promise<void>;
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
   numOfParticipants: number;
@@ -22,7 +22,11 @@ interface SlideContentProps {
   $totalSlides: number;
 }
 
-export const Count = ({ onSubmit, setViewCount, numOfParticipants }: Props) => {
+export const CountWheelPicker = ({
+  onSubmit,
+  setViewCount,
+  numOfParticipants,
+}: CountWheelPickerProps) => {
   const length = Math.floor(50 / numOfParticipants);
   const list = Array.from({ length }, (_, index) => index + 1);
   const [activeIndex, setActiveIndex] = useState<number>(0);
