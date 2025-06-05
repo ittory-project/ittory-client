@@ -287,7 +287,6 @@ export const HostUser = ({
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
             <Count
-              coverId={letterInfo.coverTypeId}
               setViewCount={setViewCount}
               numOfParticipants={items.length}
               onSubmit={handleSubmit}

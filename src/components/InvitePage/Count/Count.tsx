@@ -7,6 +7,8 @@ import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import photo from '@/assets/photo.svg';
 import X from '@/assets/x.svg';
 
+const SWIPER_CLASSNAME = 'counter-swiper';
+
 interface Props {
   onSubmit: (selectNumber: number) => Promise<void>;
   setViewCount: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,9 +36,39 @@ export const Count = ({ onSubmit, setViewCount, numOfParticipants }: Props) => {
     setViewCount(false);
   };
 
-  // Swiper 슬라이드 변경 시 호출되는 함수
   const onSlideChange = (swiper: SwiperClass) => {
     setActiveIndex(swiper.realIndex);
+  };
+
+  // NOTE: slideToClickedSlide + loop 사용 시 슬라이드가 사라지는 이슈가 있어 slideToClickedSlide 기능을 직접 구현
+  // @see https://github.com/nolimits4web/swiper/issues/7148
+  const moveSlidesOnClick = (event: React.MouseEvent) => {
+    const swiperEl = document.querySelector(
+      `.${SWIPER_CLASSNAME}`,
+    ) as HTMLElement & {
+      swiper?: SwiperClass;
+    };
+    if (!swiperEl?.swiper) {
+      return;
+    }
+
+    const { swiper } = swiperEl;
+    const clickedSlide = (event.target as HTMLElement).closest('.swiper-slide');
+    const swiperContainer = swiperEl.querySelector('.swiper-wrapper');
+
+    if (clickedSlide && swiperContainer) {
+      const slides = Array.from(swiperContainer.children);
+      const activeSlideIndex = slides.findIndex((slide) =>
+        slide.classList.contains('swiper-slide-active'),
+      );
+      const clickedSlideIndex = slides.indexOf(clickedSlide);
+
+      if (clickedSlideIndex > activeSlideIndex) {
+        swiper.slideNext();
+      } else if (clickedSlideIndex < activeSlideIndex) {
+        swiper.slidePrev();
+      }
+    }
   };
 
   return (
@@ -62,10 +94,10 @@ export const Count = ({ onSubmit, setViewCount, numOfParticipants }: Props) => {
               style={{ width: '280px', height: '186px', overflow: 'hidden' }}
             >
               <Swiper
+                className={SWIPER_CLASSNAME}
                 direction="vertical"
                 slidesPerView={5}
                 loop={true}
-                slideToClickedSlide={true}
                 mousewheel={{
                   sensitivity: 2,
                 }}
@@ -81,6 +113,7 @@ export const Count = ({ onSubmit, setViewCount, numOfParticipants }: Props) => {
                       $index={index}
                       $activeIndex={activeIndex}
                       $totalSlides={list.length}
+                      onClick={moveSlidesOnClick}
                     >
                       {no}
                     </SlideContent>
@@ -293,6 +326,8 @@ const SlideContent = styled.div<SlideContentProps>`
     }
     return '-0.08px';
   }};
+
+  cursor: pointer;
 
   opacity: ${(props) => {
     const { $index, $activeIndex, $totalSlides } = props;
