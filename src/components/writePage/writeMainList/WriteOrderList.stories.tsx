@@ -18,8 +18,8 @@ const Container = styled.div`
   height: calc(var(--vh, 1vh) * 100);
 
   padding: 10px 20px;
-  /* 키보드에 영향 안 받게 고정 */
-  overflow: hidden;
+
+  overflow: auto;
 
   background-color: #212529;
 `;
@@ -79,7 +79,7 @@ export const SingleCurrentElement: Story = {
   },
 };
 
-export const AllCompleted: Story = {
+export const MaxElements: Story = {
   args: {
     elements: MOCK_ELEMENTS_ALL_COMPLETED,
     isMyTurnToWrite: false,
