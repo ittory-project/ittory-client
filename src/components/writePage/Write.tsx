@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
+
+import { Policies } from '@/constants';
 
 import { ElementResponse } from '../../api/model/ElementModel';
 import { letterQuery, userQuery } from '../../api/queries';
@@ -26,20 +28,31 @@ export const Write = () => {
   const wsApi = getWebSocketApi();
   const { letterId: _letterId } = useParams();
   const letterId = Number(_letterId);
+
+  if (!letterId) {
+    throw new Error('존재하지 않는 편지입니다.');
+  }
+
   const [
     { data: myInfo },
     { data: startInfo },
+    { data: letterDetailInfo },
     { data: elements },
     { data: participants },
   ] = useSuspenseQueries({
     queries: [
       userQuery.myInfo(),
       letterQuery.startInfoById(letterId),
+      letterQuery.detailById(letterId),
       letterQuery.elementsById(letterId),
       letterQuery.participantsByIdInSequenceOrder(letterId),
     ],
   });
 
+  const isWholeWritingFinished =
+    letterDetailInfo.finishedAt &&
+    new Date().getTime() - new Date(letterDetailInfo.finishedAt).getTime() >=
+      Policies.LETTER_WRITE_DONE_DIALOG_SHOW_TIME;
   const waitingElement = elements.find((element) => element.content === null);
   const isRoomMaster =
     participants.participants[0]?.memberId === myInfo.memberId;
@@ -61,8 +74,8 @@ export const Write = () => {
 
   const [isWriting, setIsWriting] = useState(false);
 
-  const nowItemRef = useRef<HTMLDivElement | null>(null);
-  const [, setIsNowItemVisible] = useState(true);
+  const nowElementRef = useRef<HTMLDivElement | null>(null);
+  const elementListRef = useRef<HTMLDivElement | null>(null);
 
   const openWritingDialog = () => {
     setIsWriting(true);
@@ -92,11 +105,6 @@ export const Write = () => {
       queryKey: letterQuery.queryKeys.byId(letterId),
     });
   };
-
-  // 잘못 접근하면 화면 띄우지 않게 하려고 - 임시방편
-  if (!letterId) {
-    throw 'Error: 잘못된 접근입니다.';
-  }
 
   useEffect(() => {
     wsApi.addOnConnectJob(refreshOnWsReconnect);
@@ -145,7 +153,7 @@ export const Write = () => {
         // finished modal onClose 시에 이렇게 처리하는 게 나을 듯
         setTimeout(() => {
           navigate(`/share/${letterId}?page=1`);
-        }, 5000);
+        }, Policies.LETTER_WRITE_DONE_DIALOG_SHOW_TIME);
       },
     });
 
@@ -169,31 +177,35 @@ export const Write = () => {
     };
   }, [isWriting]);
 
-  const handleScrollToNowItem = () => {
-    nowItemRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const scrollToFocusNowElement = () => {
+    if (!nowElementRef.current || !elementListRef.current) {
+      return;
+    }
+
+    // NOTE: getBoundingClientRect() 함수는 뷰포트 상 좌표를 반환, 뷰포트 위로 이탈한 경우 음수가 됨
+    const nowElementY = nowElementRef.current.getBoundingClientRect().top;
+    const elementListY = elementListRef.current.getBoundingClientRect().top;
+    const listScrollTop = elementListRef.current.scrollTop; // NOTE: 스크롤을 내릴수록 양수로 커지는 값
+
+    const STICKY_HEADER_HEIGHT = 70;
+    const elementYInList = nowElementY - elementListY;
+    const yAboveCurrentElement =
+      listScrollTop + elementYInList - STICKY_HEADER_HEIGHT;
+
+    elementListRef.current.scrollTo({
+      top: yAboveCurrentElement,
+      behavior: 'smooth',
+    });
   };
 
   const writingMember = participants.participants.find(
     (participant) => participant.memberId === waitingElement?.memberId,
   );
 
-  // 위치 아이콘 클릭 시 이동
-  useEffect(() => {
-    if (!isMyTurnToWrite || !nowItemRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsNowItemVisible(entry.isIntersecting),
-      { threshold: 1 }, // 완전히 보여야 true
-    );
-
-    observer.observe(nowItemRef.current);
-
-    return () => {
-      if (nowItemRef.current) {
-        observer.unobserve(nowItemRef.current);
-      }
-    };
-  }, [nowItemRef.current]);
+  if (isWholeWritingFinished) {
+    navigate(`/share/${letterId}?page=1`);
+    return null;
+  }
 
   return (
     <>
@@ -208,19 +220,20 @@ export const Write = () => {
         {isExitAlertOpen && exitUser && <WriteQuitAlert name={exitUser} />}
       </AlertContainer>
       <Container>
-        <StickyHeader>
-          <WriteOrderTitle
-            writeOrderList={participants.participants}
-            title={startInfo.title}
-          />
-        </StickyHeader>
         <ScrollableOrderList
+          ref={elementListRef}
           style={{ overflowY: isWriting ? 'hidden' : 'auto' }}
         >
+          <StickyHeader>
+            <WriteOrderTitle
+              writeOrderList={participants.participants}
+              title={startInfo.title}
+            />
+          </StickyHeader>
           <WriteOrderList
             elements={elements}
             isMyTurnToWrite={isMyTurnToWrite}
-            nowItemRef={nowItemRef}
+            nowElementRef={nowElementRef}
           />
         </ScrollableOrderList>
         {isMyTurnToWrite
@@ -234,7 +247,7 @@ export const Write = () => {
               </ButtonContainer>
             )
           : waitingElement?.nickname && (
-              <LocationContainer onClick={handleScrollToNowItem}>
+              <LocationContainer onClick={scrollToFocusNowElement}>
                 <WriteLocation
                   startedAt={waitingElement.startedAt}
                   name={waitingElement.nickname}

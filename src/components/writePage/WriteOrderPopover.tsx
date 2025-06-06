@@ -10,10 +10,10 @@ interface PopoverProps {
   onClose: () => void;
 }
 
-export const WriteOrderPopover: React.FC<PopoverProps> = ({
+export const WriteOrderPopover = ({
   writeOrderList,
   onClose,
-}) => {
+}: PopoverProps) => {
   return (
     // 상단에 순서 버튼 누르면 작게 순서 알려주는거
     <Overlay onClick={onClose}>
@@ -77,7 +77,6 @@ const Popup = styled.div`
   align-items: center;
 
   width: 180px;
-  max-height: 50vh;
 
   padding: 8px 12px 16px 12px;
 
@@ -181,7 +180,8 @@ const Line = styled.div<{ $itemnum: number }>`
   left: 12px;
   z-index: 1;
 
-  height: ${({ $itemnum }) => `calc(${$itemnum - 1} * 55px - 4px)`};
+  /* NOTE: 30px이 2인~5인 간격에 적절히 표시됨 */
+  height: ${({ $itemnum }) => `calc(${$itemnum} * 30px)`};
 
   border-left: 1.5px dashed #d3edff;
 `;

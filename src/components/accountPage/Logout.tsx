@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 import { accessTokenRepository } from '@/api/config/AccessTokenRepository';

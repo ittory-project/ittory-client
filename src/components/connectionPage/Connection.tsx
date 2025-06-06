@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import styled, { keyframes } from 'styled-components';
 
 import bg1 from '@/assets/connect/bg1.png';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router';
 import styled, { css, keyframes } from 'styled-components';
 
 import doorSvg from '@/assets/door.svg';

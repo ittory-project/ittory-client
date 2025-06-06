@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from 'react';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 import { accessTokenRepository } from '../../api/config/AccessTokenRepository';
 import { Join } from '../../components/joinPage/Join';

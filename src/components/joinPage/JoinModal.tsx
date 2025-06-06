@@ -1,10 +1,15 @@
 import React from 'react';
 
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
+import { ApiErrorCodes } from '@/api/config/errorCodes';
+import { SessionLogger } from '@/utils';
+
 import { postEnter } from '../../api/service/LetterService';
+
+const logger = new SessionLogger('join');
 
 interface Props {
   letterId: number;
@@ -49,7 +54,18 @@ export const JoinModal = ({
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
-        alert('이미 참여중인 사용자입니다.');
+        switch (error.response?.data.code) {
+          case ApiErrorCodes.ALREADY_ENTERED:
+            // FIXME: 별도의 modal 등으로 개선 필요
+            alert('이미 참여중인 사용자입니다.');
+            break;
+          case ApiErrorCodes.ALREADY_USED_NICKNAME:
+            // FIXME: Form Validation으로 개선 필요
+            alert('이미 사용중인 닉네임입니다.');
+            break;
+          default:
+            logger.error('알 수 없는 에러 발생', error);
+        }
       } else if (axios.isAxiosError(error) && error.response?.status === 404) {
         setDeleted(true);
       }

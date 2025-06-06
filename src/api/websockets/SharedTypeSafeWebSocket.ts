@@ -49,6 +49,7 @@ export class SharedTypeSafeWebSocket<
   >;
   private isConnected = false;
   private isConnecting = false; // NOTE: 중복 activate 호출 방지
+  private isReconnecting = false; // NOTE: 중복 onConnect 호출 방지
 
   // NOTE: 연결 상태가 아닐 때 클라이언트 요청이 발생하는 경우 해당 큐에서 대기.
   // 연결 시 모든 큐에서 대기하던 작업을 실행하고 큐를 비움
@@ -74,6 +75,7 @@ export class SharedTypeSafeWebSocket<
   ) {
     this.requestDefinition = requestMapperDefinition;
     this.responseDefinition = responseMapperDefinition;
+
     this.observersByChannel = new Map();
     this.connectWaitQueue = [];
 
@@ -100,6 +102,8 @@ export class SharedTypeSafeWebSocket<
     this.stompClient.onDisconnect = () => {
       this.isConnected = false;
       this.isConnecting = false;
+      this.isReconnecting = true;
+      this.stompRawSubscriptionObjects.clear();
       logger.debug('onDisconnect');
     };
     this.stompClient.onWebSocketClose = (event) => {
@@ -138,20 +142,7 @@ export class SharedTypeSafeWebSocket<
 
     oberversForChannel.push(newChannelObserver);
 
-    logger.debug(
-      'subscribe - oberversForChannel',
-      oberversForChannel,
-      this.observersByChannel,
-    );
-    logger.debug(
-      'subscribe - newChannelObserver: ',
-      newChannelObserver,
-      ', oberversForChannel: ',
-      oberversForChannel,
-    );
-
-    // 아직 구독 중이지 않으면 구독 필요
-    if (!this.isSubscribing(channelName)) {
+    if (!this.isSubscribedOnStomp(channelName)) {
       // FIXME: stomp-specific && 실제로 string으로 올텐데 왜 IMessage 타입인지 확인 필요
       const callListeners = (message: IMessage) => {
         logger.debug(
@@ -167,7 +158,7 @@ export class SharedTypeSafeWebSocket<
       };
 
       // NOTE: useEffect의 호출 시점에 따라 이미 connect됐을 수도 있음. (서버 연결 vs useEffect 호출 경합 발생)
-      this.subscribeSafely(channelName, callListeners);
+      this.subscribeOnStompSafely(channelName, callListeners);
     }
 
     // 모든 listeners가 없으면 구독도 종료
@@ -193,8 +184,10 @@ export class SharedTypeSafeWebSocket<
 
       if (nextOberversForChannel.length === 0) {
         logger.debug('no listeners left, unsubscribing', channelName);
+
         this.observersByChannel.delete(channelName);
         this.unsubscribeOnStomp(channelName);
+
         logger.debug(
           'no listeners left, unsubscribing',
           channelName,
@@ -206,7 +199,7 @@ export class SharedTypeSafeWebSocket<
       }
 
       if (this.observersByChannel.size === 0) {
-        this.disconnect();
+        this.intentionallyDisconnect();
       }
     };
   }
@@ -258,34 +251,42 @@ export class SharedTypeSafeWebSocket<
   // NOTE: channel 별 listener 들을 stompClient에 등록
   // 최초 connect 시점 이전에 subscribe하거나 re-connect 시 다시 subscribe 해야 하는 경우를 처리
   private subscribeWaitingSubscriptions() {
-    this.stompRawSubscriptionObjects.clear();
-
-    for (const [channelName, callListeners] of this
-      .stompSingletonChannelSubscribers) {
-      this.subscribeSafely(channelName as string, callListeners);
+    if (!this.isReconnecting) {
+      return;
     }
 
     logger.debug(
       'subscribeWaitingSubscriptions:',
       [...this.stompSingletonChannelSubscribers.keys()].join(','),
     );
+
+    for (const [channelName, callListeners] of this
+      .stompSingletonChannelSubscribers) {
+      this.subscribeOnStompSafely(channelName as string, callListeners);
+    }
   }
 
-  private isSubscribing(channelName: string) {
+  private isSubscribedOnStomp(channelName: string) {
     return this.stompRawSubscriptionObjects.has(channelName);
   }
 
   private unsubscribeOnStomp(channelName: string) {
     this.stompRawSubscriptionObjects.get(channelName)?.unsubscribe();
     this.stompRawSubscriptionObjects.delete(channelName);
+    this.stompSingletonChannelSubscribers.delete(channelName);
   }
 
   // NOTE: 웹소켓 connect 시점은 보장할 수 없는 환경이어서 분기 필요
-  private subscribeSafely(
+  private subscribeOnStompSafely(
     channelName: string,
     callListeners: (message: IMessage) => void,
   ) {
-    logger.debug('subscribeOnClient:', channelName);
+    // NOTE: 해당 방어구문은 없어야 정상이긴 함
+    if (this.stompSingletonChannelSubscribers.has(channelName)) {
+      return;
+    }
+
+    logger.debug('subscribeOnStompSafely:', channelName);
     this.stompSingletonChannelSubscribers.set(channelName, callListeners);
 
     this.doAsyncJobSafely(() => {
@@ -306,16 +307,29 @@ export class SharedTypeSafeWebSocket<
     }
   }
 
-  private disconnect() {
+  // NOTE: 웹소켓 초기화 용도
+  private intentionallyDisconnect() {
     this.stompClient.deactivate();
     this.isConnected = false;
     this.isConnecting = false;
+    this.clearState();
   }
 
   private checkAndConnect() {
     if (!this.isConnected && !this.isConnecting) {
       this.isConnecting = true;
       this.stompClient.activate();
+      console.log('checkAndConnect', this.isConnected, this.isConnecting);
     }
+  }
+
+  private clearState() {
+    this.observersByChannel = new Map();
+    this.connectWaitQueue = [];
+    this.onConnectQueue = [];
+
+    // stomp-specific
+    this.stompRawSubscriptionObjects = new Map();
+    this.stompSingletonChannelSubscribers = new Map();
   }
 }

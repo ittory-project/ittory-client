@@ -21,10 +21,10 @@ import tip from '@/assets/tooltip.svg';
 
 import { LetterPartiItem } from '../../api/model/LetterModel';
 import { coverQuery, fontQuery, letterQuery } from '../../api/queries';
-import { getHostUrl, isMobileDevice } from '../../utils';
+import { shareInviteLetter } from '../../features/share';
 import { SessionLogger } from '../../utils/SessionLogger';
-import { Count } from './Count/Count';
-import { CountPopup } from './Count/CountPopup';
+import { CountWheelPicker } from './CountWheelPicker/CountWheelPicker';
+import { CountWheelPickerPopup } from './CountWheelPicker/CountWheelPickerPopup';
 import { Delete } from './Delete/Delete';
 import { Exit } from './Exit';
 import { UserGuide } from './UserGuide';
@@ -95,66 +95,20 @@ export const HostUser = ({
     setPopup(true);
   };
 
-  const fallbackCopyTextToClipboard = (text: string) => {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed'; // 화면에서 보이지 않도록 고정
-    textArea.style.top = '-9999px';
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      const successful = document.execCommand('copy');
-      if (successful) {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000); // 3초 후에 알림 숨기기
-      } else {
-        alert('텍스트 복사에 실패했습니다.');
-      }
-    } catch (error) {
-      alert('텍스트 복사에 실패했습니다.');
-      throw error;
-    } finally {
-      document.body.removeChild(textArea);
-    }
-  };
-
   // 모바일, 데스크톱 화면 구분해서 공유하게 함
   const handleShare = async () => {
-    if (letterInfo) {
-      if (!isMobileDevice()) {
-        const shareTextPc = `${getHostUrl()}/join/${letterId}`;
-        if (
-          navigator.clipboard &&
-          typeof navigator.clipboard.writeText === 'function'
-        ) {
-          try {
-            await navigator.clipboard.writeText(shareTextPc);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 3000);
-          } catch (error) {
-            logger.error('공유 실패: ', error);
-            fallbackCopyTextToClipboard(shareTextPc);
-          }
-        } else {
-          // Safari 호환용 대체 복사 방식
-          fallbackCopyTextToClipboard(shareTextPc);
-        }
-      } else {
-        // 모바일이면
-        try {
-          await navigator.share({
-            url: `${getHostUrl()}/join/${letterId}`,
-          });
-          logger.debug('공유 성공');
-        } catch (e) {
-          logger.error('공유 실패', e);
-        }
-      }
-    } else {
-      logger.debug('공유 실패');
-    }
+    await shareInviteLetter({
+      letterId,
+      inviterName: items[0].nickname,
+      title: letterInfo.title,
+      onCopySuccess: () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      },
+      onError: () => {
+        logger.debug('공유 실패');
+      },
+    });
   };
 
   return (
@@ -286,8 +240,7 @@ export const HostUser = ({
           {guide && <UserGuide setGuide={setGuide} />}
           {copied && <CopyAlert>링크를 복사했어요</CopyAlert>}
           {viewCount && (
-            <Count
-              coverId={letterInfo.coverTypeId}
+            <CountWheelPicker
               setViewCount={setViewCount}
               numOfParticipants={items.length}
               onSubmit={handleSubmit}
@@ -299,7 +252,12 @@ export const HostUser = ({
         <Delete letterId={letterId} setViewDelete={setViewDelete} />
       )}
       {viewExit && <Exit setViewExit={setViewExit} letterId={letterId} />}
-      {popup && <CountPopup setPopup={setPopup} setViewCount={setViewCount} />}
+      {popup && (
+        <CountWheelPickerPopup
+          setPopup={setPopup}
+          setViewCount={setViewCount}
+        />
+      )}
     </BackGround>
   );
 };

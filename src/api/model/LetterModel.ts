@@ -111,6 +111,7 @@ export interface LetterEnterResponse {
 
 // 편지 상세 정보 조회 API Response
 export interface LetterDetailGetResponse extends LetterInfoGetResponse {
+  finishedAt: string;
   participantNames: string[];
   elements: LetterDetail[];
 }
