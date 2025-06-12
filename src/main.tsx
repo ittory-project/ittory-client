@@ -17,6 +17,7 @@ import {
   attachLoggerOnNavigate,
   logBrowserInformation,
 } from './utils/SessionLogger';
+import { syncReactNativeWebViewConsole } from './utils/reactNativeUtil';
 
 const {
   VITE_DEPLOY_ENV,
@@ -26,6 +27,7 @@ const {
 } = import.meta.env;
 
 if (VITE_DEPLOY_ENV !== 'prod') {
+  syncReactNativeWebViewConsole();
   activateDefaultLog();
   attachLoggerOnNavigate();
   attachLoggerOnError();
