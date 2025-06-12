@@ -1,5 +1,6 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 import { defineConfig } from 'vite';
 import EnvironmentPlugin from 'vite-plugin-environment';
 import mkcert from 'vite-plugin-mkcert';
@@ -31,6 +32,9 @@ export default defineConfig({
       project: 'javascript-react',
     }),
     tsconfigPaths(),
+    codeInspectorPlugin({
+      bundler: 'vite',
+    }),
   ],
   define: {
     global: 'window',

@@ -56,6 +56,7 @@
     "@types/react-helmet": "^6.1.11",
     "@types/sockjs-client": "^1.5.4",
     "@vitejs/plugin-react": "^4.3.1",
+    "code-inspector-plugin": "^0.20.12",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
