@@ -9,7 +9,7 @@ const isProdEnv = import.meta.env.VITE_DEPLOY_ENV === 'prod';
 
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="App">
+    <div className="App safe-area">
       <MediaQuery minWidth={431}>
         <div className="MainLayout large-screen">
           {children}
