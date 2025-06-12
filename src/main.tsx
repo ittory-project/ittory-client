@@ -18,6 +18,31 @@ import {
   logBrowserInformation,
 } from './utils/SessionLogger';
 
+// 웹뷰 디버깅 용도 테스트
+// ReactNativeWebView 타입 선언
+interface ReactNativeWebView {
+  postMessage: (message: string) => void;
+}
+
+declare global {
+  interface Window {
+    ReactNativeWebView?: ReactNativeWebView;
+  }
+}
+
+// console 함수 monkey patch: ReactNativeWebView로 로그 전달
+const logLevels = ['log', 'error', 'warn', 'info', 'debug'] as const;
+logLevels.forEach((level) => {
+  const original = console[level].bind(console);
+  console[level] = (...args: unknown[]) => {
+    original(...args);
+    if (window.ReactNativeWebView?.postMessage) {
+      const msg = { level, args };
+      window.ReactNativeWebView.postMessage(JSON.stringify(msg));
+    }
+  };
+});
+
 const {
   VITE_DEPLOY_ENV,
   VITE_SENTRY_DSN,
