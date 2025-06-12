@@ -6,3 +6,5 @@ export * from './locationUtil';
 export * from './smootherScrollY';
 export * from './assertUtil';
 export * from './emojiUtil';
+export * from './safeAreaUtil';
+export * from './reactNativeUtil';

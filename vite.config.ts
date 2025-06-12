@@ -1,5 +1,6 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 import { defineConfig } from 'vite';
 import EnvironmentPlugin from 'vite-plugin-environment';
 import mkcert from 'vite-plugin-mkcert';
@@ -23,18 +24,7 @@ export default defineConfig({
       },
       { defineOn: 'import.meta.env' }, // NOTE: html에서도 참조하려면 필요 - process.env 대신 import.meta.env로 노출
     ),
-    react({
-      babel: {
-        plugins: [
-          [
-            '@locator/babel-jsx/dist',
-            {
-              env: 'development',
-            },
-          ],
-        ],
-      },
-    }),
+    react(),
     svgr(),
     mkcert(),
     sentryVitePlugin({
@@ -42,12 +32,15 @@ export default defineConfig({
       project: 'javascript-react',
     }),
     tsconfigPaths(),
+    codeInspectorPlugin({
+      bundler: 'vite',
+    }),
   ],
   define: {
     global: 'window',
   },
   server: {
-    allowedHosts: ['dev-client.ittory.co.kr', '*.ngrok-free.app'],
+    allowedHosts: ['dev-client.ittory.co.kr', 'local.ittory.co.kr'],
   },
   build: {
     // @see https://github.com/vitejs/vite/issues/19402
