@@ -2,6 +2,7 @@ import propertyGroups from 'stylelint-config-recess-order/groups';
 
 /** @type {import('stylelint').Config} */
 export default {
+  ignoreFiles: ['**/*.cjs'],
   rules: {
     'order/properties-order': propertyGroups.map((group) => ({
       ...group,
