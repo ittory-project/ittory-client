@@ -45,7 +45,6 @@
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.22.0",
-    "@locator/babel-jsx": "^0.4.4",
     "@storybook/addon-docs": "^9.0.0",
     "@storybook/addon-onboarding": "^9.0.0",
     "@storybook/react-vite": "^9.0.0",

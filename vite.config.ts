@@ -23,18 +23,7 @@ export default defineConfig({
       },
       { defineOn: 'import.meta.env' }, // NOTE: html에서도 참조하려면 필요 - process.env 대신 import.meta.env로 노출
     ),
-    react({
-      babel: {
-        plugins: [
-          [
-            '@locator/babel-jsx/dist',
-            {
-              env: 'development',
-            },
-          ],
-        ],
-      },
-    }),
+    react(),
     svgr(),
     mkcert(),
     sentryVitePlugin({
