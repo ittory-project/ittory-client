@@ -12,7 +12,10 @@ declare global {
 // TODO: /api prefix를 axios 인스턴스에 공통화
 export const refreshEndpoint = `${import.meta.env.VITE_SERVER_URL}/api/auth/refresh`;
 
+type StateChangeListener = () => void;
+
 export class AccessTokenRepository {
+  #stateChangeListeners: StateChangeListener[] = [];
   #refreshRequest: Promise<void> | null = null;
   #accessToken: string | null = null;
   static #instance = new AccessTokenRepository();
@@ -54,6 +57,18 @@ export class AccessTokenRepository {
 
   logout() {
     this.#accessToken = null;
+    this.#stateChangeListeners.forEach((listener) => listener());
+  }
+
+  // NOTE: zustand/context 의존 없이, 국소적인 분기하려면 직접 이벤트 발행해야 함
+  addStageChangeListener(listener: () => void) {
+    this.#stateChangeListeners.push(listener);
+  }
+
+  removeStageChangeListener(listener: () => void) {
+    this.#stateChangeListeners = this.#stateChangeListeners.filter(
+      (l) => l !== listener,
+    );
   }
 
   // TODO: Sentry 등으로 오류 모니터링
