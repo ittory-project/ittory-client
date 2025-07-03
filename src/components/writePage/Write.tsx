@@ -11,7 +11,7 @@ import { letterQuery, userQuery } from '../../api/queries';
 import { getWebSocketApi } from '../../api/websockets';
 import { useDialog } from '../../hooks';
 import { SessionLogger } from '../../utils';
-import Button from '../common/Button';
+import { Button } from '../common/Button';
 import { ErrorFullScreen } from '../common/ErrorFullScreen';
 import { WriteFinishedModal } from './WriteFinishedModal';
 import { WriteLocation } from './WriteLocation';
