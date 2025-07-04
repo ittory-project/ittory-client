@@ -48,7 +48,7 @@ export class AccessTokenRepository {
 
   // NOTE: 로그인 API로 로그인 시 반환되는 AccessToken 활용
   onLogin(accessToken: string) {
-    this.#accessToken = `Bearer ${accessToken}`;
+    this.#setAccessToken(accessToken);
   }
 
   isLoggedIn() {
@@ -56,8 +56,7 @@ export class AccessTokenRepository {
   }
 
   logout() {
-    this.#accessToken = null;
-    this.#stateChangeListeners.forEach((listener) => listener());
+    this.#setAccessToken(null);
   }
 
   // NOTE: zustand/context 의존 없이, 국소적인 분기하려면 직접 이벤트 발행해야 함
@@ -86,6 +85,11 @@ export class AccessTokenRepository {
     return this.#refreshRequest;
   }
 
+  #setAccessToken(accessToken: string | null) {
+    this.#accessToken = accessToken ? `Bearer ${accessToken}` : null;
+    this.#stateChangeListeners.forEach((listener) => listener());
+  }
+
   async #fetchNewAccessToken() {
     const response = await api.post(
       refreshEndpoint,
@@ -97,7 +101,7 @@ export class AccessTokenRepository {
       },
     );
 
-    this.#accessToken = `Bearer ${response.data.data.accessToken}`;
+    this.#setAccessToken(response.data.data.accessToken);
   }
 }
 
