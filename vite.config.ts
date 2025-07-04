@@ -46,8 +46,6 @@ export default defineConfig({
     // @see https://github.com/vitejs/vite/issues/19402
     assetsInlineLimit: 0,
     sourcemap: true,
-  },
-  esbuild: {
     target: 'ES2022',
   },
 });
