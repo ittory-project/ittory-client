@@ -43,18 +43,33 @@ Sentry.init({
   integrations: [Sentry.captureConsoleIntegration({ levels: ['error'] })],
 });
 
-// TODO: 로그인 로딩에 대한 더 좋은 방식 찾기.
-accessTokenRepository.refresh().finally(() => {
-  ReactDOM.createRoot(document.getElementById('root')!).render(
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <HelmetProvider>
-          <ReactQueryClientProvider>
-            <App />
-            <ReactQueryDevtools position="right" initialIsOpen={false} />
-          </ReactQueryClientProvider>
-        </HelmetProvider>
-      </PersistGate>
-    </Provider>,
-  );
-});
+const app = (
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <HelmetProvider>
+        <ReactQueryClientProvider>
+          <App />
+          <ReactQueryDevtools position="right" initialIsOpen={false} />
+        </ReactQueryClientProvider>
+      </HelmetProvider>
+    </PersistGate>
+  </Provider>
+);
+
+const renderApp = () => {
+  ReactDOM.createRoot(document.getElementById('root')!).render(app);
+};
+
+const isHomePage =
+  window.location.pathname === '/' || window.location.pathname === '';
+if (isHomePage) {
+  // NOTE: 홈 페이지 지연 시간도 줄이고, 즉시 인증이 필요하지 않음
+  renderApp();
+  accessTokenRepository.refresh();
+} else {
+  try {
+    await accessTokenRepository.refresh();
+  } finally {
+    renderApp();
+  }
+}
