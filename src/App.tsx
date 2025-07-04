@@ -3,6 +3,7 @@ import { Suspense, useEffect } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router';
 
 import './App.css';
+import { OnlyAuthenticated } from './components/common';
 import { ApiErrorBoundary } from './components/common/ErrorBoundary';
 import { MainLayout } from './layout/MainLayout';
 import { AccountPage } from './pages/account/AccountPage';
@@ -50,16 +51,17 @@ function App() {
               />
 
               {/* TODO: 편지 작성 퍼널로 변경 */}
-              <Route path="/create" element={<CreatePage />} />
-              <Route path="/invite/:letterId" element={<InvitePage />} />
-              <Route path="/join/:letterId" element={<JoinPage />} />
-              <Route path="/connection" element={<ConnectionPage />} />
-              <Route path="/write/:letterId" element={<WritePage />} />
-              <Route path="/share/:letterId" element={<ShareLetterPage />} />
-
-              <Route path="/account" element={<AccountPage />} />
-              <Route path="/letterbox" element={<LetterBoxPage />} />
-              <Route path="/loading" element={<LoadingPage />} />
+              <Route path="/*" element={<OnlyAuthenticated />}>
+                <Route path="create" element={<CreatePage />} />
+                <Route path="invite/:letterId" element={<InvitePage />} />
+                <Route path="join/:letterId" element={<JoinPage />} />
+                <Route path="connection" element={<ConnectionPage />} />
+                <Route path="write/:letterId" element={<WritePage />} />
+                <Route path="share/:letterId" element={<ShareLetterPage />} />
+                <Route path="account" element={<AccountPage />} />
+                <Route path="letterbox" element={<LetterBoxPage />} />
+                <Route path="loading" element={<LoadingPage />} />
+              </Route>
             </Routes>
           </Suspense>
         </ApiErrorBoundary>
