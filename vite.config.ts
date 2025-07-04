@@ -17,10 +17,13 @@ export default defineConfig({
         VITE_DEPLOY_ENV: undefined,
         VITE_KAKAO_KEY: undefined,
         VITE_SERVER_URL: undefined,
-        VITE_SENTRY_DSN: null,
-        VITE_HOTJAR_SITE_ID: null,
-        VITE_HOTJAR_VERSION: null,
-        VITE_GTM_ID: null,
+        VITE_SENTRY_DSN: undefined,
+        VITE_SENTRY_AUTH_TOKEN: undefined,
+        VITE_SENTRY_ORG: undefined,
+        VITE_SENTRY_PROJECT: undefined,
+        VITE_HOTJAR_SITE_ID: undefined,
+        VITE_HOTJAR_VERSION: undefined,
+        VITE_GTM_ID: undefined,
       },
       { defineOn: 'import.meta.env' }, // NOTE: html에서도 참조하려면 필요 - process.env 대신 import.meta.env로 노출
     ),
@@ -28,8 +31,8 @@ export default defineConfig({
     svgr(),
     mkcert(),
     sentryVitePlugin({
-      org: 'ittory-dev',
-      project: 'javascript-react',
+      org: process.env.VITE_SENTRY_ORG,
+      project: process.env.VITE_SENTRY_PROJECT,
     }),
     tsconfigPaths(),
     codeInspectorPlugin({

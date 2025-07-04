@@ -25,7 +25,10 @@ jobs:
           VITE_DEPLOY_ENV: ${{ vars.VITE_DEPLOY_ENV }}
           VITE_SERVER_URL: ${{ vars.VITE_SERVER_URL }}
           VITE_KAKAO_KEY: ${{ vars.VITE_KAKAO_KEY }}
-          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          VITE_SENTRY_ORG: ${{ vars.VITE_SENTRY_ORG }}
+          VITE_SENTRY_PROJECT: ${{ vars.VITE_SENTRY_PROJECT }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          VITE_SENTRY_AUTH_TOKEN: ${{ secrets.VITE_SENTRY_AUTH_TOKEN }}
           VITE_HOTJAR_SITE_ID: ${{ vars.VITE_HOTJAR_SITE_ID }}
           VITE_HOTJAR_VERSION: ${{ vars.VITE_HOTJAR_VERSION }}
           VITE_GTM_ID: ${{ vars.VITE_GTM_ID }}
