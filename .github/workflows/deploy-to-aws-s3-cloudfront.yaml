@@ -22,11 +22,13 @@ jobs:
           npm ci
           npm run build
         env:
-          VITE_DEPLOY_ENV: prod
+          VITE_DEPLOY_ENV: ${{ vars.VITE_DEPLOY_ENV }}
           VITE_SERVER_URL: ${{ vars.VITE_SERVER_URL }}
           VITE_KAKAO_KEY: ${{ vars.VITE_KAKAO_KEY }}
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_HOTJAR_SITE_ID: ${{ vars.VITE_HOTJAR_SITE_ID }}
+          VITE_HOTJAR_VERSION: ${{ vars.VITE_HOTJAR_VERSION }}
+          VITE_GTM_ID: ${{ vars.VITE_GTM_ID }}
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
