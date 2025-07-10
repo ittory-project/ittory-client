@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import closeButton from '@/assets/btn_close.svg';
+import CloseIconOfficial from '@/assets/btn_close_official.svg?react';
 import kakaoBubble from '@/assets/login/kakao_bubble.svg';
 import MainLogo from '@/assets/main_logo.svg';
 
@@ -26,7 +26,7 @@ export const Login = () => {
   return (
     <LoginContainer>
       <CloseBtn onClick={handleCloseBtn}>
-        <span className="visually-hidden">닫기</span>
+        <StyledCloseIcon aria-label="닫기" />
       </CloseBtn>
       <LogoArea>
         <LogoImage src={MainLogo} alt="Logo" />
@@ -58,7 +58,11 @@ export const Login = () => {
 };
 
 const LoginContainer = styled.div`
-  position: relative;
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
 
   height: 100%;
 
@@ -69,29 +73,46 @@ const LoginContainer = styled.div`
 
 const CloseBtn = styled.button`
   position: absolute;
-  top: 12px;
-  right: 16px;
-
-  width: 20px;
-  height: 20px;
-
-  padding: 0;
-
-  background: url(${closeButton}) no-repeat center;
-  background-size: contain;
-  border: none;
-`;
-
-const LogoArea = styled.div`
-  position: absolute;
-  top: 128px;
+  top: 0;
+  right: 0;
+  z-index: 10;
 
   display: flex;
 
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  padding: 12px;
+
+  cursor: pointer;
+
+  background: transparent;
+  border: none;
+
+  &:hover svg {
+    color: var(--Color-grayscale-gray600);
+  }
+`;
+
+const StyledCloseIcon = styled(CloseIconOfficial)`
+  width: 24px;
+  height: 24px;
+
+  color: var(--Color-grayscale-gray600);
+`;
+
+const LogoArea = styled.div`
+  display: flex;
+
+  flex: 1;
   flex-direction: column;
 
   gap: 12px;
   align-items: center;
+  justify-content: center;
 
   width: 100%;
 `;
@@ -109,9 +130,6 @@ const LogoDescription = styled.div`
 `;
 
 const BottomArea = styled.div`
-  position: absolute;
-  bottom: 40px;
-
   display: flex;
 
   flex-direction: column;
@@ -120,7 +138,8 @@ const BottomArea = styled.div`
   align-items: center;
   justify-content: center;
 
-  width: 100%;
+  padding-bottom: 40px;
+  margin: 0 16px;
 `;
 
 const Icon = styled.img`
@@ -137,7 +156,6 @@ const LoginBtn = styled.button`
   justify-content: center;
 
   width: 100%;
-  max-width: 288px;
   height: 48px;
 
   padding: 0 20px;
@@ -153,22 +171,22 @@ const LoginBtn = styled.button`
 `;
 
 const LoginDesc = styled.div`
-  width: 100%;
-  max-width: 288px;
-
   font-size: 12px;
 
   color: var(--Color-grayscale-gray600);
 
   a {
+    font-weight: 600;
+
     color: var(--Color-grayscale-gray600);
 
     text-decoration: underline;
 
     cursor: pointer;
+  }
+  a:hover {
+    font-weight: 700;
 
-    &:hover {
-      color: #495057;
-    }
+    color: var(--Color-grayscale-gray700);
   }
 `;
