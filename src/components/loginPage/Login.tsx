@@ -160,7 +160,7 @@ const LoginBtn = styled.button`
 
   padding: 0 20px;
 
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 
   color: black;
