@@ -4,14 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-import ask from '@/assets/menu/ask.svg';
-import graynavi from '@/assets/menu/graynavi.svg';
+import ChevronRight from '@/assets/icons/chevron_right.svg?react';
+import AskIcon from '@/assets/menu/ask.svg?react';
 import letter_create from '@/assets/menu/letter_create.svg';
 import letter_receive from '@/assets/menu/letter_receive.svg';
 import logindefault from '@/assets/menu/logindefault.png';
 import defaultImage from '@/assets/menu/profileImg.png';
-import direction from '@/assets/navigate.svg';
-import X from '@/assets/x.svg';
+import XIcon from '@/assets/x.svg?react';
 
 import { accessTokenRepository } from '../api/config/AccessTokenRepository';
 import { userQuery } from '../api/queries';
@@ -109,11 +108,11 @@ export const Menu = ({ onClose }: Props) => {
   return (
     <BackGround>
       <Cancel>
-        <img
-          src={X}
-          alt="X"
-          style={{ width: '16px', height: '16px' }}
+        <XIcon
+          width={16}
+          height={16}
           onClick={handleCancel}
+          style={{ cursor: 'pointer' }}
         />
       </Cancel>
       <Profile>
@@ -132,7 +131,11 @@ export const Menu = ({ onClose }: Props) => {
           <>
             <NavigateLogin onClick={handleLogin}>
               로그인하고 이용하기
-              {<img src={direction} style={{ width: '7px', height: '12px' }} />}
+              <ChevronRight
+                width={16}
+                height={16}
+                color="var(--Color-grayscale-gray600, #868e96)"
+              />
             </NavigateLogin>
           </>
         ) : (
@@ -140,13 +143,10 @@ export const Menu = ({ onClose }: Props) => {
             <UserName>{myInfo.name}</UserName>
             <UserSetting onClick={navigateToAccount}>
               계정 관리
-              <img
-                src={graynavi}
-                style={{
-                  width: '5px',
-                  height: '9px',
-                  marginLeft: '5.75px',
-                }}
+              <ChevronRight
+                width={16}
+                height={16}
+                color="var(--Color-grayscale-gray600, #868e96)"
               />
             </UserSetting>
           </UserSet>
@@ -210,13 +210,14 @@ export const Menu = ({ onClose }: Props) => {
           <path d="M0 1L260 1.00002" stroke="#F1F3F5" />
         </svg>
         <AskContainer onClick={handleAsk}>
-          <img
-            src={ask}
-            style={{ width: '16px', height: '16px', marginBottom: '1.2px' }}
-          />
+          <AskIcon width={16} height={16} style={{ marginBottom: '1.2px' }} />
           문의하기
           <Navi>
-            <img src={graynavi} style={{ width: '5px', height: '10px' }} />
+            <ChevronRight
+              width={16}
+              height={16}
+              color="var(--Color-grayscale-gray600, #868e96)"
+            />
           </Navi>
         </AskContainer>
       </List>
@@ -306,7 +307,7 @@ const UserName = styled.div`
 
   line-height: 24px;
 
-  color: #000;
+  color: var(--Color-grayscale-gray900, #15191c);
 
   letter-spacing: -0.5px;
 `;
@@ -323,7 +324,7 @@ const UserSetting = styled.div`
 
   line-height: 16px;
 
-  color: #868e96;
+  color: var(--Color-grayscale-gray600, #868e96);
 
   letter-spacing: -0.5px;
 
@@ -343,7 +344,7 @@ const NavigateLogin = styled.div`
 
   line-height: 24px;
 
-  color: #000;
+  color: var(--Color-grayscale-gray900, #15191c);
 
   letter-spacing: -0.5px;
 
@@ -385,7 +386,7 @@ const CreatedLetter = styled.div`
 
   line-height: 16px;
 
-  color: #343a40;
+  color: var(--Color-grayscale-gray900, #15191c);
 
   letter-spacing: -0.5px;
 
@@ -411,7 +412,7 @@ const ReceivedLetter = styled.div`
 
   line-height: 16px;
 
-  color: #343a40;
+  color: var(--Color-grayscale-gray900, #15191c);
 
   letter-spacing: -0.5px;
 
@@ -428,7 +429,7 @@ const LetterNum = styled.div`
 
   line-height: 16px;
 
-  color: #343a40;
+  color: var(--Color-grayscale-gray900, #15191c);
 
   letter-spacing: -0.5px;
 `;
@@ -494,7 +495,7 @@ const AskContainer = styled.div`
 
   line-height: 16px;
 
-  color: #212529;
+  color: var(--Color-grayscale-gray900, #15191c);
 
   letter-spacing: -0.5px;
 
@@ -504,14 +505,8 @@ const Navi = styled.div`
   position: absolute;
   right: 0;
 
-  box-sizing: border-box;
   display: flex;
 
   align-items: center;
   justify-content: center;
-
-  width: 16px;
-  height: 16px;
-
-  padding: 3px 6px 3px 5px;
 `;
